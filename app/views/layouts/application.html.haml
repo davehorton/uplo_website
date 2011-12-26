@@ -31,14 +31,13 @@
 
     #wrapper
       #main.clearfix
-        - flash_class = (flash.blank? ? "" : "round-box")
+        - flash_class = (flash.blank? ? "" : "content")
         #flash{:class => flash_class}
           - flash.each do |key, value|
             .box{:class => "box-#{key}"}= value
           
         .content-wrapper.clearfix
-          .content
-            = yield
+          = yield
         
         #contact-panel
           =# render(:partial => "shared/contact_panel")
