@@ -5,8 +5,10 @@ gem 'rails', '3.0.10'
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
 
+#gem "unicorn" # HTTP Server
 gem 'pg'
 gem "will_paginate", ">=3.0.pre4"
+gem 'haml'
 gem "haml-rails", ">= 0.3.4"
 gem "inherited_resources", ">= 1.3.0"
 gem "simple_form"
@@ -34,9 +36,14 @@ group :development do
   gem "bullet"
   gem "pry"
   gem "heroku_san"
-  gem "ruby-debug"
   gem "capistrano"
   gem "capistrano-ext", :require => "capistrano"
+  
+  if RUBY_VERSION >= "1.9"
+    gem "ruby-debug19"
+  else
+    gem "ruby-debug"
+  end
 end
 
 group :test do

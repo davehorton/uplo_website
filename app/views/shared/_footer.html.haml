@@ -1,0 +1,8 @@
+.tpl-project
+  %span.description= "A project of"
+  %span.logo
+    %a#tpl-logo{:href => "http://www.techpropulsionlabs.com/", :target => "_blank"}
+      = image_tag("tpl-logo-large.png", {:alt => "Tech Propulsion Labs"})
+.copy-right
+  = "© #{Time.now.year} "
+  = link_to("Tech Propulsion Labs", "http://www.techpropulsionlabs.com/", :target => "_blank")

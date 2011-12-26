@@ -1,4 +1,23 @@
 Uplo::Application.routes.draw do
+  root :to => "home#index"
+
+  resources :galleries
+  resources :images
+
+  devise_for :users, :controllers => {:registrations => "registrations", :sessions => "sessions"}
+
+  devise_scope :user do
+    get "signin", :to => "devise/sessions#new"
+    get "register", :to => "user/registrations#new"
+    delete "signout", :to => "devise/sessions#destroy"
+  end
+  
+  namespace :api do
+    resources :users
+  end  
+
+  get "profile", :to => "users#profile"
+  
   # The priority is based upon order of creation:
   # first created -> highest priority.
 

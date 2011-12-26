@@ -32,8 +32,7 @@ Uplo::Application.configure do
     Bullet.rails_logger          = true
     Bullet.disable_browser_cache = true
   end
-  config.i18n.default_locale = :fr
-  config.i18n.fallbacks.defaults = [:en]
+
   config.action_mailer.default_url_options = { :host => 'localhost:3000' }
   config.action_mailer.delivery_method = :async_smtp
   

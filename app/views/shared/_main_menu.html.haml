@@ -1,0 +1,40 @@
+= js_menu_include_tag
+
+%ul#menu-items
+  %li.first{:class => set_current_tab("home")}
+    = link_to(I18n.t("main_menu.home"), "http://tpl-tripgeek.heroku.com")
+
+  %li.first{:class => set_current_tab("apps")}
+    = link_to(I18n.t("main_menu.apps"), "/apps")
+
+  %li.sf-menu{:class => set_current_tab("details")}
+    %a{:href => "/places"}
+      %span= I18n.t("main_menu.details")
+      %span.sf-sub-indicator
+
+    %ul.sub-menu.hidden
+      %li.sub-menu-item
+        = link_to(I18n.t("main_menu.places"), "/places")
+      %li.sub-menu-item
+        = link_to(I18n.t("main_menu.events"), "/events")
+      %li.sub-menu-item.last
+        = link_to(I18n.t("main_menu.services"), "/services")
+        
+  %li{:class => set_current_tab("about_us")}
+    = link_to(I18n.t("main_menu.about_us"), "http://tpl-tripgeek.heroku.com/about-us")
+#menu-bottom-padding
+
+:erb
+  <script type="text/javascript">
+    $(document).ready(function(){
+      $("#menu-items").supersubs({ 
+        minWidth:    5,
+        maxWidth:    10,
+        extraWidth:  0.1
+      }).superfish({
+        autoArrows:   false,
+        speed:        "normal",
+        delay:        100
+      });
+    });
+  </script>

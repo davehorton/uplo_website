@@ -1,0 +1,24 @@
+.home.content
+  - if user_signed_in?
+    = link_to 'Your Profile', '/profile'
+  - else
+    #session-container.clearfix
+      #signup-area.clearfix.left
+        .intro= "Let everyone know your"
+        .intro
+          %span= "Join us now"
+          %span.signup
+          %a{:href => "/register"}= "Sign up"
+
+      #signin-area.right
+        .intro= "Member sign in"
+        = simple_form_for(:user, :url => user_session_path) do |f|
+          = f.input :email, :wrapper_class => "input clearfix", :label_html => {:class => "signin"}, :input_html => {:class => 'signin'}, :label => "Email", :required => false
+          = f.error :email
+          = f.input :password, :wrapper_class => "input clearfix", :label_html => {:class => "signin"}, :input_html => {:class => 'signin'}, :label => "Password", :required => false
+          #remember-me.clearfix
+            = f.check_box :remember_me
+            = f.label :remember_me, "Remember me"
+          .input.clearfix
+            = link_to "Forgot your password?", new_password_path(:user), :class => "icon-info-link"
+            = f.submit "Sign in", :class => "round-button signin"

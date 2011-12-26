@@ -1,0 +1,13 @@
+- if user_signed_in?
+  #top-box.clearfix
+    .avatar
+    .name{:title => current_user.full_name}= truncate(current_user.full_name, :length => 20)
+    .links.clearfix
+      = link_to "Logout", "/signout", :class => "icon-link icon-logout", :method => "delete"
+
+:erb
+  <script type = "text/javascript">
+    jQuery(document).ready(function() {
+      
+    });
+  </script>
