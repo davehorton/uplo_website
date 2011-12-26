@@ -22,10 +22,10 @@ class User < ActiveRecord::Base
   has_many :image_likes, :dependent => :destroy
   
   # VALIDATION
-  validates_presence_of :first_name, :last_name, :email
+  validates_presence_of :first_name, :last_name, :email, :message => 'This field cannot be blank'
   validates :password, :presence => true, :confirmation => true, :unless => :force_submit
-  validates :email, :format => { :with => /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\Z/i, :on => :create }
-  validates :email, :uniqueness => true
+  validates_format_of :email, :with => /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\Z/i, :on => :create, :message => 'Email is invalid'
+  validates_uniqueness_of :email, :message => 'Email must be unique'
   
   # CALLBACK
   

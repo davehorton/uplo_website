@@ -1,6 +1,8 @@
 Uplo::Application.routes.draw do
   root :to => "home#index"
 
+  get "register.JSON", :to => "api/users#create_user"
+  
   resources :galleries
   resources :images
 
