@@ -4,14 +4,15 @@ Uplo::Application.routes.draw do
   resources :galleries
   resources :images
 
-  devise_for :users, :controllers => {:registrations => "registrations", :sessions => "sessions"}
+  devise_for :users, :controllers => {:registrations => "users/registrations", :sessions => "users/sessions",
+    :confirmations => "users/confirmations", :passwords => "users/passwords" }
 
   devise_scope :user do
-    get "signin", :to => "devise/sessions#new"
-    get "register", :to => "user/registrations#new"
-    delete "signout", :to => "devise/sessions#destroy"
+    get "signin", :to => "users/sessions#new"
+    get "register", :to => "users/registrations#new"
+    delete "signout", :to => "users/sessions#destroy"
   end
-  
+
   namespace :api do
     resources :users
   end  

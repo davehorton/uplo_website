@@ -1,4 +1,4 @@
-class SessionsController < Devise::SessionsController
+class Users::SessionsController < Devise::SessionsController
   #ssl_required :sign_in, :new, :create if ssl_required?
   
   skip_before_filter(:authenticate_user!)
