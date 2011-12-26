@@ -37,10 +37,18 @@
             .box{:class => "box-#{key}"}= value
           
         .content-wrapper.clearfix
-          = yield
+          .content
+            = yield
         
         #contact-panel
           =# render(:partial => "shared/contact_panel")
 
     #footer.round-box
       =# render(:partial => "shared/footer")
+
+:erb
+  <script type="text/javascript">
+    $(document).ready(function(){
+      helper.hide_require_signs();
+    });
+  </script>

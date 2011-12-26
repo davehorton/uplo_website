@@ -1,14 +1,15 @@
-.home.content
+.home
   - if user_signed_in?
     = link_to 'Your Profile', '/profile'
   - else
     #session-container.clearfix
       #signup-area.clearfix.left
-        .intro= "Let everyone know your"
+        .intro= "Broadcast your photos"
         .intro
           %span= "Join us now"
           %span.signup
-          %a{:href => "/register"}= "Sign up"
+            %a{:href => "/register", :class => "button-container"}
+              %span.round-button= "Sign up"
 
       #signin-area.right
         .intro= "Member sign in"
@@ -20,5 +21,5 @@
             = f.check_box :remember_me
             = f.label :remember_me, "Remember me"
           .input.clearfix
-            = link_to "Forgot your password?", new_password_path(:user), :class => "icon-info-link"
-            = f.submit "Sign in", :class => "round-button signin"
+            = link_to "Forgot your password?", new_password_path(:user), :class => "icon info-link"
+            = f.submit "Sign in", :class => "signin"
