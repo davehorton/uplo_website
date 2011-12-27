@@ -25,7 +25,8 @@ class Api::UsersController < ApplicationController
     if user && user.valid_password?(params[:password])
       session[:user_id] = user.id
       result[:success] = true
-      result[:auth_token] = user.ensure_authentication_token!
+      user.ensure_authentication_token!
+      result[:auth_token] = user.authentication_token
     end
     
     render :json => result
