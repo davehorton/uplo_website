@@ -1,8 +1,7 @@
 Uplo::Application.routes.draw do
   root :to => "home#index"
 
-  get "register.JSON", :to => "api/users#create_user"
-  
+  # WEB ROUTING
   resources :galleries
   resources :images
 
@@ -14,12 +13,13 @@ Uplo::Application.routes.draw do
     get "register", :to => "users/registrations#new"
     delete "signout", :to => "users/sessions#destroy"
   end
-
+  get "profile", :to => "users#profile"
+  
+  # API ROUTING
+  get "register.JSON", :to => "api/users#create_user"
   namespace :api do
     resources :users
-  end  
-
-  get "profile", :to => "users#profile"
+  end 
   
   # The priority is based upon order of creation:
   # first created -> highest priority.

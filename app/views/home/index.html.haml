@@ -4,22 +4,18 @@
   - else
     #session-container.clearfix
       #signup-area.clearfix.left
-        .intro= "Broadcast your photos"
-        .intro
-          %span= "Join us now"
-          %span.signup
-            %a{:href => "/register", :class => "button-container"}
-              %span.round-button= "Sign up"
+        %h1.intro= "Broadcast your photos"
+        .signup
+          %a{:href => "/register", :class => "button-container"}
+            %span.round-button= "Sign up now"
 
-      #signin-area.right
-        .intro= "Member sign in"
-        = simple_form_for(:user, :url => user_session_path) do |f|
-          = f.input :email, :wrapper_class => "input clearfix", :label_html => {:class => "signin"}, :input_html => {:class => 'signin'}, :label => "Email", :required => false
-          = f.error :email
-          = f.input :password, :wrapper_class => "input clearfix", :label_html => {:class => "signin"}, :input_html => {:class => 'signin'}, :label => "Password", :required => false
-          #remember-me.clearfix
-            = f.check_box :remember_me
-            = f.label :remember_me, "Remember me"
-          .input.clearfix
-            = link_to "Forgot your password?", new_password_path(:user), :class => "icon info-link"
-            = f.submit "Sign in", :class => "signin"
+      #signin-area.right.box.column
+        .header= "Member sign in"
+        .content
+          = simple_form_for(:user, :url => user_session_path) do |f|
+            = f.input :email, :wrapper_class => "input clearfix", :label_html => {:class => "signin"}, :input_html => {:class => 'signin'}, :label => "Email", :required => false
+            = f.error :email
+            = f.input :password, :wrapper_class => "input clearfix", :label_html => {:class => "signin"}, :input_html => {:class => 'signin'}, :label => "Password", :required => false    
+            .input.clearfix
+              = link_to "Forgot your password?", new_password_path(:user), :class => "icon info-link small"
+              = f.submit "Sign in", :class => "signin-button"

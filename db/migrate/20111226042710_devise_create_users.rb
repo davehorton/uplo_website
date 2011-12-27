@@ -4,7 +4,6 @@ class DeviseCreateUsers < ActiveRecord::Migration
       t.string :first_name, :null => false
       t.string :last_name, :null => false
       t.string :username
-      t.string :fullname
       t.datetime :birthday
       t.string :nationality
       t.database_authenticatable :null => false

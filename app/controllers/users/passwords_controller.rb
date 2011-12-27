@@ -1,19 +1,3 @@
-class Users::PasswordsController < Devise::RegistrationsController
-  def new
-    super
-  end
+class Users::PasswordsController < Devise::PasswordsController
 
-  def create
-    super
-  end
-
-  def update
-    super
-  end
-  
-  protected
-
-  def after_sign_up_path_for(resource)
-    '/profile'
-  end
 end
