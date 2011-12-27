@@ -20,7 +20,7 @@ Uplo::Application.routes.draw do
     resources :users
     get "logout", :to => "users#logout"
     post "register", :to => "users#create_user"
-    get "login", :to => "users#login"
+    post "login", :to => "users#login"
   end 
   
   # The priority is based upon order of creation:
