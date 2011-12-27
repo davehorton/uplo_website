@@ -6,6 +6,7 @@ class DeviseCreateUsers < ActiveRecord::Migration
       t.string :username
       t.datetime :birthday
       t.string :nationality
+      t.string :gender
       t.database_authenticatable :null => false
       t.recoverable
       t.rememberable

@@ -2,12 +2,13 @@ class Api::UsersController < ApplicationController
 #  before_filter :authenticate_user!, :only => [:login]
   
   def create_user
-    info = params
+    info = params[:user]
     user = User.new info
     result = {
       :success => true,
       :msg => {}
     }
+    
     unless user.save
       result[:msg] = user.errors 
       result[:success] = false

@@ -8,14 +8,15 @@ class User < ActiveRecord::Base
 
   # Setup accessible (or protected) attributes for your model
   attr_accessible :email, :password, :password_confirmation, :remember_me, 
-                  :first_name, :last_name, :username, :login
+                  :first_name, :last_name, :username, :login, :nationality, :birthday, :gender, :avatar
+                  
   
   # Paperclip
   has_attached_file :avatar, 
    :styles => {:thumb => "180x180>" }, 
    :storage => :s3,
    :s3_credentials => "#{Rails.root}/config/amazon_s3.yml",
-   :path => "user/:id/:style.:extension"
+   :path => "user/:id/avatar/:style.:extension"
    
   # ASSOCIATIONS
   has_many :galleries, :dependent => :destroy
