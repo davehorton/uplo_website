@@ -46,9 +46,7 @@ FbIntranet::Application.configure do
 
   # Enable locale fallbacks for I18n (makes lookups for any locale fall back to
   # the I18n.default_locale when a translation can not be found)
-  #config.i18n.fallbacks = true
-  config.i18n.default_locale = :fr
-  config.i18n.fallbacks.defaults = [:en]
+  config.i18n.fallbacks = true
 
   # Send deprecation notices to registered listeners
   config.active_support.deprecation = :notify
@@ -57,24 +55,13 @@ FbIntranet::Application.configure do
   config.action_mailer.delivery_method = :async_smtp
 
   # GMAIL
-  #config.action_mailer.smtp_settings = {
-    #:address              => "smtp.gmail.com",
-    #:port                 => 587,
-    #:domain               => 'gmail.com',
-    #:user_name            => 'tpldev1',
-    #:password             => 'tpldev1!',
-    #:authentication       => 'plain',
-    #:enable_starttls_auto => true  }
-
-  # SENDGRID
   config.action_mailer.smtp_settings = {
-    :address              => "smtp.sendgrid.net",
+    :address              => "smtp.gmail.com",
     :port                 => 587,
-    :domain               => 'fabernovel.com',
-    :user_name            => 'intranet.no-reply@fabernovel.com',
+    :domain               => 'gmail.com',
+    :user_name            => 'tpldev1',
     :password             => 'tpldev1!',
     :authentication       => 'plain',
     :enable_starttls_auto => true  }
-
 end
 

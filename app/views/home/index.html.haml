@@ -13,9 +13,9 @@
         .header= "Member sign in"
         .content
           = simple_form_for(:user, :url => user_session_path) do |f|
-            = f.input :email, :wrapper_class => "input clearfix", :label_html => {:class => "signin"}, :input_html => {:class => 'signin'}, :label => "Email", :required => false
+            = f.input :login, :wrapper_class => "input clearfix", :label_html => {:class => "signin"}, :input_html => {:class => 'signin'}, :required => true
             = f.error :email
-            = f.input :password, :wrapper_class => "input clearfix", :label_html => {:class => "signin"}, :input_html => {:class => 'signin'}, :label => "Password", :required => false    
+            = f.input :password, :wrapper_class => "input clearfix", :label_html => {:class => "signin"}, :input_html => {:class => 'signin'}, :label => "Password", :required => true    
             .input.clearfix
               = link_to "Forgot your password?", new_password_path(:user), :class => "icon info-link small"
               = f.submit "Sign in", :class => "signin-button"

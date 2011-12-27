@@ -1,9 +1,15 @@
+- content_for :head do
+  = javascript_include_tag("lib/jquery.ui.datepicker.js")
+  = javascript_include_tag("app/user.js")
+  = jquery_ui_css_tag
+  
 %h2
   Edit #{resource_name.to_s.humanize}
-= simple_form_for(resource, :as => resource_name, :url => registration_path(resource_name), :html => { :method => :put }) do |f|
+= simple_form_for(resource, :as => resource_name, :url => registration_path(resource_name), :html => { :method => :put, :class => "signup"}) do |f|
   = f.error_notification
   .inputs
     = f.input :email, :required => true, :autofocus => true
+    = f.input :username, :required => true, :autofocus => true
     = f.input :password, :hint => "leave it blank if you don't want to change it", :required => false
     = f.input :password_confirmation, :required => false
     = f.input :current_password, :hint => "we need your current password to confirm your changes", :required => true

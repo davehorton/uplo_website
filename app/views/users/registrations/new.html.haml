@@ -1,12 +1,27 @@
+- content_for :head do
+  = javascript_include_tag("lib/jquery.ui.datepicker.js")
+  = javascript_include_tag("app/user.js")
+  = jquery_ui_css_tag
+  
 %h2 Sign up
-= simple_form_for(resource, :as => resource_name, :url => registration_path(resource_name)) do |f|
+= simple_form_for(resource, :as => resource_name, :url => registration_path(resource_name), :html => {:class => "signup"}) do |f|
   = f.error_notification
   .inputs
     = f.input :email, :required => true, :autofocus => true
+    = f.input :username, :required => true, :autofocus => true
     = f.input :first_name, :required => true, :autofocus => true
     = f.input :last_name, :required => true, :autofocus => true
     = f.input :password, :required => true
     = f.input :password_confirmation, :required => true
+    = f.input :birthday, :as => :string, :input_html => {:class => "datepicker"}
+    = f.input :nationality
   .actions
     = f.button :submit, "Sign up"
 = render :partial => "devise/shared/links"
+
+:erb
+  <script type="text/javascript">
+    $(document).ready(function(){
+      user.setup_datepicker();
+    });
+  </script>

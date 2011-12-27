@@ -20,7 +20,7 @@ class Api::UsersController < ApplicationController
       :success => false,
       :auth_token => ''
     }
-    user = User.find_by_username params[:username]
+    user = User.find_by_username params[:login]
     if user && user.valid_password?(params[:password])
       session[:user_id] = user.id
       result[:success] = true
@@ -33,7 +33,7 @@ class Api::UsersController < ApplicationController
   def logout
     user = current_user
     user.authentication_token = nil
-    result[:success] = @user.save? true : false
+    result[:success] = @user.save ? true : false
     
     render :json => { :info => result }
   end

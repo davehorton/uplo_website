@@ -4,3 +4,7 @@
 en:
   common:
     site_title: "Welcome to UPLO"
+  
+  date:
+    formats:
+      default: "%m/%d/%Y"
