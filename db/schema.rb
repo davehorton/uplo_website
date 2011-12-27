@@ -68,6 +68,7 @@ ActiveRecord::Schema.define(:version => 20111226052542) do
     t.string   "username"
     t.datetime "birthday"
     t.string   "nationality"
+    t.string   "gender"
     t.string   "email",                                 :default => "", :null => false
     t.string   "encrypted_password",     :limit => 128, :default => "", :null => false
     t.string   "reset_password_token"
