@@ -24,7 +24,7 @@ Array.prototype.remove = function(s) {
 }); */
 
 global = {
-  date_format: "dd/mm/yy",
+  date_format: "mm/dd/yy",
   date_format_dev: "yy-mm-dd",
   status_show_error: 777
 };

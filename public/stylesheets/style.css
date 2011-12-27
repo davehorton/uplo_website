@@ -409,6 +409,8 @@ input[type=text]:focus, input[type=password]:focus, input[type=email]:focus, tex
   padding-right: 10px;
 }
 
+#user-box{color: #333;}
+
 /*** Common styles ***/
 .clearfix:after { clear: both; content: ' '; display: block; font-size: 0; height: 0; line-height: 0; visibility: hidden; width: 0; }
 * html .clearfix,
@@ -624,7 +626,7 @@ input[type=text]:focus, input[type=password]:focus, input[type=email]:focus, tex
 
 .simple_form label {float: left; width: 130px; margin-right: 10px; margin-top: 5px}
 .simple_form select {width: 165px; float: left;}
-.simple_form input[type=text], input[type=email], input[type=password] {width: 200px; padding: 6px; background-color: #FFFFFF;}
+.simple_form input[type=text], .simple_form input[type=email], .simple_form input[type=password] {width: 200px; padding: 6px; background-color: #FFFFFF;}
 .simple_form input{border: 1px solid #CDCDCD; 
   -webkit-border-radius: 10px;
   -moz-border-radius: 10px;
@@ -762,4 +764,5 @@ input[type=text]:focus, input[type=password]:focus, input[type=email]:focus, tex
   vertical-align: middle;}
 #signin-area .small{font-size: 12px;}
 #signin-area .signin-button{padding: 3px; float: right;}
-#signin-area .simple_form input[type=text], input[type=email], input[type=password] {width: 310px}
+.signin input[type=text], .signin input[type=email], .signin input[type=password] {width: 310px}
+.signup input[type=email], .signup input[type=password] {width: 310px}
