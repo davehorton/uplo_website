@@ -16,9 +16,11 @@ Uplo::Application.routes.draw do
   get "profile", :to => "users#profile"
   
   # API ROUTING
-  get "register.JSON", :to => "api/users#create_user"
   namespace :api do
     resources :users
+    get "logout", :to => "users#logout"
+    post "register", :to => "users#create_user"
+    get "login", :to => "users#login"
   end 
   
   # The priority is based upon order of creation:

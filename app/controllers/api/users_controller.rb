@@ -12,10 +12,10 @@ class Api::UsersController < ApplicationController
       result[:msg] = user.errors 
       result[:success] = false
     end
-    render :json => { :info => result }
+    render :json => result
   end
   
-  def login 
+  def login
     result = {
       :success => false,
       :auth_token => ''
@@ -27,14 +27,16 @@ class Api::UsersController < ApplicationController
       result[:auth_token] = user.ensure_authentication_token!
     end
     
-    render :json => { :info => result }
+    render :json => result
   end
   
   def logout
+    result = {:success => false}
     user = current_user
-    user.authentication_token = nil
-    result[:success] = @user.save ? true : false
-    
-    render :json => { :info => result }
+    user.authentication_token = nil unless user.nil?
+    if !user.nil? && user.save? 
+      result[:success] = true
+    end
+    render :json =>result
   end
 end

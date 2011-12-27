@@ -11,6 +11,7 @@ class DeviseCreateUsers < ActiveRecord::Migration
       t.rememberable
       t.trackable
       t.confirmable
+      t.token_authenticatable
       
       # t.encryptable
       # t.lockable :lock_strategy => :failed_attempts, :unlock_strategy => :both
