@@ -2,7 +2,12 @@ development:
   bucket: uplo-dev
   access_key_id: AKIAIOYCWZFROQJEEBYQ
   secret_access_key: 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
-    
+
+staging:
+  bucket: uplo-dev
+  access_key_id: AKIAIOYCWZFROQJEEBYQ
+  secret_access_key: 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
+  
 test:
   bucket: uplo
   access_key_id: AKIAIOYCWZFROQJEEBYQ
