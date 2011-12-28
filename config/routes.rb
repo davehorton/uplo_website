@@ -17,11 +17,11 @@ Uplo::Application.routes.draw do
   
   # API ROUTING
   namespace :api do
-    resources :users
     get "logout", :to => "users#logout"
     post "register", :to => "users#create_user"
     post "login", :to => "users#login"
     get "reset_password", :to => "users#reset_password"
+    get "list_galleries", :to => "galleries#list_galleries"
   end 
   
   # The priority is based upon order of creation:
