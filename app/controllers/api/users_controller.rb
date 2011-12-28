@@ -68,6 +68,14 @@ class Api::UsersController < ApplicationController
   end
   
   def reset_password
-    User.send_reset_password_instructions({:email => params[:email]}) 
+    result = { :success => true }
+    user = User.find_by_email params[:email]
+    if user.nil?
+      result[:success] = false
+      result[:msg] = "Email does not exist"
+    else
+      User.send_reset_password_instructions({:email => params[:email]})
+    end
+    render :json =>result
   end
 end
