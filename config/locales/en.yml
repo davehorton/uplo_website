@@ -5,6 +5,13 @@ en:
   common:
     site_title: "Welcome to UPLO"
   
+  main_menu:
+    popular: "Popular"
+    browse: "Browse"
+    galleries: "My Galleries"
+    sales: "My Sales"
+    account: "Account"
+  
   date:
     formats:
       default: "%m/%d/%Y"

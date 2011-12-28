@@ -1,27 +1,21 @@
 = js_menu_include_tag
 
 %ul#menu-items
-  %li.first{:class => set_current_tab("home")}
-    = link_to(I18n.t("main_menu.home"), "http://tpl-tripgeek.heroku.com")
+  %li.first{:class => set_current_tab("popular")}
+    = link_to(I18n.t("main_menu.popular"), "#")
 
-  %li.first{:class => set_current_tab("apps")}
-    = link_to(I18n.t("main_menu.apps"), "/apps")
+  %li{:class => set_current_tab("browse")}
+    = link_to(I18n.t("main_menu.browse"), "#")
 
-  %li.sf-menu{:class => set_current_tab("details")}
-    %a{:href => "/places"}
-      %span= I18n.t("main_menu.details")
-      %span.sf-sub-indicator
-
-    %ul.sub-menu.hidden
-      %li.sub-menu-item
-        = link_to(I18n.t("main_menu.places"), "/places")
-      %li.sub-menu-item
-        = link_to(I18n.t("main_menu.events"), "/events")
-      %li.sub-menu-item.last
-        = link_to(I18n.t("main_menu.services"), "/services")
+  %li{:class => set_current_tab("galleries")}
+    = link_to(I18n.t("main_menu.galleries"), "#")
         
-  %li{:class => set_current_tab("about_us")}
-    = link_to(I18n.t("main_menu.about_us"), "http://tpl-tripgeek.heroku.com/about-us")
+  %li{:class => set_current_tab("sales")}
+    = link_to(I18n.t("main_menu.sales"), "#")
+  
+  %li.last{:class => set_current_tab("account")}
+    = link_to(I18n.t("main_menu.account"), "#")
+
 #menu-bottom-padding
 
 :erb
