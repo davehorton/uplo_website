@@ -21,7 +21,7 @@ class Api::UsersController < ApplicationController
     user = User.find_by_username params[:login]
     if user.nil?
       result[:msg] = 'User does not exist'
-    elsif user.confirmed?
+    elsif not user.confirmed?
       result[:msg] = "You must confirm your registration first"
     elsif not user.valid_password?(params[:password])
       result[:msg] = "Password is not correct"
