@@ -10,6 +10,7 @@
 
 class Api::GalleriesController < Api::BaseController
   
+  # GET /api/list_galleries
   def list_galleries 
     result = {:success => false}
     

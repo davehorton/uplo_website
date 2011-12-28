@@ -23,6 +23,8 @@ Uplo::Application.routes.draw do
     get "reset_password", :to => "users#reset_password"
     get "list_galleries", :to => "galleries#list_galleries"
     post "upload_image", :to => "images#upload_image"
+    post "update_image", :to => "images#update_image"
+    delete "delete_image", :to => "images#delete_image"
   end 
   
   # The priority is based upon order of creation:
