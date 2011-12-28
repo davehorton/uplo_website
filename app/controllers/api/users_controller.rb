@@ -29,10 +29,13 @@ class Api::UsersController < ApplicationController
     elsif not user.valid_password?(params[:password])
       result[:msg] = "Password is not correct"
     else
+      info = user.attributes()
+      info[:avatar_url] = user.avatar.url
+      result[:user_info] = info
       session[:user_id] = user.id
-      result[:success] = true
       user.ensure_authentication_token!
       result[:auth_token] = user.authentication_token
+      result[:success] = true
     end
     
     render :json => result
