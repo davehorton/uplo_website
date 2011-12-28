@@ -1,5 +1,19 @@
 class Api::UsersController < ApplicationController
 #  before_filter :authenticate_user!, :only => [:login]
+  def get_user_info
+    result = {:success => false}
+    user = User.find_by_id params[:id]
+    if user.nil?
+      result[:msg] = "This user does not exist"
+    else
+      info = user.attributes()
+      info[:avatar_url] = ""
+      info[:avatar_url] = user.avatar.url unless user.avatar.nil?
+      result[:user_info] = info
+      result[:success] = true
+    end
+    render :json => result
+  end
   
   def create_user
     info = params[:user]
@@ -30,7 +44,8 @@ class Api::UsersController < ApplicationController
       result[:msg] = "Password is not correct"
     else
       info = user.attributes()
-      info[:avatar_url] = user.avatar.url
+      info[:avatar_url] = ""
+      info[:avatar_url] = user.avatar.url unless user.avatar.nil?
       result[:user_info] = info
       session[:user_id] = user.id
       user.ensure_authentication_token!
