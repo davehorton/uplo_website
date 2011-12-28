@@ -22,7 +22,13 @@ class Api::UsersController < ApplicationController
       :auth_token => ''
     }
     user = User.find_by_username params[:login]
-    if user && user.valid_password?(params[:password])
+    if user.nil?
+      result[:msg] = 'User does not exist'
+    elsif user.confirm?
+      result[:msg] = "You must confirm your registration first"
+    elsif not user.valid_password?(params[:password])
+      result[:msg] = "Password is not correct"
+    else
       session[:user_id] = user.id
       result[:success] = true
       user.ensure_authentication_token!
@@ -37,8 +43,13 @@ class Api::UsersController < ApplicationController
     user = current_user
     user.authentication_token = nil unless user.nil?
     if !user.nil? && user.save? 
+      session[:user_id] = nil
       result[:success] = true
     end
     render :json =>result
+  end
+  
+  def reset_password
+    User.send_reset_password_instructions({:email => params[:email]}) 
   end
 end

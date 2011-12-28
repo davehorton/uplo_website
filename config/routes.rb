@@ -21,6 +21,7 @@ Uplo::Application.routes.draw do
     get "logout", :to => "users#logout"
     post "register", :to => "users#create_user"
     post "login", :to => "users#login"
+    get "reset_password", :to => "users#reset_password"
   end 
   
   # The priority is based upon order of creation:
