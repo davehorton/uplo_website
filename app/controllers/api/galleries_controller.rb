@@ -18,7 +18,7 @@ class Api::GalleriesController < Api::BaseController
       return render :json => result
     end
     
-    ser = current_user
+    user = current_user
     result[:data] = user.galleries.select [:id, :name, :description]
     result[:success] = true
     render :json => result

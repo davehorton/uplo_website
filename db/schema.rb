@@ -46,6 +46,7 @@ ActiveRecord::Schema.define(:version => 20111226052542) do
   create_table "images", :force => true do |t|
     t.string   "name",              :null => false
     t.text     "description"
+    t.integer  "gallery_id",        :null => false
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "data_file_name"

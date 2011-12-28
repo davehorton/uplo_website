@@ -3,7 +3,7 @@ class CreateImages < ActiveRecord::Migration
     create_table :images do |t|
       t.string :name, :null => false
       t.text :description
-
+      t.integer :gallery_id, :null => false
       t.timestamps
     end
   end
