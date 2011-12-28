@@ -25,6 +25,7 @@ ActiveRecord::Schema.define(:version => 20111226052542) do
     t.integer  "user_id",     :null => false
     t.string   "name",        :null => false
     t.text     "description"
+    t.string   "permission"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

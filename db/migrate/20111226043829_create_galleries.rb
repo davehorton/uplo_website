@@ -4,6 +4,7 @@ class CreateGalleries < ActiveRecord::Migration
       t.integer :user_id, :null => false
       t.string :name, :null => false
       t.text :description
+      t.string :permission
 
       t.timestamps
     end

@@ -1,0 +1,36 @@
+- content_for :head do
+  = javascript_include_tag("lib/jail.min.js")
+  
+.galleries
+  .action-container.clearfix
+    %a#new-gallery{:href => "#", :class => "button-container icon-link"}
+      %span.round-button= "Add Gallery"
+
+  .galleries-wrapper.clearfix
+    - if @galleries.blank?
+      .empty-data= "There is no gallery. Let create one."
+    - else
+      - count = 0
+      - @galleries.each do |gallery|
+        .gallery-container{:id => "gallery-container-#{gallery.id}"}
+          .gallery-image
+            %a.gallery-link{:href => "#"}
+              = async_image_tag("gallery-thumb-180.jpg", :class => "gallery-image")
+          .gallery-info
+            .name{:title => gallery.name}= truncate(gallery.name, :length => 30)
+            .photo-number= (gallery.images.length > 0 ? pluralize(gallery.images.length, "image") : "No image")
+            .update-time= "Last updated: #{gallery.updated_at_string}"
+            .permission= gallery.permission_string.titleize
+        
+        - count = count + 1
+        - if (count % 2 == 0)
+          .separator.clearfix
+      
+      = render_pagination(@galleries, {:controller => "galleries", :action => params[:action]})
+
+:erb
+  <script type="text/javascript">
+    $("img.gallery-image").jail({
+      effect : "fadeIn"
+    });
+  </script>

@@ -7,7 +7,7 @@ gem 'rails', '3.0.10'
 
 #gem "unicorn" # HTTP Server
 gem 'pg'
-gem "will_paginate", ">=3.0.pre4"
+gem "will_paginate", ">= 3.0.pre4"
 gem 'haml'
 gem "haml-rails", ">= 0.3.4"
 gem "inherited_resources", ">= 1.3.0"

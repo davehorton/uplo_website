@@ -2,13 +2,13 @@
 
 %ul#menu-items
   %li.first{:class => set_current_tab("popular")}
-    = link_to(I18n.t("main_menu.popular"), "#")
+    = link_to(I18n.t("main_menu.popular"), "/")
 
   %li{:class => set_current_tab("browse")}
     = link_to(I18n.t("main_menu.browse"), "#")
 
   %li{:class => set_current_tab("galleries")}
-    = link_to(I18n.t("main_menu.galleries"), "#")
+    = link_to(I18n.t("main_menu.galleries"), galleries_path)
         
   %li{:class => set_current_tab("sales")}
     = link_to(I18n.t("main_menu.sales"), "#")

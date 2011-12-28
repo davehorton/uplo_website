@@ -12,6 +12,13 @@ en:
     sales: "My Sales"
     account: "Account"
   
+  gallery:
+    permission:
+      public: "Public"
+      protected: "Password Protected"
+
   date:
     formats:
       default: "%m/%d/%Y"
+      short: "%b %e, %Y"
+      long: "%B %e, %Y"

@@ -177,7 +177,7 @@ input[type=text]:focus, input[type=password]:focus, input[type=email]:focus, tex
 #wrapper
 {
   width: 990px;
-  margin: 0 auto;
+  margin: 10px auto;
   -moz-border-radius: 5px;
 	-webkit-border-radius: 5px;
 	border-radius: 5px;
@@ -552,7 +552,7 @@ ul#nav a:hover{
   overflow: hidden;
 }
 
-.empty-data{ color: #ccc;}
+.empty-data{ color: #bbb;}
 
 .pagination{
   margin: 10px 20px;
@@ -598,12 +598,16 @@ ul#nav a:hover{
 }
 
 .pagination .previous_page{
+/*
   background: url("../images/back.png") no-repeat scroll center center transparent;
+*/
   margin-right: 10px;
 }
 
 .pagination .next_page{
+/*
   background: url("../images/next.png") no-repeat scroll center center transparent;
+*/
   margin-left: 10px;
 }
 
@@ -615,6 +619,8 @@ ul#nav a:hover{
   box-shadow: rgba(0,0,0,.45) 0 1px 3px; 
   box-shadow: rgba(0,0,0,.45) 0 1px 6px \0/IE9;
 }
+
+a.icon-link{text-decoration: none;}
 
 .round-button{
   border: 1px solid #cdcdcd;
@@ -638,7 +644,7 @@ ul#nav a:hover{
 }
 
 .round-button:hover{
-  background: none repeat scroll 0 0 #EA501F;
+  opacity: 0.85;
 }
 
 .blue-gradient{
@@ -659,6 +665,17 @@ ul#nav a:hover{
 	background:-ms-linear-gradient(bottom, rgb(255,255,255) 0%,rgb(255,255,255) 0%,#CEEFF6 100%);
 }
 
+.button-container{
+  display: table;
+  width: 100%;
+  height: 100%;
+  text-decoration: none;
+  vertical-align: middle;
+  width: 135px;
+  margin: 0 auto;
+}
+.button-container .round-button{display: inline-block; color: #fff;display: table-cell; vertical-align: middle;}
+  
 .simple_form label {float: left; width: 130px; margin-right: 10px; margin-top: 5px}
 .simple_form select {width: 165px; float: left;}
 .simple_form input[type=text], .simple_form input[type=email], .simple_form input[type=password] {width: 200px; padding: 6px; background-color: #FFFFFF;}
@@ -784,20 +801,61 @@ ul#nav a:hover{
   text-align: center;
   vertical-align: middle;
 }
-#signup-area .signup .button-container{
-  display: table;
-  width: 100%;
-  height: 100%;
-  text-decoration: none;
-  vertical-align: middle;
-  width: 135px;
-  margin: 0 auto;
-}
-
+  
 #signup-area h1{font-size: 24px; text-align: center;}
-#signup-area .signup .button-container .round-button{display: inline-block; color: #fff;display: table-cell;
-  vertical-align: middle;}
+
 #signin-area .small{font-size: 12px;}
 #signin-area .signin-button{padding: 3px; float: right;}
 .signin input[type=text], .signin input[type=email], .signin input[type=password] {width: 310px}
 .signup input[type=email], .signup input[type=password] {width: 310px}
+
+/*** GALLERY ***/
+.galleries{
+
+}
+
+.galleries .galleries-wrapper{
+  margin-left: 80px;
+}
+
+.galleries .gallery-container{
+  display: inline-block;
+  margin-left: 20px;
+  margin-right: 20px;
+  width: 400px;
+}
+
+.galleries .gallery-container .gallery-image{
+  width: 180px;
+  height: 180px;
+  cursor: pointer;
+  -webkit-box-shadow: rgba(0,0,0,0.7) 0 3px 8px; 
+  -moz-box-shadow: rgba(0,0,0,0.7) 0 3px 8px; 
+  box-shadow: rgba(0,0,0,0.7) 0 3px 8px; 
+  box-shadow: rgba(0,0,0,0.7) 0 3px 8px \0/IE9;
+}
+
+.galleries .gallery-container .gallery-info{
+  display: inline-block;
+  margin-top: 10px;
+}
+
+.galleries .separator{margin-top: 20px;}
+.galleries .action-container{
+  margin: 10px;
+}
+
+.galleries #new-gallery{
+  float: right;
+}
+
+.galleries #new-gallery .round-button{
+  background:-moz-linear-gradient(center top , #46B40D, #3CA008) repeat scroll 0 0 transparent;
+	background:-webkit-gradient(linear, left top, left bottom, from(#46B40D),to(#3CA008));
+	background:-webkit-linear-gradient(top, #46B40D 0%, #3CA008 100%);
+	background:-o-linear-gradient(top, #46B40D 0%, #3CA008 100%);
+	background:-ms-linear-gradient(top, #46B40D 0%, #3CA008 100%);
+  background-color: #3CA008;
+}
+
+.galleries .pagination{text-align: center;}
