@@ -17,14 +17,11 @@ class Api::UsersController < ApplicationController
   end
   
   def login
-    result = {
-      :success => false,
-      :auth_token => ''
-    }
+    result = { :success => false }
     user = User.find_by_username params[:login]
     if user.nil?
       result[:msg] = 'User does not exist'
-    elsif user.confirm?
+    elsif user.confirmed?
       result[:msg] = "You must confirm your registration first"
     elsif not user.valid_password?(params[:password])
       result[:msg] = "Password is not correct"
@@ -33,6 +30,7 @@ class Api::UsersController < ApplicationController
       result[:success] = true
       user.ensure_authentication_token!
       result[:auth_token] = user.authentication_token
+      result[:user_info] = user.attributes()
     end
     
     render :json => result
@@ -50,6 +48,14 @@ class Api::UsersController < ApplicationController
   end
   
   def reset_password
-    User.send_reset_password_instructions({:email => params[:email]}) 
+    result = { :success => true }
+    user = User.find_by_email params[:email]
+    if user.nil?
+      result[:success] = false
+      result[:msg] = "Email does not exist"
+    else
+      User.send_reset_password_instructions({:email => params[:email]})
+    end
+    render :json =>result
   end
 end
