@@ -9,6 +9,25 @@
 =end
 
 class Api::GalleriesController < Api::BaseController
+  def create_gallery
+    result = {:success => true}
+    
+    if !user_signed_in?
+      result[:success] = false
+      result[:msg] = "You must login first."
+      return render :json => result
+    end
+    
+    info = params[:gallery]
+    gal = Gallery.new info
+    gal.user = current_user
+    unless gal.save
+      result[:msg] = gal.errors 
+      result[:success] = false
+    end
+    
+    return render :json => result
+  end
   
   # GET /api/list_galleries
   def list_galleries 
