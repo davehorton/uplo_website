@@ -32,7 +32,30 @@ class Api::GalleriesController < Api::BaseController
     return render :json => result
   end
   
-  
+  # POST /api/edit_gallery
+  # params: 
+  # gallery[name]
+  # gallery[description]
+  def update_gallery
+    # find gallery
+    gallery = Gallery.find_by_id(params[:gallery][:id])
+    if gallery.nil?
+      result[:msg] = "Could not find Gallery"
+      return render :json => result
+    end
+    # make sure the gallery is user's
+    if gallery.user != user
+       result[:msg] = "This gallery is not belong to you"
+        return render :json => result
+    end
+    # update gallery
+    if gallery.update_attributes(params[:gallery])
+      result[:success] = true
+      result[:data] = {:gallery => gallery.serializable_hash(:only => [:id, :name, :description])}
+    end
+    
+    render :json => result
+  end
   
   # GET /api/list_galleries
   def list_galleries

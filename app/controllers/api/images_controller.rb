@@ -19,7 +19,7 @@ class Api::ImagesController < Api::BaseController
   def upload_image
     result = {:success => false} 
     if !user_signed_in?
-      result[:msg] = "no user logined"
+      result[:msg] = "You must login first."
       return render :json => result
     end 
     
@@ -27,7 +27,7 @@ class Api::ImagesController < Api::BaseController
     gallery = Gallery.find_by_id(params[:gallery_id])
     
     if gallery.nil?
-      result[:msg] = "can not find Gallery"
+      result[:msg] = "Could not find Gallery"
       result[:success] = false
       return render :json => result
     end
@@ -50,7 +50,7 @@ class Api::ImagesController < Api::BaseController
   def update_image
     result = {:success => false}
     if !user_signed_in?
-      result[:msg] = "no user logined"
+      result[:msg] = "You must login first."
       return render :json => result
     end
     
@@ -59,12 +59,12 @@ class Api::ImagesController < Api::BaseController
     # find image
     image = Image.find_by_id(params[:image][:id])
     if image.nil?
-      result[:msg] = "can not find Image"
+      result[:msg] = "Could not find Image"
       return render :json => result
     end
     # make sure the image is user's
     if image.gallery.user != user
-       result[:msg] = "this image is not belong to you"
+       result[:msg] = "This image is not belong to you"
         return render :json => result
     end
     # update image
@@ -81,7 +81,7 @@ class Api::ImagesController < Api::BaseController
   def delete_image
     result = {:success => false}
     if !user_signed_in?
-      result[:msg] = "no user logined"
+      result[:msg] = "You must login first."
       return render :json => result
     end
     user = current_user
@@ -89,12 +89,12 @@ class Api::ImagesController < Api::BaseController
     # find image
     image = Image.find_by_id(params[:id])
     if image.nil?
-      result[:msg] = "can not find Image"
+      result[:msg] = "Could not find Image"
       return render :json => result
     end
     # make sure the image is user's
     if image.gallery.user != user
-       result[:msg] = "this image is not belong to you"
+       result[:msg] = "This image is not belong to you"
         return render :json => result
     end
     
