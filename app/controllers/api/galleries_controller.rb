@@ -39,10 +39,14 @@ class Api::GalleriesController < Api::BaseController
       result[:msg] = "no user logined"
       return render :json => result
     end
-    
+
     user = current_user
-    result[:data] = user.galleries.select [:id, :name, :description]
+    pagination = {:total => user.galleries.count}
+    result[:data] = user.galleries.select([:id, :name, :description])
+            .paginate(:page => params[:page], :per_page => params[:limit])
+            .all(:order => params[:orderby].nil? ? 'id' : params[:orderby] + ' DESC')
     result[:success] = true
+    result[:pagination] = pagination
     render :json => result
   end
 end

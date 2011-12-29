@@ -1,5 +1,7 @@
 class Api::UsersController < ApplicationController
 #  before_filter :authenticate_user!, :only => [:login]
+  include Devise::Controllers::InternalHelpers
+  
   def get_user_info
     result = {:success => false}
     user = User.find_by_id params[:id]
@@ -33,35 +35,24 @@ class Api::UsersController < ApplicationController
   def login
     result = {
       :success => false,
-      :auth_token => ''
     }
-    user = User.find_by_username params[:login]
-    if user.nil?
-      result[:msg] = 'User does not exist'
-    elsif not user.confirmed?
-      result[:msg] = "You must confirm your registration first"
-    elsif not user.valid_password?(params[:password])
-      result[:msg] = "Password is not correct"
-    else
-      info = user.attributes()
-      info[:avatar_url] = ""
-      info[:avatar_url] = user.avatar.url unless user.avatar.nil?
-      result[:user_info] = info
-      session[:user_id] = user.id
-      user.ensure_authentication_token!
-      result[:auth_token] = user.authentication_token
-      result[:success] = true
-    end
+    # Modify to apply devise
+    user = warden.authenticate!(:api)
+    sign_in(:user, user)
+    # End of modification
     
+    info = user.serializable_hash :only => [:email, :first_name, :last_name, :username, :nationality, :birthday, :gender, :avatar]
+    result[:data] = info
+    result[:success] = true
     render :json => result
   end
   
   def logout
     result = {:success => false}
-    user = current_user
-    user.authentication_token = nil unless user.nil?
-    if !user.nil? && user.save? 
-      session[:user_id] = nil
+    signed_in = signed_in?(:user)
+    Devise.sign_out_all_scopes ? sign_out : sign_out(:user)
+    if signed_in
+      result[:msg] = :signed_out
       result[:success] = true
     end
     render :json =>result

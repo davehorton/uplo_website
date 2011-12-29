@@ -10,6 +10,7 @@ Uplo::Application.routes.draw do
 
   devise_scope :user do
     get "signin", :to => "users/sessions#new"
+    post "signin", :to => "users/sessions#new"
     get "register", :to => "users/registrations#new"
     delete "signout", :to => "users/sessions#destroy"
   end
@@ -17,7 +18,10 @@ Uplo::Application.routes.draw do
   
   # API ROUTING
   namespace :api do
-    get "logout", :to => "users#logout"
+    devise_scope :user do
+      post "login", :to => "users#login"
+      get "logout", :to => "users#logout"
+    end
     post "register", :to => "users#create_user"
     post "login", :to => "users#login"
     get "user_info", :to => "users#get_user_info"

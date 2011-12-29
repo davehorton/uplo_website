@@ -206,4 +206,24 @@ Devise.setup do |config|
   #   manager.intercept_401 = false
   #   manager.default_strategies(:scope => :user).unshift :some_external_strategy
   # end
+  config.warden do |manager|
+    Warden::Strategies.add(:api) do
+
+      def valid?
+        params[:username] || params[:password]
+      end
+
+      def authenticate!
+        user = User.find_by_username params[:username]
+        if user.nil?
+          return fail!('User does not exist')
+        elsif not user.confirmed?
+          return fail!("You must confirm your registration first")
+        elsif not user.valid_password?(params[:password])
+          return fail!("Password is not correct")
+        end
+        success!(user)
+      end
+    end
+  end
 end
