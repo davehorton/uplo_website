@@ -3,7 +3,11 @@ Uplo::Application.routes.draw do
 
   # WEB ROUTING
   resources :galleries
-  resources :images
+  resources :images do 
+    collection do 
+      get 'slideshow'
+    end 
+  end
 
   devise_for :users, :controllers => {:registrations => "users/registrations", :sessions => "users/sessions",
     :confirmations => "users/confirmations", :passwords => "users/passwords" }

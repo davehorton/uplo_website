@@ -1,0 +1,112 @@
+= stylesheet_link_tag("style.css","skin.css")
+= javascript_include_tag("rails.js", "application.js", "jquery.jcarousel.min.js")
+.container
+  .top-container
+    .left-container.clearfix.left.round-box
+      #image-viewer
+        = image_tag "http://t2.gstatic.com/images?q=tbn:ANd9GcSwoYSMWKh06h6xsI_fTLdwNpUbzdgxFEIBJ9G6HjuNwvrXccqgFmQPFIxM"
+      .filter-container
+        %ul
+          %li
+            %button Filter
+          %li
+            %button Filter
+          %li
+            %button Filter
+          %li
+            %button Filter
+          %li
+            %button Filter
+    .right-container.right
+      .button-container.round-box.blue-gradient
+        %ul
+          %li
+            %button Cancel
+          %li
+            %button Print
+          %li
+            %button Save
+      .edit-area.round-box.clearfix
+        UserName
+        %br.clearfix
+        %ul
+          %li
+            Picture name 
+          %li
+            Description
+        %ul
+          %li
+          %li
+            %input
+          %li
+            %textarea
+  .bottom-container.clearfix
+    %ul#mycarousel.jcarousel-skin-tango
+      %li
+        = image_tag("http://t2.gstatic.com/images?q=tbn:ANd9GcSwoYSMWKh06h6xsI_fTLdwNpUbzdgxFEIBJ9G6HjuNwvrXccqgFmQPFIxM", :size => "75x75")
+      %li
+        = image_tag("http://t2.gstatic.com/images?q=tbn:ANd9GcSwoYSMWKh06h6xsI_fTLdwNpUbzdgxFEIBJ9G6HjuNwvrXccqgFmQPFIxM", :size => "75x75")
+      %li
+        = image_tag("http://t2.gstatic.com/images?q=tbn:ANd9GcSwoYSMWKh06h6xsI_fTLdwNpUbzdgxFEIBJ9G6HjuNwvrXccqgFmQPFIxM", :size => "75x75")
+      %li
+        = image_tag("http://t2.gstatic.com/images?q=tbn:ANd9GcSwoYSMWKh06h6xsI_fTLdwNpUbzdgxFEIBJ9G6HjuNwvrXccqgFmQPFIxM", :size => "75x75")
+      %li
+        = image_tag("http://t2.gstatic.com/images?q=tbn:ANd9GcSwoYSMWKh06h6xsI_fTLdwNpUbzdgxFEIBJ9G6HjuNwvrXccqgFmQPFIxM", :size => "75x75")
+      %li
+        = image_tag("http://t2.gstatic.com/images?q=tbn:ANd9GcSwoYSMWKh06h6xsI_fTLdwNpUbzdgxFEIBJ9G6HjuNwvrXccqgFmQPFIxM", :size => "75x75")
+      %li
+        = image_tag("http://t2.gstatic.com/images?q=tbn:ANd9GcSwoYSMWKh06h6xsI_fTLdwNpUbzdgxFEIBJ9G6HjuNwvrXccqgFmQPFIxM", :size => "75x75")
+      %li
+        = image_tag("http://t2.gstatic.com/images?q=tbn:ANd9GcSwoYSMWKh06h6xsI_fTLdwNpUbzdgxFEIBJ9G6HjuNwvrXccqgFmQPFIxM", :size => "75x75")
+      %li
+        = image_tag("http://t2.gstatic.com/images?q=tbn:ANd9GcSwoYSMWKh06h6xsI_fTLdwNpUbzdgxFEIBJ9G6HjuNwvrXccqgFmQPFIxM", :size => "75x75")
+      %li
+        = image_tag("http://t2.gstatic.com/images?q=tbn:ANd9GcSwoYSMWKh06h6xsI_fTLdwNpUbzdgxFEIBJ9G6HjuNwvrXccqgFmQPFIxM", :size => "75x75")
+      %li
+        = image_tag("http://t2.gstatic.com/images?q=tbn:ANd9GcSwoYSMWKh06h6xsI_fTLdwNpUbzdgxFEIBJ9G6HjuNwvrXccqgFmQPFIxM", :size => "75x75")
+      %li
+        = image_tag("http://t2.gstatic.com/images?q=tbn:ANd9GcSwoYSMWKh06h6xsI_fTLdwNpUbzdgxFEIBJ9G6HjuNwvrXccqgFmQPFIxM", :size => "75x75")
+      %li
+        = image_tag("http://t2.gstatic.com/images?q=tbn:ANd9GcSwoYSMWKh06h6xsI_fTLdwNpUbzdgxFEIBJ9G6HjuNwvrXccqgFmQPFIxM", :size => "75x75")
+      %li
+        = image_tag("http://t2.gstatic.com/images?q=tbn:ANd9GcSwoYSMWKh06h6xsI_fTLdwNpUbzdgxFEIBJ9G6HjuNwvrXccqgFmQPFIxM", :size => "75x75")
+      %li
+        = image_tag("http://t2.gstatic.com/images?q=tbn:ANd9GcSwoYSMWKh06h6xsI_fTLdwNpUbzdgxFEIBJ9G6HjuNwvrXccqgFmQPFIxM", :size => "75x75")
+      %li
+        = image_tag("http://t2.gstatic.com/images?q=tbn:ANd9GcSwoYSMWKh06h6xsI_fTLdwNpUbzdgxFEIBJ9G6HjuNwvrXccqgFmQPFIxM", :size => "75x75")
+      %li
+        = image_tag("http://t2.gstatic.com/images?q=tbn:ANd9GcSwoYSMWKh06h6xsI_fTLdwNpUbzdgxFEIBJ9G6HjuNwvrXccqgFmQPFIxM", :size => "75x75")
+      %li
+        = image_tag("http://t2.gstatic.com/images?q=tbn:ANd9GcSwoYSMWKh06h6xsI_fTLdwNpUbzdgxFEIBJ9G6HjuNwvrXccqgFmQPFIxM", :size => "75x75")
+
+
+:erb
+  <script type="text/javascript">
+  function mycarousel_initCallback(carousel)
+  {
+    // Disable autoscrolling if the user clicks the prev or next button.
+    carousel.buttonNext.bind('click', function() {
+        carousel.startAuto(0);
+    });
+
+    carousel.buttonPrev.bind('click', function() {
+        carousel.startAuto(0);
+    });
+
+    // Pause autoscrolling if the user moves with the cursor over the clip.
+    carousel.clip.hover(function() {
+        carousel.stopAuto();
+    }, function() {
+        carousel.startAuto();
+    });
+  };
+
+  jQuery(document).ready(function() {
+    jQuery('#mycarousel').jcarousel({
+        start: 5,
+        scroll: 3,
+        initCallback: mycarousel_initCallback
+    });
+  });
+
+  </script>

@@ -95,7 +95,7 @@ class Api::GalleriesController < Api::BaseController
     pagination = {:total => user.galleries.count}
     result[:data] = user.galleries.select([:id, :name, :description])
             .paginate(:page => params[:page], :per_page => params[:limit])
-            .all(:order => params[:orderby].nil? ? 'id' : params[:orderby] + ' DESC')
+            .all(:order => params[:orderby].nil? ? 'id DESC' : params[:orderby] + ' DESC')
     result[:success] = true
     result[:pagination] = pagination
     render :json => result

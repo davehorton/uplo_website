@@ -859,3 +859,86 @@ a.icon-link{text-decoration: none;}
 }
 
 .galleries .pagination{text-align: center;}
+
+
+/*** SLIDESHOW ***/
+/*
+.container
+  .top-container
+    .left-container
+      #image-viewer
+      .filter-container
+    .right-container
+      .button-container
+      .edit-area
+        %input
+        %input
+        %input
+  .bottom-container
+*/
+.container {
+	margin: 0 auto;
+	width: 670px;
+}
+.top-container {
+	background: black;
+}
+.left-container {
+	width: 350px;
+	text-align: center;
+}
+#image-viewer {
+	width: 300px;
+	height: 200px;
+	margin: 0 auto;
+}
+#image-viewer img {
+	width: 200px;
+	height: 200px;
+	
+}
+.filter-container {
+	width: 100%;
+	height: 50px;
+}
+.filter-container ul {
+	margin: 5px;
+	padding: 0;
+	list-style-type: none;
+}
+.filter-container ul li {
+	display: inline;
+	margin-right: 15px;
+	text-align: center;
+}
+.right-container {
+	width: 300px;
+}
+.button-container {
+	width:100%;
+	padding: 10px;
+}
+.button-container ul {
+	margin: 0;
+	padding: 0;
+	list-style-type: none;
+}
+.button-container ul li {
+	display: inline;
+	margin-right: 70px;
+	text-align: center;
+}
+.edit-area {
+	text-align: left;
+	padding: 10px;
+	width: 300px;
+}
+.edit-area ul {
+	float: left;
+}
+.edit-area ul li {
+	margin: 5px;
+}
+.bottom-container {
+	clear:both;
+}
