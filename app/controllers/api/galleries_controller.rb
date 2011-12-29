@@ -21,7 +21,9 @@ class Api::GalleriesController < Api::BaseController
     info = params[:gallery]
     gal = Gallery.new info
     gal.user = current_user
-    unless gal.save
+    if gal.save
+      result[:gallery_id] = gal.id
+    else
       result[:msg] = gal.errors 
       result[:success] = false
     end
