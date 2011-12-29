@@ -24,6 +24,7 @@ class Api::ImagesController < Api::BaseController
     end 
 =end    
 # TODO: uncomment this     user = current_user
+  def upload_image
     user = User.find_by_username :admin
     gallery = Gallery.find_by_id(params[:gallery_id])
     
