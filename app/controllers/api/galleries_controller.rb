@@ -37,6 +37,8 @@ class Api::GalleriesController < Api::BaseController
   # gallery[name]
   # gallery[description]
   def update_gallery
+    result = {:success => false}
+    user = current_user
     # find gallery
     gallery = Gallery.find_by_id(params[:gallery][:id])
     if gallery.nil?
