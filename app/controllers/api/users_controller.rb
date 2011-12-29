@@ -41,7 +41,8 @@ class Api::UsersController < ApplicationController
     sign_in(:user, user)
     # End of modification
     
-    info = user.serializable_hash :only => [:id, :email, :first_name, :authentication_token, :last_name, :username, :nationality, :birthday, :gender, :avatar]
+    info = user.serializable_hash :only => [:id, :email, :first_name, :authentication_token, :last_name, :username, :nationality, :birthday, :gender]
+    info[:avatar] = user.avatar.url
     result[:user_info] = info
     result[:success] = true
     render :json => result

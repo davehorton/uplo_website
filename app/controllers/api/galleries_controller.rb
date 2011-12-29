@@ -33,11 +33,11 @@ class Api::GalleriesController < Api::BaseController
   end
   
   # GET /api/list_galleries
-  def list_galleries 
+  def list_galleries
     result = {:success => false}
     
     if !user_signed_in?
-      result[:msg] = "no user logined"
+      result[:msg] = "You must login first."
       return render :json => result
     end
 
