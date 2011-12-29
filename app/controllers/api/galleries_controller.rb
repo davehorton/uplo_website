@@ -59,6 +59,29 @@ class Api::GalleriesController < Api::BaseController
     render :json => result
   end
   
+  # DELETE /api/delete_gallery
+  # params: id
+  def delete_gallery
+    result = {:success => false}
+    user = current_user
+    # find gallery
+    gallery = Gallery.find_by_id(params[:id])
+    if gallery.nil?
+      result[:msg] = "Could not find Gallery"
+      return render :json => result
+    end
+    # make sure the gallery is user's
+    if gallery.user != user
+       result[:msg] = "This gallery is not belong to you"
+        return render :json => result
+    end
+    # delete gallery
+    gallery.destroy
+    result[:success] = true
+    
+    render :json => result
+  end
+  
   # GET /api/list_galleries
   def list_galleries
     result = {:success => false}
