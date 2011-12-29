@@ -9,6 +9,7 @@
 =end
 
 class Api::GalleriesController < Api::BaseController
+  before_filter :authenticate_user!
   def create_gallery
     result = {:success => true}
     
