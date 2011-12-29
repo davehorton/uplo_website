@@ -32,6 +32,8 @@ class Api::GalleriesController < Api::BaseController
     return render :json => result
   end
   
+  
+  
   # GET /api/list_galleries
   def list_galleries
     result = {:success => false}

@@ -1,5 +1,5 @@
 class Api::UsersController < ApplicationController
-#  before_filter :authenticate_user!, :only => [:login]
+  before_filter :authenticate_user!, :only => [:get_user_info]
   include Devise::Controllers::InternalHelpers
   
   def get_user_info
@@ -8,9 +8,8 @@ class Api::UsersController < ApplicationController
     if user.nil?
       result[:msg] = "This user does not exist"
     else
-      info = user.attributes()
-      info[:avatar_url] = ""
-      info[:avatar_url] = user.avatar.url unless user.avatar.nil?
+      info = user.serializable_hash :only => [:id, :email, :first_name, :last_name, :username, :nationality, :birthday, :gender]
+      info[:avatar] = user.avatar.url
       result[:user_info] = info
       result[:success] = true
     end

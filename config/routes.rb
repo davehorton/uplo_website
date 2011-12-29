@@ -21,12 +21,11 @@ Uplo::Application.routes.draw do
     devise_scope :user do
       post "login", :to => "users#login"
       get "logout", :to => "users#logout"
+      get "user_info", :to => "users#get_user_info"
     end
     post "register", :to => "users#create_user"
     post "login", :to => "users#login"
-    get "user_info", :to => "users#get_user_info"
     get "reset_password", :to => "users#reset_password"
-    post "create_gallery", :to => "galleries#create_gallery"
     get "list_galleries", :to => "galleries#list_galleries"
     post "upload_image", :to => "images#upload_image"
     post "update_image", :to => "images#update_image"
