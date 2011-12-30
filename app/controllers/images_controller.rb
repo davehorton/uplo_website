@@ -5,25 +5,25 @@ class ImagesController < ApplicationController
   end
   
   def index
-  
+    list = Image.all
+    list.map! { |image| 
+      { :name => image.name,
+        :size => image.data_file_size,
+        :url => url_for(:controller => 'images', :action => 'edit', :id => image.id),
+        :thumbnail_url => image.data(:thumb),
+        :delete_url => "/images/delete/#{image.id}"
+      } 
+    }
+    render :json => list
   end 
   
   def new 
   end
   
   def create
-    @upload = Image.new(params[:upload])
-    if @upload.save
-      render :json => { :pic_path => @upload.data.url.to_s , :name => @upload.data.instance.attributes["picture_file_name"] }, :content_type => 'text/html'
-    else
-      render :json => { :result => 'error'}, :content_type => 'text/html'
-    end
-  end
-  
-  def upload
     info = params[:image]
     a = {
-      :name => 'alaalla',
+      :name => info[0].original_filename,
       :gallery_id => 1,
       :data => info
     }
@@ -33,11 +33,11 @@ class ImagesController < ApplicationController
       result = [{:error => 'Cannot save image' }]
     else
       result = [{
-        :name => image.data_file_name,
+        :name => image.name,
         :size => image.data_file_size,
-        :url => image.data.url,
-        :thumbnail_url => image.data(:thumb)
-#        :delete_url
+        :url => url_for(:controller => 'images', :action => 'edit', :id => image.id),
+        :thumbnail_url => image.data(:thumb),
+        :delete_url => "/images/delete/#{image.id}"
 #        :delete_type => "DELETE"
       }]
     end
@@ -45,9 +45,30 @@ class ImagesController < ApplicationController
     render :json => result
   end
   
-  def show
+  def destroy
+    Image.destroy params[:id]
+    redirect_to :action => :list
   end
   
   def list
+  end
+  
+  def show
+  end
+  
+  def edit
+    @image = Image.find_by_id params[:id]
+  end
+  
+  def update
+    image = Image.find_by_id params[:id]
+    image.update_attributes params[:image]
+    redirect_to :action => :list
+  end
+  
+  protected
+  
+  def set_current_tab
+    @current_tab = "galleries"
   end
 end

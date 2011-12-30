@@ -1,0 +1,13 @@
+<span >
+  <h3>Update your image info</h3>
+</span>
+
+<div style='padding-top:20px;'>
+  <div><%= image_tag @image.data(:thumb) %></div>
+  <% form_for :image, :url => "/images/#{params[:id]}", :html => { :class => "image edit", :id => "edit_image", :method => "put" } do |f| %>
+    <div><div class='label'><span>Name:</span></div><%= f.text_field :name, :value => @image.name %></div>
+    <div><div class='label'><span>Description:</span></div><%= f.text_area :description, :value => @image.description %></div>
+    <div><%= submit_tag "Update", :class => "btn" %></div>
+
+  <% end %>
+</div>

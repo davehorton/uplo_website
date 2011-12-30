@@ -370,12 +370,13 @@
         _deleteHandler: function (e) {
             e.preventDefault();
             var button = $(this);
-            e.data.fileupload._trigger('destroy', e, {
-                context: button.closest('.template-download'),
-                url: button.attr('data-url'),
-                type: button.attr('data-type'),
-                dataType: e.data.fileupload.options.dataType
-            });
+            window.location = button.attr('data-url');
+//            e.data.fileupload._trigger('destroy', e, {
+//                context: button.closest('.template-download'),
+//                url: button.attr('data-url'),
+//                type: button.attr('data-type'),
+//                dataType: e.data.fileupload.options.dataType
+//            });
         },
 
         _transitionCallback: function (node, callback) {

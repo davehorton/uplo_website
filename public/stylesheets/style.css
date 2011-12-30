@@ -861,6 +861,7 @@ a.icon-link{text-decoration: none;}
 .galleries .pagination{text-align: center;}
 
 
+
 /*** SLIDESHOW ***/
 /*
 .container
@@ -942,3 +943,5 @@ a.icon-link{text-decoration: none;}
 .bottom-container {
 	clear:both;
 }
+.image.edit span {width:100px;}
+.image.edit .label{width:100px; float:left;}
