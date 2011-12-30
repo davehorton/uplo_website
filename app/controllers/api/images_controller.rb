@@ -32,7 +32,7 @@ class Api::ImagesController < Api::BaseController
       result[:msg] = "Could not find Gallery"
       result[:success] = false
       return render :json => result
-    en
+    end
     image = gallery.images.create(params[:image])
     unless image.save
       result[:msg] = image.errors 
