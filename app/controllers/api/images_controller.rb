@@ -13,29 +13,27 @@ end
 =end
 
 class Api::ImagesController < Api::BaseController
-# TODO: uncomment this  before_filter :authenticate_user!
+  before_filter :authenticate_user!
+  
   # POST /api/upload_image
   # params: image[data], gallery_id, image[name], image[description]
-=begin  def upload_image
+  def upload_image
     result = {:success => false} 
+    
     if !user_signed_in?
       result[:msg] = "You must login first."
       return render :json => result
     end 
-=end    
-# TODO: uncomment this     user = current_user
-  def upload_image
-    user = User.find_by_username :admin
+    
+    user = current_user
     gallery = Gallery.find_by_id(params[:gallery_id])
     
     if gallery.nil?
       result[:msg] = "Could not find Gallery"
       result[:success] = false
       return render :json => result
-    end
-    
+    en
     image = gallery.images.create(params[:image])
-    
     unless image.save
       result[:msg] = image.errors 
       result[:success] = false
@@ -51,17 +49,13 @@ class Api::ImagesController < Api::BaseController
   # params: image[id], image[name], image[description]
   def update_image
     result = {:success => false}
-=begin  def upload_image
-        result = {:success => false} 
-        if !user_signed_in?
-          result[:msg] = "You must login first."
-          return render :json => result
-        end 
-=end
     
-    # TODO: uncomment this     user = current_user
-    user = User.find_by_username :admin
+    if !user_signed_in?
+      result[:msg] = "You must login first."
+      return render :json => result
+    end
     
+    user = current_user
     # find image
     image = Image.find_by_id(params[:image][:id])
     if image.nil?
