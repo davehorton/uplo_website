@@ -7,7 +7,7 @@
   <% form_for :image, :url => "/images/#{params[:id]}", :html => { :class => "image edit", :id => "edit_image", :method => "put" } do |f| %>
     <div><div class='label'><span>Name:</span></div><%= f.text_field :name, :value => @image.name %></div>
     <div><div class='label'><span>Description:</span></div><%= f.text_area :description, :value => @image.description %></div>
-    <div><%= submit_tag "Update", :class => "btn" %></div>
-
+    <div><%= submit_tag "Update", :class => "btn", :style => 'float:left;' %></div>
   <% end %>
+  <div><%= button_to_function "Return", :onclick => "window.location='/images/list'", :class => "btn" %></div>
 </div>

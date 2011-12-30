@@ -6,9 +6,10 @@ class ImagesController < ApplicationController
     list.map! { |image| 
       { :name => image.name,
         :size => image.data_file_size,
-        :url => url_for(:controller => 'images', :action => 'edit', :id => image.id),
+        :url => image.data.url,
         :thumbnail_url => image.data(:thumb),
-        :delete_url => "/images/delete/#{image.id}"
+        :delete_url => "/images/delete/#{image.id}",
+        :edit_url => url_for(:controller => 'images', :action => 'edit', :id => image.id)
       } 
     }
     render :json => list
@@ -18,23 +19,24 @@ class ImagesController < ApplicationController
   end
   
   def create
-    info = params[:image]
-    a = {
-      :name => info[0].original_filename,
+    data = params[:image][:data]
+    image_info = {
+      :name => data[0].original_filename,
       :gallery_id => 1,
-      :data => info
+      :data => data[0]
     }
 
-    image = Image.new a
+    image = Image.new image_info
     unless image.save
       result = [{:error => 'Cannot save image' }]
     else
       result = [{
         :name => image.name,
         :size => image.data_file_size,
-        :url => url_for(:controller => 'images', :action => 'edit', :id => image.id),
+        :url => image.data.url,
         :thumbnail_url => image.data(:thumb),
-        :delete_url => "/images/delete/#{image.id}"
+        :delete_url => "/images/delete/#{image.id}",
+        :edit_url => url_for(:controller => 'images', :action => 'edit', :id => image.id)
 #        :delete_type => "DELETE"
       }]
     end

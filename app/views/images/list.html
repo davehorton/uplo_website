@@ -4,27 +4,27 @@
 
 
 <div class="container">
-    <form id="fileupload" action="/images" method="POST" enctype="multipart/form-data">
-        <div class="row">
-            <div class="span16 fileupload-buttonbar">
-                <div class="progressbar fileupload-progressbar"><div style="width:0%;"></div></div>
-                <span class="btn success fileinput-button">
-                    <span>Add files...</span>
-                    <input type="file" name="image[]" multiple>
-                </span>
-                <button type="submit" class="btn primary start">Start upload</button>
-                <button type="reset" class="btn info cancel">Cancel upload</button>
-                <button type="button" class="btn danger delete">Delete selected</button>
-                <input type="checkbox" class="toggle">
-            </div>
+  <%= form_for :image, :url=>"/images", :method => 'post', :html => { :multipart => true, :id => 'fileupload' } do |f| %>
+    <div class="row">
+        <div class="span16 fileupload-buttonbar">
+            <div class="progressbar fileupload-progressbar"><div style="width:0%;"></div></div>
+            <span class="btn success fileinput-button">
+                <span>Add files...</span>
+                <%= f.file_field :data, :multiple => true %>
+            </span>
+            <button type="submit" class="btn primary start">Start upload</button>
+            <button type="reset" class="btn info cancel">Cancel upload</button>
+            <button type="button" class="btn danger delete">Delete selected</button>
+            <input type="checkbox" class="toggle">
         </div>
-        <br>
-        <div class="row">
-            <div class="span16">
-                <table class="zebra-striped"><tbody class="files"></tbody></table>
-            </div>
+    </div>
+    <br />
+    <div class="row">
+        <div class="span16">
+            <table class="zebra-striped"><tbody class="files"></tbody></table>
         </div>
-    </form>
+    </div>
+  <% end %>
 </div>
 <!-- gallery-loader is the loading animation container -->
 <div id="gallery-loader"></div>
@@ -38,7 +38,6 @@
     <div class="modal-footer">
         <a class="btn primary next">Next</a>
         <a class="btn info prev">Previous</a>
-        <a class="btn success download" target="_blank">Download</a>
     </div>
 </div>
 <script>
@@ -82,7 +81,7 @@ var fileUploadErrors = {
                 <a href="{%=file.url%}" title="{%=file.name%}" rel="gallery"><img src="{%=file.thumbnail_url%}"></a>
             {% } %}</td>
             <td class="name">
-                <a href="{%=file.url%}" title="{%=file.name%}" rel="{%=file.thumbnail_url&&'gallery'%}" onClick='window.location="{%=file.url%}"'>{%=file.name%}</a>
+                <a href="{%=file.edit_url%}" title="{%=file.name%}" rel="{%=file.thumbnail_url&&'gallery'%}" onClick="window.location='{%=file.edit_url%}'">{%=file.name%}</a>
             </td>
             <td class="size">{%=o.formatFileSize(file.size)%}</td>
             <td colspan="2"></td>
@@ -102,9 +101,7 @@ var fileUploadErrors = {
       "http://twitter.github.com/bootstrap/1.4.0/bootstrap-modal.min.js", 
       "http://blueimp.github.com/Bootstrap-Image-Gallery/bootstrap-image-gallery.min.js", 
       "file_upload/jquery.iframe-transport.js", 
-      "file_upload/jquery.iframe-transport.js", 
-      "file_upload/jquery.fileupload.js", 
-      "file_upload/jquery.fileupload.js", 
+      "file_upload/jquery.fileupload.js",
       "file_upload/jquery.fileupload-ui.js", 
       "file_upload/application.js", 
       "file_upload/jquery.xdr-transport.js" %>
