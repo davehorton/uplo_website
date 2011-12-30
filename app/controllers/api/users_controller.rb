@@ -1,5 +1,4 @@
-class Api::UsersController < ApplicationController
-  before_filter :authenticate_user!, :only => [:get_user_info]
+class Api::UsersController < Api::BaseController
   include Devise::Controllers::InternalHelpers
   
   def get_user_info
@@ -38,7 +37,6 @@ class Api::UsersController < ApplicationController
     # Modify to apply devise
     user = warden.authenticate!(:api)
     sign_in(:user, user)
-    user.reset_authentication_token!
     # End of modification
     
     info = user.serializable_hash :only => [:id, :email, :first_name, :authentication_token, :last_name, :username, :nationality, :birthday, :gender]

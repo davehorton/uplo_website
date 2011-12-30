@@ -63,6 +63,12 @@ class Api::GalleriesController < Api::BaseController
   # params: id
   def delete_gallery
     result = {:success => false}
+    
+    if !user_signed_in?
+      result[:msg] = "You must login first."
+      return render :json => result
+    end
+    
     user = current_user
     # find gallery
     gallery = Gallery.find_by_id(params[:id])
@@ -92,12 +98,12 @@ class Api::GalleriesController < Api::BaseController
     end
 
     user = current_user
-    pagination = {:total => user.galleries.count}
+    result[:total]  = user.galleries.count
     result[:data] = user.galleries.select([:id, :name, :description])
             .paginate(:page => params[:page], :per_page => params[:limit])
             .all(:order => params[:orderby].nil? ? 'id DESC' : params[:orderby] + ' DESC')
     result[:success] = true
-    result[:pagination] = pagination
+    result[:total] = pagination
     render :json => result
   end
 end

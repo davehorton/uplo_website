@@ -1,9 +1,6 @@
 class ImagesController < ApplicationController
   before_filter :authenticate_user!
   
-  def slideshow
-  end
-  
   def index
     list = Image.all
     list.map! { |image| 
@@ -64,6 +61,19 @@ class ImagesController < ApplicationController
     image = Image.find_by_id params[:id]
     image.update_attributes params[:image]
     redirect_to :action => :list
+  end
+  
+  # GET images/slideshow
+  # params: id => Image ID
+  def slideshow
+    # get selected Image
+    @selectedImage = Image.find_by_id(params[:id])
+    if (@selectedImage.nil?)
+      
+    end
+    # get Gallery
+    @images = @selectedImage.gallery.images
+    # get Images belongs Gallery
   end
   
   protected

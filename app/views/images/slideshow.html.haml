@@ -1,6 +1,6 @@
-= stylesheet_link_tag("style.css","skin.css")
-= javascript_include_tag("rails.js", "application.js", "jquery.jcarousel.min.js")
-.container
+= stylesheet_link_tag("slideshow.css")
+= javascript_include_tag("jquery.jcarousel.min.js")
+.slideshow-container
   .top-container
     .left-container.clearfix.left.round-box
       #image-viewer
@@ -21,13 +21,16 @@
       .button-container.round-box.blue-gradient
         %ul
           %li
-            %button Cancel
+            %div
+              %button Cancel
           %li
-            %button Print
+            %div
+              %button Print
           %li
-            %button Save
+            %div
+              %button Save
       .edit-area.round-box.clearfix
-        UserName
+        =current_user.first_name + " " + current_user.last_name
         %br.clearfix
         %ul
           %li
@@ -37,49 +40,50 @@
         %ul
           %li
           %li
-            %input
+            %div
+            %input :value => abc
           %li
             %textarea
   .bottom-container.clearfix
-    %ul#mycarousel.jcarousel-skin-tango
-      %li
-        = image_tag("http://t2.gstatic.com/images?q=tbn:ANd9GcSwoYSMWKh06h6xsI_fTLdwNpUbzdgxFEIBJ9G6HjuNwvrXccqgFmQPFIxM", :size => "75x75")
-      %li
-        = image_tag("http://t2.gstatic.com/images?q=tbn:ANd9GcSwoYSMWKh06h6xsI_fTLdwNpUbzdgxFEIBJ9G6HjuNwvrXccqgFmQPFIxM", :size => "75x75")
-      %li
-        = image_tag("http://t2.gstatic.com/images?q=tbn:ANd9GcSwoYSMWKh06h6xsI_fTLdwNpUbzdgxFEIBJ9G6HjuNwvrXccqgFmQPFIxM", :size => "75x75")
-      %li
-        = image_tag("http://t2.gstatic.com/images?q=tbn:ANd9GcSwoYSMWKh06h6xsI_fTLdwNpUbzdgxFEIBJ9G6HjuNwvrXccqgFmQPFIxM", :size => "75x75")
-      %li
-        = image_tag("http://t2.gstatic.com/images?q=tbn:ANd9GcSwoYSMWKh06h6xsI_fTLdwNpUbzdgxFEIBJ9G6HjuNwvrXccqgFmQPFIxM", :size => "75x75")
-      %li
-        = image_tag("http://t2.gstatic.com/images?q=tbn:ANd9GcSwoYSMWKh06h6xsI_fTLdwNpUbzdgxFEIBJ9G6HjuNwvrXccqgFmQPFIxM", :size => "75x75")
-      %li
-        = image_tag("http://t2.gstatic.com/images?q=tbn:ANd9GcSwoYSMWKh06h6xsI_fTLdwNpUbzdgxFEIBJ9G6HjuNwvrXccqgFmQPFIxM", :size => "75x75")
-      %li
-        = image_tag("http://t2.gstatic.com/images?q=tbn:ANd9GcSwoYSMWKh06h6xsI_fTLdwNpUbzdgxFEIBJ9G6HjuNwvrXccqgFmQPFIxM", :size => "75x75")
-      %li
-        = image_tag("http://t2.gstatic.com/images?q=tbn:ANd9GcSwoYSMWKh06h6xsI_fTLdwNpUbzdgxFEIBJ9G6HjuNwvrXccqgFmQPFIxM", :size => "75x75")
-      %li
-        = image_tag("http://t2.gstatic.com/images?q=tbn:ANd9GcSwoYSMWKh06h6xsI_fTLdwNpUbzdgxFEIBJ9G6HjuNwvrXccqgFmQPFIxM", :size => "75x75")
-      %li
-        = image_tag("http://t2.gstatic.com/images?q=tbn:ANd9GcSwoYSMWKh06h6xsI_fTLdwNpUbzdgxFEIBJ9G6HjuNwvrXccqgFmQPFIxM", :size => "75x75")
-      %li
-        = image_tag("http://t2.gstatic.com/images?q=tbn:ANd9GcSwoYSMWKh06h6xsI_fTLdwNpUbzdgxFEIBJ9G6HjuNwvrXccqgFmQPFIxM", :size => "75x75")
-      %li
-        = image_tag("http://t2.gstatic.com/images?q=tbn:ANd9GcSwoYSMWKh06h6xsI_fTLdwNpUbzdgxFEIBJ9G6HjuNwvrXccqgFmQPFIxM", :size => "75x75")
-      %li
-        = image_tag("http://t2.gstatic.com/images?q=tbn:ANd9GcSwoYSMWKh06h6xsI_fTLdwNpUbzdgxFEIBJ9G6HjuNwvrXccqgFmQPFIxM", :size => "75x75")
-      %li
-        = image_tag("http://t2.gstatic.com/images?q=tbn:ANd9GcSwoYSMWKh06h6xsI_fTLdwNpUbzdgxFEIBJ9G6HjuNwvrXccqgFmQPFIxM", :size => "75x75")
-      %li
-        = image_tag("http://t2.gstatic.com/images?q=tbn:ANd9GcSwoYSMWKh06h6xsI_fTLdwNpUbzdgxFEIBJ9G6HjuNwvrXccqgFmQPFIxM", :size => "75x75")
-      %li
-        = image_tag("http://t2.gstatic.com/images?q=tbn:ANd9GcSwoYSMWKh06h6xsI_fTLdwNpUbzdgxFEIBJ9G6HjuNwvrXccqgFmQPFIxM", :size => "75x75")
-      %li
-        = image_tag("http://t2.gstatic.com/images?q=tbn:ANd9GcSwoYSMWKh06h6xsI_fTLdwNpUbzdgxFEIBJ9G6HjuNwvrXccqgFmQPFIxM", :size => "75x75")
-
-
+    %br
+    %div
+      %ul#mycarousel.jcarousel-skin-tango
+        %li
+          = image_tag("http://t2.gstatic.com/images?q=tbn:ANd9GcSwoYSMWKh06h6xsI_fTLdwNpUbzdgxFEIBJ9G6HjuNwvrXccqgFmQPFIxM", :size => "75x75")
+        %li
+          = image_tag("http://t2.gstatic.com/images?q=tbn:ANd9GcSwoYSMWKh06h6xsI_fTLdwNpUbzdgxFEIBJ9G6HjuNwvrXccqgFmQPFIxM", :size => "75x75")
+        %li
+          = image_tag("http://t2.gstatic.com/images?q=tbn:ANd9GcSwoYSMWKh06h6xsI_fTLdwNpUbzdgxFEIBJ9G6HjuNwvrXccqgFmQPFIxM", :size => "75x75")
+        %li
+          = image_tag("http://t2.gstatic.com/images?q=tbn:ANd9GcSwoYSMWKh06h6xsI_fTLdwNpUbzdgxFEIBJ9G6HjuNwvrXccqgFmQPFIxM", :size => "75x75")
+        %li
+          = image_tag("http://t2.gstatic.com/images?q=tbn:ANd9GcSwoYSMWKh06h6xsI_fTLdwNpUbzdgxFEIBJ9G6HjuNwvrXccqgFmQPFIxM", :size => "75x75")
+        %li
+          = image_tag("http://t2.gstatic.com/images?q=tbn:ANd9GcSwoYSMWKh06h6xsI_fTLdwNpUbzdgxFEIBJ9G6HjuNwvrXccqgFmQPFIxM", :size => "75x75")
+        %li
+          = image_tag("http://t2.gstatic.com/images?q=tbn:ANd9GcSwoYSMWKh06h6xsI_fTLdwNpUbzdgxFEIBJ9G6HjuNwvrXccqgFmQPFIxM", :size => "75x75")
+        %li
+          = image_tag("http://t2.gstatic.com/images?q=tbn:ANd9GcSwoYSMWKh06h6xsI_fTLdwNpUbzdgxFEIBJ9G6HjuNwvrXccqgFmQPFIxM", :size => "75x75")
+        %li
+          = image_tag("http://t2.gstatic.com/images?q=tbn:ANd9GcSwoYSMWKh06h6xsI_fTLdwNpUbzdgxFEIBJ9G6HjuNwvrXccqgFmQPFIxM", :size => "75x75")
+        %li
+          = image_tag("http://t2.gstatic.com/images?q=tbn:ANd9GcSwoYSMWKh06h6xsI_fTLdwNpUbzdgxFEIBJ9G6HjuNwvrXccqgFmQPFIxM", :size => "75x75")
+        %li
+          = image_tag("http://t2.gstatic.com/images?q=tbn:ANd9GcSwoYSMWKh06h6xsI_fTLdwNpUbzdgxFEIBJ9G6HjuNwvrXccqgFmQPFIxM", :size => "75x75")
+        %li
+          = image_tag("http://t2.gstatic.com/images?q=tbn:ANd9GcSwoYSMWKh06h6xsI_fTLdwNpUbzdgxFEIBJ9G6HjuNwvrXccqgFmQPFIxM", :size => "75x75")
+        %li
+          = image_tag("http://t2.gstatic.com/images?q=tbn:ANd9GcSwoYSMWKh06h6xsI_fTLdwNpUbzdgxFEIBJ9G6HjuNwvrXccqgFmQPFIxM", :size => "75x75")
+        %li
+          = image_tag("http://t2.gstatic.com/images?q=tbn:ANd9GcSwoYSMWKh06h6xsI_fTLdwNpUbzdgxFEIBJ9G6HjuNwvrXccqgFmQPFIxM", :size => "75x75")
+        %li
+          = image_tag("http://t2.gstatic.com/images?q=tbn:ANd9GcSwoYSMWKh06h6xsI_fTLdwNpUbzdgxFEIBJ9G6HjuNwvrXccqgFmQPFIxM", :size => "75x75")
+        %li
+          = image_tag("http://t2.gstatic.com/images?q=tbn:ANd9GcSwoYSMWKh06h6xsI_fTLdwNpUbzdgxFEIBJ9G6HjuNwvrXccqgFmQPFIxM", :size => "75x75")
+        %li
+          = image_tag("http://t2.gstatic.com/images?q=tbn:ANd9GcSwoYSMWKh06h6xsI_fTLdwNpUbzdgxFEIBJ9G6HjuNwvrXccqgFmQPFIxM", :size => "75x75")
+        %li
+          = image_tag("http://t2.gstatic.com/images?q=tbn:ANd9GcSwoYSMWKh06h6xsI_fTLdwNpUbzdgxFEIBJ9G6HjuNwvrXccqgFmQPFIxM", :size => "75x75")
 :erb
   <script type="text/javascript">
   function mycarousel_initCallback(carousel)
