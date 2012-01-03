@@ -2,6 +2,9 @@ class Gallery < ActiveRecord::Base
   # ASSOCIATIONS
   belongs_to :user
   has_many :images, :dependent => :destroy
+  
+  # VALIDATIONS
+  validates :name, :presence => true
   validates :user, :presence => true
   
   # CALL BACK

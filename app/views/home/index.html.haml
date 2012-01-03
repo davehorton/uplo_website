@@ -19,3 +19,10 @@
             .input.clearfix
               = link_to "Forgot your password?", new_password_path(:user), :class => "icon info-link small"
               = f.submit "Sign in", :class => "signin-button"
+
+:erb
+  <script type="text/javascript">
+    $(document).ready(function(){
+      helper.hide_require_signs();
+    });
+  </script>
