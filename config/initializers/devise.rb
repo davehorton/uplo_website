@@ -215,6 +215,7 @@ Devise.setup do |config|
 
       def authenticate!
         user = User.find_by_username params[:username]
+        user = User.find_by_email params[:username] if user.nil?
         if user.nil?
           return fail!('User does not exist')
         elsif not user.confirmed?

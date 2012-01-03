@@ -4,7 +4,7 @@
   .top-container
     .left-container.clearfix.left.round-box
       #image-viewer
-        = image_tag "http://t2.gstatic.com/images?q=tbn:ANd9GcSwoYSMWKh06h6xsI_fTLdwNpUbzdgxFEIBJ9G6HjuNwvrXccqgFmQPFIxM"
+        = image_tag @selectedImage.data.url
       .filter-container
         %ul
           %li
@@ -18,72 +18,38 @@
           %li
             %button Filter
     .right-container.right
-      .button-container.round-box.blue-gradient
-        %ul
-          %li
-            %div
-              %button Cancel
-          %li
-            %div
-              %button Print
-          %li
-            %div
-              %button Save
-      .edit-area.round-box.clearfix
-        =current_user.first_name + " " + current_user.last_name
-        %br.clearfix
-        %ul
-          %li
-            Picture name 
-          %li
-            Description
-        %ul
-          %li
-          %li
-            %div
-            %input :value => abc
-          %li
-            %textarea
+      = simple_form_for(:image, :url => image_path(@selectedImage)) do |image|
+        .button-container.round-box.blue-gradient
+          %ul
+            %li
+              %div
+                %button Cancel
+            %li
+              %div
+                %button Print
+            %li
+              %div
+                =image.submit "Save"
+        .edit-area.round-box.clearfix
+          = current_user.first_name + " " + current_user.last_name
+          %br.clearfix
+          %ul
+            %li
+              Picture name 
+            %li
+              = image.text_field :name, :value => @selectedImage.name
+            %li
+              Description
+            %li
+              = image.text_area :description, :value => @selectedImage.description
   .bottom-container.clearfix
     %br
     %div
       %ul#mycarousel.jcarousel-skin-tango
-        %li
-          = image_tag("http://t2.gstatic.com/images?q=tbn:ANd9GcSwoYSMWKh06h6xsI_fTLdwNpUbzdgxFEIBJ9G6HjuNwvrXccqgFmQPFIxM", :size => "75x75")
-        %li
-          = image_tag("http://t2.gstatic.com/images?q=tbn:ANd9GcSwoYSMWKh06h6xsI_fTLdwNpUbzdgxFEIBJ9G6HjuNwvrXccqgFmQPFIxM", :size => "75x75")
-        %li
-          = image_tag("http://t2.gstatic.com/images?q=tbn:ANd9GcSwoYSMWKh06h6xsI_fTLdwNpUbzdgxFEIBJ9G6HjuNwvrXccqgFmQPFIxM", :size => "75x75")
-        %li
-          = image_tag("http://t2.gstatic.com/images?q=tbn:ANd9GcSwoYSMWKh06h6xsI_fTLdwNpUbzdgxFEIBJ9G6HjuNwvrXccqgFmQPFIxM", :size => "75x75")
-        %li
-          = image_tag("http://t2.gstatic.com/images?q=tbn:ANd9GcSwoYSMWKh06h6xsI_fTLdwNpUbzdgxFEIBJ9G6HjuNwvrXccqgFmQPFIxM", :size => "75x75")
-        %li
-          = image_tag("http://t2.gstatic.com/images?q=tbn:ANd9GcSwoYSMWKh06h6xsI_fTLdwNpUbzdgxFEIBJ9G6HjuNwvrXccqgFmQPFIxM", :size => "75x75")
-        %li
-          = image_tag("http://t2.gstatic.com/images?q=tbn:ANd9GcSwoYSMWKh06h6xsI_fTLdwNpUbzdgxFEIBJ9G6HjuNwvrXccqgFmQPFIxM", :size => "75x75")
-        %li
-          = image_tag("http://t2.gstatic.com/images?q=tbn:ANd9GcSwoYSMWKh06h6xsI_fTLdwNpUbzdgxFEIBJ9G6HjuNwvrXccqgFmQPFIxM", :size => "75x75")
-        %li
-          = image_tag("http://t2.gstatic.com/images?q=tbn:ANd9GcSwoYSMWKh06h6xsI_fTLdwNpUbzdgxFEIBJ9G6HjuNwvrXccqgFmQPFIxM", :size => "75x75")
-        %li
-          = image_tag("http://t2.gstatic.com/images?q=tbn:ANd9GcSwoYSMWKh06h6xsI_fTLdwNpUbzdgxFEIBJ9G6HjuNwvrXccqgFmQPFIxM", :size => "75x75")
-        %li
-          = image_tag("http://t2.gstatic.com/images?q=tbn:ANd9GcSwoYSMWKh06h6xsI_fTLdwNpUbzdgxFEIBJ9G6HjuNwvrXccqgFmQPFIxM", :size => "75x75")
-        %li
-          = image_tag("http://t2.gstatic.com/images?q=tbn:ANd9GcSwoYSMWKh06h6xsI_fTLdwNpUbzdgxFEIBJ9G6HjuNwvrXccqgFmQPFIxM", :size => "75x75")
-        %li
-          = image_tag("http://t2.gstatic.com/images?q=tbn:ANd9GcSwoYSMWKh06h6xsI_fTLdwNpUbzdgxFEIBJ9G6HjuNwvrXccqgFmQPFIxM", :size => "75x75")
-        %li
-          = image_tag("http://t2.gstatic.com/images?q=tbn:ANd9GcSwoYSMWKh06h6xsI_fTLdwNpUbzdgxFEIBJ9G6HjuNwvrXccqgFmQPFIxM", :size => "75x75")
-        %li
-          = image_tag("http://t2.gstatic.com/images?q=tbn:ANd9GcSwoYSMWKh06h6xsI_fTLdwNpUbzdgxFEIBJ9G6HjuNwvrXccqgFmQPFIxM", :size => "75x75")
-        %li
-          = image_tag("http://t2.gstatic.com/images?q=tbn:ANd9GcSwoYSMWKh06h6xsI_fTLdwNpUbzdgxFEIBJ9G6HjuNwvrXccqgFmQPFIxM", :size => "75x75")
-        %li
-          = image_tag("http://t2.gstatic.com/images?q=tbn:ANd9GcSwoYSMWKh06h6xsI_fTLdwNpUbzdgxFEIBJ9G6HjuNwvrXccqgFmQPFIxM", :size => "75x75")
-        %li
-          = image_tag("http://t2.gstatic.com/images?q=tbn:ANd9GcSwoYSMWKh06h6xsI_fTLdwNpUbzdgxFEIBJ9G6HjuNwvrXccqgFmQPFIxM", :size => "75x75")
+        - @images.each do |image| 
+          %li
+            %a{:href => "/images/slideshow?id=#{image.id}"}
+              = image_tag(image.data.url(:thumb), :size => "75x75")
 :erb
   <script type="text/javascript">
   function mycarousel_initCallback(carousel)

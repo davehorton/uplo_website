@@ -42,6 +42,13 @@ class Image < ActiveRecord::Base
   end
   
   # INSTANCE METHODS
+  def image_url
+    data.url
+  end
+  
+  def image_thumb_url
+    data.url(:thumb)
+  end
   
   # Shortcut to get image's URL                                    
   def url(options = nil)

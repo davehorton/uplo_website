@@ -81,7 +81,7 @@ class ImagesController < ApplicationController
     # get selected Image
     @selectedImage = Image.find_by_id(params[:id])
     if (@selectedImage.nil?)
-      
+      return 
     end
     # get Gallery
     @images = @selectedImage.gallery.images
