@@ -9,7 +9,7 @@
 =end
 
 class Api::GalleriesController < Api::BaseController
-  before_filter :authenticate_user!
+  before_filter :authenticate_user!, :except => [:list_popular]
   
   def create_gallery
     gal = Gallery.new params[:gallery]
@@ -79,6 +79,19 @@ class Api::GalleriesController < Api::BaseController
   def list_galleries
     @result[:total]  = @user.galleries.count
     @result[:data] = @user.galleries.select([:id, :name, :description]).load_galleries(@filtered_params)
+    @result[:success] = true
+    render :json => @result
+  end
+  
+  # GET /api/list_popular
+  #   parmas: 
+  #   page_id
+  #   page_size
+  #   sort_field
+  #   sort_direction
+  def list_popular
+    @result[:total]  = Gallery.count
+    @result[:data] = Gallery.select([:id, :name, :description]).load_galleries(@filtered_params)
     @result[:success] = true
     render :json => @result
   end

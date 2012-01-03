@@ -27,3 +27,10 @@ en:
       default: "%m/%d/%Y"
       short: "%b %e, %Y"
       long: "%B %e, %Y"
+      
+  slideshow:
+    picture_name: "Picture Name"
+    description: "Description"
+    cancel: "Cancel"
+    print: "Print"
+    save: "Save"

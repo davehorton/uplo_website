@@ -18,28 +18,28 @@
           %li
             %button Filter
     .right-container.right
-      = simple_form_for(:image, :url => image_path(@selectedImage)) do |image|
+      = simple_form_for(:image, :action => :update, :method => "put") do |image|
         .button-container.round-box.blue-gradient
           %ul
             %li
               %div
-                %button Cancel
+                =button_to I18n.t("slideshow.cancel")
             %li
               %div
-                %button Print
+                =button_to I18n.t("slideshow.print")
             %li
               %div
-                =image.submit "Save"
+                =image.submit I18n.t("slideshow.save")
         .edit-area.round-box.clearfix
           = current_user.first_name + " " + current_user.last_name
           %br.clearfix
           %ul
             %li
-              Picture name 
+              = I18n.t("slideshow.picture_name")
             %li
               = image.text_field :name, :value => @selectedImage.name
             %li
-              Description
+              = I18n.t("slideshow.description")
             %li
               = image.text_area :description, :value => @selectedImage.description
   .bottom-container.clearfix
