@@ -75,17 +75,25 @@ class ImagesController < ApplicationController
     redirect_to :action => :list
   end
   
-  # GET images/slideshow
+  # GET images/:id/slideshow
   # params: id => Image ID
   def slideshow
     # get selected Image
-    @selectedImage = Image.find_by_id(params[:id])
-    if (@selectedImage.nil?)
-      return 
+    @selected_image = Image.find_by_id(params[:id])
+    if (@selected_image.nil?)
+      return render 'public/404.html'
     end
     # get Gallery
-    @images = @selectedImage.gallery.images
+    @images = @selected_image.gallery.images.all(:order => 'id')
     # get Images belongs Gallery
+  end
+  
+  # PUT images/:id/slideshow_update
+  # params: id => Image ID
+  def slideshow_update
+    image = Image.find_by_id params[:id]
+    image.update_attributes params[:image]
+    redirect_to :action => :slideshow, :id => params[:id]
   end
   
   protected

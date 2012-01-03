@@ -10,7 +10,8 @@ Uplo::Application.routes.draw do
   
   resources :images do 
     collection do 
-      get 'slideshow'
+      get '/:id/slideshow' => 'images#slideshow'
+      post '/:id/slideshow' => 'images#slideshow_update'
     end 
   end
 
