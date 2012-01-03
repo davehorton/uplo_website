@@ -32,9 +32,9 @@ Uplo::Application.routes.draw do
       post "login", :to => "users#login"
       post "logout", :to => "users#logout"
       get "user_info", :to => "users#get_user_info"
+      post "register", :to => "users#create_user"
+      get "reset_password", :to => "users#reset_password"
     end
-    post "register", :to => "users#create_user"
-    get "reset_password", :to => "users#reset_password"
     post "create_gallery", :to => "galleries#create_gallery"
     post "update_gallery", :to => "galleries#update_gallery"
     post "delete_gallery", :to => "galleries#delete_gallery"
