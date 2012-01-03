@@ -42,7 +42,7 @@ class ImagesController < ApplicationController
         :size => image.data_file_size,
         :url => image.data.url,
         :thumbnail_url => image.data(:thumb),
-        :delete_url => "/galleries/#{@gallery.id}/images/delete/#{image.id}",
+        :delete_url => "/galleries/#{params[:gallery_id]}/images/delete/#{image.id}",
         :edit_url => url_for(:controller => 'images', :action => 'edit', :id => image.id)
 #        :delete_type => "DELETE"
       }]
