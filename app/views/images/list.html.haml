@@ -1,0 +1,111 @@
+- content_for :head do
+  = stylesheet_link_tag "http://twitter.github.com/bootstrap/1.4.0/bootstrap.min.css", "http://blueimp.github.com/Bootstrap-Image-Gallery/bootstrap-image-gallery.min.css", "file_upload/jquery.fileupload-ui.css"
+
+.galleries.images
+  .gallery-header
+    %h2.gallery-name
+      = link_to(@gallery.name, gallery_images_path(@gallery))
+    %span= "("
+    %span.gallery-permission
+      %a{:href => "#"}= @gallery.permission_string
+    %span= ")"
+    
+.container
+  = form_for :image, :url=>"/galleries/#{@gallery.id}/images", :method => 'post', :html => { :multipart => true, :id => 'fileupload' } do |f|
+    .row
+      .span16.fileupload-buttonbar
+        .progressbar.fileupload-progressbar
+          %div{:style => "width:0%;"}
+        %span.btn.success.fileinput-button
+          %span Add files...
+          = f.file_field :data, :multiple => true
+        
+        %button{:type=>"submit", :class=>"btn primary start"}Start upload
+        %button{:type=>"reset", :class=>"btn info cancel"}Cancel upload
+    %br
+    .row
+      .span16
+        %table{:class=>"zebra-striped"}
+          %tbody{:class=>"files"}
+          
+%div
+  =# will_paginate @images
+
+<!-- gallery-loader is the loading animation container -->
+#gallery-loader
+<!-- gallery-modal is the modal dialog used for the image gallery -->
+#gallery-modal.modal.hide.fade
+  .modal-header
+    %a{:href=>"#", :class=>"close"}&times;
+    %h3{:class=>"title"}
+  .modal-body
+  .modal-footer
+    %a{:class=>"btn primary next"}Next
+    %a{:class=>"btn info prev"}Previous
+
+:erb
+  <script>
+  var fileUploadErrors = {
+      maxFileSize: 'File is too big',
+      minFileSize: 'File is too small',
+      acceptFileTypes: 'Filetype not allowed',
+      maxNumberOfFiles: 'Max number of files exceeded',
+      uploadedBytes: 'Uploaded bytes exceed file size',
+      emptyResult: 'Empty file upload result'
+  };
+  </script>
+  <script id="template-upload" type="text/html">
+  {% for (var i=0, files=o.files, l=files.length, file=files[0]; i<l; file=files[++i]) { %}
+      <tr class="template-upload fade">
+          <td class="preview"><span class="fade"></span></td>
+          <td class="name">{%=file.name%}</td>
+          <td class="size">{%=o.formatFileSize(file.size)%}</td>
+          {% if (file.error) { %}
+              <td class="error" colspan="2"><span class="label important">Error</span> {%=fileUploadErrors[file.error] || file.error%}</td>
+          {% } else if (o.files.valid && !i) { %}
+              <td class="progress"><div class="progressbar"><div style="width:0%;"></div></div></td>
+              <td class="start">{% if (!o.options.autoUpload) { %}<button class="btn primary">Start</button>{% } %}</td>
+          {% } else { %}
+              <td colspan="2"></td>
+          {% } %}
+          <td class="cancel">{% if (!i) { %}<button class="btn info">Cancel</button>{% } %}</td>
+      </tr>
+  {% } %}
+  </script>
+  <script id="template-download" type="text/html">
+  {% for (var i=0, files=o.files, l=files.length, file=files[0]; i<l; file=files[++i]) { %}
+      <tr class="template-download fade">
+          {% if (file.error) { %}
+              <td></td>
+              <td class="name">{%=file.name%}</td>
+              <td class="size">{%=o.formatFileSize(file.size)%}</td>
+              <td class="error" colspan="2"><span class="label important">Error</span> {%=fileUploadErrors[file.error] || file.error%}</td>
+          {% } else { %}
+              <td class="preview">{% if (file.thumbnail_url) { %}
+                  <a href="{%=file.url%}" title="{%=file.name%}" rel="gallery"><img src="{%=file.thumbnail_url%}"></a>
+              {% } %}</td>
+              <td class="name">
+                  <a href="{%=file.edit_url%}" title="{%=file.name%}" rel="{%=file.thumbnail_url&&'gallery'%}" onClick="window.location='{%=file.edit_url%}'">{%=file.name%}</a>
+              </td>
+              <td class="size">{%=o.formatFileSize(file.size)%}</td>
+              <td colspan="2"></td>
+          {% } %}
+          <td class="delete">
+              <button class="btn danger" data-type="{%=file.delete_type%}" data-url="{%=file.delete_url%}">Delete</button>
+              <input type="checkbox" name="delete" value="1">
+          </td>
+      </tr>
+  {% } %}
+  </script>
+
+
+= javascript_include_tag "file_upload/jquery.ui.widget.js", 
+      "http://blueimp.github.com/JavaScript-Templates/tmpl.min.js",
+      "http://blueimp.github.com/JavaScript-Load-Image/load-image.min.js", 
+      "http://twitter.github.com/bootstrap/1.4.0/bootstrap-modal.min.js", 
+      "http://blueimp.github.com/Bootstrap-Image-Gallery/bootstrap-image-gallery.min.js", 
+      "file_upload/jquery.iframe-transport.js", 
+      "file_upload/jquery.fileupload.js",
+      "file_upload/jquery.fileupload-ui.js", 
+      "file_upload/application.js", 
+      "file_upload/jquery.xdr-transport.js"

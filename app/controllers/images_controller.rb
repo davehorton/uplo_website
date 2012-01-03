@@ -3,14 +3,11 @@ class ImagesController < ApplicationController
   authorize_resource
   
   def index
-    if params[:gallery_id]
-      # Author: Man Vuong
-      @gallery = current_user.galleries.find_by_id(params[:gallery_id])
-      @images = @gallery.images.load_images(@filtered_params)
-      # end
-    else
-      list = Image.all
-      list.map! { |image| 
+    @gallery = current_user.galleries.find_by_id(params[:gallery_id])
+    
+    if request.xhr?  
+      list = @gallery.images.all
+      images = list.map { |image| 
         { :name => image.name,
           :size => image.data_file_size,
           :url => image.data.url,
@@ -19,7 +16,9 @@ class ImagesController < ApplicationController
           :edit_url => url_for(:controller => 'images', :action => 'edit', :id => image.id)
         } 
       }
-      render :json => list
+      render :json => images
+    else
+      @images = @gallery.images.load_images(@filtered_params)
     end    
   end 
   
@@ -30,7 +29,7 @@ class ImagesController < ApplicationController
     data = params[:image][:data]
     image_info = {
       :name => data[0].original_filename,
-      :gallery_id => 1,
+      :gallery_id => params[:gallery_id],
       :data => data[0]
     }
 
@@ -58,9 +57,12 @@ class ImagesController < ApplicationController
   end
   
   def list
+    @gallery = Gallery.find_by_id(params[:gallery_id])
+    @images = @gallery.images.find :all
   end
   
   def show
+    @post = Image.paginate(:page => 1, :per_page => 5)
   end
   
   def edit

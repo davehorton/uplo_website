@@ -11,7 +11,7 @@
     %span= ")"
   
   .action-container
-    %a#edit-images{:href => images_list_path, :class => "ui-button-container icon-link"}
+    %a#edit-images{:href => gallery_images_list_path(:gallery_id => @gallery.id), :class => "ui-button-container icon-link"}
       %span= "Edit Images"
     
     %span.saparator= "|"
@@ -27,22 +27,16 @@
   #gallery-form-container.clearfix.round-box.hidden{:style => "display: none"}
   
   .images-wrapper.clearfix
-    - if !@images.blank?
+    - if @images.blank?
       .empty-data= "There is no images in this gallery. Please add image."
     - else
-      - count = 0
-      -# @images.each do |image|
-      - (1..10).each do |image|
-        .gallery-container.image-container{:id => "image-container-#{image}"}
+      - @images.each do |image|
+        .gallery-container.image-container{:id => "image-container-#{image.id}"}
           .gallery-image
             %a.image-link{:href => "#slideshow"}
-              =# async_image_tag(image.url(:thumb), :class => "image-thumb")
-              = async_image_tag("gallery-thumb-180.jpg", :class => "image-thumb")
-        
-        - count = count + 1
+              = async_image_tag(image.url(:thumb), :class => "image-thumb")
       
       = render_pagination(@images, {:controller => "images", :action => params[:action], :gallery_id => @gallery.id})
-
 
 :erb
   <script type="text/javascript">

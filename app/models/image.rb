@@ -1,4 +1,6 @@
 class Image < ActiveRecord::Base
+  include ::SharedMethods::Paging
+
   belongs_to :gallery
   has_many :image_tags, :dependent => :destroy
   has_many :tags, :through => :image_tags
@@ -15,8 +17,7 @@ class Image < ActiveRecord::Base
   #validates_attachment_presence :data
   validates_attachment_content_type :data, :content_type => [ 'image/jpeg','image/png' ],
                                       :message => 'file must be of filetype .jpg or .png'
-       
-  include ::SharedMethods::Paging
+
   
   # CLASS METHODS
   class << self
@@ -33,7 +34,7 @@ class Image < ActiveRecord::Base
     def parse_paging_options(options, default_opts = {})
       if default_opts.blank?
         default_opts = {
-          :sort_criteria => "name ASC" # "position ASC, name ASC"
+          :sort_criteria => "updated_at DESC"
         }
       end
       paging_options(options, default_opts)
