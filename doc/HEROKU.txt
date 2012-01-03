@@ -16,8 +16,8 @@ rake production deploy
 # ************************************************************************************************
 # WARNING: THIS TASK WILL DROP, CREATE, RUN MIGRATIONS AND SEED DATA
 # ************************************************************************************************
+heroku pg:reset SHARED_DATABASE_URL --app uplo-dev
 heroku rake db:setup --app uplo-dev
-heroku rake db:setup --app uplo
 
 # push local db to heroku
 # ************************************************************

@@ -18,7 +18,7 @@ class Api::ImagesController < Api::BaseController
   # POST /api/upload_image
   # params: image[data], gallery_id, image[name], image[description]
   def upload_image
-    result = {:success => false} 
+    result = {:success => false}
     
     if !user_signed_in?
       result[:msg] = "You must login first."

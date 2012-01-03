@@ -45,9 +45,10 @@ ActiveRecord::Schema.define(:version => 20111226052542) do
   end
 
   create_table "images", :force => true do |t|
-    t.string   "name",              :null => false
+    t.string   "name",                                 :null => false
     t.text     "description"
-    t.integer  "gallery_id",        :null => false
+    t.integer  "gallery_id",                           :null => false
+    t.boolean  "is_gallery_cover",  :default => false
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "data_file_name"

@@ -114,7 +114,10 @@ helper = {
   },
   
   hide_require_signs: function(){
-    $(".simple_form label.required abbr").hide();
+    // Require Livequery
+    $(".simple_form label.required abbr").livequery(function(){
+      $(this).hide()
+    });
   },
   
   scroll_to: function(element, delay_time){

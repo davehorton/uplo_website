@@ -16,6 +16,11 @@ en:
     permission:
       public: "Public"
       protected: "Password Protected"
+    create_done: "Your new gallery was created successfully"
+    update_done: "Your gallery was updated successfully"
+    delete_done: "Your gallery was deleted"
+    delete_failed: "Cannot delete the gallery"
+    delete_confirm: "Are you sure you want to delete this gallery?"
 
   date:
     formats:

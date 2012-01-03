@@ -4,7 +4,10 @@ Uplo::Application.routes.draw do
   # WEB ROUTING
   get 'images/list', :to => 'images#list'
   get 'images/delete/:id', :to => 'images#destroy'
-  resources :galleries
+  resources :galleries do
+    resources :images
+  end
+  
   resources :images do 
     collection do 
       get 'slideshow'

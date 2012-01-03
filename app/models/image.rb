@@ -15,4 +15,35 @@ class Image < ActiveRecord::Base
   #validates_attachment_presence :data
   validates_attachment_content_type :data, :content_type => [ 'image/jpeg','image/png' ],
                                       :message => 'file must be of filetype .jpg or .png'
+       
+  include ::SharedMethods::Paging
+  
+  # CLASS METHODS
+  class << self
+    def load_images(params = {})
+      paging_info = parse_paging_options(params)
+      paginate(
+        :page => paging_info.page_id, 
+        :per_page => paging_info.page_size,
+        :order => paging_info.sort_string)
+    end
+    
+    protected
+    
+    def parse_paging_options(options, default_opts = {})
+      if default_opts.blank?
+        default_opts = {
+          :sort_criteria => "name ASC" # "position ASC, name ASC"
+        }
+      end
+      paging_options(options, default_opts)
+    end
+  end
+  
+  # INSTANCE METHODS
+  
+  # Shortcut to get image's URL                                    
+  def url(options = nil)
+    self.data.url(options)
+  end
 end

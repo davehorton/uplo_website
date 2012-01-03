@@ -289,7 +289,7 @@ DEPENDENCIES
   pg
   pickle!
   pry
-  rails (= 3.0.10)
+  rails (>= 3.0.10)
   rails3-generators
   rmagick
   rspec-rails (>= 2.7.0)

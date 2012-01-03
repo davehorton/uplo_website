@@ -611,7 +611,7 @@ ul#nav a:hover{
   margin-left: 10px;
 }
 
-.hidden{ display: none}
+.hidden{ display: none !important;}
 
 .shadow{
   -webkit-box-shadow: rgba(0,0,0,.45) 0 1px 3px; 
@@ -665,7 +665,7 @@ a.icon-link{text-decoration: none;}
 	background:-ms-linear-gradient(bottom, rgb(255,255,255) 0%,rgb(255,255,255) 0%,#CEEFF6 100%);
 }
 
-.button-container{
+.ui-button-container{
   display: table;
   width: 100%;
   height: 100%;
@@ -674,17 +674,19 @@ a.icon-link{text-decoration: none;}
   width: 135px;
   margin: 0 auto;
 }
-.button-container .round-button{display: inline-block; color: #fff;display: table-cell; vertical-align: middle;}
+.ui-button-container .round-button{display: inline-block; color: #fff;display: table-cell; vertical-align: middle;}
   
 .simple_form label {float: left; width: 130px; margin-right: 10px; margin-top: 5px}
 .simple_form select {width: 165px; float: left;}
 .simple_form input[type=text], .simple_form input[type=email], .simple_form input[type=password] {width: 200px; padding: 6px; background-color: #FFFFFF;}
-.simple_form input{border: 1px solid #CDCDCD; 
+.simple_form input, .simple_form textarea{
+  border: 1px solid #CDCDCD; 
   -webkit-border-radius: 10px;
   -moz-border-radius: 10px;
   border-radius: 10px;
   vertical-align: middle;
 }
+.simple_form textarea {padding: 6px;}
 .simple_form .input.clearfix{margin: 5px 0;}
 .simple_form textarea { float: none; width: 90%; height: 50px; margin-top: 5px; }
 .simple_form .desc {margin-top: 30px;}
@@ -859,3 +861,29 @@ a.icon-link{text-decoration: none;}
 }
 
 .galleries .pagination{text-align: center;}
+.galleries .gallery-form .name{width: 40%;}
+.galleries .gallery-form .description{width: 80%;}
+.galleries .gallery-header .gallery-name{display: inline-block;}
+/*** IMAGE ***/
+.images .images-wrapper{margin-left: 55px; margin-top: 15px;}
+.images .action-container{text-align: right; font-size: 13px; display: inline-block; float: right; margin-top: 0;}
+.images .action-container .ui-button-container{width: auto;}
+.images .action-container .icon-link{display: inline-block;}
+.images .action-container a.icon-link:hover{text-decoration: underline;}
+.images .action-container .saparator{vertical-align: middle; margin: 0 2px;}
+.images .gallery-container{width: auto;}
+
+.images .image-container{
+  display: inline-block;
+  padding: 4px;
+  margin: 10px;
+}
+
+.images .image-container .gallery-image{
+  width: 180px;
+  height: 180px;
+  cursor: pointer;
+}
+
+.images #gallery-form-container{padding: 10px; margin: 10px 0;}
+.images .gallery-header{display: inline-block;}

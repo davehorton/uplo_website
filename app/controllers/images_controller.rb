@@ -1,18 +1,26 @@
 class ImagesController < ApplicationController
   before_filter :authenticate_user!
+  authorize_resource
   
   def index
-    list = Image.all
-    list.map! { |image| 
-      { :name => image.name,
-        :size => image.data_file_size,
-        :url => image.data.url,
-        :thumbnail_url => image.data(:thumb),
-        :delete_url => "/images/delete/#{image.id}",
-        :edit_url => url_for(:controller => 'images', :action => 'edit', :id => image.id)
-      } 
-    }
-    render :json => list
+    if params[:gallery_id]
+      # Author: Man Vuong
+      @gallery = current_user.galleries.find_by_id(params[:gallery_id])
+      @images = @gallery.images.load_images(@filtered_params)
+      # end
+    else
+      list = Image.all
+      list.map! { |image| 
+        { :name => image.name,
+          :size => image.data_file_size,
+          :url => image.data.url,
+          :thumbnail_url => image.data(:thumb),
+          :delete_url => "/images/delete/#{image.id}",
+          :edit_url => url_for(:controller => 'images', :action => 'edit', :id => image.id)
+        } 
+      }
+      render :json => list
+    end    
   end 
   
   def new 

@@ -1,7 +1,11 @@
 class Gallery < ActiveRecord::Base
+  # ASSOCIATIONS
   belongs_to :user
   has_many :images, :dependent => :destroy
   validates :user, :presence => true
+  
+  # CALL BACK
+  after_initialize :init_permission
   
   include ::SharedMethods::Paging
   
@@ -27,7 +31,7 @@ class Gallery < ActiveRecord::Base
     end
   end
   
-  # INSTANCE METHODS
+  # PUBLIC INSTANCE METHODS
   def updated_at_string
     self.updated_at.strftime(I18n.t("date.formats.short"))
   end
@@ -38,5 +42,25 @@ class Gallery < ActiveRecord::Base
     else
       ""
     end
+  end
+  
+  # Get the cover image for this album.
+  def cover_image
+    if self.images.loaded?
+      # Find in memory.
+      self.images.detect{|img| img.is_gallery_cover?}
+    else
+      # Find in DB.
+      self.images.where(:is_gallery_cover => true).first
+    end
+  end
+  
+  # PROTECTED INSTANCE METHODS 
+  protected
+  
+  def init_permission
+    if self.new_record? && self.permission.blank?
+      self.permission = "public"
+    end    
   end
 end
