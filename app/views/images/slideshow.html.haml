@@ -50,10 +50,13 @@
       %ul#mycarousel.jcarousel-skin-tango
         - selected_image_position = 1
         - @images.each_with_index do |image, index|
-          - selected_image_position = index if image.id == @selected_image.id
           %li
             %a{:href => "/images/#{image.id}/slideshow"}
-              = image_tag(image.data.url(:thumb), :size => "75x75")
+              - if image.id == @selected_image.id 
+                - selected_image_position = index 
+                = image_tag(image.data.url(:thumb), :size => "70x70", :style => "border: solid 2px orange")
+              - else
+                = image_tag(image.data.url(:thumb), :size => "75x75")
 :erb
   <script type="text/javascript">
   function mycarousel_initCallback(carousel)
