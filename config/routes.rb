@@ -2,9 +2,8 @@ Uplo::Application.routes.draw do
   root :to => "home#index"
 
   # WEB ROUTING
-#  get 'images/list', :to => 'images#list'
-  get 'images/delete/:id', :to => 'images#destroy'
   resources :galleries do
+    get 'images/delete/:id', :to => 'images#destroy'
     get 'images/list', :to => 'images#list'
     resources :images
   end
