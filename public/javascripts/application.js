@@ -58,6 +58,16 @@ helper = {
     }
   },
   
+  auto_hide_flash_message: function(){
+    var flash_hidden = false;
+    $(document).bind('click mousemove keypress', function(event) {
+      if(!flash_hidden){
+        $("#flash").delay(5000).slideUp();
+        flash_hidden = true;
+      }
+    });
+  },
+  
   // Validate IPv4 address format
   is_valid_ip4_address: function (ipaddr) {
    var re = /^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$/;

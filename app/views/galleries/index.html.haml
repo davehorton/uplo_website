@@ -1,10 +1,14 @@
 - content_for :head do
   = javascript_include_tag("lib/jail.min.js")
+  = javascript_include_tag("app/gallery.js")
   
 .galleries
   .action-container.clearfix
     %a#new-gallery{:href => new_gallery_path, :class => "ui-button-container icon-link"}
       %span.round-button= "Add Gallery"
+
+  #gallery-form-container.clearfix.round-box.hidden{:style => "display: none"}
+    = render(:partial => "form")
 
   .galleries-wrapper.clearfix
     - if @galleries.blank?
@@ -30,7 +34,5 @@
 
 :erb
   <script type="text/javascript">
-    $("img.gallery-cover-image").jail({
-      effect : "fadeIn"
-    });
+    gallery.setup();
   </script>

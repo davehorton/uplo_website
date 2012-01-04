@@ -812,10 +812,7 @@ a.icon-link{text-decoration: none;}
 .signup input[type=email], .signup input[type=password] {width: 310px}
 
 /*** GALLERY ***/
-.galleries{
-
-}
-
+.galleries .galleries-wrapper .empty-data{text-align: center;}
 .galleries .galleries-wrapper{
   margin-left: 80px;
 }
@@ -869,8 +866,11 @@ a.icon-link{text-decoration: none;}
 .galleries .gallery-form .name{width: 40%;}
 .galleries .gallery-form .description{width: 80%;}
 .galleries .gallery-header .gallery-name{display: inline-block;}
+.galleries #gallery-form-container{padding: 10px; margin: 10px 0;}
+
 /*** IMAGE ***/
 .images .images-wrapper{margin-left: 55px; margin-top: 15px;}
+.images .images-wrapper .empty-data{text-align: center;}
 .images .action-container{text-align: right; font-size: 13px; display: inline-block; float: right; margin-top: 0;}
 .images .action-container .ui-button-container{width: auto;}
 .images .action-container .icon-link{display: inline-block;}
@@ -903,6 +903,5 @@ a.icon-link{text-decoration: none;}
 
 .images .image-container .gallery-image .image-link{display: table-cell;}
 .images .image-container .gallery-image img{vertical-align: middle;}
-.images #gallery-form-container{padding: 10px; margin: 10px 0;}
 .images .gallery-header{display: inline-block;}
 .images .images-list-wrapper table td.name{width: 100px;}

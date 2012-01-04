@@ -4,6 +4,7 @@ class GalleriesController < ApplicationController
   
   def index
     @galleries = current_user.galleries.load_galleries(@filtered_params)
+    @gallery = Gallery.new
   end
   
   def new
@@ -14,7 +15,7 @@ class GalleriesController < ApplicationController
     @gallery = current_user.galleries.new(params[:gallery])
     respond_to do |format|
       if @gallery.save
-        format.html { redirect_to(galleries_path, :notice => I18n.t('gallery.create_done')) }
+        format.html { redirect_to(gallery_images_path(@gallery), :notice => I18n.t('gallery.create_done')) }
       else
         format.html { render :action => "new", :notice => @gallery.errors}
       end
@@ -30,7 +31,7 @@ class GalleriesController < ApplicationController
   def update
     respond_to do |format|
       if @gallery.update_attributes(params[:gallery])
-        format.html { redirect_to(galleries_path, :notice => I18n.t('gallery.update_done')) }
+        format.html { redirect_to(gallery_images_path(@gallery), :notice => I18n.t('gallery.update_done')) }
       else
         format.html { render :action => "edit", :notice => @gallery.errors}
       end
