@@ -26,6 +26,9 @@ heroku rake db:setup --app uplo-dev
 heroku db:push SHARED_DATABASE_URL --app uplo-dev     # db for development
 heroku db:push SHARED_DATABASE_URL --app uplo # db for staging
 
+# pull DB from heroku to local DB
+heroku db:pull --app uplo
+
 # restart app
 heroku restart --app uplo-dev 
 heroku restart --app uplo
