@@ -28,7 +28,7 @@
   
   .images-wrapper.clearfix
     - if @images.blank?
-      .empty-data= "There is no images in this gallery. Please add image."
+      .empty-data= "There is no image in this gallery. Please add image."
     - else
       - @images.each do |image|
         .gallery-container.image-container{:id => "image-container-#{image.id}"}

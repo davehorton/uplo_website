@@ -24,8 +24,7 @@ gallery = {
     
     // Ajax edit gallery.
     $("#edit-gallery").click(function(e){
-      e.preventDefault();
-         
+      e.preventDefault();         
       
       if(!$(target).hasClass("hidden") || $(target).find("form.gallery-form").length > 0){
         toggle_form();
