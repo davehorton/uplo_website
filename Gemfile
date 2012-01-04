@@ -1,6 +1,6 @@
 source 'http://rubygems.org'
 
-gem 'rails', '>= 3.0.10'
+gem 'rails', '>= 3.1.3'
 
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
@@ -9,6 +9,7 @@ gem 'rails', '>= 3.0.10'
 gem 'pg'
 gem "will_paginate", ">= 3.0.pre4"
 gem 'haml'
+gem 'json'
 gem "haml-rails", ">= 0.3.4"
 gem "inherited_resources", ">= 1.3.0"
 gem "simple_form"
@@ -29,6 +30,19 @@ gem 'money'
 gem "aws-s3"
 gem "dalli" # For memcache
 gem "nokogiri"
+
+# Gems used only for assets and not required
+# in production environments by default.
+group :assets do
+  gem 'sass-rails',   '~> 3.1.5'
+  gem 'coffee-rails', '~> 3.1.1'
+  gem 'uglifier', '>= 1.0.3'
+end
+
+gem 'jquery-rails'
+# Javascript runtime.
+gem 'execjs'
+gem 'therubyracer'
 
 group :development do
   gem 'sqlite3'

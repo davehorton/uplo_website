@@ -33,11 +33,21 @@ Uplo::Application.configure do
   # In production, Apache or nginx will already do this
   config.serve_static_assets = true
 
+  # Compress JavaScripts and CSS
+  config.assets.compress = true
+
+  # Don't fallback to assets pipeline if a precompiled asset is missed
+  config.assets.compile = false
+
+  # Generate digests for assets URLs
+  config.assets.digest = true
+  
+  # Precompile additional assets (application.js, application.css, and all non-JS/CSS are already added)
+  config.assets.precompile += ['*.js', '*.css']
+  
   # Enable serving of images, stylesheets, and javascripts from an asset server
   # config.action_controller.asset_host = "http://assets.example.com"
-  
-  # Remember to change to static-fnintranet.appspot.com when deploy to fano-intranet
-  
+
   # Disable delivery errors, bad email addresses will be ignored
   # config.action_mailer.raise_delivery_errors = false
 
@@ -50,7 +60,7 @@ Uplo::Application.configure do
 
   # Send deprecation notices to registered listeners
   config.active_support.deprecation = :notify
-
+  
   config.action_mailer.default_url_options = { :host => 'uplo-dev.heroku.com' }
   config.action_mailer.delivery_method = :async_smtp
 
@@ -64,4 +74,3 @@ Uplo::Application.configure do
     :authentication       => 'plain',
     :enable_starttls_auto => true  }
 end
-

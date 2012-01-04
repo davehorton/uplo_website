@@ -3,3 +3,8 @@
 Using following Rake tasks to prepare the development environment:
   rake db:bootstrap #=> rake db:drop db:create db:migrate db:seed db:sample_data
   rake db:init #=> rake db:drop db:create db:migrate db:seed
+
+For Rails 3.1.x:
+Run this command before pushing to production server (Heroku)
+  bundle exec rake assets:precompile
+This will compile assets to packages. Otherwise you will receive an AssetNotPrecompiledError exception.

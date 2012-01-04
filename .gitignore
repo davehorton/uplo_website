@@ -11,8 +11,6 @@ public/system
 public/images/users
 public/temp_data
 public/stylesheets/newrelic
-doc/specs.html
-doc/features.html
 tags
 *~
 rerun.txt
@@ -21,5 +19,4 @@ gems
 *.swp
 *.tmproj
 .idea
-bin/wkhtmltopdf
-*.komodoproject
+.sass-cache/
