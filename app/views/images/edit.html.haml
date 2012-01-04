@@ -1,0 +1,29 @@
+%span
+  %h3= "Update your image info"
+
+%div{:style => "padding-top:20px;"}
+  %div
+    = image_tag @image.data(:thumb)
+  = form_for @image, :url => "/images/#{params[:id]}", :html => { :class => "image edit", :id => "edit_image", :method => "put" } do |f|
+    %div
+      %div.label
+        %span= "Name"
+      = f.text_field :name
+    
+    %div
+      %div.label
+        %span= "Description"
+      = f.text_area :description
+    
+    %div{:style => "margin-top: 10px;"}
+      = submit_tag "Update", :class => "btn", :style => 'float:left;'
+      %button#image-back.btn{:style => "margin-left: 10px;"}
+        = "Cancel"
+
+:erb
+  <script type="text/javascript">
+    $("#image-back").click(function(e){
+      e.preventDefault();
+      window.location="/galleries/<%= @image.gallery_id %>/images/list";
+    });
+  </script>

@@ -53,7 +53,7 @@ class ImagesController < ApplicationController
   
   def destroy
     Image.destroy params[:id]
-    redirect_to :action => :list
+    redirect_to(:action => :list, :gallery_id => image.gallery_id)
   end
   
   def list
@@ -72,7 +72,7 @@ class ImagesController < ApplicationController
   def update
     image = Image.find_by_id params[:id]
     image.update_attributes params[:image]
-    redirect_to :action => :list
+    redirect_to(:action => :list, :gallery_id => image.gallery_id)
   end
   
   # GET images/:id/slideshow
