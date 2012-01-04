@@ -825,6 +825,7 @@ a.icon-link{text-decoration: none;}
   margin-left: 20px;
   margin-right: 20px;
   width: 400px;
+  float: left;
 }
 
 .galleries .gallery-container .gallery-image{
@@ -842,7 +843,11 @@ a.icon-link{text-decoration: none;}
   margin-top: 10px;
 }
 
-.galleries .separator{margin-top: 20px;}
+.galleries .separator{
+  float: left;
+  margin-top: 20px;
+  width: 100%;
+}
 .galleries .action-container{
   margin: 10px;
 }
@@ -878,13 +883,26 @@ a.icon-link{text-decoration: none;}
   padding: 4px;
   margin: 10px;
   float: left;
+  width: 180px;
+  height: 180px;
 }
 
 .images .image-container .gallery-image{
-  width: 180px;
-  height: 180px;
   cursor: pointer;
+  display: table;
+  text-align: center;
+  height: auto;
+  width: auto;
+  margin: 0 auto;
 }
 
+.images .image-container .image-link.default{
+  width: 180px;
+  height: 180px;
+}
+
+.images .image-container .gallery-image .image-link{display: table-cell;}
+.images .image-container .gallery-image img{vertical-align: middle;}
 .images #gallery-form-container{padding: 10px; margin: 10px 0;}
 .images .gallery-header{display: inline-block;}
+.images .images-list-wrapper table td.name{width: 100px;}

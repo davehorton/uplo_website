@@ -101,4 +101,8 @@ class ImagesController < ApplicationController
   def set_current_tab
     @current_tab = "galleries"
   end
+  
+  def default_page_size
+    return 12
+  end
 end

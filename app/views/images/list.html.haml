@@ -1,5 +1,5 @@
 - content_for :head do
-  = stylesheet_link_tag "http://twitter.github.com/bootstrap/1.4.0/bootstrap.min.css", "http://blueimp.github.com/Bootstrap-Image-Gallery/bootstrap-image-gallery.min.css", "file_upload/jquery.fileupload-ui.css"
+  = stylesheet_link_tag "bootstrap.css", "bootstrap-image-gallery.min.css", "file_upload/jquery.fileupload-ui.css"
 
 .galleries.images
   .gallery-header
@@ -10,38 +10,38 @@
       %a{:href => "#"}= @gallery.permission_string
     %span= ")"
     
-.container
-  = form_for :image, :url=>"/galleries/#{@gallery.id}/images", :method => 'post', :html => { :multipart => true, :id => 'fileupload' } do |f|
-    .row
-      .span16.fileupload-buttonbar
-        .progressbar.fileupload-progressbar
-          %div{:style => "width:0%;"}
-        %span.btn.success.fileinput-button
-          %span Add files...
-          = f.file_field :data, :multiple => true
-        
-        %button{:type=>"submit", :class=>"btn primary start"}Start upload
-        %button{:type=>"reset", :class=>"btn info cancel"}Cancel upload
-    %br
-    .row
-      .span16
-        %table{:class=>"zebra-striped"}
-          %tbody{:class=>"files"}
+  .images-list-wrapper.clearfix
+    = form_for :image, :url=>"/galleries/#{@gallery.id}/images", :method => 'post', :html => { :multipart => true, :id => 'fileupload' } do |f|
+      .row
+        .span16.fileupload-buttonbar
+          .progressbar.fileupload-progressbar
+            %div{:style => "width:0%;"}
+          %span.btn.success.fileinput-button
+            %span Add files...
+            = f.file_field :data, :multiple => true
           
-%div
-  =# will_paginate @images
+          %button{:type=>"submit", :class=>"btn primary start"}Start upload
+          %button{:type=>"reset", :class=>"btn info cancel"}Cancel upload
+      %br
+      .row
+        .span16
+          %table{:class=>"zebra-striped"}
+            %tbody{:class=>"files"}
+            
+    %div
+      =# will_paginate @images
 
-<!-- gallery-loader is the loading animation container -->
-#gallery-loader
-<!-- gallery-modal is the modal dialog used for the image gallery -->
-#gallery-modal.modal.hide.fade
-  .modal-header
-    %a{:href=>"#", :class=>"close"}&times;
-    %h3{:class=>"title"}
-  .modal-body
-  .modal-footer
-    %a{:class=>"btn primary next"}Next
-    %a{:class=>"btn info prev"}Previous
+    <!-- gallery-loader is the loading animation container -->
+    #gallery-loader
+    <!-- gallery-modal is the modal dialog used for the image gallery -->
+    #gallery-modal.modal.hide.fade
+      .modal-header
+        %a{:href=>"#", :class=>"close"}&times;
+        %h3{:class=>"title"}
+      .modal-body
+      .modal-footer
+        %a{:class=>"btn primary next"}Next
+        %a{:class=>"btn info prev"}Previous
 
 :erb
   <script>
@@ -98,12 +98,11 @@
   {% } %}
   </script>
 
-
 = javascript_include_tag "file_upload/jquery.ui.widget.js", 
-      "http://blueimp.github.com/JavaScript-Templates/tmpl.min.js",
-      "http://blueimp.github.com/JavaScript-Load-Image/load-image.min.js", 
-      "http://twitter.github.com/bootstrap/1.4.0/bootstrap-modal.min.js", 
-      "http://blueimp.github.com/Bootstrap-Image-Gallery/bootstrap-image-gallery.min.js", 
+      "lib/blueimp/tmpl.min.js",
+      "lib/blueimp/load-image.min.js", 
+      "lib/blueimp/bootstrap-modal.min.js", 
+      "lib/blueimp/bootstrap-image-gallery.min.js", 
       "file_upload/jquery.iframe-transport.js", 
       "file_upload/jquery.fileupload.js",
       "file_upload/jquery.fileupload-ui.js", 

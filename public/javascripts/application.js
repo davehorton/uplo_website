@@ -94,7 +94,10 @@ helper = {
     $(img_selector).livequery(function(){
       $(this).jail({
         effect : "fadeIn",
-        selector: container_selector
+        selector: container_selector,
+        callbackAfterEachImage : function(img, event) {
+          $(img).parent().removeClass("default");
+        }
       });
     });
   },

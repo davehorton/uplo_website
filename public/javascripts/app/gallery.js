@@ -1,8 +1,6 @@
 gallery = {
   setup: function(){
-    $("img.image-thumb").jail({
-      effect : "fadeIn"
-    });
+    helper.setup_async_image_tag("img.image-thumb");
     
     var target = "#gallery-form-container";
     $("#edit-gallery").click(function(e){
