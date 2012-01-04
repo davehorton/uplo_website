@@ -16,7 +16,7 @@
       = f.text_area :description
     
     %div{:style => "margin-top: 10px;"}
-      = submit_tag "Update", :class => "btn", :style => 'float:left;'
+      = f.submit("Update", :class => "btn")
       %button#image-back.btn{:style => "margin-left: 10px;"}
         = "Cancel"
 
