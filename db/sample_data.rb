@@ -66,3 +66,10 @@ user = User.first
 end
 
 # Images
+gallery = galleries.first
+40.times do |counter|
+  img = gallery.images.create!({
+    :name => Faker::Lorem.words,
+    :photo => File.open(Dir.glob(File.join(Rails.root, 'public/assets', 'gallery-thumb.jpg')).sample)
+  })
+end
