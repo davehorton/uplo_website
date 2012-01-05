@@ -2,12 +2,13 @@ class ImagesController < ApplicationController
   before_filter :authenticate_user!
   authorize_resource
   
+  
   def index
     @gallery = current_user.galleries.find_by_id(params[:gallery_id])
     
-    if request.xhr?  
-      list = @gallery.images.all
-      images = list.map { |image| 
+    if request.xhr?
+      lists = @gallery.images.load_images(@filtered_params)
+      images = lists.map { |image| 
         { :name => image.name,
           :size => image.data_file_size,
           :url => image.data.url,
@@ -52,13 +53,14 @@ class ImagesController < ApplicationController
   end
   
   def destroy
-    Image.destroy params[:id]
-    redirect_to(:action => :list, :gallery_id => image.gallery_id)
+    Image.destroy params[:id] if Image.exists?(params[:id])
+    redirect_to(:action => :list, :gallery_id => params[:gallery_id])
   end
   
   def list
     @gallery = Gallery.find_by_id(params[:gallery_id])
-    @images = @gallery.images.find :all
+    @images = @gallery.images.load_images(@filtered_params)
+    @page_id = @filtered_params[:page_id].nil? ? 1 : @filtered_params[:page_id]
   end
   
   def show
