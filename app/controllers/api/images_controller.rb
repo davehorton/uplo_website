@@ -38,7 +38,7 @@ class Api::ImagesController < Api::BaseController
       result[:msg] = image.errors 
       result[:success] = false
     else
-      result[:data] = {:image => image.serializable_hash(:only => [:id])}
+      result[:data] = {:image => image.serializable_hash(:only => image.exposed_attributes)}
       result[:success] = true
     end
     
@@ -84,8 +84,9 @@ class Api::ImagesController < Api::BaseController
       result[:msg] = "You must login first."
       return render :json => result
     end
-    # TODO: uncomment this     user = current_user
-        user = User.find_by_username :admin
+    # TODO: uncomment this     
+    user = current_user
+    #user = User.find_by_username :admin
     
     # find image
     image = Image.find_by_id(params[:id])

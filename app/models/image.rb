@@ -34,7 +34,7 @@ class Image < ActiveRecord::Base
     end
     
     def exposed_attributes
-      [:id, :name, :description, :data_file_name]
+      [:id, :name, :description, :data_file_name, :gallery_id]
     end
     
     def exposed_associations
@@ -88,5 +88,17 @@ class Image < ActiveRecord::Base
               :methods => self.class.exposed_methods, 
               :include => self.class.exposed_associations})
     end
+  end
+  
+  def exposed_methods
+    self.class.exposed_methods
+  end
+    
+  def exposed_attributes
+    self.class.except_attributes
+  end
+  
+  def exposed_associations
+    self.class.exposed_associations
   end
 end

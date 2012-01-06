@@ -95,6 +95,18 @@ class Gallery < ActiveRecord::Base
     end
   end
   
+  def exposed_methods
+    self.class.exposed_methods
+  end
+    
+  def exposed_attributes
+    self.class.except_attributes
+  end
+  
+  def exposed_associations
+    self.class.exposed_associations
+  end
+  
   # PROTECTED INSTANCE METHODS 
   protected
   

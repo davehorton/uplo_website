@@ -24,7 +24,10 @@ class Api::UsersController < Api::BaseController
     }
     
     unless user.save
-      result[:msg] = user.errors 
+      user.errors.each do |key, messages|
+        result[:msg] = messages.first
+        break # Get only one message
+      end
       result[:success] = false
     end
     render :json => result
