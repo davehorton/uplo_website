@@ -10,6 +10,7 @@
 
 class Api::GalleriesController < Api::BaseController
   before_filter :authenticate_user!, :except => [:list_popular]
+  N_INCLUDED_IMAGES = 4
   
   def create_gallery
     gal = Gallery.new params[:gallery]
@@ -77,8 +78,16 @@ class Api::GalleriesController < Api::BaseController
   #   sort_field
   #   sort_direction
   def list_galleries
-    @result[:total]  = @user.galleries.count
-    @result[:data] = @user.galleries.select([:id, :name, :description]).load_galleries(@filtered_params)
+    galleries = @user.galleries.select([:id, :name, :description]).load_galleries(@filtered_params)
+    galleries.map! do |gallery|
+      if gallery.images.length > N_INCLUDED_IMAGES
+        gallery.images = gallery.images.select([:id, :name, :description, :data_file_name])
+        gallery.images = gallery.images[0..(N_INCLUDED_IMAGES - 1)]
+      end
+    end
+    
+    @result[:data] = galleries
+    @result[:total]  = galleries.total_entries
     @result[:success] = true
     render :json => @result
   end
@@ -90,8 +99,9 @@ class Api::GalleriesController < Api::BaseController
   #   sort_field
   #   sort_direction
   def list_popular
-    @result[:total]  = Gallery.count
-    @result[:data] = Gallery.select([:id, :name, :description]).load_galleries(@filtered_params)
+    galleries = Gallery.select([:id, :name, :description]).load_galleries(@filtered_params)
+    @result[:data] = galleries
+    @result[:total]  = galleries.total_entries
     @result[:success] = true
     render :json => @result
   end
@@ -104,7 +114,6 @@ class Api::GalleriesController < Api::BaseController
   #   sort_field
   #   sort_direction
   def list_images
-    
     gallery = Gallery.find_by_id(params[:gallery_id])
     if gallery.nil?
       @result[:msg] = "Could not find Gallery"

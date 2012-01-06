@@ -29,6 +29,28 @@ class Image < ActiveRecord::Base
         :order => paging_info.sort_string)
     end
     
+    def exposed_methods
+      [:image_url, :image_thumb_url]
+    end
+    
+    def exposed_attributes
+      [:id, :name, :description, :data_file_name]
+    end
+    
+    def exposed_associations
+      []
+    end
+    
+    def except_attributes
+      attrs = []
+      self.attribute_names.each do |n|
+        if !exposed_attributes.include?(n.to_sym)
+          attrs << n
+        end
+      end
+      attrs
+    end
+    
     protected
     
     def parse_paging_options(options, default_opts = {})
@@ -53,5 +75,18 @@ class Image < ActiveRecord::Base
   # Shortcut to get image's URL                                    
   def url(options = nil)
     self.data.url(options)
+  end
+  
+  # Override Rails as_json method
+  def as_json(options={})
+    if (!options.nil?)
+      super({ :except => self.class.except_attributes,
+              :methods => self.class.exposed_methods, 
+              :include => self.class.exposed_associations}.merge(options))
+    else
+      super({ :except => self.class.except_attributes,
+              :methods => self.class.exposed_methods, 
+              :include => self.class.exposed_associations})
+    end
   end
 end
