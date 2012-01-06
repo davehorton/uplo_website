@@ -9,7 +9,7 @@
 =end
 
 class Api::GalleriesController < Api::BaseController
-  before_filter :authenticate_user!, :except => [:list_popular]
+  before_filter :authenticate_user!, :except => [:list_popular, :list_images]
   N_INCLUDED_IMAGES = 4
   
   def create_gallery
@@ -120,10 +120,10 @@ class Api::GalleriesController < Api::BaseController
       return render :json => @result
     end
     # make sure the gallery is user's
-    if gallery.user != @user
-       @result[:msg] = "This gallery is not belong to you"
-        return render :json => @result
-    end
+    #if gallery.user != @user
+       #@result[:msg] = "This gallery is not belong to you"
+        #return render :json => @result
+    #end
     
     @result[:total]  = gallery.images.count
     images = gallery.images.select([:id, :name, :description, :data_file_name]).load_images(@filtered_params)
