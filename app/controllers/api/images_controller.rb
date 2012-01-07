@@ -18,71 +18,71 @@ class Api::ImagesController < Api::BaseController
   # POST /api/upload_image
   # params: image[data], gallery_id, image[name], image[description]
   def upload_image
-    result = {:success => false}
+    @result[:success] = false
     
     if !user_signed_in?
-      result[:msg] = "You must login first."
-      return render :json => result
+      @result[:msg] = "You must login first."
+      return render :json => @result
     end 
     
     user = current_user
-    gallery = Gallery.find_by_id(params[:gallery_id])
+    gallery = user.galleries.find_by_id(params[:gallery_id])
     
     if gallery.nil?
-      result[:msg] = "Could not find Gallery"
-      result[:success] = false
-      return render :json => result
+      @result[:msg] = "Could not find Gallery"
+      @result[:success] = false
+      return render :json => @result
     end
     image = gallery.images.create(params[:image])
     unless image.save
-      result[:msg] = image.errors 
-      result[:success] = false
+      @result[:msg] = image.errors 
+      @result[:success] = false
     else
-      result[:data] = {:image => image.serializable_hash(:only => image.exposed_attributes)}
-      result[:success] = true
+      @result[:data] = {:image => image.serializable_hash(image.default_serializable_options)}
+      @result[:success] = true
     end
     
-    render :json => result
+    render :json => @result
   end
   
   # POST /api/update_image
   # params: image[id], image[name], image[description]
   def update_image
-    result = {:success => false}
+    @result[:success] = false
     
     if !user_signed_in?
-      result[:msg] = "You must login first."
-      return render :json => result
+      @result[:msg] = "You must login first."
+      return render :json => @result
     end
     
     user = current_user
     # find image
     image = Image.find_by_id(params[:image][:id])
     if image.nil?
-      result[:msg] = "Could not find Image"
-      return render :json => result
+      @result[:msg] = "Could not find Image"
+      return render :json => @result
     end
     # make sure the image is user's
-    if image.gallery.user != user
-       result[:msg] = "This image is not belong to you"
-        return render :json => result
+    if image.gallery.user_id != user.id
+      @result[:msg] = "This image is not belong to you"
+      return render :json => @result
     end
     # update image
     if image.update_attributes(params[:image])
-      result[:success] = true
-      result[:data] = {:image => image.serializable_hash(:only => [:id, :name, :description])}
+      @result[:success] = true
+      @result[:data] = {:image => image.serializable_hash(image.default_serializable_options)}
     end
     
-    render :json => result
+    render :json => @result
   end
   
   # DELETE /api/delete_image
   # params:id
   def delete_image
-    result = {:success => false}
+    @result[:success] = false
     if !user_signed_in?
-      result[:msg] = "You must login first."
-      return render :json => result
+      @result[:msg] = "You must login first."
+      return render :json => @result
     end
     # TODO: uncomment this     
     user = current_user
@@ -91,19 +91,18 @@ class Api::ImagesController < Api::BaseController
     # find image
     image = Image.find_by_id(params[:id])
     if image.nil?
-      result[:msg] = "Could not find Image"
-      return render :json => result
+      @result[:msg] = "Could not find Image"
+      return render :json => @result
     end
     # make sure the image is user's
-    if image.gallery.user != user
-       result[:msg] = "This image is not belong to you"
-        return render :json => result
+    if image.gallery.user_id != user.id
+      @result[:msg] = "This image is not belong to you"
+      return render :json => @result
     end
     
     # Delete!
     image.destroy
-    result[:success] = true
-    render :json => result
+    @result[:success] = true
+    render :json => @result
   end
-  
 end

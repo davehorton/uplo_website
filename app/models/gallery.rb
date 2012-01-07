@@ -1,4 +1,6 @@
 class Gallery < ActiveRecord::Base
+  include ::SharedMethods::Paging
+  
   # ASSOCIATIONS
   belongs_to :user
   has_many :images, :dependent => :destroy
@@ -9,8 +11,6 @@ class Gallery < ActiveRecord::Base
   
   # CALL BACK
   after_initialize :init_permission
-  
-  include ::SharedMethods::Paging
   
   # CLASS METHODS
   class << self
@@ -42,6 +42,13 @@ class Gallery < ActiveRecord::Base
         end
       end
       attrs
+    end
+    
+    def default_serializable_options
+      { :except => self.except_attributes,
+        :methods => self.exposed_methods, 
+        :include => self.exposed_associations
+      }
     end
     
     protected
@@ -84,14 +91,10 @@ class Gallery < ActiveRecord::Base
   
   # Override Rails as_json method
   def as_json(options={})
-    if (!options.nil?)
-      super({ :except => self.class.except_attributes,
-              :methods => self.class.exposed_methods, 
-              :include => self.class.exposed_associations}.merge(options))
+    if (!options.blank?)
+      super(self.default_serializable_options.merge(options))
     else
-      super({ :except => self.class.except_attributes,
-              :methods => self.class.exposed_methods, 
-              :include => self.class.exposed_associations})
+      super(self.default_serializable_options)
     end
   end
   
@@ -105,6 +108,14 @@ class Gallery < ActiveRecord::Base
   
   def exposed_associations
     self.class.exposed_associations
+  end
+  
+  def except_attributes
+    self.class.except_attributes
+  end
+  
+  def default_serializable_options
+    self.class.default_serializable_options
   end
   
   # PROTECTED INSTANCE METHODS 

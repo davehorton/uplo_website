@@ -10,10 +10,11 @@
 
 class Api::GalleriesController < Api::BaseController
   before_filter :authenticate_user!, :except => [:list_popular, :list_images]
+  
   N_INCLUDED_IMAGES = 4
   
   def create_gallery
-    gal = Gallery.new params[:gallery]
+    gal = Gallery.new(params[:gallery])
     gal.user = @user
     if gal.save
       @result[:gallery_id] = gal.id
@@ -37,14 +38,14 @@ class Api::GalleriesController < Api::BaseController
       return render :json => @result
     end
     # make sure the gallery is user's
-    if gallery.user != @user
+    if gallery.user_id != @user.id
       @result[:msg] = "This gallery is not belong to you"
       return render :json => @result
     end
     # update gallery
     if gallery.update_attributes(params[:gallery])
       @result[:success] = true
-      @result[:data] = {:gallery => gallery.serializable_hash(:only => [:id, :name, :description])}
+      @result[:data] = {:gallery => gallery.serializable_hash(gallery.default_serializable_options)}
     end
     
     render :json => @result
@@ -60,9 +61,9 @@ class Api::GalleriesController < Api::BaseController
       return render :json => @result
     end
     # make sure the gallery is user's
-    if gallery.user != @user
-       @result[:msg] = "This gallery is not belong to you"
-        return render :json => @result
+    if gallery.user_id != @user.id
+      @result[:msg] = "This gallery is not belong to you"
+      return render :json => @result
     end
     # delete gallery
     gallery.destroy
@@ -78,10 +79,9 @@ class Api::GalleriesController < Api::BaseController
   #   sort_field
   #   sort_direction
   def list_galleries
-    galleries = @user.galleries.select([:id, :name, :description]).load_galleries(@filtered_params)
+    galleries = @user.galleries.load_galleries(@filtered_params)
     galleries.map! do |gallery|
       if gallery.images.length > N_INCLUDED_IMAGES
-        gallery.images = gallery.images.select([:id, :name, :description, :data_file_name])
         gallery.images = gallery.images[0..(N_INCLUDED_IMAGES - 1)]
       end
     end
@@ -99,7 +99,7 @@ class Api::GalleriesController < Api::BaseController
   #   sort_field
   #   sort_direction
   def list_popular
-    galleries = Gallery.select([:id, :name, :description]).load_galleries(@filtered_params)
+    galleries = Gallery.load_galleries(@filtered_params)
     @result[:data] = galleries
     @result[:total]  = galleries.total_entries
     @result[:success] = true
@@ -120,13 +120,13 @@ class Api::GalleriesController < Api::BaseController
       return render :json => @result
     end
     # make sure the gallery is user's
-    #if gallery.user != @user
+    #if gallery.user_id != @user.id
        #@result[:msg] = "This gallery is not belong to you"
         #return render :json => @result
     #end
     
     @result[:total]  = gallery.images.count
-    images = gallery.images.select([:id, :name, :description, :data_file_name]).load_images(@filtered_params)
+    images = gallery.images.load_images(@filtered_params)
     images.each do |image|
       image[:image_url] = image.data.url
       image[:image_thumb_url] = image.data.url(:thumb)

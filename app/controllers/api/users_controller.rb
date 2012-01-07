@@ -2,41 +2,41 @@ class Api::UsersController < Api::BaseController
   include Devise::Controllers::InternalHelpers
   
   def get_user_info
-    result = {:success => false}
-    user = User.find_by_id params[:id]
+    @result[:success] = false
+    user = User.find_by_id(params[:id])
     if user.nil?
-      result[:msg] = "This user does not exist"
+      @result[:msg] = "This user does not exist"
     else
-      info = user.serializable_hash :only => [:id, :email, :first_name, :last_name, :username, :nationality, :birthday, :gender]
+      info = user.serializable_hash(user.default_serializable_options)
+      # TODO: rename :avatar to :avatar_url and put it into User#exposed_methods
       info[:avatar] = user.avatar.url
-      result[:user_info] = info
-      result[:success] = true
+      @result[:user_info] = info
+      @result[:success] = true
     end
-    render :json => result
+    render :json => @result
   end
   
   def create_user
     info = params[:user]
-    user = User.new info
-    result = {
+    user = User.new(info)
+    @result = {
       :success => true,
       :msg => {}
     }
     
     unless user.save
       user.errors.each do |key, messages|
-        result[:msg] = messages.first
+        @result[:msg] = [messages.first]
         break # Get only one message
       end
-      result[:success] = false
+      @result[:success] = false
     end
-    render :json => result
+    render :json => @result
   end
   
   def login
-    result = {
-      :success => false,
-    }
+    @result[:success] = false
+    
     # Sign out if signing in
     signed_in = signed_in?(:user)
     Devise.sign_out_all_scopes ? sign_out : sign_out(:user)
@@ -45,33 +45,33 @@ class Api::UsersController < Api::BaseController
     sign_in(:user, user)
     # End of modification
     
-    info = user.serializable_hash :only => [:id, :email, :first_name, :authentication_token, :last_name, :username, :nationality, :birthday, :gender]
+    info = user.serializable_hash(user.default_serializable_options)
     info[:avatar] = user.avatar.url
-    result[:user_info] = info
-    result[:success] = true
-    render :json => result
+    @result[:user_info] = info
+    @result[:success] = true
+    render :json => @result
   end
   
   def logout
-    result = {:success => false}
+    @result[:success] = false
     signed_in = signed_in?(:user)
     Devise.sign_out_all_scopes ? sign_out : sign_out(:user)
     if signed_in
-      result[:msg] = :signed_out
-      result[:success] = true
+      @result[:msg] = :signed_out
+      @result[:success] = true
     end
-    render :json =>result
+    render :json => @result
   end
   
   def reset_password
-    result = { :success => true }
+    @result[:success] = true
     user = User.find_by_email params[:email]
     if user.nil?
-      result[:success] = false
-      result[:msg] = "Email does not exist"
+      @result[:success] = false
+      @result[:msg] = "Email does not exist"
     else
       User.send_reset_password_instructions({:email => params[:email]})
     end
-    render :json =>result
+    render :json => @result
   end
 end

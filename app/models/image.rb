@@ -1,6 +1,7 @@
 class Image < ActiveRecord::Base
   include ::SharedMethods::Paging
 
+  # ASSOCIATIONS
   belongs_to :gallery
   has_many :image_tags, :dependent => :destroy
   has_many :tags, :through => :image_tags
@@ -51,6 +52,13 @@ class Image < ActiveRecord::Base
       attrs
     end
     
+    def default_serializable_options
+      { :except => self.except_attributes,
+        :methods => self.exposed_methods, 
+        :include => self.exposed_associations
+      }
+    end
+    
     protected
     
     def parse_paging_options(options, default_opts = {})
@@ -79,14 +87,10 @@ class Image < ActiveRecord::Base
   
   # Override Rails as_json method
   def as_json(options={})
-    if (!options.nil?)
-      super({ :except => self.class.except_attributes,
-              :methods => self.class.exposed_methods, 
-              :include => self.class.exposed_associations}.merge(options))
+    if (!options.blank?)
+      super(self.default_serializable_options.merge(options))
     else
-      super({ :except => self.class.except_attributes,
-              :methods => self.class.exposed_methods, 
-              :include => self.class.exposed_associations})
+      super(self.default_serializable_options)
     end
   end
   
@@ -100,5 +104,13 @@ class Image < ActiveRecord::Base
   
   def exposed_associations
     self.class.exposed_associations
+  end
+  
+  def except_attributes
+    self.class.except_attributes
+  end
+  
+  def default_serializable_options
+    self.class.default_serializable_options
   end
 end

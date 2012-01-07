@@ -30,8 +30,47 @@ class User < ActiveRecord::Base
   validates_uniqueness_of :email, :message => 'Email must be unique'
   validates_uniqueness_of :username, :message => 'Username must be unique'
   
-  # CALLBACK
+  # CLASS METHODS
+  class << self
+    # Override Devise method so that User can log in with username or email.
+    def find_for_database_authentication(warden_conditions)
+      conditions = warden_conditions.dup
+      login = conditions.delete(:login)
+      where(conditions).where(["lower(username) = :value OR lower(email) = :value", 
+                              { :value => login.strip.downcase }]).first
+    end
   
+    def exposed_methods
+      []
+    end
+    
+    def exposed_attributes
+      [:id, :email, :first_name, :last_name, :username, :nationality, :birthday, :gender]
+    end
+    
+    def exposed_associations
+      []
+    end
+    
+    def except_attributes
+      attrs = []
+      self.attribute_names.each do |n|
+        if !exposed_attributes.include?(n.to_sym)
+          attrs << n
+        end
+      end
+      attrs
+    end
+    
+    def default_serializable_options
+      { :except => self.except_attributes,
+        :methods => self.exposed_methods, 
+        :include => self.exposed_associations
+      }
+    end
+  end
+  
+  # PUBLIC INSTANCE METHODS
   def fullname
     self.first_name + " " + self.last_name
   end
@@ -47,10 +86,32 @@ class User < ActiveRecord::Base
     self.send(:write_attribute, :birthday, date)
   end
   
-  def self.find_for_database_authentication(warden_conditions)
-    conditions = warden_conditions.dup
-    login = conditions.delete(:login)
-    where(conditions).where(["lower(username) = :value OR lower(email) = :value", 
-                            { :value => login.strip.downcase }]).first
+  # Override Rails as_json method
+  def as_json(options={})
+    if (!options.blank?)
+      super(self.default_serializable_options.merge(options))
+    else
+      super(self.default_serializable_options)
+    end
+  end
+  
+  def exposed_methods
+    self.class.exposed_methods
+  end
+    
+  def exposed_attributes
+    self.class.except_attributes
+  end
+  
+  def exposed_associations
+    self.class.exposed_associations
+  end
+  
+  def except_attributes
+    self.class.except_attributes
+  end
+  
+  def default_serializable_options
+    self.class.default_serializable_options
   end
 end
