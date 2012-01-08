@@ -17,16 +17,20 @@
     = yield :head
 
   %body
-    #header.round-box
-      #logo-wrapper
-        %a#logo{:href => "/"}
-          = "UPLO"
-        #search-box-wrapper
-          =# render(:partial => "shared/search_box")
-      %nav#menu
-        =# render(:partial => "shared/main_menu")
-
     #wrapper
+      #header.blue-gradient-reverse
+        #logo-wrapper
+          %a#logo{:href => "/"}
+            = image_tag("uplo-logo.png", {:alt => "UPLO"})
+          #search-box-wrapper
+            =# render(:partial => "shared/search_box")
+          #user-box
+            = render(:partial => "shared/user_menu")
+
+        %nav#menu
+          - if user_signed_in?
+            = render(:partial => "shared/main_menu")
+
       #main.clearfix
         - flash_class = (flash.blank? ? "" : "content")
         #flash{:class => flash_class}
@@ -42,9 +46,8 @@
           - if devise_mapping.recoverable? && controller_name != 'passwords'
             = link_to "Forgot your password?", new_password_path(resource_name), :class => "icon-info-link"
           
-    #footer.round-box
-      =# render(:partial => "shared/footer")
-
+      #footer.round-box.blue-gradient
+      
 :erb
   <script type="text/javascript">
     $(document).ready(function(){
