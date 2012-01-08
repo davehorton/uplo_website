@@ -2,13 +2,12 @@ class ImagesController < ApplicationController
   before_filter :authenticate_user!
   authorize_resource
   
-  
   def index
     @gallery = current_user.galleries.find_by_id(params[:gallery_id])
+    @images = @gallery.images.load_images(@filtered_params)
     
     if request.xhr?
-      lists = @gallery.images.load_images(@filtered_params)
-      images = lists.map { |image| 
+      @images = @images.map { |image| 
         { :name => image.name,
           :size => image.data_file_size,
           :url => image.data.url,
@@ -17,9 +16,7 @@ class ImagesController < ApplicationController
           :edit_url => url_for(:controller => 'images', :action => 'edit', :id => image.id)
         } 
       }
-      render :json => images
-    else
-      @images = @gallery.images.load_images(@filtered_params)
+      render :json => @images
     end    
   end 
   
