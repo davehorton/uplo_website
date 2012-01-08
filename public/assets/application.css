@@ -678,6 +678,7 @@ a.icon-link{text-decoration: none;}
 .ui-button-container .round-button{display: inline-block; color: #fff;display: table-cell; vertical-align: middle;}
   
 .simple_form label {float: left; width: 130px; margin-right: 10px; margin-top: 5px}
+.simple_form label abbr {float: right; color: #D4550B;}
 .simple_form select {width: 165px; float: left;}
 .simple_form input[type=text], .simple_form input[type=email], .simple_form input[type=password] {width: 200px; padding: 6px; background-color: #FFFFFF;}
 .simple_form input, .simple_form textarea{
