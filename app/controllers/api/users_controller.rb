@@ -41,10 +41,10 @@ class Api::UsersController < Api::BaseController
   # POST update_profile
   # params = {:user => {}}
   def update_profile
-    if params.blank?
+    if params[:user].blank?
       @result[:success] = false
       @result[:msg] = I18n.t("common.invalid_params")
-    elsif @user.update_profile(params)
+    elsif @user.update_profile(params[:user])
       @result[:success] = true
     else
       @result[:success] = false

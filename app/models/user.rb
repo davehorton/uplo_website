@@ -117,6 +117,12 @@ class User < ActiveRecord::Base
   
   def update_profile(params)
     result = nil
+    params ||= {}
+    params.to_options!
+    [:username, :email].each do |key|
+      # Remove sensitive parameter.
+      params.delete(key)
+    end
     
     # If there is any password parameter we will update user info with password.
     if params.has_key?(:current_password) || 

@@ -39,4 +39,4 @@ en:
   activerecord:
     errors:
       messages:
-        blank: "This field cannot be blank"
+        blank: "cannot be blank"
