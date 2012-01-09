@@ -26,7 +26,11 @@ class Api::UsersController < Api::BaseController
     
     unless user.save
       user.errors.each do |key, messages|
-        @result[:msg] = [messages.first]
+        if messages.is_a?(Array)
+          @result[:msg] = [messages.first]
+        else
+          @result[:msg] = [messages]
+        end
         break # Get only one message
       end
       @result[:success] = false
