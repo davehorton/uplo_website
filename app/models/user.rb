@@ -24,11 +24,11 @@ class User < ActiveRecord::Base
   has_many :image_likes, :dependent => :destroy
   
   # VALIDATION
-  validates_presence_of :first_name, :last_name, :email, :username, :message => 'This field cannot be blank'
+  validates_presence_of :first_name, :last_name, :email, :username, :message => 'cannot be blank'
   validates :password, :presence => true, :confirmation => true, :unless => :force_submit
-  validates_format_of :email, :with => /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\Z/i, :on => :create, :message => 'Email is invalid'
-  validates_uniqueness_of :email, :message => 'Email must be unique'
-  validates_uniqueness_of :username, :message => 'Username must be unique'
+  validates_format_of :email, :with => /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\Z/i, :on => :create, :message => 'is invalid'
+  validates_uniqueness_of :email, :message => 'must be unique'
+  validates_uniqueness_of :username, :message => 'must be unique'
   
   # CLASS METHODS
   class << self
@@ -113,5 +113,25 @@ class User < ActiveRecord::Base
   
   def default_serializable_options
     self.class.default_serializable_options
+  end
+  
+  def update_profile(params)
+    result = nil
+    
+    # If there is any password parameter we will update user info with password.
+    if params.has_key?(:current_password) || 
+        params.has_key?(:password) || 
+        params.has_key?(:password_confirmation)
+      result = self.update_with_password(params)
+    else
+      # Update without password
+      
+      # TODO: inspect why this method does not work?
+      #result = self.update_without_password(params)
+      self.force_submit = true
+      result = self.update_attributes(params)
+    end
+    
+    result
   end
 end

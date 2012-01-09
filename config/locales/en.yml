@@ -4,14 +4,15 @@
 en:
   common:
     site_title: "Welcome to UPLO"
-  
+    invalid_params: "Invalid parameters"
+    
   main_menu:
     popular: "Popular"
     browse: "Browse"
     galleries: "My Galleries"
     sales: "My Sales"
     account: "Account"
-  
+
   gallery:
     permission:
       public: "Public"

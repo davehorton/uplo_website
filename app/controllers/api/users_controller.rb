@@ -1,6 +1,8 @@
 class Api::UsersController < Api::BaseController
   include Devise::Controllers::InternalHelpers
   
+  before_filter :authenticate_user!, :except => [:login]
+  
   def get_user_info
     @result[:success] = false
     user = User.find_by_id(params[:id])
@@ -25,16 +27,35 @@ class Api::UsersController < Api::BaseController
     }
     
     unless user.save
-      user.errors.each do |key, messages|
-        if messages.is_a?(Array)
-          @result[:msg] = messages.first
-        else
-          @result[:msg] = messages
-        end
-        break # Get only one message
+      messages = user.errors.full_messages
+      if messages.is_a?(Array)
+        @result[:msg] = messages.first
+      else
+        @result[:msg] = messages
       end
       @result[:success] = false
     end
+    render :json => @result
+  end
+  
+  # POST update_profile
+  # params = {:user => {}}
+  def update_profile
+    if params.blank?
+      @result[:success] = false
+      @result[:msg] = I18n.t("common.invalid_params")
+    elsif @user.update_profile(params)
+      @result[:success] = true
+    else
+      @result[:success] = false
+      messages = @user.errors.full_messages
+      if messages.is_a?(Array)
+        @result[:msg] = messages.first
+      else
+        @result[:msg] = messages
+      end
+    end
+    
     render :json => @result
   end
   
