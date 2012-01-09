@@ -125,12 +125,16 @@ class User < ActiveRecord::Base
     end
     
     # If there is any password parameter we will update user info with password.
-    if params.has_key?(:current_password) || 
-        params.has_key?(:password) || 
-        params.has_key?(:password_confirmation)
+    if !params[:current_password].blank? && 
+          (params.has_key?(:password) || 
+           params.has_key?(:password_confirmation))
       result = self.update_with_password(params)
     else
       # Update without password
+      [:password, :password_confirmation].each do |key|
+        # Remove sensitive parameter.
+        params.delete(key)
+      end
       
       # TODO: inspect why this method does not work?
       #result = self.update_without_password(params)
