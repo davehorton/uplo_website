@@ -1,4 +1,6 @@
 class GalleriesController < ApplicationController
+  before_filter :authenticate_user!
+  
   authorize_resource
   before_filter :find_gallery, :only => [:edit, :update, :destroy]
   

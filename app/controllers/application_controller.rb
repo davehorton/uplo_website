@@ -6,7 +6,16 @@ class ApplicationController < ActionController::Base
   PAGE_SIZE = 10
   MAX_PAGE_SIZE = 100
   
-  rescue_from CanCan::AccessDenied do |exception|
+  if (Rails.env.production? or Rails.env.staging?)
+    rescue_from CanCan::AccessDenied, :with => :render_unauthorized  
+    rescue_from ActiveRecord::RecordNotFound, :with => :render_not_found
+  end
+  
+  def render_not_found
+    render :file => "public/404.html", :status => 404, :layout => false
+  end
+  
+  def render_unauthorized
     render :file => "public/403.html", :status => :unauthorized, :layout => false
   end
   

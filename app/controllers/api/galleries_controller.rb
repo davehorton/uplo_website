@@ -9,7 +9,7 @@
 =end
 
 class Api::GalleriesController < Api::BaseController
-  before_filter :authenticate_user!, :except => [:list_popular, :list_images]
+  before_filter :require_login!, :except => [:list_popular, :list_images]
   
   N_INCLUDED_IMAGES = 4
   

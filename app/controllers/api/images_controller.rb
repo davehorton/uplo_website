@@ -13,7 +13,7 @@ end
 =end
 
 class Api::ImagesController < Api::BaseController
-  before_filter :authenticate_user!
+  before_filter :require_login!
   
   # POST /api/upload_image
   # params: image[data], gallery_id, image[name], image[description]

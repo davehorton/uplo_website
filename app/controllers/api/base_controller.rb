@@ -7,6 +7,44 @@ class Api::BaseController < ActionController::Base
   PAGE_SIZE = 20
   MAX_PAGE_SIZE = 100
   
+  if (Rails.env.production? or Rails.env.staging?)
+    rescue_from CanCan::AccessDenied, :with => :render_unauthorized  
+    rescue_from ActiveRecord::RecordNotFound, :with => :render_not_found
+  end
+  
+  def render_not_found(with_status_code = true)
+    options = {:json => {:message => I18n.t("common.error_resource_notfound"), :status => 404}}
+    if with_status_code
+      options[:status] = 401
+    end
+    
+    render(options)
+  end
+  
+  def render_unauthorized(with_status_code = true)
+    options = {:json => {:message => I18n.t("common.error_unauthorized"), :status => 403}}
+    if with_status_code
+      options[:status] = 403
+    end
+    
+    render(options)
+  end
+  
+  def render_require_login(with_status_code = true)
+    options = {:json => {:message => I18n.t("common.error_not_login"), :status => 401}}
+    if with_status_code
+      options[:status] = 401
+    end
+    
+    render(options)
+  end
+  
+  def require_login!
+    if !user_signed_in?
+      render_require_login(false)
+    end
+  end
+  
   protected
   
   def setup_device_call
