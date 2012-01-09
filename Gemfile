@@ -41,10 +41,10 @@ end
 
 gem 'jquery-rails'
 # Javascript runtime.
-gem 'execjs'
-gem 'therubyracer'
 
 group :development do
+  gem 'execjs'
+  gem 'therubyracer'
   gem 'sqlite3'
   gem "mongrel", '1.2.0.pre2'
   gem "bullet"

@@ -45,7 +45,7 @@ class Api::GalleriesController < Api::BaseController
     # update gallery
     if gallery.update_attributes(params[:gallery])
       @result[:success] = true
-      @result[:data] = {:gallery => gallery.serializable_hash(gallery.default_serializable_options)}
+      @result[:gallery] = gallery.serializable_hash(gallery.default_serializable_options)
     end
     
     render :json => @result

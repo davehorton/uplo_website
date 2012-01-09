@@ -38,7 +38,7 @@ class Api::ImagesController < Api::BaseController
       @result[:msg] = image.errors 
       @result[:success] = false
     else
-      @result[:data] = {:image => image.serializable_hash(image.default_serializable_options)}
+      @result[:image] = image.serializable_hash(image.default_serializable_options)
       @result[:success] = true
     end
     
@@ -70,7 +70,7 @@ class Api::ImagesController < Api::BaseController
     # update image
     if image.update_attributes(params[:image])
       @result[:success] = true
-      @result[:data] = {:image => image.serializable_hash(image.default_serializable_options)}
+      @result[:image] = image.serializable_hash(image.default_serializable_options)
     end
     
     render :json => @result
