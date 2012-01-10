@@ -93,6 +93,6 @@ class ImagesController < ApplicationController
   end
   
   def default_page_size
-    return 3
+    return 12
   end
 end
