@@ -906,3 +906,11 @@ a.icon-link{text-decoration: none;}
 .images .image-container .gallery-image img{vertical-align: middle;}
 .images .gallery-header{display: inline-block;}
 .images .images-list-wrapper table td.name{width: 100px;}
+.images .images-list-wrapper .files .name{color:#2D9DD1;font-weight:bold;}
+.images .images-list-wrapper .files .preview{width:220px;}
+.images .images-list-wrapper .files .description{width: 600px;word-wrap: break-word;padding-top: 5px;}
+.images .images-list-wrapper .files .start{display:none;}
+.images .images-list-wrapper .files .edit{margin: 0px 0px 2px 5px;}
+.images .images-list-wrapper .files .edit button{width:67px;}
+.images .images-list-wrapper .files .progressbar div{margin-top:10px;}
+.images .images-list-wrapper table tr{border-top: 1px solid #ddd;}

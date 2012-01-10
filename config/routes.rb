@@ -7,13 +7,6 @@ Uplo::Application.routes.draw do
     get 'images/list', :to => 'images#list'
     resources :images
   end
-  
-  resources :images do 
-    collection do 
-      get '/:id/slideshow' => 'images#slideshow'
-      post '/:id/slideshow' => 'images#slideshow_update'
-    end 
-  end
 
   devise_for :users, :controllers => {:registrations => "users/registrations", :sessions => "users/sessions",
     :confirmations => "users/confirmations", :passwords => "users/passwords" }

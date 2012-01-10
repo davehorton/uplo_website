@@ -9,11 +9,13 @@ class ImagesController < ApplicationController
     if request.xhr?
       @images = @images.map { |image| 
         { :name => image.name,
+          :description => image.description,
           :size => image.data_file_size,
           :url => image.data.url,
           :thumbnail_url => image.data(:thumb),
           :delete_url => "/galleries/#{@gallery.id}/images/delete/#{image.id}",
-          :edit_url => url_for(:controller => 'images', :action => 'edit', :id => image.id)
+          :edit_url => url_for(:controller => 'images', :action => 'show', :id => image.id),
+          :image_id => image.id
         } 
       }
       render :json => @images
@@ -37,12 +39,13 @@ class ImagesController < ApplicationController
     else
       result = [{
         :name => image.name,
+        :description => image.description,
         :size => image.data_file_size,
         :url => image.data.url,
         :thumbnail_url => image.data(:thumb),
         :delete_url => "/galleries/#{params[:gallery_id]}/images/delete/#{image.id}",
-        :edit_url => url_for(:controller => 'images', :action => 'edit', :id => image.id)
-#        :delete_type => "DELETE"
+        :edit_url => url_for(:controller => 'images', :action => 'show', :id => image.id),
+        :image_id => image.id
       }]
     end
 
@@ -50,8 +53,10 @@ class ImagesController < ApplicationController
   end
   
   def destroy
-    Image.destroy params[:id] if Image.exists?(params[:id])
-    redirect_to(:action => :list, :gallery_id => params[:gallery_id])
+    ids = params[:id]
+    ids = params[:id].join(',') if params[:id].instance_of? Array
+    Image.destroy_all("id in (#{ids})")
+    render :json => {:success => true}
   end
   
   def list
@@ -59,24 +64,10 @@ class ImagesController < ApplicationController
     @images = @gallery.images.load_images(@filtered_params)
     @page_id = @filtered_params[:page_id].nil? ? 1 : @filtered_params[:page_id]
   end
-  
-  def show
-    @post = Image.paginate(:page => 1, :per_page => 5)
-  end
-  
-  def edit
-    @image = Image.find_by_id params[:id]
-  end
-  
-  def update
-    image = Image.find_by_id params[:id]
-    image.update_attributes params[:image]
-    redirect_to(:action => :list, :gallery_id => image.gallery_id)
-  end
-  
+    
   # GET images/:id/slideshow
   # params: id => Image ID
-  def slideshow
+  def show
     # get selected Image
     @selected_image = Image.find_by_id(params[:id])
     if (@selected_image.nil?)
@@ -89,10 +80,10 @@ class ImagesController < ApplicationController
   
   # PUT images/:id/slideshow_update
   # params: id => Image ID
-  def slideshow_update
+  def update
     image = Image.find_by_id params[:id]
     image.update_attributes params[:image]
-    redirect_to :action => :slideshow, :id => params[:id]
+    redirect_to :action => :show, :id => params[:id]
   end
   
   protected
@@ -102,6 +93,6 @@ class ImagesController < ApplicationController
   end
   
   def default_page_size
-    return 12
+    return 3
   end
 end

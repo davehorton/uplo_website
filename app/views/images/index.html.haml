@@ -33,7 +33,8 @@
       - @images.each do |image|
         .gallery-container.image-container{:id => "image-container-#{image.id}"}
           .gallery-image
-            %a.image-link.default{:href => "/images/#{image.id}/slideshow"}
+            - url = url_for(:controller => "images", :action => "show", :id => "#{image.id}")
+            %a.image-link.default{:href => "#{url}" }
               = async_image_tag(image.url(:thumb), :class => "image-thumb")
       
   = render_pagination(@images, {:controller => "images", :action => params[:action], :gallery_id => @gallery.id})

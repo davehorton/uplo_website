@@ -62,7 +62,7 @@
                 data.isAdjusted = true;
                 data.files.valid = data.isValidated = that._validate(files);
                 data.context = that._renderUpload(files)
-                    .appendTo(that._files)
+                    .prependTo(that._files)
                     .data('data', data);
                 // Force reflow:
                 that._reflow = that._transition && data.context[0].offsetWidth;
@@ -205,15 +205,21 @@
             destroy: function (e, data) {
                 var that = $(this).data('fileupload');
                 if (data.url) {
+                    data.success = function(response){
+                        if(response.success == true){
+                            that._adjustMaxNumberOfFiles(1);
+                            that._transitionCallback(
+                                data.context.removeClass('in'),
+                                function (node) {
+                                    node.remove();
+                                }
+                            );
+                        } else {
+                            alert('Something went wrong! Cannot delete this picture');
+                        }
+                    };
                     $.ajax(data);
                 }
-                that._adjustMaxNumberOfFiles(1);
-                that._transitionCallback(
-                    data.context.removeClass('in'),
-                    function (node) {
-                        node.remove();
-                    }
-                );
             }
         },
 
@@ -367,16 +373,21 @@
             }
         },
 
-        _deleteHandler: function (e) {
+        _editHandler: function (e) {
             e.preventDefault();
             var button = $(this);
             window.location = button.attr('data-url');
-//            e.data.fileupload._trigger('destroy', e, {
-//                context: button.closest('.template-download'),
-//                url: button.attr('data-url'),
-//                type: button.attr('data-type'),
-//                dataType: e.data.fileupload.options.dataType
-//            });
+        },
+        
+        _deleteHandler: function (e) {
+            e.preventDefault();
+            var button = $(this);
+            e.data.fileupload._trigger('destroy', e, {
+                context: button.closest('.template-download'),
+                url: button.attr('data-url'),
+                type: button.attr('data-type'),
+                dataType: e.data.fileupload.options.dataType
+            });
         },
 
         _transitionCallback: function (node, callback) {
@@ -434,8 +445,36 @@
             fileUploadButtonBar.find('.delete')
                 .bind('click.' + ns, function (e) {
                     e.preventDefault();
-                    filesList.find('.delete input:checked')
-                        .siblings('button').click();
+                    var that = $('#fileupload').data('fileupload'),
+                        deleted_ids = [],
+                        selected, url;
+                    selected = filesList.find('.delete input:checked');
+                    selected.each(function(idx, elm){
+                      deleted_ids.push(elm.getAttribute('data-id'));
+                    });
+
+                    url = $(selected[0]).siblings('button').attr('data-url');
+                    url = url.substr(0, url.lastIndexOf('/'))
+                    url = url + '/' + deleted_ids;
+                    $.ajax({
+                        url: url,
+                        success: function(response){
+                          if(response.success == true){
+                            selected.each(function(idx, elm){
+//                              var row = $(elm).parent().parent().parent();
+                              var row = $(elm).closest('.template-download');
+                              that._adjustMaxNumberOfFiles(1);
+                              that._transitionCallback(
+                                  row.removeClass('in'),
+                                  function (node) {
+                                      node.remove();
+                                  }
+                              );
+                            });
+                          }
+                        }
+                    });
+                    return false;
                 });
             fileUploadButtonBar.find('.toggle')
                 .bind('change.' + ns, function (e) {
@@ -468,6 +507,12 @@
                     'click.' + this.options.namespace,
                     eventData,
                     this._cancelHandler
+                )
+                .delegate(
+                    '.edit button',
+                    'click.' + this.options.namespace,
+                    eventData,
+                    this._editHandler
                 )
                 .delegate(
                     '.delete button',
