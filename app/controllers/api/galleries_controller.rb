@@ -80,14 +80,23 @@ class Api::GalleriesController < Api::BaseController
   #   sort_direction
   def list_galleries
     galleries = @user.galleries.load_galleries(@filtered_params)
+    @result[:total]  = galleries.total_entries
     galleries.map! do |gallery|
+      data = gallery.serializable_hash({ 
+        :except => gallery.except_attributes,
+        :methods => gallery.exposed_methods, 
+      })
+      
       if gallery.images.length > N_INCLUDED_IMAGES
-        gallery.images = gallery.images[0..(N_INCLUDED_IMAGES - 1)]
+        data[:images] = gallery.images[0..(N_INCLUDED_IMAGES - 1)]
+      else
+        data[:images] = gallery.images
       end
+      
+      data
     end
     
     @result[:data] = galleries
-    @result[:total]  = galleries.total_entries
     @result[:success] = true
     render :json => @result
   end
