@@ -80,23 +80,8 @@ class Api::GalleriesController < Api::BaseController
   #   sort_direction
   def list_galleries
     galleries = @user.galleries.load_galleries(@filtered_params)
-    @result[:total]  = galleries.total_entries
-    galleries.map! do |gallery|
-      data = gallery.serializable_hash({ 
-        :except => gallery.except_attributes,
-        :methods => gallery.exposed_methods, 
-      })
-      
-      if gallery.images.length > N_INCLUDED_IMAGES
-        data[:images] = gallery.images[0..(N_INCLUDED_IMAGES - 1)]
-      else
-        data[:images] = gallery.images
-      end
-      
-      data
-    end
-    
-    @result[:data] = galleries
+    @result[:total] = galleries.total_entries    
+    @result[:data] = galleries_to_json(galleries)
     @result[:success] = true
     render :json => @result
   end
@@ -109,8 +94,8 @@ class Api::GalleriesController < Api::BaseController
   #   sort_direction
   def list_popular
     galleries = Gallery.load_galleries(@filtered_params)
-    @result[:data] = galleries
-    @result[:total]  = galleries.total_entries
+    @result[:total] = galleries.total_entries
+    @result[:data] = galleries_to_json(galleries)
     @result[:success] = true
     render :json => @result
   end
@@ -143,5 +128,38 @@ class Api::GalleriesController < Api::BaseController
     @result[:data] = images
     @result[:success] = true
     render :json => @result
+  end
+  
+  protected
+  
+  def galleries_to_json(galleries)
+    json_array = []
+    
+    galleries.each do |gallery|
+      data = gallery.serializable_hash({ 
+        :except => gallery.except_attributes,
+        :methods => gallery.exposed_methods, 
+      })
+      
+      images = []
+      if gallery.images.length > N_INCLUDED_IMAGES
+        images = gallery.images[0..(N_INCLUDED_IMAGES - 1)]
+      else
+        images = gallery.images
+      end
+      data[:images] = []
+      images.each do |img|
+        data[:images] << img.serializable_hash(img.default_serializable_options)
+      end
+      
+      puts data.inspect
+      if data[:cover_image]
+        data[:cover_image] = data[:cover_image].serializable_hash(Image.default_serializable_options)
+      end
+      
+      json_array << data
+    end
+    
+    return json_array
   end
 end
