@@ -8,4 +8,12 @@ module GalleriesHelper
     
     return img_url
   end
+  
+  def gallery_permissions_options
+    result = []
+    [:public, :protected].each do |permission|
+      result << [I18n.t("gallery.permission.#{permission}"), permission]
+    end    
+    result
+  end
 end
