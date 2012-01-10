@@ -136,7 +136,8 @@ class Api::GalleriesController < Api::BaseController
     json_array = []
     
     galleries.each do |gallery|
-      data = gallery.serializable_hash({ 
+      data = {}
+      data[:gallery] = gallery.serializable_hash({ 
         :except => gallery.except_attributes,
         :methods => gallery.exposed_methods, 
       })
@@ -147,14 +148,14 @@ class Api::GalleriesController < Api::BaseController
       else
         images = gallery.images
       end
-      data[:images] = []
+      data[:gallery][:images] = []
       images.each do |img|
-        data[:images] << img.serializable_hash(img.default_serializable_options)
+        data[:gallery][:images] << img.serializable_hash(img.default_serializable_options)
       end
       
       puts data.inspect
-      if data[:cover_image]
-        data[:cover_image] = data[:cover_image].serializable_hash(Image.default_serializable_options)
+      if data[:gallery][:cover_image]
+        data[:gallery][:cover_image] = data[:gallery][:cover_image].serializable_hash(Image.default_serializable_options)
       end
       
       json_array << data
