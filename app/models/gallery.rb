@@ -1,6 +1,8 @@
 class Gallery < ActiveRecord::Base
   include ::SharedMethods::Paging
   
+  PUBLIC_PERMISSION = "public"
+  
   # ASSOCIATIONS
   belongs_to :user
   has_many :images, :dependent => :destroy
@@ -17,6 +19,14 @@ class Gallery < ActiveRecord::Base
     def load_galleries(params = {})
       paging_info = parse_paging_options(params)
       self.includes(:images).paginate(
+        :page => paging_info.page_id, 
+        :per_page => paging_info.page_size,
+        :order => paging_info.sort_string)
+    end
+    
+    def load_popular_galleries(params)
+      paging_info = parse_paging_options(params)
+      self.includes(:images).where(:permission => PUBLIC_PERMISSION).paginate(
         :page => paging_info.page_id, 
         :per_page => paging_info.page_size,
         :order => paging_info.sort_string)
@@ -123,7 +133,7 @@ class Gallery < ActiveRecord::Base
   
   def init_permission
     if self.new_record? && self.permission.blank?
-      self.permission = "public"
+      self.permission = PUBLIC_PERMISSION
     end    
   end
 end

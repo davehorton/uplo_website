@@ -1,8 +1,11 @@
 class HomeController < ApplicationController
   def index
-    if user_signed_in?
-      redirect_to "/profile"
-    end
+    @galleries = Gallery.load_popular_galleries(@filtered_params)
   end
-
+  
+  protected
+  
+  def set_current_tab
+    @current_tab = "popular"
+  end
 end
