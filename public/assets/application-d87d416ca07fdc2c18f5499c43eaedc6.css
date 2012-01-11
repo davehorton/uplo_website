@@ -120,7 +120,6 @@ input[type=text]:focus, input[type=password]:focus, input[type=email]:focus, tex
 
 #search-box-wrapper {
   float: right;
-  margin-top: 10px;
   margin-right: 10px;
 }
 
@@ -142,7 +141,7 @@ input[type=text]:focus, input[type=password]:focus, input[type=email]:focus, tex
 }
 
 .search-container .inline_label{
-  padding-top: 5px;
+  padding-top: 3.5px;
 }
 
 .search-container #search-textbox{
@@ -677,7 +676,7 @@ a.icon-link{text-decoration: none;}
 }
 .ui-button-container .round-button{display: inline-block; color: #fff;display: table-cell; vertical-align: middle;}
   
-.simple_form label {float: left; width: 130px; margin-right: 10px; margin-top: 5px}
+.simple_form label {float: left; width: 140px; margin-right: 10px; margin-top: 5px}
 .simple_form label abbr {float: right; color: #D4550B;}
 .simple_form select {width: 165px; float: left;}
 .simple_form input[type=text], .simple_form input[type=email], .simple_form input[type=password] {width: 200px; padding: 6px; background-color: #FFFFFF;}
@@ -777,7 +776,7 @@ a.icon-link{text-decoration: none;}
   border-style: solid;
   border-width: 1px;
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
-  min-height: 200px;
+  min-height: 180px;
   padding: 0px;
   font-size: 100%
 }
@@ -812,6 +811,22 @@ a.icon-link{text-decoration: none;}
 #signin-area .signin-button{padding: 3px; float: right;}
 .signin input[type=text], .signin input[type=email], .signin input[type=password] {width: 310px}
 .signup input[type=email], .signup input[type=password] {width: 310px}
+
+/*** HOME ***/
+.home #gallery{
+  padding: 10px;
+  min-width: 950px;
+  min-height: 500px;
+  -webkit-box-shadow: rgba(0,0,0,.45) 0 1px 3px; 
+  -moz-box-shadow: rgba(0,0,0,.45) 0 1px 3px; 
+  box-shadow: rgba(0,0,0,.45) 0 1px 3px; 
+  box-shadow: rgba(0,0,0,.45) 0 1px 6px \0/IE9;
+}
+
+.home .home-footer{margin-top: 20px}
+
+/*** BROWSE ***/
+.browse .browse-header{text-align: right;}
 
 /*** GALLERY ***/
 .galleries .galleries-wrapper .empty-data{text-align: center;}
@@ -877,6 +892,7 @@ a.icon-link{text-decoration: none;}
 .galleries .gallery-form .name{width: 40%;}
 .galleries .gallery-form .description{width: 80%;}
 .galleries .gallery-header .gallery-name{display: inline-block;}
+.galleries .gallery-header .author-info{font-size: 13px;}
 .galleries #gallery-form-container{padding: 10px; margin: 10px 0;}
 
 /*** IMAGE ***/
