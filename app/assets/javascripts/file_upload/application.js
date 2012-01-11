@@ -30,7 +30,7 @@ $(function () {
             template;
         fu._adjustMaxNumberOfFiles(-files.length);
         template = fu._renderDownload(files)
-            .appendTo($('#fileupload .files'));
+            .appendTo($('#fileupload .files.download'));
         // Force reflow:
         fu._reflow = fu._transition && template.length &&
             template[0].offsetWidth;
@@ -68,6 +68,6 @@ $(function () {
     );
 
     // Initialize the Bootstrap Image Gallery plugin:
-    $('#fileupload .files').imagegallery();
+//    $('#fileupload .files').imagegallery();
 
 });
