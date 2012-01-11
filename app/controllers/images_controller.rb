@@ -3,7 +3,7 @@ class ImagesController < ApplicationController
   authorize_resource
   
   def index
-    @gallery = current_user.galleries.find_by_id(params[:gallery_id])
+    @gallery = Gallery.find_by_id(params[:gallery_id])
     @images = @gallery.images.load_images(@filtered_params)
     
     if request.xhr?

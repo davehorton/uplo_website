@@ -17,8 +17,8 @@
       - count = 0
       - @galleries.each do |gallery|
         .gallery-container{:id => "gallery-container-#{gallery.id}"}
-          .gallery-image
-            %a.gallery-link{:href => gallery_images_path(gallery)}
+          %a.gallery-image{:href => gallery_images_path(gallery)}
+            %span.gallery-link.default
               = async_image_tag(gallery_cover_image_url(gallery), :class => "gallery-cover-image")
           .gallery-info
             .name{:title => gallery.name}= truncate(gallery.name, :length => 30)

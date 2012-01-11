@@ -828,15 +828,24 @@ a.icon-link{text-decoration: none;}
 }
 
 .galleries .gallery-container .gallery-image{
-  width: 180px;
-  height: 180px;
   cursor: pointer;
+  display: table;
+  height: auto;
+  text-align: center;
+  width: auto;
   -webkit-box-shadow: rgba(0,0,0,0.7) 0 3px 8px; 
   -moz-box-shadow: rgba(0,0,0,0.7) 0 3px 8px; 
   box-shadow: rgba(0,0,0,0.7) 0 3px 8px; 
   box-shadow: rgba(0,0,0,0.7) 0 3px 8px \0/IE9;
 }
 
+.galleries .gallery-container .gallery-link.default{
+  width: 180px;
+  height: 180px;
+}
+
+.galleries .gallery-container .gallery-link{display: table-cell;}
+.galleries .gallery-container .gallery-image img{vertical-align: middle;}
 .galleries .gallery-container .gallery-info{
   display: inline-block;
   margin-top: 10px;

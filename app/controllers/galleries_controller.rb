@@ -1,8 +1,6 @@
 class GalleriesController < ApplicationController
-  before_filter :authenticate_user!
-  
+  before_filter :authenticate_user!  
   authorize_resource
-  before_filter :find_gallery, :only => [:edit, :update, :destroy]
   
   def index
     @galleries = current_user.galleries.load_galleries(@filtered_params)
@@ -25,27 +23,33 @@ class GalleriesController < ApplicationController
   end
   
   def edit
-    if request.xhr?
-      render :layout => false
+    if find_gallery!
+      if request.xhr?
+        render :layout => false
+      end
     end
   end
   
   def update
-    respond_to do |format|
-      if @gallery.update_attributes(params[:gallery])
-        format.html { redirect_to(gallery_images_path(@gallery), :notice => I18n.t('gallery.update_done')) }
-      else
-        format.html { render :action => "edit", :notice => @gallery.errors}
+    if find_gallery!
+      respond_to do |format|
+        if @gallery.update_attributes(params[:gallery])
+          format.html { redirect_to(gallery_images_path(@gallery), :notice => I18n.t('gallery.update_done')) }
+        else
+          format.html { render :action => "edit", :notice => @gallery.errors}
+        end
       end
-    end 
+    end
   end
   
   def destroy
-    respond_to do |format|
-      if @gallery.destroy
-        format.html { redirect_to(galleries_path, :notice => I18n.t("gallery.delete_done")) }
-      else
-        format.html { redirect_to(galleries_path, :notice => I18n.t("gallery.delete_failed")) }
+    if find_gallery!
+      respond_to do |format|
+        if @gallery.destroy
+          format.html { redirect_to(galleries_path, :notice => I18n.t("gallery.delete_done")) }
+        else
+          format.html { redirect_to(galleries_path, :notice => I18n.t("gallery.delete_failed")) }
+        end
       end
     end
   end
@@ -57,6 +61,19 @@ class GalleriesController < ApplicationController
   end
   
   def find_gallery
-    @gallery = current_user.galleries.find_by_id(params[:id])
+    @gallery = Gallery.find_by_id(params[:id])
+  end
+  
+  def find_gallery!
+    self.find_gallery
+    if @gallery.blank?
+      render_not_found
+      return false
+    elsif !@gallery.can_access?(current_user) || 
+          (!@gallery.is_owner?(current_user) && %w(edit update destroy).include?(params[:action]))
+      render_unauthorized
+      return false
+    end
+    @gallery
   end
 end

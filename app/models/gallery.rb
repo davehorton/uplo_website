@@ -128,6 +128,18 @@ class Gallery < ActiveRecord::Base
     self.class.default_serializable_options
   end
   
+  def is_public?
+    (self.permission == PUBLIC_PERMISSION)
+  end
+  
+  def can_access?(user)
+    (self.is_owner?(user) || self.is_public?)   
+  end
+  
+  def is_owner?(user)
+    (user && self.user_id == user.id)
+  end
+  
   # PROTECTED INSTANCE METHODS 
   protected
   

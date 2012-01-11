@@ -6,23 +6,6 @@ Array.prototype.remove = function(s) {
 /**
  * GLOBAL SETUP.
  */
-/* $(document).ready(function(){
-  //Modify the URL of the project tab.
-  //TODO: this's just a trick to track the user's favourite project.
-  if(user_preferences.project_id()){
-    var project_url = $("#menu .project-tab a").attr("href");
-    if(project_url){
-      var new_url = user_preferences.modify_project_url(project_url);
-      $("#menu .project-tab a").attr("href", new_url);
-    }
-    
-    var billing_url = $(".sub-menu .accounting a").attr("href");
-    if(billing_url){
-      $(".sub-menu .accounting a").attr("href", billing_url);
-    }
-  }
-}); */
-
 global = {
   date_format: "mm/dd/yy",
   date_format_dev: "yy-mm-dd",
@@ -103,10 +86,13 @@ helper = {
       img_selector = "img.user-avatar";
     $(img_selector).livequery(function(){
       $(this).jail({
-        effect : "fadeIn",
+        //effect : "fadeIn",
         selector: container_selector,
         callbackAfterEachImage : function(img, event) {
           $(img).parent().removeClass("default");
+          $(img).error(function(){
+            $(this).parent().addClass("default");
+          });         
         }
       });
     });
