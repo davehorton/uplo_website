@@ -66,7 +66,7 @@ class Gallery < ActiveRecord::Base
     def parse_paging_options(options, default_opts = {})
       if default_opts.blank?
         default_opts = {
-          :sort_criteria => "name ASC"
+          :sort_criteria => "galleries.name ASC"
         }
       end
       paging_options(options, default_opts)

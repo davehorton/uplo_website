@@ -1,7 +1,10 @@
 Uplo::Application.routes.draw do
-  root :to => "home#index"
-
   # WEB ROUTING
+  root :to => "home#index"
+  get "browse", :to => "home#browse"
+  get "profile", :to => "users#profile"
+  match 'images/browse/:id' => 'images#browse', :via => [:get]
+
   resources :galleries do
     get 'images/delete/:id', :to => 'images#destroy'
     get 'images/list', :to => 'images#list'
@@ -17,7 +20,6 @@ Uplo::Application.routes.draw do
     get "register", :to => "users/registrations#new"
     delete "signout", :to => "users/sessions#destroy"
   end
-  get "profile", :to => "users#profile"
   
   # API ROUTING
   namespace :api do

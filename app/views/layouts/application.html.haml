@@ -28,8 +28,8 @@
             = render(:partial => "shared/user_menu")
 
         %nav#menu
-          - if user_signed_in?
-            = render(:partial => "shared/main_menu")
+          -# if user_signed_in?
+          = render(:partial => "shared/main_menu")
 
       #main.clearfix
         - flash_class = (flash.blank? ? "" : "content")

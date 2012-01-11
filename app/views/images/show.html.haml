@@ -32,7 +32,7 @@
                 = f.submit I18n.t("slideshow.save")
 
         .edit-area.round-box.clearfix
-          = current_user.first_name + " " + current_user.last_name
+          = (@selected_image.author ? @selected_image.author.fullname : "")
           %br.clearfix
           %ul
             %li

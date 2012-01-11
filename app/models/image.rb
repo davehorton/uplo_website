@@ -30,6 +30,17 @@ class Image < ActiveRecord::Base
         :order => paging_info.sort_string)
     end
     
+    def load_popular_images(params)
+      paging_info = parse_paging_options(params)
+      # TODO: calculate the popularity of the images: base on how many times an image is "liked".
+      self.includes(:gallery).joins([:gallery]).
+            where("galleries.id = ? AND galleries.permission = ?", 19, Gallery::PUBLIC_PERMISSION).
+            paginate(
+              :page => paging_info.page_id, 
+              :per_page => paging_info.page_size,
+              :order => paging_info.sort_string)
+    end
+    
     def exposed_methods
       [:image_url, :image_thumb_url]
     end
@@ -64,7 +75,7 @@ class Image < ActiveRecord::Base
     def parse_paging_options(options, default_opts = {})
       if default_opts.blank?
         default_opts = {
-          :sort_criteria => "updated_at DESC"
+          :sort_criteria => "images.updated_at DESC"
         }
       end
       paging_options(options, default_opts)
@@ -72,6 +83,12 @@ class Image < ActiveRecord::Base
   end
   
   # INSTANCE METHODS
+  def author
+    if self.gallery && self.gallery.user
+      self.gallery.user
+    end
+  end
+  
   def image_url
     data.url
   end

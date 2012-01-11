@@ -22,8 +22,7 @@ $(function () {
         maxFileSize: 5000000,
         acceptFileTypes: /(\.|\/)(gif|jpe?g|png)$/i,
         previewMaxWidth: 180,
-        previewMaxHeight: 180,
-        displayNumber: page_size
+        previewMaxHeight: 180
     });
     // Load existing files:
     $.getJSON($('#fileupload').prop('action'), function (files) {
@@ -31,7 +30,7 @@ $(function () {
             template;
         fu._adjustMaxNumberOfFiles(-files.length);
         template = fu._renderDownload(files)
-            .appendTo($('#fileupload .files.download'));
+            .appendTo($('#fileupload .files'));
         // Force reflow:
         fu._reflow = fu._transition && template.length &&
             template[0].offsetWidth;
@@ -69,6 +68,6 @@ $(function () {
     );
 
     // Initialize the Bootstrap Image Gallery plugin:
-//    $('#fileupload .files').imagegallery();
+    $('#fileupload .files').imagegallery();
 
 });

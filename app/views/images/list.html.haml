@@ -26,12 +26,8 @@
       %br
       .row
         .span16
-          %table{:class=>"zebra-striped", :style => 'margin-bottom:0px;'}
-            %tbody{:class=>"files upload"}
-      .row
-        .span16
           %table{:class=>"zebra-striped"}
-            %tbody{:class=>"files download"}
+            %tbody{:class=>"files"}
 
     <!-- gallery-loader is the loading animation container -->
     #gallery-loader
@@ -45,7 +41,6 @@
   = render_pagination(@images)
 :erb
   <script>
-  var page_size = '<%= @page_size %>'
   var fileUploadErrors = {
       maxFileSize: 'File is too big',
       minFileSize: 'File is too small',

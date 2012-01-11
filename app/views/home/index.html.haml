@@ -1,38 +1,33 @@
-.home
-  - if user_signed_in?
-    - content_for :head do
-      = javascript_include_tag("lib/jail.min.js")
-      = javascript_include_tag("app/gallery.js")
+- content_for :head do
+  = javascript_include_tag("lib/jail.min.js")
+  = javascript_include_tag("lib/galleria/galleria.min.js")
+  = javascript_include_tag("app/gallery.js")
       
-    .galleries
-      .galleries-wrapper.clearfix
-        - if @galleries.blank?
-          .empty-data= "There is no gallery. Let create one."
-        - else
-          - count = 0
-          - @galleries.each do |gallery|
-            .gallery-container{:id => "gallery-container-#{gallery.id}"}
-              %a.gallery-image{:href => gallery_images_path(gallery)}
-                %span.gallery-link.default
-                  = async_image_tag(gallery_cover_image_url(gallery), :class => "gallery-cover-image")
-              .gallery-info
-                .name{:title => gallery.name}= truncate(gallery.name, :length => 30)
-                .photo-number= (gallery.images.length > 0 ? pluralize(gallery.images.length, "image") : "No image")
-                .update-time= "Last updated: #{gallery.updated_at_string}"
-                .permission= gallery.permission_string.titleize
-            
-            - count = count + 1
-            - if (count % 2 == 0)
-              .separator.clearfix
-          
-      = render_pagination(@galleries, {:controller => "home", :action => params[:action]})
-  - else
-    = render(:partial => "welcome")
+.home
+  .home-header
 
+  .gallery-container.clearfix
+    #gallery
+      - @images.each do |image|
+        %a.image{:href => image.url}
+          = image_tag(image.image_thumb_url, :title => image.name)
+  .home-footer
+    - if !user_signed_in?
+      = render(:partial => "shared/welcome")
 :erb
   <script type="text/javascript">
     $(document).ready(function(){
       helper.hide_require_signs();
-      gallery.setup();
+      //gallery.setup();
+      Galleria.loadTheme("<%= javascript_path("lib/galleria/themes/classic/galleria.classic.min.js") %>");
+      $('#gallery').galleria({
+        width: 950,
+        height: 500,
+        debug: false,
+        extend: function(options) {
+          var gallery = this;
+          gallery.play(5000);
+        }
+      });
     });
   </script>

@@ -51,9 +51,6 @@
             // The expected data type of the upload response, sets the dataType
             // option of the $.ajax upload requests:
             dataType: 'json',
-            
-            // Number of pictures to display on page
-            displayNumber: 5,
 
             // The add callback is invoked as soon as files are added to the fileupload
             // widget (via file input selection, drag & drop or add API call).
@@ -65,7 +62,7 @@
                 data.isAdjusted = true;
                 data.files.valid = data.isValidated = that._validate(files);
                 data.context = that._renderUpload(files)
-                    .prependTo($(this).find('.files.upload'))
+                    .prependTo(that._files)
                     .data('data', data);
                 // Force reflow:
                 that._reflow = that._transition && data.context[0].offsetWidth;
@@ -120,27 +117,21 @@
                                         .prop('width', preview.prop('width'))
                                         .prop('height', preview.prop('height'));
                                 }
-                                template.replaceAll(node)
-                                        .prependTo($('.files.download'));
+                                template
+                                    .replaceAll(node);
                                 // Force reflow:
                                 that._reflow = that._transition &&
                                     template[0].offsetWidth;
                                 template.addClass('in');
-                                if($('.files.download').children().size() > this.options.displayNumber){
-                                  $('.files.download').children().last().remove();
-                                }
                             }
                         );
                     });
                 } else {
                     template = that._renderDownload(data.result)
-                                   .prependTo($('.files.download'));
+                        .appendTo(that._files);
                     // Force reflow:
                     that._reflow = that._transition && template[0].offsetWidth;
                     template.addClass('in');
-                    if($('.files.download').children().size() > this.options.displayNumber){
-                      $('.files.download').children().last().remove();
-                    }
                 }
             },
             // Callback for failed (abort or error) uploads:
@@ -216,19 +207,13 @@
                 if (data.url) {
                     data.success = function(response){
                         if(response.success == true){
-                            $.getJSON($('#fileupload').prop('action'), function (files) {
-                                var fu = $('#fileupload').data('fileupload'),
-                                    container = $('#fileupload .files.download'),
-                                    template;
-                                container.empty();
-                                fu._adjustMaxNumberOfFiles(-files.length);
-                                template = fu._renderDownload(files)
-                                    .appendTo(container);
-                                // Force reflow:
-                                fu._reflow = fu._transition && template.length &&
-                                    template[0].offsetWidth;
-                                template.addClass('in');
-                            });
+                            that._adjustMaxNumberOfFiles(1);
+                            that._transitionCallback(
+                                data.context.removeClass('in'),
+                                function (node) {
+                                    node.remove();
+                                }
+                            );
                         } else {
                             alert('Something went wrong! Cannot delete this picture');
                         }
@@ -237,7 +222,7 @@
                 }
             }
         },
-        
+
         // Link handler, that allows to download files
         // by drag & drop of the links to the desktop:
         _enableDragToDesktop: function () {

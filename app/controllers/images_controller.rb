@@ -1,25 +1,26 @@
 class ImagesController < ApplicationController
-  before_filter :authenticate_user!
-  authorize_resource
+  before_filter :authenticate_user!, :except => [:index, :browse]
+  authorize_resource :except => [:index, :browse]
   
   def index
-    @gallery = Gallery.find_by_id(params[:gallery_id])
-    @images = @gallery.images.load_images(@filtered_params)
-    
-    if request.xhr?
-      @images = @images.map { |image| 
-        { :name => image.name,
-          :description => image.description,
-          :size => image.data_file_size,
-          :url => image.data.url,
-          :thumbnail_url => image.data(:thumb),
-          :delete_url => "/galleries/#{@gallery.id}/images/delete/#{image.id}",
-          :edit_url => url_for(:controller => 'images', :action => 'show', :id => image.id),
-          :image_id => image.id
-        } 
-      }
-      render :json => @images
-    end    
+    if find_gallery!
+      @images = @gallery.images.load_images(@filtered_params)
+      
+      if request.xhr?
+        @images = @images.map { |image| 
+          { :name => image.name,
+            :description => image.description,
+            :size => image.data_file_size,
+            :url => image.data.url,
+            :thumbnail_url => image.data(:thumb),
+            :delete_url => "/galleries/#{@gallery.id}/images/delete/#{image.id}",
+            :edit_url => url_for(:controller => 'images', :action => 'show', :id => image.id),
+            :image_id => image.id
+          } 
+        }
+        render :json => @images
+      end
+    end
   end 
   
   def new 
@@ -60,10 +61,10 @@ class ImagesController < ApplicationController
   end
   
   def list
-    @gallery = Gallery.find_by_id(params[:gallery_id])
-    @images = @gallery.images.load_images(@filtered_params)
-    @page_size = @filtered_params[:page_size].nil? ? 1 : @filtered_params[:page_size]
-    @page_id = @filtered_params[:page_id].nil? ? 1 : @filtered_params[:page_id]
+    if find_gallery!
+      @images = @gallery.images.load_images(@filtered_params)
+      @page_id = @filtered_params[:page_id].nil? ? 1 : @filtered_params[:page_id]
+    end
   end
     
   # GET images/:id/slideshow
@@ -72,11 +73,22 @@ class ImagesController < ApplicationController
     # get selected Image
     @selected_image = Image.find_by_id(params[:id])
     if (@selected_image.nil?)
-      return render 'public/404.html'
+      return render_not_found
     end
     # get Gallery
     @images = @selected_image.gallery.images.all(:order => 'id')
     # get Images belongs Gallery
+  end
+  
+  # GET images/:id/browse
+  def browse
+    @image = Image.find_by_id(params[:id])
+    if @image.blank?
+      return render_not_found
+    elsif @image.gallery && !@image.gallery.can_access?(current_user)
+      return render_unauthorized
+    end
+    @images = @image.gallery.images.all(:order => 'name')
   end
   
   # PUT images/:id/slideshow_update
@@ -90,10 +102,32 @@ class ImagesController < ApplicationController
   protected
   
   def set_current_tab
-    @current_tab = "galleries"
+    tab = "galleries"
+    if params[:action] == "browse"
+      tab = "browse"
+    end
+    
+    @current_tab = tab
   end
   
   def default_page_size
     return 12
+  end
+  
+  def find_gallery
+    @gallery = Gallery.find_by_id(params[:gallery_id])
+  end
+  
+  def find_gallery!
+    self.find_gallery
+    if @gallery.blank?
+      render_not_found
+      return false
+    elsif !@gallery.can_access?(current_user) || 
+          (!@gallery.is_owner?(current_user) && %w(edit update destroy create list).include?(params[:action]))
+      render_unauthorized
+      return false
+    end
+    @gallery
   end
 end
