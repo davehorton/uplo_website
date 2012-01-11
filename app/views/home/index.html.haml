@@ -5,15 +5,16 @@
       
 .home
   .home-header
-
-  .gallery-container.clearfix
-    #gallery
-      - @images.each do |image|
-        %a.image{:href => image.url}
-          = image_tag(image.image_thumb_url, :title => image.name)
-  .home-footer
     - if !user_signed_in?
       = render(:partial => "shared/welcome")
+    - else
+      .gallery-container.clearfix
+        #gallery
+          - @images.each do |image|
+            %a.image{:href => image.url}
+              = image_tag(image.image_thumb_url, :title => image.name)
+  .home-footer
+    
 :erb
   <script type="text/javascript">
     $(document).ready(function(){

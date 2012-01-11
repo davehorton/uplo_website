@@ -28,8 +28,8 @@
             = render(:partial => "shared/user_menu")
 
         %nav#menu
-          -# if user_signed_in?
-          = render(:partial => "shared/main_menu")
+          - if user_signed_in?
+            = render(:partial => "shared/main_menu")
 
       #main.clearfix
         - flash_class = (flash.blank? ? "" : "content")
@@ -45,7 +45,9 @@
 
       #footer.round-box.blue-gradient
         =# render(:partial => "shared/footer")
-
+    
+    #build-version{:style => "text-align: center; font-size: 12px"}= "Build 1"
+      
 :erb
   <script type="text/javascript">
     $(document).ready(function(){

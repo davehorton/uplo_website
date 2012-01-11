@@ -1,6 +1,6 @@
 class ImagesController < ApplicationController
-  before_filter :authenticate_user!, :except => [:index, :browse]
-  authorize_resource :except => [:index, :browse]
+  before_filter :authenticate_user!
+  authorize_resource
   
   def index
     if find_gallery!
