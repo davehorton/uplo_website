@@ -45,6 +45,7 @@
   = render_pagination(@images)
 :erb
   <script>
+  var page_size = '<%= @page_size %>'
   var fileUploadErrors = {
       maxFileSize: 'File is too big',
       minFileSize: 'File is too small',

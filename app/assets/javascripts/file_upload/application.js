@@ -22,7 +22,8 @@ $(function () {
         maxFileSize: 5000000,
         acceptFileTypes: /(\.|\/)(gif|jpe?g|png)$/i,
         previewMaxWidth: 180,
-        previewMaxHeight: 180
+        previewMaxHeight: 180,
+        displayNumber: page_size
     });
     // Load existing files:
     $.getJSON($('#fileupload').prop('action'), function (files) {

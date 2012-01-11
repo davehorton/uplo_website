@@ -51,6 +51,9 @@
             // The expected data type of the upload response, sets the dataType
             // option of the $.ajax upload requests:
             dataType: 'json',
+            
+            // Number of pictures to display on page
+            displayNumber: 5,
 
             // The add callback is invoked as soon as files are added to the fileupload
             // widget (via file input selection, drag & drop or add API call).
@@ -123,7 +126,9 @@
                                 that._reflow = that._transition &&
                                     template[0].offsetWidth;
                                 template.addClass('in');
-                                $('.files.download').children().last().remove();
+                                if($('.files.download').children().size() > this.options.displayNumber){
+                                  $('.files.download').children().last().remove();
+                                }
                             }
                         );
                     });
@@ -133,7 +138,9 @@
                     // Force reflow:
                     that._reflow = that._transition && template[0].offsetWidth;
                     template.addClass('in');
-                    $('.files.download').children().last().remove();
+                    if($('.files.download').children().size() > this.options.displayNumber){
+                      $('.files.download').children().last().remove();
+                    }
                 }
             },
             // Callback for failed (abort or error) uploads:
