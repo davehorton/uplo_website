@@ -847,14 +847,16 @@ a.icon-link{text-decoration: none;}
 .image-browse .slideshow-container .gallery-image{
   cursor: pointer;
   display: table;
-  height: auto;
+  height: 100%;
   margin: 0 auto;
   text-align: center;
-  width: auto;
+  width: 100%;
 }
 
 .image-browse .slideshow-container .gallery-image .image-content{
   display: table-cell;
+  text-align: center;
+  vertical-align: middle;
 }
 
 .image-browse .slideshow-container .gallery-image .image-content img{
