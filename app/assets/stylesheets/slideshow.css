@@ -22,8 +22,8 @@
 	border: gray solid 1px;
 }
 .slideshow-container #image-viewer img {
-	width: 200px;
-	height: 200px;
+	max-width: 200px;
+	max-height: 200px;
 	
 }
 .slideshow-container .filter-container {

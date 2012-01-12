@@ -1,4 +1,5 @@
 /*---- Global styles -----*/
+
 html, body, div, span, applet, object, iframe,
 h1, h2, h3, h4, h5, h6, p, blockquote, pre,
 a, abbr, acronym, address, big, cite, code,
@@ -822,10 +823,49 @@ a.icon-link{text-decoration: none;}
   box-shadow: rgba(0,0,0,.45) 0 1px 6px \0/IE9;
 }
 
+.home #gallery .galleria-thumbnails-container{
+  height: 90px;
+}
+
+.home #gallery .galleria-thumbnails-container .galleria-thumbnails .galleria-image {
+  height: 80px;
+}
+
+.home #gallery .galleria-thumb-nav-left,
+.home #gallery .galleria-thumb-nav-right {
+  height: 40px;
+  top: 20px;
+}
+
 .home .home-footer{margin-top: 20px}
 
 /*** BROWSE ***/
 .browse .browse-header{text-align: right;}
+.image-browse .slideshow-container{width: 100%;}
+.image-browse .slideshow-container .left-container{width: 620px; height: 430px;}
+.image-browse .slideshow-container .gallery-image{
+  cursor: pointer;
+  display: table;
+  height: auto;
+  margin: 0 auto;
+  text-align: center;
+  width: auto;
+}
+
+.image-browse .slideshow-container .gallery-image .image-content{
+  display: table-cell;
+}
+
+.image-browse .slideshow-container .gallery-image .image-content img{
+  max-height: 430px;
+  max-width: 620px;
+  vertical-align: middle;
+}
+
+.image-browse .simple_form label{width: 110px; margin: 0;}
+.image-browse .simple_form span{vertical-align: middle;}
+.image.image-browse .left-container{height: auto;}
+.image.image-browse .gallery-container{height: 430px; width: 100%;}
 
 /*** GALLERY ***/
 .galleries .galleries-wrapper .empty-data{text-align: center;}

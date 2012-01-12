@@ -1,51 +1,53 @@
 = stylesheet_link_tag("slideshow.css")
 = javascript_include_tag("jquery.jcarousel.min.js")
-.slideshow-container
-  .top-container
-    .left-container.clearfix.left.round-box
-      #image-viewer
-        = image_tag @image.data.url
-    = simple_form_for(:image, :id => @image, :action => :update, :method => 'put') do |f|
-      .right-container.right
-        .edit-area.round-box.clearfix
-          = (@image.author ? @image.author.fullname : "")
-          %br.clearfix
-          %ul
+.image-browse
+  .slideshow-container
+    .top-container
+      .left-container.clearfix.left.round-box
+        .gallery-image
+          .image-content
+            = image_tag @image.data.url
+      = simple_form_for(:image, :id => @image, :action => :update, :method => 'put') do |f|
+        .right-container.right
+          .edit-area.round-box.clearfix
+            .info.fullname.clearfix
+              %label= "Author:"
+              %span= (@image.author ? @image.author.fullname : "")
+            
+            .info.image-name.clearfix
+              %label= "Image Name:"
+              %span= @image.name
+              
+            .info.image-description.clearfix
+              %label= "Description:"
+              %span= @image.description
+          
+          .button-container.blue-gradient
+            %ul
+              %li
+                %div
+                  %input.not-implement{:type => "button", :value => "Comment"}
+              %li
+                %div
+                  %input.not-implement{:type => "button", :value => "Like"}
+              %li
+                %div
+                  %input.not-implement{:type => "button", :value => "Order"}
+                  
+    .bottom-container.clearfix
+      %br
+      %div
+        %ul#mycarousel.jcarousel-skin-tango
+          - selected_image_position = 1
+          - @images.each_with_index do |image, index|
             %li
-              = I18n.t("slideshow.picture_name")
-            %li
-              = @image.name
-            %li
-              = I18n.t("slideshow.description")
-            %li
-              = @image.description
-        
-        .button-container.blue-gradient
-          %ul
-            %li
-              %div
-                = button_to "Comment"
-            %li
-              %div
-                = button_to "Like"
-            %li
-              %div
-                = f.submit "Order"
-                
-  .bottom-container.clearfix
-    %br
-    %div
-      %ul#mycarousel.jcarousel-skin-tango
-        - selected_image_position = 1
-        - @images.each_with_index do |image, index|
-          %li
-            - url = url_for(:controller => "images", :action => "browse", :id => "#{image.id}")
-            %a{:href => "#{url}"}
-              - if image.id == @image.id 
-                - selected_image_position = index 
-                = image_tag(image.data.url(:thumb), :size => "70x70", :style => "border: solid 2px orange")
-              - else
-                = image_tag(image.data.url(:thumb), :size => "75x75")
+              - url = url_for(:controller => "images", :action => "browse", :id => "#{image.id}")
+              %a{:href => "#{url}"}
+                - if image.id == @image.id 
+                  - selected_image_position = index 
+                  = image_tag(image.data.url(:thumb), :size => "70x70", :style => "border: solid 2px orange")
+                - else
+                  = image_tag(image.data.url(:thumb), :size => "75x75")
 :erb
   <script type="text/javascript">
   function mycarousel_initCallback(carousel)
@@ -73,6 +75,12 @@
         start: <%= selected_image_position %>,
         scroll: 3,
         initCallback: mycarousel_initCallback
+    });
+    
+    $(".not-implement").click(function(e){
+      e.preventDefault();
+      helper.alert_not_implement();
+      return false;
     });
   });
 

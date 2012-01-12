@@ -20,6 +20,10 @@ class HomeController < ApplicationController
   end
   
   def default_page_size
-    return 30
+    size = 30
+    if params[:action] == "browse"
+      size = 12
+    end
+    return size
   end
 end

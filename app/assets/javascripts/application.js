@@ -129,5 +129,10 @@ helper = {
     var str_num = Math.random().toString();
     str_num = str_num.replace("0.", "");
     return parseInt(str_num);
+  },
+  
+  alert_not_implement: function(){
+    alert("This feature is coming soon");
+    return false;
   }
 };
