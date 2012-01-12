@@ -20,6 +20,14 @@
 
 :erb
   <script type="text/javascript">
+    $('#menu-items').delegate(
+      "a[href='#']", "click", function() {
+        alert("This feature has not been implemented yet.");
+        return false;
+      }
+    );
+  </script>
+  <script type="text/javascript">
     $(document).ready(function(){
       $("#menu-items").supersubs({ 
         minWidth:    5,
