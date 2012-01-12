@@ -1,0 +1,1 @@
+$(".pagination a").click(function(){return alert("222sss22"),!1})
