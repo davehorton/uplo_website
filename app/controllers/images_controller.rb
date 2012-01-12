@@ -50,7 +50,7 @@ class ImagesController < ApplicationController
       }]
     end
 
-    render :json => result
+    render :text => result.to_json
   end
   
   def destroy
