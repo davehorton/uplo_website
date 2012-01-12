@@ -982,3 +982,11 @@ a.icon-link{text-decoration: none;}
 .images .images-list-wrapper .files .progressbar div{margin-top:10px;}
 .images .images-list-wrapper table tr{border-top: 1px solid #ddd;}
 .images .pagination .load-more{width:300px;}
+
+/*** ACCOUNT ***/
+.account .action-container{text-align: right; font-size: 13px; display: inline-block; float: right; margin-top: 0;}
+.account .account-info-container{padding: 0 10px;}
+.account .actions a{vertical-align: middle; font-size: 13px;}
+.account .info-container {padding: 6px;}
+.account .info-container span h2{display: inline-block;}
+.account .info-container .info-content .info-item{margin-left: 10px;}
