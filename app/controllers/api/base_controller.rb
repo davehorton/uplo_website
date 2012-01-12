@@ -13,7 +13,7 @@ class Api::BaseController < ActionController::Base
   end
   
   def render_not_found(with_status_code = true)
-    options = {:json => {:message => I18n.t("common.error_resource_notfound"), :status => 404}}
+    options = {:json => {:msg => I18n.t("common.error_resource_notfound"), :status => 404}}
     if with_status_code
       options[:status] = 401
     end
@@ -22,7 +22,7 @@ class Api::BaseController < ActionController::Base
   end
   
   def render_unauthorized(with_status_code = true)
-    options = {:json => {:message => I18n.t("common.error_unauthorized"), :status => 403}}
+    options = {:json => {:msg => I18n.t("common.error_unauthorized"), :status => 403}}
     if with_status_code
       options[:status] = 403
     end
@@ -31,7 +31,7 @@ class Api::BaseController < ActionController::Base
   end
   
   def render_require_login(with_status_code = true)
-    options = {:json => {:message => I18n.t("common.error_not_login"), :status => 401}}
+    options = {:json => {:msg => I18n.t("common.error_not_login"), :status => 401}}
     if with_status_code
       options[:status] = 401
     end
