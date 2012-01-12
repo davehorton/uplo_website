@@ -1,11 +1,13 @@
-%h2 Change your password
-= simple_form_for(resource, :as => resource_name, :url => password_path(resource_name), :html => { :method => :put , :class => "simple_form"}) do |f|
-  = f.error_notification
-  = f.input :reset_password_token, :as => :hidden
-  = f.full_error :reset_password_token
-  .inputs
-    = f.input :password, :label => "New password", :required => true
-    = f.input :password_confirmation, :label => "Confirm your new password", :required => true
-  .actions
-    = f.button :submit, "Change my password"
-= render :partial => "devise/shared/links"
+.account
+  %h2 Change your password
+  = simple_form_for(@user, :url => password_path(@user), :html => { :method => :put , :class => "simple_form"}) do |f|
+    = f.error_notification
+    = f.input :reset_password_token, :as => :hidden
+    = f.full_error :reset_password_token
+    .inputs
+      = f.input :current_password, :label => "Current password", :required => true
+      = f.input :password, :label => "New password", :required => true
+      = f.input :password_confirmation, :label => "Confirm your new password", :required => true
+    .actions
+      = f.button :submit, "Update"
+      %a.cancel{:href => "/profile"}= "Cancel"

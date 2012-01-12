@@ -33,6 +33,10 @@ en:
     cancel: "Cancel"
     print: "Print"
     save: "Save"
+  
+  user:
+    update_done: "Your profile was updated successfully"
+    update_password_done: "Your password was changed successfully"
     
   date:
     formats:

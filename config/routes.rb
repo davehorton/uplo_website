@@ -3,6 +3,8 @@ Uplo::Application.routes.draw do
   root :to => "home#index"
   get "browse", :to => "home#browse"
   get "profile", :to => "users#profile"
+  get "profile/edit", :to => "users#edit"
+  put "profile/update", :to => "users#update"  
   match 'images/browse/:id' => 'images#browse', :via => [:get]
 
   resources :galleries do
