@@ -45,7 +45,7 @@ class Api::UsersController < Api::BaseController
       @result[:msg] = I18n.t("common.invalid_params")
     elsif @user.update_profile(params[:user])
       @result[:success] = true
-      @result[:user_info] = init_user_info(user)
+      @result[:user_info] = init_user_info(@user)
     else
       @result[:success] = false
       messages = @user.errors.full_messages
