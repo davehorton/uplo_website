@@ -9,6 +9,8 @@ en:
     error_unauthorized: "You are not authorized to access this resource"
     error_not_login: "You must login first"
     search_hint: "Search images"
+    male: "Male"
+    female: "Female"
     
   main_menu:
     popular: "Popular"

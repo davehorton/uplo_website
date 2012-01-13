@@ -1,6 +1,8 @@
 class User < ActiveRecord::Base
   attr_accessor :force_submit, :login
   
+  GENDER_MALE = "0"
+  
   # Include default devise modules. Others available are:
   # :token_authenticatable, :encryptable, :confirmable, :lockable, :timeoutable and :omniauthable
   devise :database_authenticatable, :registerable,
@@ -144,5 +146,17 @@ class User < ActiveRecord::Base
     end
     
     result
+  end
+  
+  def is_male?
+    (self.gender.to_s == GENDER_MALE)
+  end
+  
+  def gender_string
+    key = "female"
+    if self.is_male?
+      key = "male"
+    end
+    return I18n.t("common.#{key}")
   end
 end

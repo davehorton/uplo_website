@@ -1,4 +1,11 @@
 class Users::PasswordsController < ApplicationController
+  include Devise::Controllers::InternalHelpers
+  
+  def new
+    build_resource({})
+    render_with_scope :new
+  end
+  
   def edit
     @user = current_user
   end

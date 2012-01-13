@@ -3,6 +3,7 @@
   .inputs
     = f.input :first_name, :required => true, :autofocus => true
     = f.input :last_name, :required => true, :autofocus => true
+    = f.input :gender, :as => :radio, :collection => gender_options
     = f.input :twitter
     = f.input :facebook
     

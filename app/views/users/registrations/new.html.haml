@@ -13,8 +13,7 @@
     = f.input :last_name, :required => true, :autofocus => true
     = f.input :password, :required => true
     = f.input :password_confirmation, :required => true
-    = f.input :birthday, :as => :string, :input_html => {:class => "datepicker"}
-    = f.input :nationality
+    = f.input :gender, :as => :radio, :collection => gender_options
   .actions
     = f.button :submit, "Sign up"
 = render :partial => "devise/shared/links"

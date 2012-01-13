@@ -68,4 +68,10 @@ module ApplicationHelper
     
     image_tag(path, options)
   end
+  
+  def gender_options
+    [ [I18n.t("common.male"), 0], 
+      [I18n.t("common.female"), 1]
+    ]
+  end
 end
