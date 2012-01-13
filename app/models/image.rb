@@ -16,8 +16,8 @@ class Image < ActiveRecord::Base
    :path => "image/:id/:style.:extension"
   
   #validates_attachment_presence :data
-  validates_attachment_content_type :data, :content_type => [ 'image/jpeg','image/png' ],
-                                      :message => 'file must be of filetype .jpg or .png'
+  validates_attachment_content_type :data, :content_type => [ 'image/jpeg','image/jpg','image/png',"image/gif"],
+                                      :message => 'filetype must be one of [.jpeg, .jpg, .png, .gif]'
 
   
   # CLASS METHODS
