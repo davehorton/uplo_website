@@ -23,7 +23,7 @@ class Api::UsersController < Api::BaseController
       :msg => {}
     }
     
-    if user.valid? && user.save
+    if user.save
       @result[:user_info] = init_user_info(user)
     else
       messages = user.errors.full_messages
