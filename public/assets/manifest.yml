@@ -29,6 +29,7 @@ jquery.jcarousel.min.js: jquery.jcarousel.min-7f10a46d54c6c06063f69b36e808e803.j
 lib/jquery.ui.mouse.js: lib/jquery.ui.mouse-0b3089812447d9b364a387b920f6a757.js
 ui-bg_inset-soft_95_fef1ec_1x100.png: ui-bg_inset-soft_95_fef1ec_1x100-b46cf5911f68d5a77f9603731adb7c8c.png
 star-12.png: star-12-d865d23bbcdbf1c74427d89222f84676.png
+cart_icon.png: cart_icon-aaf11f778929f7fdfa32c3db56f0635d.png
 rails.js: rails-99f0a6e1ea028850c1452416f3598df1.js
 lib/jquery.poshytip.js: lib/jquery.poshytip-041e56e22ed597fe22cc446995f322cb.js
 accept.png: accept-827150100e63c7b2f3c88f34d60d43a8.png
@@ -52,6 +53,7 @@ down.gif: down-34df3de9766e522b8e5872ad42fdab82.gif
 ui-bg_flat_75_ffffff_40x100.png: ui-bg_flat_75_ffffff_40x100-61e1b7d15d2479ba68755f17cb0de396.png
 prev12.png: prev12-50faae018f6c8d92a763de0f296e2495.png
 lib/jquery.inline_label.min.js: lib/jquery.inline_label.min-7f083ec0bc4cf06e6c2793f14c9600a8.js
+scss/cart.css: scss/cart-7042b6bdc40f9374305bc2c751831dfd.css
 lib/galleria/plugins/history/history-demo.html: lib/galleria/plugins/history/history-demo-02b1d03cb736959d0011be3955545090.html
 lib/jquery.textchange.min.js: lib/jquery.textchange.min-d427e73b82b6fc80c2942f03135f5201.js
 lib/galleria/plugins/flickr/flickr-demo.html: lib/galleria/plugins/flickr/flickr-demo-d08c260d91ae4e9528bdd047457888bb.html
@@ -85,6 +87,7 @@ lib/galleria/plugins/picasa/loader.gif: lib/galleria/plugins/picasa/loader-c00d1
 lib/galleria/themes/classic/galleria.classic.js: lib/galleria/themes/classic/galleria.classic-361e004fbaed2ff25840fc22f8546651.js
 app/user.js: app/user-0889d86ead6ad03706026dc9dd5148c1.js
 drag-handler.png: drag-handler-74cdacb3a25b3f09df3b368d8150d5f8.png
+shopping_cart.js: shopping_cart-858094f437690f433871c26b46760bad.js
 gallery-thumb-180.jpg: gallery-thumb-180-d7e291b90b99686dc26c73ab3852da24.jpg
 error.png: error-99e5c8bbc52ed6896b8e6fdff991cb79.png
 gallery-thumb.jpg: gallery-thumb-187bddbf19a796898510953324f672f2.jpg
@@ -112,11 +115,12 @@ lib/galleria/plugins/flickr/flickr-loader.gif: lib/galleria/plugins/flickr/flick
 loading-small.gif: loading-small-49e6f2d14e0624a4ff56071d45d90f12.gif
 loading.gif: loading-4aec309c41e2af79984dbae2a0238108.gif
 prev-vertical.png: prev-vertical-eaef69b30a628022ae98a7704e5ef474.png
-application.css: application-e092e15e96e7080b0c7f7e5abe87ccde.css
+application.css: application-dae0fb3f53f86dbd3061874c6698b5ae.css
 ui-bg_glass_75_dadada_1x400.png: ui-bg_glass_75_dadada_1x400-2595aa9b98f998d64965af8a53aac820.png
 lib/galleria/themes/classic/classic-loader.gif: lib/galleria/themes/classic/classic-loader-c00d11b554c986fb60ec35bae8d78908.gif
 last.png: last-224cc1eb9953afe7129632bc6da470d8.png
 jquery.min.js: jquery.min-460459a37590253002f65e6137a90b87.js
+cart.css: cart-7042b6bdc40f9374305bc2c751831dfd.css
 bootstrap.css: bootstrap-856da68b6ae07a71b659dedecae850a9.css
 lib/blueimp/bootstrap-modal.min.js: lib/blueimp/bootstrap-modal.min-6d7fa4a6ec8fcb28991ade33a6c3786f.js
 lib/superfish.min.js: lib/superfish.min-3e9e8ba48e2eff4361f86168d6e6afcf.js
