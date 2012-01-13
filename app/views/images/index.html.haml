@@ -18,6 +18,8 @@
         %span= "From "
         %span.author-link
           %a{:href => "#"}= current_user.fullname
+    .description 
+      = @gallery.description
         
   - if can_modify_gallery?(@gallery)
     .action-container
