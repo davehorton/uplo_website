@@ -126,9 +126,9 @@
                                 that._reflow = that._transition &&
                                     template[0].offsetWidth;
                                 template.addClass('in');
-                                if($('.files.download').children().size() > this.options.displayNumber){
-                                  $('.files.download').children().last().remove();
-                                }
+//                                if($('.files.download').children().size() > this.options.displayNumber){
+//                                  $('.files.download').children().last().remove();
+//                                }
                             }
                         );
                     });

@@ -64,6 +64,7 @@ class ImagesController < ApplicationController
     if find_gallery!
       @images = @gallery.images.load_images(@filtered_params)
       @page_id = @filtered_params[:page_id].nil? ? 1 : @filtered_params[:page_id]
+      @page_size = @filtered_params[:page_size]
     end
   end
     
