@@ -1,6 +1,7 @@
 /*---- Global styles -----*/
 
 
+
 html, body, div, span, applet, object, iframe,
 h1, h2, h3, h4, h5, h6, p, blockquote, pre,
 a, abbr, acronym, address, big, cite, code,
@@ -650,6 +651,7 @@ a.icon-link{text-decoration: none;}
 
 .blue-gradient{
   background:#CEEFF6;
+  filter:progid:DXImageTransform.Microsoft.gradient(GradientType=0,startColorstr='#ffffff',endColorstr='#CEEFF6');
 	background:-moz-linear-gradient(top, rgb(255,255,255) 0%, rgb(255,255,255) 0%, #CEEFF6 100%);
 	background:-webkit-gradient(linear, left top, left bottom, color-stop(0%,rgb(255,255,255)), color-stop(0%,rgb(255,255,255)), color-stop(100%,#CEEFF6));
 	background:-webkit-linear-gradient(top, rgb(255,255,255) 0%,rgb(255,255,255) 0%,#CEEFF6 100%);
@@ -659,6 +661,7 @@ a.icon-link{text-decoration: none;}
 
 .blue-gradient-reverse{
   background:#CEEFF6;
+  filter:progid:DXImageTransform.Microsoft.gradient(GradientType=0,startColorstr='#CEEFF6',endColorstr='#ffffff');
 	background:-moz-linear-gradient(bottom, rgb(255,255,255) 0%, rgb(255,255,255) 0%, #CEEFF6 100%);
 	background:-webkit-gradient(linear, left bottom, left top, color-stop(0%,rgb(255,255,255)), color-stop(0%,rgb(255,255,255)), color-stop(100%,#CEEFF6));
 	background:-webkit-linear-gradient(bottom, rgb(255,255,255) 0%,rgb(255,255,255) 0%,#CEEFF6 100%);
@@ -678,6 +681,7 @@ a.icon-link{text-decoration: none;}
 .ui-button-container .round-button{display: inline-block; color: #fff;display: table-cell; vertical-align: middle;}
   
 .simple_form label {float: left; width: 140px; margin-right: 10px; margin-top: 5px}
+.simple_form .input.optional span label{float: none; vertical-align: middle;}
 .simple_form label abbr {float: right; color: #D4550B;}
 .simple_form select {width: 165px; float: left;}
 .simple_form input[type=text], .simple_form input[type=email], .simple_form input[type=password] {width: 200px; padding: 6px; background-color: #FFFFFF;}
@@ -922,6 +926,7 @@ a.icon-link{text-decoration: none;}
 }
 
 .galleries #new-gallery .round-button{
+  filter:progid:DXImageTransform.Microsoft.gradient(GradientType=0,startColorstr='#46B40D',endColorstr='#3CA008');
   background:-moz-linear-gradient(center top , #46B40D, #3CA008) repeat scroll 0 0 transparent;
 	background:-webkit-gradient(linear, left top, left bottom, from(#46B40D),to(#3CA008));
 	background:-webkit-linear-gradient(top, #46B40D 0%, #3CA008 100%);
