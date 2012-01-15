@@ -1,6 +1,8 @@
 .account
   .action-container.clearfix
-    %a#edit-profile{:href => "/profile/edit", :class => "ui-button-container icon-link"}
+    .header
+      %h1= "My Profile"
+    %a.float-right#edit-profile{:href => "/profile/edit", :class => "ui-button-container icon-link"}
       %span= "Edit Profile"
   
   .clearfix

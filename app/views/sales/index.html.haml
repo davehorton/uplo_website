@@ -1,0 +1,23 @@
+- content_for :head do
+  = javascript_include_tag("lib/highcharts/highcharts.js")
+  = javascript_include_tag("app/sales.js")
+
+.sales
+  .action-container.clearfix
+    %a.float-right#payment-link{:href => "/profile#payment-settings", :class => "ui-button-container icon-link"}
+      %span= "Payment"
+  
+  .clearfix
+
+  .sales-info-container.clearfix
+    .chart-container#daily-sales-chart-container.clearfix
+    
+  .images-info-container.clearfix
+
+
+:erb
+  <script type="text/javascript">
+    $(document).ready(function(){
+      sales.setup();
+    });
+  </script>

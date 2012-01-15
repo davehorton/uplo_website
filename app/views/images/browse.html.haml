@@ -32,7 +32,7 @@
                   %input.not-implement{:type => "button", :value => "Like"}
               %li
                 %div
-                  %input.not-implement{:type => "button", :value => "Order"}
+                  %input#test-order-image{:type => "button", :value => "Order"}
                   
     .bottom-container.clearfix
       %br
@@ -81,6 +81,11 @@
       e.preventDefault();
       helper.alert_not_implement();
       return false;
+    });
+    
+    $("#test-order-image").click(function(e){
+      e.preventDefault();
+      window.location = "/payments";
     });
   });
 
