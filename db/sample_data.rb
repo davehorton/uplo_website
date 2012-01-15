@@ -1,5 +1,5 @@
 # Users
-user = User.create!({
+user = User.new({
   :email => "user@uplo.com",
   :username => "user",
   :last_name => "User",
@@ -10,7 +10,9 @@ user = User.create!({
   :confirmed_at => Time.now.advance(:hours => -1), #bypass email confirmation
   :confirmation_sent_at => Time.now.advance(:days => - 1, :hours => -1), #bypass email confirmation
 })
-
+user.skip_confirmation!
+user.save!
+  
 user.galleries.create!({
   :user_id => user.id,
   :name => "The best of the year",
@@ -28,14 +30,9 @@ user.galleries.create!({
   :name => "The best of the year",
   :description => "There are a lot of artworks which are the best of the months and weeks in this year"
 })
-
-if user.confirmed_at.blank?
-  user.confirmed_at = Time.now.advance(:hours => -1)
-  user.save
-end
 
 5.times do |counter|
-  user = User.create!({
+  user = User.new({
     :email => Faker::Internet.email,
     :username => Faker::Internet.user_name,
     :last_name =>  Faker::Name.last_name,
@@ -46,11 +43,8 @@ end
     :confirmed_at => Time.now, #bypass email confirmation
     :confirmation_sent_at => Time.now, #bypass email confirmation
   })
-  
-  if user.confirmed_at.blank?
-    user.confirmed_at = Time.now
-    user.save
-  end
+  user.skip_confirmation!
+  user.save!
 end
 
 # Galleries
@@ -58,18 +52,21 @@ galleries = []
 user = User.first
 20.times do |counter|
   galleries << Gallery.create!({
-    :name => Faker::Company.name,
+    :name => Faker::Name.name,
     :user => user,
     :permission => "public",
-    :description => Faker::Lorem.words(3).map{|x| x.capitalize}.join(" ")
+    :description => Faker::Lorem.paragraph
   })
 end
 
 # Images
-gallery = galleries.first
-40.times do |counter|
-  img = gallery.images.create!({
-    :name => Faker::Lorem.words,
-    :data => File.open(Dir.glob(File.join(Rails.root, 'public/assets', 'gallery-thumb.jpg')).sample)
-  })
+# Run: "rake db:sample_data with_sample_image=true" to run this step
+if ENV["with_sample_image"]
+  gallery = galleries.first
+  40.times do |counter|
+    img = gallery.images.create!({
+      :name => Faker::Lorem.words,
+      :data => File.open(Dir.glob(File.join(Rails.root, 'public/assets', 'gallery-thumb.jpg')).sample)
+    })
+  end
 end

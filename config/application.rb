@@ -14,6 +14,7 @@ module Uplo
       g.template_engine :haml
       #g.test_framework  :shoulda, :fixture_replacement => :factory_girl
       g.test_framework  :rspec, :fixture => true, :views => false
+      g.form_builder :simple_form
       #g.fixture_replacement :factory_girl, :dir => "spec/factories"
       g.fixture_replacement :machinist
       g.fallbacks[:shoulda] = :rspec

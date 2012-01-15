@@ -14,7 +14,7 @@
 end
 =end
 
-admin = User.create!({
+admin = User.new({
   :email => "admin@uplo.com",
   :username => "admin",
   :last_name => "Admin",
@@ -26,7 +26,5 @@ admin = User.create!({
   :confirmation_sent_at => Time.now.advance(:days => - 1, :hours => -1), #bypass email confirmation
 })
 
-if admin.confirmed_at.blank?
-  admin.confirmed_at = Time.now.advance(:hours => -1)
-  admin.save
-end
+admin.skip_confirmation!
+admin.save!
