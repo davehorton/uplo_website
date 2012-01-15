@@ -6,10 +6,19 @@
 
 require 'rubygems'
 require 'spork'
- 
+
 Spork.prefork do
   require 'cucumber/rails'
+  require 'capybara/rails'
+  require 'capybara/cucumber'
+  require 'capybara/session'
 
+  ENV["RAILS_ENV"] ||= "test"
+  Capybara.register_driver :selenium do |app|
+    Capybara::Selenium::Driver.new(app, :browser => :chrome)
+  end
+  Capybara.default_wait_time = 10 
+  Capybara.server_boot_timeout = 20
 
   # Capybara defaults to XPath selectors rather than Webrat's default of CSS3. In
   # order to ease the transition to Capybara we set the default here. If you'd

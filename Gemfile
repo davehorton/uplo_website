@@ -37,6 +37,7 @@ group :assets do
   gem 'sass-rails',   '~> 3.1.5'
   gem 'coffee-rails', '~> 3.1.1'
   gem 'uglifier', '>= 1.0.3'
+  gem 'yui-compressor', '>= 0.9.6'
 end
 
 gem 'jquery-rails'
@@ -61,16 +62,17 @@ group :development do
 end
 
 group :test do
-  gem "factory_girl_rails"
-  gem "machinist", "1.0.6"
-  gem 'machinist_callbacks'
+  gem 'database_cleaner', '>= 0.7.0'
+  gem "factory_girl_rails", '>= 1.5.0'
+  gem 'sham', '>= 1.0.2'
+  gem "machinist", ">= 2.0"
   gem "shoulda"
   gem "mynyml-redgreen", :require => "redgreen"
   gem "cucumber", ">= 1.1.4"
   gem "cucumber-rails", ">= 1.2.1"
   gem "capybara", ">= 1.1.2"
-  gem "pickle", :git => "git://github.com/kb/pickle.git"
+  gem "pickle"
   gem "launchy", ">= 2.0.5"
   gem 'spork', '~> 0.9.0.rc'
-  gem "rspec-rails", ">= 2.7.0"
+  gem "rspec-rails", ">= 2.8.1"
 end
