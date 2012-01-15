@@ -6,7 +6,15 @@ Uplo::Application.routes.draw do
   get "profile/edit", :to => "users#edit"
   put "profile/update", :to => "users#update"  
   match 'images/browse/:id' => 'images#browse', :via => [:get]
-
+  get "sales", :to => "sales#index"
+  
+  match '/payments/paypal_notify' => 'payments#paypal_notify'
+  match '/payments/paypal_result' => 'payments#paypal_result'
+  match '/payments/paypal_cancel' => 'payments#paypal_cancel'
+  match '/payments/checkout' => 'payments#checkout'
+  
+  resources :payments
+  
   resources :galleries do
     get 'images/delete/:id', :to => 'images#destroy'
     get 'images/list', :to => 'images#list'

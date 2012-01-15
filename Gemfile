@@ -26,7 +26,6 @@ gem "cancan", ">= 1.6.7"
 gem "faker"
 gem "rmagick"
 gem "nested_form"
-gem 'money'
 gem "aws-s3"
 gem "dalli" # For memcache
 gem "nokogiri"
@@ -41,7 +40,10 @@ group :assets do
 end
 
 gem 'jquery-rails'
-# Javascript runtime.
+
+# ECommerce
+gem 'activemerchant', '>= 1.20.1'
+gem 'active_utils'
 
 group :development do
   gem 'execjs'
