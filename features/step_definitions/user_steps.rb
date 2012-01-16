@@ -109,10 +109,6 @@ When /^I edit my account details$/ do
   click_button "Update"
 end
 
-When /^I go to my profile page$/ do
-  visit '/profile'
-end
-
 ### THEN ###
 Then /^I should be signed in$/ do
   page.should have_content "Logout"

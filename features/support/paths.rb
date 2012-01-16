@@ -26,7 +26,7 @@ module NavigationHelpers
     when /the sales page/
       "/sales"
       
-    when /the profile page/
+    when /the profile page/, /my profile page/
       "/profile"
     
     # the following are examples using path_to_pickle
