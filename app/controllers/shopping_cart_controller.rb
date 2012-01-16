@@ -20,7 +20,7 @@ class ShoppingCartController < ApplicationController
         item.image = image
         item.size = params[:line_item][:size]
         item.moulding = params[:line_item][:moulding]
-        item.price = (image.price.nil? ? '0' : image.price)
+        item.price = 10#(image.price.nil? ? '0' : image.price)
         @cart.order.line_items << item
         @cart.save
       end

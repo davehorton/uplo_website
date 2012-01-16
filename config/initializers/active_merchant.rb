@@ -17,3 +17,5 @@ AN_LOGIN_ID = "5rEw33WW37dT"
 AN_TRANS_KEY = "4J3qwE54h8Z4Lvcd"
   
 ActionView::Base.send(:include, ActiveMerchant::Billing::Integrations::ActionViewHelper)
+
+PAYPAL_API_URL = "https://www.sandbox.paypal.com/cgi-bin/webscr"

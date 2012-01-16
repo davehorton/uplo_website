@@ -1,7 +1,7 @@
 %ul#nav
   - if user_signed_in?
     %li
-      = link_to("my cart (1)", url_for(:controller=>"shopping_cart", :action=>"show"))
+      = link_to("my cart (#{total_line_items})", url_for(:controller=>"shopping_cart", :action=>"show"))
     %li= "|"
     %li
       = link_to "Logout", "/signout", :class => "icon-link icon-logout", :method => "delete"
