@@ -22,11 +22,9 @@ Uplo::Application.routes.draw do
   match '/payments/paypal_cancel' => 'payments#paypal_cancel'
   match '/payments/checkout' => 'payments#checkout'
   
-  resources :payments
-  
+  resources :payments  
 
   get 'images/order/:id', :to => "images#order"
-
 
   resources :galleries do
     get 'images/delete/:id', :to => 'images#destroy'
@@ -63,6 +61,8 @@ Uplo::Application.routes.draw do
     post "upload_image", :to => "images#upload_image"
     post "update_image", :to => "images#update_image"
     post "delete_image", :to => "images#delete_image"
+    
+    resources :orders
   end 
   
   # The priority is based upon order of creation:
