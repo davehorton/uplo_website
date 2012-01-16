@@ -25,6 +25,7 @@ class User < ActiveRecord::Base
   has_many :galleries, :dependent => :destroy
   has_many :comments, :dependent => :destroy
   has_many :image_likes, :dependent => :destroy
+  has_many :orders, :dependent => :destroy
   
   # VALIDATION
   validates_presence_of :first_name, :last_name, :email, :username, :message => 'cannot be blank'

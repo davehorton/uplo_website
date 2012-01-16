@@ -1,6 +1,7 @@
 class Image < ActiveRecord::Base
   include ::SharedMethods::Paging
-
+  include ::SharedMethods::SerializationConfig
+  
   # ASSOCIATIONS
   belongs_to :gallery
   has_many :image_tags, :dependent => :destroy
@@ -53,23 +54,6 @@ class Image < ActiveRecord::Base
       []
     end
     
-    def except_attributes
-      attrs = []
-      self.attribute_names.each do |n|
-        if !exposed_attributes.include?(n.to_sym)
-          attrs << n
-        end
-      end
-      attrs
-    end
-    
-    def default_serializable_options
-      { :except => self.except_attributes,
-        :methods => self.exposed_methods, 
-        :include => self.exposed_associations
-      }
-    end
-    
     protected
     
     def parse_paging_options(options, default_opts = {})
@@ -100,34 +84,5 @@ class Image < ActiveRecord::Base
   # Shortcut to get image's URL                                    
   def url(options = nil)
     self.data.url(options)
-  end
-  
-  # Override Rails as_json method
-  def as_json(options={})
-    if (!options.blank?)
-      super(self.default_serializable_options.merge(options))
-    else
-      super(self.default_serializable_options)
-    end
-  end
-  
-  def exposed_methods
-    self.class.exposed_methods
-  end
-    
-  def exposed_attributes
-    self.class.except_attributes
-  end
-  
-  def exposed_associations
-    self.class.exposed_associations
-  end
-  
-  def except_attributes
-    self.class.except_attributes
-  end
-  
-  def default_serializable_options
-    self.class.default_serializable_options
   end
 end
