@@ -4,7 +4,6 @@ require 'active_merchant'
 class PaymentsController < ApplicationController
   before_filter :authenticate_user!
   include ActiveMerchant::Billing::Integrations
-  include ActiveMerchant::Billing
   
   def index
     @pp_payment = Payment.create_paypal_test
@@ -42,17 +41,53 @@ class PaymentsController < ApplicationController
         end
         redirect_to pp_gateway.redirect_url_for(setup_response.token)
       when "an"
+        an_payment = Payment.create_paypal_test
+        transaction = AuthorizeNet::AIM::Transaction.new(AN_LOGIN_ID, AN_TRANS_KEY,
+          :gateway => :card_present_sandbox)
+        response = transaction.purchase(an_payment.amount, an_credit_card)
+
+        if response.success?
+          flash[:notice] = "Successfully made a purchase (authorization code: #{response.authorization_code})"
+        else
+          flash[:warn] = 'Fail:' + response.message.to_s
+        end
+        
+        redirect_to :action => :index
     end
   end
   
   def pp_gateway
-    @pp_gateway ||= PaypalExpressGateway.new(
-      :login => "man.vu_1326647847_biz_api1.techpropulsionlabs.com",
-      :password => "1326647884",
-      :signature => "A4SdiHKfPQhiL0XrZSBoi7ft4tKHA1P76IKXYaZi7xHu2Vv2VRZqNX3B"
+    @pp_gateway ||= ActiveMerchant::Billing::PaypalExpressGateway.new(
+      :login => PP_API_USERNAME,
+      :password => PP_API_PASSWORD,
+      :signature => PP_API_SIGN
     )
   end
 
+  def an_gateway
+    @an_gateway ||= ActiveMerchant::Billing::AuthorizeNetGateway.new(
+    :login => AN_LOGIN_ID,
+    :password => AN_TRANS_KEY, 
+    :test => true)
+  end
+  
+  def an_credit_card
+    @an_credit_card ||= AuthorizeNet::CreditCard.new(nil, nil, 
+    :track_1 => '%B4111111111111111^DOE/JOHN^1803101000000000020000831000000?')
+  end
+  
+  def credit_card
+    @credit_card ||= ActiveMerchant::Billing::CreditCard.new(
+      :number     => '4007000000027',
+      :month      => '8',
+      :year       => '2020',
+      :first_name => 'Uplo',
+      :last_name  => 'Payment',
+      :verification_value  => '123',
+      :type => "visa"
+    )
+  end
+  
   def get_setup_purchase_params(request)
     pp_payment = Payment.create_paypal_test
     total = pp_payment.amount

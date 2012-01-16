@@ -44,7 +44,7 @@ gem 'jquery-rails'
 # ECommerce
 gem 'activemerchant', '>= 1.20.1'
 gem 'active_utils'
-
+gem 'authorize-net', '>= 1.5.2'
 group :development do
   gem 'execjs'
   gem 'therubyracer'

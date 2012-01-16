@@ -72,8 +72,9 @@ Uplo::Application.configure do
     :address              => "smtp.gmail.com",
     :port                 => 587,
     :domain               => 'gmail.com',
-    :user_name            => 'tpldev1',
-    :password             => 'tpldev1!',
+    :user_name            => 'uplo.mailer',
+    :password             => 'uploTPL123456',
     :authentication       => 'plain',
-    :enable_starttls_auto => true  }
+    :enable_starttls_auto => true  
+  }
 end

@@ -34,7 +34,7 @@
         bundle exec spork cucumber
     - Open one more console and run one of these commands:
         bundle exec cucumber --drb # Run all features
-        bundle exec cucumber --drb features features/user.feature
+        bundle exec cucumber --drb features/user.feature
         bundle exec cucumber --drb --tags @current # Run only selected scenario with tag @current
       You can add as many *.feature file as you want.
   

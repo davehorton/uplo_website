@@ -9,7 +9,7 @@ class Payment
     user_info = {
       :first_name => "Man", 
       :last_name => "Vuong", 
-      :email => "man.vu_1326646895_per@techpropulsionlabs.com", 
+      :email => PP_BUYER_ACCOUNT, 
       :address1 => "awesome ln", 
       :city => "Austin", 
       :state => "TX",

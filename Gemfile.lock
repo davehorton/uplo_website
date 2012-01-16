@@ -47,6 +47,8 @@ GEM
     addressable (2.2.6)
     archive-tar-minitar (0.5.2)
     arel (2.2.1)
+    authorize-net (1.5.2)
+      nokogiri (~> 1.4)
     awesome_print (1.0.2)
     aws-s3 (0.6.2)
       builder
@@ -305,6 +307,7 @@ PLATFORMS
 DEPENDENCIES
   active_utils
   activemerchant (>= 1.20.1)
+  authorize-net (>= 1.5.2)
   awesome_print
   aws-s3
   bullet
