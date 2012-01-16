@@ -100,6 +100,16 @@ class ImagesController < ApplicationController
     redirect_to :action => :show, :id => params[:id]
   end
   
+  def order
+    @image = Image.find_by_id(params[:id])
+    if @image.blank?
+      return render_not_found
+    elsif @image.gallery && !@image.gallery.can_access?(current_user)
+      return render_unauthorized
+    end
+    @images = @image.gallery.images.all(:order => 'name')
+  end
+  
   protected
   
   def set_current_tab

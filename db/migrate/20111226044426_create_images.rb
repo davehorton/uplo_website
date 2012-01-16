@@ -5,6 +5,7 @@ class CreateImages < ActiveRecord::Migration
       t.text :description
       t.integer :gallery_id, :null => false
       t.boolean :is_gallery_cover, :default => false
+      t.float :price
       t.timestamps
     end
   end

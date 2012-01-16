@@ -1,11 +1,20 @@
 Uplo::Application.routes.draw do
+  get "orders/index"
+
   # WEB ROUTING
   root :to => "home#index"
+  get "shopping_cart/show"
+  post "shopping_cart/add_to_cart"
+  post "shopping_cart/destroy_item"
+  post "shopping_cart/clear"
+  get "shopping_cart/checkout"
+  get "orders", :to => "orders#index"
   get "browse", :to => "home#browse"
   get "profile", :to => "users#profile"
   get "profile/edit", :to => "users#edit"
   put "profile/update", :to => "users#update"  
   match 'images/browse/:id' => 'images#browse', :via => [:get]
+
   get "sales", :to => "sales#index"
   
   match '/payments/paypal_notify' => 'payments#paypal_notify'
@@ -15,6 +24,10 @@ Uplo::Application.routes.draw do
   
   resources :payments
   
+
+  get 'images/order/:id', :to => "images#order"
+
+
   resources :galleries do
     get 'images/delete/:id', :to => 'images#destroy'
     get 'images/list', :to => 'images#list'

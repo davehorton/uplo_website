@@ -1,0 +1,23 @@
+= stylesheet_link_tag("cart.css")
+
+%h1 Shopping Cart
+
+
+- if @line_items.empty?
+  Your cart is current empty.
+- else
+  Here is content of your cart
+
+  .solidBlock.round-box
+    = render :partial => "show_details"
+
+.button-container
+  = button_to("Clear cart",
+              {:controller => "shopping_cart",
+              :action => "clear"},
+             {:confirm => "Are you sure?", 
+              :method => :post, :class => 'btn left-btn'}) unless @order.line_items.empty?
+
+  = button_to "Continue shopping", "/browse", :method => "get", :class => 'btn left-btn'
+  = button_to("Checkout", {:controller => "shopping_cart", :action => "checkout"}, :method => "get", :class => 'btn left-btn') unless @order.line_items.empty?
+  

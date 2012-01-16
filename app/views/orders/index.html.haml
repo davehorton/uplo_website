@@ -1,0 +1,20 @@
+= stylesheet_link_tag("cart.css")
+
+.solidBlock.round-box
+  .order_summary.round-box
+    %table
+      %tr
+        %td.header Order Summary
+      %tr{:style=>"padding:3px;"} 
+        %td Total pictures
+        %td{:style=>"text-align:right"}
+          = number_to_currency(@order.price_total, {:precision => 2})
+      %tr
+        %td{:style=>"padding:3px;"} Tax 
+        %td{:style=>"text-align:right;"}
+          = number_to_currency(@order.tax, {:precision => 2})
+      %tr
+        %td{:style=>"border-top: dotted 1px #49484C;padding-top:5px;"}
+          %span Total Amount:
+        %td{:style=>"border-top: dotted 1px #49484C;padding-top:5px; text-align: right"}
+          = number_to_currency(@order.order_total, {:precision => 2})

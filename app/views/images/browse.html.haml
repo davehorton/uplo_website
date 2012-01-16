@@ -32,7 +32,8 @@
                   %input.not-implement{:type => "button", :value => "Like"}
               %li
                 %div
-                  %input#test-order-image{:type => "button", :value => "Order"}
+                  - order_url = url_for(:controller => 'images', :action => 'order', :id => params[:id])
+                  %input.order{:type => "button", :value => "Order", :data => {:url => "#{order_url}"}}
                   
     .bottom-container.clearfix
       %br
@@ -83,9 +84,8 @@
       return false;
     });
     
-    $("#test-order-image").click(function(e){
-      e.preventDefault();
-      window.location = "/payments";
+    $(".button-container .order").click(function(){
+      window.location.href = $(this).attr('data-url');
     });
   });
 

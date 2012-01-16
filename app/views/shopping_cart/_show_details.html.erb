@@ -1,0 +1,36 @@
+<table class="cartTable">
+
+  	<tr class="header">
+			<td class='name'>Item</td>
+			<td class="right">Size</td>
+			<td class="right">Moulding</td>
+			<td class="right">Price</td>
+			<td class="right">Tax</td>
+		</tr>
+
+  <% @line_items.each do |line_item| %>
+    <% unless line_item.image.nil? %>
+      <% image = line_item.image %>
+		  <tr class='lines'>
+	      <td class='preview'>
+	        <p><%= image_tag image.url(:small_preview) %></p>
+    		  <p class="option"><%= link_to("delete", {:controller => "shopping_cart", :action => "destroy_item", :id => line_item.id}, {:confirm => "Do you want to remove this item out of your cart?", :method => :post}) %></p>
+    		</td>
+			  <td class="right"><%= line_item.size %></td>
+			  <td class="right"><%= line_item.moulding %></td>
+        <td class='right'><%= number_to_currency(line_item.price, {:precision => 2}) %></td>
+        <td class= 'right'><%= number_to_currency((line_item.price * PER_TAX), {:precision => 2}) %></td>
+
+      </tr>
+    <% end %>
+  <% end %>
+
+    <tr class="footer">
+	    <td>Total:<p class="total"><%= number_to_currency(@order.order_total, {:precision => 2}) %></p></td>
+        <td class="right"></td>
+        <td class="right"></td>
+	    <td class="right">Price:<p><%= number_to_currency(@order.price_total, {:precision => 2}) %></p></td>
+	    <td class="right">Tax:<p class="blBody"><%= number_to_currency(@order.tax, {:precision => 2}) %></p></td>
+	  </tr>
+
+</table>

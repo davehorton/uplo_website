@@ -1,0 +1,38 @@
+= stylesheet_link_tag("slideshow.css", "cart.css")
+= javascript_include_tag("")
+.image-browse
+  .slideshow-container
+    .top-container
+      .left-container.clearfix.left.round-box
+        .gallery-image
+          .image-content
+            = image_tag @image.data.url
+      = simple_form_for(:line_item, :url => "/shopping_cart/add_to_cart", :method => 'post') do |f|
+        .order.right-container.right
+          .edit-area.round-box.clearfix
+            .info.clearfix
+              %label= "Print size:"
+              = radio_button(:line_item, :size, "300x300") 
+              %span 300x300
+              = radio_button(:line_item, :size, "500x500") 
+              %span 500x500
+            %br
+            .info.clearfix
+              %label= "Moulding choice:"
+              = radio_button(:line_item, :moulding, "White")
+              %span White
+              = radio_button(:line_item, :moulding, "Black")
+              %span Black
+
+              = radio_button(:line_item, :moulding, "Wood")
+              %span Wood
+              = radio_button(:line_item, :moulding, "Silver")
+              %span Silver
+            .info
+              = hidden_field(:line_item, :image_id, :value => @image.id)
+              
+          .button-container.blue-gradient
+            - url = url_for(:controller => 'shopping_cart', :action => 'add_to_cart', :id => params[:id])
+            %input.add-to-cart{:type => "submit", :value => "Add to cart"}
+
+
