@@ -11,7 +11,14 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120112072138) do
+ActiveRecord::Schema.define(:version => 20120116042206) do
+
+  create_table "carts", :force => true do |t|
+    t.integer  "user_id"
+    t.integer  "order_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "comments", :force => true do |t|
     t.integer  "user_id",     :null => false
@@ -55,6 +62,30 @@ ActiveRecord::Schema.define(:version => 20120112072138) do
     t.string   "data_content_type"
     t.integer  "data_file_size"
     t.datetime "data_updated_at"
+    t.float    "price"
+  end
+
+  create_table "line_items", :force => true do |t|
+    t.integer  "order_id"
+    t.integer  "image_id"
+    t.float    "price"
+    t.string   "moulding"
+    t.string   "size"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "orders", :force => true do |t|
+    t.integer  "user_id"
+    t.float    "tax"
+    t.float    "price_total"
+    t.float    "order_total"
+    t.string   "transaction_code"
+    t.string   "transaction_status"
+    t.datetime "transaction_date"
+    t.string   "status"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "tags", :force => true do |t|
