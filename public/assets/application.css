@@ -679,7 +679,15 @@ a.icon-link{text-decoration: none;}
   margin: 0 auto;
 }
 .ui-button-container .round-button{display: inline-block; color: #fff;display: table-cell; vertical-align: middle;}
-  
+
+.action-container {font-size: 13px; margin: 10px;}
+.action-container .header{display: inline-block; font-size: 16px;}
+.action-container .float-right{text-align: right; float: right;}
+.action-container .ui-button-container{width: auto;}
+.action-container .icon-link{display: inline-block;}
+.action-container a.icon-link:hover{text-decoration: underline;}
+.action-container .saparator{vertical-align: middle; margin: 0 2px;}
+
 .simple_form label {float: left; width: 140px; margin-right: 10px; margin-top: 5px}
 .simple_form .input.optional span label{float: none; vertical-align: middle;}
 .simple_form label abbr {float: right; color: #D4550B;}
@@ -918,14 +926,16 @@ a.icon-link{text-decoration: none;}
   width: 100%;
 }
 .galleries .action-container{
-  margin: 10px;
+  
 }
 
 .galleries #new-gallery{
   float: right;
 }
 
-.galleries #new-gallery .round-button{
+.galleries #new-gallery .round-button,
+.account #edit-profile .round-button,
+.sales #payment-link .round-button{
   filter:progid:DXImageTransform.Microsoft.gradient(GradientType=0,startColorstr='#46B40D',endColorstr='#3CA008');
   background:-moz-linear-gradient(center top , #46B40D, #3CA008) repeat scroll 0 0 transparent;
 	background:-webkit-gradient(linear, left top, left bottom, from(#46B40D),to(#3CA008));
@@ -946,13 +956,8 @@ a.icon-link{text-decoration: none;}
 /*** IMAGE ***/
 .images .images-wrapper{margin-left: 55px; margin-top: 15px;}
 .images .images-wrapper .empty-data{text-align: center;}
-.images .action-container{text-align: right; font-size: 13px; display: inline-block; float: right; margin-top: 0;}
-.images .action-container .ui-button-container{width: auto;}
-.images .action-container .icon-link{display: inline-block;}
-.images .action-container a.icon-link:hover{text-decoration: underline;}
-.images .action-container .saparator{vertical-align: middle; margin: 0 2px;}
 .images .gallery-container{width: auto;}
-
+.images .action-container{display: inline-block; float: right;  text-align: right; margin-top: 0;}
 .images .image-container{
   display: inline-block;
   padding: 4px;
@@ -992,7 +997,6 @@ a.icon-link{text-decoration: none;}
 .images .pagination .load-more{width:300px;}
 
 /*** ACCOUNT ***/
-.account .action-container{text-align: right; font-size: 13px; display: inline-block; float: right; margin-top: 0;}
 .account .account-info-container{padding: 0 10px;}
 .account .actions a{vertical-align: middle; font-size: 13px;}
 .account .info-container {padding: 6px;}

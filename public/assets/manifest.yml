@@ -55,6 +55,7 @@ up.gif: up-7851ecffdfbb6ca3ba41bcebfa93cb35.gif
 uplo-logo.png: uplo-logo-1a1123ea4ae8aed84ec7486c1838b15e.png
 uploader_file.png: uploader_file-3ab3c53af3d8adf6071f3776329ab009.png
 app/gallery.js: app/gallery-58a8059efdcf7674993c851095d7cf64.js
+app/sales.js: app/sales-0f7f53d48fefbf99c7b266eb584a903e.js
 app/user.js: app/user-0889d86ead6ad03706026dc9dd5148c1.js
 application.js: application-ca0d234e2135baf86a54798c01b28e9f.js
 file_upload/README.md: file_upload/README-3ed47c4044fe560bd4addcb841e853cd.md
@@ -92,6 +93,14 @@ lib/galleria/themes/classic/classic-map.png: lib/galleria/themes/classic/classic
 lib/galleria/themes/classic/galleria.classic.css: lib/galleria/themes/classic/galleria.classic-8d790c55f7ee4586d15059938d74de19.css
 lib/galleria/themes/classic/galleria.classic.js: lib/galleria/themes/classic/galleria.classic-361e004fbaed2ff25840fc22f8546651.js
 lib/galleria/themes/classic/galleria.classic.min.js: lib/galleria/themes/classic/galleria.classic.min-39b8a4adf6f4aa3b0283d598f6604d0f.js
+lib/highcharts/highcharts.js: lib/highcharts/highcharts-827efc6191c0392dec919263403af6e8.js
+lib/highcharts/highcharts.src.js: lib/highcharts/highcharts.src-c87b03b8dae8527d2e0dfa99112b51ea.js
+lib/highcharts/modules/exporting.js: lib/highcharts/modules/exporting-4d25d1815d2f66c9e4a3cbcf05a93e25.js
+lib/highcharts/modules/exporting.src.js: lib/highcharts/modules/exporting.src-03dae1aca993b1c28bb5db1554c5ae8a.js
+lib/highcharts/themes/dark-blue.js: lib/highcharts/themes/dark-blue-93f1e71165f04f6fb49a53eb4fe4e7c3.js
+lib/highcharts/themes/dark-green.js: lib/highcharts/themes/dark-green-dfbcb377057f7a7c759803a54c72cfce.js
+lib/highcharts/themes/gray.js: lib/highcharts/themes/gray-d3274b42432e354ead826173b284d946.js
+lib/highcharts/themes/grid.js: lib/highcharts/themes/grid-d0c105f18e8ddf7d259342223f086de9.js
 lib/jail.min.js: lib/jail.min-46bf88ca9ac90ef68e0c4bc83752ae36.js
 lib/jquery.cookie.js: lib/jquery.cookie-75f4564c003f35188e9f9a0c2b717058.js
 lib/jquery.i18n.js: lib/jquery.i18n-2525e666c63307dcffda7fbbc9e83752.js
@@ -113,7 +122,7 @@ lib/jquery.url.js: lib/jquery.url-6cb0723ce0960f44b4c773cf2c1583a6.js
 lib/superfish.min.js: lib/superfish.min-3e9e8ba48e2eff4361f86168d6e6afcf.js
 lib/supersubs.min.js: lib/supersubs.min-0df2656932c4e2aa8475646616059ee4.js
 rails.js: rails-99f0a6e1ea028850c1452416f3598df1.js
-application.css: application-2a08bde915a8fb5b8d193508fbd9aa95.css
+application.css: application-6bf8c7a43eee7f868a2a5a44c2a0ca3b.css
 bootstrap-image-gallery.css: bootstrap-image-gallery-d5c0778ddff99fb1e8dbd314793ba0d8.css
 bootstrap-image-gallery.min.css: bootstrap-image-gallery.min-cde48091d8367d7005ad36616632fc66.css
 bootstrap.css: bootstrap-856da68b6ae07a71b659dedecae850a9.css
