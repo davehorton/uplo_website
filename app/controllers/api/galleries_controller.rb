@@ -153,7 +153,6 @@ class Api::GalleriesController < Api::BaseController
         data[:gallery][:images] << img.serializable_hash(img.default_serializable_options)
       end
       
-      puts data.inspect
       if data[:gallery][:cover_image]
         data[:gallery][:cover_image] = data[:gallery][:cover_image].serializable_hash(Image.default_serializable_options)
       end

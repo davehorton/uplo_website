@@ -8,7 +8,7 @@ class Api::OrdersController < Api::BaseController
   def list_orders
     orders = @user.orders.load_orders(@filtered_params)
     @result[:total] = orders.total_entries    
-    @result[:data] = orders
+    @result[:data] = orders_to_json(orders)
     @result[:success] = true
     render :json => @result
   end
@@ -52,5 +52,26 @@ class Api::OrdersController < Api::BaseController
       })
     end
     return items
+  end
+  
+  def orders_to_json(orders)
+    json_array = []
+    
+    orders.each do |order|
+      data = {}
+      data[:order] = order.serializable_hash({ 
+        :except => order.except_attributes,
+        :methods => order.exposed_methods, 
+      })
+
+      data[:order][:images] = []
+      order.images.each do |img|
+        data[:order][:images] << img.serializable_hash(img.default_serializable_options)
+      end
+      
+      json_array << data
+    end
+    
+    return json_array
   end
 end
