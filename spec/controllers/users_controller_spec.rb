@@ -3,8 +3,7 @@ require 'spec_helper'
 describe UsersController do
 
   before (:each) do
-    @user = User.make!
-    sign_in @user
+    init_user_and_sign_in
   end
 
   describe "GET 'profile'" do

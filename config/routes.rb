@@ -44,6 +44,7 @@ Uplo::Application.routes.draw do
   
   # API ROUTING
   namespace :api do
+    # User
     devise_scope :user do
       post "login", :to => "users#login"
       post "logout", :to => "users#logout"
@@ -52,17 +53,23 @@ Uplo::Application.routes.draw do
       get "reset_password", :to => "users#reset_password"
       post "update_profile", :to => "users#update_profile"
     end
+    
+    # Gallery
     post "create_gallery", :to => "galleries#create_gallery"
     post "update_gallery", :to => "galleries#update_gallery"
     post "delete_gallery", :to => "galleries#delete_gallery"
     get "list_galleries", :to => "galleries#list_galleries"
     get "list_images", :to => "galleries#list_images"
     get "list_popular", :to => "galleries#list_popular"
+    
+    # Image
     post "upload_image", :to => "images#upload_image"
     post "update_image", :to => "images#update_image"
     post "delete_image", :to => "images#delete_image"
     
-    resources :orders
+    # Order
+    get "list_orders", :to => "orders#list_orders"
+    post "create_order", :to => "orders#create_order"
   end 
   
   # The priority is based upon order of creation:
