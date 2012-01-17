@@ -30,8 +30,8 @@
               %li
                 %div
                   %input.link-button{:type => "button", 
-                    :value => I18n.t("slideshow.cancel"), 
-                    "data-href" => gallery_images_path(@selected_image.gallery)}                  
+                                     :value => I18n.t("slideshow.cancel"),
+                                     :data => {:href => "/back"}}                  
               %li
                 %div
                   %input.not-implement{:type => "button", :value => I18n.t("slideshow.print")}

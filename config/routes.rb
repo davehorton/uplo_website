@@ -10,6 +10,7 @@ Uplo::Application.routes.draw do
   get "shopping_cart/checkout"
   get "orders", :to => "orders#index"
   get "browse", :to => "home#browse"
+  get "back", :to => "application#redirect_back"
   get "profile", :to => "users#profile"
   get "profile/edit", :to => "users#edit"
   put "profile/update", :to => "users#update"  

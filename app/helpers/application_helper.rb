@@ -1,4 +1,10 @@
 module ApplicationHelper
+  
+  def redirect_back_url
+    url = session[:back_url].nil? ? root_url : session[:back_url]
+    return url
+  end
+  
   def total_line_items
     cart = Cart.find_by_id(session[:cart])
     if cart && cart.order

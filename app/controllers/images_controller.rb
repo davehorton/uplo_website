@@ -71,6 +71,7 @@ class ImagesController < ApplicationController
   # GET images/:id/slideshow
   # params: id => Image ID
   def show
+    push_redirect
     # get selected Image
     @selected_image = Image.find_by_id(params[:id])
     if (@selected_image.nil?)
@@ -83,6 +84,7 @@ class ImagesController < ApplicationController
   
   # GET images/:id/browse
   def browse
+    push_redirect
     @image = Image.find_by_id(params[:id])
     if @image.blank?
       return render_not_found

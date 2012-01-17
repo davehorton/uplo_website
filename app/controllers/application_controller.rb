@@ -19,6 +19,20 @@ class ApplicationController < ActionController::Base
     render :file => "public/403.html", :status => :unauthorized, :layout => false
   end
   
+  def push_redirect
+    session[:back_url] = request.env["HTTP_REFERER"]
+  end
+
+  def redirect_back
+    go_to = session[:back_url]
+    if go_to
+      session[:back_url] = nil
+      redirect_to go_to
+    else
+      redirect_to "/"
+    end
+  end
+
   protected
   
   def set_current_tab
