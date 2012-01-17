@@ -25,7 +25,8 @@ class Order < ActiveRecord::Base
     end
     
     def exposed_attributes
-      [:id, :user_id, :tax, :price_total, :order_total, :transaction_code, :transaction_date, :transaction_status]
+      [ :id, :user_id, :tax, :price_total, :order_total, :transaction_code, 
+        :transaction_date, :transaction_status, :receiver_name, :address, :message, :delivery_time]
     end
     
      def exposed_associations

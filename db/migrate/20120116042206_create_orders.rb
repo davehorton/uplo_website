@@ -9,7 +9,11 @@ class CreateOrders < ActiveRecord::Migration
       t.string :transaction_status
       t.datetime :transaction_date
       t.string :status
-
+      t.string :receiver_name
+      t.string :address
+      t.datetime :delivery_time
+      t.string :message
+      
       t.timestamps
     end
   end
