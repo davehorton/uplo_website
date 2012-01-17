@@ -49,7 +49,7 @@ class User < ActiveRecord::Base
     end
     
     def exposed_attributes
-      [:id, :email, :first_name, :last_name, :username, :nationality, :birthday, :gender]
+      [:id, :email, :first_name, :last_name, :username, :nationality, :birthday, :gender, :twitter, :facebook]
     end
     
     def exposed_associations
