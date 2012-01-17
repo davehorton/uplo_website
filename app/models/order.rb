@@ -2,9 +2,13 @@ class Order < ActiveRecord::Base
   include ::SharedMethods::Paging
   include ::SharedMethods::SerializationConfig
   
+  # ASSOCIATIONS
   belongs_to :user
   has_many :line_items, :dependent => :destroy
   has_many :images, :through => :line_items
+  
+  # CALLBACK
+  before_create :init_transaction_date
   
   # CLASS METHODS
   class << self
@@ -53,4 +57,15 @@ class Order < ActiveRecord::Base
     items_with_gifts = line_items.select{ |item| !item.price.nil? }
     items_with_gifts.inject(0) {|sum, g| sum += g.price }
   end
+  
+  # PROTECTED METHODS
+  protected
+  
+  def init_transaction_date
+    if self.transaction_date.blank?
+      self.transaction_date = Time.now
+    end
+    return self.transaction_date
+  end
+  
 end
