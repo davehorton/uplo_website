@@ -11,6 +11,13 @@
         .order.right-container.right
           .edit-area.round-box.clearfix
             .info.clearfix
+              %label= "Plexi Mount:"
+              = radio_button(:line_item, :plexi_mount, true) 
+              %span Yes
+              = radio_button(:line_item, :plexi_mount, false) 
+              %span No
+            %br
+            .info.clearfix
               %label= "Print size:"
               = radio_button(:line_item, :size, "300x300") 
               %span 300x300

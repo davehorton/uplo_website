@@ -15,9 +15,18 @@ class ShoppingCartController < ApplicationController
   
   def add_to_cart
     image = Image.find_by_id params[:line_item][:image_id]
-    unless image.nil?
+    params[:line_item].delete(:image_id)
+
+    if image.nil?
+      flash[:warning] = "Your recent ordered image does not exist anymore."
+      redirect_to :controller => :home, :action => :browse and return
+    elsif not valid_item?(params[:line_item])
+      flash[:warning] = "Please fill all options first."
+      redirect_to :controller => :images, :action => :order, :id => image.id and return
+    else
       line_item = LineItem.new do |item|
         item.image = image
+        item.plexi_mount = params[:line_item][:plexi_mount]
         item.size = params[:line_item][:size]
         item.moulding = params[:line_item][:moulding]
         item.price = 10#(image.price.nil? ? '0' : image.price)
@@ -68,7 +77,6 @@ class ShoppingCartController < ApplicationController
     end
   end
   
-  
   def find_or_create_cart
     @cart = Cart.find_by_id(session[:cart]) if session[:cart]
 
@@ -80,4 +88,9 @@ class ShoppingCartController < ApplicationController
     @cart
   end
 
+  def valid_item?(hash)
+    required_fields = ["plexi_mount", "size", "moulding"]
+    required_fields.each { |k| return false if hash.has_key?(k)==false }
+    return true
+  end
 end

@@ -4,6 +4,7 @@ class CreateLineItems < ActiveRecord::Migration
       t.integer :order_id
       t.integer :image_id
       t.float :price
+      t.boolean :plexi_mount
       t.string :moulding
       t.string :size
 
