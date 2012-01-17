@@ -23,10 +23,17 @@ class Api::OrdersController < Api::BaseController
     order = Order.new(order_info)
     order.line_items = build_order_items(image_ids)
     
-    if order.save
-      @result[:order_id] = order.id
-      @result[:success] = true
-    else
+    done = false
+    if order.valid?
+      order.compute_totals
+      if order.save
+        @result[:order_id] = order.id
+        @result[:success] = true
+        done = true
+      end
+    end
+    
+    if !done
       @result[:msg] = order.errors 
     end
     
