@@ -4,11 +4,21 @@ class Order < ActiveRecord::Base
   
   # ASSOCIATIONS
   belongs_to :user
+  has_one :cart
   has_many :line_items, :dependent => :destroy
   has_many :images, :through => :line_items
   
   # CALLBACK
   before_create :init_transaction_date
+  STATUS = {
+    :shopping => "shopping",
+    :checkout => "checkout",
+    :complete => "completed"
+  }
+  TRANSACTION_STATUS = {
+    :processing => "processing",
+    :complete => "completed"
+  }
   
   # CLASS METHODS
   class << self

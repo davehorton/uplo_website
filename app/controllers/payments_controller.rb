@@ -25,6 +25,9 @@ class PaymentsController < ApplicationController
   def paypal_result
     if find_cart
       @order = @cart.order
+      @order.status = Order::STATUS[:complete]
+      @order.transaction_status = Order::TRANSACTION_STATUS[:complete]
+      @order.save
       session[:cart] = nil
       @cart.destroy if @cart
     end
