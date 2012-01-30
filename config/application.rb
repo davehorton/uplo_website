@@ -61,7 +61,9 @@ module Uplo
     config.assets.version = '1.0'
     
     # Configure to compress responses.
-    config.middleware.insert_before(ActionDispatch::Static, Rack::Deflater)
+    if config.serve_static_assets && Rails.env != "development"
+      config.middleware.insert_before(ActionDispatch::Static, Rack::Deflater)
+    end
     
     if Rails.env.test?
       initializer :after => :initialize_dependency_mechanism do 
