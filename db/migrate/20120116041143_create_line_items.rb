@@ -3,6 +3,7 @@ class CreateLineItems < ActiveRecord::Migration
     create_table :line_items do |t|
       t.integer :order_id
       t.integer :image_id
+      t.integer :quantity
       t.float :price
       t.boolean :plexi_mount
       t.string :moulding

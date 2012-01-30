@@ -12,21 +12,21 @@
           .edit-area.round-box.clearfix
             .info.clearfix
               %label= "Plexi Mount:"
-              = radio_button(:line_item, :plexi_mount, true) 
+              = radio_button(:line_item, :plexi_mount, true, :checked => true) 
               %span Yes
               = radio_button(:line_item, :plexi_mount, false) 
               %span No
             %br
             .info.clearfix
               %label= "Print size:"
-              = radio_button(:line_item, :size, "300x300") 
+              = radio_button(:line_item, :size, "300x300", :checked => true) 
               %span 300x300
               = radio_button(:line_item, :size, "500x500") 
               %span 500x500
             %br
             .info.clearfix
               %label= "Moulding choice:"
-              = radio_button(:line_item, :moulding, "White")
+              = radio_button(:line_item, :moulding, "White", :checked => true)
               %span White
               = radio_button(:line_item, :moulding, "Black")
               %span Black
@@ -35,6 +35,10 @@
               %span Wood
               = radio_button(:line_item, :moulding, "Silver")
               %span Silver
+            %br
+            .info.clearfix
+              %label= "Quantity:"
+              = text_field(:line_item, :quantity, :style => 'width:273px; margin:0 6px', :value => '1')
             .info
               = hidden_field(:line_item, :image_id, :value => @image.id)
               

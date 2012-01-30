@@ -32,21 +32,24 @@
 
 .cartTable {
 	border: none;
-	border-collapse:collapse; 
+	border-collapse:collapse;
   td {
 	  padding: 6px;
 	  font-size: 13px;
 	  width: 170px;
-	  .center {
-	    text-align: center;
-    }
-    .right {
-	    text-align: right;
-    }
-    .left {
-	    text-align: left;
-    }
   }
+  
+  .text-center {
+    text-align: center;
+  }
+  .text-right {
+    text-align: right;
+    margin-right: 10px;
+  }
+  .text-left {
+    text-align: left;
+  }
+  
   tr.header, tr.header td   {
 //	  border-bottom: 1px #D4E0C7 solid;
 	  background-color: #DEE0E0;

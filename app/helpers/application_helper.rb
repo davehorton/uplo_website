@@ -5,16 +5,6 @@ module ApplicationHelper
     return url
   end
   
-  def total_line_items
-    cart = current_user.nil? ? Cart.find_by_id(session[:cart]) : current_user.cart
-    
-    if cart && cart.order
-      return cart.order.line_items.count
-    else
-      return 0
-    end
-  end
-  
   def jquery_include_tag(all = true)
     if all
       javascript_include_tag("lib/jquery.min.js", "lib/jquery.livequery.js", "lib/jquery.ui.core.js")

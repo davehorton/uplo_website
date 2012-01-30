@@ -1,0 +1,50 @@
+%table.cartTable
+  %tr.header
+    %td.text-left Item
+    %td.text-left Size
+    %td.text-left Moulding
+    %td.text-left Quantity
+    %td.text-left Price
+    %td.text-left Tax
+
+  - total_quantity = 0
+  - @line_items.each do |line_item|
+    - unless line_item.image.nil?
+      - total_quantity += line_item.quantity
+      - image = line_item.image
+      %tr.lines
+        %td.preview
+          %p= image_tag image.url(:small_preview)
+          %p.option 
+            = link_to("delete", {:controller => "shopping_cart", :action => "destroy_item", :id => line_item.id}, {:confirm => "Do you want to remove this item out of your cart?", :method => :post})
+
+        %td.text-left
+          = line_item.size
+        %td.text-left
+          = line_item.moulding
+        %td.text-left
+          = line_item.quantity
+        %td.text-left
+          = number_to_currency(line_item.price * line_item.quantity, {:precision => 2})
+        %td.text-left
+          = number_to_currency((line_item.price * line_item.quantity * PER_TAX), {:precision => 2})
+
+  %tr.footer
+    %td 
+      %p Total:
+      %p.total= number_to_currency(@order.order_total, {:precision => 2})
+    %td 
+    %td
+    %td
+      %p.text-left Quantity:
+      %p.text-left
+        = total_quantity
+    %td
+      %p.text-left Price:
+      %p.text-left
+        = number_to_currency(@order.price_total, {:precision => 2})
+    %td
+      %p.text-left Tax:
+      %p.blBody.text-left
+        = number_to_currency(@order.tax, {:precision => 2})
+

@@ -26,9 +26,7 @@ class ShoppingCartController < ApplicationController
     else
       line_item = LineItem.new do |item|
         item.image = image
-        item.plexi_mount = params[:line_item][:plexi_mount]
-        item.size = params[:line_item][:size]
-        item.moulding = params[:line_item][:moulding]
+        item.attributes = params[:line_item]
         item.price = 10#(image.price.nil? ? '0' : image.price)
         @cart.order.line_items << item
         @cart.save
@@ -89,8 +87,14 @@ class ShoppingCartController < ApplicationController
   end
 
   def valid_item?(hash)
-    required_fields = ["plexi_mount", "size", "moulding"]
+    required_fields = ["plexi_mount", "size", "moulding", "quantity"]
     required_fields.each { |k| return false if hash.has_key?(k)==false }
+    if hash["quantity"] =~ /^\d*$/
+      return false if hash["quantity"].to_i<=0
+    else
+      return false
+    end
+    
     return true
   end
 end

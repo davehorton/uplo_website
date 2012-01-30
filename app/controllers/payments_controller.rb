@@ -4,6 +4,7 @@ require 'active_merchant'
 class PaymentsController < ApplicationController
   before_filter :authenticate_user!
   include ActiveMerchant::Billing::Integrations
+  include CartsHelper
   
   def index
     @pp_payment = Payment.create_paypal_test
@@ -131,16 +132,4 @@ class PaymentsController < ApplicationController
   def set_current_tab
     @current_tab = "browse"
   end
-  
-  private
-    def find_cart
-      @cart = Cart.find_by_id(session[:cart])
-      if @cart.nil? or @cart.empty?
-        flash[:warning] = "Sorry, your shopping cart is empty. (Did you already submit your order? Check your email for receipts.)"
-        redirect_to :controller => 'shopping_cart', :action => 'show'
-        false
-      else
-        true
-      end
-    end
 end
