@@ -44,11 +44,11 @@ class ShoppingCartController < ApplicationController
       redirect_to :action => 'show' and return
     end
     show
-    @cart.order.status = "checkout"
+    @cart.order.status = Order::STATUS[:checkout]
     @cart.order.save
     @order = @cart.order
     @order.compute_totals
-    @order.transaction_status = "processing"
+    @order.transaction_status = Order::TRANSACTION_STATUS[:processing]
          
     if @order.save
       redirect_to :controller => "orders", :action => "index"
@@ -70,22 +70,22 @@ class ShoppingCartController < ApplicationController
   # If the member is not logged in, get the cart from the session.
   # Otherwise, get it from the logged in member's member record.
   def get_cart
-    if @member
-      @cart = @member.find_or_create_cart
+    unless current_user.nil?
+      @cart = current_user.init_cart
     else
-      @cart = find_or_create_cart
+      @cart = init_cart
     end
   end
   
-  def find_or_create_cart
+  def init_cart
     @cart = Cart.find_by_id(session[:cart]) if session[:cart]
-
     unless @cart
       new_order = Order.create(:user => current_user)
       @cart = Cart.create({:order => new_order, :user => current_user})
       session[:cart] = @cart.id
     end
-    @cart
+    
+    return @cart
   end
 
   def valid_item?(hash)

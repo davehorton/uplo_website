@@ -25,7 +25,8 @@ class User < ActiveRecord::Base
   has_many :galleries, :dependent => :destroy
   has_many :comments, :dependent => :destroy
   has_many :image_likes, :dependent => :destroy
-  has_many :orders, :dependent => :destroy
+  has_many :orders
+  has_one :cart, :dependent => :destroy
   
   # VALIDATION
   validates_presence_of :first_name, :last_name, :email, :username, :message => 'cannot be blank'
@@ -159,5 +160,14 @@ class User < ActiveRecord::Base
       key = "male"
     end
     return I18n.t("common.#{key}")
+  end
+  
+  def init_cart
+    if self.cart.nil?
+      new_order = self.orders.create(:status => Order::STATUS[:shopping])
+      new_cart = self.create_cart(:order => new_order)
+    end
+
+    return self.cart
   end
 end
