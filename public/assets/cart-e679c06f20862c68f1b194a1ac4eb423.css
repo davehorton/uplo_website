@@ -30,12 +30,13 @@
     padding: 6px;
     font-size: 13px;
     width: 170px; }
-    .cartTable td .center {
-      text-align: center; }
-    .cartTable td .right {
-      text-align: right; }
-    .cartTable td .left {
-      text-align: left; }
+  .cartTable .text-center {
+    text-align: center; }
+  .cartTable .text-right {
+    text-align: right;
+    margin-right: 10px; }
+  .cartTable .text-left {
+    text-align: left; }
   .cartTable tr.header, .cartTable tr.header td {
     background-color: #DEE0E0;
     font-size: 12px;
