@@ -68,7 +68,6 @@ file_upload/jquery.iframe-transport.js: file_upload/jquery.iframe-transport-58f0
 file_upload/jquery.postmessage-transport.js: file_upload/jquery.postmessage-transport-260d142dc839fd9973067982fe2b7156.js
 file_upload/jquery.ui.widget.js: file_upload/jquery.ui.widget-530883b72cc1f485ef360932023f64f6.js
 file_upload/jquery.xdr-transport.js: file_upload/jquery.xdr-transport-bcb3d709603da2bc4e50ea3543637541.js
-jquery.jcarousel.min.js: jquery.jcarousel.min-7f10a46d54c6c06063f69b36e808e803.js
 lib/blueimp/bootstrap-image-gallery.js: lib/blueimp/bootstrap-image-gallery-36c62345dc049430b62f3f3a8ec1667d.js
 lib/blueimp/bootstrap-image-gallery.min.js: lib/blueimp/bootstrap-image-gallery.min-b7d46944fbdf577f540e1702c723abc6.js
 lib/blueimp/bootstrap-modal.min.js: lib/blueimp/bootstrap-modal.min-6d7fa4a6ec8fcb28991ade33a6c3786f.js
@@ -126,7 +125,7 @@ lib/supersubs.min.js: lib/supersubs.min-0df2656932c4e2aa8475646616059ee4.js
 orders.js: orders-858094f437690f433871c26b46760bad.js
 rails.js: rails-99f0a6e1ea028850c1452416f3598df1.js
 shopping_cart.js: shopping_cart-858094f437690f433871c26b46760bad.js
-application.css: application-e69c3e7b294ab98cd12ceeb318da0416.css
+application.css: application-34c2c4baedaa6a7d6c6a5fc122aeede1.css
 bootstrap-image-gallery.css: bootstrap-image-gallery-d5c0778ddff99fb1e8dbd314793ba0d8.css
 bootstrap-image-gallery.min.css: bootstrap-image-gallery.min-cde48091d8367d7005ad36616632fc66.css
 bootstrap.css: bootstrap-856da68b6ae07a71b659dedecae850a9.css

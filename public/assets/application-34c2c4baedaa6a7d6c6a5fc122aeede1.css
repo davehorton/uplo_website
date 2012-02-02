@@ -968,6 +968,7 @@ a.icon-link{text-decoration: none;}
 .galleries .gallery-header .author-info{font-size: 13px;}
 .galleries #gallery-form-container{padding: 10px; margin: 10px 0;}
 .galleries .gallery-header .description{font-size: 13px;width: 600px;word-wrap: break-word;}
+.galleries .match {background-color:yellow;}
 
 /*** IMAGE ***/
 .images .images-wrapper{margin-left: 55px; margin-top: 15px;}
