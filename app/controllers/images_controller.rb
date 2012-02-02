@@ -71,7 +71,9 @@ class ImagesController < ApplicationController
   # GET images/:id/slideshow
   # params: id => Image ID
   def show
-    push_redirect
+    redirect_list = [ url_for(:controller=>"images", :action=>"list", :only_path => false),
+                      url_for(:controller=>"images", :action=>"index", :only_path => false)]
+    push_redirect if redirect_list.index(request.env["HTTP_REFERER"])
     # get selected Image
     @selected_image = Image.find_by_id(params[:id])
     if (@selected_image.nil?)
