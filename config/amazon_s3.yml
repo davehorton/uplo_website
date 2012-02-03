@@ -1,5 +1,5 @@
 development:
-  bucket: uplo
+  bucket: uplo-dev
   access_key_id: AKIAIOYCWZFROQJEEBYQ
   secret_access_key: 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
 
