@@ -3,6 +3,7 @@ module Util
   class << self
     include ActionView::Helpers::NumberHelper
     include ActionView::Helpers::TextHelper
+    include ActionView::Helpers::DateHelper
     
     def format_money(number, options = {})
       options.symbolize_keys!

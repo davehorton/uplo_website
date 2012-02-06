@@ -43,11 +43,11 @@ class Image < ActiveRecord::Base
     end
     
     def exposed_methods
-      [:image_url, :image_thumb_url, :username]
+      [:image_url, :image_thumb_url, :username, :creation_timestamp]
     end
     
     def exposed_attributes
-      [:id, :name, :description, :data_file_name, :gallery_id, :price, :created_at]
+      [:id, :name, :description, :data_file_name, :gallery_id, :price]
     end
     
     def exposed_associations
@@ -86,6 +86,10 @@ class Image < ActiveRecord::Base
   
   def image_thumb_url
     data.url(:thumb)
+  end
+  
+  def creation_timestamp
+    ::Util.distance_of_time_in_words_to_now(self.created_at)
   end
   
   # Shortcut to get image's URL                                    
