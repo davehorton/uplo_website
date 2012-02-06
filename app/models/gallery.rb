@@ -34,7 +34,7 @@ class Gallery < ActiveRecord::Base
     end
     
     def exposed_methods
-      [:cover_image]
+      [:cover_image, :total_images]
     end
     
     def exposed_attributes
@@ -93,6 +93,10 @@ class Gallery < ActiveRecord::Base
   
   def is_owner?(user)
     (user && self.user_id == user.id)
+  end
+  
+  def total_images
+    self.images.length
   end
   
   # PROTECTED INSTANCE METHODS 
