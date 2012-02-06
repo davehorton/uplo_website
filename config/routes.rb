@@ -62,6 +62,7 @@ Uplo::Application.routes.draw do
     get "list_galleries", :to => "galleries#list_galleries"
     get "list_images", :to => "galleries#list_images"
     get "list_popular", :to => "galleries#list_popular"
+    get "popular_images", :to => "images#popular_images"
     
     # Image
     post "upload_image", :to => "images#upload_image"

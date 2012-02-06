@@ -105,4 +105,12 @@ class Api::ImagesController < Api::BaseController
     @result[:success] = true
     render :json => @result
   end
+  
+  def popular_images
+    images = Image.load_popular_images(@filtered_params)
+    @result[:total] = images.total_entries
+    @result[:data] = images
+    @result[:success] = true
+    render :json => @result
+  end
 end
