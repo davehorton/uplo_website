@@ -10,7 +10,7 @@
   - total_quantity = 0
   - @line_items.each do |line_item|
     - unless line_item.image.nil?
-      - total_quantity += line_item.quantity
+      - total_quantity += line_item.quantity.to_i
       - image = line_item.image
       %tr.lines
         %td.preview
@@ -25,9 +25,9 @@
         %td.text-left
           = line_item.quantity
         %td.text-left
-          = number_to_currency(line_item.price * line_item.quantity, {:precision => 2})
+          = number_to_currency(line_item.price * line_item.quantity.to_i, {:precision => 2})
         %td.text-left
-          = number_to_currency((line_item.price * line_item.quantity * PER_TAX), {:precision => 2})
+          = number_to_currency((line_item.price * line_item.quantity.to_i * PER_TAX), {:precision => 2})
 
   %tr.footer
     %td 

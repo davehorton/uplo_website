@@ -67,7 +67,7 @@ class Order < ActiveRecord::Base
   
   def compute_image_total
     items_with_gifts = line_items.select{ |item| !item.price.nil? }
-    items_with_gifts.inject(0) {|sum, g| sum += g.price*g.quantity }
+    items_with_gifts.inject(0) {|sum, g| sum += g.price*g.quantity.to_i }
   end
   
   # PROTECTED METHODS

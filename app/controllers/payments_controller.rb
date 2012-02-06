@@ -2,7 +2,8 @@ require 'ostruct'
 require 'active_merchant' 
 
 class PaymentsController < ApplicationController
-  before_filter :authenticate_user!
+  before_filter :authenticate_user!, :except => [:paypal_notify]
+  
   include ActiveMerchant::Billing::Integrations
   include CartsHelper
   
@@ -13,12 +14,12 @@ class PaymentsController < ApplicationController
   
   def paypal_notify
     notify = Paypal::Notification.new(request.raw_post)
-    puts "==== Paypal notify ==="
-    puts notify.inspect
+    Rails.logger.info "==== Paypal notify ==="
+    Rails.logger.info notify.inspect
     if notify.acknowledge
-      puts "=== Transaction ID is #{notify.transaction_id}"
-      puts "=== Notify is #{notify}"
-      puts "=== Notify status is #{notify.status}"
+      Rails.logger.info "=== Transaction ID is #{notify.transaction_id}"
+      Rails.logger.info "=== Notify is #{notify}"
+      Rails.logger.info "=== Notify status is #{notify.status}"
     end
     render :nothing => true
   end
