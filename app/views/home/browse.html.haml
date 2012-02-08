@@ -2,10 +2,11 @@
   = javascript_include_tag("lib/jail.min.js")
   = javascript_include_tag("app/gallery.js")
   
+
 .browse.galleries.images
   .browse-header.clearfix
     #search-box-wrapper
-      = render(:partial => "shared/search_box")
+      = render(:partial => "shared/search_box", :locals => {:action => "search"})
   .images-wrapper.clearfix
     - if @images.blank?
       .empty-data= "There is no image. Please add image."

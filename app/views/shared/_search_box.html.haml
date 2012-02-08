@@ -1,7 +1,7 @@
 = javascript_include_tag("lib/jquery.inline_label.min.js")
 
 #search-box
-  %form.search-form{ :action => "/browse", :method => 'get'}
+  %form.search-form{ :action => action, :method => 'get'}
     .search-container
       .search-icon
       %input#search-textbox{:type => "text", :name => "query", :class => "text", 
