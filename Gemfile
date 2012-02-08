@@ -40,6 +40,8 @@ group :assets do
 end
 
 gem 'jquery-rails'
+gem 'thinking-sphinx', '2.0.10'
+
 
 # ECommerce
 gem 'activemerchant', '>= 1.20.1'
