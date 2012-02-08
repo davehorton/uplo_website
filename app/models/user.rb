@@ -186,4 +186,13 @@ class User < ActiveRecord::Base
 
     return self.cart
   end
+  
+  # indexing with thinking sphinx
+  define_index do
+    indexes first_name
+    indexes last_name
+    indexes username
+
+    set_property :delta => true
+  end
 end

@@ -107,4 +107,18 @@ class Gallery < ActiveRecord::Base
       self.permission = PUBLIC_PERMISSION
     end    
   end
+  
+  # indexing with thinking sphinx
+  define_index do
+    indexes name
+    indexes description
+    
+    has user_id
+    
+    set_property :field_weights => {
+      :name => 4,
+      :description => 1,
+    }
+    set_property :delta => true
+  end
 end

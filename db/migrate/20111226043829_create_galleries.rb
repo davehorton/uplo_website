@@ -5,6 +5,7 @@ class CreateGalleries < ActiveRecord::Migration
       t.string :name, :null => false
       t.text :description
       t.string :permission
+      t.boolean :delta, :default => true, :null => false
 
       t.timestamps
     end

@@ -96,7 +96,7 @@ class Image < ActiveRecord::Base
     ::Util.distance_of_time_in_words_to_now(self.created_at)
   end
   
-  # Shortcut to get image's URL                                    
+  # Shortcut to get image's URL        
   def url(options = nil)
     self.data.url(options)
   end
@@ -120,5 +120,19 @@ class Image < ActiveRecord::Base
     if self.price.blank?
       self.price = rand(50)
     end
+
+  # indexing with thinking sphinx
+  define_index do
+    indexes name
+    indexes description
+    
+    has gallery_id
+    
+    set_property :field_weights => {
+      :name => 4,
+      :description => 1,
+    }
+    set_property :delta => true
+
   end
 end
