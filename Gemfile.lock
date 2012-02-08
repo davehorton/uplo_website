@@ -334,6 +334,7 @@ DEPENDENCIES
   launchy (>= 2.0.5)
   machinist (>= 2.0)
   mail
+  money
   mongrel (= 1.2.0.pre2)
   mynyml-redgreen
   nested_form

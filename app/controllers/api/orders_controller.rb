@@ -26,7 +26,11 @@ class Api::OrdersController < Api::BaseController
     done = false
     if order.valid?
       order.compute_totals
-      if order.save
+      if order.transaction_completed? && order.finalize_transaction
+        @result[:order_id] = order.id
+        @result[:success] = true
+        done = true
+      elsif order.save
         @result[:order_id] = order.id
         @result[:success] = true
         done = true

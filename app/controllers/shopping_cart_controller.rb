@@ -1,4 +1,5 @@
 class ShoppingCartController < ApplicationController
+  before_filter :authenticate_user!
   before_filter :get_cart
     
   def clear
@@ -8,9 +9,11 @@ class ShoppingCartController < ApplicationController
   end
   
   def show
-    @line_items = @cart.order.line_items.find(:all, :include => [:order, :image], :order => "line_items.updated_at DESC, line_items.created_at DESC")
-    @order = @cart.order
-    @order.compute_totals
+    if @cart.order
+      @line_items = @cart.order.line_items.find(:all, :include => [:order, :image], :order => "line_items.updated_at DESC, line_items.created_at DESC")
+      @order = @cart.order
+      @order.compute_totals
+    end
   end
   
   def add_to_cart
@@ -63,7 +66,6 @@ class ShoppingCartController < ApplicationController
     redirect_to :action => "show"
   end
   
-  
   # The member may or may not be logged in.
   # If the member is not logged in, get the cart from the session.
   # Otherwise, get it from the logged in member's member record.
@@ -77,10 +79,25 @@ class ShoppingCartController < ApplicationController
   
   def init_cart
     @cart = Cart.find_by_id(session[:cart]) if session[:cart]
-    unless @cart
-      new_order = Order.create(:user => current_user)
-      @cart = Cart.create({:order => new_order, :user => current_user})
+    if @cart.blank?
+      if current_user.cart.blank?
+        @cart = Cart.new({:user => current_user})
+      else
+        @cart = current_user.cart
+      end
+      
+      if @cart.order.blank?
+        @cart.order = current_user.recent_empty_order
+      end
+      
+      if @cart.changed?
+        @cart.save
+      end
+      
       session[:cart] = @cart.id
+    elsif @cart.order.blank?
+      @cart.order = current_user.recent_empty_order
+      @cart.save
     end
     
     return @cart

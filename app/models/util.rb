@@ -91,6 +91,10 @@ module Util
       Rails.application.routes.url_helpers
     end
     
+    def to_cents(money)
+      (money*100).round
+    end
+  
     private
 
     def perform_format_money(number, options = {})

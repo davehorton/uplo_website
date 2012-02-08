@@ -80,6 +80,11 @@ class User < ActiveRecord::Base
     self.first_name + " " + self.last_name
   end
   
+  # Generate email address including full name.
+  def friendly_email
+    "#{self.fullname} <#{self.email}>"
+  end
+  
   # Override attribute setter.
   def birthday=(date)
     if date.is_a?(String)
@@ -162,10 +167,21 @@ class User < ActiveRecord::Base
     return I18n.t("common.#{key}")
   end
   
+  def recent_empty_order
+    empty_order = self.orders.where(:status => Order::STATUS[:shopping]).order("orders.created_at DESC").first
+    if empty_order.blank?
+      empty_order = self.orders.create(:status => Order::STATUS[:shopping])
+    end
+    empty_order
+  end
+  
   def init_cart
-    if self.cart.nil?
-      new_order = self.orders.create(:status => Order::STATUS[:shopping])
+    if self.cart.blank?
+      new_order = self.recent_empty_order
       new_cart = self.create_cart(:order => new_order)
+    elsif self.cart.order.blank?
+      self.cart.order = self.recent_empty_order
+      self.cart.save
     end
 
     return self.cart

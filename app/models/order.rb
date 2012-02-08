@@ -4,7 +4,7 @@ class Order < ActiveRecord::Base
   
   # ASSOCIATIONS
   belongs_to :user
-  has_one :cart
+  has_one :cart, :dependent => :destroy
   has_many :line_items, :dependent => :destroy
   has_many :images, :through => :line_items
   
@@ -13,11 +13,14 @@ class Order < ActiveRecord::Base
   STATUS = {
     :shopping => "shopping",
     :checkout => "checkout",
-    :complete => "completed"
+    :complete => "completed",
+    :failed => "failed"
   }
+  
   TRANSACTION_STATUS = {
     :processing => "processing",
-    :complete => "completed"
+    :complete => "completed",
+    :failed => "failed"
   }
   
   # CLASS METHODS
@@ -67,7 +70,35 @@ class Order < ActiveRecord::Base
   
   def compute_image_total
     items_with_gifts = line_items.select{ |item| !item.price.nil? }
-    items_with_gifts.inject(0) {|sum, g| sum += g.price*g.quantity.to_i }
+    items_with_gifts.inject(0) {|sum, g| sum += g.price * g.quantity.to_i }
+  end
+  
+  # Finish a transaction
+  def finalize_transaction(params = {})
+    begin
+      params.to_options!
+      params.merge!({
+        :transaction_status => "completed",
+        :status => "completed"
+      })
+      
+      # Update order attributes
+      self.update_attributes(params)
+      
+      # Start shipping product
+      
+      # Send the notification email to the buyer.
+      PaymentMailer.transaction_finish(self).deliver
+    rescue Exception => exc
+      ::Util.log_error(exc, "Finalizing transaction failed")
+      raise
+    end
+    
+    return true
+  end
+  
+  def transaction_completed?
+    return (self.transaction_status.to_s == TRANSACTION_STATUS[:complete])
   end
   
   # PROTECTED METHODS

@@ -39,7 +39,15 @@ en:
   user:
     update_done: "Your profile was updated successfully"
     update_password_done: "Your password was changed successfully"
-    
+  
+  order:
+    transaction_canceled: "You've canceled the transaction"
+    cart_empty: "Sorry, your shopping cart is empty. (Did you already submit your order? Check your email for receipts.)"
+    not_found: "Could not find the order to checkout."
+    transaction_completed: "Your payment was completed successfully"
+    email:
+      transaction_finish_subject: "You payment completed successfully."
+      
   date:
     formats:
       default: "%m/%d/%Y"

@@ -10,10 +10,8 @@ class Cart < ActiveRecord::Base
     end
   end
   
-  # A destroyed cart automatically gets created again
+  # A destroyed all items in cart
   def clear
-    unless self.empty?
-      self.destroy
-    end
+    self.order.line_items.destroy_all
   end
 end

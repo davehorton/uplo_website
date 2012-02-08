@@ -12,15 +12,51 @@ class PaymentsController < ApplicationController
     @an_payment = Payment.create_authorizenet_test
   end
   
+  # This is the call back for Paypal transaction.
+  # You cannot test this method from localhost.
+  # Deploy the app to a public server (e.g, Heroku) so that Paypal can access this method.
   def paypal_notify
     notify = Paypal::Notification.new(request.raw_post)
     Rails.logger.info "==== Paypal notify ==="
     Rails.logger.info notify.inspect
-    if notify.acknowledge
-      Rails.logger.info "=== Transaction ID is #{notify.transaction_id}"
-      Rails.logger.info "=== Notify is #{notify}"
-      Rails.logger.info "=== Notify status is #{notify.status}"
+    
+    order = Order.find_by_id(params[:invoice])
+    if order
+      if notify.acknowledge
+        begin
+          if notify.complete? and order.order_total == notify.gross.to_f
+            order.finalize_transaction({
+              :transaction_code => notify.transaction_id,
+              :transaction_date => params[:payment_date],
+              :first_name => params[:first_name],
+              :last_name => params[:last_name],
+              :address => params[:address_street],
+              :zip_code => params[:address_zip],
+              :city => params[:address_city],
+              :state => params[:address_state],
+              :country => params[:address_country],
+              :country_code => params[:address_country_code],
+              :payer_email => params[:payer_email],
+              :payment_type => params[:payment_type],
+              :payment_fee => params[:payment_fee],
+              :currency => params[:mc_currency],
+              :transaction_subject => params[:transaction_subject]
+            })
+            Rails.logger.info "===== Finish Paypal transaction ===="
+          else
+            Rails.logger.error("Failed to verify Paypal's notification, please investigate")
+          end
+
+        rescue => exc
+          Rails.logger.error("===== Paypal transaction failed at order: #{order.id} =====")
+          Rails.logger.error(exc)
+          order.status = Order::STATUS[:failed]
+          order.transaction_status = Order::TRANSACTION_STATUS[:failed]
+          order.save
+        end
+      end
     end
+    
     render :nothing => true
   end
   
@@ -32,36 +68,48 @@ class PaymentsController < ApplicationController
       @order.save
       session[:cart] = nil
       @cart.destroy if @cart
+      flash[:success] = I18n.t("order.transaction_completed")
+      redirect_to :controller => 'shopping_cart', :action => 'show'
     end
   end
   
   def paypal_cancel
-  
+    flash[:warning] = I18n.t("order.transaction_canceled")
+    redirect_to :controller => 'shopping_cart', :action => 'show'
   end
   
   def checkout
-    case params[:type]
-      when "pp"
-        total_as_cents, setup_purchase_params = get_setup_purchase_params(request)
-        setup_response = pp_gateway.setup_purchase(total_as_cents, setup_purchase_params)
-        if !setup_response.success?
-          puts "===== setup_response ==="
-          puts setup_response.params.inspect
-        end
-        redirect_to pp_gateway.redirect_url_for(setup_response.token)
-      when "an"
-        an_payment = Payment.create_paypal_test
-        transaction = AuthorizeNet::AIM::Transaction.new(AN_LOGIN_ID, AN_TRANS_KEY,
-          :gateway => :card_present_sandbox)
-        response = transaction.purchase(an_payment.amount, an_credit_card)
+    type = params[:type] || "pp"
+    order = Order.find_by_id(params[:order_id])
+    if order.blank?
+      flash[:warning] = I18n.t("order.not_found")
+      redirect_to :controller => 'shopping_cart', :action => 'show'
+    else
+      case type
+        when "pp"
+          total_as_cents = ::Util.to_cents(order.order_total)
+          purchase_params = setup_purchase_params(order)
+          setup_response = pp_gateway.purchase(total_as_cents, purchase_params)
+          #if !setup_response.success?
+            #puts setup_response.params.inspect
+          #end
+          redirect_to pp_gateway.redirect_url_for(setup_response.token)
+        when "an"
+          an_payment = Payment.create_paypal_test
+          transaction = AuthorizeNet::AIM::Transaction.new(AN_LOGIN_ID, AN_TRANS_KEY,
+            :gateway => :card_present_sandbox)
+          response = transaction.purchase(an_payment.amount, an_credit_card)
 
-        if response.success?
-          flash[:notice] = "Successfully made a purchase (authorization code: #{response.authorization_code})"
+          if response.success?
+            flash[:notice] = "Successfully made a purchase (authorization code: #{response.authorization_code})"
+          else
+            flash[:warn] = 'Fail:' + response.message.to_s
+          end
+          
+          redirect_to :action => :index
         else
-          flash[:warn] = 'Fail:' + response.message.to_s
-        end
-        
-        redirect_to :action => :index
+          redirect_to :controller => 'orders', :action => 'index'
+      end
     end
   end
   
@@ -97,35 +145,29 @@ class PaymentsController < ApplicationController
     )
   end
   
-  def get_setup_purchase_params(request)
-    pp_payment = Payment.create_paypal_test
-    total = pp_payment.amount
+  def setup_purchase_params(order)
     subtotal = 0
     shipping  = 0
-    image_price = pp_payment.amount
-    return to_cents(total), {
+    image_price = order.order_total
+    return {
       :ip => request.remote_ip,
       :return_url => url_for(:only_path => false, :controller => 'payments', :action => 'paypal_result'),
       :cancel_return_url => url_for(:only_path => false, :controller => 'payments', :action => 'paypal_cancel'),
-      :subtotal => to_cents(subtotal),
-      :shipping => to_cents(shipping),
-      :amount => pp_payment.amount,
+      :notify_url => url_for(:only_path => false, :controller => 'payments', :action => 'paypal_notify'),
+      #:subtotal => ::Util.to_cents(subtotal),
+      #:shipping => ::Util.to_cents(shipping),
+      :amount => image_price,
       :handling => 0,
       :tax => 0,
-      :currency => pp_payment.currency,
+      #:currency => pp_payment.currency,
       :allow_note => true,
-      :invoice => pp_payment.invoice, 
+      :invoice => order.id, 
       :items => [{
         :name => "Test Image",
-        :number => "123456",
         :quantity => 1,
-        :amount => to_cents(image_price)
+        :amount => ::Util.to_cents(image_price)
       }]
     }
-  end
-  
-  def to_cents(money)
-    (money*100).round
   end
   
   protected

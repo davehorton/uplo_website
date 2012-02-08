@@ -11,7 +11,7 @@ module CartsHelper
   def find_cart
     @cart = current_user.nil? ? Cart.find_by_id(session[:cart]) : current_user.cart
     if @cart.nil? or @cart.empty?
-      flash[:warning] = "Sorry, your shopping cart is empty. (Did you already submit your order? Check your email for receipts.)"
+      flash[:warning] = I18n.t("order.cart_empty")
       redirect_to :controller => 'shopping_cart', :action => 'show'
       false
     else
