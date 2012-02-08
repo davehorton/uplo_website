@@ -1,0 +1,25 @@
+- content_for :head do
+  = javascript_include_tag("search.js")
+  = stylesheet_link_tag("search.css")
+
+- if @galleries.count == 0
+  = "There is no result for Galleries with \"#{params[:query]}\""
+- else
+  = "#{@galleries.count} result for Galleries with \"#{params[:query]}\""
+  .clear &nbsp;
+  .section.galleries
+    .clear
+    - @galleries.each do |gallery|
+      .wrapper{:id => "gallery-container-#{gallery.id}"}
+        %a{:href => gallery_images_path(gallery), :style => "float:left;"}
+          .preview
+            =raw async_image_tag(gallery_cover_image_url(gallery), :class => "gallery-cover-image")
+        .info
+          .name{:title => gallery.name}=raw gallery.name
+          .description=raw gallery.description
+
+  %div{:style=>"clear:both;"}
+  .section= render_pagination(@galleries, {:controller => params[:controller], :action => params[:action]})
+  
+  
+= javascript_include_tag "lib/blueimp/tmpl.min.js"

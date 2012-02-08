@@ -7,6 +7,27 @@ class GalleriesController < ApplicationController
     @gallery = Gallery.new
   end
   
+  def search
+    galleries = Gallery.search params[:query], :star => true, :with => {:user_id => current_user.id}, :page => params[:page_id], :per_page => default_page_size
+    galleries.each { |g| g.name = g.name.truncate(30) and g.name = g.excerpts.name}
+    @galleries = galleries
+    @gallery = Gallery.new
+    render :action => :index
+  end
+  
+  def search_public
+    if not params.has_key? "user"
+      with_condition = {}
+    elsif params[:user].nil? or params[:user]==""
+      with_condition = {}
+    else
+      with_condition = {:user_id => params[:user]}
+    end
+    
+    @no_async_image_tag = true
+    @galleries = Gallery.search params[:query], :star => true, :page => params[:page_id], :per_page => default_page_size, :with => with_condition
+  end
+  
   def new
     @gallery = Gallery.new
   end
@@ -57,7 +78,18 @@ class GalleriesController < ApplicationController
   protected
   
   def set_current_tab
-    @current_tab = "galleries"
+    tab = "galleries"
+    
+    browse_actions = ["search_public"]
+    unless browse_actions.index(params[:action]).nil?
+      tab = "browse"
+    end
+    
+    @current_tab = tab
+  end
+  
+  def default_page_size
+    return 12
   end
   
   def find_gallery

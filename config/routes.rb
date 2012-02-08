@@ -10,6 +10,7 @@ Uplo::Application.routes.draw do
   get "shopping_cart/checkout"
   get "orders", :to => "orders#index"
   get "browse", :to => "home#browse"
+  get "search", :to => "home#search"
   get "back", :to => "application#redirect_back"
   get "profile", :to => "users#profile"
   get "profile/edit", :to => "users#edit"
@@ -29,7 +30,11 @@ Uplo::Application.routes.draw do
 
   get 'images/order/:id', :to => "images#order"
 
+  get 'galleries/search', :to => 'galleries#search'
+  get 'galleries/search_public', :to => 'galleries#search_public'
+  get 'users/search', :to => 'users#search'
   resources :galleries do
+    get 'images/search', :to => 'images#search'
     get 'images/delete/:id', :to => 'images#destroy'
     get 'images/list', :to => 'images#list'
     resources :images

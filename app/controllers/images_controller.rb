@@ -118,7 +118,8 @@ class ImagesController < ApplicationController
   
   def set_current_tab
     tab = "galleries"
-    if params[:action] == "browse"
+    browse_actions = ["browse", "order"]
+    unless browse_actions.index(params[:action]).nil?
       tab = "browse"
     end
     

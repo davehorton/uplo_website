@@ -1,0 +1,59 @@
+- content_for :head do
+  = javascript_include_tag("search.js")
+  = stylesheet_link_tag("search.css")
+
+
+#search-box-wrapper
+  = render(:partial => "shared/search_box", :locals => {:action => "search"})
+  
+- if @users.count > 0
+  .section.users
+    .label Gallery owners:
+    .more= link_to "(more result..)", :controller=>'users', :action=>'search', :query=>params[:query]
+    .clear
+    - @users.each do |user|
+      .wrapper
+        .preview
+          =raw async_image_tag("member_normal.gif", :class => "gallery-cover-image")
+        .info
+          - full_name = [user.first_name, user.last_name].join(" ")
+          .name= full_name
+          .email= user.email
+          = link_to "(more galleries from #{full_name})", :controller=>'galleries', :action=>'search_public', :query => params[:query], :user => user.id
+  
+- if @galleries.count > 0
+  .section.galleries
+    .label Galleries: 
+    .more= link_to "(more result..)", :controller=>'galleries', :action=>'search_public', :query=>params[:query]
+    .clear
+    - @galleries.each do |gallery|
+      .wrapper{:id => "gallery-container-#{gallery.id}"}
+        %a{:href => gallery_images_path(gallery), :style => "float:left;"}
+          .preview
+            =raw async_image_tag(gallery_cover_image_url(gallery), :class => "gallery-cover-image")
+        .info
+          .name{:title => gallery.name}=raw gallery.name
+          .description=raw gallery.description
+
+- if @images.count >0
+  .section.images
+    .label{:style=>"clear:both;"} Images
+    .clear
+    - @images.each do |img|
+      .wrapper{:title=>"#{img.name}"}
+        - url = url_for(:controller => "images", :action => "browse", :id => "#{img.id}")
+        %a.gallery-image{:href => "#{url}" }
+          %dl.entry
+            %dt.preview
+              = async_image_tag(img.data.url(:thumb), :class => "image-thumb")
+            %dd.name= img.name.truncate(13)
+            %dd.price= img.price.nil? ? '$0' : number_to_currency(img.price, {:precision => 2})
+
+  %div{:style=>"clear:both;"}
+  .section= render_pagination(@images, {:controller => "home", :action => params[:action]})
+    
+:erb
+  <script>
+  </script>
+  
+= javascript_include_tag "lib/blueimp/tmpl.min.js"

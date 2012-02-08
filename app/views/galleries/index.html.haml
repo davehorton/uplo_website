@@ -3,6 +3,9 @@
   = javascript_include_tag("app/gallery.js")
   
 .galleries
+  .clearfix
+    #search-box-wrapper
+      = render(:partial => "shared/search_box", :locals => {:action => url_for(:controller => "galleries", :action => "search")})
   .action-container.clearfix
     %a.float-right#new-gallery{:href => new_gallery_path, :class => "ui-button-container icon-link"}
       %span.round-button= "Add Gallery"
@@ -21,7 +24,7 @@
             %span.gallery-link.default
               = async_image_tag(gallery_cover_image_url(gallery), :class => "gallery-cover-image")
           .gallery-info
-            .name{:title => gallery.name}= truncate(gallery.name, :length => 30)
+            .name{:title => gallery.name}=raw gallery.name
             .photo-number= (gallery.images.length > 0 ? pluralize(gallery.images.length, "image") : "No image")
             .update-time= "Last updated: #{gallery.updated_at_string}"
             .permission= gallery.permission_string.titleize

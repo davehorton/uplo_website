@@ -10,11 +10,19 @@ class HomeController < ApplicationController
     @images = Image.load_popular_images(@filtered_params)
   end
   
+  def search
+    @no_async_image_tag = true
+    @users = User.search params[:query], :star => true, :page => params[:page_id], :per_page => 3
+    @galleries = Gallery.search params[:query], :star => true, :page => params[:page_id], :per_page => 3
+    @images = Image.search params[:query], :star => true, :page => params[:page_id], :per_page => default_page_size
+  end
+  
   protected
   
   def set_current_tab
     tab = "popular"
-    if params[:action] == "browse"
+    browse_actions = ["browse", "search"]
+    unless browse_actions.index(params[:action]).nil?
       tab = "browse"
     end
     @current_tab = tab
@@ -23,6 +31,8 @@ class HomeController < ApplicationController
   def default_page_size
     size = 30
     if params[:action] == "browse"
+      size = 12
+    elsif params[:action] == "search"
       size = 12
     end
     return size
