@@ -1,4 +1,5 @@
 class User < ActiveRecord::Base
+  include ::SharedMethods::Paging
   attr_accessor :force_submit, :login
   
   GENDER_MALE = "0"
@@ -37,6 +38,17 @@ class User < ActiveRecord::Base
   
   # CLASS METHODS
   class << self
+    def do_search(params = {})
+      params[:filtered_params][:sort_field] = 'first_name' unless params[:filtered_params].has_key?("sort_field")
+      paging_info = parse_paging_options(params[:filtered_params], {:sort_mode => :extended})
+      
+      self.search(
+        params[:query],
+        :star => true,
+        :page => paging_info.page_id, 
+        :per_page => paging_info.page_size )
+    end
+    
     # Override Devise method so that User can log in with username or email.
     def find_for_database_authentication(warden_conditions)
       conditions = warden_conditions.dup
@@ -72,6 +84,17 @@ class User < ActiveRecord::Base
         :methods => self.exposed_methods, 
         :include => self.exposed_associations
       }
+    end
+    
+    protected
+    
+    def parse_paging_options(options, default_opts = {})
+      if default_opts.blank?
+        default_opts = {
+          :sort_criteria => "users.updated_at DESC"
+        }
+      end
+      paging_options(options, default_opts)
     end
   end
   
@@ -191,7 +214,6 @@ class User < ActiveRecord::Base
   define_index do
     indexes first_name
     indexes last_name
-    indexes username
 
     set_property :delta => true
   end

@@ -17,6 +17,17 @@ class Gallery < ActiveRecord::Base
   
   # CLASS METHODS
   class << self
+    def do_search(params = {})
+      params[:filtered_params][:sort_field] = 'name' unless params[:filtered_params].has_key?("sort_field")
+      paging_info = parse_paging_options(params[:filtered_params], {:sort_mode => :extended})
+      
+      self.search(
+        params[:query],
+        :star => true,
+        :page => paging_info.page_id, 
+        :per_page => paging_info.page_size )
+    end
+    
     def load_galleries(params = {})
       paging_info = parse_paging_options(params)
       self.includes(:images).paginate(
