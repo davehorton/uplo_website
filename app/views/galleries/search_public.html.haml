@@ -5,7 +5,7 @@
 - if @galleries.count == 0
   = "There is no result for Galleries with \"#{params[:query]}\""
 - else
-  = "#{@galleries.count} result for Galleries with \"#{params[:query]}\""
+  = "#{@galleries.total_entries} result for Galleries with \"#{params[:query]}\""
   .clear &nbsp;
   .section.galleries
     .clear
