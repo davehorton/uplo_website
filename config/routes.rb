@@ -22,6 +22,7 @@ Uplo::Application.routes.draw do
   match '/payments/paypal_result' => 'payments#paypal_result'
   match '/payments/paypal_cancel' => 'payments#paypal_cancel'
   match '/payments/checkout' => 'payments#checkout'
+  post '/payments/auth_order' => 'payments#auth_order'
   
   resources :payments  
 

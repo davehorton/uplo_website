@@ -61,16 +61,7 @@ class PaymentsController < ApplicationController
   end
   
   def paypal_result
-    if find_cart
-      @order = @cart.order
-      @order.status = Order::STATUS[:complete]
-      @order.transaction_status = Order::TRANSACTION_STATUS[:complete]
-      @order.save
-      session[:cart] = nil
-      @cart.destroy if @cart
-      flash[:success] = I18n.t("order.transaction_completed")
-      redirect_to :controller => 'shopping_cart', :action => 'show'
-    end
+    finalize_cart
   end
   
   def paypal_cancel
@@ -79,37 +70,43 @@ class PaymentsController < ApplicationController
   end
   
   def checkout
-    type = params[:type] || "pp"
-    order = Order.find_by_id(params[:order_id])
-    if order.blank?
-      flash[:warning] = I18n.t("order.not_found")
-      redirect_to :controller => 'shopping_cart', :action => 'show'
-    else
-      case type
-        when "pp"
-          total_as_cents = ::Util.to_cents(order.order_total)
-          purchase_params = setup_purchase_params(order)
-          setup_response = pp_gateway.purchase(total_as_cents, purchase_params)
-          #if !setup_response.success?
-            #puts setup_response.params.inspect
-          #end
-          redirect_to pp_gateway.redirect_url_for(setup_response.token)
-        when "an"
-          an_payment = Payment.create_paypal_test
-          transaction = AuthorizeNet::AIM::Transaction.new(AN_LOGIN_ID, AN_TRANS_KEY,
-            :gateway => :card_present_sandbox)
-          response = transaction.purchase(an_payment.amount, an_credit_card)
+    case params[:type]
+      when "pp"
+        total_as_cents, setup_purchase_params = get_setup_purchase_params(request)
+        setup_response = pp_gateway.setup_purchase(total_as_cents, setup_purchase_params)
+        if !setup_response.success?
+          puts "===== setup_response ==="
+          puts setup_response.params.inspect
+        end
+        redirect_to pp_gateway.redirect_url_for(setup_response.token)
+      when "an"
+        expires_on = Date.civil(params[:card]["expires_on(1i)"].to_i,
+                         params[:card]["expires_on(2i)"].to_i,
+                         params[:card]["expires_on(3i)"].to_i)
+        expires_on.class
+        expires_on = expires_on.strftime("%m%y")
+        card_string = params[:card]["card_number"]
 
-          if response.success?
-            flash[:notice] = "Successfully made a purchase (authorization code: #{response.authorization_code})"
-          else
-            flash[:warn] = 'Fail:' + response.message.to_s
-          end
-          
-          redirect_to :action => :index
+        order = Order.find_by_id params[:order_id]
+        an_value = Payment.create_authorizenet_test(card_string, expires_on)
+        response = an_value[:transaction].purchase(order.order_total, an_value[:credit_card])
+
+        success = response.success?
+        if success
+          finalize_cart
+          msg = "Successfully made a purchase (authorization code: #{response.authorization_code})"
         else
-          redirect_to :controller => 'orders', :action => 'index'
-      end
+          msg = 'Fail:' + response.message.to_s
+        end
+        render :action => :checkout_result, :msg => msg, :success => success
+    end
+  end
+  
+  def checkout_result
+    if params[:success]
+      flash[:notice] = params[:msg]
+    else
+      flash[:warn] = params[:msg]
     end
   end
   
@@ -170,9 +167,28 @@ class PaymentsController < ApplicationController
     }
   end
   
+  def to_cents(money)
+    (money*100).round
+  end
+  
+  def auth_order
+    @order_id = params[:order_id]
+  end
+  
   protected
   
   def set_current_tab
     @current_tab = "browse"
+  end
+  
+  def finalize_cart
+    if find_cart
+      @order = @cart.order
+      @order.status = Order::STATUS[:complete]
+      @order.transaction_status = Order::TRANSACTION_STATUS[:complete]
+      @order.save
+      session[:cart] = nil
+      @cart.destroy if @cart
+    end
   end
 end

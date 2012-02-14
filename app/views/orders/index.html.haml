@@ -20,4 +20,5 @@
           = number_to_currency(@order.order_total, {:precision => 2})
 
           
-  = render :partial => "checkout_form", :locals => {:order => @order}
+  
+  = render :partial => "an_checkout", :locals => {:order => @order}

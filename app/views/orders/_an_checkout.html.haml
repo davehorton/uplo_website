@@ -1,0 +1,10 @@
+= simple_form_for(:order, :url => "/payments/auth_order", :html => {:class => "signup"}) do |f|
+  = hidden_field_tag :order_id, order.id
+  = hidden_field_tag :amount,  order.order_total
+  
+  .submit
+    %div{:style=>"text-align:-moz-right;padding:10px;", :align=>"right"}
+      %table
+        %tr
+          %td{:style=>'text-align:right;'}
+            = f.submit "continue", :class => 'btnlarge btn'

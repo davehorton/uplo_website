@@ -1,0 +1,21 @@
+= stylesheet_link_tag("cart.css")
+
+.solidBlock.round-box
+  = simple_form_for(:card, :url => "/payments/checkout?type=an", :html => {:class => "card_form"}) do |f|
+    .order_summary.round-box
+      .header Please submit below information of your card
+      .inputs
+        = f.input :card_number, :autofocus => true, :required => true
+        = f.label :expires_on, 'Expiration date'
+        = f.date_select :expires_on, :discard_day => true, :start_year => Date.today.year, :end_year => (Date.today.year+10), :add_month_numbers => true, :order => [:month, :year], :required => true
+        = hidden_field_tag :order_id, @order_id
+
+    .submit
+      %div{:style=>"text-align:-moz-right;padding:10px;", :align=>"right"}
+        %table
+          %tr
+            %td{:style=>'text-align:right;'}
+              = f.submit "place order", :class => 'btnlarge btn'
+
+
+

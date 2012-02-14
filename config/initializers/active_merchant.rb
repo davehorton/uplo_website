@@ -15,6 +15,8 @@ PP_API_SIGN = "Anc0D5BOPhFy6OAh3om9ZbTOUhc.AHydVYiJ6OWgmn--YrOOe.-2ukI1"
 # https://test.authorize.net/: uplo-payment / uploTPL007
 AN_LOGIN_ID = "5rEw33WW37dT"
 AN_TRANS_KEY = "4J3qwE54h8Z4Lvcd"
+AN_CARD_NOT_PRESENT_LOGIN = "92RQRn7r9R"
+AN_CARD_NOT_PRESENT_TRANS_KEY = "6gEMD4F6g3rx3U27"
   
 ActionView::Base.send(:include, ActiveMerchant::Billing::Integrations::ActionViewHelper)
 

@@ -27,7 +27,39 @@ class Payment
     return payment
   end
   
-  def self.create_authorizenet_test
-  
+  def self.create_authorizenet_test(card_number, expiration)
+    address = AuthorizeNet::Address.new({
+      :first_name => "Man",
+      :last_name => "Vuong",
+      :company => "TPL comp.",
+      :street_address => "64 a4",
+      :city => "Austin", 
+      :state => "TX",
+      :zip => "78759", 
+      :country => "USA", 
+      :phone => "5120070070", 
+#      :fax => "5120070070",
+      :customer_address_id => "address"
+    })
+
+    shipping_address = AuthorizeNet::ShippingAddress.new({
+      :first_name => "Man",
+      :last_name => "Vuong",
+      :company => "TPL comp.",
+      :street_address => "64 a4",
+      :city => "Austin", 
+      :state => "TX",
+      :zip => "78759", 
+      :country => "USA", 
+      :phone => "5120070070" ,
+#      :fax => "5120070070",
+      :customer_address_id => "address"
+    })
+    
+    credit_card = AuthorizeNet::CreditCard.new(card_number, expiration)    
+    transaction = AuthorizeNet::AIM::Transaction.new(AN_CARD_NOT_PRESENT_LOGIN, AN_CARD_NOT_PRESENT_TRANS_KEY, :gateway => :sandbox, :test => true, :transaction_type => :auth_and_capture, :verify_ssl => false)
+    transaction.set_address(address)
+    transaction.set_shipping_address(shipping_address)
+    return {:transaction => transaction, :credit_card => credit_card}
   end
 end
