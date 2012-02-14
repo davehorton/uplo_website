@@ -3,26 +3,28 @@
     = javascript_include_tag("lib/jail.min.js")
     = javascript_include_tag("lib/galleria/galleria.min.js")
     = javascript_include_tag("app/gallery.js")
-      
+
 .home
   .home-header
     - if !user_signed_in?
       = render(:partial => "shared/welcome")
     - else
       .gallery-container.clearfix
-        #gallery
+        %ul#gallery
           - @images.each do |image|
-            %a.image{:href => image.url}
-              = image_tag(image.image_thumb_url, :title => image.name)
+            %li
+              %a.image{:href => image.url}
+                = image_tag(image.image_thumb_url, :title => image.name)
       :erb
         <script type="text/javascript">
           $(document).ready(function(){
             //gallery.setup();
-            Galleria.loadTheme("<%= javascript_path("lib/galleria/themes/classic/galleria.classic.min.js") %>");
+            Galleria.loadTheme("<%= javascript_path("lib/galleria/themes/uplo/galleria.uplo.js") %>");
             $('#gallery').galleria({
               width: 950,
               height: 500,
               debug: false,
+              showCounter: false,
               extend: function(options) {
                 var gallery = this;
                 gallery.play(5000);
@@ -31,9 +33,7 @@
             });
           });
         </script>
-  
-  .home-footer
-    
+
 :erb
   <script type="text/javascript">
     $(document).ready(function(){

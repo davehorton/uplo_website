@@ -11,7 +11,7 @@ class Image < ActiveRecord::Base
   
   # Paperclip
   has_attached_file :data, 
-   :styles => {:thumb => "180x180>", :small_preview => "100x100" }, 
+   :styles => {:thumb => "180x180>", :medium =>  "750x750>"},
    :storage => :s3,
    :s3_credentials => "#{Rails.root}/config/amazon_s3.yml",
    :path => "image/:id/:style.:extension"
@@ -20,6 +20,8 @@ class Image < ActiveRecord::Base
   validates_attachment_content_type :data, :content_type => [ 'image/jpeg','image/jpg','image/png',"image/gif"],
                                       :message => 'filetype must be one of [.jpeg, .jpg, .png, .gif]'
 
+  # CALLBACK
+  after_post_process :save_image_dimensions
   
   # CLASS METHODS
   class << self
@@ -97,4 +99,19 @@ class Image < ActiveRecord::Base
   def url(options = nil)
     self.data.url(options)
   end
+  
+  protected
+  
+  # Detect the image dimensions.
+  def save_image_dimensions
+    file = self.data.queued_for_write[:original]
+    if file.blank?
+      file = data.url(:original)
+    end
+    
+    geo = Paperclip::Geometry.from_file(file)
+    self.width = geo.width
+    self.height = geo.height
+  end
+
 end
