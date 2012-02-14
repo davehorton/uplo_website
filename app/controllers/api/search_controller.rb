@@ -73,7 +73,7 @@ class Api::SearchController < Api::BaseController
     rs[:galleries] = gals_info
     
     imgs_info = {}
-    imgs_info[:total] = galleries.total_entries
+    imgs_info[:total] = images.total_entries
     imgs_info[:data] = images
     rs[:images] = imgs_info
     
