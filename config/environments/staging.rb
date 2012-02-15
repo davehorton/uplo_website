@@ -67,6 +67,15 @@ Uplo::Application.configure do
   config.action_mailer.default_url_options = { :host => 'uplo-dev.heroku.com' }
   config.action_mailer.delivery_method = :smtp
   
+  # Configure to compress responses.
+  if config.serve_static_assets
+    begin
+      config.middleware.insert_before(ActionDispatch::Static, Rack::Deflater)
+    rescue Exception => exc
+      puts "Error when insert middleware ActionDispatch::Static"
+    end
+  end
+    
   if !ENV['SENDGRID_USERNAME'].blank? && !ENV['SENDGRID_PASSWORD'].blank?
     # SENDGRID
     config.action_mailer.smtp_settings = {

@@ -60,11 +60,6 @@ module Uplo
     # Version of your assets, change this if you want to expire all your assets
     config.assets.version = '1.0'
     
-    # Configure to compress responses.
-    if config.serve_static_assets && Rails.env != "development"
-      config.middleware.insert_before(ActionDispatch::Static, Rack::Deflater)
-    end
-    
     if Rails.env.test?
       initializer :after => :initialize_dependency_mechanism do 
         ActiveSupport::Dependencies.mechanism = :load
