@@ -57,7 +57,7 @@ class Payment
     })
     
     credit_card = AuthorizeNet::CreditCard.new(card_number, expiration)    
-    transaction = AuthorizeNet::AIM::Transaction.new(AN_CARD_NOT_PRESENT_LOGIN, AN_CARD_NOT_PRESENT_TRANS_KEY, :gateway => :sandbox, :test => true, :transaction_type => :auth_and_capture, :verify_ssl => false)
+    transaction = AuthorizeNet::AIM::Transaction.new(AN_CARD_NOT_PRESENT_LOGIN, AN_CARD_NOT_PRESENT_TRANS_KEY, :gateway => :sandbox, :transaction_type => :auth_and_capture, :verify_ssl => false)
     transaction.set_address(address)
     transaction.set_shipping_address(shipping_address)
     return {:transaction => transaction, :credit_card => credit_card}
