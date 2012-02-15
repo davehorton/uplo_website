@@ -97,6 +97,7 @@ lib/galleria/themes/uplo/classic-loader.gif: lib/galleria/themes/uplo/classic-lo
 lib/galleria/themes/uplo/classic-map.png: lib/galleria/themes/uplo/classic-map-076329b707ac9fd38f3dac16eec297bf.png
 lib/galleria/themes/uplo/galleria.uplo.css: lib/galleria/themes/uplo/galleria.uplo-191707795774032f92ddabb4e261b884.css
 lib/galleria/themes/uplo/galleria.uplo.js: lib/galleria/themes/uplo/galleria.uplo-54749c16e57f7df61c6a66d93d166a8b.js
+lib/galleria/themes/uplo/galleria.uplo.min.js: lib/galleria/themes/uplo/galleria.uplo.min-54749c16e57f7df61c6a66d93d166a8b.js
 lib/highcharts/highcharts.js: lib/highcharts/highcharts-827efc6191c0392dec919263403af6e8.js
 lib/highcharts/highcharts.src.js: lib/highcharts/highcharts.src-c87b03b8dae8527d2e0dfa99112b51ea.js
 lib/highcharts/modules/exporting.js: lib/highcharts/modules/exporting-4d25d1815d2f66c9e4a3cbcf05a93e25.js
