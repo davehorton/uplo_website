@@ -91,14 +91,14 @@ class PaymentsController < ApplicationController
         an_value = Payment.create_authorizenet_test(card_string, expires_on)
         response = an_value[:transaction].purchase(order.order_total, an_value[:credit_card])
 
-        success = response.success?
+        success = !response.nil? and response.success?
         if success
           finalize_cart
           msg = "Successfully made a purchase (authorization code: #{response.authorization_code})"
         else
           msg = 'Fail:' + response.message.to_s
         end
-        render :action => :checkout_result, :msg => msg, :success => success
+        redirect_to :action => :checkout_result, :msg => msg, :success => success
     end
   end
   
