@@ -22,6 +22,7 @@ class Image < ActiveRecord::Base
 
   # CALLBACK
   after_post_process :save_image_dimensions
+  after_initialize :init_random_price
   
   # CLASS METHODS
   class << self
@@ -114,4 +115,10 @@ class Image < ActiveRecord::Base
     self.height = geo.height
   end
 
+  # TODO: this method is for test only. Please REMOVE this in production mode.
+  def init_random_price
+    if self.price.blank?
+      self.price = rand(50)
+    end
+  end
 end
