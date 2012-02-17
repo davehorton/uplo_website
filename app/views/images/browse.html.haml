@@ -7,7 +7,7 @@
       .left-container.clearfix.left.round-box
         .gallery-image
           .image-content
-            = image_tag @image.data.url
+            = image_tag @image.data.url(:medium)
       = simple_form_for(:image, :id => @image, :action => :update, :method => 'put') do |f|
         .right-container.right
           .edit-area.round-box.clearfix

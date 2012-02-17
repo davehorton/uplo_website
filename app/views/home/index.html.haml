@@ -13,7 +13,7 @@
         %ul#gallery
           - @images.each do |image|
             %li
-              %a.image{:href => image.url}
+              %a.image{:href => image.url(:medium)}
                 = image_tag(image.image_thumb_url, :title => image.name)
       :erb
         <script type="text/javascript">
@@ -25,6 +25,7 @@
               height: 500,
               debug: false,
               showCounter: false,
+              thumbQuality: false,
               extend: function(options) {
                 var gallery = this;
                 gallery.play(5000);
