@@ -46,7 +46,7 @@ en:
     not_found: "Could not find the order to checkout."
     transaction_completed: "Your payment was completed successfully"
     email:
-      transaction_finish_subject: "You payment completed successfully."
+      transaction_finish_subject: "Your payment completed successfully."
       
   date:
     formats:
