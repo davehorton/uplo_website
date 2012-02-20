@@ -3,13 +3,7 @@
   = javascript_include_tag("app/gallery.js")
   
 .galleries
-  .action-container.clearfix
-    %a.float-right#new-gallery{:href => new_gallery_path, :class => "ui-button-container icon-link"}
-      %span.round-button= "Add Gallery"
-  
-  #gallery-form-container.clearfix.round-box.hidden{:style => "display: none"}
-    = render(:partial => "form")
-
+  = render(:partial => "add_gallery", :locals => {:gallery => @gallery}) unless @gallery.nil?
   .galleries-wrapper.clearfix
     - if @galleries.blank?
       .empty-data= "There is no gallery. Let create one."

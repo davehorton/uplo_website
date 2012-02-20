@@ -7,6 +7,16 @@ class GalleriesController < ApplicationController
     @gallery = Gallery.new
   end
   
+  def show_public
+    user = User.find_by_id params[:author]
+    if user.nil?
+      flash[:error] = "The author #{user.fullname} does not exist anymore."
+    else
+      @galleries = user.galleries.load_popular_galleries(@filtered_params)
+    end
+    render :action => :index
+  end
+  
   def search
     galleries = Gallery.search params[:query], :star => true, :with => {:user_id => current_user.id}, :page => params[:page_id], :per_page => default_page_size
     galleries.each { |g| g.name = g.name.truncate(30) and g.name = g.excerpts.name}
@@ -21,6 +31,7 @@ class GalleriesController < ApplicationController
     elsif params[:user].nil? or params[:user]==""
       with_condition = {}
     else
+      params[:query] = ""
       with_condition = {:user_id => params[:user]}
     end
     
@@ -80,7 +91,7 @@ class GalleriesController < ApplicationController
   def set_current_tab
     tab = "galleries"
     
-    browse_actions = ["search_public"]
+    browse_actions = ["search_public", "show_public"]
     unless browse_actions.index(params[:action]).nil?
       tab = "browse"
     end

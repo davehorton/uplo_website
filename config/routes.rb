@@ -32,6 +32,7 @@ Uplo::Application.routes.draw do
 
   get 'galleries/search', :to => 'galleries#search'
   get 'galleries/search_public', :to => 'galleries#search_public'
+  get 'galleries/show_public', :to => 'galleries#show_public'
   get 'users/search', :to => 'users#search'
   resources :galleries do
     get 'images/search', :to => 'images#search'
