@@ -27,6 +27,7 @@ gem "faker"
 gem "rmagick"
 gem "nested_form"
 gem "aws-s3"
+gem "aws-sdk", '~> 1.3.4'
 gem "dalli" # For memcache
 gem "nokogiri"
 
@@ -60,6 +61,9 @@ group :development do
   gem "heroku_san"
   gem "capistrano"
   gem "capistrano-ext", :require => "capistrano"
+  gem "guard-sass"
+  gem "guard-coffeescript"
+  
   
   if RUBY_VERSION >= "1.9"
     gem "ruby-debug19"
