@@ -17,7 +17,7 @@
       %span.author-info
         %span= "From "
         %span.author-link
-          %a{:href => "#"}= current_user.fullname
+          %a{:href => "#"}= @gallery.user.fullname
     .description 
       = @gallery.description
         
