@@ -131,6 +131,7 @@ class Image < ActiveRecord::Base
     if self.price.blank?
       self.price = rand(50)
     end
+  end
 
   # indexing with thinking sphinx
   define_index do
