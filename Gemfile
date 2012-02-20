@@ -14,7 +14,7 @@ gem "haml-rails", ">= 0.3.4"
 gem "inherited_resources", ">= 1.3.0"
 gem "simple_form"
 gem "awesome_print"
-gem 'devise', '>= 1.5.3'
+gem 'devise', '~> 1.5.3'
 gem 'mail'
 
 # If using HAML:
@@ -41,6 +41,7 @@ end
 
 gem 'jquery-rails'
 gem 'thinking-sphinx', '2.0.10'
+gem 'flying-sphinx',   '0.5.1'
 
 
 # ECommerce

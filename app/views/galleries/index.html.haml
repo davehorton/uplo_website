@@ -3,9 +3,6 @@
   = javascript_include_tag("app/gallery.js")
   
 .galleries
-  .clearfix
-    #search-box-wrapper
-      = render(:partial => "shared/search_box", :locals => {:action => url_for(:controller => "galleries", :action => "search")})
   .action-container.clearfix
     %a.float-right#new-gallery{:href => new_gallery_path, :class => "ui-button-container icon-link"}
       %span.round-button= "Add Gallery"
