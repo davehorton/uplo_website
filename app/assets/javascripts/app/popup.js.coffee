@@ -77,14 +77,19 @@ class window.Popup
     if top!=null and top!=undefined
       elm.css("top", top)
     else
-      elm.css("top", $("body").height()/2)
+      top = $("body").height() - $(@htmlElement).height()
+      top = top/2
+      elm.css("top", top)
       
     if left!=null and left!=undefined
       elm.css("left", left)
     else
-      elm.css("left", $("body").width()/3)
+      left = $("body").width() - $(@htmlElement).width()
+      left = left/2
+      elm.css("left", left)
       
   show: =>
+    @setPosition()
     @htmlElement.classList.add("display")
     window.mask = new Mask() unless window.mask
     window.mask.show()
