@@ -215,6 +215,10 @@ class User < ActiveRecord::Base
     indexes first_name
     indexes last_name
 
-    set_property :delta => true
+    if Rails.env.production?
+      set_property :delta => FlyingSphinx::DelayedDelta
+    else
+      set_property :delta => true  
+    end
   end
 end

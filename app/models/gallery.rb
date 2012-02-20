@@ -130,6 +130,11 @@ class Gallery < ActiveRecord::Base
       :name => 4,
       :description => 1,
     }
-    set_property :delta => true
+    
+    if Rails.env.production?
+      set_property :delta => FlyingSphinx::DelayedDelta
+    else
+      set_property :delta => true  
+    end
   end
 end
