@@ -4,9 +4,10 @@ Uplo::Application.routes.draw do
   # WEB ROUTING
   root :to => "home#index"
   get "shopping_cart/show"
+  post "shopping_cart/update_cart"
   post "shopping_cart/add_to_cart"
-  post "shopping_cart/destroy_item"
-  post "shopping_cart/clear"
+  get "shopping_cart/destroy_item"
+  get "shopping_cart/clear"
   get "shopping_cart/checkout"
   get "orders", :to => "orders#index"
   get "browse", :to => "home#browse"

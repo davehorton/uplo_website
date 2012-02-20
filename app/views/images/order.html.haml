@@ -1,4 +1,4 @@
-= stylesheet_link_tag("slideshow.css", "cart.css")
+= stylesheet_link_tag("slideshow.css", "scss/cart.css.scss")
 
 .image-browse
   .slideshow-container
@@ -7,43 +7,45 @@
         .gallery-image
           .image-content
             = image_tag @image.data.url
-      = simple_form_for(:line_item, :url => "/shopping_cart/add_to_cart", :method => 'post') do |f|
+
+      - action_url = @line_item.nil? ? url_for(:controller => "shopping_cart", :action => "add_to_cart", :image_id => @image.id) : url_for(:controller => "shopping_cart", :action => "update_cart", :line_item_id => @line_item.id)
+      = simple_form_for(:line_item, :url => action_url, :method => 'post') do |f|
         .order.right-container.right
           .edit-area.round-box.clearfix
             .info.clearfix
               %label= "Plexi Mount:"
-              = radio_button(:line_item, :plexi_mount, true, :checked => true) 
-              %span Yes
-              = radio_button(:line_item, :plexi_mount, false) 
-              %span No
+              = f.radio_button(:plexi_mount, true, :checked => true)
+              = f.label(:plexi_mount_true, "Yes", :class => 'options_label')
+              = f.radio_button(:plexi_mount, false)
+              = f.label(:plexi_mount_false, "No", :class => 'options_label')
+
             %br
             .info.clearfix
               %label= "Print size:"
-              = radio_button(:line_item, :size, "300x300", :checked => true) 
-              %span 300x300
-              = radio_button(:line_item, :size, "500x500") 
-              %span 500x500
+              = f.radio_button(:size, "300x300", :checked => true) 
+              = f.label(:size_300x300, "300x300", :class => 'options_label')
+              = f.radio_button(:size, "500x500") 
+              = f.label(:size_500x500, "500x500", :class => 'options_label')
+              
             %br
             .info.clearfix
               %label= "Moulding choice:"
-              = radio_button(:line_item, :moulding, "White", :checked => true)
-              %span White
-              = radio_button(:line_item, :moulding, "Black")
-              %span Black
-
-              = radio_button(:line_item, :moulding, "Wood")
-              %span Wood
-              = radio_button(:line_item, :moulding, "Silver")
-              %span Silver
+              = f.radio_button(:moulding, "White", :checked => true)
+              = f.label(:moulding_white, "White", :class => 'options_label')
+              = f.radio_button(:moulding, "Black")
+              = f.label(:moulding_black, "Black", :class => 'options_label')
+              = f.radio_button(:moulding, "Wood")
+              = f.label(:moulding_wood, "Wood", :class => 'options_label')
+              = f.radio_button(:moulding, "Silver")
+              = f.label(:moulding_silver, "Silver", :class => 'options_label')
+              
             %br
             .info.clearfix
               %label= "Quantity:"
-              = text_field(:line_item, :quantity, :style => 'width:273px; margin:0 6px', :value => '1')
-            .info
-              = hidden_field(:line_item, :image_id, :value => @image.id)
+              = f.text_field(:quantity, :style => 'width:273px; margin:0 6px', :value => '1')
               
           .button-container.blue-gradient
-            - url = url_for(:controller => 'shopping_cart', :action => 'add_to_cart', :id => params[:id])
-            %input.add-to-cart{:type => "submit", :value => "Add to cart"}
+            - btn_text = @line_item.nil? ? "Add to cart" : "Update cart"
+            %input.add-to-cart{:type => "submit", :value => btn_text}
 
 

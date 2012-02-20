@@ -106,12 +106,15 @@ class ImagesController < ApplicationController
   
   def order
     @image = Image.find_by_id(params[:id])
-    if @image.blank?
-      return render_not_found
-    elsif @image.gallery && !@image.gallery.can_access?(current_user)
-      return render_unauthorized
+    if params[:line_item].nil?
+      if @image.blank?
+        return render_not_found
+      elsif @image.gallery && !@image.gallery.can_access?(current_user)
+        return render_unauthorized
+      end
+    else
+      @line_item = LineItem.find_by_id params[:line_item]
     end
-    @images = @image.gallery.images.all(:order => 'name')
   end
   
   protected

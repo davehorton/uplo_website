@@ -1,4 +1,5 @@
-= stylesheet_link_tag("cart.css")
+- content_for :head do
+  = stylesheet_link_tag("scss/cart.css.scss")
 
 .solidBlock.round-box
   = simple_form_for(:card, :url => "/payments/checkout?type=an", :html => {:class => "card_form"}) do |f|

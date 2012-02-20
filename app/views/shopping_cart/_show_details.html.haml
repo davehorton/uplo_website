@@ -15,8 +15,10 @@
       %tr.lines
         %td.preview
           %p= image_tag image.url(:small_preview)
-          %p.option 
-            = link_to("delete", {:controller => "shopping_cart", :action => "destroy_item", :id => line_item.id}, {:confirm => "Do you want to remove this item out of your cart?", :method => :post})
+          %span.option 
+            = link_to("edit", {:controller => "images", :action => "order", :id => image.id, :line_item => line_item.id}, html_options = {:class => "edit"})
+          %span.option 
+            = link_to("delete", {:controller => "shopping_cart", :action => "destroy_item", :id => line_item.id}, html_options = {:class => "delete"}, :data => {:id => line_item.id})
 
         %td.text-left
           = line_item.size

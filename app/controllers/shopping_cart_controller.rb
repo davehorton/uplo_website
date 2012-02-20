@@ -17,7 +17,7 @@ class ShoppingCartController < ApplicationController
   end
   
   def add_to_cart
-    image = Image.find_by_id params[:line_item][:image_id]
+    image = Image.find_by_id params[:image_id]
     params[:line_item].delete(:image_id)
 
     if image.nil?
@@ -39,6 +39,22 @@ class ShoppingCartController < ApplicationController
     redirect_to :action => :show
   end
 
+  def update_cart
+    line_item = LineItem.find_by_id params[:line_item_id]
+
+    if line_item.nil?
+      flash[:warning] = "Your recent ordered image does not exist anymore."
+    elsif not valid_item?(params[:line_item])
+      flash[:warning] = "Please fill all options first."
+      redirect_to :controller => :images, :action => :order, :id => image.id, :line_item => line_item.id and return
+    else
+      line_item.attributes = params[:line_item]
+      line_item.save
+      @order = @cart.order.reload
+    end
+    redirect_to :action => :show
+  end
+  
   def checkout
     unless @cart
       flash[:warning] = "Your shopping cart is empty."
