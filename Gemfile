@@ -41,7 +41,7 @@ end
 
 gem 'jquery-rails'
 gem 'thinking-sphinx', '2.0.10'
-gem 'flying-sphinx',   '0.5.1'
+gem 'flying-sphinx',   '>= 0.6.2'
 
 
 # ECommerce

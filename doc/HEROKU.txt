@@ -33,5 +33,12 @@ heroku db:pull --app uplo
 heroku restart --app uplo-dev 
 heroku restart --app uplo
 
+# rebuild index (with flying sphinx)
+heroku rake fs:index
+heroku rake fs:start
+heroku rake fs:stop
+heroku rake fs:rebuild
+https://flying-sphinx.com/docs
+
 # more info
 https://github.com/fastestforward/heroku_san
