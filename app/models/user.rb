@@ -58,7 +58,7 @@ class User < ActiveRecord::Base
     end
   
     def exposed_methods
-      []
+      [:avatar_url]
     end
     
     def exposed_attributes
@@ -101,6 +101,10 @@ class User < ActiveRecord::Base
   # PUBLIC INSTANCE METHODS
   def fullname
     self.first_name + " " + self.last_name
+  end
+  
+  def avatar_url
+    self.avatar.url(:thumb)
   end
   
   # Generate email address including full name.
