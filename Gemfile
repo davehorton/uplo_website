@@ -59,11 +59,10 @@ group :development do
   gem "bullet"
   gem "pry"
   gem "heroku_san"
-  gem "capistrano"
-  gem "capistrano-ext", :require => "capistrano"
+  #gem "capistrano"
+  #gem "capistrano-ext", :require => "capistrano"
   gem "guard-sass"
-  gem "guard-coffeescript"
-  
+  gem "guard-coffeescript"  
   
   if RUBY_VERSION >= "1.9"
     gem "ruby-debug19"
