@@ -6,7 +6,7 @@
       .left-container.clearfix.left.round-box
         .gallery-image
           .image-content
-            = image_tag @image.data.url
+            = image_tag @image.url(:medium)
 
       - action_url = @line_item.nil? ? url_for(:controller => "shopping_cart", :action => "add_to_cart", :image_id => @image.id) : url_for(:controller => "shopping_cart", :action => "update_cart", :line_item_id => @line_item.id)
       = simple_form_for(:line_item, :url => action_url, :method => 'post') do |f|

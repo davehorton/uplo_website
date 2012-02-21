@@ -1,4 +1,5 @@
 .gallery-form-container
+  - gallery ||= @gallery
   = simple_form_for(gallery, :html => {:class => "gallery-form"}) do |f|
     = f.input(:name, :wrapper_class => "input clearfix", 
               :input_html => {:class => "name"}, :required => true)

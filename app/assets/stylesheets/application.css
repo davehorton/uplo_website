@@ -876,7 +876,7 @@ a.icon-link{text-decoration: none;}
 }
 
 .image-browse .slideshow-container .gallery-image .image-content img{
-  max-height: 610px;
+  max-height: 420px;
   max-width: 610px;
   vertical-align: middle;
 }
@@ -900,9 +900,9 @@ a.icon-link{text-decoration: none;}
   float: left;
 }
 
-.galleries .gallery-container .gallery-image{
+.galleries .gallery-container .gallery-image,
+.image-browse .gallery-image .image-content img{
   cursor: pointer;
-  display: table;
   height: auto;
   text-align: center;
   width: auto;
@@ -911,6 +911,7 @@ a.icon-link{text-decoration: none;}
   box-shadow: rgba(0,0,0,0.7) 0 3px 8px; 
   box-shadow: rgba(0,0,0,0.7) 0 3px 8px \0/IE9;
 }
+.galleries .gallery-container .gallery-image{ display: table;}
 
 .galleries .gallery-container .gallery-link.default{
   width: 180px;

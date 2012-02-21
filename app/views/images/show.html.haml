@@ -8,7 +8,7 @@
         .gallery-container.round-box
           .gallery-image
             .image-content
-              = image_tag @selected_image.data.url
+              = image_tag @selected_image.url(:medium)
 
         .filter-container
           %ul
