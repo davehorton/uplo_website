@@ -99,7 +99,7 @@ lib/galleria/themes/uplo/classic-loader.gif: lib/galleria/themes/uplo/classic-lo
 lib/galleria/themes/uplo/classic-map.png: lib/galleria/themes/uplo/classic-map-076329b707ac9fd38f3dac16eec297bf.png
 lib/galleria/themes/uplo/galleria.uplo.css: lib/galleria/themes/uplo/galleria.uplo-01e04ce7bdd7a93c1ff00528fd93f2cb.css
 lib/galleria/themes/uplo/galleria.uplo.js: lib/galleria/themes/uplo/galleria.uplo-bfc54ad51e0705ce444a892837832993.js
-lib/galleria/themes/uplo/galleria.uplo.min.js: lib/galleria/themes/uplo/galleria.uplo.min-62439396caf08ebd83e54e63572b397c.js
+lib/galleria/themes/uplo/galleria.uplo.min.js: lib/galleria/themes/uplo/galleria.uplo.min-fa90038fc47f27b9dfd82885c136748f.js
 lib/highcharts/highcharts.js: lib/highcharts/highcharts-cbd37a3d4b2ba9980b900e8c72bbf0a7.js
 lib/highcharts/highcharts.src.js: lib/highcharts/highcharts.src-f7ceaed3a76fdbfafd3b8c5cee9c2030.js
 lib/highcharts/modules/exporting.js: lib/highcharts/modules/exporting-e45d07167c8e5d42fdaf7f015d1c7714.js
@@ -121,7 +121,6 @@ lib/jquery.textchange.min.js: lib/jquery.textchange.min-e42d6da304633ca5580ef87b
 lib/jquery.tmpl.js: lib/jquery.tmpl-bd77d8d2ab1c8ff82312cdb342b5c6eb.js
 lib/jquery.ui.core.js: lib/jquery.ui.core-ec04ab475a1e1d47d9e1b3e10e85d84a.js
 lib/jquery.ui.datepicker.js: lib/jquery.ui.datepicker-df365c543cf9a31c139b5f1af9d8e127.js
-lib/jquery.ui.dialog.js: lib/jquery.ui.dialog-3aa110f5bb53968c48740442eedf8c56.js
 lib/jquery.ui.draggable.js: lib/jquery.ui.draggable-14f2a11976cf750565517af608bc7e7a.js
 lib/jquery.ui.droppable.js: lib/jquery.ui.droppable-c7f1a9110c0d59208af4215455c35334.js
 lib/jquery.ui.mouse.js: lib/jquery.ui.mouse-85e976a4dd424706afe05ebb9f5e82fe.js
@@ -129,9 +128,8 @@ lib/jquery.ui.widget.js: lib/jquery.ui.widget-0d68580b40839753efc5ace9498dba90.j
 lib/jquery.url.js: lib/jquery.url-54bab1cba764049f9199d478427a17df.js
 lib/superfish.min.js: lib/superfish.min-ffabcd0209faaae3216c63369a26facf.js
 lib/supersubs.min.js: lib/supersubs.min-51d2091adc4247f2751775293b4697b7.js
-lib/ui.core.js: lib/ui.core-3f028459bf942c6c689fcc5f11c9f292.js
 rails.js: rails-68b47f0ba7401778dadbcdeafc621db8.js
-application.css: application-ca7f67d43aa76ea04e0d71276f3c393d.css
+application.css: application-aac82068d5f727431884f03e487d4068.css
 bootstrap-image-gallery.css: bootstrap-image-gallery-d5c0778ddff99fb1e8dbd314793ba0d8.css
 bootstrap-image-gallery.min.css: bootstrap-image-gallery.min-cde48091d8367d7005ad36616632fc66.css
 bootstrap.css: bootstrap-856da68b6ae07a71b659dedecae850a9.css
@@ -139,7 +137,6 @@ bootstrap.min.css: bootstrap.min-90723bafe9e62082bc01b2d2e17c451b.css
 cart.css: cart-86780b2bedfb16f568a7b459ceb97a13.css
 file_upload/jquery.fileupload-ui.css: file_upload/jquery.fileupload-ui-f39575881f448014568e7c117a1fff41.css
 file_upload/progressbar.gif: file_upload/progressbar-54dfeacc002a35b014f009faa50bf254.gif
-jquery-ui.css: jquery-ui-6d9bee2bc83431a2ca440fd9ec95bce9.css
 jquery-ui.custom.css: jquery-ui.custom-bb782aff6a70a3531739cdd09fe60b50.css
 scss/cart.css: scss/cart-ae1de547ce4a3d5d357975e50ddf7c3f.css
 scss/dialog.css: scss/dialog-16a1497e0120767a5a1013e539cd30d5.css
