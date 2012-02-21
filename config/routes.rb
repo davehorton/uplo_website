@@ -50,6 +50,8 @@ Uplo::Application.routes.draw do
     post "signin", :to => "users/sessions#new"
     get "register", :to => "users/registrations#new"
     delete "signout", :to => "users/sessions#destroy"
+    get "change_password", :to => "users/passwords#edit_password"
+    put "update_password", :to => "users/passwords#update_password"
   end
   
   # API ROUTING

@@ -42,7 +42,7 @@ Uplo::Application.configure do
   end
 
   config.action_mailer.default_url_options = { :host => 'localhost:3000' }
-  config.action_mailer.delivery_method = :async_smtp
+  config.action_mailer.delivery_method = :smtp
   
   # GMAIL
   config.action_mailer.smtp_settings = {

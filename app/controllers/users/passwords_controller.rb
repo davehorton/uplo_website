@@ -1,32 +1,18 @@
-class Users::PasswordsController < ApplicationController
-  include Devise::Controllers::InternalHelpers
+class Users::PasswordsController < Devise::PasswordsController 
+  prepend_before_filter :require_no_authentication, :except => [:edit_password, :update_password]
+  before_filter :authenticate_user!, :only => [:edit_password, :update_password]
   
-  def new
-    build_resource({})
-    render_with_scope :new
-  end
-  
-  def create
-    self.resource = resource_class.send_reset_password_instructions(params[resource_name])
-
-    if successfully_sent?(resource)
-      respond_with({}, :location => new_session_path(resource_name))
-    else
-      respond_with_navigational(resource){ render_with_scope :new }
-    end
-  end
-  
-  def edit
+  def edit_password
     @user = current_user
   end
   
-  def update
+  def update_password
     @user = current_user
     if @user.update_profile(params[:user])
       sign_in(@user, :bypass => true)
       redirect_to("/profile", :notice => I18n.t('user.update_password_done')) 
     else
-      render :action => :edit
+      render :action => :edit_password
     end
   end
   
