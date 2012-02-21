@@ -78,8 +78,20 @@ class Api::GalleriesController < Api::BaseController
   #   page_size
   #   sort_field
   #   sort_direction
+  #   user_id: if null, list galleries of current user
   def list_galleries
-    galleries = @user.galleries.load_galleries(@filtered_params)
+    if params.has_key?("user_id") && params[:user_id]!=""
+      author = User.find_by_id params[:user_id].to_i
+      if author.nil?
+        @result[:msg] = "User does not exist."
+        @result[:success] = false
+        render :json => @result and return
+      end
+    else
+      author = @user
+    end
+    
+    galleries = author.galleries.load_galleries(@filtered_params)
     @result[:total] = galleries.total_entries    
     @result[:data] = galleries_to_json(galleries)
     @result[:success] = true
