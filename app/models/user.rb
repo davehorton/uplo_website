@@ -10,10 +10,9 @@ class User < ActiveRecord::Base
          :recoverable, :rememberable, :trackable, :validatable, :confirmable
 
   # Setup accessible (or protected) attributes for your model
-  attr_accessible :email, :password, :password_confirmation, :remember_me, 
+  attr_accessible :id, :email, :password, :password_confirmation, :remember_me, 
                   :first_name, :last_name, :username, :login, :nationality, :birthday, :gender, :avatar,
-                  :twitter, :facebook
-                  
+                  :twitter, :facebook                  
   
   # Paperclip
   has_attached_file :avatar, 
