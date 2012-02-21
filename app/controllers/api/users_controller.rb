@@ -9,7 +9,7 @@ class Api::UsersController < Api::BaseController
     if user.nil?
       @result[:msg] = "This user does not exist"
     else
-      @result[:user_info] = user
+      @result[:user_info] = init_user_info(user)
       @result[:success] = true
     end
     render :json => @result
@@ -24,7 +24,7 @@ class Api::UsersController < Api::BaseController
     }
     
     if user.save
-      @result[:user_info] = user
+      @result[:user_info] = init_user_info(user)
     else
       messages = user.errors.full_messages
       if messages.is_a?(Array)
@@ -45,7 +45,7 @@ class Api::UsersController < Api::BaseController
       @result[:msg] = I18n.t("common.invalid_params")
     elsif @user.update_profile(params[:user])
       @result[:success] = true
-      @result[:user_info] = @user
+      @result[:user_info] = init_user_info(@user)
     else
       @result[:success] = false
       messages = @user.errors.full_messages
@@ -70,7 +70,7 @@ class Api::UsersController < Api::BaseController
     sign_in(:user, user)
     # End of modification
     
-    @result[:user_info] = user
+    @result[:user_info] = init_user_info(user)
     @result[:success] = true
     render :json => @result
   end
@@ -98,4 +98,14 @@ class Api::UsersController < Api::BaseController
     render :json => @result
   end
   
+  protected
+  
+  # Init a hash containing user's info
+  def init_user_info(user)
+    info = user.serializable_hash(user.default_serializable_options)
+    # TODO: rename :avatar to :avatar_url and put it into User#exposed_methods
+    info[:avatar_url] = user.avatar_url
+    
+    return info
+  end
 end
