@@ -130,4 +130,9 @@ class ShoppingCartController < ApplicationController
     
     return true
   end
+  
+  protected
+  def set_current_tab
+    @current_tab = "browse"
+  end
 end

@@ -8,4 +8,9 @@ class OrdersController < ApplicationController
       @order = @cart.order
     end    
   end
+  
+  protected
+  def set_current_tab
+    @current_tab = "browse"
+  end
 end
