@@ -41,8 +41,15 @@
               
             %br
             .info.clearfix
+              %label= "Per item price:"
+              - price = @line_item.nil? ? @image.price : @line_item.price
+              = f.text_field(:price, :style => 'width:273px; margin:0 6px;', :value => price, :disabled => true)
+              
+            %br
+            .info.clearfix
               %label= "Quantity:"
-              = f.text_field(:quantity, :style => 'width:273px; margin:0 6px', :value => '1')
+              - quantity = @line_item.nil? ? 1 : @line_item.quantity
+              = f.text_field(:quantity, :style => 'width:273px; margin:0 6px', :value => quantity)
               
           .button-container.blue-gradient
             - btn_text = @line_item.nil? ? "Add to cart" : "Update cart"

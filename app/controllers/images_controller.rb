@@ -35,6 +35,7 @@ class ImagesController < ApplicationController
     }
 
     image = Image.new image_info
+    image.price = rand(50) #tmp for randomzise price
     unless image.save
       result = [{:error => 'Cannot save image' }]
     else
