@@ -8,7 +8,7 @@
       .inputs
         = f.input :card_number, :autofocus => true, :required => true
         = f.label :expires_on, 'Expiration date'
-        = f.date_select :expires_on, :discard_day => true, :start_year => Date.today.year, :end_year => (Date.today.year+10), :add_month_numbers => true, :order => [:month, :year], :required => true
+        = f.date_select :expires_on, :discard_day => true, :start_year => Date.today.year, :end_year => (Date.today.year+10), :add_month_numbers => false, :order => [:month, :year], :required => true
         = hidden_field_tag :order_id, @order_id
 
     .submit
