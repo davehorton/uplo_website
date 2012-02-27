@@ -98,7 +98,7 @@ class PaymentsController < ApplicationController
         else
           msg = 'Fail:' + response.message.to_s
         end
-        redirect_to :action => :checkout_result, :msg => msg, :success => success
+        redirect_to :action => :checkout_result, :msg => msg, :success => success, :trans_id => response.transaction_id
     end
   end
   
@@ -108,6 +108,7 @@ class PaymentsController < ApplicationController
     else
       flash[:warn] = params[:msg]
     end
+    @transaction_id = params[:trans_id]
   end
   
   def pp_gateway
