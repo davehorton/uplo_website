@@ -16,7 +16,8 @@
   height: 60px !important;
   width: 530px !important; }
 .filter-container .jcarousel-container {
-  border: 1px solid #DDDDDD !important; }
+  border: 1px solid #DDDDDD !important;
+  background: -moz-linear-gradient(center top, white 0%, white 0%, #ceeff6 100%) repeat scroll 0 0 transparent !important; }
 .filter-container .jcarousel-container-horizontal {
   padding: 10px 35px 10px 44px !important;
   width: 541px !important; }
