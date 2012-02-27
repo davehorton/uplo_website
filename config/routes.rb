@@ -39,6 +39,7 @@ Uplo::Application.routes.draw do
     get 'images/search', :to => 'images#search'
     get 'images/delete/:id', :to => 'images#destroy'
     get 'images/list', :to => 'images#list'
+    get 'images/load_image', :to => 'images#get_image_data'
     resources :images
   end
 

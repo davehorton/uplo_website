@@ -1,5 +1,5 @@
-= stylesheet_link_tag("slideshow.css")
-= javascript_include_tag("lib/jquery.jcarousel.js")
+= stylesheet_link_tag("slideshow.css", "scss/filter.css")
+= javascript_include_tag("lib/jquery.jcarousel.js", "filter/filtrr.js", "filter/effects.js")
 
 .image.image-browse
   .slideshow-container.clearfix
@@ -8,30 +8,23 @@
         .gallery-container.round-box
           .gallery-image
             .image-content
-              = image_tag @selected_image.url(:medium)
+              = image_tag url_for(:controller => 'images', :action => 'get_image_data', :id => @selected_image.id, :size => 'medium'), :id => "origin-pic"
 
-        .filter-container
-          %ul
-            %li
-              %input.not-implement{:type => "button", :value => "Filter"}
-            %li
-              %input.not-implement{:type => "button", :value => "Filter"}
-            %li
-              %input.not-implement{:type => "button", :value => "Filter"}
-            %li
-              %input.not-implement{:type => "button", :value => "Filter"}
-            %li
-              %input.not-implement{:type => "button", :value => "Filter"}
+          .filter-container
+            %ul#filterCarousel.jcarousel-skin-tango
+              - (1..10).each do |i|
+                %li
+                  = image_tag "/assets/filter-e#{i}-preview.jpg", :class => "filter-img", :data => {:effect => "e#{i}"}, :title => "filter effect #{i}"
 
-      = simple_form_for(:image, :id => @selected_image, :action => :update, :method => 'put') do |f|
+      = simple_form_for(:image, :id => @selected_image, :action => :update, :method => 'put', :html => {:id => "frmImageData"}) do |f|
         .right-container.right
           .button-container.round-box.blue-gradient
             %ul
               %li
                 %div
-                  %input.link-button{:type => "button", 
-                                     :value => I18n.t("slideshow.cancel"),
-                                     :data => {:href => "/back"}}                  
+                  = button_to_function I18n.t("slideshow.cancel"), "makeConfirmation()", 
+                      :class => 'link-button', :data => {:href => "/back"}, :value => I18n.t("slideshow.cancel")
+
               %li
                 %div
                   %input.not-implement{:type => "button", :value => I18n.t("slideshow.print")}
@@ -51,6 +44,8 @@
                 = I18n.t("slideshow.description")
               %li
                 = f.text_area :description, :value => @selected_image.description
+              %li
+                = f.hidden_field :filtered_image
 
     .bottom-container.clearfix
       %div
@@ -65,16 +60,11 @@
                   = image_tag(image.data.url(:thumb), :size => "70x70", :style => "border: solid 2px orange")
                 - else
                   = image_tag(image.data.url(:thumb), :size => "75x75")
+
 :erb
   <script type="text/javascript">
-    $(".filter-container").delegate(
+    $(".button-container").delegate(
       ".not-implement", "click", function() {
-        alert("This feature has not been implemented yet.");
-        return false;
-      }
-    );
-    $("form .button-container").delegate(
-      "input[value!='Save']", "click", function() {
         alert("This feature has not been implemented yet.");
         return false;
       }
@@ -104,12 +94,61 @@
           initCallback: mycarousel_initCallback,
           itemFallbackDimension: 180
       });
+      jQuery('#filterCarousel').jcarousel({
+          auto: 2,
+          start: 1,
+          scroll: 3,
+          initCallback: mycarousel_initCallback,
+          itemFallbackDimension: 180
+      });
     });
     
-    $(".link-button").click(function(e){
-      e.preventDefault();
-      if($(this).attr("data-href"))
-        window.location = $(this).attr("data-href");
-      return false;
+    $('#frmImageData').submit(function(e){
+      if($("canvas").size() > 0){
+        var cvs = $("canvas")[0];
+        $("#image_filtered_image").attr("value", cvs.toDataURL("image/jpeg"));
+      }
     });
+    
+    window.mask = new Mask();
+    var loader_img = document.createElement("img");
+    loader_img.src = "/assets/loading.gif";
+    loader_img.style.width = "128px";
+    loader_img.style.height = "128px";
+    var loader = document.createElement("div");
+    loader.id = "loader";
+    loader.classList.add("loading");
+    loader.appendChild(loader_img);
+    $("body").append(loader);
+    $("#loader").fadeOut(100);
+    $("#filterCarousel").delegate(".filter-img", "click", function(){
+      $this = $(this);
+      window.mask.show();
+      $("#loader").fadeIn(100);
+      $(".image-content canvas").remove();  
+      $(".image-content #origin-pic").css("display", "block");
+      window.setTimeout(function(){
+        EFFECTS[$this.attr("data-effect")]();
+      }, 30);
+    });
+    
+    function makeConfirmation(){
+      confirmDlg = new Popup({
+        id: "clear-confirm-dialog",
+        title: "Canceling confirm",
+        text: "Please save your change(s) first. Do you still want to quit?",
+        css: {width: "231px", textAlign: "center"},
+        buttons:{
+          "Yes": function(){
+            url = $(".link-button").attr("data-href");
+            console.log(url);
+            window.location = url;
+          },
+          "No": function(){
+            confirmDlg.hide();
+          }
+        }
+      });
+      confirmDlg.show();
+    }
   </script>

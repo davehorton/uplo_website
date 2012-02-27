@@ -26,8 +26,16 @@ class ImagesController < ApplicationController
   def new 
   end
   
+  def get_image_data
+    img = Image.find_by_id params[:id]
+    img_url = img.url(params[:size])
+    img_data = Magick::Image.read(img_url).first
+    send_data(img_data.to_blob, :disposition => 'inline', :type => 'image/jpeg')
+  end
+  
   def create
     data = params[:image][:data]
+
     image_info = {
       :name => data[0].original_filename,
       :gallery_id => params[:gallery_id],
@@ -101,7 +109,18 @@ class ImagesController < ApplicationController
   # params: id => Image ID
   def update
     image = Image.find_by_id params[:id]
-    image.update_attributes params[:image]
+    img_info = params[:image]
+    if img_info.has_key?(:filtered_image) and !img_info[:filtered_image].nil? and img_info[:filtered_image]!=""
+      tmp = img_info[:filtered_image].split(",")
+      img_content = ActiveSupport::Base64.decode64(tmp[1])
+      file_path = "#{Rails.root}/tmp/#{image.name}"            
+      File.open(file_path, "wb") {|file| file.write(img_content)}
+#      image.data = File.open(file_path)
+    end
+    
+#    img_info.delete :filtered_image
+#    image.attributes = img_info
+#    image.save
     redirect_to :action => :show, :id => params[:id]
   end
   
