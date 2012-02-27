@@ -829,11 +829,12 @@
                 canvas.getContext("2d").drawImage(img, 0, 0);
                 var pos = findPos(imgElem);
                 var posP = findPos(imgElem.offsetParent);
+                var parent = $(imgElem).parent();
 //                canvas.style.top = Math.abs(pos.top - posP.top) + "px";
 //                canvas.style.left = Math.abs(pos.left - posP.left) + "px"; 
 //                canvas.style.position = "absolute";               
-                if (imgElem.offsetParent) {
-                    imgElem.offsetParent.appendChild(canvas);
+                if (parent.size() > 0) {
+                    parent[0].appendChild(canvas);
                     imgElem.style.display = "none";
                 }
                 img = null;
