@@ -19,7 +19,6 @@
     // a complete user interface based on the given upload/download
     // templates.
     $.widget('blueimpUI.fileupload', $.blueimp.fileupload, {
-
         options: {
             // By default, files added to the widget are uploaded as soon
             // as the user clicks on the start buttons. To enable automatic
@@ -58,7 +57,9 @@
             // The add callback is invoked as soon as files are added to the fileupload
             // widget (via file input selection, drag & drop or add API call).
             // See the basic file upload widget for more information:
+
             add: function (e, data) {
+                console.log($(this));
                 var that = $(this).data('fileupload'),
                     files = data.files;
                 that._adjustMaxNumberOfFiles(-files.length);
@@ -68,6 +69,7 @@
                     .prependTo($(this).find('.files.upload'))
                     .data('data', data);
                 // Force reflow:
+                that._renderUploadCounter();
                 that._reflow = that._transition && data.context[0].offsetWidth;
                 data.context.addClass('in');
                 if ((that.options.autoUpload || data.autoUpload) &&
@@ -122,6 +124,7 @@
                                 }
                                 template.replaceAll(node)
                                         .prependTo($('.files.download'));
+                that._renderUploadCounter();
                                 // Force reflow:
                                 that._reflow = that._transition &&
                                     template[0].offsetWidth;
@@ -327,6 +330,15 @@
                 options: this.options
             })).children();
         },
+        _renderUploadCounter: function(){
+            $("#upload-counter").remove();
+            var div = document.createElement("div");
+            div.id = "upload-counter";
+            var total = $(".template-upload").size();
+            var str = total + " file(s) is ready to upload";
+            div.innerHTML = str;
+            $(".gallery-header").append(div);
+        },
 
         _renderUpload: function (files) {
             var that = this,
@@ -386,6 +398,13 @@
             } else {
                 data.jqXHR.abort();
             }
+        },
+        _cancelAndRecount: function(that) {
+          console.log(that);
+          console.log(this);
+            this._cancelHandler;
+            that._renderUploadCounter();
+            return false;
         },
 
         _editHandler: function (e) {
@@ -508,6 +527,7 @@
         },
 
         _initEventHandlers: function () {
+            var that = this;
             $.blueimp.fileupload.prototype._initEventHandlers.call(this);
             var eventData = {fileupload: this};
             this._files
@@ -521,7 +541,12 @@
                     '.cancel button',
                     'click.' + this.options.namespace,
                     eventData,
+//                    this._cancelAndRecount(that)
                     this._cancelHandler
+//                    function(e){
+//                      this._cancelHandler;
+////                      that._renderUploadCounter();
+//                    }
                 )
                 .delegate(
                     '.edit button',
@@ -537,6 +562,7 @@
                 );
             this._initButtonBarEventHandlers();
             this._initTransitionSupport();
+            this._renderUploadCounter();
         },
 
         _destroyEventHandlers: function () {
