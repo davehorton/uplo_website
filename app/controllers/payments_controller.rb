@@ -103,11 +103,11 @@ class PaymentsController < ApplicationController
   end
   
   def checkout_result
-    if params[:success]
-      flash[:notice] = params[:msg]
-    else
-      flash[:warn] = params[:msg]
-    end
+#    if params[:success]
+#      flash[:notice] = params[:msg]
+#    else
+#      flash[:warn] = params[:msg]
+#    end
     @transaction_id = params[:trans_id]
   end
   
