@@ -860,7 +860,7 @@ a.icon-link{text-decoration: none;}
 /*** BROWSE ***/
 .browse .browse-header{text-align: right;}
 .image-browse .slideshow-container{width: 100%;}
-.image-browse .slideshow-container .left-container{width: 620px; height: 430px;}
+.image-browse .slideshow-container .left-container{width: 620px; height: 525px !important;}
 .image-browse .slideshow-container .gallery-image{
   cursor: pointer;
   display: table;
