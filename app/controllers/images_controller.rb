@@ -115,12 +115,12 @@ class ImagesController < ApplicationController
       img_content = ActiveSupport::Base64.decode64(tmp[1])
       file_path = "#{Rails.root}/tmp/#{image.name}"            
       File.open(file_path, "wb") {|file| file.write(img_content)}
-#      image.data = File.open(file_path)
+      image.data = File.open(file_path)
     end
     
-#    img_info.delete :filtered_image
-#    image.attributes = img_info
-#    image.save
+    img_info.delete :filtered_image
+    image.attributes = img_info
+    image.save
     redirect_to :action => :show, :id => params[:id]
   end
   
