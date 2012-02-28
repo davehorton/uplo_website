@@ -88,7 +88,7 @@ class PaymentsController < ApplicationController
         card_string = params[:card]["card_number"]
 
         order = Order.find_by_id params[:order_id]
-        an_value = Payment.create_authorizenet_test(card_string, expires_on)
+        an_value = Payment.create_authorizenet_test(card_string, expires_on, {:shipping => params[:shipping], :address => params[:address]})
         response = an_value[:transaction].purchase(order.order_total, an_value[:credit_card])
 
         success = !response.nil? and response.success?

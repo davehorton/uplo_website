@@ -102,6 +102,14 @@
     float:left;
   }
 }
+
+.address {
+  padding-bottom: 25px;
+  .order_summary.round-box {
+    float: left;
+    width: 421px !important;
+  }
+}
 .order_summary{
   &.round-box {
     margin: 5px;
@@ -115,6 +123,12 @@
   .inputs{
     width: 100%;
     height: 70px;
+    .info {
+      padding-bottom: 5px;
+      select {
+        width: 215px !important;
+      }
+    }
   }
   .actions{
     float:left;
