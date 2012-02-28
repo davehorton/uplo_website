@@ -12,9 +12,11 @@
 
           .filter-container
             %ul#filterCarousel.jcarousel-skin-tango
+              %li
+                = image_tag "/assets/non-filter-preview.jpg", :onclick => "clearFilter()", :title => "Remove effect - back to original image"
               - (1..10).each do |i|
                 %li
-                  = image_tag "/assets/filter-e#{i}-preview.jpg", :class => "filter-img", :data => {:effect => "e#{i}"}, :title => "filter effect #{i}"
+                  = image_tag "/assets/filter-e#{i}-preview.jpg", :class => "filter-img", :data => {:effect => "e#{i}"}, :title => "Apply filter: effect #{i}"
 
       = simple_form_for(:image, :id => @selected_image, :action => :update, :method => 'put', :html => {:id => "frmImageData"}) do |f|
         .right-container.right
@@ -71,6 +73,11 @@
     );
   </script>
   <script type="text/javascript">
+    function clearFilter(){
+      $(".image-content canvas").remove();  
+      $(".image-content #origin-pic").css("display", "inline-block");
+    }
+    
     function mycarousel_initCallback(carousel)
     {
       // Disable autoscrolling if the user clicks the prev or next button.
