@@ -12,9 +12,20 @@
 /*jslint nomen: true, unparam: true, regexp: true */
 /*global window, document, URL, webkitURL, FileReader, jQuery */
 
+
 (function ($) {
     'use strict';
-
+    
+    function countUploadFiles(){
+        $("#upload-counter").remove();
+        var div = document.createElement("div");
+        div.id = "upload-counter";
+        var total = $(".template-upload").size();
+        var str = total + " file(s) is ready to upload";
+        div.innerHTML = str;
+        $(".gallery-header").append(div);
+    }
+    
     // The UI version extends the basic fileupload widget and adds
     // a complete user interface based on the given upload/download
     // templates.
@@ -69,7 +80,7 @@
                     .prependTo($(this).find('.files.upload'))
                     .data('data', data);
                 // Force reflow:
-                that._renderUploadCounter();
+                countUploadFiles();
                 that._reflow = that._transition && data.context[0].offsetWidth;
                 data.context.addClass('in');
                 if ((that.options.autoUpload || data.autoUpload) &&
@@ -124,7 +135,7 @@
                                 }
                                 template.replaceAll(node)
                                         .prependTo($('.files.download'));
-                that._renderUploadCounter();
+                  countUploadFiles();
                                 // Force reflow:
                                 that._reflow = that._transition &&
                                     template[0].offsetWidth;
@@ -330,15 +341,6 @@
                 options: this.options
             })).children();
         },
-        _renderUploadCounter: function(){
-            $("#upload-counter").remove();
-            var div = document.createElement("div");
-            div.id = "upload-counter";
-            var total = $(".template-upload").size();
-            var str = total + " file(s) is ready to upload";
-            div.innerHTML = str;
-            $(".gallery-header").append(div);
-        },
 
         _renderUpload: function (files) {
             var that = this,
@@ -398,13 +400,9 @@
             } else {
                 data.jqXHR.abort();
             }
-        },
-        _cancelAndRecount: function(that) {
-          console.log(that);
-          console.log(this);
-            this._cancelHandler;
-            that._renderUploadCounter();
-            return false;
+            window.setTimeout(function(){
+              countUploadFiles();
+            }, 200);
         },
 
         _editHandler: function (e) {
@@ -541,12 +539,7 @@
                     '.cancel button',
                     'click.' + this.options.namespace,
                     eventData,
-//                    this._cancelAndRecount(that)
                     this._cancelHandler
-//                    function(e){
-//                      this._cancelHandler;
-////                      that._renderUploadCounter();
-//                    }
                 )
                 .delegate(
                     '.edit button',
@@ -562,7 +555,6 @@
                 );
             this._initButtonBarEventHandlers();
             this._initTransitionSupport();
-            this._renderUploadCounter();
         },
 
         _destroyEventHandlers: function () {
