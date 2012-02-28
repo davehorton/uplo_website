@@ -73,6 +73,12 @@
 .button-container .left-btn {
   float: left; }
 
+.address {
+  padding-bottom: 25px; }
+  .address .order_summary.round-box {
+    float: left;
+    width: 421px !important; }
+
 .order_summary.round-box {
   margin: 5px;
   padding: 20px;
@@ -83,5 +89,9 @@
 .order_summary .inputs {
   width: 100%;
   height: 70px; }
+  .order_summary .inputs .info {
+    padding-bottom: 5px; }
+    .order_summary .inputs .info select {
+      width: 215px !important; }
 .order_summary .actions {
   float: left; }
