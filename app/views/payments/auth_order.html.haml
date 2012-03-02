@@ -11,75 +11,40 @@
         = f.date_select :expires_on, :discard_day => true, :start_year => Date.today.year, :end_year => (Date.today.year+10), :add_month_numbers => false, :order => [:month, :year], :required => true
         = hidden_field_tag :order_id, @order_id
         
-    .address
-      .order_summary.round-box
-        .header Please submit your address
-        .inputs
-          .info
-            = label_tag :address_first_name, "First name"
-            = text_field :address, :first_name, :autofocus => true, :required => true
-          .info
-            = label_tag :address_last_name, "Last name"
-            = text_field :address, :last_name, :required => true
-          .info
-            = label_tag :address_company, "Company"
-            = text_field :address, :company, :required => false
-          .info
-            = label_tag :address_street_address, "Street address"
-            = text_field :address, :street_address, :required => true
-          .info
-            = label_tag :address_city, "City"
-            = text_field :address, :city, :required => true
-          .info
-            = label_tag :address_state, "State"
-            = text_field :address, :state, :required => true
-          .info
-            = label_tag :address_zip, "Zip code"
-            = text_field :address, :zip, :required => true
-          .info
-            = label_tag :address_country, "Country"
-            = select_tag :country, options_for_select({"USA" => "USA", "Canada" => "Canada"}, "USA")
-          .info
-            = label_tag :address_phone, "Phone"
-            = text_field :address, :phone, :as => :string, :required => false
-          .info
-            = label_tag :address_fax, "Fax"
-            = text_field :address, :fax
-            
-      .order_summary.round-box
-        .header Please submit the shipping address
-        .inputs
-          .info
-            = label_tag :shipping_first_name, "First name"
-            = text_field :shipping, :first_name, :autofocus => true, :required => true
-          .info
-            = label_tag :shipping_last_name, "Last name"
-            = text_field :shipping, :last_name, :required => true
-          .info
-            = label_tag :shipping_company, "Company"
-            = text_field :shipping, :company, :required => false
-          .info
-            = label_tag :shipping_street_address, "Street address"
-            = text_field :shipping, :street_address, :required => true
-          .info
-            = label_tag :shipping_city, "City"
-            = text_field :shipping, :city, :required => true
-          .info
-            = label_tag :shipping_state, "State"
-            = text_field :shipping, :state, :required => true
-          .info
-            = label_tag :shipping_zip, "Zip code"
-            = text_field :shipping, :zip, :required => true
-          .info
-            = label_tag :shipping_country, "Country"
-            = select_tag :country, options_for_select({"USA" => "USA", "Canada" => "Canada"}, "USA")
-          .info
-            = label_tag :shipping_phone, "Phone"
-            = text_field :shipping, :phone, :as => :string, :required => false, :onchange => "validateNumber()"
-          .info
-            = label_tag :shipping_fax, "Fax"
-            = text_field :shipping, :fax
-        
+    .order_summary.round-box{:style => "height:388px;"}
+      .header Please submit the shipping address
+      .inputs
+        .info
+          = label_tag :shipping_first_name, "First name"
+          = text_field :shipping, :first_name, :autofocus => true, :required => true
+        .info
+          = label_tag :shipping_last_name, "Last name"
+          = text_field :shipping, :last_name, :required => true
+        .info
+          = label_tag :shipping_company, "Company"
+          = text_field :shipping, :company, :required => false
+        .info
+          = label_tag :shipping_street_address, "Street address"
+          = text_field :shipping, :street_address, :required => true
+        .info
+          = label_tag :shipping_city, "City"
+          = text_field :shipping, :city, :required => true
+        .info
+          = label_tag :shipping_state, "State"
+          = text_field :shipping, :state, :required => true
+        .info
+          = label_tag :shipping_zip, "Zip code"
+          = text_field :shipping, :zip, :required => true
+        .info{:style => "height: 30px; padding-top: 5px;"}
+          = label_tag :shipping_country, "Country"
+          = select_tag :country, options_for_select({"USA" => "USA", "Canada" => "Canada"}, "USA")
+        .info
+          = label_tag :shipping_phone, "Phone"
+          = text_field :shipping, :phone, :as => :string, :required => false, :onchange => "validateNumber()"
+        .info
+          = label_tag :shipping_fax, "Fax"
+          = text_field :shipping, :fax
+          
     .submit.clearfix
       = f.submit "place order", :class => 'btnlarge btn', :style => 'float:right'
 
