@@ -17,7 +17,7 @@ class Api::SearchController < Api::BaseController
   def search
     result = {}
     
-    search_params = {:query => params[:query], :filtered_params => @filtered_params}
+    search_params = {:query => URI.unescape(params[:query]), :filtered_params => @filtered_params}
     if params[:search_type].nil?
       result = search_global search_params        
       result[:success] = true
