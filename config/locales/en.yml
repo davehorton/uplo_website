@@ -8,7 +8,7 @@ en:
     error_resource_notfound: "Resource not found"
     error_unauthorized: "You are not authorized to access this resource"
     error_not_login: "You must login first"
-    search_hint: "Search images"
+    search_hint: "Enter search key"
     male: "Male"
     female: "Female"
     

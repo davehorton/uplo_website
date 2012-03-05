@@ -1,4 +1,12 @@
+.empty-label {
+  color: #BBBBBB;
+  margin: 40px 0 0 20px;
+}
 .section {
+  .group-label{
+    width: 100%;
+    height: 40px;
+  }
   .label{
     font-weight: bold;
     font-size: 20px;
@@ -13,7 +21,14 @@
   .clear {
     clear:both;
   }
-  .pagination{text-align: center;}
+  .pagination{ text-align: center; }
+  .result-counter{
+    float: left;
+    font-size: 14px;
+    padding: 0 0 5px 5px;
+    font-style: italic;
+    color: #B2B2B2;
+  }
 }
 .section.images .wrapper{
   float: left;

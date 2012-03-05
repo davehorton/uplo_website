@@ -1,12 +1,12 @@
 - content_for :head do
-  = stylesheet_link_tag("search.css")
+  = stylesheet_link_tag("scss/search.css")
 
 
 - if @users.count == 0
   = "There is no result for Gallery owners with \"#{params[:query]}\""
 
 - else
-  = "#{@users.total_entries} result for Gallery owners with \"#{params[:query]}\""
+  = "#{@users.total_entries} results for Gallery owners with \"#{params[:query]}\""
   .clear &nbsp;
   .section.users
     .clear

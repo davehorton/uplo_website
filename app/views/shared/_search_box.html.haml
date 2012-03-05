@@ -5,7 +5,7 @@
     .search-container
       .search-icon
       %input#search-textbox{:type => "text", :name => "query", :class => "text", 
-                            :value => params[:query], :title => I18n.t("common.search_hint")}
+                            :value => params[:query], :placeHolder => I18n.t("common.search_hint")}
       .search-right-padding
 
 :erb

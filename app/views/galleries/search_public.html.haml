@@ -1,10 +1,10 @@
 - content_for :head do
-  = stylesheet_link_tag("search.css")
+  = stylesheet_link_tag("scss/search.css")
 
 - if @galleries.count == 0
   = "There is no result for Galleries with \"#{params[:query]}\""
 - else
-  = "#{@galleries.total_entries} result for Galleries with \"#{params[:query]}\""
+  = "#{@galleries.total_entries} results for Galleries with \"#{params[:query]}\""
   .clear &nbsp;
   .section.galleries
     .clear

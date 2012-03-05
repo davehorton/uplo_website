@@ -1,14 +1,19 @@
 - content_for :head do
-  = stylesheet_link_tag("search.css")
+  = stylesheet_link_tag("scss/search.css")
 
 
 #search-box-wrapper
   = render(:partial => "shared/search_box", :locals => {:action => "search"})
   
+- if @users.count==0 and @galleries.count==0 and @images.count==0
+  .empty-label There is no search result with "#{params[:query]}"
+  
 - if @users.count > 0
   .section.users
-    .label Gallery owners:
-    .more= link_to "(more result..)", :controller=>'users', :action=>'search', :query=>params[:query]
+    .group-label
+      .label Gallery owners:
+      .more= link_to "(more results..)", :controller=>'users', :action=>'search', :query=>params[:query]
+    .result-counter= "#{@users.total_entries} results for Gallery owners with \"#{params[:query]}\""
     .clear
     - @users.each do |user|
       .wrapper
@@ -21,8 +26,10 @@
   
 - if @galleries.count > 0
   .section.galleries
-    .label Galleries: 
-    .more= link_to "(more result..)", :controller=>'galleries', :action=>'search_public', :query=>params[:query]
+    .group-label
+      .label Galleries: 
+      .more= link_to "(more results..)", :controller=>'galleries', :action=>'search_public', :query=>params[:query]
+    .result-counter= "#{@galleries.total_entries} results for Galleries with \"#{params[:query]}\""
     .clear
     - @galleries.each do |gallery|
       .wrapper{:id => "gallery-container-#{gallery.id}"}
@@ -35,7 +42,9 @@
 
 - if @images.count >0
   .section.images
-    .label{:style=>"clear:both;"} Images
+    .group-label
+      .label{:style=>"clear:both;width:100%;"} Images
+    .result-counter= "#{@images.total_entries} results for Images with \"#{params[:query]}\""
     .clear
     - @images.each do |img|
       .wrapper{:title=>"#{img.name}"}
