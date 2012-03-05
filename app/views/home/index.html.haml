@@ -14,7 +14,7 @@
           - @images.each do |image|
             %li
               %a.image{:href => image.url(:medium)}
-                = image_tag(image.image_thumb_url, :title => image.name)
+                = image_tag(image.image_thumb_url, :title => "#{image.name}<br />#{image.description}<br />#{image.user_fullname}<br />#{image.price.nil? ? '$0' : number_to_currency(image.price, {:precision => 2})}")
                 .link= url_for(:controller => "images", :action => "browse", :id => "#{image.id}")
       :erb
         <script type="text/javascript">

@@ -1,7 +1,7 @@
 - content_for :head do
   = javascript_include_tag("lib/jail.min.js")
   = javascript_include_tag("app/gallery.js")
-  
+  = stylesheet_link_tag("scss/image.css")
 
 .browse.galleries.images
   .browse-header.clearfix
@@ -12,12 +12,17 @@
       .empty-data= "There is no image. Please add image."
     - else
       - @images.each do |image|
-        .gallery-container.image-container{:id => "image-container-#{image.id}"}
+        .gallery-container.image-container{:id => "image-container-#{image.id}", :title=>"#{image.name}"}
           - url = url_for(:controller => "images", :action => "browse", :id => "#{image.id}")
-          %a.gallery-image{:href => "#{url}" }
-            %span.image-link.default
-              = async_image_tag(image.url(:thumb), :class => "image-thumb", 
-                                "data-width" => image.width, "data-height" => image.height)
+          %a{ :href => "#{url}" }
+            %dl.entry
+              %dt.preview
+                .gallery-image
+                  = async_image_tag(image.data.url(:thumb), :class => "image-thumb")
+              %dd.name
+                %div= image.name.truncate(13)
+                %div= image.user_fullname.truncate(17)
+              %dd.price= image.price.nil? ? '$0' : number_to_currency(image.price, {:precision => 2})
       
   = render_pagination(@images, {:controller => "home", :action => params[:action]})
 
