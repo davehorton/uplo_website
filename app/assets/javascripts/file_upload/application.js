@@ -23,6 +23,7 @@ $(function () {
         acceptFileTypes: /(\.|\/)(gif|jpe?g|png)$/i,
         previewMaxWidth: 180,
         previewMaxHeight: 180,
+        autoUpload: true,
         displayNumber: page_size
     });
     // Load existing files:
