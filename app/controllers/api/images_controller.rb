@@ -33,11 +33,25 @@ class Api::ImagesController < Api::BaseController
       @result[:success] = false
       return render :json => @result
     end
-    image = gallery.images.create(params[:image])
+    img_info = params[:image]
+    effect_id = nil
+    if img_info.has_key?(:effect_id) and !img_info[:effect_id].nil? and img_info[:effect_id]!=""
+      effect_id = img_info[:effect_id] if img_info[:effect_id].to_i > 0
+      img_info.delete :effect_id
+    end
+    
+    image = gallery.images.create(img_info)
     unless image.save
       @result[:msg] = image.errors 
       @result[:success] = false
     else
+      unless effect_id.nil?
+        file_path = "#{Rails.root}/tmp/#{image.name}"
+        FilterEffect::Effect.send("e#{effect_id}", image.url, file_path)
+        image.data = File.open(file_path)
+        image.save
+      end
+      
       @result[:image] = image.serializable_hash(image.default_serializable_options)
       @result[:success] = true
     end
