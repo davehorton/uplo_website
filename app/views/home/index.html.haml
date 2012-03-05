@@ -14,8 +14,8 @@
           - @images.each do |image|
             %li
               %a.image{:href => image.url(:medium)}
-                = image_tag(image.image_thumb_url, :title => image.name, 
-                            "data-width" => image.width, "data-height" => image.height)
+                = image_tag(image.image_thumb_url, :title => image.name)
+                .link= url_for(:controller => "images", :action => "browse", :id => "#{image.id}")
       :erb
         <script type="text/javascript">
           $(document).ready(function(){
@@ -31,9 +31,16 @@
                 var gallery = this;
                 gallery.play(5000);
                 $("#gallery .galleria-container").css("height", 550);
+              },
+              dataConfig: function(img) {
+                return {
+                  link: $(img).siblings('.link').html()
+                };
               }
             });
           });
+          
+    
         </script>
 
 :erb
