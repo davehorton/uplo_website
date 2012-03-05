@@ -153,6 +153,7 @@ jquery-ui.custom.css: jquery-ui.custom-bb782aff6a70a3531739cdd09fe60b50.css
 scss/cart.css: scss/cart-a00c819367f1c26885c93fd320e87746.css
 scss/dialog.css: scss/dialog-5dec5a3c5274437ee34726e7e4356988.css
 scss/filter.css: scss/filter-739c80ba8eabd3a953be7d9ea50b38b6.css
+scss/image.css: scss/image-cdc86fbf7bdce7a19aa3c9424c760c91.css
 scss/search.css: scss/search-a0e687522dc68c0d48ce0c6d3fa48465.css
 slideshow.css: slideshow-4e9846ec17887bfc57b83c7043b75588.css
 jquery-ui.js: jquery-ui-6a97e5e99c09f28e0afb72345403d903.js
