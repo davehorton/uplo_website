@@ -13,7 +13,6 @@
     = f.input :last_name, :required => true, :autofocus => true
     = f.input :password, :required => true
     = f.input :password_confirmation, :required => true
-    = f.input :gender, :as => :radio, :collection => gender_options
   .actions
     = f.button :submit, "Sign up"
 = render :partial => "users/shared/links"
