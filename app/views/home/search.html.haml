@@ -33,7 +33,7 @@
     .clear
     - @galleries.each do |gallery|
       .wrapper{:id => "gallery-container-#{gallery.id}"}
-        %a{:href => gallery_images_path(gallery), :style => "float:left;"}
+        %a{:href => "#{url_for(:controller => 'images', :action => 'public_images', :gallery_id => gallery.id)}", :style => "float:left;"}
           .preview
             =raw async_image_tag(gallery_cover_image_url(gallery), :class => "gallery-cover-image")
         .info

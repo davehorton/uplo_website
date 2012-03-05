@@ -26,6 +26,12 @@ class ImagesController < ApplicationController
   def new 
   end
   
+  def public_images
+    if find_gallery!
+      @images = @gallery.images.load_popular_images(@filtered_params)
+    end
+  end
+  
   def get_image_data
     img = Image.find_by_id params[:id]
     img_url = img.url(params[:size])
@@ -139,7 +145,7 @@ class ImagesController < ApplicationController
   
   def set_current_tab
     tab = "galleries"
-    browse_actions = ["browse", "order"]
+    browse_actions = ["browse", "order", "public_images"]
     unless browse_actions.index(params[:action]).nil?
       tab = "browse"
     end

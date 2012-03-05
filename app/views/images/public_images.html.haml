@@ -1,0 +1,45 @@
+- content_for :head do
+  = javascript_include_tag("lib/jail.min.js")
+  = javascript_include_tag("app/gallery.js")
+  
+.galleries.images
+  .browse-header.clearfix
+    #search-box-wrapper
+      = render(:partial => "shared/search_box", :locals => {:action => "/search"})
+      
+  .gallery-header
+    - is_owner = @gallery.is_owner?(current_user)
+    %h2.gallery-name= @gallery.name
+    %span= "("
+    %span.gallery-permission
+      - if is_owner
+        %a{:href => "#"}= @gallery.permission_string
+      - else
+        = @gallery.permission_string
+    %span= ")"
+    - if !is_owner
+      %span.author-info
+        %span= "From "
+        %span.author-link
+          %a{:href => "#"}= @gallery.user.fullname
+    .description 
+      = @gallery.description
+        
+  .images-wrapper.clearfix
+    - if @images.blank?
+      .empty-data= "There is no image. Please add image."
+    - else
+      - @images.each do |image|
+        .gallery-container.image-container{:id => "image-container-#{image.id}"}
+          - url = url_for(:controller => "images", :action => "browse", :id => "#{image.id}")
+          %a.gallery-image{:href => "#{url}" }
+            %span.image-link.default
+              = async_image_tag(image.url(:thumb), :class => "image-thumb", 
+                                "data-width" => image.width, "data-height" => image.height)
+      
+  = render_pagination(@images, {:controller => "images", :action => params[:action]})
+
+:erb
+  <script type="text/javascript">
+    gallery.setup();
+  </script>
