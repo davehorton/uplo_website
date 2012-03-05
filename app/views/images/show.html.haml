@@ -47,7 +47,7 @@
               %li
                 = f.text_area :description, :value => @selected_image.description
               %li
-                = f.hidden_field :filtered_image
+                = f.hidden_field :filtered_effect
 
     .bottom-container.clearfix
       %div
@@ -109,14 +109,7 @@
           itemFallbackDimension: 180
       });
     });
-    
-    $('#frmImageData').submit(function(e){
-      if($("canvas").size() > 0){
-        var cvs = $("canvas")[0];
-        $("#image_filtered_image").attr("value", cvs.toDataURL("image/jpeg"));
-      }
-    });
-    
+        
     window.mask = new Mask();
     var loader_img = document.createElement("img");
     loader_img.src = "/assets/loading.gif";
@@ -136,6 +129,7 @@
       $(".image-content #origin-pic").css("display", "inline-block");
       window.setTimeout(function(){
         EFFECTS[$this.attr("data-effect")]();
+        $("#image_filtered_effect").attr("value", $this.attr("data-effect"));
       }, 30);
     });
     

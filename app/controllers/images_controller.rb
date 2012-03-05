@@ -110,15 +110,13 @@ class ImagesController < ApplicationController
   def update
     image = Image.find_by_id params[:id]
     img_info = params[:image]
-    if img_info.has_key?(:filtered_image) and !img_info[:filtered_image].nil? and img_info[:filtered_image]!=""
-      tmp = img_info[:filtered_image].split(",")
-      img_content = ActiveSupport::Base64.decode64(tmp[1])
-      file_path = "#{Rails.root}/tmp/#{image.name}"            
-      File.open(file_path, "wb") {|file| file.write(img_content)}
+    if img_info.has_key?(:filtered_effect) and !img_info[:filtered_effect].nil? and img_info[:filtered_effect]!=""
+      file_path = "#{Rails.root}/tmp/#{image.name}"
+      FilterEffect::Effect.send(img_info[:filtered_effect], image.url, file_path)
       image.data = File.open(file_path)
     end
     
-    img_info.delete :filtered_image
+    img_info.delete :filtered_effect
     image.attributes = img_info
     image.save
     redirect_to :action => :show, :id => params[:id]
