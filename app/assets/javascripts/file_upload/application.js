@@ -37,6 +37,23 @@ $(function () {
         fu._reflow = fu._transition && template.length &&
             template[0].offsetWidth;
         template.addClass('in');
+        
+        var links = $("a");
+        var edit_btns = $(".edit button");
+        $.merge(links, edit_btns).bind('click', function(e){
+          
+            var targetObj = $(this);
+            var url = targetObj.attr("href");
+            if(url==null || url==undefined){
+              url = targetObj.attr("data-url");
+            }
+            $(".fileupload-buttonbar .cancel").click();
+            window.setTimeout(function(){
+              window.location = url;
+            }, 1500);
+            return false;
+          
+        })
     });
 
     // Enable iframe cross-domain access via redirect page:
