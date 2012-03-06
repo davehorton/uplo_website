@@ -125,7 +125,7 @@ class ImagesController < ApplicationController
     img_info.delete :filtered_effect
     image.attributes = img_info
     image.save
-    redirect_to :action => :show, :id => params[:id]
+    redirect_to :action => :index
   end
   
   def order

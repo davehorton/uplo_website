@@ -29,7 +29,8 @@
 
               %li
                 %div
-                  %input.not-implement{:type => "button", :value => I18n.t("slideshow.print")}
+                  - order_url = url_for(:controller => 'images', :action => 'order', :id => params[:id])
+                  %input.order{:type => "button", :value => "Order", :data => {:url => "#{order_url}"}}
               %li
                 %div
                   = f.submit I18n.t("slideshow.save")
@@ -73,6 +74,10 @@
     );
   </script>
   <script type="text/javascript">
+    $(".button-container .order").click(function(){
+      window.location.href = $(this).attr('data-url');
+    });
+    
     function clearFilter(){
       $(".image-content canvas").remove();  
       $(".image-content #origin-pic").css("display", "inline-block");
