@@ -53,7 +53,10 @@
           %dl.entry
             %dt.preview
               = async_image_tag(img.data.url(:thumb), :class => "image-thumb")
-            %dd.name= img.name.truncate(13)
+              %dd.name
+                %div= img.name.truncate(13)
+                %div= img.username.truncate(17)
+                %div= img.user_fullname.truncate(17)
             %dd.price= img.price.nil? ? '$0' : number_to_currency(img.price, {:precision => 2})
 
   %div{:style=>"clear:both;"}
