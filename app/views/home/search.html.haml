@@ -20,6 +20,7 @@
         .preview
           =raw async_image_tag("member_normal.gif", :class => "gallery-cover-image")
         .info
+          .name= user.username
           .name= user.fullname
           .email= user.email
           = link_to "(more galleries from #{user.fullname})", :controller=>'galleries', :action=>'show_public', :author => user.id
@@ -38,6 +39,8 @@
             =raw async_image_tag(gallery_cover_image_url(gallery), :class => "gallery-cover-image")
         .info
           .name{:title => gallery.name}=raw gallery.name
+          .name= gallery.user.username
+          .name= gallery.user.fullname
           .description=raw gallery.description
 
 - if @images.count >0

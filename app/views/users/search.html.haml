@@ -15,8 +15,8 @@
         .preview
           =raw async_image_tag("member_normal.gif", :class => "gallery-cover-image")
         .info
-          - full_name = [user.first_name, user.last_name].join(" ")
-          .name= full_name
+          .name= user.username
+          .name= user.fullname
           .email= user.email
           = link_to "(more galleries from #{full_name})", :controller=>'galleries', :action=>'search_public', :query => params[:query], :user => user.id
 
