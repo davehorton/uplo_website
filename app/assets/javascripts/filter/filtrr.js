@@ -1,6 +1,6 @@
 /**
  * filtrr.js - Javascript Image Processing Library
- * 
+ *
  * Copyright (C) 2011 Alex Michael
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
@@ -20,64 +20,64 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
- * 
+ *
  **/
- 
+
  /* The filtr object contains all the image processing functions,
   * and it is returned as a parameter to the callback passed in filtrr.
   */
  var filtr = function(_canvas) {
- 
+
     if (!_canvas) {
         throw "Canvas supplied to filtr was null or undefined.";
     }
- 
+
     var canvas    = _canvas;
     var w         = canvas.width;
     var h         = canvas.height;
     var ctx       = canvas.getContext("2d");
     var imageData = ctx.getImageData(0, 0, w, h);
-  
+
     /**
      * Clamps the intensity level between 0 - 255.
      *
      * @param i The intensity level.
      */
-    var safe = function(i) 
+    var safe = function(i)
     {
-        return Math.min(255, Math.max(0, i));
+        return Math.min(255, Math.max(0, parseInt(i)));
     };
-    
+
     /**
      * Returns a new copy of this filtr. Useful when
      * wanting to blend multiple layers of the image.
      */
-    this.duplicate = function() 
+    this.duplicate = function()
     {
         return new filtr(canvas);
     };
-    
-    /** 
+
+    /**
      * Puts the image data in the image. This function is separated from
-     * the filters so that many copies of this object can be 
+     * the filters so that many copies of this object can be
      * created and filtered without affecting the underlying image. It
-     * is left to the discretion of the programmer when to "put back" the 
+     * is left to the discretion of the programmer when to "put back" the
      * filtered object.
      */
-    this.put = function() 
+    this.put = function()
     {
         ctx.putImageData(imageData, 0, 0);
     };
-    
-    /** 
+
+    /**
      * Return a reference to the underlying canvas element.
      */
-    this.canvas = function() 
+    this.canvas = function()
     {
         return canvas;
     };
-    
-    /** 
+
+    /**
      * Return the imageData array in it's current state.  It is different
      * than getting the imageData from the canvas object because they
      * might not be drawn on the canvas yet.
@@ -86,22 +86,22 @@
     {
         return imageData;
     };
-    
+
     /*
      * The core image processing functions.
      */
     this.core = {
-        
-        /** 
+
+        /**
          * Computes the new pixel values based on the filter function. Can be used
-         * to apply custom image processing functions on the image by giving a 
+         * to apply custom image processing functions on the image by giving a
          * reference to a pixel-manipulating function.
-         * 
-         * @param fn The function which will compute the new RGB values given the 
+         *
+         * @param fn The function which will compute the new RGB values given the
          *           current RGB values.
          */
-        apply : function(fn) 
-        {    
+        apply : function(fn)
+        {
             var data = imageData.data;
             var i = 0, j = 0;
             for (i = 0; i < h; i++) {
@@ -115,20 +115,20 @@
                     );
                     data[index]     = rgb.r;
                     data[index + 1] = rgb.g;
-                    data[index + 2] = rgb.b;  
-                    data[index + 3] = rgb.a;  
+                    data[index + 2] = rgb.b;
+                    data[index + 3] = rgb.a;
                 }
             }
             return this;
         },
-                
-        /** 
+
+        /**
          * Performs a convolution given a kernel.
          *
          * @param kernel The convolution kernel.
          */
-        convolve : function(kernel) 
-        {    
+        convolve : function(kernel)
+        {
             if (!kernel) {
                 throw "Kernel was null in convolve function.";
             } else if (kernel.length === 0) {
@@ -170,8 +170,8 @@
             }
             return outData;
         },
-        
-        /** 
+
+        /**
          * Edge detection. Three possible methods are offered - Simple (a simple horizontal edge detection),
          * Sobel and Canny.
          *
@@ -198,9 +198,9 @@
                     }
                 }
                 imageData = outData;
-                        
-            } else if (type.toLowerCase() === "sobel") {                
-                
+
+            } else if (type.toLowerCase() === "sobel") {
+
                 var gH = this.convolve([
                     [-1.0, -2.0, -1.0],
                     [0.0,   0.0,  0.0],
@@ -228,22 +228,22 @@
                     }
                 }
                 imageData = inData;
-                
+
             } else if (type.toLowerCase() === "canny") {
                 // Not implemented yet.
             }
             return this;
         },
-        
-        /** 
+
+        /**
          * Adjusts the RGB values by a given factor.
-         * 
+         *
          * @param rS Red channel factor.
          * @param gS Green channel factor.
-         * @param bS Blue channel factor. 
+         * @param bS Blue channel factor.
          */
         adjust : function(rS, gS, bS)
-        {    
+        {
             this.apply(function(r, g, b, a)
             {
                 return {
@@ -256,13 +256,13 @@
             rS = gS = bS = null;
             return this;
         },
-            
-        /** 
+
+        /**
          * Adjusts the brightness by a given factor.
-         * 
-         * @param t The factor to adjust the brightness by. 
+         *
+         * @param t The factor to adjust the brightness by.
          */
-        brightness : function(t) 
+        brightness : function(t)
         {
             this.apply(function(r, g, b, a)
             {
@@ -276,15 +276,15 @@
             t = null;
             return this;
         },
-        
-        /** 
+
+        /**
          * Fill the image with a color.
-         * 
+         *
          * @param rF Red channel.
          * @param gF Green channel.
-         * @param bF Blue channel. 
+         * @param bF Blue channel.
          */
-        fill : function(rF, gF, bF) 
+        fill : function(rF, gF, bF)
         {
             this.apply(function(r, g, b, a)
             {
@@ -298,13 +298,13 @@
             rf = gF = bF = null;
             return this;
         },
-        
-        /** 
+
+        /**
          * Multiply the opacity by a given factor.
-         * 
-         * @param o The factor to multply the opacity by. 
+         *
+         * @param o The factor to multply the opacity by.
          */
-        opacity : function(o) 
+        opacity : function(o)
         {
             this.apply(function(r, g, b, a)
             {
@@ -318,15 +318,15 @@
             o = null;
             return this;
         },
-        
-        /** 
+
+        /**
          * Adjusts the saturation by a given factor.
-         * 
-         * @param t The factor to adjust the saturation by. 
+         *
+         * @param t The factor to adjust the saturation by.
          */
-        saturation : function(t) 
-        {    
-            this.apply(function(r, g, b, a) 
+        saturation : function(t)
+        {
+            this.apply(function(r, g, b, a)
             {
                 var avg = ( r + g + b ) / 3;
                 return {
@@ -337,17 +337,17 @@
                 };
             });
             t = null;
-            return this;   
+            return this;
         },
-            
+
         /**
          * Uses a threshold number on each channel - intensities below
          * the threshold are turned black and intensities above are turned white.
          *
          * @param t The threshold.
          */
-        threshold : function(t) 
-        {    
+        threshold : function(t)
+        {
             this.apply(function(r, g, b, a)
             {
                 var c = 255;
@@ -363,15 +363,15 @@
             });
             t = null;
             return this;
-        }, 
-        
+        },
+
         /**
          * Quantizes the colors in the image like a posterization effect.
-         * 
+         *
          * @param levels The levels of quantization.
          */
-        posterize : function(levels) 
-        {    
+        posterize : function(levels)
+        {
             var step = Math.floor(255 / levels);
             this.apply(function(r, g, b, a)
             {
@@ -386,14 +386,14 @@
             levels = null;
             return this;
         },
-        
+
         /**
          * Changes the gamma of the image.
          *
          * @param value The gamma value.
          */
-        gamma : function(value) 
-        {    
+        gamma : function(value)
+        {
             this.apply(function(r, g, b, a)
             {
                 return {
@@ -402,16 +402,16 @@
                     b: safe(Math.pow(b, value)),
                     a: a
                 };
-        
+
             });
             value = null;
             return this;
         },
-        
+
         /**
          * Inverts the colors in the image.
          */
-        negative: function() 
+        negative: function()
         {
             this.apply(function(r, g, b, a)
             {
@@ -424,12 +424,12 @@
             });
             return this;
         },
-        
+
         /**
          * Creates a grayscale version of the image.
          */
-        grayScale : function() 
-        {    
+        grayScale : function()
+        {
             this.apply(function(r, g, b, a)
             {
                 var avg = (r + g + b) / 3;
@@ -442,11 +442,11 @@
             });
             return this;
         },
-        
+
         /**
          * Embosses the edges of the image.
          */
-        bump : function() 
+        bump : function()
         {
             imageData = this.convolve([
                 [-1.0, -1.0,  0.0],
@@ -455,17 +455,17 @@
             ]);
             return this;
         },
-        
+
         /**
          * Interpolates between the given RGB values. Changes the tint of the image.
          *
          * @param maxRGB The maximum RGB values.
          * @param minRGB The minimum RGB values.
          */
-        tint : function(minRGB, maxRGB) 
+        tint : function(minRGB, maxRGB)
         {
             this.apply(function(r, g, b, a)
-            {        
+            {
                 return {
                     r: safe((r - minRGB[0]) * ((255 / (maxRGB[0] - minRGB[0])))),
                     g: safe((g - minRGB[1]) * ((255 / (maxRGB[1] - minRGB[1])))),
@@ -476,17 +476,17 @@
             minRGB = maxRGB = null;
             return this;
         },
-        
-        /** 
+
+        /**
          * Applies a mask on each channel.
-         * 
+         *
          * @param mR Red channel mask.
          * @param mG Green channel mask.
          * @param mB Blue channel mask.
          */
-        mask : function(mR, mG, mB) 
+        mask : function(mR, mG, mB)
         {
-            this.apply(function(r, g, b, a) 
+            this.apply(function(r, g, b, a)
             {
                 return {
                     r: safe(r & mR),
@@ -498,13 +498,13 @@
             mR = mG = mB = null;
             return this;
         },
-        
+
         /**
          * Applies a sepia filter.
          */
-        sepia : function() 
+        sepia : function()
         {
-            this.apply(function(r, g, b, a) 
+            this.apply(function(r, g, b, a)
             {
                 return {
                     r: safe((r * 0.393) + (g * 0.769) + (b * 0.189)),
@@ -515,14 +515,14 @@
             });
             return this;
         },
-        
-        /** 
+
+        /**
          * Make color lighter or darker by a given factor.
-         * 
-         * @param t The factor to adjust the bias by. 
+         *
+         * @param t The factor to adjust the bias by.
          */
-        bias : function(val) 
-        {    
+        bias : function(val)
+        {
             function calc(f, bi){
                 return f / ((1.0 / bi - 1.9) * (0.9 - f) + 1);
             }
@@ -532,20 +532,20 @@
                     r: safe(r * calc(r / 255, val)),
                     g: safe(g * calc(g / 255, val)),
                     b: safe(b * calc(b / 255, val)),
-                    a: a        
+                    a: a
                 };
             });
             val = null;
             return this;
         },
-        
-        /** 
+
+        /**
          * Adjusts the contrast by a given factor.
-         * 
-         * @param t The factor to adjust the contrast by. 
+         *
+         * @param t The factor to adjust the contrast by.
          */
-        contrast : function(val) 
-        {    
+        contrast : function(val)
+        {
             function calc(f, c){
                 return (f-0.5) * c + 0.5;
             }
@@ -555,15 +555,15 @@
                     r: safe(255 * calc(r / 255, val)),
                     g: safe(255 * calc(g / 255, val)),
                     b: safe(255 * calc(b / 255, val)),
-                    a: a            
+                    a: a
                 };
             });
             val = null;
             return this;
         },
-        
-        /** 
-         * A simple convolution blur. 
+
+        /**
+         * A simple convolution blur.
          */
         blur: function()
         {
@@ -574,8 +574,8 @@
             ]);
             return this;
         },
-        
-        /** 
+
+        /**
          * Convolution sharpening.
          */
         sharpen : function()
@@ -587,8 +587,8 @@
             ]);
             return this;
         },
-        
-        /** 
+
+        /**
          * Gaussian blur with a 5x5 convolution kernel.
          */
         gaussianBlur: function()
@@ -597,17 +597,17 @@
                 [1/273, 4/273, 7/273, 4/273, 1/273],
                 [4/273, 16/273, 26/273, 16/273, 4/273],
                 [7/273, 26/273, 41/273, 26/273, 7/273],
-                [4/273, 16/273, 26/273, 16/273, 4/273],             
+                [4/273, 16/273, 26/273, 16/273, 4/273],
                 [1/273, 4/273, 7/273, 4/273, 1/273]
-            ]);   
+            ]);
             return this;
         }
     };
-    
+
     /* Blending modes. Each mode takes another filtr object representing the layer to be blended on top. */
     this.blend = {
-    
-        apply : function(topFiltr, fn) 
+
+        apply : function(topFiltr, fn)
         {
             var blendData = topFiltr.getCurrentImageData();
             var blendDArray = blendData.data;
@@ -633,28 +633,28 @@
                 }
             }
         },
-        
+
         /**
          * Multiply blend mode.
          */
-        multiply: function(topFiltr) 
-        { 
+        multiply: function(topFiltr)
+        {
             this.apply(topFiltr, function(top, bottom)
             {
                 return {
                     r: safe((top.r * bottom.r) / 255),
                     g: safe((top.g * bottom.g) / 255),
                     b: safe((top.b * bottom.b) / 255),
-                    a: bottom.a 
+                    a: bottom.a
                 };
             });
             return this;
         },
-        
+
         /**
          * Screen blend mode.
          */
-        screen : function(topFiltr) 
+        screen : function(topFiltr)
         {
             this.apply(topFiltr, function(top, bottom)
             {
@@ -662,23 +662,23 @@
                     r: safe(255 - (((255 - top.r) * (255 - bottom.r)) / 255)),
                     g: safe(255 - (((255 - top.g) * (255 - bottom.g)) / 255)),
                     b: safe(255 - (((255 - top.b) * (255 - bottom.b)) / 255)),
-                    a: bottom.a 
+                    a: bottom.a
                 };
             });
-            return this;    
+            return this;
         },
-        
+
         /**
          * Overaly blend mode - a combination of multiply and screen.
          */
-        overlay : function(topFiltr) 
+        overlay : function(topFiltr)
         {
             function calc(b, t) {
                 return (b > 128) ? 255 - 2 * (255 - t) * (255 - b) / 255: (b * t * 2) / 255;
             }
-            
+
             this.apply(topFiltr, function(top, bottom)
-            { 
+            {
                 return {
                     r: safe(calc(bottom.r, top.r)),
                     g: safe(calc(bottom.g, top.g)),
@@ -688,11 +688,11 @@
             });
             return this;
         },
-        
+
         /**
          * Difference blend mode - subtracts bottom from top.
          */
-        difference : function(topFiltr) 
+        difference : function(topFiltr)
         {
             this.apply(topFiltr, function(top, bottom)
             {
@@ -700,16 +700,16 @@
                     r: safe(Math.abs(top.r - bottom.r)),
                     g: safe(Math.abs(top.g - bottom.g)),
                     b: safe(Math.abs(top.b - bottom.b)),
-                    a: bottom.a 
+                    a: bottom.a
                 };
             });
             return this;
         },
-        
+
         /**
          * Addition blend mode - adds top to bottom.
          */
-        addition : function(topFiltr) 
+        addition : function(topFiltr)
         {
             this.apply(topFiltr, function(top, bottom)
             {
@@ -717,16 +717,16 @@
                     r: safe(top.r + bottom.r),
                     g: safe(top.g + bottom.g),
                     b: safe(top.b + bottom.b),
-                    a: bottom.a 
+                    a: bottom.a
                 };
             });
             return this;
         },
-        
+
         /**
          * Exclusion blend mode - similar to difference with lower contrast.
          */
-        exclusion : function(topFiltr) 
+        exclusion : function(topFiltr)
         {
             this.apply(topFiltr, function(top, bottom)
             {
@@ -735,21 +735,21 @@
                     g: safe(128 - 2 * (bottom.g - 128) * (top.g - 128) / 255),
                     b: safe(128 - 2 * (bottom.b - 128) * (top.b - 128) / 255),
                     a: bottom.a
-                                
+
                 };
             });
             return this;
         },
-        
+
         /**
          * Soft light blend mode - a softer version of Overlay.
-         */     
-        softLight : function(topFiltr) 
+         */
+        softLight : function(topFiltr)
         {
             function calc(b, t) {
                 return (b > 128) ? 255 - ((255 - b) * (255 - (t - 128))) / 255 : (b * (t + 128)) / 255;
             }
-            
+
             this.apply(topFiltr, function(top, bottom)
             {
                 return {
@@ -761,14 +761,14 @@
             });
             return this;
         }
-    };    
+    };
  };
- 
- /* filtrr is a singleton class. 
+
+ /* filtrr is a singleton class.
   * It can be attached directly to an <img> element or a <canvas> element.
   */
  var filtrr = new function() {
-    
+
     /**
      * Is it a string?
      *
@@ -776,11 +776,11 @@
      **/
     var isString = function(str)
     {
-        return (typeof str === "string") 
-               || (!isNaN(str))          
+        return (typeof str === "string")
+               || (!isNaN(str))
                || (str.substring);
     };
-    
+
     /**
      * Find the position of the object in the document.
      *
@@ -790,7 +790,7 @@
     {
         var curleft = 0;
         var curtop  = 0;
-        
+
         if (obj.offsetParent) {
             while(true) {
                 curtop += obj.offsetTop;
@@ -799,16 +799,16 @@
                 obj = obj.offsetParent;
             }
         } else {
-            if (obj.x) { 
+            if (obj.x) {
                 curleft += obj.x;
-            } 
+            }
             if (obj.y) {
                 curtop += obj.y;
-            } 
+            }
         }
         return {top: curtop, left: curleft};
     }
-    
+
     /**
      * Replaces an image element with a canvas.
      *
@@ -816,12 +816,12 @@
      * @callback The callback function to be executed once the image
      *           has be loaded.
      **/
-    this.img = function(elemOrId, callback) 
+    this.img = function(elemOrId, callback)
     {
-        var imgElem = (isString(elemOrId))? document.getElementById(elemOrId) : elemOrId; 
+        var imgElem = (isString(elemOrId))? document.getElementById(elemOrId) : elemOrId;
         if (imgElem) {
             var img = new Image();
-            img.onload = function() 
+            img.onload = function()
             {
                 var canvas = document.createElement("canvas");
                 canvas.width = img.width;
@@ -831,8 +831,8 @@
                 var posP = findPos(imgElem.offsetParent);
                 var parent = $(imgElem).parent();
 //                canvas.style.top = Math.abs(pos.top - posP.top) + "px";
-//                canvas.style.left = Math.abs(pos.left - posP.left) + "px"; 
-//                canvas.style.position = "absolute";               
+//                canvas.style.left = Math.abs(pos.left - posP.left) + "px";
+//                canvas.style.position = "absolute";
                 if (parent.size() > 0) {
                     parent[0].appendChild(canvas);
                     imgElem.style.display = "none";
@@ -846,7 +846,7 @@
             throw "Could not find image element with id: " + id;
         }
     };
-    
+
     /**
      * Creates a filtr object from a canvas.
      *
@@ -854,9 +854,9 @@
      * @callback The callback function to be executed once the canvas
      *           has been loaded - just to be consistent with the image async loading.
      **/
-    this.canvas = function(elemOrId, callback) 
-    {    
-        var canvasElem = (isString(elemOrId))? document.getElementById(elemOrId) : elemOrId; 
+    this.canvas = function(elemOrId, callback)
+    {
+        var canvasElem = (isString(elemOrId))? document.getElementById(elemOrId) : elemOrId;
         if (canvasElem) {
             callback(new filtr(canvasElem));
         } else {
