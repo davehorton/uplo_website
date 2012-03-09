@@ -131,4 +131,27 @@ class Api::ImagesController < Api::BaseController
     @result[:success] = true
     render :json => @result
   end
+  
+  def like
+    image = Image.find_by_id(params[:id])
+    if image.nil?
+      @result[:success] = false
+      @result[:msg] = "Could not find Image"
+      return render :json => @result
+    end
+    
+    image.likes += 1
+    if user_signed_in?
+      img_like = ImageLikes.new({:image_id => image.id, :user_id => current_user.id})
+      image.image_likes << img_like
+    end
+    if image.save
+      @result[:success] = true
+      @result[:likes] = image.likes
+    else
+      @result[:success] = false
+      @result[:msg] = "Action failure! Please try your like later."
+    end
+    return render :json => @result
+  end
 end
