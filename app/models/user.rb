@@ -1,9 +1,11 @@
 class User < ActiveRecord::Base
   include ::SharedMethods::Paging
+  include ::SharedMethods::Converter
   attr_accessor :force_submit, :login
 
   GENDER_MALE = "0"
-  ALLOCATION = 200 * 2**20 #200MB
+  ALLOCATION_STRING = "#{RESOURCE_LIMIT[:size]} #{RESOURCE_LIMIT[:unit]}"
+  ALLOCATION = FileSizeConverter.convert RESOURCE_LIMIT[:size], RESOURCE_LIMIT[:unit], FileSizeConverter::UNITS[:byte]
 
   # Include default devise modules. Others available are:
   # :token_authenticatable, :encryptable, :confirmable, :lockable, :timeoutable and :omniauthable

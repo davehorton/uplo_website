@@ -5,25 +5,25 @@ module SharedMethods
       base.send(:include, InstanceMethods)
       base.send(:extend, ClassMethods)
     end
-    
+
     module InstanceMethods
-    
-    end 
-    
+
+    end
+
     module ClassMethods
       def paging_options(options, default_opts = {})
         info = PagingInfo.new
-        
+
         options ||= {}
         options.to_options!
-        
+
         if default_opts.blank?
           default_opts = {
             :sort_criteria => {:id => "DESC"},
             :page_id => 1
           }
         end
-        
+
         page_id = default_opts[:page_id]
         #page_size = PAGE_SIZE
 
@@ -34,7 +34,7 @@ module SharedMethods
         if options[:page_size] && options[:page_size].to_i > 0
           info.page_size = options[:page_size]
         end
-        
+
         if options[:sort_field]
           sort_field = options[:sort_field]
           sort_direction = options[:sort_direction] || "ASC"
@@ -54,7 +54,7 @@ module SharedMethods
 
         return info
       end
-      
+
       # Parse the input string with the format "sort_field1 sort_direction1, sort_field2 sort_direction2, ..." to a hash.
       def parse_sort_param(sort_param = "")
         params = sort_param.split(",")
@@ -76,7 +76,7 @@ module SharedMethods
         end
         return result
       end
-      
+
       # Parse the input hash with the format {:sort_field1 => "sort_direction1", :sort_field2 => "sort_direction2""", ...} to a string.
       # This is the inverse method of parse_sort_param() method.
       def sort_param_to_string(sort_param = {})
@@ -84,13 +84,13 @@ module SharedMethods
       end
     end
   end
-  
+
   module SerializationConfig
     def self.included(base)
       base.send(:include, InstanceMethods)
       base.send(:extend, ClassMethods)
     end
-    
+
     module InstanceMethods
       # Override Rails as_json method
       def as_json(options={})
@@ -100,41 +100,41 @@ module SharedMethods
           super(self.default_serializable_options)
         end
       end
-      
+
       def exposed_methods
         self.class.exposed_methods
       end
-        
+
       def exposed_attributes
         self.class.except_attributes
       end
-      
+
       def exposed_associations
         self.class.exposed_associations
       end
-      
+
       def except_attributes
         self.class.except_attributes
       end
-      
+
       def default_serializable_options
         self.class.default_serializable_options
       end
-    end 
-    
+    end
+
     module ClassMethods
       def exposed_methods
         []
       end
-      
+
       def exposed_attributes
         []
       end
-      
+
       def exposed_associations
         []
       end
-      
+
       def except_attributes
         attrs = []
         self.attribute_names.each do |n|
@@ -144,12 +144,27 @@ module SharedMethods
         end
         attrs
       end
-      
+
       def default_serializable_options
         { :except => self.except_attributes,
-          :methods => self.exposed_methods, 
+          :methods => self.exposed_methods,
           :include => self.exposed_associations
         }
+      end
+    end
+  end
+
+  module Converter
+    class FileSizeConverter
+      UNITS = {:byte => 'b', :kilobyte => 'kb', :megabyte => 'mb', :gigabyte => 'gb', :tetrabyte => 'tb'}
+      UNIT_ARRANCE = [UNITS[:byte], UNITS[:kilobyte], UNITS[:megabyte], UNITS[:gigabyte], UNITS[:tetrabyte]]
+
+      def self.convert(size, from_unit, to_unit)
+        gab = UNIT_ARRANCE.index(from_unit.downcase) - UNIT_ARRANCE.index(to_unit.downcase)
+        pow = gab / gab.abs # 1 or -1
+        (0...gab.abs).each{ size *= Float(2 ** (10 * pow)) }
+
+        return size.round(3)
       end
     end
   end

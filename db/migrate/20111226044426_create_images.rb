@@ -7,7 +7,8 @@ class CreateImages < ActiveRecord::Migration
       t.boolean :is_gallery_cover, :default => false
       t.float :price, :default => 0
       t.boolean :delta, :default => true, :null => false
-      
+      t.integer :likes, :default => 0
+
       t.timestamps
     end
   end
