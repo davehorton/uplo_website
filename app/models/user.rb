@@ -1,73 +1,74 @@
 class User < ActiveRecord::Base
   include ::SharedMethods::Paging
   attr_accessor :force_submit, :login
-  
+
   GENDER_MALE = "0"
-  
+  ALLOCATION = 200 * 2**20 #200MB
+
   # Include default devise modules. Others available are:
   # :token_authenticatable, :encryptable, :confirmable, :lockable, :timeoutable and :omniauthable
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable, :confirmable
 
   # Setup accessible (or protected) attributes for your model
-  attr_accessible :id, :email, :password, :password_confirmation, :remember_me, 
+  attr_accessible :id, :email, :password, :password_confirmation, :remember_me,
                   :first_name, :last_name, :username, :login, :nationality, :birthday, :gender, :avatar,
-                  :twitter, :facebook                  
-  
+                  :twitter, :facebook
+
   # Paperclip
-  has_attached_file :avatar, 
-   :styles => {:thumb => "180x180>" }, 
+  has_attached_file :avatar,
+   :styles => {:thumb => "180x180>" },
    :storage => :s3,
    :s3_credentials => "#{Rails.root}/config/amazon_s3.yml",
    :path => "user/:id/avatar/:style.:extension"
-   
+
   # ASSOCIATIONS
   has_many :galleries, :dependent => :destroy
   has_many :comments, :dependent => :destroy
   has_many :image_likes, :dependent => :destroy
   has_many :orders
   has_one :cart, :dependent => :destroy
-  
+
   # VALIDATION
   validates_presence_of :first_name, :last_name, :email, :username, :message => 'cannot be blank'
   validates :password, :presence => true, :confirmation => true, :unless => :force_submit
   validates_format_of :email, :with => /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\Z/i, :on => :create, :message => 'is invalid'
   validates_uniqueness_of :email, :message => 'must be unique'
   validates_uniqueness_of :username, :message => 'must be unique'
-  
+
   # CLASS METHODS
   class << self
     def do_search(params = {})
       params[:filtered_params][:sort_field] = 'first_name' unless params[:filtered_params].has_key?("sort_field")
       paging_info = parse_paging_options(params[:filtered_params], {:sort_mode => :extended})
-      
+
       self.search(
         params[:query],
         :star => true,
-        :page => paging_info.page_id, 
+        :page => paging_info.page_id,
         :per_page => paging_info.page_size )
     end
-    
+
     # Override Devise method so that User can log in with username or email.
     def find_for_database_authentication(warden_conditions)
       conditions = warden_conditions.dup
       login = conditions.delete(:login)
-      where(conditions).where(["lower(username) = :value OR lower(email) = :value", 
+      where(conditions).where(["lower(username) = :value OR lower(email) = :value",
                               { :value => login.strip.downcase }]).first
     end
-  
+
     def exposed_methods
       [:avatar_url]
     end
-    
+
     def exposed_attributes
       [:id, :email, :first_name, :last_name, :username, :nationality, :birthday, :gender, :twitter, :facebook]
     end
-    
+
     def exposed_associations
       []
     end
-    
+
     def except_attributes
       attrs = []
       self.attribute_names.each do |n|
@@ -77,16 +78,16 @@ class User < ActiveRecord::Base
       end
       attrs
     end
-    
+
     def default_serializable_options
       { :except => self.except_attributes,
-        :methods => self.exposed_methods, 
+        :methods => self.exposed_methods,
         :include => self.exposed_associations
       }
     end
-    
+
     protected
-    
+
     def parse_paging_options(options, default_opts = {})
       if default_opts.blank?
         default_opts = {
@@ -96,21 +97,21 @@ class User < ActiveRecord::Base
       paging_options(options, default_opts)
     end
   end
-  
+
   # PUBLIC INSTANCE METHODS
   def fullname
     self.first_name + " " + self.last_name
   end
-  
+
   def avatar_url
     self.avatar.url(:thumb)
   end
-  
+
   # Generate email address including full name.
   def friendly_email
     "#{self.fullname} <#{self.email}>"
   end
-  
+
   # Override attribute setter.
   def birthday=(date)
     if date.is_a?(String)
@@ -121,7 +122,7 @@ class User < ActiveRecord::Base
     end
     self.send(:write_attribute, :birthday, date)
   end
-  
+
   # Override Rails as_json method
   def as_json(options={})
     if (!options.blank?)
@@ -130,27 +131,27 @@ class User < ActiveRecord::Base
       super(self.default_serializable_options)
     end
   end
-  
+
   def exposed_methods
     self.class.exposed_methods
   end
-    
+
   def exposed_attributes
     self.class.except_attributes
   end
-  
+
   def exposed_associations
     self.class.exposed_associations
   end
-  
+
   def except_attributes
     self.class.except_attributes
   end
-  
+
   def default_serializable_options
     self.class.default_serializable_options
   end
-  
+
   def update_profile(params)
     result = nil
     params ||= {}
@@ -159,10 +160,10 @@ class User < ActiveRecord::Base
       # Remove sensitive parameter.
       params.delete(key)
     end
-    
+
     # If there is any password parameter we will update user info with password.
-    if !params[:current_password].blank? && 
-          (params.has_key?(:password) || 
+    if !params[:current_password].blank? &&
+          (params.has_key?(:password) ||
            params.has_key?(:password_confirmation))
       result = self.update_with_password(params)
     else
@@ -171,20 +172,20 @@ class User < ActiveRecord::Base
         # Remove sensitive parameter.
         params.delete(key)
       end
-      
+
       # TODO: inspect why this method does not work?
       #result = self.update_without_password(params)
       self.force_submit = true
       result = self.update_attributes(params)
     end
-    
+
     result
   end
-  
+
   def is_male?
     (self.gender.to_s == GENDER_MALE)
   end
-  
+
   def gender_string
     key = "female"
     if self.is_male?
@@ -192,7 +193,7 @@ class User < ActiveRecord::Base
     end
     return I18n.t("common.#{key}")
   end
-  
+
   def recent_empty_order
     empty_order = self.orders.where(:status => Order::STATUS[:shopping]).order("orders.created_at DESC").first
     if empty_order.blank?
@@ -200,7 +201,7 @@ class User < ActiveRecord::Base
     end
     empty_order
   end
-  
+
   def init_cart
     if self.cart.blank?
       new_order = self.recent_empty_order
@@ -212,7 +213,27 @@ class User < ActiveRecord::Base
 
     return self.cart
   end
-  
+
+  def used_allocation
+    total = 0
+    self.galleries.each do |gal|
+      gal.images.each do |img|
+        total += img.data_file_size
+      end
+    end
+    return total
+  end
+
+  def free_allocation
+    remaining = ALLOCATION
+    self.galleries.each do |gal|
+      gal.images.each do |img|
+        remaining -= img.data_file_size
+      end
+    end
+    return remaining
+  end
+
   # indexing with thinking sphinx
   define_index do
     indexes first_name
@@ -222,7 +243,7 @@ class User < ActiveRecord::Base
     if Rails.env.production?
       set_property :delta => FlyingSphinx::DelayedDelta
     else
-      set_property :delta => true  
+      set_property :delta => true
     end
   end
 end

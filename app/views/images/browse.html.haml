@@ -14,15 +14,15 @@
             .info.fullname.clearfix
               %label= "Author:"
               %span= (@image.author ? @image.author.fullname : "")
-            
+
             .info.image-name.clearfix
               %label= "Image Name:"
               %span= @image.name
-              
+
             .info.image-description.clearfix
               %label= "Description:"
               %span= @image.description
-          
+
           .button-container.blue-gradient
             %ul
               %li
@@ -35,7 +35,7 @@
                 %div
                   - order_url = url_for(:controller => 'images', :action => 'order', :id => params[:id])
                   %input.order{:type => "button", :value => "Order", :data => {:url => "#{order_url}"}}
-                  
+
     .bottom-container.clearfix
       %br
       %div
@@ -45,8 +45,8 @@
             %li
               - url = url_for(:controller => "images", :action => "browse", :id => "#{image.id}")
               %a{:href => "#{url}"}
-                - if image.id == @image.id 
-                  - selected_image_position = index 
+                - if image.id == @image.id
+                  - selected_image_position = index
                   = image_tag(image.data.url(:thumb), :size => "70x70", :style => "border: solid 2px orange")
                 - else
                   = image_tag(image.data.url(:thumb), :size => "75x75")
@@ -78,13 +78,13 @@
         scroll: 3,
         initCallback: mycarousel_initCallback
     });
-    
+
     $(".not-implement").click(function(e){
       e.preventDefault();
       helper.alert_not_implement();
       return false;
     });
-    
+
     $(".button-container .order").click(function(){
       window.location.href = $(this).attr('data-url');
     });

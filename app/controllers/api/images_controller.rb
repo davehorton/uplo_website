@@ -14,20 +14,24 @@ end
 
 class Api::ImagesController < Api::BaseController
   before_filter :require_login!
-  
+
   # POST /api/upload_image
   # params: image[data], gallery_id, image[name], image[description]
   def upload_image
     @result[:success] = false
-    
+
     if !user_signed_in?
       @result[:msg] = "You must login first."
       return render :json => @result
-    end 
-    
+    end
+    if File.new(params[:image][:data].tempfile).size > current_user.free_allocation
+      @result[:msg] = "It's over 200MB of your allocation with this file."
+      # raise exception
+      render :json => @result.to_json and return
+    end
+
     user = current_user
     gallery = user.galleries.find_by_id(params[:gallery_id])
-    
     if gallery.nil?
       @result[:msg] = "Could not find Gallery"
       @result[:success] = false
@@ -39,10 +43,10 @@ class Api::ImagesController < Api::BaseController
       effect_id = img_info[:effect_id] if img_info[:effect_id].to_i > 0
       img_info.delete :effect_id
     end
-    
+
     image = gallery.images.create(img_info)
     if !image.save
-      @result[:msg] = image.errors 
+      @result[:msg] = image.errors
       @result[:success] = false
     elsif !effect_id.nil?
       file_path = "#{Rails.root}/tmp/#{image.name}"
@@ -52,27 +56,27 @@ class Api::ImagesController < Api::BaseController
         @result[:image] = image.serializable_hash(image.default_serializable_options)
         @result[:success] = true
       else
-        @result[:msg] = image.errors 
+        @result[:msg] = image.errors
         @result[:success] = false
       end
     else
       @result[:image] = image.serializable_hash(image.default_serializable_options)
         @result[:success] = true
     end
-    
+
     render :json => @result
   end
-  
+
   # POST /api/update_image
   # params: image[id], image[name], image[description]
   def update_image
     @result[:success] = false
-    
+
     if !user_signed_in?
       @result[:msg] = "You must login first."
       return render :json => @result
     end
-    
+
     user = current_user
     # find image
     image = Image.find_by_id(params[:image][:id])
@@ -90,10 +94,10 @@ class Api::ImagesController < Api::BaseController
       @result[:success] = true
       @result[:image] = image.serializable_hash(image.default_serializable_options)
     end
-    
+
     render :json => @result
   end
-  
+
   # DELETE /api/delete_image
   # params:id
   def delete_image
@@ -102,10 +106,10 @@ class Api::ImagesController < Api::BaseController
       @result[:msg] = "You must login first."
       return render :json => @result
     end
-    # TODO: uncomment this     
+    # TODO: uncomment this
     user = current_user
     #user = User.find_by_username :admin
-    
+
     # find image
     image = Image.find_by_id(params[:id])
     if image.nil?
@@ -117,13 +121,13 @@ class Api::ImagesController < Api::BaseController
       @result[:msg] = "This image is not belong to you"
       return render :json => @result
     end
-    
+
     # Delete!
     image.destroy
     @result[:success] = true
     render :json => @result
   end
-  
+
   def popular_images
     images = Image.load_popular_images(@filtered_params)
     @result[:total] = images.total_entries
@@ -131,7 +135,7 @@ class Api::ImagesController < Api::BaseController
     @result[:success] = true
     render :json => @result
   end
-  
+
   def like
     image = Image.find_by_id(params[:id])
     if image.nil?
@@ -139,7 +143,7 @@ class Api::ImagesController < Api::BaseController
       @result[:msg] = "Could not find Image"
       return render :json => @result
     end
-    
+
     image.likes += 1
     if user_signed_in?
       img_like = ImageLikes.new({:image_id => image.id, :user_id => current_user.id})
