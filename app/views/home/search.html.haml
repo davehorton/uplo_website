@@ -1,5 +1,5 @@
 - content_for :head do
-  = stylesheet_link_tag("scss/search.css")
+  = stylesheet_link_tag("scss/search.css", "scss/image.css")
 
 
 #search-box-wrapper
@@ -57,7 +57,9 @@
                 %div= img.name.truncate(13)
                 %div= img.username.truncate(17)
                 %div= img.user_fullname.truncate(17)
-            %dd.price= img.price.nil? ? '$0' : number_to_currency(img.price, {:precision => 2})
+            %dd.price
+              .likes= "#{img.likes} likes"
+              %div= img.price.nil? ? '$0' : number_to_currency(img.price, {:precision => 2})
 
   %div{:style=>"clear:both;"}
   .section= render_pagination(@images, {:controller => "home", :action => params[:action]})

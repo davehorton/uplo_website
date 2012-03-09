@@ -46,8 +46,7 @@ class Image < ActiveRecord::Base
     end
     
     def load_popular_images(params)
-      params.merge!({:sort_criteria => "images.created_at DESC"})
-      paging_info = parse_paging_options(params)
+      paging_info = parse_paging_options(params, {:sort_criteria => "images.likes DESC"})
       # TODO: calculate the popularity of the images: base on how many times an image is "liked".
       self.includes(:gallery).joins([:gallery]).
             where("galleries.permission = ?", Gallery::PUBLIC_PERMISSION).
@@ -62,7 +61,7 @@ class Image < ActiveRecord::Base
     end
     
     def exposed_attributes
-      [:id, :name, :description, :data_file_name, :gallery_id, :price]
+      [:id, :name, :description, :data_file_name, :gallery_id, :price, :likes]
     end
     
     def exposed_associations
@@ -117,6 +116,18 @@ class Image < ActiveRecord::Base
   # Shortcut to get image's URL        
   def url(options = nil)
     self.data.url(options)
+  end
+  
+  def is_likable(user_id)
+    if !User.exists?(user_id) 
+      result = false #raise exception
+    elsif ImageLikes.exists?({:image_id => self.id, :user_id => user_id})
+      result = true
+    else
+      result = false
+    end
+    
+    return result
   end
   
   protected

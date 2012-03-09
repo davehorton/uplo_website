@@ -23,7 +23,9 @@
                 %div= image.name.truncate(13)
                 %div= image.username.truncate(17)
                 %div= image.user_fullname.truncate(17)
-              %dd.price= image.price.nil? ? '$0' : number_to_currency(image.price, {:precision => 2})
+              %dd.price
+                .likes= "#{image.likes} likes"
+                %div= image.price.nil? ? '$0' : number_to_currency(image.price, {:precision => 2})
       
   = render_pagination(@images, {:controller => "home", :action => params[:action]})
 
