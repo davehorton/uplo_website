@@ -25,3 +25,7 @@
   font-weight: bold;
   float: right;
   padding: 0 2px; }
+  .entry .price .likes {
+    color: #4B4B4B;
+    font-style: italic;
+    font-size: 14px; }

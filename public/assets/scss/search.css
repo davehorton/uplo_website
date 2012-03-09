@@ -33,23 +33,6 @@
     border: 1px solid #FFFE7C;
     background-color: #FEFDC3;
     border-radius: 5px; }
-  .section.images .wrapper .entry-container {
-    padding-left: 20px; }
-  .section.images .wrapper .entry .preview {
-    height: 180px;
-    text-align: center;
-    width: 180px; }
-  .section.images .wrapper .entry .name {
-    color: #4B4B4B;
-    overflow: hidden;
-    max-height: 30px;
-    padding: 0 2px;
-    float: left;
-    font-weight: normal; }
-  .section.images .wrapper .entry .price {
-    font-weight: bold;
-    float: right;
-    padding: 0 2px; }
 
 .section.galleries .wrapper {
   height: 180px;
