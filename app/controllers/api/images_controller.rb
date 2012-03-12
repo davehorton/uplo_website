@@ -14,6 +14,7 @@ end
 
 class Api::ImagesController < Api::BaseController
   before_filter :require_login!
+  include ::SharedMethods::Converter
 
   # POST /api/upload_image
   # params: image[data], gallery_id, image[name], image[description]
@@ -29,7 +30,7 @@ class Api::ImagesController < Api::BaseController
       mb_unit = FileSizeConverter::UNITS[:megabyte]
       mb_img_size = FileSizeConverter.convert img_size, FileSizeConverter::UNITS[:byte], mb_unit
       free_allocation = FileSizeConverter.convert current_user.free_allocation, FileSizeConverter::UNITS[:byte], mb_unit
-      @result[:msg] = "This image is #{mb_img_size} {mb_unit.upcase}. You have only #{free_allocation} #{mb_unit.upcase} / #{User::ALLOCATION_STRING} free"
+      @result[:msg] = "UPLOAD FAIL! This image is #{mb_img_size} #{mb_unit.upcase}. You have only #{free_allocation} #{mb_unit.upcase} / #{User::ALLOCATION_STRING} free"
       # raise exception
       render :json => @result.to_json and return
     end

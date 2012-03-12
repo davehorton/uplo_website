@@ -48,7 +48,7 @@ class ImagesController < ApplicationController
       mb_unit = FileSizeConverter::UNITS[:megabyte]
       mb_img_size = FileSizeConverter.convert img_size, FileSizeConverter::UNITS[:byte], mb_unit
       free_allocation = FileSizeConverter.convert current_user.free_allocation, FileSizeConverter::UNITS[:byte], mb_unit
-      result = [{:error => "This image is #{mb_img_size} {mb_unit.upcase}. You have only #{free_allocation} #{mb_unit.upcase} / #{User::ALLOCATION_STRING} free" }]
+      result = [{:error => "UPLOAD FAIL! This image is #{mb_img_size} #{mb_unit.upcase}. You have only #{free_allocation} #{mb_unit.upcase} / #{User::ALLOCATION_STRING} free" }]
       # raise exception
       render :text => result.to_json and return
     end
