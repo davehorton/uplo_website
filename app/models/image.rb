@@ -1,4 +1,5 @@
 class Image < ActiveRecord::Base
+  include Rails.application.routes.url_helpers
   include ::SharedMethods::Paging
   include ::SharedMethods::SerializationConfig
 
@@ -114,7 +115,8 @@ class Image < ActiveRecord::Base
   end
 
   def public_link
-    url_for :controller => 'images', :action => 'browse', :id => params[:id], :only_path => false
+    url_for :controller => 'images', :action => 'browse', :id => self.id, :only_path => false, :host => DOMAIN
+    # return image_public_link
   end
 
   # Shortcut to get image's URL

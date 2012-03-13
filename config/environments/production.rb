@@ -1,4 +1,6 @@
 Uplo::Application.configure do
+  DOMAIN = 'uplo.heroku.com'
+
   # Settings specified here will take precedence over those in config/application.rb
 
   # The production environment is meant for finished, "live" apps.
@@ -26,9 +28,9 @@ Uplo::Application.configure do
 
   # Use a different cache store in production
   config.cache_store = :dalli_store
-  
+
   #config.action_controller.page_cache_directory = "public/cache"
-  
+
   # Disable Rails's static asset server
   # In production, Apache or nginx will already do this
   config.serve_static_assets = true
@@ -44,10 +46,10 @@ Uplo::Application.configure do
 
   # Generate digests for assets URLs
   config.assets.digest = true
-  
+
   # Precompile additional assets (application.js, application.css, and all non-JS/CSS are already added)
   config.assets.precompile += ['*.js', '*.css']
-  
+
   # Enable serving of images, stylesheets, and javascripts from an asset server
   # config.action_controller.asset_host = "http://assets.example.com"
 
@@ -63,10 +65,10 @@ Uplo::Application.configure do
 
   # Send deprecation notices to registered listeners
   config.active_support.deprecation = :notify
-  
-  config.action_mailer.default_url_options = { :host => 'uplo.heroku.com' }
+
+  config.action_mailer.default_url_options = { :host => DOMAIN }
   config.action_mailer.delivery_method = :smtp
-  
+
   # Configure to compress responses.
   if config.serve_static_assets
     begin
@@ -75,7 +77,7 @@ Uplo::Application.configure do
       puts "Error when insert middleware ActionDispatch::Static"
     end
   end
-    
+
   if !ENV['SENDGRID_USERNAME'].blank? && !ENV['SENDGRID_PASSWORD'].blank?
     # SENDGRID
     config.action_mailer.smtp_settings = {
@@ -95,7 +97,7 @@ Uplo::Application.configure do
       :user_name            => 'uplo.mailer',
       :password             => 'uploTPL123456',
       :authentication       => 'plain',
-      :enable_starttls_auto => true  
+      :enable_starttls_auto => true
     }
   end
 end
