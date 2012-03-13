@@ -20,6 +20,10 @@
               %span= @image.name
 
             .info.image-description.clearfix
+              %label= "Liked:"
+              %span= @image.likes
+
+            .info.image-description.clearfix
               %label= "Description:"
               %span= @image.description
 
@@ -37,7 +41,8 @@
                   %input.order{:type => "button", :value => "Order", :data => {:url => "#{order_url}"}}
               %li
                 %div{:style => "padding:2px 0 0 2px;"}
-                  %a{:href=>"https://twitter.com/share", :class=>"twitter-share-button", :rel => "www.google.com", :data => {:lang => "en", :url => "#{@image.data.url}", :text => "An amazing image from UPLO.."}} Tweet
+                  - tweet_url = url_for(:controller => 'images', :action => 'browse', :id => params[:id], :only_path => false)
+                  %a{:href=>"https://twitter.com/share", :class=>"twitter-share-button", :data => {:lang => "en", :url => "#{tweet_url}", :counturl => "#{tweet_url}", :count => "horizontal", :text => "Shared from UPLO -"}} Tweet
 
     .bottom-container.clearfix
       %br
