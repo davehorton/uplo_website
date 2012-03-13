@@ -167,5 +167,41 @@ module SharedMethods
         return size.round(3)
       end
     end
+
+    class SearchStringConverter
+      SPECIAL_CHARS = ["@", "&", "^", "~", "$", "!", "+", "-", "|", "{", "}", "?", "/", "\\", "<", ">", ";", ":"]
+
+      def self.contain_special_character?(str)
+        SPECIAL_CHARS.each{|c| return true if str.index(c)}
+        return false
+      end
+
+      def self.process_special_chars(str)
+        str.gsub!(/\s+/, " ")
+        start_space = 0
+        end_space = str.index " "
+        tmp = str
+        idx = tmp.index(" ").nil? ? (tmp.length) : tmp.index(" ")
+
+        while !tmp.nil? and tmp.length > 0
+          idx = tmp.index(" ").nil? ? (tmp.length) : tmp.index(" ")
+          end_space = tmp.index(" ").nil? ? (idx + start_space ) : (idx + start_space)
+          sub_str = str[start_space, end_space]
+          if self.contain_special_character?(sub_str)
+            str.insert start_space, '*'
+            str.insert (end_space + 1), '*'
+            start_space = end_space + 3
+          else
+            start_space = end_space + 1
+          end
+
+          idx = tmp.index(" ").nil? ? (tmp.length) : tmp.index(" ")
+          tmp = tmp[idx + 1, tmp.length - 1]
+        end
+
+        return str
+      end
+
+    end
   end
 end

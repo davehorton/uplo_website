@@ -45,7 +45,7 @@ class User < ActiveRecord::Base
       paging_info = parse_paging_options(params[:filtered_params], {:sort_mode => :extended})
 
       self.search(
-        params[:query],
+        SharedMethods::Converter::SearchStringConverter.process_special_chars(params[:query]),
         :star => true,
         :page => paging_info.page_id,
         :per_page => paging_info.page_size )
