@@ -5,6 +5,9 @@ gem 'rails', '>= 3.1.3'
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
 
+# Social network
+gem 'twitter'
+
 #gem "unicorn" # HTTP Server
 gem 'pg'
 gem "will_paginate", ">= 3.0.pre4"
@@ -62,8 +65,8 @@ group :development do
   #gem "capistrano"
   #gem "capistrano-ext", :require => "capistrano"
   gem "guard-sass"
-  gem "guard-coffeescript"  
-  
+  gem "guard-coffeescript"
+
   if RUBY_VERSION >= "1.9"
     gem "ruby-debug19"
   else
