@@ -22,7 +22,7 @@ class Image < ActiveRecord::Base
 
   # CALLBACK
   after_post_process :save_image_dimensions
-  after_initialize :init_random_price
+  after_initialize :init_random_price, :set_likes
 
   # CLASS METHODS
   class << self
@@ -149,6 +149,10 @@ class Image < ActiveRecord::Base
     if self.price.blank?
       self.price = rand(50)
     end
+  end
+
+  def set_likes
+    self.update_attribute("likes", self.id)
   end
 
   # indexing with thinking sphinx
