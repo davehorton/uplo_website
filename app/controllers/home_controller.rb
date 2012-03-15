@@ -12,9 +12,14 @@ class HomeController < ApplicationController
 
   def search
     @no_async_image_tag = true
-    @users = User.search params[:query], :star => true, :page => params[:page_id], :per_page => 3
-    @galleries = Gallery.search params[:query], :star => true, :page => params[:page_id], :per_page => 3
-    @images = Image.search params[:query], :star => true, :page => params[:page_id], :per_page => default_page_size
+    limit_filtered_params = @filtered_params
+    limit_filtered_params[:page_size] = 3
+    @users = User.do_search({:query => URI.unescape(params[:query]), :filtered_params => limit_filtered_params})
+    @galleries = Gallery.do_search({:query => URI.unescape(params[:query]), :filtered_params => limit_filtered_params})
+    @images = Image.do_search({:query => URI.unescape(params[:query]), :filtered_params => @filtered_params})
+
+    p '-'*100
+    p @galleries
   end
 
   protected
