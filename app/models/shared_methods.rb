@@ -155,6 +155,12 @@ module SharedMethods
   end
 
   module Converter
+    def Boolean(string)
+      return true if string== true || string =~ (/(true|t|yes|y|1)$/i)
+      return false if string== false || string.nil? || string =~ (/(false|f|no|n|0)$/i)
+      raise ArgumentError.new("invalid value for Boolean: #{string}")
+    end
+
     class FileSizeConverter
       UNITS = {:byte => 'b', :kilobyte => 'kb', :megabyte => 'mb', :gigabyte => 'gb', :tetrabyte => 'tb'}
       UNIT_ARRANCE = [UNITS[:byte], UNITS[:kilobyte], UNITS[:megabyte], UNITS[:gigabyte], UNITS[:tetrabyte]]

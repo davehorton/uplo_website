@@ -149,7 +149,7 @@ class Api::ImagesController < Api::BaseController
       return render :json => result
     end
     if user_signed_in?
-      result = params[:dislike]==true.to_s ? image.disliked_by_user(current_user.id) : image.liked_by_user(current_user.id)
+      result = Boolean(params[:dislike]) ? image.disliked_by_user(current_user.id) : image.liked_by_user(current_user.id)
     else
       result[:msg] = "You have to sign in first"
     end
