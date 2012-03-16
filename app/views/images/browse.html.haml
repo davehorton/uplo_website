@@ -21,7 +21,7 @@
 
             .info.image-description.clearfix
               %label= "Liked:"
-              %span= @image.likes
+              %span.liked= @image.likes
 
             .info.image-description.clearfix
               %label= "Description:"
@@ -34,7 +34,9 @@
                   %input.not-implement{:type => "button", :value => "Comment"}
               %li
                 %div
-                  %input.not-implement{:type => "button", :value => "Like"}
+                  - liked_label = @dislike ? "Dislike" : "Like"
+                  - liked_url = url_for(:controller => 'images', :action => 'switch_liked', :id => params[:id], :dislike => @dislike)
+                  = button_to_function liked_label, "update_liked()", :class => "like", :data => {:url => liked_url, :dislike => @dislike, :id => params[:id]}
               %li
                 %div
                   - order_url = url_for(:controller => 'images', :action => 'order', :id => params[:id])
@@ -96,8 +98,38 @@
     $(".button-container .order").click(function(){
       window.location.href = $(this).attr('data-url');
     });
+
+    $(".button-container .like").click(function(){
+      url = $(this).attr('data-url');
+    });
   });
 
+  function update_liked(){
+    $.ajax({
+      url: $(".button-container .like").attr('data-url'),
+      type: "GET",
+      dataType: "json",
+      success: function(response){
+        if(response.success==true){
+          $(".info .liked")[0].innerHTML = response.likes;
+          id = $(".button-container .like").attr('data-id');
+          dislike = $(".button-container .like").attr('data-dislike');
+          if(dislike == "true"){
+            dislike = "false";
+            $(".button-container .like").attr('value', "Dislike");
+          }else{
+            dislike = "true";
+            $(".button-container .like").attr('value', "Like");
+          }
+
+          liked_url = "/images/switch_like/" + id + "?dislike=" + dislike;
+          $(".button-container .like").attr('data-url', liked_url);
+          $(".button-container .like").attr('data-dislike', dislike);
+        }
+      },
+      fail: function(){}
+    });
+  }
   </script>
 
   <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>

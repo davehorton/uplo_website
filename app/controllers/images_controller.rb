@@ -93,6 +93,21 @@ class ImagesController < ApplicationController
     end
   end
 
+  def switch_liked
+    result = {:success => false}
+    image = Image.find_by_id(params[:id])
+    if image.nil?
+      result[:msg] = "This image does not exist anymore!"
+      return render :json => result
+    end
+    if user_signed_in?
+      result = params[:dislike]==true.to_s ? image.disliked_by_user(current_user.id) : image.liked_by_user(current_user.id)
+    else
+      result[:msg] = "You have to sign in first"
+    end
+    render :json => result
+  end
+
   # GET images/:id/slideshow
   # params: id => Image ID
   def show
@@ -118,7 +133,12 @@ class ImagesController < ApplicationController
     elsif @image.gallery && !@image.gallery.can_access?(current_user)
       return render_unauthorized
     end
+
     @images = @image.gallery.images.all(:order => 'name')
+    @dislike = false
+    if user_signed_in?
+      @dislike = @image.is_liked? current_user.id
+    end
   end
 
   # PUT images/:id/slideshow_update

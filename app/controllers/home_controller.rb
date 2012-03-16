@@ -17,9 +17,6 @@ class HomeController < ApplicationController
     @users = User.do_search({:query => URI.unescape(params[:query]), :filtered_params => limit_filtered_params})
     @galleries = Gallery.do_search({:query => URI.unescape(params[:query]), :filtered_params => limit_filtered_params})
     @images = Image.do_search({:query => URI.unescape(params[:query]), :filtered_params => @filtered_params})
-
-    p '-'*100
-    p @galleries
   end
 
   protected

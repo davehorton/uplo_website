@@ -15,21 +15,22 @@ Uplo::Application.routes.draw do
   get "back", :to => "application#redirect_back"
   get "profile", :to => "users#profile"
   get "profile/edit", :to => "users#edit"
-  put "profile/update", :to => "users#update"  
+  put "profile/update", :to => "users#update"
+
   match 'images/browse/:id' => 'images#browse', :via => [:get]
+  get 'images/order/:id', :to => "images#order"
+  get 'images/switch_like/:id', :to => 'images#switch_liked'
 
   get "sales", :to => "sales#index"
-  
+
   match '/payments/paypal_notify' => 'payments#paypal_notify'
   match '/payments/paypal_result' => 'payments#paypal_result'
   match '/payments/paypal_cancel' => 'payments#paypal_cancel'
   match '/payments/checkout' => 'payments#checkout'
   get '/payments/checkout_result' => 'payments#checkout_result'
   post '/payments/auth_order' => 'payments#auth_order'
-  
-  resources :payments  
 
-  get 'images/order/:id', :to => "images#order"
+  resources :payments
 
   get 'galleries/search', :to => 'galleries#search'
   get 'galleries/search_public', :to => 'galleries#search_public'
@@ -55,11 +56,12 @@ Uplo::Application.routes.draw do
     get "change_password", :to => "users/passwords#edit_password"
     put "update_password", :to => "users/passwords#update_password"
   end
-  
+
   # API ROUTING
   namespace :api do
     # User
     devise_scope :user do
+      get "total_sales", :to => "users#get_total_sales"
       post "login", :to => "users#login"
       post "logout", :to => "users#logout"
       get "user_info", :to => "users#get_user_info"
@@ -67,7 +69,7 @@ Uplo::Application.routes.draw do
       get "reset_password", :to => "users#reset_password"
       post "update_profile", :to => "users#update_profile"
     end
-    
+
     # Gallery
     post "create_gallery", :to => "galleries#create_gallery"
     post "update_gallery", :to => "galleries#update_gallery"
@@ -77,17 +79,18 @@ Uplo::Application.routes.draw do
     get "list_popular", :to => "galleries#list_popular"
     get "popular_images", :to => "images#popular_images"
     get "search", :to => "search#search"
-    
+
     # Image
     post "upload_image", :to => "images#upload_image"
     post "update_image", :to => "images#update_image"
     post "delete_image", :to => "images#delete_image"
-    
+
     # Order
     get "list_orders", :to => "orders#list_orders"
     post "create_order", :to => "orders#create_order"
-  end 
-  
+    get "like", :to => "images#like"
+  end
+
   # The priority is based upon order of creation:
   # first created -> highest priority.
 
