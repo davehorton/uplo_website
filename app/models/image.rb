@@ -187,10 +187,34 @@ class Image < ActiveRecord::Base
   end
 
   def saled_quantity
+    result = 0
     orders = self.orders.where({:transaction_status => Order::TRANSACTION_STATUS[:complete]}).collect { |o| o.id }
     saled_items = (orders.length==0) ? [] : self.line_items.where("order_id in (#{orders.join(',')})")
 
-    return saled_items.length
+    saled_items.collect{ |item| result += item.quantity; p'-'*100; p result; }
+    return result
+  end
+
+  def get_purchased_info
+    result = []
+    orders = self.orders.where({:transaction_status => Order::TRANSACTION_STATUS[:complete]}).collect { |o| o.id }
+    saled_items = []
+    if orders.length > 0
+      saled_items = LineItem.find_all_by_image_id self.id, :conditions => "order_id in (#{orders.join(',')})", :joins => "LEFT JOIN orders ON orders.id = line_items.order_id LEFT JOIN users ON users.id = orders.user_id", :select => "line_items.*, users.id as purchaser_id, orders.created_at as purchased_date", :order => "purchased_date DESC"
+    end
+
+    saled_items.collect { |item|
+      user = User.find_by_id item.purchaser_id
+      purchased_date = DateTime.parse(item.purchased_date).strftime "%b %d, %Y"
+      result << {
+        :purchaser => user.serializable_hash(user.default_serializable_options),
+        :quantity => item.quantity,
+        :moulding => item.moulding,
+        :date => purchased_date
+      }
+    }
+
+    return result
   end
 
   protected

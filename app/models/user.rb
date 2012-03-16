@@ -60,7 +60,7 @@ class User < ActiveRecord::Base
     end
 
     def exposed_methods
-      [:avatar_url]
+      [:avatar_url, :fullname]
     end
 
     def exposed_attributes
@@ -102,7 +102,7 @@ class User < ActiveRecord::Base
 
   # PUBLIC INSTANCE METHODS
   def fullname
-    self.first_name + " " + self.last_name
+    [self.first_name, self.last_name].join(" ")
   end
 
   def avatar_url

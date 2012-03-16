@@ -159,7 +159,13 @@ class Api::ImagesController < Api::BaseController
   def total_sales
     image = Image.find_by_id params[:id]
     user = current_user
-    if !Gallery.exists?({:id => image.gallery_id, :user_id => user.id})
+
+    if image.nil?
+      result = {
+        :success => false,
+        :msg => "This image does not exist anymore!"
+      }
+    elsif !Gallery.exists?({:id => image.gallery_id, :user_id => user.id})
       result = {
         :success => false,
         :msg => "This image is not yours!"
@@ -167,8 +173,10 @@ class Api::ImagesController < Api::BaseController
     else
       result = {
         :success => true,
+        :image => image.serializable_hash(image.default_serializable_options),
         :total => image.total_sales,
-        :saled_quantity => image.saled_quantity
+        :saled_quantity => image.saled_quantity,
+        :purchased_info => image.get_purchased_info
       }
     end
 
