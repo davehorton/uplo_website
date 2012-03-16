@@ -175,6 +175,7 @@ class Api::ImagesController < Api::BaseController
         :success => true,
         :image => image.serializable_hash(image.default_serializable_options),
         :total => image.total_sales,
+        :year_monthly_sales => image.get_monthly_sales_over_year(Time.now),
         :saled_quantity => image.saled_quantity,
         :purchased_info => image.get_purchased_info
       }

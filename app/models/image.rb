@@ -3,6 +3,7 @@ class Image < ActiveRecord::Base
   include ::SharedMethods::Paging
   include ::SharedMethods::SerializationConfig
   include ::SharedMethods::Converter
+  include ::SharedMethods
 
   # ASSOCIATIONS
   belongs_to :gallery
@@ -142,14 +143,16 @@ class Image < ActiveRecord::Base
   def liked_by_user(user_id)
     result = {:success => false}
     Image.transaction do
-      self.likes += 1
-      if User.exists? user_id
-        img_like = ImageLike.new({:image_id => self.id, :user_id => user_id})
-        self.image_likes << img_like
-      else
-        result[:msg] = "User does not exist anymore"
+      unless self.is_liked?(user_id)
+        self.likes += 1
+        if User.exists? user_id
+          img_like = ImageLike.new({:image_id => self.id, :user_id => user_id})
+          self.image_likes << img_like
+        else
+          result[:msg] = "User does not exist anymore"
+        end
+        self.save
       end
-      self.save
       result[:likes] = self.likes
       result[:success] = true
     end
@@ -159,14 +162,16 @@ class Image < ActiveRecord::Base
   def disliked_by_user(user_id)
     result = {:success => false}
     Image.transaction do
-      self.likes -= 1
-      if User.exists? user_id
-        img_like = ImageLike.find_by_image_id self.id, :conditions => {:user_id => user_id}
-        img_like.destroy
-      else
-        result[:msg] = "User does not exist anymore"
+      if self.is_liked? user_id
+        self.likes -= 1
+        if User.exists? user_id
+          img_like = ImageLike.find_by_image_id self.id, :conditions => {:user_id => user_id}
+          img_like.destroy
+        else
+          result[:msg] = "User does not exist anymore"
+        end
+        self.save
       end
-      self.save
       result[:likes] = self.likes
       result[:success] = true
     end
@@ -177,11 +182,20 @@ class Image < ActiveRecord::Base
     ImageLike.exists?({:image_id => self.id, :user_id => user_id})
   end
 
-  def total_sales
-    orders = self.orders.where({:transaction_status => Order::TRANSACTION_STATUS[:complete]}).collect { |o| o.id }
-    saled_items = (orders.length==0) ? [] : self.line_items.where("order_id in (#{orders.join(',')})")
-
+  def total_sales(mon = nil) # mon with year
     total = 0
+
+    if mon.nil?
+      orders = self.orders.where({:transaction_status => Order::TRANSACTION_STATUS[:complete]})
+    else
+      start_date = DateTime.parse("01 #{mon}")
+      end_date = TimeCalculator.last_day_of_month(start_date.mon, start_date.year).strftime("%Y-%m-%d %T")
+      start_date = start_date.strftime("%Y-%m-%d %T")
+      orders = self.orders.where "transaction_status ='#{Order::TRANSACTION_STATUS[:complete]}' and transaction_date > '#{start_date.to_s}' and transaction_date < '#{end_date.to_s}'"
+    end
+
+    orders_in = orders.collect { |o| o.id }
+    saled_items = (orders.length==0) ? [] : self.line_items.where("order_id in (#{orders_in.join(',')})")
     saled_items.each { |item| total += (item.price + item.tax) }
     return total
   end
@@ -191,7 +205,7 @@ class Image < ActiveRecord::Base
     orders = self.orders.where({:transaction_status => Order::TRANSACTION_STATUS[:complete]}).collect { |o| o.id }
     saled_items = (orders.length==0) ? [] : self.line_items.where("order_id in (#{orders.join(',')})")
 
-    saled_items.collect{ |item| result += item.quantity; p'-'*100; p result; }
+    saled_items.collect{ |item| result += item.quantity }
     return result
   end
 
@@ -200,7 +214,7 @@ class Image < ActiveRecord::Base
     orders = self.orders.where({:transaction_status => Order::TRANSACTION_STATUS[:complete]}).collect { |o| o.id }
     saled_items = []
     if orders.length > 0
-      saled_items = LineItem.find_all_by_image_id self.id, :conditions => "order_id in (#{orders.join(',')})", :joins => "LEFT JOIN orders ON orders.id = line_items.order_id LEFT JOIN users ON users.id = orders.user_id", :select => "line_items.*, users.id as purchaser_id, orders.created_at as purchased_date", :order => "purchased_date DESC"
+      saled_items = LineItem.find_all_by_image_id self.id, :conditions => "order_id in (#{orders.join(',')})", :joins => "LEFT JOIN orders ON orders.id = line_items.order_id LEFT JOIN users ON users.id = orders.user_id", :select => "line_items.*, users.id as purchaser_id, orders.transaction_date as purchased_date", :order => "purchased_date DESC"
     end
 
     saled_items.collect { |item|
@@ -213,7 +227,16 @@ class Image < ActiveRecord::Base
         :date => purchased_date
       }
     }
+    return result
+  end
 
+  def get_monthly_sales_over_year(current_date)
+    result = []
+    date = DateTime.parse current_date.to_s
+    prior_months = TimeCalculator.prior_year_period(date)
+    prior_months.collect { |mon|
+      result << {:month => mon, :sales => self.total_sales(mon)}
+    }
     return result
   end
 
