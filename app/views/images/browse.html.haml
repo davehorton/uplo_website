@@ -116,10 +116,10 @@
           dislike = $(".button-container .like").attr('data-dislike');
           if(dislike == "true"){
             dislike = "false";
-            $(".button-container .like").attr('value', "Dislike");
+            $(".button-container .like").attr('value', "Like");
           }else{
             dislike = "true";
-            $(".button-container .like").attr('value', "Like");
+            $(".button-container .like").attr('value', "Dislike");
           }
 
           liked_url = "/images/switch_like/" + id + "?dislike=" + dislike;
