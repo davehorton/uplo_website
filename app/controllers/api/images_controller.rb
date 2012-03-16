@@ -136,31 +136,34 @@ class Api::ImagesController < Api::BaseController
   def popular_images
     images = Image.load_popular_images(@filtered_params)
     @result[:total] = images.total_entries
-    @result[:data] = images
+    @result[:data] = process_public_images(images)
     @result[:success] = true
     render :json => @result
   end
 
   def like
+    result = {:success => false}
     image = Image.find_by_id(params[:id])
     if image.nil?
-      @result[:success] = false
-      @result[:msg] = "Could not find Image"
-      return render :json => @result
+      result[:msg] = "This image does not exist anymore!"
+      return render :json => result
     end
-
-    image.likes += 1
     if user_signed_in?
-      img_like = ImageLikes.new({:image_id => image.id, :user_id => current_user.id})
-      image.image_likes << img_like
-    end
-    if image.save
-      @result[:success] = true
-      @result[:likes] = image.likes
+      result = params[:dislike]==true.to_s ? image.disliked_by_user(current_user.id) : image.liked_by_user(current_user.id)
     else
-      @result[:success] = false
-      @result[:msg] = "Action failure! Please try your like later."
+      result[:msg] = "You have to sign in first"
     end
-    return render :json => @result
+    render :json => result
+  end
+
+  protected
+  def process_public_images(images)
+    result = []
+    images.map { |img|
+      info = img.serializable_hash(img.default_serializable_options)
+      info[:liked] = current_user.nil? ? false : img.is_liked?(current_user.id)
+      result << info
+    }
+    return result
   end
 end

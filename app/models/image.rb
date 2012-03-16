@@ -10,6 +10,8 @@ class Image < ActiveRecord::Base
   has_many :tags, :through => :image_tags
   has_many :image_likes, :dependent => :destroy
   has_many :comments, :dependent => :destroy
+  has_many :line_items, :dependent => :destroy
+  has_many :orders, :through => :line_items
 
   # Paperclip
   has_attached_file :data,
@@ -24,7 +26,7 @@ class Image < ActiveRecord::Base
 
   # CALLBACK
   after_post_process :save_image_dimensions
-  after_initialize :init_random_price, :set_likes
+  after_initialize :init_random_price
 
   # CLASS METHODS
   class << self
@@ -115,9 +117,9 @@ class Image < ActiveRecord::Base
     ::Util.distance_of_time_in_words_to_now(self.created_at)
   end
 
+  # public link on social network
   def public_link
     url_for :controller => 'images', :action => 'browse', :id => self.id, :only_path => false, :host => DOMAIN
-    # return image_public_link
   end
 
   # Shortcut to get image's URL
@@ -135,6 +137,53 @@ class Image < ActiveRecord::Base
     end
 
     return result
+  end
+
+  def liked_by_user(user_id)
+    result = {:success => false}
+    Image.transaction do
+      self.likes += 1
+      if User.exists? user_id
+        img_like = ImageLike.new({:image_id => self.id, :user_id => user_id})
+        self.image_likes << img_like
+      else
+        result[:msg] = "User does not exist anymore"
+      end
+      self.save
+      result[:likes] = self.likes
+      result[:success] = true
+    end
+    return result
+  end
+
+  def disliked_by_user(user_id)
+    result = {:success => false}
+    Image.transaction do
+      self.likes -= 1
+      if User.exists? user_id
+        img_like = ImageLike.find_by_image_id self.id, :conditions => {:user_id => user_id}
+        img_like.destroy
+      else
+        result[:msg] = "User does not exist anymore"
+      end
+      self.save
+      result[:likes] = self.likes
+      result[:success] = true
+    end
+    return result
+  end
+
+  def is_liked?(user_id)
+    ImageLike.exists?({:image_id => self.id, :user_id => user_id})
+  end
+
+  def total_sales
+    orders = self.orders.where({:transaction_status => Order::TRANSACTION_STATUS[:complete]}).collect { |o| o.id }
+    saled_items = (orders.length==0) ? [] : self.line_items.where("order_id in (#{orders.join(',')})")
+
+    total = 0
+    saled_items.each { |item| total += (item.price + item.tax) }
+    return total
   end
 
   protected
@@ -158,11 +207,7 @@ class Image < ActiveRecord::Base
     end
   end
 
-  def set_likes
-    self.update_attribute("likes", self.id)
-  end
-
-  # indexing with thinking sphinx
+  #indexing with thinking sphinx
   define_index do
     indexes name
     indexes description
