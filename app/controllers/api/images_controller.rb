@@ -156,13 +156,32 @@ class Api::ImagesController < Api::BaseController
     render :json => result
   end
 
+  def total_sales
+    image = Image.find_by_id params[:id]
+    user = current_user
+    if !Gallery.exists?({:id => image.gallery_id, :user_id => user.id})
+      result = {
+        :success => false,
+        :msg => "This image is not yours!"
+      }
+    else
+      result = {
+        :success => true,
+        :total => image.total_sales,
+        :saled_quantity => image.saled_quantity
+      }
+    end
+
+    render :json => result
+  end
+
   protected
   def process_public_images(images)
     result = []
     images.map { |img|
       info = img.serializable_hash(img.default_serializable_options)
       info[:liked] = current_user.nil? ? false : img.is_liked?(current_user.id)
-      result << info
+      result << {:image => info}
     }
     return result
   end

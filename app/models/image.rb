@@ -186,6 +186,13 @@ class Image < ActiveRecord::Base
     return total
   end
 
+  def saled_quantity
+    orders = self.orders.where({:transaction_status => Order::TRANSACTION_STATUS[:complete]}).collect { |o| o.id }
+    saled_items = (orders.length==0) ? [] : self.line_items.where("order_id in (#{orders.join(',')})")
+
+    return saled_items.length
+  end
+
   protected
 
   # Detect the image dimensions.

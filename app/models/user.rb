@@ -240,7 +240,7 @@ class User < ActiveRecord::Base
     result = []
     self.galleries.each { |gal|
       gal.images.each { |img|
-        result << {:image => img, :total => img.total_sales}
+        result << {:image => img.serializable_hash(img.default_serializable_options), :total => img.total_sales}
       }
     }
     return result
