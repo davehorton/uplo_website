@@ -236,6 +236,16 @@ class User < ActiveRecord::Base
     return remaining
   end
 
+  def total_sales
+    result = []
+    self.galleries.each { |gal|
+      gal.images.each { |img|
+        result << {:image => img, :total => img.total_sales}
+      }
+    }
+    return result
+  end
+
   # indexing with thinking sphinx
   define_index do
     indexes first_name

@@ -1,8 +1,8 @@
 class Api::UsersController < Api::BaseController
   include Devise::Controllers::InternalHelpers
-  
+
   before_filter :require_login!, :except => [:login, :create_user]
-  
+
   def get_user_info
     @result[:success] = false
     user = User.find_by_id(params[:id])
@@ -14,7 +14,7 @@ class Api::UsersController < Api::BaseController
     end
     render :json => @result
   end
-  
+
   def create_user
     info = params[:user]
     user = User.new(info)
@@ -22,7 +22,7 @@ class Api::UsersController < Api::BaseController
       :success => true,
       :msg => {}
     }
-    
+
     if user.save
       @result[:user_info] = init_user_info(user)
     else
@@ -36,7 +36,7 @@ class Api::UsersController < Api::BaseController
     end
     render :json => @result
   end
-  
+
   # POST update_profile
   # params = {:user => {}}
   def update_profile
@@ -55,13 +55,13 @@ class Api::UsersController < Api::BaseController
         @result[:msg] = messages
       end
     end
-    
+
     render :json => @result
   end
-  
+
   def login
     @result[:success] = false
-    
+
     # Sign out if signing in
     signed_in = signed_in?(:user)
     Devise.sign_out_all_scopes ? sign_out : sign_out(:user)
@@ -69,12 +69,12 @@ class Api::UsersController < Api::BaseController
     user = warden.authenticate!(:api)
     sign_in(:user, user)
     # End of modification
-    
+
     @result[:user_info] = init_user_info(user)
     @result[:success] = true
     render :json => @result
   end
-  
+
   def logout
     @result[:success] = false
     signed_in = signed_in?(:user)
@@ -85,7 +85,7 @@ class Api::UsersController < Api::BaseController
     end
     render :json => @result
   end
-  
+
   def reset_password
     @result[:success] = true
     user = User.find_by_email params[:email]
@@ -97,15 +97,24 @@ class Api::UsersController < Api::BaseController
     end
     render :json => @result
   end
-  
+
+  def get_total_sales
+    user = current_user
+    result = {
+      :success => true,
+      :sales => user.total_sales
+    }
+    render :json => result
+  end
+
   protected
-  
+
   # Init a hash containing user's info
   def init_user_info(user)
     info = user.serializable_hash(user.default_serializable_options)
     # TODO: rename :avatar to :avatar_url and put it into User#exposed_methods
     info[:avatar_url] = user.avatar_url
-    
+
     return info
   end
 end
