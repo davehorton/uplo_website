@@ -236,13 +236,28 @@ class User < ActiveRecord::Base
     return remaining
   end
 
-  def total_sales
-    result = []
+  def total_sales(image_paging_params = {})
+    result = {:total => 0, :data => []}
+    gal_ids = []
     self.galleries.each { |gal|
-      gal.images.each { |img|
-        result << {:image => img.serializable_hash(img.default_serializable_options), :total => img.total_sales}
-      }
+      gal_ids << gal.id
+      # gal.images.each { |img|
+      #   result << {:image => img.serializable_hash(img.default_serializable_options), :total => img.total_sales}
+      # }
     }
+    paging_info = Image.paging_options(image_paging_params, {:sort_criteria => "images.updated_at DESC"})
+    images = Image.paginate(
+      :page => paging_info.page_id,
+      :per_page => paging_info.page_size,
+      :conditions => ["gallery_id in (#{gal_ids.join(',')})"],
+      :order => paging_info.sort_string)
+
+    images.each { |img|
+      info = img.serializable_hash(img.default_serializable_options)
+      info[:total_sale] = img.total_sales
+      result[:data] << {:image => info }
+    }
+    result[:total_entries] = images.total_entries
     return result
   end
 

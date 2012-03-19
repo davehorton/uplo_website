@@ -100,9 +100,11 @@ class Api::UsersController < Api::BaseController
 
   def get_total_sales
     user = current_user
+    user_sales = user.total_sales(@filtered_params)
     result = {
       :success => true,
-      :sales => user.total_sales
+      :total => user_sales[:total_entries],
+      :data => user_sales[:data]
     }
     render :json => result
   end
