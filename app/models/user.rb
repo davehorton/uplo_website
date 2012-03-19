@@ -249,7 +249,8 @@ class User < ActiveRecord::Base
     images = Image.paginate(
       :page => paging_info.page_id,
       :per_page => paging_info.page_size,
-      :conditions => ["gallery_id in (#{gal_ids.join(',')})"],
+      :joins => "LEFT JOIN galleries ON galleries.id = images.gallery_id",
+      :conditions => ["galleries.permission = ? and gallery_id in (#{gal_ids.join(',')})", Gallery::PUBLIC_PERMISSION],
       :order => paging_info.sort_string)
 
     images.each { |img|
