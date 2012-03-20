@@ -148,13 +148,11 @@ class ImagesController < ApplicationController
     img_info = params[:image]
     if request.xhr?
       worker = FilterWorker.new
-      worker.image_name = image.name
+      worker.image_id = image.id
       worker.image_url = image.data.url
       worker.effect = img_info[:filtered_effect]
-
-      img_info.delete :filtered_effect
-      worker.image_info = img_info
       worker.queue #put task to iron worker
+
       return render :json => {:task_id => worker.task_id}
     end
 
@@ -165,10 +163,19 @@ class ImagesController < ApplicationController
   end
 
   def get_filter_status
+    success = false
     task = IronWorker.service.status params[:task_id]
+    if task["status"]=="complete"
+      image = Image.find_by_id params[:id]
+      img_info = params[:image].delete :filtered_effect
+      image.attributes = img_info
+      image.data = open(image.data.url)
+      success = image.save
+    end
+
     render :json => {
       :status => task["status"],
-      :success => (task["status"]=="complete" || task["status"]=="cancelled")
+      :success => (success || task["status"]=="cancelled")
     }
   end
 

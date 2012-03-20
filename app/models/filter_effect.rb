@@ -34,7 +34,8 @@ module FilterEffect
     end
 
     def write_filterred_image(path)
-      @image.write(path)
+      return path if @image.write(path)
+      return nil
     end
   end
 

@@ -33,7 +33,7 @@
                   %input.order{:type => "button", :value => "Order", :data => {:url => "#{order_url}"}}
               %li
                 %div
-                  - status_url = url_for(:controller => 'images', :action => 'get_filter_status')
+                  - status_url = url_for(:controller => 'images', :action => 'get_filter_status', :id => params[:id])
                   = button_to_function I18n.t("slideshow.save"), "update_image()", :data => {:status_url => "#{status_url}"}, :class => "save"
 
           .edit-area.round-box.clearfix
@@ -101,8 +101,8 @@
       url = $(".button-container .save").attr("data-status-url");
       $.ajax({
         url: url,
-        type: "GET",
-        data: "task_id=" + task_id,
+        type: "POST",
+        data: $("#frmImageData").serialize() + "&task_id=" + task_id,
         dataType: "json",
         success: function(response){
           if(response.success == false){
