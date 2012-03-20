@@ -58,3 +58,5 @@ Uplo::Application.configure do
 
 end
 
+ENV['IRON_WORKER_TOKEN'] = 'syi1brYtdyKSHphY8OjuA4QjW_8'
+ENV['IRON_WORKER_PROJECT_ID'] = '4f66dfe48de4561d190044ab'
