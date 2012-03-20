@@ -31,7 +31,7 @@ gem "cancan", ">= 1.6.7"
 gem "faker"
 gem "rmagick"
 gem "nested_form"
-gem "aws-s3"
+gem "aws-s3", :require => "aws/s3"
 gem "aws-sdk", '~> 1.3.4'
 gem "dalli" # For memcache
 gem "nokogiri"
