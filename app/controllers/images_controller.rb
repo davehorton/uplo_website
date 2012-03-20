@@ -146,16 +146,30 @@ class ImagesController < ApplicationController
   def update
     image = Image.find_by_id params[:id]
     img_info = params[:image]
-    if img_info.has_key?(:filtered_effect) and !img_info[:filtered_effect].nil? and img_info[:filtered_effect]!=""
-      file_path = "#{Rails.root}/tmp/#{image.name}"
-      FilterEffect::Effect.send(img_info[:filtered_effect], image.url, file_path)
-      image.data = File.open(file_path)
+    if request.xhr?
+      worker = FilterWorker.new
+      worker.image_name = image.name
+      worker.image_url = image.data.url
+      worker.effect = img_info[:filtered_effect]
+
+      img_info.delete :filtered_effect
+      worker.image_info = img_info
+      worker.queue #put task to iron worker
+      return render :json => {:task_id => worker.task_id}
     end
 
     img_info.delete :filtered_effect
     image.attributes = img_info
     image.save
-    redirect_to :action => :index
+    redirect_to :action => :browse
+  end
+
+  def get_filter_status
+    task = IronWorker.service.status params[:task_id]
+    render :json => {
+      :status => task["status"],
+      :success => (task["status"]=="complete" || task["status"]=="cancelled")
+    }
   end
 
   def order

@@ -237,7 +237,7 @@ class User < ActiveRecord::Base
   end
 
   def total_sales(image_paging_params = {})
-    result = {:total => 0, :data => []}
+    result = {:total_entries => 0, :data => []}
     gal_ids = []
     self.galleries.each { |gal|
       gal_ids << gal.id

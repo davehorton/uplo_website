@@ -1,3 +1,5 @@
+require "RMagick"
+
 module FilterEffect
   POW_CONST = 65535/255
   class Pixel
