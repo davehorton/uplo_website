@@ -1,5 +1,4 @@
 require 'iron_worker'
-require 'aws/s3'
 
 class FilterWorker < IronWorker::Base
   attr_accessor :rails_root #from iron_worker config
@@ -8,6 +7,7 @@ class FilterWorker < IronWorker::Base
   attr_accessor :image_id
   attr_accessor :effect
 
+  merge_gem "aws/s3"
   merge "filter_effect.rb"
 
   def run

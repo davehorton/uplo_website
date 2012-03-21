@@ -107,6 +107,10 @@
         success: function(response){
           if(response.success == false){
             window.setTimeout( function(){ update_status(task_id); }, 5000);
+          }else if(response.status=="error"){
+            alert("ERROR! Your process has been stop!");
+          }else if(response.status=="cancelled"){
+            alert("Your process has been cancelled!");
           }
         },
         fail: function(){}

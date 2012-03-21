@@ -163,19 +163,22 @@ class ImagesController < ApplicationController
   end
 
   def get_filter_status
-    success = false
     task = IronWorker.service.status params[:task_id]
+    success = (task["status"]=="cancelled" || task["status"]=="error")
     if task["status"]=="complete"
       image = Image.find_by_id params[:id]
       img_info = params[:image].delete :filtered_effect
       image.attributes = img_info
-      image.data = open(image.data.url)
+      file_path = "#{Rails.root}/tmp/#{image.name}.jpg"
+      img = Magick::Image.read(image.data.url).first
+      img.write file_path
+      image.data = File.open file_path
       success = image.save
     end
 
     render :json => {
       :status => task["status"],
-      :success => (success || task["status"]=="cancelled")
+      :success => success
     }
   end
 
