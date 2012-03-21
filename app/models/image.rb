@@ -29,6 +29,11 @@ class Image < ActiveRecord::Base
   after_post_process :save_image_dimensions
   after_initialize :init_random_price
 
+  SALE_REPORT_TYPE = {
+    :quantity => "quantity",
+    :price => "price"
+  }
+
   # CLASS METHODS
   class << self
     def do_search(params = {})
@@ -182,7 +187,7 @@ class Image < ActiveRecord::Base
     ImageLike.exists?({:image_id => self.id, :user_id => user_id})
   end
 
-  def total_sales(mon = nil) # mon with year
+  def total_sales(mon = nil) # mon with year, return saled $$
     total = 0
 
     if mon.nil?
@@ -196,16 +201,26 @@ class Image < ActiveRecord::Base
 
     orders_in = orders.collect { |o| o.id }
     saled_items = (orders.length==0) ? [] : self.line_items.where("order_id in (#{orders_in.join(',')})")
-    saled_items.each { |item| total += (item.price + item.tax) }
+    saled_items.each { |item| total += (item.price + item.tax)*item.quantity }
     return total
   end
 
-  def saled_quantity
+  # mon with year, return saled quantity
+  def saled_quantity(mon = nil)
     result = 0
-    orders = self.orders.where({:transaction_status => Order::TRANSACTION_STATUS[:complete]}).collect { |o| o.id }
-    saled_items = (orders.length==0) ? [] : self.line_items.where("order_id in (#{orders.join(',')})")
 
-    saled_items.collect{ |item| result += item.quantity }
+    if mon.nil?
+      orders = self.orders.where({:transaction_status => Order::TRANSACTION_STATUS[:complete]})
+    else
+      start_date = DateTime.parse("01 #{mon}")
+      end_date = TimeCalculator.last_day_of_month(start_date.mon, start_date.year).strftime("%Y-%m-%d %T")
+      start_date = start_date.strftime("%Y-%m-%d %T")
+      orders = self.orders.where "transaction_status ='#{Order::TRANSACTION_STATUS[:complete]}' and transaction_date > '#{start_date.to_s}' and transaction_date < '#{end_date.to_s}'"
+    end
+
+    orders_in = orders.collect { |o| o.id }
+    saled_items = (orders.length==0) ? [] : self.line_items.where("order_id in (#{orders_in.join(',')})")
+    saled_items.collect { |item| result += item.quantity }
     return result
   end
 
@@ -230,12 +245,20 @@ class Image < ActiveRecord::Base
     return result
   end
 
-  def get_monthly_sales_over_year(current_date)
+  # return saled quantity
+  def get_monthly_sales_over_year(current_date, options = {:report_by => SALE_REPORT_TYPE[:price]})
     result = []
     date = DateTime.parse current_date.to_s
     prior_months = TimeCalculator.prior_year_period(date)
     prior_months.collect { |mon|
-      result << {:month => mon, :sales => self.total_sales(mon)}
+      if options.nil?
+        result << { :month => mon, :sales => self.total_sales(mon) }
+      else if options.has_key?(:report_by)
+        result << {
+          :month => mon,
+          :sales => (options[:report_by]==SALE_REPORT_TYPE[:price]) ? self.total_sales(mon) : self.saled_quantity(mon)
+        }
+      end
     }
     return result
   end

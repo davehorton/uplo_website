@@ -175,13 +175,19 @@ class Api::ImagesController < Api::BaseController
         :success => true,
         :image => image.serializable_hash(image.default_serializable_options),
         :total => image.total_sales,
-        :year_monthly_sales => image.get_monthly_sales_over_year(Time.now),
+        :sale_chart => url_for(:action => :sale_chart, :image_id => image.id),
         :saled_quantity => image.saled_quantity,
         :purchased_info => image.get_purchased_info
       }
     end
 
     render :json => result
+  end
+
+  def sale_chart
+    image = Image.find_by_id params[:image_id]
+    monthly_sales = image.get_monthly_sales_over_year(Time.now)
+    render :file => "shared/sale_chart.html", :layout => false
   end
 
   protected
