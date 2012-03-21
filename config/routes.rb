@@ -87,6 +87,7 @@ Uplo::Application.routes.draw do
     post "delete_image", :to => "images#delete_image"
     get "image_total_sales", :to => "images#total_sales"
     get "sale_chart", :to => "images#sale_chart"
+    get "image_purchasers", :to => "images#get_purchasers"
 
     # Order
     get "list_orders", :to => "orders#list_orders"

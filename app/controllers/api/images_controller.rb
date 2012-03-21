@@ -157,7 +157,7 @@ class Api::ImagesController < Api::BaseController
   end
 
   def total_sales
-    image = Image.find_by_id params[:id]
+    image = Image.find_by_id params[:image_id]
     user = current_user
 
     if image.nil?
@@ -178,6 +178,32 @@ class Api::ImagesController < Api::BaseController
         :sale_chart => url_for(:action => :sale_chart, :image_id => image.id, :only_path => false),
         :saled_quantity => image.saled_quantity,
         :purchased_info => image.get_purchased_info
+      }
+    end
+
+    render :json => result
+  end
+
+  def get_purchasers
+    image = Image.find_by_id params[:image_id]
+    user = current_user
+
+    if image.nil?
+      result = {
+        :success => false,
+        :msg => "This image does not exist anymore!"
+      }
+    elsif !Gallery.exists?({:id => image.gallery_id, :user_id => user.id})
+      result = {
+        :success => false,
+        :msg => "This image is not yours!"
+      }
+    else
+      purchased_info = image.get_purchased_info(@filtered_params)
+      result = {
+        :success => true,
+        :total => purchased_info[:total],
+        :data => purchased_info[:data]
       }
     end
 
