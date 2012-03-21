@@ -214,7 +214,7 @@ module SharedMethods
     MONS_PER_YEAR = 12
     DAYS_OF_MONTH = [0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
 
-    def self.prior_year_period(date)
+    def self.prior_year_period(date, options = {:format => '%b %Y'})
       result = []
       date = DateTime.parse String(date)
       current_month = date.month
@@ -224,15 +224,14 @@ module SharedMethods
 
       if last_year < current_year
         (start_month..MONS_PER_YEAR).collect { |mon|
-          p mon
           tmp = DateTime.parse "01-#{mon}-#{last_year}"
-          result << tmp.strftime("%b %Y")
+          result << tmp.strftime(options[:format])
         }
         start_month = 1
       end
       (start_month..current_month).collect { |mon|
         tmp = DateTime.parse "01-#{mon}-#{current_year}"
-        result << tmp.strftime("%b %Y")
+        result << tmp.strftime(options[:format])
       }
 
       return result
