@@ -81,12 +81,14 @@ file_upload/jquery.postmessage-transport.js: file_upload/jquery.postmessage-tran
 file_upload/jquery.ui.widget.js: file_upload/jquery.ui.widget-0d68580b40839753efc5ace9498dba90.js
 file_upload/jquery.xdr-transport.js: file_upload/jquery.xdr-transport-dd3b6b06f1f31dfa444095dfb6a8bfb2.js
 filter/effects.js: filter/effects-297a200a4a999a580d936baebb5ea543.js
-filter/filtrr.js: filter/filtrr-47b986cb75b6967a9d802d257ff9347d.js
+filter/filtrr.js: filter/filtrr-b17c28c81c2c9d6d7d8359cf0e0483dc.js
 lib/blueimp/bootstrap-image-gallery.js: lib/blueimp/bootstrap-image-gallery-dcdfba959f8e1f8e492c6f17465850f7.js
 lib/blueimp/bootstrap-image-gallery.min.js: lib/blueimp/bootstrap-image-gallery.min-3f21a16cb0ce2fe5df750f62655f509b.js
 lib/blueimp/bootstrap-modal.min.js: lib/blueimp/bootstrap-modal.min-48e59916df6f192013c57bada9c468d0.js
 lib/blueimp/load-image.min.js: lib/blueimp/load-image.min-bb9cbf973b6a077ec1c5c003215ab826.js
 lib/blueimp/tmpl.min.js: lib/blueimp/tmpl.min-f88a15820b13971eb8c49ff0920389e3.js
+lib/column_charts/exporting.js: lib/column_charts/exporting-59cba5a9b3da2ce9df273c94b8a52cc6.js
+lib/column_charts/highcharts.js: lib/column_charts/highcharts-6dbe90d18d1b972426bb46806e918070.js
 lib/galleria/LICENSE: lib/galleria/LICENSE
 lib/galleria/galleria.js: lib/galleria/galleria-613b41cca339f59b602eb2504b43659b.js
 lib/galleria/galleria.min.js: lib/galleria/galleria.min-28398e5b0d04b4777c91963932dd69f0.js

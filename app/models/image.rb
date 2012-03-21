@@ -253,7 +253,7 @@ class Image < ActiveRecord::Base
     prior_months.collect { |mon|
       if options.nil?
         result << { :month => mon, :sales => self.total_sales(mon) }
-      else if options.has_key?(:report_by)
+      elsif options.has_key?(:report_by)
         result << {
           :month => mon,
           :sales => (options[:report_by]==SALE_REPORT_TYPE[:price]) ? self.total_sales(mon) : self.saled_quantity(mon)
