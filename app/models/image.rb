@@ -249,7 +249,7 @@ class Image < ActiveRecord::Base
   def get_monthly_sales_over_year(current_date, options = {:report_by => SALE_REPORT_TYPE[:price]})
     result = []
     date = DateTime.parse current_date.to_s
-    prior_months = TimeCalculator.prior_year_period(date)
+    prior_months = TimeCalculator.prior_year_period(date, {:format => '%b'})
     prior_months.collect { |mon|
       if options.nil?
         result << { :month => mon, :sales => self.total_sales(mon) }

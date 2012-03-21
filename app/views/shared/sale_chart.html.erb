@@ -9,6 +9,12 @@
 		<script type="text/javascript">
 $(function () {
     var chart;
+    var months = [];
+    var month_sales = [];
+    <%  @monthly_sales.each do |sale| %>
+            months.push("<br /><span style=\"font-size:30px; font-family:Helvetica; color:black;\"><%= sale[:month] %></span>");
+            month_sales.push(<%= sale[:sales] %>);
+    <% end %>
     $(document).ready(function() {
         chart = new Highcharts.Chart({
             chart: {
@@ -28,20 +34,7 @@ $(function () {
             },
             xAxis: {
                 lineWidth:2,
-                categories: [
-                    '<br/><span style="font-size:30px; font-family:Helvetica; color:black;font-weight:bold;">Jan</span>',
-                    '<br/><span style="font-size:30px; font-family:Helvetica; color:black;font-weight:bold;">Feb</span>',
-                    '<br/><span style="font-size:30px; font-family:Helvetica; color:black;font-weight:bold;">Mar</span>',
-                    '<br/><span style="font-size:30px; font-family:Helvetica; color:black;font-weight:bold;">Apr</span>',
-                    '<br/><span style="font-size:30px; font-family:Helvetica; color:black;font-weight:bold;">May</span>',
-                    '<br/><span style="font-size:30px; font-family:Helvetica; color:black;font-weight:bold;">Jun</span>',
-                    '<br/><span style="font-size:30px; font-family:Helvetica; color:black;font-weight:bold;">Jul</span>',
-                    '<br/><span style="font-size:30px; font-family:Helvetica; color:black;font-weight:bold;">Aug</span>',
-                    '<br/><span style="font-size:30px; font-family:Helvetica; color:black;font-weight:bold;">Sep</span>',
-                    '<br/><span style="font-size:30px; font-family:Helvetica; color:black;font-weight:bold;">Oct</span>',
-                    '<br/><span style="font-size:30px; font-family:Helvetica; color:black;font-weight:bold;">Nov</span>',
-                    '<br/><span style="font-size:30px; font-family:Helvetica; color:black;font-weight:bold;">Dec</span>'
-                ]
+                categories: months
             },
             yAxis: {
                 min: 0,
@@ -83,7 +76,7 @@ $(function () {
             },
                 series: [ {
                 name: 'Sales',
-                data: [148.9, 168.8, 179.3, 151.4, 197.0, 248.3, 199.0, 179.6, 152.4, 165.2, 119.3, 131.2]
+                data: month_sales
 
             }]
         });
