@@ -259,13 +259,14 @@ class Image < ActiveRecord::Base
   def get_monthly_sales_over_year(current_date, options = {:report_by => SALE_REPORT_TYPE[:price]})
     result = []
     date = DateTime.parse current_date.to_s
-    prior_months = TimeCalculator.prior_year_period(date, {:format => '%b'})
+    prior_months = TimeCalculator.prior_year_period(date, {:format => '%b %Y'})
     prior_months.collect { |mon|
+      short_mon = DateTime.parse(mon).strftime('%b')
       if options.nil?
-        result << { :month => mon, :sales => self.total_sales(mon) }
+        result << { :month => short_mon, :sales => self.total_sales(mon) }
       elsif options.has_key?(:report_by)
         result << {
-          :month => mon,
+          :month => short_mon,
           :sales => (options[:report_by]==SALE_REPORT_TYPE[:price]) ? self.total_sales(mon) : self.saled_quantity(mon)
         }
       end
