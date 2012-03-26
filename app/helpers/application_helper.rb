@@ -1,10 +1,14 @@
 module ApplicationHelper
-  
+
+  def private_links_options
+    options_for_select([["My UPLO", "#"], ["My Account", "/profile"], ["My Galleries", "/galleries"], ["My Sales", "/sales"]])
+  end
+
   def redirect_back_url
     url = session[:back_url].nil? ? root_url : session[:back_url]
     return url
   end
-  
+
   def jquery_include_tag(all = true)
     if all
       javascript_include_tag("lib/jquery.min.js", "lib/jquery.livequery.js", "lib/jquery.ui.core.js")
@@ -12,15 +16,15 @@ module ApplicationHelper
       javascript_include_tag("lib/jquery.min.js")
     end
   end
-  
+
   def jquery_ui_css_tag
     stylesheet_link_tag("jquery-ui.custom.css")
   end
-  
+
   def js_menu_include_tag
     javascript_include_tag("lib/superfish.min.js", "lib/supersubs.min.js")
   end
-  
+
   def set_current_tab(item)
     (current_tab.to_s == item.to_s) ? "current" : ""
   end
@@ -29,17 +33,17 @@ module ApplicationHelper
   def current_tab
     @current_tab ||= "popular"
   end
-  
+
   def render_pagination(data_source, params = {})
     return nil if data_source.blank?
     will_paginate(data_source, {
       :previous_label => "<",
       :next_label => ">",
-      :param_name => "page_id", 
+      :param_name => "page_id",
       :params => params
     })
   end
-  
+
   # This is a helper to use with the JAIL (jQuery Asynchronous Image Loader plugin)
   def async_image_tag(source, options = {})
     options ||= {}
@@ -51,14 +55,14 @@ module ApplicationHelper
       image_html << content_tag("noscript") do # Tag to show image when the JS is disabled.
         image_tag_ex(source, options)
       end
-    end    
+    end
     render :inline => image_html
   end
-  
+
   # This is an extension method for image_path to help you can use <img> tag in HTML email.
   def image_tag_ex(source, options = {})
     path = source
-        
+
     if @use_absolute_asset_path
       path = path_to_image(source)
       if path && path.index("http") != 0
@@ -71,12 +75,12 @@ module ApplicationHelper
         path = File.join(host, path)
       end
     end
-    
+
     image_tag(path, options)
   end
-  
+
   def gender_options
-    [ [I18n.t("common.male"), 0], 
+    [ [I18n.t("common.male"), 0],
       [I18n.t("common.female"), 1]
     ]
   end

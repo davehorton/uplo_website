@@ -1,0 +1,24 @@
+%ul
+  - if user_signed_in?
+    %li
+      = link_to "Logout", "/signout", :class => "icon-link icon-logout", :method => "delete"
+    %li
+      = link_to("my cart (#{total_line_items})", shopping_cart_show_path)
+    %li.no-padding-right
+      = select_tag "private_pages", private_links_options, :id => "my_links"
+
+  - else
+    %li
+      = link_to "Login", "/signin", :method => "get"
+    %li.no-padding= "|"
+    %li
+      = link_to "Sign Up", "/register"
+
+:erb
+  <script type = "text/javascript">
+    jQuery(document).ready(function() {
+      $('#my_links').bind('change', function(e){
+        window.location = e.target.value;
+      });
+    });
+  </script>

@@ -8,16 +8,19 @@ en:
     error_resource_notfound: "Resource not found"
     error_unauthorized: "You are not authorized to access this resource"
     error_not_login: "You must login first"
-    search_hint: "Enter search key"
+    search_hint: "Keyword Search"
     male: "Male"
     female: "Female"
-    
+
   main_menu:
     popular: "Popular"
     browse: "Browse"
     galleries: "My Galleries"
     sales: "My Sales"
     account: "Account"
+    spotlight: "Spotlight"
+    the_app: "The App"
+    friend: "Friends"
 
   gallery:
     permission:
@@ -35,11 +38,11 @@ en:
     cancel: "Cancel"
     print: "Print"
     save: "Save"
-  
+
   user:
     update_done: "Your profile was updated successfully"
     update_password_done: "Your password was changed successfully"
-  
+
   order:
     transaction_canceled: "You've canceled the transaction"
     cart_empty: "Sorry, your shopping cart is empty. (Did you already submit your order? Check your email for receipts.)"
@@ -47,7 +50,7 @@ en:
     transaction_completed: "Your payment was completed successfully"
     email:
       transaction_finish_subject: "Your payment completed successfully."
-      
+
   date:
     formats:
       default: "%m/%d/%Y"

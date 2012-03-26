@@ -2,21 +2,16 @@
 
 %ul#menu-items
   %li.first{:class => set_current_tab("popular")}
-    = link_to(I18n.t("main_menu.popular"), "/")
+    = link_to(I18n.t("main_menu.spotlight"), "/")
 
   %li{:class => set_current_tab("browse")}
     = link_to(I18n.t("main_menu.browse"), "/browse")
 
   %li{:class => set_current_tab("galleries")}
-    = link_to(I18n.t("main_menu.galleries"), galleries_path)
+    = link_to(I18n.t("main_menu.the_app"), "#")
 
-  %li{:class => set_current_tab("sales")}
-    = link_to(I18n.t("main_menu.sales"), "/sales")
-
-  %li.last{:class => set_current_tab("account")}
-    = link_to(I18n.t("main_menu.account"), "/profile")
-
-#menu-bottom-padding
+  %li{:class => set_current_tab("friend")}
+    = link_to(I18n.t("main_menu.friend"), "#")
 
 :erb
   <script type="text/javascript">
