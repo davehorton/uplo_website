@@ -5,9 +5,9 @@
   height: auto !important;
   padding: 20px !important;
   border: 1px solid transparent;
-  
-  &:hover { 
-    border: 1px solid #FFFE7C; 
+
+  &:hover {
+    border: 1px solid #FFFE7C;
     background-color: #FEFDC3;
     border-radius: 20px;
   }
@@ -27,14 +27,14 @@
     float: left;
     font-weight: normal;
   }
-  
+
   .price{
     .likes {
       color: #4B4B4B;
       font-style: italic;
       font-size: 14px;
     }
-    
+
     font-weight: bold;
     float: right;
     padding: 0 2px;

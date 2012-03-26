@@ -8,6 +8,7 @@ class HomeController < ApplicationController
 
   def browse
     @images = Image.load_popular_images(@filtered_params)
+    render :template => 'home/new_browse', :layout => "main"
   end
 
   def search
@@ -33,8 +34,8 @@ class HomeController < ApplicationController
   def default_page_size
     size = 30
     if params[:action] == "browse"
-      size = 12
-    elsif params[:action] == "search"
+      size = 24
+    elsif params[:action] == "search" || params[:action] == "spotlight"
       size = 12
     end
     return size

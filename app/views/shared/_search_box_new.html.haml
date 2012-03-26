@@ -1,0 +1,24 @@
+#search-box.right
+  %form.search-form{ :action => action, :method => 'get'}
+    .container
+      %input#search-keyword{:type => "text", :name => "query", :class => "text",
+                            :value => params[:query], :placeHolder => I18n.t("common.search_hint")}
+      .search-right-padding
+      .search-icon
+
+:erb
+  <script type="text/javascript">
+    $(document).ready(function(){
+      $("#search-keyword").focusin(function(){
+        $("#search-box .container").addClass("focus");
+      });
+
+      $("#search-keyword").focusout(function(){
+        $("#search-box .container").removeClass("focus");
+      });
+
+      $(".search-icon").click(function(){
+        $(".search-form").submit();
+      });
+    });
+  </script>

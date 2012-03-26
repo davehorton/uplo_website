@@ -4,7 +4,7 @@
   %form.search-form{ :action => action, :method => 'get'}
     .search-container
       .search-icon
-      %input#search-textbox{:type => "text", :name => "query", :class => "text", 
+      %input#search-textbox{:type => "text", :name => "query", :class => "text",
                             :value => params[:query], :placeHolder => I18n.t("common.search_hint")}
       .search-right-padding
 
@@ -15,11 +15,11 @@
       $("#search-textbox").focusin(function(){
         $(".search-container").addClass("focus");
       });
-      
+
       $("#search-textbox").focusout(function(){
         $(".search-container").removeClass("focus");
       });
-      
+
       $(".search-icon").click(function(){
         $(".search-form").submit();
       });
