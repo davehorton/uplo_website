@@ -3,7 +3,7 @@
     %li
       = link_to "Logout", "/signout", :class => "icon-link icon-logout", :method => "delete"
     %li
-      = link_to("my cart (#{total_line_items})", shopping_cart_show_path)
+      = link_to("My Cart (#{total_line_items})", shopping_cart_show_path)
     %li.no-padding-right
       = select_tag "private_pages", private_links_options, :id => "my_links"
 
