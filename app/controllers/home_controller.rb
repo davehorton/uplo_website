@@ -1,9 +1,12 @@
 class HomeController < ApplicationController
-  before_filter :authenticate_user!, :only => [:browse]
+  before_filter :authenticate_user!, :except => [:index]
 
   def index
     session[:back_url] = url_for(:controller => 'home', :action => "browse") if session[:back_url].nil?
     @images = Image.load_popular_images(@filtered_params)
+    if user_signed_in?
+      redirect_to :action => :popular
+    end
   end
 
   def browse

@@ -115,6 +115,9 @@ p, ul{
   margin-top: 5px;
   background: url("/assets/line_horizontal.jpg") repeat-x scroll 0 0 transparent;
 }
+.normal {
+  font-weight: normal;
+}
 .fuzzy {
   color: $fuzzy-text;
 }
@@ -232,10 +235,13 @@ p, ul{
   .header-menu {
     li {
       float: left;
-      padding: 0px 5px;
+      padding: 0px 8px;
       a, option {
         color: $header-text;
         font-size: 13.5px;
+        .normal {
+          font-size: 14px;
+        }
       }
     }
   }
@@ -255,9 +261,14 @@ p, ul{
 
 #top {
   width: 100%;
+
   #filter-box {
     .container {
-      padding: 2px 25px 0 0;
+      padding-right: 25px;
+      select {
+        height: 26px;
+        padding-top: 2px;
+      }
       .label {
         font-size: 13px;
       }

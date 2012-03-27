@@ -3,7 +3,9 @@
     %li
       = link_to "Logout", "/signout", :class => "icon-link icon-logout", :method => "delete"
     %li
-      = link_to("My Cart (#{total_line_items})", shopping_cart_show_path)
+      %a{:href => shopping_cart_show_path}
+        My Cart
+        %span.normal (#{total_line_items})
     %li.no-padding-right
       = select_tag "private_pages", private_links_options, :id => "my_links"
 
