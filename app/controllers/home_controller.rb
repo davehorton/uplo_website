@@ -11,6 +11,21 @@ class HomeController < ApplicationController
     render :template => 'home/new_browse', :layout => "main"
   end
 
+  def spotlight
+    @images = Image.load_popular_images(@filtered_params)
+    render :layout => "main"
+  end
+
+  def intro
+    render :layout => "main"
+  end
+
+  def popular
+    session[:back_url] = url_for(:controller => 'home', :action => "browse") if session[:back_url].nil?
+    @images = Image.load_popular_images(@filtered_params)
+    render :layout => "main"
+  end
+
   def search
     @no_async_image_tag = true
     limit_filtered_params = @filtered_params

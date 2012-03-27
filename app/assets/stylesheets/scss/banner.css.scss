@@ -1,0 +1,115 @@
+/*==================================================================================*/
+/* CONSTANT */
+/*==================================================================================*/
+$frame-width: 960px;
+$fuzzy-text: #CBCBCB;
+$header-text: #000000;
+
+/*==================================================================================*/
+/* CLASS */
+/*==================================================================================*/
+.banner {
+  background: url("/assets/banner-bg.jpg") repeat-x scroll center left transparent;
+  height: 399px;
+  color: #FFFFFF;
+  .left {
+    width: 445px;
+    .info {
+      word-wrap: break-word;
+      text-align: justify;
+      line-height: 20px;
+      font-size: 15px;
+      margin-top: 20px;
+      height: 95px;
+    }
+    .buttons {
+      // padding-top: 55px;
+    }
+  }
+  .right {
+    width: 500px;
+  }
+}
+
+.spotlight{
+  .upper {
+    .left {
+      margin-top: 82px;
+      .logo {
+        background: url("/assets/banner-logo-broadcast.png") no-repeat scroll center left transparent;
+        width: 330px;
+        height: 75px;
+        margin-top: 10px;
+      }
+    }
+    .right {
+      background: url("/assets/banner-devices-spotlight.png") no-repeat scroll center left transparent;
+      height: 300px;
+      width: 498px;
+      margin-top: 82px;
+    }
+  }
+
+  .lower {
+    background: url("/assets/banner-lower-bg.png") repeat-x scroll center left transparent;
+    height: 140px;
+    border-bottom: 1px solid $fuzzy-text;
+    color: $header-text;
+
+    .devider {
+      padding: 20px;
+    }
+
+    .info {
+      width: 292px;
+      word-wrap: break-word;
+      text-align: justify;
+      font-size: 12px;
+      margin: 20px 0;
+      line-height: 22px;
+      .header {
+        font-weight: bold;
+        font-size: 15px;
+        .main {
+          font-size: 20px;
+        }
+      }
+      .text {
+        line-height: 16px;
+        margin-top: 7px;
+      }
+    }
+  }
+}
+
+.the-app {
+  .left {
+    margin-top: 20px;
+    ul {
+      margin-top: 20px;
+      li {
+        padding: 3px 0 3px 18px;
+      }
+    }
+    .header {
+      margin-top: 30px;
+      font-size: 28px;
+      font-weight: bold;
+      height: 80px;
+    }
+    .check {
+      background: url("/assets/banner-check.png") no-repeat scroll center left transparent;
+      height: 20px;
+      padding-left: 18px;
+    }
+    .info {
+      height: 140px;
+    }
+  }
+  .right {
+    background: url("/assets/banner-devices-the-app.png") no-repeat scroll center left transparent;
+    height: 360px;
+    width: 350px;
+    margin-top: 20px;
+  }
+}

@@ -1,0 +1,39 @@
+- content_for :head do
+  = javascript_include_tag("lib/jail.min.js")
+  = javascript_include_tag("app/gallery.js")
+  = stylesheet_link_tag("scss/new_image.css.scss", "scss/banner.css.scss")
+
+- content_for :banner do
+  - render :partial => "home/banners/spotlight"
+
+- content_for :right_content do
+  %div{:style => "padding-top:15px;"}
+    .breadcrum.left
+      .left Recent Upload
+      %a.more.left{:href => "#"} +VIEW ALL
+
+%div{:style => "padding-top:15px;"}
+  .breadcrum.left
+    .left Spotlight Images
+    %a.more.left{:href => "#"} +VIEW ALL
+
+%div{:style => "width:640px;"}
+  .images-wrapper.clearfix
+  - if @images.blank?
+    .empty-data= "There is no image. Please add image."
+  - else
+    - (0...@images.length). each do |idx|
+      - image = @images[idx]
+      - url = url_for(:controller => "images", :action => "browse", :id => "#{image.id}")
+      - additional_class = (idx%4 == 0) ? "no-padding-left" : ((idx%4==3) ? "no-padding-right" : "")
+      .image-container{:id => "image-container-#{image.id}", :title=>"#{image.name}", :class => "#{additional_class}"}
+        %a{ :href => "#{url}" }
+          %dl.entry
+            %dt.preview
+              = async_image_tag(image.data.url(:thumb), :class => "image-thumb")
+
+
+:erb
+  <script type="text/javascript">
+    gallery.setup();
+  </script>

@@ -3,7 +3,7 @@
 /*==================================================================================*/
 $frame-width: 960px;
 $fuzzy-text: #CBCBCB;
-$header-nav-text: #000000;
+$header-text: #000000;
 
 /*==================================================================================*/
 /* HTML */
@@ -101,7 +101,7 @@ p, ul{
 }
 .wrapper {
   width: $frame-width;
-  margin: 10px auto;
+  margin: 0 auto;
   /*-webkit-box-shadow: rgba(0,0,0,.45) 0 1px 3px;
   -moz-box-shadow: rgba(0,0,0,.45) 0 1px 3px;
   box-shadow: rgba(0,0,0,.45) 0 1px 3px;
@@ -123,6 +123,9 @@ p, ul{
 }
 .right {
   float: right;
+}
+.center {
+  text-align: center;
 }
 .no-padding {
   padding: 0 !important;
@@ -199,10 +202,16 @@ p, ul{
 .breadcrum {
   line-height: 2.5em;
   font-weight: bold;
-  color: #000000;
+  color: $header-text;
 
   .current {
     color: gray;
+  }
+  .more {
+    color: $header-text;
+    font-size: 10px;
+    padding-left: 20px;
+    padding-top: 3px;
   }
 }
 
@@ -210,23 +219,22 @@ p, ul{
 /* ID */
 /*==================================================================================*/
 #header {
-  height: auto;
-  margin-left: auto;
-  margin-right: auto;
-  margin-top: 5px;
+  min-height: 60px;
+  height: 62px;
   position: relative;
   overflow: hidden;
   color: #ebebeb;
-  padding: 0;
-  border-bottom: 1px solid $fuzzy-text;
-  background: url("/assets/navigationBar.jpg") repeat-x scroll 0 0 transparent;
+  background: url("/assets/header-bg.jpg") repeat-x scroll 0 0 transparent;
 
+  .wrapper {
+    padding-top: 20px;
+  }
   .header-menu {
     li {
       float: left;
       padding: 0px 5px;
       a, option {
-        color: $header-nav-text;
+        color: $header-text;
         font-size: 13.5px;
       }
     }
@@ -247,6 +255,14 @@ p, ul{
 
 #top {
   width: 100%;
+  #filter-box {
+    .container {
+      padding: 2px 25px 0 0;
+      .label {
+        font-size: 13px;
+      }
+    }
+  }
 
   #search-box {
     .container{
@@ -313,6 +329,21 @@ p, ul{
   margin-left: 2%;
 }
 #center {
+  .intro {
+    width: 300px;
+    height: auto;
+    word-wrap: break-word;
+    text-align: justify;
+    line-height: 20px;
+    font-size: 15px;
+    padding: 0 15px 30px 15px;
+    .header {
+      color: $header-text;
+      font-weight: bold;
+      font-size: 18px;
+      margin: 10px 0 5px;
+    }
+  }
 }
 
 #menu-items{
