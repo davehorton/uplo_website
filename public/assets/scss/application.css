@@ -190,7 +190,7 @@ p, ul {
     color: black;
     font-size: 10px;
     padding-left: 20px;
-    padding-top: 3px; }
+    padding-top: 2px; }
 
 /*==================================================================================*/
 /* ID */
@@ -198,8 +198,6 @@ p, ul {
 #header {
   min-height: 60px;
   height: 62px;
-  position: relative;
-  overflow: hidden;
   color: #ebebeb;
   background: url("/assets/header-bg.jpg") repeat-x scroll 0 0 transparent; }
   #header .wrapper {
@@ -274,7 +272,7 @@ p, ul {
 #bottom {
   width: 100%;
   font-size: 12px;
-  padding-top: 10px; }
+  margin: 10px 0 30px; }
 
 #left {
   margin-right: 2%; }

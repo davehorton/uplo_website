@@ -11,7 +11,7 @@ banner-button-learn-more.png: banner-button-learn-more-8042d3373b36701b49715f829
 banner-check.png: banner-check-dd187f3e86f40492d14a947ba83c7e53.png
 banner-devices-spotlight.png: banner-devices-spotlight-851aa1a93d2751cb0499158a991b71ad.png
 banner-devices-the-app.png: banner-devices-the-app-115de8e26ea3fd19f4503d7e49a0b9d6.png
-banner-divider.jpg: banner-divider-b628fd7cfbd23fe95b24164a6882157d.jpg
+banner-divider.png: banner-divider-d2d74c26b33122894a69a24a57f065a5.png
 banner-logo-broadcast.png: banner-logo-broadcast-0b6239ad5d645b08c427fc3185455860.png
 banner-logo.png: banner-logo-1877ababb9afc7d685ad149a112d31da.png
 banner-lower-bg.png: banner-lower-bg-5a0747d6225576e4688c307a8afcaa35.png
@@ -175,7 +175,7 @@ bootstrap.min.css: bootstrap.min-90723bafe9e62082bc01b2d2e17c451b.css
 file_upload/jquery.fileupload-ui.css: file_upload/jquery.fileupload-ui-f39575881f448014568e7c117a1fff41.css
 file_upload/progressbar.gif: file_upload/progressbar-54dfeacc002a35b014f009faa50bf254.gif
 jquery-ui.custom.css: jquery-ui.custom-bb782aff6a70a3531739cdd09fe60b50.css
-scss/application.css: scss/application-58fbe43aadbf2e41e2bc527aa6e6b1f3.css
+scss/application.css: scss/application-20a969e05b72df839a4f0a59583ef002.css
 scss/banner.css: scss/banner-dcfce3b89cdf4e4397eb717567ee9e1d.css
 scss/cart.css: scss/cart-a00c819367f1c26885c93fd320e87746.css
 scss/dialog.css: scss/dialog-5dec5a3c5274437ee34726e7e4356988.css
