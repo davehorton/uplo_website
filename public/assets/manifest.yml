@@ -5,6 +5,7 @@ ajaxloading.gif: ajaxloading-e26c97d156b7747cd4d45581116dc1ff.gif
 arrow-down.gif: arrow-down-6d6494c03460b35f1b63015a56604ae2.gif
 arrow-up.gif: arrow-up-b4e8950b0089bfe8db8f09b5d2b6ed72.gif
 banner-bg.jpg: banner-bg-d8fcb91763c1c309bf623ecc36e9c202.jpg
+banner-button-download-big.png: banner-button-download-big-d3acf5bab216e5ba87b09a86acdd111e.png
 banner-button-download.png: banner-button-download-0414669a5ffb02cdc8582e1a4bcd4523.png
 banner-button-learn-more.png: banner-button-learn-more-8042d3373b36701b49715f8296ef43e6.png
 banner-check.png: banner-check-dd187f3e86f40492d14a947ba83c7e53.png
@@ -174,8 +175,8 @@ bootstrap.min.css: bootstrap.min-90723bafe9e62082bc01b2d2e17c451b.css
 file_upload/jquery.fileupload-ui.css: file_upload/jquery.fileupload-ui-f39575881f448014568e7c117a1fff41.css
 file_upload/progressbar.gif: file_upload/progressbar-54dfeacc002a35b014f009faa50bf254.gif
 jquery-ui.custom.css: jquery-ui.custom-bb782aff6a70a3531739cdd09fe60b50.css
-scss/application.css: scss/application-abc0468f5020878b0005ed1a8cd8bc15.css
-scss/banner.css: scss/banner-4319b2fafc197687557a7a0334ad4a0a.css
+scss/application.css: scss/application-58fbe43aadbf2e41e2bc527aa6e6b1f3.css
+scss/banner.css: scss/banner-dcfce3b89cdf4e4397eb717567ee9e1d.css
 scss/cart.css: scss/cart-a00c819367f1c26885c93fd320e87746.css
 scss/dialog.css: scss/dialog-5dec5a3c5274437ee34726e7e4356988.css
 scss/filter.css: scss/filter-739c80ba8eabd3a953be7d9ea50b38b6.css

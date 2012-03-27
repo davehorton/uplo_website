@@ -109,6 +109,9 @@ p, ul {
   margin-top: 5px;
   background: url("/assets/line_horizontal.jpg") repeat-x scroll 0 0 transparent; }
 
+.normal {
+  font-weight: normal; }
+
 .fuzzy {
   color: #cbcbcb; }
 
@@ -203,10 +206,12 @@ p, ul {
     padding-top: 20px; }
   #header .header-menu li {
     float: left;
-    padding: 0px 5px; }
+    padding: 0px 8px; }
     #header .header-menu li a, #header .header-menu li option {
       color: black;
       font-size: 13.5px; }
+      #header .header-menu li a .normal, #header .header-menu li option .normal {
+        font-size: 14px; }
   #header .devider {
     margin-top: -10px;
     padding: 0px 5px; }
@@ -220,7 +225,10 @@ p, ul {
 #top {
   width: 100%; }
   #top #filter-box .container {
-    padding: 2px 25px 0 0; }
+    padding-right: 25px; }
+    #top #filter-box .container select {
+      height: 26px;
+      padding-top: 2px; }
     #top #filter-box .container .label {
       font-size: 13px; }
   #top #search-box .container {
