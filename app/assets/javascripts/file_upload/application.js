@@ -14,7 +14,6 @@
 $(function () {
 
     'use strict';
-
     // Initialize the jQuery File Upload widget:
     $('#fileupload').fileupload();
 
@@ -28,32 +27,37 @@ $(function () {
     });
     // Load existing files:
     $.get($('#fileupload').prop('action'), function (files) {
-        var fu = $('#fileupload').data('fileupload'),
-            template;
-        fu._adjustMaxNumberOfFiles(-files.length);
-        template = fu._renderDownload(files)
-            .appendTo($('#fileupload .files.download'));
-        // Force reflow:
-        fu._reflow = fu._transition && template.length &&
-            template[0].offsetWidth;
-        template.addClass('in');
-        
-        var links = $("a");
-        var edit_btns = $(".edit button");
-        $.merge(links, edit_btns).bind('click', function(e){
-          
-            var targetObj = $(this);
-            var url = targetObj.attr("href");
-            if(url==null || url==undefined){
-              url = targetObj.attr("data-url");
-            }
-            $(".fileupload-buttonbar .cancel").click();
-            window.setTimeout(function(){
-              window.location = url;
-            }, 1500);
-            return false;
-          
-        })
+        if(files.length == 0){
+            $("#image_data").click();
+        }else{
+            var fu = $('#fileupload').data('fileupload'),
+                template;
+
+            fu._adjustMaxNumberOfFiles(-files.length);
+            template = fu._renderDownload(files)
+                .appendTo($('#fileupload .files.download'));
+            // Force reflow:
+            fu._reflow = fu._transition && template.length &&
+                template[0].offsetWidth;
+            template.addClass('in');
+
+            var links = $("a");
+            var edit_btns = $(".edit button");
+            $.merge(links, edit_btns).bind('click', function(e){
+
+                var targetObj = $(this);
+                var url = targetObj.attr("href");
+                if(url==null || url==undefined){
+                  url = targetObj.attr("data-url");
+                }
+                $(".fileupload-buttonbar .cancel").click();
+                window.setTimeout(function(){
+                  window.location = url;
+                }, 1500);
+                return false;
+
+            })
+        }
     });
 
     // Enable iframe cross-domain access via redirect page:

@@ -9,7 +9,7 @@
     %span.gallery-permission
       %a{:href => "#"}= @gallery.permission_string
     %span= ")"
-    
+
   .images-list-wrapper.clearfix
     = form_for :image, :url=>"/galleries/#{@gallery.id}/images?page_id=#{@page_id}", :method => 'post', :html => { :multipart => true, :id => 'fileupload' } do |f|
       .row
@@ -19,7 +19,7 @@
           %span.btn.success.fileinput-button
             %span Add files...
             = f.file_field :data, :multiple => true
-          
+
           %button{:type=>"submit", :class=>"btn primary start"}Start upload
           %button{:type=>"reset", :class=>"btn info cancel"}Cancel upload
           %button{:type=>"button", :class=>"btn danger delete"}Delete selected
@@ -95,7 +95,7 @@
                 <div class='description'>{%= file.description %}</div>
               </td>
           {% } %}
-          
+
           <td>
             <div class="edit"><button class="btn" data-url="{%=file.edit_url%}">Edit</button></div>
             <div class="delete" style="float: right;">
@@ -107,13 +107,13 @@
   {% } %}
   </script>
 
-= javascript_include_tag "file_upload/jquery.ui.widget.js", 
+= javascript_include_tag "file_upload/jquery.ui.widget.js",
       "lib/blueimp/tmpl.min.js",
-      "lib/blueimp/load-image.min.js", 
-      "lib/blueimp/bootstrap-modal.min.js", 
-      "lib/blueimp/bootstrap-image-gallery.min.js", 
-      "file_upload/jquery.iframe-transport.js", 
+      "lib/blueimp/load-image.min.js",
+      "lib/blueimp/bootstrap-modal.min.js",
+      "lib/blueimp/bootstrap-image-gallery.min.js",
+      "file_upload/jquery.iframe-transport.js",
       "file_upload/jquery.fileupload.js",
-      "file_upload/jquery.fileupload-ui.js", 
-      "file_upload/application.js", 
+      "file_upload/jquery.fileupload-ui.js",
+      "file_upload/application.js",
       "file_upload/jquery.xdr-transport.js"
