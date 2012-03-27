@@ -2,7 +2,8 @@
   %form.search-form{ :action => action, :method => 'get'}
     .container
       %input#search-keyword{:type => "text", :name => "query", :class => "text",
-                            :value => params[:query], :placeHolder => I18n.t("common.search_hint")}
+                            :value => params[:query], :placeHolder => I18n.t("common.search_hint"),
+                            :title => "Searching is not supported with these characters: ^, *, _" }
       .search-right-padding
       .search-icon
 
@@ -19,6 +20,17 @@
 
       $(".search-icon").click(function(){
         $(".search-form").submit();
+      });
+
+      $(".search-form").submit(function(){
+        var not_support = ["^", "*", "_"];
+        var val = $("#search-keyword").attr('value');
+        for(var i=0; i<not_support.length; i++){
+          if(val.indexOf(not_support[i]) > -1){
+            alert("Search can't be performed with these characters: ^, *, _");
+            return false;
+          }
+        }
       });
     });
   </script>
