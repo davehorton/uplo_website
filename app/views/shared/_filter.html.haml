@@ -1,0 +1,5 @@
+#filter-box.right
+  %form.filter-form{ :action => action, :method => 'get'}
+    .container
+      %span.label Sort By:
+      = select_tag "private_pages", sort_options, :id => "my_links"

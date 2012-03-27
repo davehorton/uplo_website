@@ -1,4 +1,7 @@
 module ApplicationHelper
+  def popular_sort_options
+    options_for_select([["Most View", "#"]])
+  end
 
   def private_links_options
     options_for_select([["My UPLO", "#"], ["My Account", "/profile"], ["My Galleries", "/galleries"], ["My Sales", "/sales"]])
