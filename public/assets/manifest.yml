@@ -4,6 +4,16 @@ add.png: add-0745403a8479f8514cd70130d79e2f20.png
 ajaxloading.gif: ajaxloading-e26c97d156b7747cd4d45581116dc1ff.gif
 arrow-down.gif: arrow-down-6d6494c03460b35f1b63015a56604ae2.gif
 arrow-up.gif: arrow-up-b4e8950b0089bfe8db8f09b5d2b6ed72.gif
+banner-bg.jpg: banner-bg-d8fcb91763c1c309bf623ecc36e9c202.jpg
+banner-button-download.png: banner-button-download-0414669a5ffb02cdc8582e1a4bcd4523.png
+banner-button-learn-more.png: banner-button-learn-more-8042d3373b36701b49715f8296ef43e6.png
+banner-check.png: banner-check-dd187f3e86f40492d14a947ba83c7e53.png
+banner-devices-spotlight.png: banner-devices-spotlight-851aa1a93d2751cb0499158a991b71ad.png
+banner-devices-the-app.png: banner-devices-the-app-115de8e26ea3fd19f4503d7e49a0b9d6.png
+banner-divider.jpg: banner-divider-b628fd7cfbd23fe95b24164a6882157d.jpg
+banner-logo-broadcast.png: banner-logo-broadcast-0b6239ad5d645b08c427fc3185455860.png
+banner-logo.png: banner-logo-1877ababb9afc7d685ad149a112d31da.png
+banner-lower-bg.png: banner-lower-bg-5a0747d6225576e4688c307a8afcaa35.png
 blank.png: blank-45063a26a92d2a4b47566e6252de160d.png
 cancel-uploadify.gif: cancel-uploadify-c195bd1e99bbcdc1a1e4649e945a00c8.gif
 cancel.png: cancel-c54ffe2f8b6e7a006dd6c45c59a8e116.png
@@ -29,7 +39,14 @@ first-disabled.png: first-disabled-519e1cb6a028ba9df072613f63385b17.png
 first.png: first-7fe040b6e1c497c04a324fc6e148664d.png
 gallery-thumb-180.jpg: gallery-thumb-180-d7e291b90b99686dc26c73ab3852da24.jpg
 gallery-thumb.jpg: gallery-thumb-187bddbf19a796898510953324f672f2.jpg
+header-bg.jpg: header-bg-211836ef0a5a6b15a978dc3f780e8ff5.jpg
 information.png: information-c4c474067cc407e32a4acb74e0165e8e.png
+intro-phone-app.jpg: intro-phone-app-eed875346444530d10b137fe9cb9e5df.jpg
+intro-phone-features.jpg: intro-phone-features-5bc9350b1e9a18276ccbbea8a2277791.jpg
+intro-phone-like-comment.jpg: intro-phone-like-comment-cc4dd997e93c7192ce89070b5feb4338.jpg
+intro-phone-order.jpg: intro-phone-order-13a1c0d5ba1adace7018a9cc5e4a28a8.jpg
+intro-phone-sales.jpg: intro-phone-sales-5d86e83427b8123bb41345fbcc9ace0a.jpg
+intro-phone-take-pic.jpg: intro-phone-take-pic-212c620b72b204bc9695743fff152ed5.jpg
 last-disabled.png: last-disabled-8e398010e5441986058f627827651f57.png
 last.png: last-224cc1eb9953afe7129632bc6da470d8.png
 line_horizontal.jpg: line_horizontal-86edfb41b39b4be34d46ae776795a432.jpg
@@ -39,7 +56,6 @@ loading.gif: loading-4aec309c41e2af79984dbae2a0238108.gif
 member_normal.gif: member_normal-ac79efd112d65412ce0175b1154c9f9b.gif
 menu-item-bg.png: menu-item-bg-6642df38f6a3dfd71d4f5655e7cb44a3.png
 menu-item-hightlight-bg.png: menu-item-hightlight-bg-da9a09ab5e6d2980642ec1b6ff6084fc.png
-navigationBar.jpg: navigationBar-211836ef0a5a6b15a978dc3f780e8ff5.jpg
 next-horizontal.png: next-horizontal-536bd4744d23687b56c1ae8baf582513.png
 next-vertical.png: next-vertical-149affdb40db3c0b6e1e93314ecc4741.png
 next12-disabled.png: next12-disabled-0cc4c9eb0eaaa4b9a57ca3bc266208e1.png
@@ -50,6 +66,7 @@ prev-vertical.png: prev-vertical-eaef69b30a628022ae98a7704e5ef474.png
 prev12-disabled.png: prev12-disabled-8ea229509f8091dfef6c29a027b901c2.png
 prev12.png: prev12-50faae018f6c8d92a763de0f296e2495.png
 search-13x13.png: search-13x13-ace65b27bd43db2eddafea0827f2a856.png
+search-icon.png: search-icon-5a7422008b9fcb256657d6e54dd558a7.png
 search.png: search-52aed94b16526e83fbc524b34c546cbe.png
 star-12-inactive.png: star-12-inactive-a7d603fc4011682ec61ad8cf4e20cc7e.png
 star-12.png: star-12-d865d23bbcdbf1c74427d89222f84676.png
@@ -157,7 +174,8 @@ bootstrap.min.css: bootstrap.min-90723bafe9e62082bc01b2d2e17c451b.css
 file_upload/jquery.fileupload-ui.css: file_upload/jquery.fileupload-ui-f39575881f448014568e7c117a1fff41.css
 file_upload/progressbar.gif: file_upload/progressbar-54dfeacc002a35b014f009faa50bf254.gif
 jquery-ui.custom.css: jquery-ui.custom-bb782aff6a70a3531739cdd09fe60b50.css
-scss/application.css: scss/application-9d86a07659321ed73eba1d51cc90c071.css
+scss/application.css: scss/application-abc0468f5020878b0005ed1a8cd8bc15.css
+scss/banner.css: scss/banner-4319b2fafc197687557a7a0334ad4a0a.css
 scss/cart.css: scss/cart-a00c819367f1c26885c93fd320e87746.css
 scss/dialog.css: scss/dialog-5dec5a3c5274437ee34726e7e4356988.css
 scss/filter.css: scss/filter-739c80ba8eabd3a953be7d9ea50b38b6.css

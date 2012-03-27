@@ -1,7 +1,7 @@
 - content_for :head do
   = javascript_include_tag("lib/jail.min.js")
   = javascript_include_tag("app/gallery.js")
-  = stylesheet_link_tag("scss/new_image.css.scss", "scss/banner.css.scss")
+  = stylesheet_link_tag("scss/new_image.css", "scss/banner.css")
 
 - content_for :banner do
   - render :partial => "home/banners/spotlight"
