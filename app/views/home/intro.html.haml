@@ -1,0 +1,55 @@
+- content_for :head do
+  = stylesheet_link_tag("scss/banner.css.scss")
+
+- content_for :banner do
+  - render :partial => "home/banners/the_app"
+
+- content_for :top_content do
+  .breadcrum.center{:style => "font-size:20px; margin:20px 0px -5px 0px;"}
+    Feature & Gallery
+  .line-separator{:style => "margin-bottom:5px;"} &nbsp;
+
+.full-width
+  .intro.left.no-padding-left
+    = image_tag("/assets/intro-phone-app.jpg")
+    .header
+      Lorem.
+    .info
+      Lorem ipsum dolor sit amet consectetur adipisicing elit sed do eiusmod tempor incididunt ut labone et dolore magna aliqua. Ut enim ad mimim veniam.
+
+  .intro.left
+    = image_tag("/assets/intro-phone-take-pic.jpg")
+    .header
+      Dolor Sit Amet.
+    .info
+      Lorem ipsum dolor sit amet consectetur adipisicing elit sed do eiusmod tempor incididunt ut labone et dolore magna aliqua. Ut enim ad mimim veniam.
+
+  .intro.left.no-padding-right
+    = image_tag("/assets/intro-phone-features.jpg")
+    .header
+      Consectetur Elit.
+    .info
+      Lorem ipsum dolor sit amet consectetur adipisicing elit sed do eiusmod tempor incididunt ut labone et dolore magna aliqua. Ut enim ad mimim veniam.
+
+  .intro.left.no-padding-left
+    = image_tag("/assets/intro-phone-like-comment.jpg")
+    .header
+      Adipiscing.
+    .info
+      Lorem ipsum dolor sit amet consectetur adipisicing elit sed do eiusmod tempor incididunt ut labone et dolore magna aliqua. Ut enim ad mimim veniam.
+
+  .intro.left
+    = image_tag("/assets/intro-phone-order.jpg")
+    .header
+      Elit Sed Do.
+    .info
+      Lorem ipsum dolor sit amet consectetur adipisicing elit sed do eiusmod tempor incididunt ut labone et dolore magna aliqua. Ut enim ad mimim veniam.
+
+  .intro.left.no-padding-right
+    = image_tag("/assets/intro-phone-sales.jpg")
+    .header
+      Tempor Incididunt.
+    .info
+      Lorem ipsum dolor sit amet consectetur adipisicing elit sed do eiusmod tempor incididunt ut labone et dolore magna aliqua. Ut enim ad mimim veniam.
+
+
