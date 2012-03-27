@@ -1,6 +1,6 @@
 module ApplicationHelper
   def popular_sort_options
-    options_for_select([["Most View", "#"]])
+    options_for_select([["Most Views", "#"]])
   end
 
   def private_links_options
