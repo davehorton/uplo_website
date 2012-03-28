@@ -12,6 +12,10 @@ $header-text: #000000;
   background: url("/assets/banner-bg.jpg") repeat-x scroll center left transparent;
   height: 399px;
   color: #FFFFFF;
+  .wrapper {
+    background: url("/assets/banner-bg.jpg") repeat-x scroll center left transparent;
+    height: 399px;
+  }
   .left {
     width: 445px;
     .info {
@@ -56,11 +60,14 @@ $header-text: #000000;
     background: url("/assets/banner-lower-bg.png") repeat-x scroll center left transparent;
     height: 140px;
     border-bottom: 1px solid $fuzzy-text;
-
+    .wrapper {
+      background: url("/assets/banner-lower-bg.png") repeat-x scroll center left transparent;
+      height: 140px;
+      border-bottom: 1px solid $fuzzy-text;
+    }
     .devider {
       padding: 20px;
     }
-
     .info {
       width: 292px;
       word-wrap: break-word;
