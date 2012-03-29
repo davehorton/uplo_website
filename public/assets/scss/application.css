@@ -201,7 +201,9 @@ p, ul {
   color: #ebebeb;
   background: url("/assets/header-bg.jpg") repeat-x scroll 0 0 transparent; }
   #header .wrapper {
-    padding-top: 20px; }
+    height: 62px;
+    padding-top: 20px;
+    background: url("/assets/header-bg.jpg") repeat-x scroll 0 0 transparent; }
   #header .header-menu li {
     float: left;
     padding: 0px 8px; }

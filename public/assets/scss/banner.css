@@ -8,6 +8,9 @@
   background: url("/assets/banner-bg.jpg") repeat-x scroll center left transparent;
   height: 399px;
   color: #FFFFFF; }
+  .banner .wrapper {
+    background: url("/assets/banner-bg.jpg") repeat-x scroll center left transparent;
+    height: 399px; }
   .banner .left {
     width: 445px; }
     .banner .left .info {
@@ -37,6 +40,10 @@
   background: url("/assets/banner-lower-bg.png") repeat-x scroll center left transparent;
   height: 140px;
   border-bottom: 1px solid #cbcbcb; }
+  .spotlight .lower .wrapper {
+    background: url("/assets/banner-lower-bg.png") repeat-x scroll center left transparent;
+    height: 140px;
+    border-bottom: 1px solid #cbcbcb; }
   .spotlight .lower .devider {
     padding: 20px; }
   .spotlight .lower .info {
