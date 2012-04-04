@@ -1,21 +1,23 @@
 class ShoppingCartController < ApplicationController
   before_filter :authenticate_user!
   before_filter :get_cart
-    
+
   def clear
     @cart.clear
     session[:cart] = nil unless current_user
     redirect_to :action => 'show'
   end
-  
+
   def show
     if @cart.order
       @line_items = @cart.order.line_items.find(:all, :include => [:order, :image], :order => "line_items.updated_at DESC, line_items.created_at DESC")
       @order = @cart.order
       @order.compute_totals
     end
+
+    render :template => "shopping_cart/show_new", :layout => 'main'
   end
-  
+
   def add_to_cart
     image = Image.find_by_id params[:image_id]
     params[:line_item].delete(:image_id)
@@ -54,7 +56,7 @@ class ShoppingCartController < ApplicationController
     end
     redirect_to :action => :show
   end
-  
+
   def checkout
     unless @cart
       flash[:warning] = "Your shopping cart is empty."
@@ -66,14 +68,14 @@ class ShoppingCartController < ApplicationController
     @order = @cart.order
     @order.compute_totals
     @order.transaction_status = Order::TRANSACTION_STATUS[:processing]
-         
+
     if @order.save
       redirect_to :controller => "orders", :action => "index"
     else
       redirect_to :action => "show"
-    end    
+    end
   end
-  
+
   def destroy_item
     item = LineItem.find(params[:id])
     if @cart.order.line_items.include?(item)
@@ -81,7 +83,7 @@ class ShoppingCartController < ApplicationController
     end
     redirect_to :action => "show"
   end
-  
+
   # The member may or may not be logged in.
   # If the member is not logged in, get the cart from the session.
   # Otherwise, get it from the logged in member's member record.
@@ -92,7 +94,7 @@ class ShoppingCartController < ApplicationController
       @cart = init_cart
     end
   end
-  
+
   def init_cart
     @cart = Cart.find_by_id(session[:cart]) if session[:cart]
     if @cart.blank?
@@ -101,21 +103,21 @@ class ShoppingCartController < ApplicationController
       else
         @cart = current_user.cart
       end
-      
+
       if @cart.order.blank?
         @cart.order = current_user.recent_empty_order
       end
-      
+
       if @cart.changed?
         @cart.save
       end
-      
+
       session[:cart] = @cart.id
     elsif @cart.order.blank?
       @cart.order = current_user.recent_empty_order
       @cart.save
     end
-    
+
     return @cart
   end
 
@@ -127,10 +129,10 @@ class ShoppingCartController < ApplicationController
     else
       return false
     end
-    
+
     return true
   end
-  
+
   protected
   def set_current_tab
     @current_tab = "browse"

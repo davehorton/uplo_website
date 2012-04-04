@@ -10,8 +10,8 @@
       %span.current All Images
     = render(:partial => "shared/search_box_new", :locals => {:action => "search"})
 
-.full-width
-  .images-wrapper.clearfix
+.wrapper
+  .clearfix
     - if @images.blank?
       .empty-data= "There is no image. Please add image."
     - else
@@ -19,7 +19,7 @@
         - image = @images[idx]
         - url = url_for(:controller => "images", :action => "browse", :id => "#{image.id}")
         - additional_class = (idx%6 == 0) ? "no-padding-left" : ((idx%6==5) ? "no-padding-right" : "")
-        .image-container{:id => "image-container-#{image.id}", :title=>"#{image.name}", :class => "#{additional_class}"}
+        .image-container.thumb{:id => "image-container-#{image.id}", :title=>"#{image.name}", :class => "#{additional_class}"}
           %a{ :href => "#{url}" }
             %dl.entry
               %dt.preview

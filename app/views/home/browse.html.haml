@@ -26,7 +26,7 @@
               %dd.price
                 .likes= "#{image.likes} likes"
                 %div= image.price.nil? ? '$0' : number_to_currency(image.price, {:precision => 2})
-      
+
   = render_pagination(@images, {:controller => "home", :action => params[:action]})
 
 :erb

@@ -1,0 +1,54 @@
+.cart-details
+  .header
+    .cell.left.preview ITEM
+    .cell.left SIZE
+    .cell.left MOULDING
+    .cell.left QTY
+    .cell.left PRICE
+    .cell.left TAX
+    .cell.left SUBTOTAL
+
+  .content
+    - total_quantity = 0
+    - @line_items.each do |line_item|
+      - unless line_item.image.nil?
+        - total_quantity += line_item.quantity.to_i
+        - image = line_item.image
+        - line_price = line_item.price * line_item.quantity.to_i
+        - line_tax = line_item.price * line_item.quantity.to_i * PER_TAX
+        .line.clear
+          .cell.left.preview
+            .left= image_tag image.url(:small_preview)
+            .left
+              .name= image.name
+              .left{:style => 'padding-left: 10px;'}
+                .edit.left
+                = link_to("Edit", {:controller => "images", :action => "order", :id => image.id, :line_item => line_item.id})
+              .left{:style => 'padding-left: 10px;'}
+                = link_to("X Delete", {:controller => "shopping_cart", :action => "destroy_item", :id => line_item.id}, html_options = {:class => "delete"}, :data => {:id => line_item.id})
+          .cell.left
+            = line_item.size
+          .cell.left
+            = line_item.moulding
+          .cell.left
+            = line_item.quantity
+          .cell.left
+            = number_to_currency(line_price, {:precision => 2})
+          .cell.left
+            = number_to_currency(line_tax, {:precision => 2})
+          .cell.left
+            = number_to_currency(line_price + line_tax, {:precision => 2})
+
+  .footer.clear
+    .right{:style => "margin:10px 0; line-height:15px;"}
+      .cell.summary.left{:style => "text-align:right;"} Sub Total:
+      .cell.summary.left= number_to_currency(@order.price_total, {:precision => 2})
+      .clear
+      .cell.left{:style => "text-align:right;"} Tax:
+      .cell.left= number_to_currency(@order.tax, {:precision => 2})
+    .line-separator.clear &nbsp;
+    .right{:style => "margin-bottom: 8px;"}
+      .cell.summary.left{:style => "text-align:right;"} Cart Total:
+      .cell.summary.left= number_to_currency(@order.order_total, {:precision => 2})
+    .line-separator.clear &nbsp;
+
