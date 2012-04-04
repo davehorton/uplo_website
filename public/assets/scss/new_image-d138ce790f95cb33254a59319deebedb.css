@@ -23,20 +23,20 @@
     padding: 6.25px; }
 
 .image-thumb {
-  max-width: 150px;
-  max-height: 150px; }
+  width: 150px;
+  height: 150px; }
 
 .image.small {
-  max-width: 48px;
-  max-height: 48px; }
+  width: 48px;
+  height: 48px; }
 .image.thumb {
-  max-width: 150px;
-  max-height: 150px; }
+  width: 150px;
+  height: 150px; }
 .image.medium {
   width: 640px; }
   .image.medium img {
-    max-width: 640px;
-    max-height: 640px; }
+    width: 640px;
+    height: 640px; }
 
 .entry .preview {
   text-align: center;
