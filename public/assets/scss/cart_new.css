@@ -1,0 +1,75 @@
+/*==================================================================================*/
+/* CONSTANT */
+/*==================================================================================*/
+/*==================================================================================*/
+/* CLASS */
+/*==================================================================================*/
+.cart-details {
+  font-size: 11.5px;
+  line-height: 22px; }
+  .cart-details .cell {
+    width: 100px;
+    text-align: right;
+    margin-top: 50px; }
+    .cart-details .cell.preview {
+      width: 360px;
+      margin: 0;
+      text-align: left; }
+  .cart-details .line {
+    height: 100px;
+    padding: 10px 0;
+    border-bottom: 1px #cbcbcb solid; }
+    .cart-details .line .preview img {
+      width: 100px;
+      height: 100px; }
+    .cart-details .line .preview a:link {
+      font-weight: normal; }
+    .cart-details .line .preview .edit {
+      background: url("/assets/icon-edit.jpg") no-repeat scroll 0 0 transparent;
+      height: 9px;
+      width: 9px;
+      margin-top: 6px; }
+    .cart-details .line .preview .name {
+      color: black;
+      font-weight: bold;
+      width: 250px;
+      word-wrap: break-word;
+      padding-left: 10px;
+      margin-top: 50px; }
+  .cart-details .header {
+    padding: 5px 0;
+    border-bottom: 1px #cbcbcb solid;
+    color: black;
+    font-weight: bold;
+    height: 20px; }
+    .cart-details .header .cell {
+      margin: 0; }
+  .cart-details .footer .summary {
+    font-weight: bold;
+    font-size: 13.5px; }
+  .cart-details .footer .cell {
+    margin-top: 0; }
+
+.actions {
+  font-size: 13.5px; }
+  .actions .shopping a {
+    color: black;
+    font-weight: normal;
+    text-decoration: underline; }
+  .actions .checkout {
+    background: url("/assets/btn-checkout.jpg") no-repeat scroll 0 0 transparent;
+    height: 28px;
+    width: 137px;
+    margin-top: 10px; }
+
+.option {
+  margin-bottom: 10px; }
+  .option .header {
+    color: black;
+    font-size: 13px;
+    font-weight: bold; }
+
+.add-to-cart {
+  background: url("/assets/btn-add-to-cart.jpg") no-repeat scroll 0 0 transparent;
+  height: 27px;
+  width: 91px; }

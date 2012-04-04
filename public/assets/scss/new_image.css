@@ -4,21 +4,39 @@
 /*==================================================================================*/
 /* CLASS */
 /*==================================================================================*/
-.images-wrapper {
-  margin-left: 0px; }
-
 .image-container {
   display: inline-block;
   float: left;
   height: auto;
   border: 1px solid transparent;
-  width: 150px;
-  height: 150px;
-  padding: 0.3em; }
+  text-align: center;
+  vertical-align: middle; }
+  .image-container img {
+    display: inline-block; }
+  .image-container.thumb {
+    width: 150px;
+    height: 150px;
+    padding: 0.3em; }
+  .image-container.small {
+    width: 48px;
+    height: 48px;
+    padding: 6.25px; }
 
 .image-thumb {
-  width: 150px;
-  height: 150px; }
+  max-width: 150px;
+  max-height: 150px; }
+
+.image.small {
+  max-width: 48px;
+  max-height: 48px; }
+.image.thumb {
+  max-width: 150px;
+  max-height: 150px; }
+.image.medium {
+  width: 640px; }
+  .image.medium img {
+    max-width: 640px;
+    max-height: 640px; }
 
 .entry .preview {
   text-align: center;

@@ -4,6 +4,7 @@ add.png: add-0745403a8479f8514cd70130d79e2f20.png
 ajaxloading.gif: ajaxloading-e26c97d156b7747cd4d45581116dc1ff.gif
 arrow-down.gif: arrow-down-6d6494c03460b35f1b63015a56604ae2.gif
 arrow-up.gif: arrow-up-b4e8950b0089bfe8db8f09b5d2b6ed72.gif
+avatar-default-small.jpg: avatar-default-small-aeca276c9b70670096e21d5e30afae7e.jpg
 banner-bg.jpg: banner-bg-d8fcb91763c1c309bf623ecc36e9c202.jpg
 banner-button-download-big.png: banner-button-download-big-d3acf5bab216e5ba87b09a86acdd111e.png
 banner-button-download.png: banner-button-download-0414669a5ffb02cdc8582e1a4bcd4523.png
@@ -16,6 +17,8 @@ banner-logo-broadcast.png: banner-logo-broadcast-0b6239ad5d645b08c427fc318545586
 banner-logo.png: banner-logo-1877ababb9afc7d685ad149a112d31da.png
 banner-lower-bg.png: banner-lower-bg-5a0747d6225576e4688c307a8afcaa35.png
 blank.png: blank-45063a26a92d2a4b47566e6252de160d.png
+btn-add-to-cart.jpg: btn-add-to-cart-c30eb12ea88816756e7b963de90e5a20.jpg
+btn-checkout.jpg: btn-checkout-213d609b81160865a8ca9d52534b3104.jpg
 cancel-uploadify.gif: cancel-uploadify-c195bd1e99bbcdc1a1e4649e945a00c8.gif
 cancel.png: cancel-c54ffe2f8b6e7a006dd6c45c59a8e116.png
 cart_icon.png: cart_icon-aaf11f778929f7fdfa32c3db56f0635d.png
@@ -41,6 +44,8 @@ first.png: first-7fe040b6e1c497c04a324fc6e148664d.png
 gallery-thumb-180.jpg: gallery-thumb-180-d7e291b90b99686dc26c73ab3852da24.jpg
 gallery-thumb.jpg: gallery-thumb-187bddbf19a796898510953324f672f2.jpg
 header-bg.jpg: header-bg-211836ef0a5a6b15a978dc3f780e8ff5.jpg
+icon-edit.jpg: icon-edit-20de540a8626f41767d86841b0c86395.jpg
+image-default-small.jpg: image-default-small-aeca276c9b70670096e21d5e30afae7e.jpg
 information.png: information-c4c474067cc407e32a4acb74e0165e8e.png
 intro-phone-app.jpg: intro-phone-app-eed875346444530d10b137fe9cb9e5df.jpg
 intro-phone-features.jpg: intro-phone-features-5bc9350b1e9a18276ccbbea8a2277791.jpg
@@ -62,6 +67,7 @@ next-vertical.png: next-vertical-149affdb40db3c0b6e1e93314ecc4741.png
 next12-disabled.png: next12-disabled-0cc4c9eb0eaaa4b9a57ca3bc266208e1.png
 next12.png: next12-7561bd294cd972027e97096457d1fbe2.png
 non-filter-preview.jpg: non-filter-preview-35a1e6bf37a22c16723f2c40ca2f6d0c.jpg
+option-header-bg.png: option-header-bg-de8c2c5efba70ba7737366f8d6faae33.png
 prev-horizontal.png: prev-horizontal-9a2acf6de5c1ac513ced48c832ebab95.png
 prev-vertical.png: prev-vertical-eaef69b30a628022ae98a7704e5ef474.png
 prev12-disabled.png: prev12-disabled-8ea229509f8091dfef6c29a027b901c2.png
@@ -175,13 +181,14 @@ bootstrap.min.css: bootstrap.min-90723bafe9e62082bc01b2d2e17c451b.css
 file_upload/jquery.fileupload-ui.css: file_upload/jquery.fileupload-ui-f39575881f448014568e7c117a1fff41.css
 file_upload/progressbar.gif: file_upload/progressbar-54dfeacc002a35b014f009faa50bf254.gif
 jquery-ui.custom.css: jquery-ui.custom-bb782aff6a70a3531739cdd09fe60b50.css
-scss/application.css: scss/application-c1a6e4cc3b43121901fd428e9b6382c8.css
+scss/application.css: scss/application-7986a5f08950d91fb3b16d9644a2df19.css
 scss/banner.css: scss/banner-34b0a85b55b48b319c087be5d3e7daa9.css
 scss/cart.css: scss/cart-a00c819367f1c26885c93fd320e87746.css
+scss/cart_new.css: scss/cart_new-484e19c8da95f0c87bb2c22fb92d8cfa.css
 scss/dialog.css: scss/dialog-5dec5a3c5274437ee34726e7e4356988.css
 scss/filter.css: scss/filter-739c80ba8eabd3a953be7d9ea50b38b6.css
 scss/image.css: scss/image-64b6683d484780bff39a790b7c1d60b3.css
-scss/new_image.css: scss/new_image-61a0d2778811af0db48b5f7fb1b3016b.css
+scss/new_image.css: scss/new_image-65f09b1a5810edf40a5bd68e81855bb9.css
 scss/search.css: scss/search-4ce78cb5c202f9d4f94d7ce58c348bd7.css
 slideshow.css: slideshow-4e9846ec17887bfc57b83c7043b75588.css
 jquery-ui.js: jquery-ui-6a97e5e99c09f28e0afb72345403d903.js
