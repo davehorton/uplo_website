@@ -11,7 +11,7 @@
     .line-separator &nbsp;
     = simple_form_for(:line_item, :url => action_url, :method => 'post', :html => {:id => 'order-details'}) do |f|
       .round-box.option.left
-        .header= "Plexi Mount:"
+        .header= "Plexi Mount"
         .line
           .item.left
             = f.radio_button(:plexi_mount, true, :checked => true)
@@ -21,17 +21,23 @@
             = f.label(:plexi_mount_false, "No", :class => 'options_label')
 
       .round-box.option.left
-        .header= "Print size:"
+        .header= "Print Size"
         .line.left
           .item.left
-            = f.radio_button(:size, "300x300", :checked => true)
-            = f.label(:size_300x300, "300x300", :class => 'options_label')
+            = f.radio_button(:size, "10x10", :checked => true)
+            = f.label(:size_300x300, "10x10", :class => 'options_label')
           .item.left
-            = f.radio_button(:size, "500x500")
-            = f.label(:size_500x500, "500x500", :class => 'options_label')
+            = f.radio_button(:size, "16x16")
+            = f.label(:size_500x500, "16x16", :class => 'options_label')
+          .item.left
+            = f.radio_button(:size, "20x20")
+            = f.label(:size_500x500, "20x20", :class => 'options_label')
+          .item.left
+            = f.radio_button(:size, "25x25")
+            = f.label(:size_500x500, "25x25", :class => 'options_label')
 
       .round-box.option.left
-        .header= "Moulding choice:"
+        .header= "Moulding Choice"
         .line.left
           .item.left
             = f.radio_button(:moulding, "White", :checked => true)
@@ -49,18 +55,17 @@
 
       .round-box.option.left{:style => 'width:143px;'}
         - price = @line_item.nil? ? @image.price : @line_item.price
-        .header= "Per item price:"
+        .header= "Price Per Item"
         .line{:style => 'width:143px;'}
           .item.left
             = number_to_currency(price, {:precision => 2})
 
       .round-box.option.right{:style => 'width:143px;'}
         - quantity = @line_item.nil? ? 1 : @line_item.quantity
-        .header= "Quantity:"
+        .header= "Quantity"
         .line{:style => 'width:143px;'}
           .item.left{:style => 'padding: 5px;'}
-            = f.text_field(:quantity, :style => 'padding:0pt 2px; width:122px;', :value => quantity)
-
+            = f.number_field(:quantity, :style => 'padding:0pt 2px; width:122px;', :value => quantity, :size => '5', :title => 'Limit from 1 to 99999')
     .clear
       .add-to-cart.right
 
@@ -69,9 +74,15 @@
     = image_tag @image.url(:medium)
 
 - content_for :js do
-  :erb
-    <script>
+  - javascript_tag do
+    :erb
       $(".add-to-cart").bind("click", function(){
         $("#order-details").submit();
       });
-    </script>
+      $('#line_item_quantity').bind('keypress', function(e,a,b){
+        var reg = /^\d{1,5}$/;
+        var val = e.currentTarget.value + String.fromCharCode(e.charCode);
+        if(!reg.test(val)){
+          return false;
+        }
+      });
