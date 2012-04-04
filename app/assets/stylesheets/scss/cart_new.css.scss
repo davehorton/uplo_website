@@ -6,6 +6,20 @@ $normal-text: #5A5A5A;
 $bold-text: #000000;
 
 /*==================================================================================*/
+/* IDs */
+/*==================================================================================*/
+#order-details {
+  .round-box {
+    width: 300px;
+    padding: 0;
+  }
+  .item {
+    width: 125px;
+    padding: 10px;
+  }
+}
+
+/*==================================================================================*/
 /* CLASS */
 /*==================================================================================*/
 .cart-details {
@@ -13,12 +27,15 @@ $bold-text: #000000;
   line-height: 22px;
   .cell {
     width: 100px;
-    text-align: right;
+    text-align: center;
     margin-top: 50px;
     &.preview {
       width: 360px;
       margin: 0;
       text-align: left;
+    }
+    &.subtotal {
+      text-align: right;
     }
   }
   .line {
@@ -91,7 +108,12 @@ $bold-text: #000000;
     color: $bold-text;
     font-size: 13px;
     font-weight: bold;
+    padding: 10px;
     // background: url("/assets/option-header-bg.png") repeat-x scroll 0 0 transparent;
+  }
+  .line {
+    border-top: 1px solid $fuzzy-text;
+    width: 300px;
   }
 }
 

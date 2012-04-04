@@ -6,7 +6,7 @@
     .cell.left QTY
     .cell.left PRICE
     .cell.left TAX
-    .cell.left SUBTOTAL
+    .cell.left.subtotal SUBTOTAL
 
   .content
     - total_quantity = 0
@@ -22,10 +22,11 @@
             .left
               .name= image.name
               .left{:style => 'padding-left: 10px;'}
-                .edit.left
+                .edit.left{:style => 'padding-right:3px;'}
                 = link_to("Edit", {:controller => "images", :action => "order", :id => image.id, :line_item => line_item.id})
               .left{:style => 'padding-left: 10px;'}
-                = link_to("X Delete", {:controller => "shopping_cart", :action => "destroy_item", :id => line_item.id}, html_options = {:class => "delete"}, :data => {:id => line_item.id})
+                .left{:style => 'font-weight:bold; padding-right:3px; font-size:11px;'} X
+                = link_to("Remove", {:controller => "shopping_cart", :action => "destroy_item", :id => line_item.id}, html_options = {:class => "delete"}, :data => {:id => line_item.id})
           .cell.left
             = line_item.size
           .cell.left
@@ -36,19 +37,19 @@
             = number_to_currency(line_price, {:precision => 2})
           .cell.left
             = number_to_currency(line_tax, {:precision => 2})
-          .cell.left
+          .cell.left.subtotal
             = number_to_currency(line_price + line_tax, {:precision => 2})
 
   .footer.clear
     .right{:style => "margin:10px 0; line-height:15px;"}
-      .cell.summary.left{:style => "text-align:right;"} Sub Total:
-      .cell.summary.left= number_to_currency(@order.price_total, {:precision => 2})
+      .cell.summary.left{:style => "text-align:right;"} Subtotal:
+      .cell.summary.left.subtotal= number_to_currency(@order.price_total, {:precision => 2})
       .clear
       .cell.left{:style => "text-align:right;"} Tax:
-      .cell.left= number_to_currency(@order.tax, {:precision => 2})
+      .cell.left.subtotal= number_to_currency(@order.tax, {:precision => 2})
     .line-separator.clear &nbsp;
     .right{:style => "margin-bottom: 8px;"}
       .cell.summary.left{:style => "text-align:right;"} Cart Total:
-      .cell.summary.left= number_to_currency(@order.order_total, {:precision => 2})
+      .cell.summary.left.subtotal= number_to_currency(@order.order_total, {:precision => 2})
     .line-separator.clear &nbsp;
 
