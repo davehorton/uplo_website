@@ -5,11 +5,12 @@
 /* IDs */
 /*==================================================================================*/
 #order-details .round-box {
-  width: 300px;
+  width: 298px;
   padding: 0; }
 #order-details .item {
   width: 125px;
-  padding: 10px; }
+  line-height: 22px;
+  padding: 5px 10px; }
 
 /*==================================================================================*/
 /* CLASS */
@@ -80,10 +81,13 @@
     color: black;
     font-size: 13px;
     font-weight: bold;
-    padding: 10px; }
+    padding: 9px 10px;
+    background: url("/assets/option-header-bg.png") repeat-x scroll 0 0 transparent;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px; }
   .option .line {
     border-top: 1px solid #cbcbcb;
-    width: 300px; }
+    width: 298px; }
 
 .add-to-cart {
   background: url("/assets/btn-add-to-cart.jpg") no-repeat scroll 0 0 transparent;

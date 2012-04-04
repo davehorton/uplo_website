@@ -90,8 +90,7 @@ p, ul {
 
 .round-box {
   border: 1px solid #cbcbcb;
-  border-radius: 5px;
-  padding: 10px; }
+  border-radius: 5px; }
 
 .clear {
   clear: both; }
