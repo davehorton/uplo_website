@@ -11,7 +11,6 @@
     %link(href="#{path_to_image('/favicon.ico')}" type="image/x-icon" rel="icon")/
 
     = stylesheet_link_tag "scss/application.css", "scss/dialog.css"
-    =# stylesheet_link_tag "application.css", "scss/dialog.css"
     = jquery_include_tag
     = javascript_include_tag("rails.js", "application.js", "app/popup.js")
     = csrf_meta_tag
@@ -58,5 +57,7 @@
         .line-separator &nbsp;
         .fuzzy Copyright &copy; 2012 UPLO. All rights reserved
         #build-version{:style => "text-align: center; font-size: 12px"}= "Build 8: 2012-03-27"
+
+    = yield :js
 
 
