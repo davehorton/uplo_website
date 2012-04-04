@@ -11,6 +11,12 @@
   width: 125px;
   line-height: 22px;
   padding: 5px 10px; }
+  #order-details .item input[type='radio'] {
+    margin: 0;
+    padding: 0;
+    vertical-align: middle; }
+  #order-details .item label {
+    vertical-align: middle; }
 
 /*==================================================================================*/
 /* CLASS */
