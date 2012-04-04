@@ -193,6 +193,7 @@ class ImagesController < ApplicationController
     else
       @line_item = LineItem.find_by_id params[:line_item]
     end
+    render :template => "images/order_new", :layout => "main"
   end
 
   protected

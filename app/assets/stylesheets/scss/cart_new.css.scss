@@ -10,12 +10,13 @@ $bold-text: #000000;
 /*==================================================================================*/
 #order-details {
   .round-box {
-    width: 300px;
+    width: 298px;
     padding: 0;
   }
   .item {
     width: 125px;
-    padding: 10px;
+    line-height: 22px;
+    padding: 5px 10px;
   }
 }
 
@@ -108,12 +109,17 @@ $bold-text: #000000;
     color: $bold-text;
     font-size: 13px;
     font-weight: bold;
-    padding: 10px;
-    // background: url("/assets/option-header-bg.png") repeat-x scroll 0 0 transparent;
+    padding: 9px 10px;
+    background: url("/assets/option-header-bg.png") repeat-x scroll 0 0 transparent;
+    border: {
+      top-left-radius: 5px;
+      top-right-radius: 5px;
+    }
+
   }
   .line {
     border-top: 1px solid $fuzzy-text;
-    width: 300px;
+    width: 298px;
   }
 }
 

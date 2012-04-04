@@ -1,0 +1,77 @@
+- content_for :head do
+  = stylesheet_link_tag("scss/cart_new.css", "scss/new_image.css")
+
+- content_for :top_content do
+  .breadcrum{:style => "padding-top:10px;"}= @image.name
+
+- content_for :right_content do
+  - action_url = @line_item.nil? ? url_for(:controller => "shopping_cart", :action => "add_to_cart", :image_id => @image.id) : url_for(:controller => "shopping_cart", :action => "update_cart", :line_item_id => @line_item.id)
+  .right{:style => "width:300px;"}
+    .breadcrum Build Your Order
+    .line-separator &nbsp;
+    = simple_form_for(:line_item, :url => action_url, :method => 'post', :html => {:id => 'order-details'}) do |f|
+      .round-box.option.left
+        .header= "Plexi Mount:"
+        .line
+          .item.left
+            = f.radio_button(:plexi_mount, true, :checked => true)
+            = f.label(:plexi_mount_true, "Yes", :class => 'options_label')
+          .item.left
+            = f.radio_button(:plexi_mount, false)
+            = f.label(:plexi_mount_false, "No", :class => 'options_label')
+
+      .round-box.option.left
+        .header= "Print size:"
+        .line.left
+          .item.left
+            = f.radio_button(:size, "300x300", :checked => true)
+            = f.label(:size_300x300, "300x300", :class => 'options_label')
+          .item.left
+            = f.radio_button(:size, "500x500")
+            = f.label(:size_500x500, "500x500", :class => 'options_label')
+
+      .round-box.option.left
+        .header= "Moulding choice:"
+        .line.left
+          .item.left
+            = f.radio_button(:moulding, "White", :checked => true)
+            = f.label(:moulding_white, "White", :class => 'options_label')
+          .item.left
+            = f.radio_button(:moulding, "Black")
+            = f.label(:moulding_black, "Black", :class => 'options_label')
+        .line.left
+          .item.left
+            = f.radio_button(:moulding, "Wood")
+            = f.label(:moulding_wood, "Wood", :class => 'options_label')
+          .item.left
+            = f.radio_button(:moulding, "Silver")
+            = f.label(:moulding_silver, "Silver", :class => 'options_label')
+
+      .round-box.option.left{:style => 'width:143px;'}
+        - price = @line_item.nil? ? @image.price : @line_item.price
+        .header= "Per item price:"
+        .line{:style => 'width:143px;'}
+          .item.left
+            = number_to_currency(price, {:precision => 2})
+
+      .round-box.option.right{:style => 'width:143px;'}
+        - quantity = @line_item.nil? ? 1 : @line_item.quantity
+        .header= "Quantity:"
+        .line{:style => 'width:143px;'}
+          .item.left{:style => 'padding: 5px;'}
+            = f.text_field(:quantity, :style => 'padding:0pt 2px; width:122px;', :value => quantity)
+
+    .clear
+      .add-to-cart.right
+
+%div{:style => "width:640px;"}
+  .image.medium.left
+    = image_tag @image.url(:medium)
+
+- content_for :js do
+  :erb
+    <script>
+      $(".add-to-cart").bind("click", function(){
+        $("#order-details").submit();
+      });
+    </script>
