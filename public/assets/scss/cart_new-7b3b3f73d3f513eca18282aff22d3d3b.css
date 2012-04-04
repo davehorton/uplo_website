@@ -65,7 +65,10 @@
       margin: 0; }
   .cart-details .footer .summary {
     font-weight: bold;
-    font-size: 13.5px; }
+    font-size: 13.5px;
+    color: black; }
+  .cart-details .footer .subtotal {
+    width: 140px; }
   .cart-details .footer .cell {
     margin-top: 0; }
 

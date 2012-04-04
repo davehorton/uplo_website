@@ -89,6 +89,10 @@ $bold-text: #000000;
     .summary {
       font-weight: bold;
       font-size: 13.5px;
+      color: $bold-text;
+    }
+    .subtotal {
+      width: 140px;
     }
     .cell {
       margin-top: 0;
