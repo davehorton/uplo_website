@@ -16,7 +16,20 @@
     padding: 0;
     vertical-align: middle; }
   #order-details .item label {
-    vertical-align: middle; }
+    vertical-align: middle;
+    float: none;
+    margin: 0; }
+
+#order-shippings #shipping-address .edit {
+  background-color: #EEEEEE;
+  border: 1px solid #CBCBCB;
+  padding: 10px; }
+  #order-shippings #shipping-address .edit a {
+    text-decoration: underline; }
+#order-shippings .submit {
+  background: url("/assets/btn-place-order.jpg") no-repeat;
+  width: 94px;
+  height: 28px; }
 
 /*==================================================================================*/
 /* CLASS */
@@ -73,7 +86,8 @@
     margin-top: 0; }
 
 .actions {
-  font-size: 13.5px; }
+  font-size: 13.5px;
+  line-height: 22px; }
   .actions .shopping a {
     color: black;
     font-weight: normal;
@@ -102,3 +116,43 @@
   background: url("/assets/btn-add-to-cart.jpg") no-repeat scroll 0 0 transparent;
   height: 27px;
   width: 91px; }
+
+.order_summary {
+  padding-right: 15px;
+  width: 310px; }
+  .order_summary input {
+    width: 200px; }
+  .order_summary .header {
+    font-weight: bold;
+    padding-bottom: 10px; }
+  .order_summary .inputs {
+    width: 100%; }
+    .order_summary .inputs .info {
+      padding-bottom: 5px; }
+      .order_summary .inputs .info label {
+        width: 110px; }
+      .order_summary .inputs .info select {
+        width: 190px !important; }
+      .order_summary .inputs .info.expiration-date select {
+        width: 90px !important; }
+      .order_summary .inputs .info.expiration-date #card_expires_on_2i {
+        margin-right: 10px; }
+    .order_summary .inputs .simple_form label {
+      width: 110px; }
+    .order_summary .inputs .simple_form input[type=text], .order_summary .inputs .simple_form input[type=email], .order_summary .inputs .simple_form input[type=password] {
+      width: 176px; }
+  .order_summary .actions {
+    float: left; }
+
+.block {
+  width: 100%;
+  padding: 10px 0; }
+  .block .text {
+    padding: 3px 5px;
+    width: 280px; }
+
+.solid-block {
+  background-color: #EEEEEE;
+  padding: 10px; }
+  .solid-block .no-background {
+    background-color: white; }
