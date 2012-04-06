@@ -1,5 +1,5 @@
 - content_for :head do
-  = stylesheet_link_tag("scss/cart_new.css.scss")
+  = stylesheet_link_tag("scss/cart_new.css")
 
 .wrapper
   = simple_form_for(:card, :url => "/payments/checkout?type=an", :html => {:class => "card_form", :id => 'order-shippings'}) do |f|
