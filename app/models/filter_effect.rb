@@ -1,7 +1,7 @@
 require "RMagick"
 
 module FilterEffect
-  POW_CONST = 65535/255
+  POW_CONST = 257
   class Pixel
     attr_accessor :r, :g, :b, :a
     def initialize(r,g,b,a)

@@ -16,10 +16,11 @@ class Image < ActiveRecord::Base
 
   # Paperclip
   has_attached_file :data,
-   :styles => {:small_preview => "100x100", :thumb => "150x150>", :medium =>  "750x750>", :large => '1000x1000>'},
+   :styles => {:small => "48x48>", :small_preview => "100x100", :thumb => "150x150>", :medium =>  "640x640>", :large => '1000x1000>'},
    :storage => :s3,
    :s3_credentials => "#{Rails.root}/config/amazon_s3.yml",
-   :path => "image/:id/:style.:extension"
+   :path => "image/:id/:style.:extension",
+   :default_url => "/assets/image-default-:style.jpg"
 
   #validates_attachment_presence :data
   validates_attachment_content_type :data, :content_type => [ 'image/jpeg','image/jpg','image/png',"image/gif"],
@@ -224,6 +225,25 @@ class Image < ActiveRecord::Base
     return result
   end
 
+  def raw_purchased_info(item_paging_params = {})
+    result = {:data => [], :total => 0}
+    orders = self.orders.where({:transaction_status => Order::TRANSACTION_STATUS[:complete]}).collect { |o| o.id }
+    saled_items = []
+    if orders.length > 0
+      paging_info = LineItem.paging_options(item_paging_params)
+      saled_items = LineItem.paginate(
+        :page => paging_info.page_id,
+        :per_page => paging_info.page_size,
+        :joins => "LEFT JOIN orders ON orders.id = line_items.order_id LEFT JOIN users ON users.id = orders.user_id",
+        :select => "line_items.*, users.id as purchaser_id, orders.transaction_date as purchased_date",
+        :order => "purchased_date DESC",
+        :conditions => ["image_id=? and order_id in (#{orders.join(',')})", self.id]
+      )
+    end
+
+    return saled_items
+  end 
+
   def get_purchased_info(item_paging_params = {})
     result = {:data => [], :total => 0}
     orders = self.orders.where({:transaction_status => Order::TRANSACTION_STATUS[:complete]}).collect { |o| o.id }
@@ -260,7 +280,7 @@ class Image < ActiveRecord::Base
     result = []
     date = DateTime.parse current_date.to_s
     prior_months = TimeCalculator.prior_year_period(date, {:format => '%b %Y'})
-    prior_months.collect { |mon|
+    prior_months.each { |mon|
       short_mon = DateTime.parse(mon).strftime('%b')
       if options.nil?
         result << { :month => short_mon, :sales => self.total_sales(mon) }

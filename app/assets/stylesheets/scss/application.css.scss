@@ -156,7 +156,12 @@ p, ul{
     color: $normal-text;
   }
 }
-
+.show {
+  display: inline-block;
+}
+.hide {
+  display: none;
+}
 .pagination {
   padding-top: 30px;
   text-align: center;
@@ -231,6 +236,40 @@ p, ul{
     padding-top: 2px;
   }
 }
+
+.simple_form label {float: left; width: 140px; margin-right: 10px; margin-top: 5px}
+.simple_form .input.optional span label{float: none; vertical-align: middle;}
+.simple_form label abbr {float: right; color: #D4550B;}
+.simple_form select {width: 165px; float: left;}
+
+.simple_form input[type=text],
+.simple_form input[type=email],
+.simple_form input[type=password] {
+  width: 200px;
+  padding: 6px;
+  background-color: #FFFFFF;
+}
+
+.simple_form input[type=text],
+.simple_form input[type=email],
+.simple_form input[type=password],
+.simple_form textarea{
+  border: 1px solid #CDCDCD;
+  -webkit-border-radius: 10px;
+  -moz-border-radius: 10px;
+  border-radius: 10px;
+}
+
+.simple_form input, .simple_form textarea{
+  vertical-align: middle;
+}
+
+.simple_form textarea {padding: 6px;}
+.simple_form .input label, .simple_form .input input{vertical-align: middle;}
+.simple_form .input.clearfix{margin: 5px 0;}
+.simple_form textarea { float: none; width: 90%; height: 50px; margin-top: 5px; }
+.simple_form .desc {margin-top: 30px;}
+.simple_form span.error { margin-left: 50px; padding-top: 5px; color: #EA501F; font-size: 12px; font-weight: bold; clear: both; }
 
 /*==================================================================================*/
 /* ID */

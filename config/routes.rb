@@ -25,6 +25,8 @@ Uplo::Application.routes.draw do
   get 'images/switch_like/:id', :to => 'images#switch_liked'
 
   get "sales", :to => "sales#index"
+  get "sales/year_sales", :to => "sales#year_sales"
+  get "sales/image_sale_details", :to => "sales#image_sale_details"
 
   match '/payments/paypal_notify' => 'payments#paypal_notify'
   match '/payments/paypal_result' => 'payments#paypal_result'

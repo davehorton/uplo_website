@@ -1,0 +1,32 @@
+.sale-item{
+  height: 150px;
+  padding: 5px 0 10px;
+  .info {
+    margin: 37px 0 37px 8px;
+    .text{
+      max-width: 800px;
+      .bold {
+        font-weight: bold;
+      }
+    }
+    .details {
+      background: url("/assets/btn-more-details.jpg") no-repeat scroll 0 0 transparent;
+      height: 23px;
+      width: 91px;
+      margin-top: 10px;
+    }
+  }
+}
+.sale-info {
+  .header {
+    font-weight: bold;
+    margin: 10px 0;
+  }
+  .text{
+    max-width: 800px;
+  }
+  .user {
+    margin-right: 10px;
+    margin-bottom: 5px;
+  }
+}

@@ -19,10 +19,11 @@ class User < ActiveRecord::Base
 
   # Paperclip
   has_attached_file :avatar,
-   :styles => {:thumb => "180x180>" },
+   :styles => {:thumb => "180x180>", :small => "48x48>" },
    :storage => :s3,
    :s3_credentials => "#{Rails.root}/config/amazon_s3.yml",
-   :path => "user/:id/avatar/:style.:extension"
+   :path => "user/:id/avatar/:style.:extension",
+   :default_url => "/assets/avatar-default-:style.jpg"
 
   # ASSOCIATIONS
   has_many :galleries, :dependent => :destroy
@@ -236,6 +237,22 @@ class User < ActiveRecord::Base
     return remaining
   end
 
+  def raw_total_sales(image_paging_params = {})
+    gal_ids = []
+    self.galleries.each { |gal|
+      gal_ids << gal.id
+    }
+    paging_info = Image.paging_options(image_paging_params, {:sort_criteria => "images.updated_at DESC"})
+    images = Image.paginate(
+      :page => paging_info.page_id,
+      :per_page => paging_info.page_size,
+      :joins => "LEFT JOIN galleries ON galleries.id = images.gallery_id",
+      :conditions => ["galleries.permission = ? and gallery_id in (#{gal_ids.join(',')})", Gallery::PUBLIC_PERMISSION],
+      :order => paging_info.sort_string) # need sort by order date
+
+    return images
+  end  
+
   def total_sales(image_paging_params = {})
     result = {:total_entries => 0, :data => []}
     gal_ids = []
@@ -248,7 +265,7 @@ class User < ActiveRecord::Base
       :per_page => paging_info.page_size,
       :joins => "LEFT JOIN galleries ON galleries.id = images.gallery_id",
       :conditions => ["galleries.permission = ? and gallery_id in (#{gal_ids.join(',')})", Gallery::PUBLIC_PERMISSION],
-      :order => paging_info.sort_string)
+      :order => paging_info.sort_string) # need sort by order date
 
     images.each { |img|
       info = img.serializable_hash(img.default_serializable_options)
@@ -259,6 +276,7 @@ class User < ActiveRecord::Base
     result[:total_entries] = images.total_entries
     return result
   end
+  
 
   # indexing with thinking sphinx
   define_index do
