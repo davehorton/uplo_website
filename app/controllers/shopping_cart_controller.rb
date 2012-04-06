@@ -1,6 +1,7 @@
 class ShoppingCartController < ApplicationController
   before_filter :authenticate_user!
   before_filter :get_cart
+  layout "main"
 
   def clear
     @cart.clear
@@ -14,8 +15,6 @@ class ShoppingCartController < ApplicationController
       @order = @cart.order
       @order.compute_totals
     end
-
-    render :template => "shopping_cart/show_new", :layout => 'main'
   end
 
   def add_to_cart
@@ -33,6 +32,7 @@ class ShoppingCartController < ApplicationController
         item.image = image
         item.attributes = params[:line_item]
         item.price = (image.price.nil? ? '0' : image.price)
+        item.tax = item.price * item.quantity.to_i * PER_TAX
         @cart.order.line_items << item
         @cart.save
       end
@@ -84,6 +84,7 @@ class ShoppingCartController < ApplicationController
     redirect_to :action => "show"
   end
 
+  protected
   # The member may or may not be logged in.
   # If the member is not logged in, get the cart from the session.
   # Otherwise, get it from the logged in member's member record.
@@ -133,7 +134,6 @@ class ShoppingCartController < ApplicationController
     return true
   end
 
-  protected
   def set_current_tab
     @current_tab = "browse"
   end

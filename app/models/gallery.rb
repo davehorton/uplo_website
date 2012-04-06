@@ -70,6 +70,11 @@ class Gallery < ActiveRecord::Base
   end
 
   # PUBLIC INSTANCE METHODS
+  def get_images_without(ids)
+    ids = [] unless ids.instance_of? Array
+    self.images.where("id not in (#{ids.join(',')})").order('name')
+  end
+
   def updated_at_string
     self.updated_at.strftime(I18n.t("date.formats.short"))
   end

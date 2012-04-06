@@ -7,6 +7,7 @@ class OrdersController < ApplicationController
     if find_cart
       @order = @cart.order
     end    
+    render :template => 'orders/index_new', :layout => 'main'
   end
   
   protected

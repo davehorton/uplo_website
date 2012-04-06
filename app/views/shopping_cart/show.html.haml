@@ -1,26 +1,31 @@
 - content_for :head do
-  = stylesheet_link_tag("scss/cart.css", "scss/dialog.css")
+  = stylesheet_link_tag("scss/cart_new.css", "scss/dialog.css")
   = javascript_include_tag("app/popup.js")
 
-%h1 Shopping Cart
+- content_for :top_content do
+  .breadcrum Shopping Cart
+  .line-separator &nbsp;
 
+.wrapper
+  - if @line_items.empty?
+    .left{:style => 'min-height:100px;'} Your cart is current empty.
+  - else
+    = render :partial => "show_details_new"
 
-- if @line_items.empty?
-  Your cart is current empty.
-- else
-  Here is content of your cart
+  - if @line_items.empty?
+    .line-separator.clear{:style => 'width: 100%;'} &nbsp;
+    .actions.right
+      .shopping.left= link_to "Continue shopping", "/back", :method => "get"
+  - else
+    .actions.right
+      .right.italic{:style => "font-size: 12px;"}
+        Shipping is Calculated at the Next Step, Before You Pay
+      .right.clear{:style => "line-height:50px;"}
+        .shopping.left= link_to "Continue shopping", "/back", :method => "get"
+        .left &nbsp;or&nbsp;
+        - unless @order.line_items.empty?
+          %a.checkout.left{:href => "#{url_for(:controller => 'shopping_cart', :action => 'checkout')}"}
 
-  .solidBlock.round-box
-    = render :partial => "show_details"
- 
-.button-container
-  = button_to_function "Clear cart", "clearCartConfirm()", 
-      :id => "btn_clear", :class => 'btn left-btn',
-      :data => {:url => "#{ url_for({:controller => "shopping_cart",:action => "clear", :only_path => false}) }"} unless @order.line_items.empty?
-
-  = button_to "Continue shopping", "/back", :method => "get", :class => 'btn left-btn'
-  = button_to("Checkout", {:controller => "shopping_cart", :action => "checkout"}, :method => "get", :class => 'btn left-btn') unless @order.line_items.empty?
-  
 :javascript
   $(".lines .option").delegate("a.delete", "click", function(){
     confirmDlg = new Popup({
@@ -37,11 +42,11 @@
         }
       }
     });
-    
+
     confirmDlg.show();
     return false;
   });
-  
+
   function clearCartConfirm(){
     confirmDlg = new Popup({
       id: "clear-confirm-dialog",

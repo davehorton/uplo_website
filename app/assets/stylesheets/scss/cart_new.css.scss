@@ -1,6 +1,7 @@
 /*==================================================================================*/
 /* CONSTANT */
 /*==================================================================================*/
+$fuzzier-color: #EEEEEE;
 $fuzzy-text: #CBCBCB;
 $normal-text: #5A5A5A;
 $bold-text: #000000;
@@ -23,11 +24,30 @@ $bold-text: #000000;
       vertical-align: middle
     }
     label {
-      vertical-align: middle
+      vertical-align: middle;
+      float: none;
+      margin: 0;
     }
   }
 }
 
+#order-shippings {
+  #shipping-address {
+    .edit {
+      background-color: #EEEEEE;
+      border: 1px solid #CBCBCB;
+      padding: 10px;
+      a {
+        text-decoration: underline;
+      };
+    }
+  }
+  .submit {
+    background: url('/assets/btn-place-order.jpg') no-repeat;
+    width: 94px;
+    height: 28px;
+  }
+}
 /*==================================================================================*/
 /* CLASS */
 /*==================================================================================*/
@@ -102,6 +122,7 @@ $bold-text: #000000;
 
 .actions {
   font-size: 13.5px;
+  line-height: 22px;
   .shopping a {
     color: $bold-text;
     font-weight: normal;
@@ -139,4 +160,94 @@ $bold-text: #000000;
   background: url("/assets/btn-add-to-cart.jpg") no-repeat scroll 0 0 transparent;
   height: 27px;
   width: 91px;
+}
+
+.order_summary{
+  padding-right: 15px;
+  width: 310px;
+  font-size: 13.5px;
+  input {
+    width: 200px;
+  }
+  .header{
+    font-weight: bold;
+    padding-bottom: 10px;
+    font-size: 16px;
+    color: $bold-text;
+    .italic {
+      font-size: 12px;
+      color: $normal-text;
+      font-weight: normal;
+      line-height: 22px;
+    }
+  }
+  .inputs{
+    width: 100%;
+    .info {
+      padding-bottom: 5px;
+      label {
+        width: 110px;
+      }
+      input {
+        width: 175px;
+      }
+      select {
+        width: 190px !important;
+      }
+      &.expiration-date {
+        select {
+          width: 90px !important;
+        }
+        #card_expires_on_2i {
+          margin-right: 10px;
+        }
+      }
+    }
+  .simple_form {
+    label {
+      width: 110px;
+    }
+    input[type=text], input[type=email], input[type=password] {
+      width: 176px;
+    }
+}
+  }
+  .actions{
+    float:left;
+  }
+}
+
+.block {
+  width: 100%;
+  padding: 10px 0;
+  .text {
+    padding: 3px 5px;
+    width: 280px;
+    .bold, &.bold {
+      font-weight: bold;
+    }
+  }
+}
+.summary {
+  padding-bottom: 10px;
+  .text {
+    padding: 3px 5px;
+    .bold {
+      font-weight: bold;
+      color: $bold-text;
+    }
+    .right {
+      width: 120px;
+      text-align: right;
+    }
+  }
+
+}
+.solid-block {
+  background-color: #EEEEEE;
+  padding: 10px;
+  font-size: 13.5px;
+  .no-background {
+    background-color: white;
+  }
 }
