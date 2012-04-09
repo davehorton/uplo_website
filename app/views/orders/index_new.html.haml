@@ -1,13 +1,19 @@
 - content_for :head do
   = stylesheet_link_tag("scss/cart_new.css")
 
+
+- content_for :top_content do
+  %div{:style => "margin: 15px 0;"}
+    .breadcrum.left Checkout - Step 2 of 2
+    .line-separator.clear &nbsp;
+
 .wrapper
   = simple_form_for(:card, :url => "/payments/checkout?type=an", :html => {:class => "card_form", :id => 'order-shippings'}) do |f|
     #billing-address.order_summary.left{:style => "height:430px;"}
       .header
-        %span Billing Address
-        .italic.right
-          %span{:style=>'color:red;'} *&nbsp;
+        %span.left Billing Address
+        .italic.left
+          %span{:style=>'color:red;'} &nbsp;&nbsp;&nbsp;*
           Required Fields
       .line-separator.clear &nbsp;
       .inputs
@@ -32,9 +38,9 @@
         .info
           = label_tag :shipping_state, "State <span style='color:red;'>*</span>".html_safe
           = text_field :shipping, :state, :required => true
-        .info{:style => "height: 30px; padding-top: 5px;"}
+        .info
           = label_tag :billing_country, "Country"
-          = select_tag :country, options_for_select({"USA" => "USA", "Canada" => "Canada"}, "USA")
+          = select_tag :country, options_for_select({"USA" => "USA", "Canada" => "Canada", '- Please Select --' => 'default'}, 'default')
         .info
           = label_tag :billing_phone, "Phone Number <span style='color:red;'>*</span>".html_safe
           = text_field :billing, :phone, :as => :string, :required => false, :onchange => "validateNumber()"
@@ -43,14 +49,18 @@
           = text_field :billing, :fax
         .info
           / = hidden_field_tag 'billing[ship_to_billing]', 0
-          %input{ :type => 'checkbox', :name => 'billing[ship_to_billing]', :value => '1', :id => 'billing_ship_to_billing', :class => 'left', :style => 'margin: 6px 5px 0 0;', :checked => 'checked' }
-          = label_tag :billing_ship_to_billing, 'Ship Items to the Above Billing Address', :style => 'width:280px;', :class => 'left'
+          %input{ :type => 'checkbox', :name => 'billing[ship_to_billing]', :value => '1', :id => 'billing_ship_to_billing', :class => 'left', :checked => 'checked' }
+          = label_tag :billing_ship_to_billing, 'Ship Items to the Above Billing Address', :style => 'width:auto;', :class => 'left'
 
     .left
-      #shipping-address.order_summary.left{:style => "height:auto;min-height: 100px;"}
-        .header Shipping Address
+      #shipping-address.order_summary.left
+        .header
+          %span.left Shipping Address
+          .italic.left.hide
+            %span{:style=>'color:red;'} &nbsp;&nbsp;&nbsp;*
+            Required Fields
         .line-separator.clear &nbsp;
-        .edit{:style => 'font-size:13px;'}
+        .edit
           %span Item(s) will be shipped to your billing address
           %a.right{:href => '#'} Edit
         .inputs.hide
@@ -75,9 +85,9 @@
           .info
             = label_tag :shipping_state, "State <span style='color:red;'>*</span>".html_safe
             = text_field :shipping, :state, :required => true
-          .info{:style => "height: 30px; padding-top: 5px;"}
+          .info
             = label_tag :shipping_country, "Country <span style='color:red;'>*</span>".html_safe
-            = select_tag :country, options_for_select({"USA" => "USA", "Canada" => "Canada"}, "USA")
+            = select_tag :country, options_for_select({"USA" => "USA", "Canada" => "Canada", '- Please Select --' => 'default'}, 'default')
           .info
             = label_tag :shipping_phone, "Phone Number <span style='color:red;'>*</span>".html_safe
             = text_field :shipping, :phone, :as => :string, :required => false, :onchange => "validateNumber()"
@@ -87,26 +97,26 @@
 
       .order_summary.clear{:style => "padding-top:20px;"}
         .header
-          %span Payment Information
-          .italic.right
-            %span{:style=>'color:red;'} *&nbsp;
+          .left Payment Information
+          .italic.left
+            %span{:style=>'color:red;'} &nbsp;&nbsp;&nbsp;*
             Required Fields
         .line-separator.clear &nbsp;
         .inputs
           .info
             = f.label :name_on_card, "Name on Card <span style='color:red;'>*</span>".html_safe
             = f.input :name_on_card, :autofocus => true, :required => true, :label => false
-          .info{:style => "height: 30px;"}
+          .info
             = f.label :card_type, "Card Type <span style='color:red;'>*</span>".html_safe
-            = f.select :card_type, options_for_select({"American Express" => "USA_express", "Discover" => "discover", "Visa" => "visa", "JCB" => "jcb", "Diners Club/ Carte Blanche" => "dinners_club", "Master Card" => "master_card"}, "visa")
+            = f.select :card_type, options_for_select({"American Express" => "USA_express", "Discover" => "discover", "Visa" => "visa", "JCB" => "jcb", "Diners Club/ Carte Blanche" => "dinners_club", "Master Card" => "master_card", '- Please Select --' => 'default'}, "default")
           .info
             = f.label :card_number, "Card Number <span style='color:red;'>*</span>".html_safe
             = f.input :card_number, :autofocus => true, :required => true, :label => false
-          .info.expiration-date{:style => "height: 30px;"}
+          .info.expiration-date
             = f.label :expires_on, "Expiration Date <span style='color:red;'>*</span>".html_safe
-            = f.date_select :expires_on, :discard_day => true, :start_year => Date.today.year, :end_year => (Date.today.year+10), :add_month_numbers => false, :order => [:month, :year], :required => true, :label => false
+            = f.date_select :expires_on, :discard_day => true, :start_year => Date.today.year, :end_year => (Date.today.year+10), :add_month_numbers => false, :order => [:month, :year], :required => true, :label => false, :default => { :mon => '12' }
           .info
-            = f.label :ccv, "CCV <span style='color:red;'>*</span>".html_safe
+            = f.label :ccv, "CCV <span style='color:red;'>*</span> <span id='cvv-explanation'><a href='#'>What's This?</a></span>".html_safe
             = f.input :ccv, :autofocus => true, :required => true, :label => false
           = hidden_field_tag :order_id, @order.id
 
@@ -130,7 +140,6 @@
             .text.normal.left.no-background
               .left TAX
               .bold.right= number_to_currency line_item.tax
-        .line-separator.clear &nbsp;
         .summary.right
           .text.right
             .bold.left Subtotal:
@@ -143,7 +152,7 @@
             .right Free
 
         .line-separator.clear &nbsp;
-        .summary.right
+        .grand-total.summary.right
           .text.right.clear
             .bold.left Grand Total:
             .bold.right= number_to_currency(tax_total + subtotal)
@@ -210,15 +219,19 @@
       $('#shipping-address .edit a').bind('click', function(){
         $('#shipping-address .inputs').removeClass('hide').addClass('show');
         $('#shipping-address .edit').removeClass('show').addClass('hide');
-        $('#billing_ship_to_billing').attr('checked', true);
+        $('#billing_ship_to_billing').attr('checked', false);
+        $('#shipping-address .header .italic').removeClass('hide').addClass('show');
       });
       $('#billing_ship_to_billing').bind('click', function(){
+        console.log($(this).attr('checked'));
         if($(this).attr('checked') == 'checked'){
-          $('#shipping-address .inputs').removeClass('hide').addClass('show');
-          $('#shipping-address .edit').removeClass('show').addClass('hide');
-        } else {
           $('#shipping-address .inputs').removeClass('show').addClass('hide');
+          $('#shipping-address .header .italic').removeClass('show').addClass('hide');
           $('#shipping-address .edit').removeClass('hide').addClass('show');
+        } else {
+          $('#shipping-address .inputs').removeClass('hide').addClass('show');
+          $('#shipping-address .header .italic').removeClass('hide').addClass('show');
+          $('#shipping-address .edit').removeClass('show').addClass('hide');
         }
       });
       $('.submit').bind('click', function(){
