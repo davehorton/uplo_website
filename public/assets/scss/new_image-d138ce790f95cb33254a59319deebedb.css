@@ -1,0 +1,57 @@
+/*==================================================================================*/
+/* CONSTANT */
+/*==================================================================================*/
+/*==================================================================================*/
+/* CLASS */
+/*==================================================================================*/
+.image-container {
+  display: inline-block;
+  float: left;
+  height: auto;
+  border: 1px solid transparent;
+  text-align: center;
+  vertical-align: middle; }
+  .image-container img {
+    display: inline-block; }
+  .image-container.thumb {
+    width: 150px;
+    height: 150px;
+    padding: 0.3em; }
+  .image-container.small {
+    width: 48px;
+    height: 48px;
+    padding: 6.25px; }
+
+.image-thumb {
+  width: 150px;
+  height: 150px; }
+
+.image.small {
+  width: 48px;
+  height: 48px; }
+.image.thumb {
+  width: 150px;
+  height: 150px; }
+.image.medium {
+  width: 640px; }
+  .image.medium img {
+    width: 640px;
+    height: 640px; }
+
+.entry .preview {
+  text-align: center;
+  margin-bottom: 5px; }
+.entry .name {
+  color: #4B4B4B;
+  overflow: hidden;
+  padding: 0 2px;
+  float: left;
+  font-weight: normal; }
+.entry .price {
+  font-weight: bold;
+  float: right;
+  padding: 0 2px; }
+  .entry .price .likes {
+    color: #4B4B4B;
+    font-style: italic;
+    font-size: 14px; }

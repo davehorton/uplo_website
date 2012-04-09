@@ -265,7 +265,8 @@ $bold-text: #000000;
 .summary {
   padding-bottom: 10px;
   .text {
-    padding: 3px 5px;
+    height: 20px;
+    padding-right: 5px;
     .bold {
       font-weight: bold;
       color: $bold-text;
@@ -277,5 +278,6 @@ $bold-text: #000000;
   }
   &.grand-total {
     font-size: 17px;
+    margin: 5px 0;
   }
 }

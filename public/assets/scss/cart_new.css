@@ -1,0 +1,205 @@
+/*==================================================================================*/
+/* CONSTANT */
+/*==================================================================================*/
+/*==================================================================================*/
+/* IDs */
+/*==================================================================================*/
+#order-details .round-box {
+  width: 298px;
+  padding: 0; }
+#order-details .item {
+  width: 125px;
+  line-height: 22px;
+  padding: 5px 10px; }
+  #order-details .item input[type='radio'] {
+    margin: 0;
+    padding: 0;
+    vertical-align: middle; }
+  #order-details .item label {
+    vertical-align: middle;
+    float: none;
+    margin: 0; }
+
+#order-shippings #billing-address #billing_ship_to_billing {
+  margin: 8px 5px 0 0; }
+#order-shippings #shipping-address {
+  height: auto;
+  min-height: 155px; }
+  #order-shippings #shipping-address .edit {
+    width: 281px;
+    font-size: 11.5px;
+    background-color: #EEEEEE;
+    border: 1px solid #CBCBCB;
+    padding: 15px 10px; }
+    #order-shippings #shipping-address .edit a {
+      text-decoration: underline;
+      font-weight: normal; }
+#order-shippings .submit {
+  background: url("/assets/btn-place-order.jpg") no-repeat;
+  width: 94px;
+  height: 28px; }
+
+#order-summary .solid-block {
+  background-color: #EEEEEE;
+  padding: 10px;
+  margin-top: 5px;
+  font-size: 13.5px; }
+  #order-summary .solid-block .no-background {
+    background-color: white; }
+
+#cvv-explanation {
+  font-size: 11.5px;
+  font-weight: normal;
+  text-decoration: underline; }
+
+/*==================================================================================*/
+/* CLASS */
+/*==================================================================================*/
+.cart-details {
+  font-size: 11.5px;
+  line-height: 22px; }
+  .cart-details .cell {
+    width: 100px;
+    text-align: center;
+    margin-top: 50px; }
+    .cart-details .cell.preview {
+      width: 360px;
+      margin: 0;
+      text-align: left; }
+    .cart-details .cell.subtotal {
+      text-align: right; }
+  .cart-details .line {
+    height: 100px;
+    padding: 10px 0;
+    border-bottom: 1px #cbcbcb solid; }
+    .cart-details .line .preview img {
+      width: 100px;
+      height: 100px; }
+    .cart-details .line .preview a:link {
+      font-weight: normal; }
+    .cart-details .line .preview .edit {
+      background: url("/assets/icon-edit.jpg") no-repeat scroll 0 0 transparent;
+      height: 9px;
+      width: 9px;
+      margin-top: 6px; }
+    .cart-details .line .preview .name {
+      color: black;
+      font-weight: bold;
+      width: 250px;
+      word-wrap: break-word;
+      padding-left: 10px;
+      margin-top: 50px; }
+  .cart-details .header {
+    padding: 5px 0;
+    border-bottom: 1px #cbcbcb solid;
+    color: black;
+    font-weight: bold;
+    height: 20px; }
+    .cart-details .header .cell {
+      margin: 0; }
+  .cart-details .footer .summary {
+    font-weight: bold;
+    font-size: 13.5px;
+    color: black; }
+  .cart-details .footer .subtotal {
+    width: 140px; }
+  .cart-details .footer .cell {
+    margin-top: 0; }
+
+.actions {
+  font-size: 13.5px;
+  line-height: 22px; }
+  .actions .shopping a {
+    color: black;
+    font-weight: normal;
+    text-decoration: underline; }
+  .actions .checkout {
+    background: url("/assets/btn-checkout.jpg") no-repeat scroll 0 0 transparent;
+    height: 28px;
+    width: 137px;
+    margin-top: 10px; }
+
+.option {
+  margin-bottom: 10px; }
+  .option .header {
+    color: black;
+    font-size: 13px;
+    font-weight: bold;
+    padding: 9px 10px;
+    background: url("/assets/option-header-bg.png") repeat-x scroll 0 0 transparent;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px; }
+  .option .line {
+    border-top: 1px solid #cbcbcb;
+    width: 298px; }
+
+.add-to-cart {
+  background: url("/assets/btn-add-to-cart.jpg") no-repeat scroll 0 0 transparent;
+  height: 27px;
+  width: 91px; }
+
+.order_summary {
+  padding-right: 25px;
+  width: 303px;
+  font-size: 13.5px; }
+  .order_summary input {
+    width: 200px; }
+  .order_summary .header {
+    height: 20px;
+    font-weight: bold;
+    font-size: 16px;
+    color: black; }
+    .order_summary .header .italic {
+      font-size: 12px;
+      color: #5a5a5a;
+      font-weight: normal;
+      line-height: 20px; }
+  .order_summary .inputs {
+    width: 100%; }
+    .order_summary .inputs .info {
+      padding-bottom: 5px;
+      height: 30px; }
+      .order_summary .inputs .info label {
+        width: 120px;
+        margin: 9px 0; }
+      .order_summary .inputs .info input {
+        width: 169px;
+        font-size: 13.5px; }
+      .order_summary .inputs .info select {
+        width: 183px !important;
+        height: 30px;
+        padding: 3px 1px; }
+      .order_summary .inputs .info.expiration-date select {
+        width: 87px !important; }
+      .order_summary .inputs .info.expiration-date #card_expires_on_2i {
+        margin-right: 9px; }
+    .order_summary .inputs .simple_form label {
+      width: 110px; }
+    .order_summary .inputs .simple_form input[type=text], .order_summary .inputs .simple_form input[type=email], .order_summary .inputs .simple_form input[type=password] {
+      width: 176px; }
+  .order_summary .actions {
+    float: left; }
+
+.block {
+  width: 100%;
+  padding: 10px 0; }
+  .block .text {
+    padding: 3px 5px;
+    width: 273px; }
+    .block .text .bold, .block .text.bold {
+      font-weight: bold; }
+
+.summary {
+  padding-bottom: 10px; }
+  .summary .text {
+    height: 20px;
+    padding-right: 5px; }
+    .summary .text .bold {
+      font-weight: bold;
+      color: black; }
+    .summary .text .right {
+      width: 120px;
+      text-align: right; }
+  .summary.grand-total {
+    font-size: 17px;
+    margin: 5px 0; }

@@ -40,7 +40,7 @@
           = text_field :shipping, :state, :required => true
         .info
           = label_tag :billing_country, "Country"
-          = select_tag :country, options_for_select({"USA" => "USA", "Canada" => "Canada", '- Please Select --' => 'default'}, 'default')
+          = select_tag :country, options_for_select({'- Please Select --' => 'default', "USA" => "USA", "Canada" => "Canada"}, 'default')
         .info
           = label_tag :billing_phone, "Phone Number <span style='color:red;'>*</span>".html_safe
           = text_field :billing, :phone, :as => :string, :required => false, :onchange => "validateNumber()"
@@ -87,7 +87,7 @@
             = text_field :shipping, :state, :required => true
           .info
             = label_tag :shipping_country, "Country <span style='color:red;'>*</span>".html_safe
-            = select_tag :country, options_for_select({"USA" => "USA", "Canada" => "Canada", '- Please Select --' => 'default'}, 'default')
+            = select_tag :country, options_for_select({'- Please Select --' => 'default', "USA" => "USA", "Canada" => "Canada"}, 'default')
           .info
             = label_tag :shipping_phone, "Phone Number <span style='color:red;'>*</span>".html_safe
             = text_field :shipping, :phone, :as => :string, :required => false, :onchange => "validateNumber()"
@@ -108,7 +108,7 @@
             = f.input :name_on_card, :autofocus => true, :required => true, :label => false
           .info
             = f.label :card_type, "Card Type <span style='color:red;'>*</span>".html_safe
-            = f.select :card_type, options_for_select({"American Express" => "USA_express", "Discover" => "discover", "Visa" => "visa", "JCB" => "jcb", "Diners Club/ Carte Blanche" => "dinners_club", "Master Card" => "master_card", '- Please Select --' => 'default'}, "default")
+            = f.select :card_type, options_for_select({'- Please Select --' => 'default', "American Express" => "USA_express", "Discover" => "discover", "Visa" => "visa", "JCB" => "jcb", "Diners Club/ Carte Blanche" => "dinners_club", "Master Card" => "master_card"}, "default")
           .info
             = f.label :card_number, "Card Number <span style='color:red;'>*</span>".html_safe
             = f.input :card_number, :autofocus => true, :required => true, :label => false

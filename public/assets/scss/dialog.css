@@ -1,0 +1,48 @@
+.mask {
+  background-color: #dadada;
+  display: none;
+  height: 100%;
+  left: 0;
+  opacity: 0.5;
+  position: fixed;
+  top: 0;
+  width: 100%; }
+  .mask.display {
+    display: block !important; }
+  .mask.loading {
+    line-height: 50;
+    text-align: center;
+    vertical-align: middle; }
+
+.loading {
+  display: block;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  text-align: center;
+  vertical-align: middle;
+  line-height: 50; }
+
+.popup {
+  display: none;
+  z-index: 2000;
+  position: absolute;
+  padding: 10px; }
+  .popup .title {
+    font-size: 16.5px;
+    font-weight: bold;
+    padding-bottom: 2px; }
+    .popup .title.non-text {
+      height: 15px;
+      padding-bottom: 0px; }
+  .popup .content {
+    width: auto;
+    min-width: 200px;
+    min-height: 60px;
+    background-color: #FFFFFF; }
+  .popup .buttons {
+    text-align: center;
+    padding-top: 5px; }
+  .popup.display {
+    display: block !important; }
