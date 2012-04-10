@@ -237,14 +237,14 @@ $bold-text: #000000;
         }
       }
     }
-  .simple_form {
-    label {
-      width: 110px;
+    .simple_form {
+      label {
+        width: 110px;
+      }
+      input[type=text], input[type=email], input[type=password] {
+        width: 176px;
+      }
     }
-    input[type=text], input[type=email], input[type=password] {
-      width: 176px;
-    }
-}
   }
   .actions{
     float:left;

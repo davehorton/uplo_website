@@ -26,7 +26,7 @@
       - image = @images[idx]
       - url = url_for(:controller => "images", :action => "browse", :id => "#{image.id}")
       - additional_class = (idx%4 == 0) ? "no-padding-left" : ((idx%4==3) ? "no-padding-right" : "")
-      .image-container{:id => "image-container-#{image.id}", :title=>"#{image.name}", :class => "#{additional_class}"}
+      .image-container.thumb{:id => "image-container-#{image.id}", :title=>"#{image.name}", :class => "#{additional_class}"}
         %a{ :href => "#{url}" }
           %dl.entry
             %dt.preview

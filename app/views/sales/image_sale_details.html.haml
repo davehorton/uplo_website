@@ -17,9 +17,9 @@
             %dt.preview
               = image_tag(@image.data.url(:thumb), :class => "image-thumb")
         .info.left
-          .text.bold= @image.name
-          .text.fuzzy= @image.saled_quantity
-          .text= number_to_currency @image.total_sales, {:precision => 2}
+          .saled-name.text.bold= @image.name
+          .saled-quantity.text.fuzzy= "#{@image.saled_quantity} Sales"
+          .saled-price.text= number_to_currency @image.total_sales, {:precision => 2}
       .line-separator.clear &nbsp;
 
       .sale-chart.clear
@@ -34,12 +34,13 @@
           .user.left.clear= image_tag(purchaser.avatar.url(:small), :class => "image small")
           .left
             %span.text.bold= purchaser.username
-            %span.text.fuzzy= "at #{DateTime.parse(line_item.purchased_date).strftime "%B %d, %Y"}"
+            %span.text.fuzzy= "(#{line_item.creation_timestamp} ago)"
             .text.normal
-              %span= line_item.plexi_mount
-              %span= line_item.size
-              %span= line_item.moulding
-              %span= line_item.quantity
+              - plexi_mount = SharedMethods::Converter.Boolean(line_item.plexi_mount)
+              %span= plexi_mount ? 'Plexi Mount,&nbsp;'.html_safe : 'No Plexi Mount,&nbsp;'.html_safe
+              %span= "#{line_item.size},&nbsp;".html_safe
+              %span= "#{line_item.moulding} Mounding,&nbsp;".html_safe
+              %span= "Quantity #{line_item.quantity}"
           - if idx < (@purchased_info.length - 1)
             .line-separator.clear &nbsp;
         = render_pagination(@purchased_info, {:controller => "sales", :action => params[:action]})

@@ -1,6 +1,7 @@
 .text.bold{:style=>"width: 400px; margin: 0 auto"}
-  %span{:style=>"font-size:20px; font-family:Helvetica; color:black;"}
-    = "Total Monthly Sales #{number_to_currency total_sales}"
+  %span{:style=>"font-size:20px; font-family:Helvetica; color:black;"} Total Monthly Sales
+  %span{:style=>"font-size:32px; font-family:Helvetica; color:black; font-weight:bold;"}
+    = "&nbsp;#{number_to_currency total_sales}".html_safe
 
 #container{:style=>"min-width: 400px; height: 460px; margin: 0 auto"}
 
