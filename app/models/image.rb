@@ -113,7 +113,7 @@ class Image < ActiveRecord::Base
   end
 
   def image_url
-    data.url
+    data.url(:medium)
   end
 
   def image_thumb_url
@@ -242,7 +242,7 @@ class Image < ActiveRecord::Base
     end
 
     return saled_items
-  end 
+  end
 
   def get_purchased_info(item_paging_params = {})
     result = {:data => [], :total => 0}
