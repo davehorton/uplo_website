@@ -20,24 +20,27 @@
     float: none;
     margin: 0; }
 
-#order-shippings #billing-address #billing_ship_to_billing {
-  margin: 8px 5px 0 0; }
-#order-shippings #shipping-address {
-  height: auto;
-  min-height: 155px; }
-  #order-shippings #shipping-address .edit {
-    width: 281px;
-    font-size: 11.5px;
-    background-color: #EEEEEE;
-    border: 1px solid #CBCBCB;
-    padding: 15px 10px; }
-    #order-shippings #shipping-address .edit a {
-      text-decoration: underline;
-      font-weight: normal; }
-#order-shippings .submit {
-  background: url("/assets/btn-place-order.jpg") no-repeat;
-  width: 94px;
-  height: 28px; }
+#order-shippings {
+  color: black; }
+  #order-shippings #billing-address #billing_ship_to_billing {
+    margin: 8px 5px 0 0;
+    width: 10px !important; }
+  #order-shippings #shipping-address {
+    height: auto;
+    min-height: 155px; }
+    #order-shippings #shipping-address .edit {
+      width: 281px;
+      font-size: 11.5px;
+      background-color: #EEEEEE;
+      border: 1px solid #CBCBCB;
+      padding: 15px 10px; }
+      #order-shippings #shipping-address .edit a {
+        text-decoration: underline;
+        font-weight: normal; }
+  #order-shippings .submit {
+    background: url("/assets/btn-place-order.jpg") no-repeat;
+    width: 94px;
+    height: 28px; }
 
 #order-summary .solid-block {
   background-color: #EEEEEE;
@@ -147,7 +150,7 @@
   .order_summary .header {
     height: 20px;
     font-weight: bold;
-    font-size: 16px;
+    font-size: 18px;
     color: black; }
     .order_summary .header .italic {
       font-size: 12px;
@@ -185,7 +188,8 @@
   padding: 10px 0; }
   .block .text {
     padding: 3px 5px;
-    width: 273px; }
+    width: 273px;
+    color: black; }
     .block .text .bold, .block .text.bold {
       font-weight: bold; }
 

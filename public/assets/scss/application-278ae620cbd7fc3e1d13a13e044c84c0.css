@@ -201,7 +201,8 @@ p, ul {
 .breadcrum {
   line-height: 2.5em;
   font-weight: bold;
-  color: black; }
+  color: black;
+  font-size: 18px; }
   .breadcrum .current {
     color: gray; }
   .breadcrum .more {

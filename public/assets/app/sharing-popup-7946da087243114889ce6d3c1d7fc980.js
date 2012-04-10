@@ -1,0 +1,1 @@
+((function(){window.SocialSharingPopup=function(){function a(a){a==null&&(a={id:"social-sharing-popup",title:"",text:"",css:{},buttons:{}}),this.htmlElement=document.createElement("div"),a.id!==null&&a.id!==void 0&&(this.htmlElement.id=a.id),$("body").append(this.htmlElement)}return a}()})).call(this);
