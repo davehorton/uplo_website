@@ -162,6 +162,8 @@
     .order_summary .inputs .info {
       padding-bottom: 5px;
       height: 30px; }
+      .order_summary .inputs .info #cvv-explanation a {
+        font-weight: normal; }
       .order_summary .inputs .info label {
         width: 120px;
         margin: 9px 0; }
