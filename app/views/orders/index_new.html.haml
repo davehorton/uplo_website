@@ -39,7 +39,7 @@
           = label_tag :shipping_state, "State <span style='color:red;'>*</span>".html_safe
           = text_field :shipping, :state, :required => true
         .info
-          = label_tag :billing_country, "Country <span style='color:red;'>*</span>"
+          = label_tag :billing_country, "Country <span style='color:red;'>*</span>".html_safe
           = select_tag :country, options_for_select({'- Please Select --' => 'default', "USA" => "USA", "Canada" => "Canada"}, 'default')
         .info
           = label_tag :billing_phone, "Phone Number <span style='color:red;'>*</span>".html_safe
