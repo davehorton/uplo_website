@@ -107,7 +107,7 @@ uploader_file.png: uploader_file-3ab3c53af3d8adf6071f3776329ab009.png
 app/gallery.js: app/gallery-a3f6738705a727c6d8f05dd2b9691275.js
 app/popup.js: app/popup-3d37daf582062d5f270aa53d3da682bd.js
 app/sales.js: app/sales-03318d5b60f42b484cc55e4f12ca5fcc.js
-app/sharing-popup.js: app/sharing-popup-7946da087243114889ce6d3c1d7fc980.js
+app/sharing-popup.js: app/sharing-popup-3153e337c69afbd4f0f0eed2f9617b5a.js
 app/user.js: app/user-7856a14fe2fceeb1f0ad1b74126f9e28.js
 application.js: application-41164e1ed50f310a459c4663c28379d7.js
 file_upload/README.md: file_upload/README-3ed47c4044fe560bd4addcb841e853cd.md
@@ -193,7 +193,7 @@ jquery-ui.custom.css: jquery-ui.custom-bb782aff6a70a3531739cdd09fe60b50.css
 scss/application.css: scss/application-278ae620cbd7fc3e1d13a13e044c84c0.css
 scss/banner.css: scss/banner-34b0a85b55b48b319c087be5d3e7daa9.css
 scss/cart.css: scss/cart-a00c819367f1c26885c93fd320e87746.css
-scss/cart_new.css: scss/cart_new-7bf83fc13d15f509f69870d693724fae.css
+scss/cart_new.css: scss/cart_new-d300793a176608b402735aa3c6fa65ef.css
 scss/dialog.css: scss/dialog-5dec5a3c5274437ee34726e7e4356988.css
 scss/filter.css: scss/filter-739c80ba8eabd3a953be7d9ea50b38b6.css
 scss/image.css: scss/image-64b6683d484780bff39a790b7c1d60b3.css

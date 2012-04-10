@@ -22,8 +22,10 @@
 
 #order-shippings {
   color: black; }
+  #order-shippings #card_ccv {
+    width: 73px; }
   #order-shippings #billing-address #billing_ship_to_billing {
-    margin: 8px 5px 0 0;
+    margin: 10px 5px 0 0;
     width: 10px !important; }
   #order-shippings #shipping-address {
     height: auto;
