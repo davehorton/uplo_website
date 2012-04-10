@@ -28,7 +28,7 @@ body {
   font-family: "Lucida Grande", Helvetica, Verdana, Arial, Sans-Serif;
   margin: 0;
   padding: 0;
-  color: #5a5a5a; }
+  color: #8a8a8a; }
 
 ol, ul {
   list-style: none outside none; }
@@ -146,7 +146,7 @@ p, ul {
   .text.bold {
     color: black; }
   .text.normal {
-    color: #5a5a5a; }
+    color: #8a8a8a; }
 
 .show {
   display: inline-block; }

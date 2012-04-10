@@ -5,7 +5,15 @@
     margin: 37px 0 37px 8px; }
     .sale-item .info .text {
       max-width: 800px; }
-      .sale-item .info .text .bold {
+      .sale-item .info .text.bold {
+        font-weight: bold; }
+      .sale-item .info .text.saled-name {
+        font-size: 20px; }
+      .sale-item .info .text.saled-quantity {
+        font-size: 16px;
+        margin: 10px 0 5px; }
+      .sale-item .info .text.saled-price {
+        font-size: 2em;
         font-weight: bold; }
     .sale-item .info .details {
       background: url("/assets/btn-more-details.jpg") no-repeat scroll 0 0 transparent;
