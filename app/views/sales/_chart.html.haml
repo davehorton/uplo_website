@@ -1,5 +1,5 @@
 .text.bold{:style=>"width: 400px; margin: 0 auto"}
-  %span{:style=>"font-size:20px; font-family:Helvetica; color:black;"} Total Monthly Sales
+  %span{:style=>"font-size:20px; font-family:Helvetica; color:black; font-weight:bold;"} Total Monthly Sales
   %span{:style=>"font-size:32px; font-family:Helvetica; color:black; font-weight:bold;"}
     = "&nbsp;#{number_to_currency total_sales}".html_safe
 
@@ -12,7 +12,7 @@
         var months = [];
         var month_sales = [];
         <% sales.each do |sale| %>
-                months.push("<br /><span style=\"font-size:20px; font-family:Helvetica; color:black;\"><%= sale[:month] %></span>");
+                months.push("<br /><span style=\"color:black;\"><%= sale[:month] %></span>");
                 month_sales.push(<%= sale[:sales] %>);
         <% end %>
 
@@ -20,13 +20,14 @@
             chart = new Highcharts.Chart({
                 chart: {
                     renderTo: 'container',
-                    type: 'column'
+                    type: 'column',
+                    shadown: false
                 },
                 navigation:{
                     buttonOptions:{
                         enabled:false
-                                  }
-                           },
+                    }
+                },
                 title: {
                     text: '<br/>'
                 },
@@ -48,7 +49,7 @@
                                 }
                             },
                     title: {
-                        text: '<span style="font-size:20px; font-family:Helvetica; color:black;">Gross ($)</span>'
+                        text: '<span style="font-size:25px; font-family:Helvetica; color:black;">Gross ($)</span>'
                     }
                 },
                 legend: {
@@ -62,6 +63,10 @@
                     shadow: true
                 },
                 tooltip: {
+                    style: {
+                        padding: '5px',
+                        backgroundColor: 'red'
+                    },
                     formatter: function() {
 
                         return ''+
@@ -72,10 +77,11 @@
                     column: {
                         pointPadding: 0,
                         borderWidth: 0,
-                        color:'#fc7700'
+                        color:'#fc7700',
+                        shadow: false
                     }
                 },
-                    series: [ {
+                series: [ {
                     name: 'Sales',
                     data: month_sales
 
