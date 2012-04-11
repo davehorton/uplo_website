@@ -251,7 +251,7 @@ class User < ActiveRecord::Base
       :order => paging_info.sort_string) # need sort by order date
 
     return images
-  end  
+  end
 
   def total_sales(image_paging_params = {})
     result = {:total_entries => 0, :data => []}
@@ -276,7 +276,7 @@ class User < ActiveRecord::Base
     result[:total_entries] = images.total_entries
     return result
   end
-  
+
 
   # indexing with thinking sphinx
   define_index do

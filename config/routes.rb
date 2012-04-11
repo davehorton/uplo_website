@@ -21,6 +21,7 @@ Uplo::Application.routes.draw do
   put "profile/update", :to => "users#update"
 
   match 'images/browse/:id' => 'images#browse', :via => [:get]
+  match 'images/public/:id' => 'images#browse_share', :via => [:get]
   get 'images/order/:id', :to => "images#order"
   get 'images/switch_like/:id', :to => 'images#switch_liked'
 

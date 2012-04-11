@@ -49,9 +49,10 @@ $medium-image-size: 640px;
   }
   &.medium {
     width: $medium-image-size;
+    max-height: $medium-image-size;
     img {
-      width: $medium-image-size;
-      height: $medium-image-size;
+      max-width: $medium-image-size;
+      max-height: $medium-image-size;
     }
   }
 }
@@ -79,5 +80,58 @@ $medium-image-size: 640px;
     font-weight: bold;
     float: right;
     padding: 0 2px;
+  }
+}
+
+.sections {
+  width: 640px;
+  position: relative;
+  .actions {
+    width: 100%;
+    margin: 10px 0;
+    font-size: 13.5px;
+    color: $fuzzy-text;
+    .left {
+      line-height: 27px;
+      .times {
+        font-weight: bold;
+      }
+      .icon {
+        height: 13px;
+        width: 13px;
+        margin: 7px 3px 0 0;
+      }
+      .like {
+        margin-right: 20px;
+        .icon {
+          background: url('/assets/icon-like.jpg') no-repeat;
+        }
+      }
+      .comment .icon {
+        background: url('/assets/icon-comment.jpg') no-repeat;
+      }
+    }
+    .right {
+      .button {
+        margin-left: 5px;
+        height: 27px;
+        &.comment {
+          background: url('/assets/btn-comment.jpg') no-repeat;
+          width: 98px;
+        }
+        &.like, &.dislike {
+          background: url('/assets/btn-like.jpg') no-repeat;
+          width: 65px;
+        }
+        &.order {
+          background: url('/assets/btn-order.jpg') no-repeat;
+          width: 80px;
+        }
+        &.share {
+          background: url('/assets/btn-share.png') no-repeat;
+          width: 77px;
+        }
+      }
+    }
   }
 }

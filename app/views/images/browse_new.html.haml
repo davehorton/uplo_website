@@ -1,0 +1,159 @@
+- content_for :head do
+  = stylesheet_link_tag("scss/new_image.css", "scss/sale.css")
+
+
+- content_for :top_content do
+  &nbsp;
+
+- content_for :right_content do
+  .breadcrum{:style => 'line-height:12.5px;'}= @image.name
+  .line-separator{:style => 'margin: 10px 0 0px;'} &nbsp;
+  .left{:style => "height:48px; margin-bottom:10px;"}
+    .left= image_tag @image.gallery.user.avatar(:small)
+    .left{:style => 'padding-left:10px;'}
+      .text.bold= "By #{@image.user_fullname}"
+      .text.bold= @image.username
+  .line-separator.clear{:style => 'margin: 10px 0 0px;'} &nbsp;
+  .text.bold.left{:style => "margin-bottom:10px;"}= "Uploaded on #{@image.created_at.strftime('%B %d, %Y')}"
+  .line-separator.clear{:style => 'margin: 10px 0 5px;'} &nbsp;
+  .text.normal{:style => 'width:300px;'}
+    Lorem ipsum dolor sit amet consectetur adipisicing elit sed do eiusmod tempor incididunt ut labone et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco.
+
+  .text.bold{:style => 'margin: 10px 0 0px;'} Related images
+  .line-separator.clear &nbsp;
+  %div{:style => 'width:300px;'}
+    .clearfix
+      - if @images.blank?
+        .empty-data= "There is no image. Please add image."
+      - else
+        - (0...@images.length). each do |idx|
+          - image = @images[idx]
+          - url = url_for(:controller => "images", :action => "browse", :id => "#{image.id}")
+          - additional_class = (idx%5 == 0) ? "no-padding-left" : ((idx%5==4) ? "no-padding-right" : "")
+          .image-container.small{:id => "image-container-#{image.id}", :title=>"#{image.name}", :class => "#{additional_class}"}
+            %a{ :href => "#{url}" }
+              %dl.entry
+                %dt.preview
+                  .image.small.left= image_tag image.data(:small)
+
+.sections
+  .image.medium.left
+    = image_tag @image.data.url(:medium)
+
+  #social-sharing.hide
+    .main.left
+      .close
+        .right{:onclick => "$('#social-sharing').hasClass('hide');"} &times;
+      .container.left
+        .text
+          .left Share this via:
+          .right Share References
+        .line-separator.clear &nbsp;
+        .buttons-container.left
+          - public_url = url_for(:controller => 'images', :action => 'browse_share', :id => params[:id], :only_path => false)
+          .email.button.left.no-padding-left.not-implement
+          %a.facebook.button.left{:href => "http://www.facebook.com/sharer.php?u=#{public_url}"}
+          %a.twitter.button.left{:href=>"https://twitter.com/share", :data => {:lang => "en", :url => "#{public_url}", :counturl => "#{public_url}", :count => "horizontal", :text => "Shared from UPLO -"}}
+          .flickr.button.left.not-implement
+          .tumblr.button.left.not-implement
+          .pinterest.button.left.no-padding-right.not-implement
+    .tail.left
+      .icon.right
+
+  .actions.left
+    .left
+      .like.left
+        .icon.left
+        .times.left= @image.likes
+        .left &nbsp;Likes
+      .comment.left
+        .icon.left
+        .times.left= @image.likes
+        .left &nbsp;Comments
+    .right
+      - like_class = @dislike ? "dislike" : "like"
+      - liked_url = url_for(:controller => 'images', :action => 'switch_liked', :id => params[:id], :dislike => @dislike)
+      - order_url = url_for(:controller => 'images', :action => 'order', :id => params[:id])
+      .button.left{:class => "#{like_class}", :onclick => 'update_liked();', :data => {:url => liked_url, :dislike => @dislike, :id => params[:id]}}
+      .button.comment.not-implement.left
+      .button.order.left{:onclick => "window.location.href = '#{order_url}';", :data => {:url => "#{order_url}"}}
+      .button.share.left{:onclick => "display_sharing_box();"}
+
+  .line-separator.clear &nbsp;
+  .sale-info
+    .header.text.bold Comments & Faves
+    - (0...@purchased_info.length). each do |idx|
+      - line_item = @purchased_info[idx]
+      - purchaser = User.find_by_id line_item.purchaser_id.to_i
+      .user.left.clear= image_tag(purchaser.avatar.url(:small), :class => "image small")
+      .left
+        %span.text.bold{:style => 'font-weight:bold;'}= purchaser.username
+        %span.text.fuzzy= "(#{line_item.creation_timestamp} ago)"
+        .text.normal
+          Great shot!
+      .line-separator.clear &nbsp;
+    .user.left.clear= image_tag('/assets/avatar-default-small.jpg', :class => "image small")
+    .left
+      = text_area_tag 'comment', "Add your comment here...", :id => 'comment-field', :class => 'left'
+      .post-comment.clear
+
+    = render_pagination(@purchased_info, {:controller => "sales", :action => params[:action]})
+  .clear
+
+
+- content_for :js do
+  = javascript_tag do
+    :erb
+      $(".not-implement").click(function(e){
+        e.preventDefault();
+        helper.alert_not_implement();
+        return false;
+      });
+      $('#social-sharing .close .right').click(function(){
+        $('#social-sharing').addClass('hide');
+      });
+
+      function display_sharing_box() {
+        var box, top, left;
+        box = $('#social-sharing');
+        btn_share = $('.button.share');
+        img = $('.sections .image.medium');
+        if(box.hasClass('hide')) {
+          top = img.height() - box.height();
+          left = img.width() - box.width() + 18;
+          box.removeClass('hide');
+          box.css('top', top + 'px');
+          box.css('left', left + 'px');
+        } else {
+          box.addClass('hide');
+        }
+      }
+
+      function update_liked(){
+        $.ajax({
+          url: $(".button.like").attr('data-url'),
+          type: "GET",
+          dataType: "json",
+          success: function(response){
+            if(response.success==true){
+              $(".public-preview .like .time")[0].innerHTML = response.likes;
+              id = $(".button-container .like").attr('data-id');
+              dislike = $(".button-container .like").attr('data-dislike');
+              if(dislike == "true"){
+                dislike = "false";
+                $(".button-container .like").attr('value', "Like");
+              }else{
+                dislike = "true";
+                $(".button-container .like").attr('value', "Dislike");
+              }
+
+              liked_url = "/images/switch_like/" + id + "?dislike=" + dislike;
+              $(".button-container .like").attr('data-url', liked_url);
+              $(".button-container .like").attr('data-dislike', dislike);
+            }
+          },
+          fail: function(){}
+        });
+      }
+
+      !function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");

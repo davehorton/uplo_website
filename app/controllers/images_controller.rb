@@ -1,7 +1,7 @@
 class ImagesController < ApplicationController
   include ::SharedMethods::Converter
 
-  before_filter :authenticate_user!
+  before_filter :authenticate_user!, :except => [:browse_share]
   authorize_resource
 
   def index
@@ -134,11 +134,24 @@ class ImagesController < ApplicationController
       return render_unauthorized
     end
 
-    @images = @image.gallery.images.all(:order => 'name')
+    # @images = @image.gallery.images.all(:order => 'name')
+    @images = @image.gallery.get_images_without([@image.id])
     @dislike = false
     if user_signed_in?
       @dislike = @image.is_liked? current_user.id
     end
+
+    @purchased_info = @image.raw_purchased_info(@filtered_params)
+    render :template => "images/browse_new", :layout => "main"
+  end
+
+  def browse_share
+    if user_signed_in?
+      return redirect_to :action => 'browse', :id => params[:id]
+    end
+    @image = Image.find_by_id(params[:id])
+    @purchased_info = @image.raw_purchased_info(@filtered_params)
+    render :layout => "main"
   end
 
   # PUT images/:id/slideshow_update
