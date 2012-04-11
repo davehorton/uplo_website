@@ -4,9 +4,7 @@ class SalesController < ApplicationController
   layout 'main'
 
   def index
-    user = current_user
-#    user = User.find 7
-    @sales = user.raw_total_sales(@filtered_params)
+    return redirect_to :action => :year_sales
   end
 
   def image_sale_details
@@ -17,7 +15,6 @@ class SalesController < ApplicationController
 
   def year_sales
     user = current_user
-#    user = User.find 7
     @sales = user.raw_total_sales(@filtered_params)
     @monthly_sales = user_monthly_sales(@sales)
     @year_sales = user_year_sales(@monthly_sales)
@@ -32,7 +29,7 @@ class SalesController < ApplicationController
   def user_monthly_sales(sales)
     result = []
     date = DateTime.parse Time.now.to_s
-    prior_months = TimeCalculator.prior_year_period(date, {:format => '%b %Y'})
+    prior_months = TimeCalculator.prior_year_period(date, {:format => '%b'})
     prior_months.each { |mon|
       total_sales = 0
       sales.each { |img|
