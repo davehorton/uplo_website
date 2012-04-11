@@ -1,8 +1,7 @@
 class ImagesController < ApplicationController
-  include ::SharedMethods::Converter
-
   before_filter :authenticate_user!, :except => [:browse_share]
-  authorize_resource
+  skip_authorize_resource :only => :browse_share
+  include ::SharedMethods::Converter
 
   def index
     if find_gallery!
