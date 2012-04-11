@@ -265,6 +265,8 @@ class Image < ActiveRecord::Base
         result[:data] << {
           # :purchaser => user.serializable_hash(user.default_serializable_options),
           :username => user.username,
+          :plexi_mount => item.plexi_mount ? 'Plexi Mount' : 'No Plexi Mount',
+          :size => item.size,
           :quantity => item.quantity,
           :moulding => item.moulding,
           :date => purchased_date
