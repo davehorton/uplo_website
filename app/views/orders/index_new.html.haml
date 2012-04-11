@@ -126,10 +126,11 @@
       .solid-block.left
         - subtotal = 0
         - tax_total = 0
-        - @order.line_items.each do |line_item|
+        - (0...@order.line_items.length).each do |idx|
+          - line_item = @order.line_items[idx]
           - subtotal += line_item.price
           - tax_total += line_item.tax
-          .block.left
+          .block.left{:style => "#{'padding-top:0;' if idx==0}"}
             .text.bold.left= line_item.image.name
             .text.normal.left.no-background
               .left QTY
