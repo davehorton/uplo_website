@@ -39,6 +39,8 @@ $medium-image-size: 640px;
 }
 
 .image {
+  text-align: center;
+  vertical-align: middle;
   &.small {
     width: $small-image-size;
     height: $small-image-size;

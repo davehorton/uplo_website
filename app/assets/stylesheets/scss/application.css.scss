@@ -460,6 +460,7 @@ p, ul{
     box-shadow: 1px -1px 5px $fuzzy-text;
     background-color: white;
     .close {
+      color: $fuzzy-text;
       width: 100%;
       .right {
         border: 1px solid $fuzzy-text;
@@ -477,7 +478,7 @@ p, ul{
         font-size: 12px;
         .left {
           font-weight: bold;
-          font-size: 13.5px;
+          font-size: 15px;
         }
       }
     }

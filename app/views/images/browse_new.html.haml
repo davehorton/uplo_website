@@ -42,7 +42,7 @@
 
   #social-sharing.hide
     .main.left
-      .close
+      %a.close{:href=>'#'}
         .right{:onclick => "$('#social-sharing').hasClass('hide');"} &times;
       .container.left
         .text
@@ -52,8 +52,8 @@
         .buttons-container.left
           - public_url = url_for(:controller => 'images', :action => 'browse_share', :id => params[:id], :only_path => false)
           .email.button.left.no-padding-left.not-implement
-          %a.facebook.button.left{:href => "http://www.facebook.com/sharer.php?u=#{public_url}"}
-          %a.twitter.button.left{:href=>"https://twitter.com/share", :data => {:lang => "en", :url => "#{public_url}", :counturl => "#{public_url}", :count => "horizontal", :text => "Shared from UPLO -"}}
+          %a.facebook.button.left{:href => "http://www.facebook.com/sharer.php?u=#{public_url}", :target=>"_blank"}
+          %a.twitter.button.left{:href=>"https://twitter.com/share", :target=>"_blank", :data => {:lang => "en", :url => "#{public_url}", :counturl => "#{public_url}", :count => "horizontal", :text => "Shared from UPLO -"}}
           .flickr.button.left.not-implement
           .tumblr.button.left.not-implement
           .pinterest.button.left.no-padding-right.not-implement
