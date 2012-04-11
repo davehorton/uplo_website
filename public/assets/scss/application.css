@@ -131,13 +131,16 @@ p, ul {
   text-align: center; }
 
 .no-padding {
-  padding: 0 !important; }
+  padding: 0 !important;
+  margin: 0 !important; }
 
 .no-padding-right {
-  padding-right: 0 !important; }
+  padding-right: 0 !important;
+  margin-right: 0 !important; }
 
 .no-padding-left {
-  padding-left: 0 !important; }
+  padding-left: 0 !important;
+  margin-left: 0 !important; }
 
 .text {
   line-height: 22px;
@@ -272,6 +275,28 @@ p, ul {
   font-weight: bold;
   clear: both; }
 
+.buttons-container .button {
+  width: 32px;
+  height: 32px;
+  margin: 5px; }
+  .buttons-container .button.email {
+    background: url("/assets/icon-email.png") no-repeat; }
+  .buttons-container .button.facebook {
+    background: url("/assets/icon-facebook.png") no-repeat; }
+  .buttons-container .button.twitter {
+    background: url("/assets/icon-twitter.png") no-repeat !important; }
+  .buttons-container .button.flickr {
+    background: url("/assets/icon-flickr.png") no-repeat; }
+  .buttons-container .button.tumblr {
+    background: url("/assets/icon-tumblr.png") no-repeat; }
+  .buttons-container .button.pinterest {
+    background: url("/assets/icon-pinterest.png") no-repeat; }
+
+.post-comment {
+  background: url("/assets/btn-post-comment.jpg") no-repeat;
+  width: 111px;
+  height: 27px; }
+
 /*==================================================================================*/
 /* ID */
 /*==================================================================================*/
@@ -380,3 +405,47 @@ p, ul {
 #menu-items {
   margin-left: 20px;
   height: 40px; }
+
+#social-sharing {
+  width: 286px;
+  position: absolute; }
+  #social-sharing .main {
+    width: 264px;
+    height: 95px;
+    padding: 10px;
+    border: 1px solid transparent;
+    border-radius: 5px;
+    box-shadow: 1px -1px 5px #cbcbcb;
+    background-color: white; }
+    #social-sharing .main .close {
+      width: 100%; }
+      #social-sharing .main .close .right {
+        border: 1px solid #cbcbcb;
+        height: 13px;
+        line-height: 10px;
+        text-align: center;
+        width: 13px; }
+    #social-sharing .main .container {
+      width: 242px;
+      padding: 0 11px 5px 11px; }
+      #social-sharing .main .container .text {
+        color: black;
+        font-size: 12px; }
+        #social-sharing .main .container .text .left {
+          font-weight: bold;
+          font-size: 13.5px; }
+  #social-sharing .tail {
+    width: 100%;
+    height: 13px; }
+    #social-sharing .tail .icon {
+      background: url("/assets/icon-sharing-tail.png") no-repeat;
+      width: 23px;
+      height: 12px;
+      margin-right: 45px; }
+
+#comment-field {
+  border: 1px solid #cbcbcb;
+  width: 570px;
+  height: 100px;
+  margin-bottom: 10px;
+  padding: 5px; }
