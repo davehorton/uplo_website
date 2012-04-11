@@ -29,7 +29,7 @@
               %span.fuzzy Cumulative
             .details{:data => {:url => "#{url}"}}
         .line-separator.clear &nbsp;
-  = render_pagination(@sales, {:controller => "sales", :action => params[:action]})
+  .clear= render_pagination(@sales, {:controller => "sales", :action => params[:action]})
 
 - content_for :js do
   - javascript_tag do

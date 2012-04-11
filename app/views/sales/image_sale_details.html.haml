@@ -43,7 +43,7 @@
               %span= "Quantity #{line_item.quantity}"
           - if idx < (@purchased_info.length - 1)
             .line-separator.clear &nbsp;
-        = render_pagination(@purchased_info, {:controller => "sales", :action => params[:action]})
+        .clear= render_pagination(@purchased_info, {:controller => "sales", :action => params[:action]})
 
 
 - content_for :js do
