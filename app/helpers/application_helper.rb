@@ -1,4 +1,30 @@
 module ApplicationHelper
+  def state_options
+    options_for_select({
+      'Alaska' => 'AK', 'Alabama' => 'AL', 'Arkansas' => 'AR', 'American Samoa' => 'AS', 'Arizona' => 'AZ',
+      'California' => 'CA', 'Colorado' => 'CO', 'Connecticut' => 'CT', 'D.C.' => 'DC', 'Delaware' => 'DE',
+      'Florida' => 'FL', 'Micronesia' => 'FM',
+      'Georgia' => 'GA', 'Guam' => 'GU',
+      'Hawaii' => 'HI',
+      'Iowa' => 'IA', 'Idaho' => 'ID', 'Illinois' => 'IL', 'Indiana' => 'IN',
+      'Kansas' => 'KS', 'Kentucky' => 'KY',
+      'Louisiana' => 'LA',
+      'Massachusetts' => 'MA', 'Maryland' => 'MD', 'Maine' => 'ME', 'Marshall Islands' => 'MH', 'Michigan' => 'MI',
+      'Minnesota' => 'MN', 'Missouri' => 'MO', 'Marianas' => 'MP', 'Mississippi' => 'MS', 'Montana' => 'MT',
+      'North Carolina' => 'NC', 'North Dakota' => 'ND', 'Nebraska' => 'NE', 'New Hampshire' => 'NH',
+      'New Jersey' => 'NJ', 'New Mexico' => 'NM', 'Nevada' => 'NV', 'New York' => 'NY',
+      'Ohio' => 'OH', 'Oklahoma' => 'OK', 'Oregon' => 'OR',
+      'Pennsylvania' => 'PA', 'Puerto Rico' => 'PR', 'Palau' => 'PW',
+      'Rhode Island' => 'RI',
+      'South Carolina' => 'SC', 'South Dakota' => 'SD',
+      'Tennessee' => 'TN', 'Texas' => 'TX',
+      'Utah' => 'UT',
+      'Virginia' => 'VA', 'Virgin Islands' => 'VI', 'Vermont' => 'VT',
+      'Washington' => 'WA', 'Wisconsin' => 'WI', 'West Virginia' => 'WV', 'Wyoming' => 'WY',
+      'Military Americas' => 'AA', 'Military Europe/ME/Canada' => 'AE', 'Military Pacific' =>  'AP'
+    })
+  end
+
   def popular_sort_options
     options_for_select([["Most Views", "#"]])
   end

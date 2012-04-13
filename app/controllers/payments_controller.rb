@@ -1,17 +1,17 @@
 require 'ostruct'
-require 'active_merchant' 
+require 'active_merchant'
 
 class PaymentsController < ApplicationController
   before_filter :authenticate_user!, :except => [:paypal_notify]
-  
+
   include ActiveMerchant::Billing::Integrations
   include CartsHelper
-  
+
   def index
     @pp_payment = Payment.create_paypal_test
     @an_payment = Payment.create_authorizenet_test
   end
-  
+
   # This is the call back for Paypal transaction.
   # You cannot test this method from localhost.
   # Deploy the app to a public server (e.g, Heroku) so that Paypal can access this method.
@@ -19,7 +19,7 @@ class PaymentsController < ApplicationController
     notify = Paypal::Notification.new(request.raw_post)
     Rails.logger.info "==== Paypal notify ==="
     Rails.logger.info notify.inspect
-    
+
     order = Order.find_by_id(params[:invoice])
     if order
       if notify.acknowledge
@@ -56,19 +56,19 @@ class PaymentsController < ApplicationController
         end
       end
     end
-    
+
     render :nothing => true
   end
-  
+
   def paypal_result
     finalize_cart
   end
-  
+
   def paypal_cancel
     flash[:warning] = I18n.t("order.transaction_canceled")
     redirect_to :controller => 'shopping_cart', :action => 'show'
   end
-  
+
   def checkout
     case params[:type]
       when "pp"
@@ -82,7 +82,7 @@ class PaymentsController < ApplicationController
       when "an"
         expires_on = Date.civil(params[:card]["expires_on(1i)"].to_i,
                          params[:card]["expires_on(2i)"].to_i,
-                         params[:card]["expires_on(3i)"].to_i)
+                         1)
         expires_on.class
         expires_on = expires_on.strftime("%m%y")
         card_string = params[:card]["card_number"]
@@ -101,7 +101,7 @@ class PaymentsController < ApplicationController
         redirect_to :action => :checkout_result, :msg => msg, :success => success, :trans_id => response.transaction_id
     end
   end
-  
+
   def checkout_result
 #    if params[:success]
 #      flash[:notice] = params[:msg]
@@ -110,7 +110,7 @@ class PaymentsController < ApplicationController
 #    end
     @transaction_id = params[:trans_id]
   end
-  
+
   def pp_gateway
     @pp_gateway ||= ActiveMerchant::Billing::PaypalExpressGateway.new(
       :login => PP_API_USERNAME,
@@ -122,15 +122,15 @@ class PaymentsController < ApplicationController
   def an_gateway
     @an_gateway ||= ActiveMerchant::Billing::AuthorizeNetGateway.new(
     :login => AN_LOGIN_ID,
-    :password => AN_TRANS_KEY, 
+    :password => AN_TRANS_KEY,
     :test => true)
   end
-  
+
   def an_credit_card
-    @an_credit_card ||= AuthorizeNet::CreditCard.new(nil, nil, 
+    @an_credit_card ||= AuthorizeNet::CreditCard.new(nil, nil,
     :track_1 => '%B4111111111111111^DOE/JOHN^1803101000000000020000831000000?')
   end
-  
+
   def credit_card
     @credit_card ||= ActiveMerchant::Billing::CreditCard.new(
       :number     => '4007000000027',
@@ -142,7 +142,7 @@ class PaymentsController < ApplicationController
       :type => "visa"
     )
   end
-  
+
   def setup_purchase_params(order)
     subtotal = 0
     shipping  = 0
@@ -159,7 +159,7 @@ class PaymentsController < ApplicationController
       :tax => 0,
       #:currency => pp_payment.currency,
       :allow_note => true,
-      :invoice => order.id, 
+      :invoice => order.id,
       :items => [{
         :name => "Test Image",
         :quantity => 1,
@@ -167,21 +167,21 @@ class PaymentsController < ApplicationController
       }]
     }
   end
-  
+
   def to_cents(money)
     (money*100).round
   end
-  
+
   def auth_order
     @order_id = params[:order_id]
   end
-  
+
   protected
-  
+
   def set_current_tab
     @current_tab = "browse"
   end
-  
+
   def finalize_cart
     if find_cart
       @order = @cart.order

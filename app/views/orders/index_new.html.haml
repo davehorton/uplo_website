@@ -36,11 +36,8 @@
           = label_tag :billing_zip, "Portal/Zip Code <span style='color:red;'>*</span>".html_safe
           = text_field :billing, :zip, :required => true
         .info
-          = label_tag :shipping_state, "State <span style='color:red;'>*</span>".html_safe
-          = text_field :shipping, :state, :required => true
-        .info
-          = label_tag :billing_country, "Country <span style='color:red;'>*</span>".html_safe
-          = select_tag :country, options_for_select({'- Please Select --' => 'default', "USA" => "USA", "Canada" => "Canada"}, 'default')
+          = label_tag :billing_state, "State <span style='color:red;'>*</span>".html_safe
+          = select :billing, :state, state_options, {:required => true,  :prompt => '- Please Select--'}
         .info
           = label_tag :billing_phone, "Phone Number <span style='color:red;'>*</span>".html_safe
           = text_field :billing, :phone, :as => :string, :required => false, :onchange => "validateNumber()"
@@ -48,7 +45,7 @@
           = label_tag :billing_fax, "Fax Number"
           = text_field :billing, :fax
         .info
-          / = hidden_field_tag 'billing[ship_to_billing]', 0
+          / = hidden_field_tag 'billing[ship_to_billing]', 0hy
           %input{ :type => 'checkbox', :name => 'billing[ship_to_billing]', :value => '1', :id => 'billing_ship_to_billing', :class => 'left', :checked => 'checked' }
           = label_tag :billing_ship_to_billing, 'Ship Items to the Above Billing Address', :style => 'width:auto;', :class => 'left'
 
@@ -84,10 +81,7 @@
             = text_field :shipping, :zip, :required => true
           .info
             = label_tag :shipping_state, "State <span style='color:red;'>*</span>".html_safe
-            = text_field :shipping, :state, :required => true
-          .info
-            = label_tag :shipping_country, "Country <span style='color:red;'>*</span>".html_safe
-            = select_tag :country, options_for_select({'- Please Select --' => 'default', "USA" => "USA", "Canada" => "Canada"}, 'default')
+            = select :shipping, :state, state_options, {:required => true,  :prompt => '- Please Select--'}
           .info
             = label_tag :shipping_phone, "Phone Number <span style='color:red;'>*</span>".html_safe
             = text_field :shipping, :phone, :as => :string, :required => false, :onchange => "validateNumber()"
@@ -108,13 +102,15 @@
             = f.input :name_on_card, :autofocus => true, :required => true, :label => false
           .info
             = f.label :card_type, "Card Type <span style='color:red;'>*</span>".html_safe
-            = f.select :card_type, options_for_select({'- Please Select --' => 'default', "American Express" => "USA_express", "Discover" => "discover", "Visa" => "visa", "JCB" => "jcb", "Diners Club/ Carte Blanche" => "dinners_club", "Master Card" => "master_card"}, "default")
+            = f.select :card_type, options_for_select({"American Express" => "USA_express", "Discover" => "discover", "Visa" => "visa", "JCB" => "jcb", "Diners Club/ Carte Blanche" => "dinners_club", "Master Card" => "master_card"}), {:prompt => '- Please Select--'}
           .info
             = f.label :card_number, "Card Number <span style='color:red;'>*</span>".html_safe
             = f.input :card_number, :autofocus => true, :required => true, :label => false
           .info.expiration-date
+            - today = Date.today
             = f.label :expires_on, "Expiration Date <span style='color:red;'>*</span>".html_safe
-            = f.date_select :expires_on, :discard_day => true, :start_year => Date.today.year, :end_year => (Date.today.year+10), :add_month_numbers => false, :order => [:month, :year], :required => true, :label => false, :default => { :mon => '12' }
+            = f.date_select :expires_on, :discard_day => true, :start_year => Date.today.year, :end_year => (Date.today.year+10), :add_month_numbers => false, :order => [:month, :year], :required => true, :label => false, :default => { :day => '1', :mon => '12' }, :prompt => { :month => 'Month', :year => 'Year' }
+
           .info
             = f.label :ccv, "CCV <span style='color:red;'>*</span> <span id='cvv-explanation'><a href='#'>What's This?</a></span>".html_safe
             = f.input :ccv, :autofocus => true, :required => true, :label => false
