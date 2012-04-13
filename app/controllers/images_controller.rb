@@ -100,7 +100,7 @@ class ImagesController < ApplicationController
       return render :json => result
     end
     if user_signed_in?
-      result = Boolean(params[:dislike]) ? image.disliked_by_user(current_user.id) : image.liked_by_user(current_user.id)
+      result = SharedMethods::Converter.Boolean(params[:dislike]) ? image.disliked_by_user(current_user.id) : image.liked_by_user(current_user.id)
     else
       result[:msg] = "You have to sign in first"
     end
