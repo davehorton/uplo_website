@@ -117,6 +117,7 @@ GEM
     faraday_middleware (0.7.0)
       faraday (~> 0.7.3)
     ffi (1.0.11)
+    flickraw (0.9.5)
     flying-sphinx (0.6.4)
       faraday_middleware (~> 0.7.0)
       multi_json (~> 1.0.1)
@@ -367,6 +368,7 @@ DEPENDENCIES
   execjs
   factory_girl_rails (>= 1.5.0)
   faker
+  flickraw
   flying-sphinx (>= 0.6.2)
   guard-coffeescript
   guard-sass

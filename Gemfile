@@ -9,6 +9,7 @@ gem 'iron_worker'
 
 # Social network
 gem 'twitter'
+gem 'flickraw'
 
 #gem "unicorn" # HTTP Server
 gem 'pg'
@@ -57,6 +58,8 @@ gem 'authorize-net', '>= 1.5.2'
 gem 'money'
 
 group :development do
+#  gem 'thin'
+#  gem 'typhoeus'
   gem 'execjs'
   gem 'therubyracer'
   gem 'sqlite3'

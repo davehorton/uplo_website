@@ -3,6 +3,8 @@ Uplo::Application.routes.draw do
 
   # WEB ROUTING
   root :to => "home#index"
+  get '/test', :to => "home#test"
+  match '/flickr_response' => 'home#flickr_response'
   get "shopping_cart/show"
   post "shopping_cart/update_cart"
   post "shopping_cart/add_to_cart"
