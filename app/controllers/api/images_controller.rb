@@ -103,6 +103,11 @@ class Api::ImagesController < Api::BaseController
     render :json => @result
   end
 
+  def get_images
+    images = Image.find_all_by_id JSON.parse(URI.unescape(params[:ids]))
+    render :json => {:data => images}
+  end
+
   # DELETE /api/delete_image
   # params:id
   def delete_image
