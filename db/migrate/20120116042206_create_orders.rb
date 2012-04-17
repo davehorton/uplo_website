@@ -11,9 +11,9 @@ class CreateOrders < ActiveRecord::Migration
       t.string :status
       t.string :receiver_name
       t.string :address
-      t.datetime :delivery_time
       t.string :message
-      
+      t.integer :shipping_address_id
+      t.integer :billing_address_id
       t.timestamps
     end
   end

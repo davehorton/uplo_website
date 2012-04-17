@@ -25,11 +25,12 @@ class Api::OrdersController < Api::BaseController
     order_items = build_order_items(JSON.parse(images))
     billing_address = Address.new params[:billing_address]
     order.billing_address = billing_address
-    if SharedMethods::Converter.Boolean(params[:ship_to_billing])
+    if params.has_key?(:ship_to_billing) && params[:ship_to_billing]!='' && SharedMethods::Converter.Boolean(params[:ship_to_billing])
       order.shipping_address = billing_address
     else
       order.shipping_address = Address.new params[:shipping_address]
     end
+    order.transaction_date = Time.now
 
     done = false
     if order.valid?
@@ -58,9 +59,12 @@ class Api::OrdersController < Api::BaseController
     result = []
     items.each do |item_info|
       line_item = LineItem.new do |item|
-        item.attributes = item_info
-        item.price = (image.price.nil? ? '0' : image.price)
-        result << item
+        image = Image.find_by_id item_info['image_id']
+        unless image.nil?
+          item.attributes = item_info
+          item.price = (item.price.nil? ? '0' : image.price)
+          result << item
+        end
       end
     end
     return result
