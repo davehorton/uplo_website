@@ -23,22 +23,28 @@ class Api::OrdersController < Api::BaseController
     order_info[:user] = @user
     order = Order.new(order_info)
     order_items = build_order_items(JSON.parse(images))
+    billing_address = Address.new params[:billing_address]
+    order.billing_address = billing_address
+    if SharedMethods::Converter.Boolean(params[:ship_to_billing])
+      order.shipping_address = billing_address
+    else
+      order.shipping_address = Address.new params[:shipping_address]
+    end
 
     done = false
     if order.valid?
       order.compute_totals
       if order.transaction_completed? && order.finalize_transaction
         @result[:order_id] = order.id
-        @result[:success] = true
         done = true
       elsif order.save
         order.line_items << order_items
         @result[:order_id] = order.id
-        @result[:success] = true
         done = true
       end
     end
 
+    @result[:success] = done
     if !done
       @result[:msg] = order.errors
     end
@@ -49,15 +55,15 @@ class Api::OrdersController < Api::BaseController
   protected
   # items: [{"image_id":1, "plexi_mount":"true", "size":"500x500", "moulding":"Wood", "quantity":"5"}]
   def build_order_items(items)
-    items = []
+    result = []
     items.each do |item_info|
       line_item = LineItem.new do |item|
         item.attributes = item_info
         item.price = (image.price.nil? ? '0' : image.price)
-        items << item
+        result << item
       end
     end
-    return items
+    return result
   end
 
   def orders_to_json(orders)

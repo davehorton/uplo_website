@@ -4,6 +4,8 @@ class Order < ActiveRecord::Base
 
   # ASSOCIATIONS
   belongs_to :user
+  belongs_to :shipping_address, :class_name => 'Address', :foreign_key => :shipping_address_id
+  belongs_to :billing_address, :class_name => 'Address', :foreign_key => :billing_address_id
   has_one :cart, :dependent => :destroy
   has_many :line_items, :dependent => :destroy
   has_many :images, :through => :line_items
