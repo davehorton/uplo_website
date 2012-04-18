@@ -168,6 +168,7 @@ p, ul{
 .pagination {
   padding-top: 30px;
   text-align: center;
+  clear: both;
 
   .current{
     font-style: normal;
@@ -420,10 +421,10 @@ p, ul{
   margin: 10px 0 30px;
 }
 #left {
-  margin-right: 2%;
+  margin-right: 20px;
 }
 #right {
-  margin-left: 2%;
+
 }
 #center {
   .intro {
@@ -498,7 +499,7 @@ p, ul{
 #comment-field {
   border: 1px solid $fuzzy-text;
   // color: $fuzzy-text;
-  width: 570px;
+  width: 543px;
   height: 100px;
   margin-bottom: 10px;
   padding: 5px;

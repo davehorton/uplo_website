@@ -4,9 +4,10 @@
 $fuzzy-text: #CBCBCB;
 $normal-text: #5A5A5A;
 $bold-text: #000000;
-$small-image-size: 48px;
-$thumb-image-size: 150px;
+$small-image-size: 75px;
+$thumb-image-size: 155px;
 $medium-image-size: 640px;
+$image-space: 0.113em;
 
 /*==================================================================================*/
 /* CLASS */
@@ -24,12 +25,12 @@ $medium-image-size: 640px;
   &.thumb {
     width: $thumb-image-size;
     height: $thumb-image-size;
-    padding: 0.3em;
+    margin: $image-space;
   }
   &.small {
     width: $small-image-size;
     height: $small-image-size;
-    padding: 6.25px;
+    margin: $image-space;
   }
 }
 
@@ -134,6 +135,16 @@ $medium-image-size: 640px;
           width: 77px;
         }
       }
+    }
+  }
+}
+
+#spotlight-images {
+  width: 710px;
+  .image-container.thumb {
+    width: 172px;
+    img {
+      width: 172px;
     }
   }
 }

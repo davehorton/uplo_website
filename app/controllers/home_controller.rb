@@ -1,26 +1,6 @@
 class HomeController < ApplicationController
   before_filter :authenticate_user!, :except => [:index]
 
-  def test
-    FlickRaw.api_key = FLICKER_API_KEY
-    FlickRaw.shared_secret = FLICKER_SHARED_SECRET
-    flickr = FlickRaw::Flickr.new
-    logger.debug(params)
-    token = flickr.get_request_token(:oauth_callback => 'http://uplo.heroku.com/flickr_response')
-    auth_url = flickr.get_authorize_url(token['oauth_token'], token['oauth_token_secret'], :perms => 'write')
-    redirect_to auth_url
-  end
-
-  # response: { "oauth_token"=>"72157629828499297-421d9d93795a9b2b",
-  #             "oauth_verifier"=>"c1ae746b4a78bb78",
-  #             "controller"=>"home", "action"=>"flickr_response"}
-  def flickr_response
-    logger.debug('#####')
-    logger.debug(params)
-    logger.debug('#####')
-    render :text => "here is response from flickr: #{params.inspect}"
-  end
-
   def index
     session[:back_url] = url_for(:controller => 'home', :action => "browse") if session[:back_url].nil?
     @images = Image.load_popular_images(@filtered_params)
