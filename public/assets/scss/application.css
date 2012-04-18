@@ -159,7 +159,8 @@ p, ul {
 
 .pagination {
   padding-top: 30px;
-  text-align: center; }
+  text-align: center;
+  clear: both; }
   .pagination .current {
     font-style: normal;
     font-weight: bold;
@@ -383,10 +384,7 @@ p, ul {
   margin: 10px 0 30px; }
 
 #left {
-  margin-right: 2%; }
-
-#right {
-  margin-left: 2%; }
+  margin-right: 20px; }
 
 #center .intro {
   width: 300px;
@@ -446,7 +444,7 @@ p, ul {
 
 #comment-field {
   border: 1px solid #cbcbcb;
-  width: 570px;
+  width: 543px;
   height: 100px;
   margin-bottom: 10px;
   padding: 5px; }
