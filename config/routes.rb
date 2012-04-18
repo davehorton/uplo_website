@@ -3,8 +3,6 @@ Uplo::Application.routes.draw do
 
   # WEB ROUTING
   root :to => "home#index"
-  get '/test', :to => "images#get_flickr_authorize"
-  match '/flickr_response' => 'images#flickr_response'
   get "shopping_cart/show"
   post "shopping_cart/update_cart"
   post "shopping_cart/add_to_cart"
@@ -26,6 +24,9 @@ Uplo::Application.routes.draw do
   match 'images/public/:id' => 'images#browse_share', :via => [:get]
   get 'images/order/:id', :to => "images#order"
   get 'images/switch_like/:id', :to => 'images#switch_liked'
+  get 'images/flickr_authorize', :to => "images#get_flickr_authorize"
+  get 'images/flickr_response' => 'images#flickr_response'
+  get 'images/flickr_post', :to => 'images#post_image_to_flickr'
 
   get "sales", :to => "sales#index"
   get "sales/year_sales", :to => "sales#year_sales"

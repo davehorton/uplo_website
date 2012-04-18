@@ -50,7 +50,7 @@
     .wrapper
       #top.panel
         = yield :top_content
-      #left.panel
+      #left.panel.left
         = yield :left_content
 
       #center.panel
@@ -62,7 +62,7 @@
 
         = yield
 
-      #right.panel
+      #right.panel.right
         = yield :right_content
 
       #bottom.panel

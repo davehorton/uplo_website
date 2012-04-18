@@ -123,6 +123,39 @@ class ImagesController < ApplicationController
     # get Images belongs Gallery
   end
 
+  def get_flickr_authorize
+    FlickRaw.api_key = FLICKER_API_KEY
+    FlickRaw.shared_secret = FLICKER_SHARED_SECRET
+    flickr = FlickRaw::Flickr.new
+    token = flickr.get_request_token(:oauth_callback => url_for(:controller => 'images', :action => 'flickr_response', :image_id => params[:image_id], :only_path => false))
+
+    session[:flickr_token_secret] = token['oauth_token_secret']
+    auth_url = flickr.get_authorize_url(token['oauth_token'], :perms => 'write')
+    redirect_to auth_url
+  end
+
+  # response: { "oauth_token"=>"72157629828499297-421d9d93795a9b2b",
+  #             "oauth_verifier"=>"c1ae746b4a78bb78",
+  #             "controller"=>"images", "action"=>"flickr_response"}
+  def flickr_response
+    verify = params['oauth_verifier'].strip
+    flickr.get_access_token(params['oauth_token'], session[:flickr_token_secret], verify)
+    session.delete :flickr_token_secret
+    session[:flickr_verify_key] = verify
+    uplo_photoset = push_to_uplo_photoset(params[:image_id])
+
+    return redirect_to :action => :browse, :id => params[:image_id], :flickr_post => 'success'
+  end
+
+  def post_image_to_flickr
+    if session.has_key?(:flickr_verify_key)==false || session[:flickr_verify_key].nil? || session[:flickr_verify_key]==''
+      return redirect_to :action => :get_flickr_authorize, :image_id => params[:id]
+    end
+
+    push_to_uplo_photoset params[:id]
+    return redirect_to :action => :browse, :id => params[:id], :flickr_post => 'success'
+  end
+
   # GET images/:id/browse
   def browse
     push_redirect
@@ -131,6 +164,12 @@ class ImagesController < ApplicationController
       return render_not_found
     elsif @image.gallery && !@image.gallery.can_access?(current_user)
       return render_unauthorized
+    end
+
+    if params.has_key?(:flickr_post) && params[:flickr_post]=='success'
+      @flickr_post = true
+    elsif params.has_key?(:flickr_post) && params[:flickr_post]!='success'
+      @flickr_post = false
     end
 
     # @images = @image.gallery.images.all(:order => 'name')
@@ -239,5 +278,23 @@ class ImagesController < ApplicationController
       return false
     end
     @gallery
+  end
+
+  def push_to_uplo_photoset(image_id)
+    image = Image.find_by_id image_id
+    image_data = Magick::Image.read(image.data.url(:medium)).first
+    image_tmp_path = "#{Rails.root}/tmp/#{image.name}"
+    image_data.write image_tmp_path
+    photo_id = flickr.upload_photo image_tmp_path, :title => image.name, :description => "#{image.description} \ndetail at <a href='#{url_for(:controller => 'images', :action => 'browse', :id => image_id)}'>UPLO"
+    photosets = flickr.photosets.getList
+    photosets.each do |photoset|
+      if photoset['title'] == 'UPLO'
+        flickr.photosets.addPhoto :photoset_id => photoset['id'], :photo_id => photo_id
+        flickr.photosets.setPrimaryPhoto :photoset_id => photoset['id'], :photo_id => photo_id
+        return true
+      end
+    end
+    flickr.photosets.create(:title => 'UPLO', :description => "from <a href='#{DOMAIN}'>UPLO</a>", :primary_photo_id => photo_id)
+    return true
   end
 end
