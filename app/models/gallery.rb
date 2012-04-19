@@ -50,7 +50,7 @@ class Gallery < ActiveRecord::Base
     end
 
     def exposed_attributes
-      [:id, :name, :description]
+      [:id, :name, :description, :permission, :keyword]
     end
 
     def exposed_associations
