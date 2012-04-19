@@ -1,5 +1,5 @@
 Uplo::Application.configure do
-  DOMAIN = 'http://uplo.heroku.com'
+  DOMAIN = 'uplo.heroku.com'
 
   # Settings specified here will take precedence over those in config/application.rb
 
