@@ -4,6 +4,20 @@
 /*==================================================================================*/
 /* CLASS */
 /*==================================================================================*/
+.gallery-container {
+  margin: 0.113em; }
+  .gallery-container .image-container {
+    margin: 0 0 10px 0 !important;
+    border: 1px solid #cbcbcb;
+    line-height: 153px; }
+  .gallery-container .gallery-info {
+    font-size: 12px;
+    padding: 0.113em; }
+  .gallery-container .text.bold {
+    font-weight: bold; }
+  .gallery-container .text {
+    line-height: 18px; }
+
 .image-container {
   display: inline-block;
   float: left;
@@ -33,8 +47,8 @@
     width: 75px;
     height: 75px; }
   .image.thumb {
-    width: 155px;
-    height: 155px; }
+    max-width: 155px;
+    max-height: 155px; }
   .image.medium {
     width: 640px;
     max-height: 640px; }
@@ -104,3 +118,8 @@
     width: 172px; }
     #spotlight-images .image-container.thumb img {
       width: 172px; }
+
+#new-gallery {
+  background: url("/assets/btn-add-gallery.png") no-repeat;
+  width: 127px;
+  height: 23px; }

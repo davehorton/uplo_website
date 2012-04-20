@@ -4,6 +4,20 @@
 /*==================================================================================*/
 /* CLASS */
 /*==================================================================================*/
+.gallery-container {
+  margin: 0.113em; }
+  .gallery-container .image-container {
+    margin: 0 0 10px 0 !important;
+    border: 1px solid #cbcbcb;
+    line-height: 153px; }
+  .gallery-container .gallery-info {
+    font-size: 12px;
+    padding: 0.113em; }
+  .gallery-container .text.bold {
+    font-weight: bold; }
+  .gallery-container .text {
+    line-height: 18px; }
+
 .image-container {
   display: inline-block;
   float: left;
@@ -14,30 +28,33 @@
   .image-container img {
     display: inline-block; }
   .image-container.thumb {
-    width: 150px;
-    height: 150px;
-    padding: 0.3em; }
+    width: 155px;
+    height: 155px;
+    margin: 0.113em; }
   .image-container.small {
-    width: 48px;
-    height: 48px;
-    padding: 6.25px; }
+    width: 75px;
+    height: 75px;
+    margin: 0.113em; }
 
 .image-thumb {
-  width: 150px;
-  height: 150px; }
+  width: 155px;
+  height: 155px; }
 
-.image.small {
-  width: 48px;
-  height: 48px; }
-.image.thumb {
-  width: 150px;
-  height: 150px; }
-.image.medium {
-  width: 640px;
-  max-height: 640px; }
-  .image.medium img {
-    max-width: 640px;
+.image {
+  text-align: center;
+  vertical-align: middle; }
+  .image.small {
+    width: 75px;
+    height: 75px; }
+  .image.thumb {
+    max-width: 155px;
+    max-height: 155px; }
+  .image.medium {
+    width: 640px;
     max-height: 640px; }
+    .image.medium img {
+      max-width: 640px;
+      max-height: 640px; }
 
 .entry .preview {
   text-align: center;
@@ -94,3 +111,15 @@
       .sections .actions .right .button.share {
         background: url("/assets/btn-share.png") no-repeat;
         width: 77px; }
+
+#spotlight-images {
+  width: 710px; }
+  #spotlight-images .image-container.thumb {
+    width: 172px; }
+    #spotlight-images .image-container.thumb img {
+      width: 172px; }
+
+#new-gallery {
+  background: url("/assets/btn-add-gallery.png") no-repeat;
+  width: 127px;
+  height: 23px; }
