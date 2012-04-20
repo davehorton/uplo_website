@@ -12,7 +12,7 @@ class GalleriesController < ApplicationController
   def index
     @galleries = current_user.galleries.load_galleries(@filtered_params)
     @gallery = Gallery.new
-    render :template => 'galleries/index_new', :layout => 'main'
+    # render :template => 'galleries/index_new', :layout => 'main'
   end
 
   def show_public
