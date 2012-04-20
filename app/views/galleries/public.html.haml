@@ -1,0 +1,42 @@
+- content_for :head do
+  = javascript_include_tag("lib/jail.min.js")
+  = javascript_include_tag("app/gallery.js")
+  = stylesheet_link_tag("scss/new_image.css")
+
+- content_for :right_content do
+  .left{ :style => 'margin-bottom: 15px;' }
+    .text.bold{ :style => 'font-weight:bold;' }= @gallery.name
+
+  .line-separator.clear{ :style => 'margin-top:10px;'} &nbsp;
+
+  .left{:style => "height:48px; margin-bottom:10px;"}
+    .left= image_tag @author.avatar(:small)
+    .left{:style => 'padding-left:10px;'}
+      .text.bold= @author.username
+      .text.normal= "#{@author.images.length} Photos &bull; 44 Followers".html_safe
+
+  .line-separator.clear{:style => 'margin: 10px 0 5px;'} &nbsp;
+  .text.normal{:style => 'width:300px;'}
+    Lorem ipsum dolor sit amet consectetur adipisicing elit sed do eiusmod tempor incididunt ut labone et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco.
+
+  #app-advertise.left
+    .app-image
+    %a{ :href => '#' }
+      #download-app.clear
+
+%div{:style => "width:640px;"}
+  .images-wrapper.clearfix
+  - if @images.blank?
+    .empty-data= "There is no image. Please add image."
+  - else
+    - (0...@images.length). each do |idx|
+      - image = @images[idx]
+      - url = url_for(:controller => "images", :action => "browse", :id => "#{image.id}")
+      - additional_class = (idx%4 == 0) ? "no-padding-left" : ((idx%4==3) ? "no-padding-right" : "")
+      .image-container.thumb{:id => "image-container-#{image.id}", :title=>"#{image.name}", :class => "#{additional_class}"}
+        %a{ :href => "#{url}" }
+          = async_image_tag(image.data.url(:thumb), :class => "image-thumb")
+
+- content_for :js do
+  = javascript_tag do
+    gallery.setup();

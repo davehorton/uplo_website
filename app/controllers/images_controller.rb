@@ -1,6 +1,6 @@
 class ImagesController < ApplicationController
-  before_filter :authenticate_user!, :except => [:browse_share]
-  skip_authorize_resource :only => :browse_share
+  before_filter :authenticate_user!, :except => [:public]
+  skip_authorize_resource :only => :public
   include ::SharedMethods::Converter
 
   def index
@@ -183,7 +183,7 @@ class ImagesController < ApplicationController
     render :template => "images/browse_new", :layout => "main"
   end
 
-  def browse_share
+  def public
     if user_signed_in?
       return redirect_to :action => 'browse', :id => params[:id]
     end

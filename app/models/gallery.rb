@@ -46,7 +46,7 @@ class Gallery < ActiveRecord::Base
     end
 
     def exposed_methods
-      [:cover_image, :total_images]
+      [:cover_image, :total_images, :public_link]
     end
 
     def exposed_attributes
@@ -76,7 +76,7 @@ class Gallery < ActiveRecord::Base
   end
 
   def updated_at_string
-    self.updated_at.strftime(I18n.t("date.formats.short"))
+    self.updated_at.strftime("%m/%d/%y")
   end
 
   def permission_string
@@ -85,6 +85,10 @@ class Gallery < ActiveRecord::Base
     else
       ""
     end
+  end
+
+  def public_link
+    url_for :controller => 'galleries', :action => 'public', :id => self.id, :only_path => false, :host => DOMAIN
   end
 
   # Get the cover image for this album.

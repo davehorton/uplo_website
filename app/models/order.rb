@@ -40,8 +40,9 @@ class Order < ActiveRecord::Base
     end
 
     def exposed_attributes
-      [ :id, :user_id, :tax, :price_total, :order_total, :transaction_code,
-        :transaction_date, :transaction_status, :first_name, :last_name, :address, :message, :delivery_time,
+      [ :id, :user_id, :tax, :price_total, :order_total,
+        :transaction_code, :transaction_date, :transaction_status,
+        :first_name, :last_name, :address, :message, :delivery_time,
         :city, :zip_code, :card_type, :card_number, :expiration, :cvv]
     end
 
@@ -51,14 +52,14 @@ class Order < ActiveRecord::Base
 
     protected
 
-    def parse_paging_options(options, default_opts = {})
-      if default_opts.blank?
-        default_opts = {
-          :sort_criteria => "orders.transaction_date DESC"
-        }
+      def parse_paging_options(options, default_opts = {})
+        if default_opts.blank?
+          default_opts = {
+            :sort_criteria => "orders.transaction_date DESC"
+          }
+        end
+        paging_options(options, default_opts)
       end
-      paging_options(options, default_opts)
-    end
   end
 
   # PUBLIC INSTANCE METHODS
@@ -106,11 +107,11 @@ class Order < ActiveRecord::Base
   # PROTECTED METHODS
   protected
 
-  def init_transaction_date
-    if self.transaction_date.blank?
-      self.transaction_date = Time.now
+    def init_transaction_date
+      if self.transaction_date.blank?
+        self.transaction_date = Time.now
+      end
+      return self.transaction_date
     end
-    return self.transaction_date
-  end
 
 end

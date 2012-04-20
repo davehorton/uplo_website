@@ -20,8 +20,8 @@ Uplo::Application.routes.draw do
   get "profile/edit", :to => "users#edit"
   put "profile/update", :to => "users#update"
 
-  match 'images/browse/:id' => 'images#browse', :via => [:get]
-  match 'images/public/:id' => 'images#browse_share', :via => [:get]
+  get 'images/browse/:id', :to => 'images#browse'
+  get 'images/public/:id', :to => 'images#public'
   get 'images/order/:id', :to => "images#order"
   get 'images/switch_like/:id', :to => 'images#switch_liked'
   get 'images/flickr_authorize', :to => "images#get_flickr_authorize"
@@ -46,6 +46,7 @@ Uplo::Application.routes.draw do
   get 'galleries/show_public', :to => 'galleries#show_public'
   get 'users/search', :to => 'users#search'
   resources :galleries do
+    get 'public', :to => 'galleries#public'
     get 'public_images', :to => 'images#public_images'
     get 'images/search', :to => 'images#search'
     get 'images/delete/:id', :to => 'images#destroy'

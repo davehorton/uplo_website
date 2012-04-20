@@ -126,7 +126,7 @@ class Image < ActiveRecord::Base
 
   # public link on social network
   def public_link
-    url_for :controller => 'images', :action => 'browse_share', :id => self.id, :only_path => false, :host => DOMAIN
+    url_for :controller => 'images', :action => 'public', :id => self.id, :only_path => false, :host => DOMAIN
   end
 
   # Shortcut to get image's URL

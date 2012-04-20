@@ -50,7 +50,7 @@
           .right Share References
         .line-separator.clear &nbsp;
         .buttons-container.left
-          - public_url = url_for(:controller => 'images', :action => 'browse_share', :id => params[:id], :only_path => false)
+          - public_url = url_for(:controller => 'images', :action => 'public', :id => params[:id], :only_path => false)
           - flickr_request = url_for(:controller => 'images', :action => 'post_image_to_flickr', :id => params[:id], :only_path => false)
           %a.email.button.left.no-padding-left.not-implement{ :href => '#' }
           %a.facebook.button.left{ :href => "http://www.facebook.com/sharer.php?u=#{public_url}", :title => "Share on Facebook", :target=>"_blank" }

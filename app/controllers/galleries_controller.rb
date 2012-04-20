@@ -1,22 +1,30 @@
 class GalleriesController < ApplicationController
-  before_filter :authenticate_user!  
-  authorize_resource
-  
+  before_filter :authenticate_user!, :except => [:public]
+  skip_authorize_resource :only => [:public]
+
+  def public
+    @gallery = Gallery.find_by_id params[:gallery_id]
+    @author = @gallery.user
+    @images = Image.load_popular_images(@filtered_params)
+    render :layout => "public"
+  end
+
   def index
     @galleries = current_user.galleries.load_galleries(@filtered_params)
     @gallery = Gallery.new
+    render :template => 'galleries/index_new', :layout => 'main'
   end
-  
+
   def show_public
     user = User.find_by_id params[:author]
     if user.nil?
-      flash[:error] = "The author #{user.fullname} does not exist anymore."
+      flash[:error] = "The author does not exist anymore."
     else
       @galleries = user.galleries.load_popular_galleries(@filtered_params)
     end
     render :action => :index
   end
-  
+
   def search
     galleries = Gallery.search params[:query], :star => true, :with => {:user_id => current_user.id}, :page => params[:page_id], :per_page => default_page_size
     galleries.each { |g| g.name = g.name.truncate(30) and g.name = g.excerpts.name}
@@ -24,7 +32,7 @@ class GalleriesController < ApplicationController
     @gallery = Gallery.new
     render :action => :index
   end
-  
+
   def search_public
     if not params.has_key? "user"
       with_condition = {}
@@ -34,15 +42,15 @@ class GalleriesController < ApplicationController
       params[:query] = ""
       with_condition = {:user_id => params[:user]}
     end
-    
+
     @no_async_image_tag = true
     @galleries = Gallery.search params[:query], :star => true, :page => params[:page_id], :per_page => default_page_size, :with => with_condition
   end
-  
+
   def new
     @gallery = Gallery.new
   end
-  
+
   def create
     @gallery = current_user.galleries.new(params[:gallery])
     respond_to do |format|
@@ -53,7 +61,7 @@ class GalleriesController < ApplicationController
       end
     end
   end
-  
+
   def edit
     if find_gallery!
       if request.xhr?
@@ -61,7 +69,7 @@ class GalleriesController < ApplicationController
       end
     end
   end
-  
+
   def update
     if find_gallery!
       respond_to do |format|
@@ -73,7 +81,7 @@ class GalleriesController < ApplicationController
       end
     end
   end
-  
+
   def destroy
     if find_gallery!
       respond_to do |format|
@@ -85,34 +93,34 @@ class GalleriesController < ApplicationController
       end
     end
   end
-  
+
   protected
-  
+
   def set_current_tab
     tab = "galleries"
-    
+
     browse_actions = ["search_public", "show_public"]
     unless browse_actions.index(params[:action]).nil?
       tab = "browse"
     end
-    
+
     @current_tab = tab
   end
-  
+
   def default_page_size
     return 12
   end
-  
+
   def find_gallery
     @gallery = Gallery.find_by_id(params[:id])
   end
-  
+
   def find_gallery!
     self.find_gallery
     if @gallery.blank?
       render_not_found
       return false
-    elsif !@gallery.can_access?(current_user) || 
+    elsif !@gallery.can_access?(current_user) ||
           (!@gallery.is_owner?(current_user) && %w(edit update destroy).include?(params[:action]))
       render_unauthorized
       return false

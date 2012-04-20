@@ -10,9 +10,9 @@
 
 class Api::GalleriesController < Api::BaseController
   before_filter :require_login!, :except => [:list_popular, :list_images]
-  
+
   N_INCLUDED_IMAGES = 4
-  
+
   def create_gallery
     gal = Gallery.new(params[:gallery])
     gal.user = @user
@@ -20,14 +20,14 @@ class Api::GalleriesController < Api::BaseController
       @result[:gallery_id] = gal.id
       @result[:success] = true
     else
-      @result[:msg] = gal.errors 
+      @result[:msg] = gal.errors
     end
-    
+
     return render :json => @result
   end
-  
+
   # POST /api/edit_gallery
-  # params: 
+  # params:
   # gallery[name]
   # gallery[description]
   def update_gallery
@@ -47,10 +47,10 @@ class Api::GalleriesController < Api::BaseController
       @result[:success] = true
       @result[:gallery] = gallery.serializable_hash(gallery.default_serializable_options)
     end
-    
+
     render :json => @result
   end
-  
+
   # DELETE /api/delete_gallery
   # params: id
   def delete_gallery
@@ -68,12 +68,12 @@ class Api::GalleriesController < Api::BaseController
     # delete gallery
     gallery.destroy
     @result[:success] = true
-    
+
     render :json => @result
   end
-  
+
   # GET /api/list_galleries
-  # params: 
+  # params:
   #   page_id
   #   page_size
   #   sort_field
@@ -90,16 +90,16 @@ class Api::GalleriesController < Api::BaseController
     else
       author = @user
     end
-    
+
     galleries = author.galleries.load_galleries(@filtered_params)
-    @result[:total] = galleries.total_entries    
+    @result[:total] = galleries.total_entries
     @result[:data] = galleries_to_json(galleries)
     @result[:success] = true
     render :json => @result
   end
-  
+
   # GET /api/list_popular
-  #   parmas: 
+  #   parmas:
   #   page_id
   #   page_size
   #   sort_field
@@ -111,9 +111,9 @@ class Api::GalleriesController < Api::BaseController
     @result[:success] = true
     render :json => @result
   end
-  
+
   # GET /api/list_images
-  # params: 
+  # params:
   # gallery_id
   #   page_id
   #   page_size
@@ -130,7 +130,7 @@ class Api::GalleriesController < Api::BaseController
        #@result[:msg] = "This gallery is not belong to you"
         #return render :json => @result
     #end
-    
+
     @result[:total]  = gallery.images.count
     images = gallery.images.load_images(@filtered_params)
     images.each do |image|
@@ -141,19 +141,19 @@ class Api::GalleriesController < Api::BaseController
     @result[:success] = true
     render :json => @result
   end
-  
+
   protected
-  
+
   def galleries_to_json(galleries)
     json_array = []
-    
+
     galleries.each do |gallery|
       data = {}
-      data[:gallery] = gallery.serializable_hash({ 
+      data[:gallery] = gallery.serializable_hash({
         :except => gallery.except_attributes,
-        :methods => gallery.exposed_methods, 
+        :methods => gallery.exposed_methods,
       })
-      
+
       images = []
       if gallery.images.length > N_INCLUDED_IMAGES
         images = gallery.images[0..(N_INCLUDED_IMAGES - 1)]
@@ -164,14 +164,14 @@ class Api::GalleriesController < Api::BaseController
       images.each do |img|
         data[:gallery][:images] << img.serializable_hash(img.default_serializable_options)
       end
-      
+
       if data[:gallery][:cover_image]
         data[:gallery][:cover_image] = data[:gallery][:cover_image].serializable_hash(Image.default_serializable_options)
       end
-      
+
       json_array << data
     end
-    
+
     return json_array
   end
 end

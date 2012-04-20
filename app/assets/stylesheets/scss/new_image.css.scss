@@ -12,7 +12,25 @@ $image-space: 0.113em;
 /*==================================================================================*/
 /* CLASS */
 /*==================================================================================*/
-.image-container{
+.gallery-container {
+  margin: $image-space;
+  .image-container {
+    margin: 0 0 10px 0 !important;
+    border: 1px solid $fuzzy-text;
+    line-height: 153px;
+  }
+  .gallery-info {
+    font-size: 12px;
+    padding: 0.113em;
+  }
+  .text.bold {
+    font-weight: bold;
+  }
+  .text {
+    line-height: 18px;
+  }
+}
+.image-container {
   display: inline-block;
   float: left;
   height: auto;
@@ -47,8 +65,8 @@ $image-space: 0.113em;
     height: $small-image-size;
   }
   &.thumb {
-    width: $thumb-image-size;
-    height: $thumb-image-size;
+    max-width: $thumb-image-size;
+    max-height: $thumb-image-size;
   }
   &.medium {
     width: $medium-image-size;
@@ -147,4 +165,9 @@ $image-space: 0.113em;
       width: 172px;
     }
   }
+}
+#new-gallery {
+  background: url('/assets/btn-add-gallery.png') no-repeat;
+  width: 127px;
+  height: 23px;
 }

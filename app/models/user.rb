@@ -27,6 +27,7 @@ class User < ActiveRecord::Base
 
   # ASSOCIATIONS
   has_many :galleries, :dependent => :destroy
+  has_many :images, :through => :galleries
   has_many :comments, :dependent => :destroy
   has_many :image_likes, :dependent => :destroy
   has_many :orders
