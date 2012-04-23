@@ -18,6 +18,7 @@ class Api::GalleriesController < Api::BaseController
     gal.user = @user
     if gal.save
       @result[:gallery_id] = gal.id
+      @result[:public_link] = gal.public_link
       @result[:success] = true
     else
       @result[:msg] = gal.errors
