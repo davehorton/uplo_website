@@ -57,13 +57,20 @@ gallery-thumb.jpg: gallery-thumb-187bddbf19a796898510953324f672f2.jpg
 header-bg.jpg: header-bg-211836ef0a5a6b15a978dc3f780e8ff5.jpg
 icon-comment.jpg: icon-comment-e6a95090a762ef10ef4dc508084d60ff.jpg
 icon-edit.jpg: icon-edit-20de540a8626f41767d86841b0c86395.jpg
+icon-email-16x16.png: icon-email-16x16-e93958eaadf5c326f3f753418fe52bf3.png
 icon-email.png: icon-email-0e8bc3fe6482662058e9e68c906be51d.png
+icon-facebook-16x16.png: icon-facebook-16x16-e6eea69107e81c9f4f32051a8867cd14.png
 icon-facebook.png: icon-facebook-060afc76f493fb77e8da6f89b9b6b689.png
+icon-flickr-16x16.png: icon-flickr-16x16-e9c6653e8fc72138cc39a3fa1c9c6f6e.png
 icon-flickr.png: icon-flickr-acddbd300599c3734e7b549ac226763d.png
 icon-like.jpg: icon-like-0a2e5f9894431b9889b7c9d350eb3164.jpg
+icon-pinterest-16x16.png: icon-pinterest-16x16-a04f59d751bcd1e9481f894fc254f367.png
 icon-pinterest.png: icon-pinterest-da63835956554d27aab97d84aa354d5b.png
-icon-sharing-tail.png: icon-sharing-tail-b327a3ca97a2c1de8887908b6a5964d6.png
+icon-sharing-tail.png: icon-sharing-tail-1d0a397ec74ad97d3199977aefb05d0d.png
+icon-sharing-tail1.png: icon-sharing-tail1-b327a3ca97a2c1de8887908b6a5964d6.png
+icon-tumblr-16x16.png: icon-tumblr-16x16-1961a97f1f30d78662fe1439ef37301d.png
 icon-tumblr.png: icon-tumblr-dec04bcd7477f6bb8759414328cb15b7.png
+icon-twitter-16x16.png: icon-twitter-16x16-37ba67d81bdd4931ebef6b2cb64c66b8.png
 icon-twitter.png: icon-twitter-0d5137a3f0ac1aa516bba597ec2d5ce7.png
 image-default-small.jpg: image-default-small-aeca276c9b70670096e21d5e30afae7e.jpg
 information.png: information-c4c474067cc407e32a4acb74e0165e8e.png
@@ -174,6 +181,7 @@ lib/highcharts/themes/dark-green.js: lib/highcharts/themes/dark-green-44a7a8ebaa
 lib/highcharts/themes/gray.js: lib/highcharts/themes/gray-ce0175c6fbb533c23e010b6b9e9e4d87.js
 lib/highcharts/themes/grid.js: lib/highcharts/themes/grid-3681f670ac793bcd631872299662b59b.js
 lib/jail.min.js: lib/jail.min-757213e31c7156a2de6722ea965b93c1.js
+lib/jquery.contextMenu.js: lib/jquery.contextMenu-a24fc19596bf5e88c3c3c8bba44c938c.js
 lib/jquery.cookie.js: lib/jquery.cookie-255498b1e2350af9b98284797ed86032.js
 lib/jquery.i18n.js: lib/jquery.i18n-585f84a20da5fc129e1991402e137ff9.js
 lib/jquery.inline_label.js: lib/jquery.inline_label-d42d7eb2bd7d8ec605a9eff66ef1a481.js
@@ -189,6 +197,7 @@ lib/jquery.ui.datepicker.js: lib/jquery.ui.datepicker-df365c543cf9a31c139b5f1af9
 lib/jquery.ui.draggable.js: lib/jquery.ui.draggable-14f2a11976cf750565517af608bc7e7a.js
 lib/jquery.ui.droppable.js: lib/jquery.ui.droppable-c7f1a9110c0d59208af4215455c35334.js
 lib/jquery.ui.mouse.js: lib/jquery.ui.mouse-85e976a4dd424706afe05ebb9f5e82fe.js
+lib/jquery.ui.position.js: lib/jquery.ui.position-4c73bddbf101b339db397296b3d26f0e.js
 lib/jquery.ui.widget.js: lib/jquery.ui.widget-0d68580b40839753efc5ace9498dba90.js
 lib/jquery.url.js: lib/jquery.url-54bab1cba764049f9199d478427a17df.js
 lib/superfish.min.js: lib/superfish.min-ffabcd0209faaae3216c63369a26facf.js
@@ -202,6 +211,7 @@ bootstrap.min.css: bootstrap.min-90723bafe9e62082bc01b2d2e17c451b.css
 file_upload/jquery.fileupload-ui.css: file_upload/jquery.fileupload-ui-f39575881f448014568e7c117a1fff41.css
 file_upload/progressbar.gif: file_upload/progressbar-54dfeacc002a35b014f009faa50bf254.gif
 jquery-ui.custom.css: jquery-ui.custom-bb782aff6a70a3531739cdd09fe60b50.css
+jquery.contextMenu.css: jquery.contextMenu-5e13ffab2ad4f1c83de146893d8f0b86.css
 scss/application.css: scss/application-8a4241ebc19b94e29d262db9dce498a9.css
 scss/banner.css: scss/banner-34b0a85b55b48b319c087be5d3e7daa9.css
 scss/cart.css: scss/cart-a00c819367f1c26885c93fd320e87746.css
