@@ -1,4 +1,5 @@
 class Gallery < ActiveRecord::Base
+  include Rails.application.routes.url_helpers
   include ::SharedMethods::Paging
   include ::SharedMethods::SerializationConfig
   include ::SharedMethods::Converter
@@ -88,7 +89,7 @@ class Gallery < ActiveRecord::Base
   end
 
   def public_link
-    url_for :controller => 'galleries', :action => 'public', :id => self.id, :only_path => false, :host => DOMAIN
+    url_for :controller => 'galleries', :action => 'public', :gallery_id => self.id, :only_path => false, :host => DOMAIN
   end
 
   # Get the cover image for this album.
