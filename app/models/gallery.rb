@@ -71,6 +71,13 @@ class Gallery < ActiveRecord::Base
   end
 
   # PUBLIC INSTANCE METHODS
+  def load_popular_images(params)
+    paging_info = Image.parse_paging_options(params)
+    self.images.paginate( :page => paging_info.page_id,
+                          :per_page => paging_info.page_size,
+                          :order => paging_info.sort_string )
+  end
+
   def get_images_without(ids)
     ids = [] unless ids.instance_of? Array
     self.images.where("id not in (#{ids.join(',')})").order('name')

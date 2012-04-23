@@ -79,7 +79,7 @@ class Image < ActiveRecord::Base
       []
     end
 
-    protected
+    # protected
 
     def parse_paging_options(options, default_opts = {})
       if default_opts.blank?

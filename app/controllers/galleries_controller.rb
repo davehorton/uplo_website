@@ -5,7 +5,7 @@ class GalleriesController < ApplicationController
   def public
     @gallery = Gallery.find_by_id params[:gallery_id]
     @author = @gallery.user
-    @images = Image.load_popular_images(@filtered_params)
+    @images = @gallery.load_popular_images(@filtered_params)
     render :layout => "public"
   end
 
