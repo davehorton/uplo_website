@@ -4,7 +4,7 @@ class ImagesController < ApplicationController
   include ::SharedMethods::Converter
 
   def mail_shared_image
-    SharingMailer.share_image_email(params[:id], params[:email]['email']).deliver
+    SharingMailer.share_image_email(params[:id], params[:email]['email'], current_user.id).deliver
     redirect_to :action => 'browse', :id => params[:id]
   end
 

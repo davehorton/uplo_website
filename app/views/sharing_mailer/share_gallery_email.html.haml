@@ -4,7 +4,7 @@
     %meta{ :content=>"text/html; charset=UTF-8", :http_equiv=>"Content-Type" }
 
   %body
-    %div= "There is a gallery shared with you by #{@user.fullname}"
+    %div= "Gallery #{@gallery.name} has been shared with you by #{@user.fullname}"
     %br
     %a{ :href => "#{ @gallery.public_link }", :style => 'clear:both;' }
       = image_tag gallery_cover_image_url(@gallery)
