@@ -298,6 +298,9 @@ p, ul {
   width: 111px;
   height: 27px; }
 
+.simplemodal-overlay {
+  background-color: #cbcbcb; }
+
 /*==================================================================================*/
 /* ID */
 /*==================================================================================*/
@@ -407,6 +410,55 @@ p, ul {
 #menu-items {
   margin-left: 20px;
   height: 40px; }
+
+#email-sharing-popup {
+  width: 490px;
+  min-height: 100px;
+  border: 1px solid transparent;
+  border-radius: 5px;
+  box-shadow: 1px -1px 5px #cbcbcb;
+  background-color: white; }
+  #email-sharing-popup .header {
+    width: 470px;
+    padding: 10px;
+    background: url("/assets/bg-email-popup.png") repeat-x; }
+    #email-sharing-popup .header .email-icon {
+      background-image: url("/assets/icon-email-24x24.png");
+      width: 24px;
+      height: 24px; }
+    #email-sharing-popup .header .text.bold {
+      font-weight: bold;
+      margin-left: 10px;
+      line-height: 30px; }
+  #email-sharing-popup .main {
+    padding: 10px; }
+    #email-sharing-popup .main #email-details input, #email-sharing-popup .main #email-details textarea {
+      width: 285px; }
+    #email-sharing-popup .main #email-details textarea {
+      height: 100px; }
+    #email-sharing-popup .main #email-details #button-container {
+      margin-top: 10px; }
+    #email-sharing-popup .main #email-details .button {
+      height: 27px; }
+      #email-sharing-popup .main #email-details .button.cancel {
+        background: url("/assets/btn-cancel.png") no-repeat;
+        width: 65px; }
+      #email-sharing-popup .main #email-details .button.send {
+        background: url("/assets/btn-send.png") no-repeat;
+        width: 55px;
+        margin-right: 10px; }
+    #email-sharing-popup .main #info {
+      width: 299px;
+      margin-left: 10px; }
+  #email-sharing-popup .close {
+    color: black;
+    width: 100%; }
+    #email-sharing-popup .close .right {
+      border: 1px solid #cbcbcb;
+      height: 13px;
+      line-height: 10px;
+      text-align: center;
+      width: 13px; }
 
 #social-sharing {
   width: 286px;

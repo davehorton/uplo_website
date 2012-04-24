@@ -17,10 +17,12 @@ banner-divider.png: banner-divider-d2d74c26b33122894a69a24a57f065a5.png
 banner-logo-broadcast.png: banner-logo-broadcast-0b6239ad5d645b08c427fc3185455860.png
 banner-logo.png: banner-logo-1877ababb9afc7d685ad149a112d31da.png
 banner-lower-bg.png: banner-lower-bg-5a0747d6225576e4688c307a8afcaa35.png
+bg-email-popup.png: bg-email-popup-cf0fe9259335acfa4013b990e576f17d.png
 bg-public-ad.jpg: bg-public-ad-1cbbaa661fec3a44012995de5de889a6.jpg
 blank.png: blank-45063a26a92d2a4b47566e6252de160d.png
 btn-add-gallery.png: btn-add-gallery-f113135bc3379b8fdd7568ded7c0cef8.png
 btn-add-to-cart.jpg: btn-add-to-cart-c30eb12ea88816756e7b963de90e5a20.jpg
+btn-cancel.png: btn-cancel-8641548e8d97c6dad9281a63ebb145f3.png
 btn-checkout.jpg: btn-checkout-213d609b81160865a8ca9d52534b3104.jpg
 btn-comment.jpg: btn-comment-0a73efa9af8378462e4d4bad7317d5fb.jpg
 btn-dowload-app.png: btn-dowload-app-2e9fc66a9ec53cf550430ad32ddc2fba.png
@@ -29,6 +31,7 @@ btn-more-details.jpg: btn-more-details-eff40444c687c18a1b5357a6b95d8b15.jpg
 btn-order.jpg: btn-order-3a014c1992c917f45763abe22d3d5ea1.jpg
 btn-place-order.jpg: btn-place-order-972a850d8a31ba1847f592bd76655f82.jpg
 btn-post-comment.jpg: btn-post-comment-ab1b739ac44614fe54d98665f3c7f234.jpg
+btn-send.png: btn-send-ff6d3239a55ddfae94196aad81f6bffb.png
 btn-share.png: btn-share-40644dc10f0910f48bbbd6ddf49fa370.png
 cancel-uploadify.gif: cancel-uploadify-c195bd1e99bbcdc1a1e4649e945a00c8.gif
 cancel.png: cancel-c54ffe2f8b6e7a006dd6c45c59a8e116.png
@@ -58,6 +61,7 @@ header-bg.jpg: header-bg-211836ef0a5a6b15a978dc3f780e8ff5.jpg
 icon-comment.jpg: icon-comment-e6a95090a762ef10ef4dc508084d60ff.jpg
 icon-edit.jpg: icon-edit-20de540a8626f41767d86841b0c86395.jpg
 icon-email-16x16.png: icon-email-16x16-e93958eaadf5c326f3f753418fe52bf3.png
+icon-email-24x24.png: icon-email-24x24-dc20e675ec415a88e662608c3553ca68.png
 icon-email.png: icon-email-0e8bc3fe6482662058e9e68c906be51d.png
 icon-facebook-16x16.png: icon-facebook-16x16-e6eea69107e81c9f4f32051a8867cd14.png
 icon-facebook.png: icon-facebook-060afc76f493fb77e8da6f89b9b6b689.png
@@ -66,8 +70,7 @@ icon-flickr.png: icon-flickr-acddbd300599c3734e7b549ac226763d.png
 icon-like.jpg: icon-like-0a2e5f9894431b9889b7c9d350eb3164.jpg
 icon-pinterest-16x16.png: icon-pinterest-16x16-a04f59d751bcd1e9481f894fc254f367.png
 icon-pinterest.png: icon-pinterest-da63835956554d27aab97d84aa354d5b.png
-icon-sharing-tail.png: icon-sharing-tail-1d0a397ec74ad97d3199977aefb05d0d.png
-icon-sharing-tail1.png: icon-sharing-tail1-b327a3ca97a2c1de8887908b6a5964d6.png
+icon-sharing-tail.png: icon-sharing-tail-6762e7065ae762d827d5192e754986f2.png
 icon-tumblr-16x16.png: icon-tumblr-16x16-1961a97f1f30d78662fe1439ef37301d.png
 icon-tumblr.png: icon-tumblr-dec04bcd7477f6bb8759414328cb15b7.png
 icon-twitter-16x16.png: icon-twitter-16x16-37ba67d81bdd4931ebef6b2cb64c66b8.png
@@ -190,6 +193,7 @@ lib/jquery.jcarousel.js: lib/jquery.jcarousel-b27a580e665d898b2b46ae6e2f0b1e82.j
 lib/jquery.livequery.js: lib/jquery.livequery-4aa91cfdf4e601202318e34ea9875151.js
 lib/jquery.min.js: lib/jquery.min-92db3e9645bf381db699af5c85229722.js
 lib/jquery.poshytip.js: lib/jquery.poshytip-58a64494716ee3cace919173f5d93adf.js
+lib/jquery.simplemodal.js: lib/jquery.simplemodal-9050610fbfd5bbf0b53b78f9f63813c7.js
 lib/jquery.textchange.min.js: lib/jquery.textchange.min-e42d6da304633ca5580ef87b88313d8c.js
 lib/jquery.tmpl.js: lib/jquery.tmpl-bd77d8d2ab1c8ff82312cdb342b5c6eb.js
 lib/jquery.ui.core.js: lib/jquery.ui.core-ec04ab475a1e1d47d9e1b3e10e85d84a.js
@@ -212,7 +216,7 @@ file_upload/jquery.fileupload-ui.css: file_upload/jquery.fileupload-ui-f39575881
 file_upload/progressbar.gif: file_upload/progressbar-54dfeacc002a35b014f009faa50bf254.gif
 jquery-ui.custom.css: jquery-ui.custom-bb782aff6a70a3531739cdd09fe60b50.css
 jquery.contextMenu.css: jquery.contextMenu-5e13ffab2ad4f1c83de146893d8f0b86.css
-scss/application.css: scss/application-8a4241ebc19b94e29d262db9dce498a9.css
+scss/application.css: scss/application-c86fe1d8851fd6e32aa160eac9345b73.css
 scss/banner.css: scss/banner-34b0a85b55b48b319c087be5d3e7daa9.css
 scss/cart.css: scss/cart-a00c819367f1c26885c93fd320e87746.css
 scss/cart_new.css: scss/cart_new-d300793a176608b402735aa3c6fa65ef.css
