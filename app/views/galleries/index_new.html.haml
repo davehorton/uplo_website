@@ -1,7 +1,7 @@
 - content_for :head do
-  = javascript_include_tag("lib/jail.min.js", 'lib/jquery.ui.position.js', 'lib/jquery.contextMenu.js')
-  = javascript_include_tag("app/gallery.js")
-  = stylesheet_link_tag("scss/new_image.css", 'jquery.contextMenu.css')
+  = javascript_include_tag "lib/jail.min.js", 'lib/jquery.simplemodal.js', 'lib/jquery.ui.position.js', 'lib/jquery.contextMenu.js'
+  = javascript_include_tag 'app/gallery.js'
+  = stylesheet_link_tag "scss/new_image.css", 'jquery.contextMenu.css'
 
 - content_for :top_content do
   %div{:style => "padding-top:15px;"}
@@ -25,13 +25,52 @@
           .text.normal.photo-number= (gallery.images.length > 0 ? pluralize(gallery.images.length, "image") : "No image")
           .text.normal.update-time= "Last updated: #{gallery.updated_at_string}"
           .text.fuzzy.permission= gallery.permission_string.titleize
-          %a.share-link.text.normal{ :id => "share-context-menu-#{gallery.id}", :href=>'#', :data => { :public_url => "#{gallery.public_link}", :cover_url => "#{gallery_cover_image_url(gallery)}" } } Share
+          %a.share-link.text.normal{ :id => "share-context-menu-#{gallery.id}", :href=>'#', :data => { :public_url => "#{gallery.public_link}", :cover_url => "#{gallery_cover_image_url(gallery)}", :email_url => "#{ url_for(:controller => 'galleries', :action => 'mail_shared_gallery', :gallery_id => gallery.id) }", :gallery_name => "#{gallery.name.truncate(20)}", :gallery_user => "#{gallery.user.username.truncate(15)}" } } Share
   = render_pagination(@galleries, {:controller => "galleries", :action => params[:action]})
+
+#email-sharing-popup.left.hide
+  .header.left
+    .email-icon.left
+    .text.bold.left Share Via Email
+    %a.close{:href=>'#'}
+      .right{:onclick => "$('#social-sharing').hasClass('hide');"} &times;
+  .main.right
+    #preview.left
+      .image-container.thumb
+        / # = image_tag @image.data.url(:thumb), :class => 'image thumb'
+      #name.text.bold.clear
+        / = @image.name.truncate(20)
+      #username.text.fuzzy.clear
+        / = "by #{ @image.username.truncate(15) }"
+    #info.right
+      .text.bold{ :style => 'margin-top:-4px;' } Email Address
+      = simple_form_for(:email, :method => 'post', :class => 'left', :html => { :id => 'email-details' }) do |f|
+        = f.input :email, :label => false, :required => true
+        = f.input :comment, :as => :text, :label => false, :required => false
+        #button-container.right
+          #btn-send.button.send.left
+          #btn-cancel.button.cancel.left
 
 - content_for :js do
   = javascript_tag do
     :erb
       gallery.setup();
+
+      $('#email-sharing-popup .close').click(function(){
+        $.modal.close();
+      });
+      $('#btn-cancel').click(function(){
+        $.modal.close();
+      });
+      $('#btn-send').click(function(){
+        var reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+        if(reg.test($('#email_email').val())){
+          $('#email-details').submit();
+        }else{
+          alert('Please enter an email address!');
+          return false;
+        }
+      });
 
       $(function(){
         $.contextMenu({
@@ -42,9 +81,24 @@
             "email": {
               name: "Share via Email",
               icon: "email",
-              callback: function(key, opt, e){
-                url = $(this).attr('data-public_url');
-                alert('This feature is coming soon.');
+              callback: function(key, opt){
+                window.selected_gallery = $(this);
+                $('#email-sharing-popup').modal({
+                  onShow: function(dialog) {
+                    if(window.selected_gallery != null) {
+                      var action_url = window.selected_gallery.attr('data-email_url');
+                      var cover_image = window.selected_gallery.attr('data-cover_url');
+                      var img = document.createElement('img');
+                      img.classList.add('image');
+                      img.classList.add('thumb');
+                      $(img).attr('src', cover_image);
+                      $('#preview .image-container.thumb').append(img);
+                      $('#name')[0].innerHTML = window.selected_gallery.attr('data-gallery_name');
+                      $('#username')[0].innerHTML = 'by ' + window.selected_gallery.attr('data-gallery_user');
+                      $('#email-details').attr('action', action_url);
+                    }
+                  }
+                });
               }
             },
             "facebook": {
@@ -84,4 +138,4 @@
             }
           }
         });
-    });
+      });

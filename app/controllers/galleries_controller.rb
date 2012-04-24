@@ -9,6 +9,11 @@ class GalleriesController < ApplicationController
     render :layout => "public"
   end
 
+  def mail_shared_gallery
+    SharingMailer.share_gallery_email(params[:gallery_id], params[:email]['email']).deliver
+    redirect_to :action => :index
+  end
+
   def index
     @galleries = current_user.galleries.load_galleries(@filtered_params)
     @gallery = Gallery.new

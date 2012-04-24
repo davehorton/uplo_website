@@ -10,7 +10,6 @@ class SharingMailer < ApplicationMailer
   def share_gallery_email(gallery_id, emails)
     @user = User.first
     @gallery = Gallery.find_by_id gallery_id
-    # @cover_image = gallery_cover_image_url(@gallery)
     mail(:to => emails, :subject => "Share from UPLO")
   end
 end

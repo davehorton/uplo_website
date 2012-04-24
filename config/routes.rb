@@ -47,6 +47,7 @@ Uplo::Application.routes.draw do
   get 'galleries/show_public', :to => 'galleries#show_public'
   get 'users/search', :to => 'users#search'
   resources :galleries do
+    post 'mail_shared_gallery', :to => 'galleries#mail_shared_gallery'
     get 'public', :to => 'galleries#public'
     get 'public_images', :to => 'images#public_images'
     get 'images/search', :to => 'images#search'

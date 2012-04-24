@@ -479,6 +479,10 @@ p, ul{
   }
   .main {
     padding: 10px;
+    .image-container {
+      margin-top: 0;
+      margin-left: 0;
+    }
     #email-details {
       input, textarea {
         width: 285px;
