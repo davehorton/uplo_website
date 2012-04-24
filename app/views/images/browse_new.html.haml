@@ -47,8 +47,8 @@
     #preview.left
       .image-container.thumb
         = image_tag @image.data.url(:thumb), :class => 'image thumb'
-      .text.bold.clear= @image.name
-      .text.fuzzy.clear= "by #{@image.username}"
+      .text.bold.clear= @image.name.truncate(20)
+      .text.fuzzy.clear= "by #{ @image.username.truncate(15) }"
     #info.right
       .text.bold{ :style => 'margin-top:-4px;' } Email Address
       - action_url = url_for(:controller => 'images', :action => 'mail_shared_image', :id => @image.id)
@@ -142,10 +142,10 @@
       });
       $('#btn-send').click(function(){
         var reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
-        if(reg.test($('#email_email'))){
+        if(reg.test($('#email_email').val())){
           $('#email-details').submit();
         }else{
-          alert('Please input an email address!');
+          alert('Please enter an email address!');
           return false;
         }
       });
