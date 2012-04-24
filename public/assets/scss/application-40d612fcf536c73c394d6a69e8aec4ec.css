@@ -432,6 +432,9 @@ p, ul {
       line-height: 30px; }
   #email-sharing-popup .main {
     padding: 10px; }
+    #email-sharing-popup .main .image-container {
+      margin-top: 0;
+      margin-left: 0; }
     #email-sharing-popup .main #email-details input, #email-sharing-popup .main #email-details textarea {
       width: 285px; }
     #email-sharing-popup .main #email-details textarea {
