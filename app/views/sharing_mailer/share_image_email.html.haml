@@ -1,0 +1,10 @@
+!!!
+%html
+  %head
+    %meta{ :content=>"text/html; charset=UTF-8", :http_equiv=>"Content-Type" }
+
+  %body
+    %div= "There is an image shared with you by #{@user.fullname}"
+    %br
+    %a{ :href => "#{ @image.public_link }", :style => 'clear:both;' }
+      = image_tag @image.data.url(:thumb)

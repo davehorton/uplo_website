@@ -303,6 +303,9 @@ p, ul{
   width: 111px;
   height: 27px;
 }
+.simplemodal-overlay {
+  background-color: $fuzzy-text;
+}
 
 /*==================================================================================*/
 /* ID */
@@ -450,6 +453,71 @@ p, ul{
 #menu-items {
   margin-left: 20px;
   height: 40px;
+}
+
+#email-sharing-popup {
+  width: 490px;
+  min-height: 100px;
+  border: 1px solid transparent;
+  border-radius: 5px;
+  box-shadow: 1px -1px 5px $fuzzy-text;
+  background-color: white;
+  .header {
+    width: 470px;
+    padding: 10px;
+    background: url("/assets/bg-email-popup.png") repeat-x;
+    .email-icon {
+      background-image: url('/assets/icon-email-24x24.png');
+      width: 24px;
+      height: 24px;
+    }
+    .text.bold {
+      font-weight: bold;
+      margin-left: 10px;
+      line-height: 30px;
+    }
+  }
+  .main {
+    padding: 10px;
+    #email-details {
+      input, textarea {
+        width: 285px;
+      }
+      textarea {
+        height: 100px;
+      }
+      #button-container {
+        margin-top: 10px;
+      }
+      .button {
+        height: 27px;
+        &.cancel {
+          background: url('/assets/btn-cancel.png') no-repeat;
+          width: 65px;
+        }
+        &.send {
+          background: url('/assets/btn-send.png') no-repeat;
+          width: 55px;
+          margin-right: 10px;
+        }
+      }
+    }
+    #info {
+      width: 299px;
+      margin-left: 10px;
+    }
+  }
+  .close {
+    color: $bold-text;
+    width: 100%;
+    .right {
+      border: 1px solid $fuzzy-text;
+      height: 13px;
+      line-height: 10px;
+      text-align: center;
+      width: 13px;
+    }
+  }
 }
 
 #social-sharing {

@@ -3,6 +3,11 @@ class ImagesController < ApplicationController
   skip_authorize_resource :only => :public
   include ::SharedMethods::Converter
 
+  def mail_shared_image
+    SharingMailer.share_image_email(params[:id], params[:email]['email']).deliver
+    redirect_to :action => 'browse', :id => params[:id]
+  end
+
   def index
     if find_gallery!
       @images = @gallery.images.load_images(@filtered_params)
@@ -144,16 +149,17 @@ class ImagesController < ApplicationController
     session[:flickr_verify_key] = verify
     uplo_photoset = push_to_uplo_photoset(params[:image_id])
 
-    return redirect_to :action => :browse, :id => params[:image_id], :flickr_post => 'success'
+    return redirect_to :action => :browse, :id => params[:image_id]#, :flickr_post => 'success'
   end
 
   def post_image_to_flickr
-    if session.has_key?(:flickr_verify_key)==false || session[:flickr_verify_key].nil? || session[:flickr_verify_key]==''
-      return redirect_to :action => :get_flickr_authorize, :image_id => params[:id]
-    end
+    redirect_to :action => :get_flickr_authorize, :image_id => params[:id]
+    # if session.has_key?(:flickr_verify_key)==false || session[:flickr_verify_key].nil? || session[:flickr_verify_key]==''
+    #   return redirect_to :action => :get_flickr_authorize, :image_id => params[:id]
+    # end
 
-    push_to_uplo_photoset params[:id]
-    return redirect_to :action => :browse, :id => params[:id], :flickr_post => 'success'
+    # push_to_uplo_photoset params[:id]
+    # return redirect_to :action => :browse, :id => params[:id], :flickr_post => 'success'
   end
 
   # GET images/:id/browse
@@ -166,11 +172,11 @@ class ImagesController < ApplicationController
       return render_unauthorized
     end
 
-    if params.has_key?(:flickr_post) && params[:flickr_post]=='success'
-      @flickr_post = true
-    elsif params.has_key?(:flickr_post) && params[:flickr_post]!='success'
-      @flickr_post = false
-    end
+    # if params.has_key?(:flickr_post) && params[:flickr_post]=='success'
+    #   @flickr_post = true
+    # elsif params.has_key?(:flickr_post) && params[:flickr_post]!='success'
+    #   @flickr_post = false
+    # end
 
     # @images = @image.gallery.images.all(:order => 'name')
     @images = @image.gallery.get_images_without([@image.id])
