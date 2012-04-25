@@ -4,7 +4,12 @@
     %meta{ :content=>"text/html; charset=UTF-8", :http_equiv=>"Content-Type" }
 
   %body
-    %div= "There is an image shared with you by #{@user.fullname}"
+    %div= "An image has been shared with you by <span style='font-weight:bold;'>#{@user.fullname}</span>".html_safe
+    - if @message != nil
+      %div with a message below:
+      %div{ :style => 'font-style:italic; margin:10px 20px; padding:10px; border:1px solid #EEEEEE;' }= @message
     %br
     %a{ :href => "#{ @image.public_link }", :style => 'clear:both;' }
       = image_tag @image.data.url(:thumb)
+    %br
+    %a{ :href => "#{DOMAIN}" } Shared from UPLO

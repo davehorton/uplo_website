@@ -48,8 +48,8 @@
     #info.right
       .text.bold{ :style => 'margin-top:-4px;' } Email Address
       = simple_form_for(:email, :method => 'post', :class => 'left', :html => { :id => 'email-details' }) do |f|
-        = f.input :email, :label => false, :required => true
-        = f.input :comment, :as => :text, :label => false, :required => false
+        = f.input :emails, :label => false, :required => true, :as => :string
+        = f.input :message, :as => :text, :label => false, :required => false
         #button-container.right
           #btn-send.button.send.left
           #btn-cancel.button.cancel.left
@@ -66,13 +66,15 @@
         $.modal.close();
       });
       $('#btn-send').click(function(){
+        var emails = $('#email_emails').val().split(',');
         var reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
-        if(reg.test($('#email_email').val())){
-          $('#email-details').submit();
-        }else{
-          alert('Please enter an email address!');
-          return false;
+        for(var i=0; i < emails.lenght; i++){
+          if( !reg.test(emails[i].trim()) ){
+            alert('Please enter an email address!');
+            return false;
+          }
         }
+        $('#email-details').submit();
       });
 
       $('#btn-gallery-cancel').click(function(){

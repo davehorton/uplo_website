@@ -10,7 +10,9 @@ class GalleriesController < ApplicationController
   end
 
   def mail_shared_gallery
-    SharingMailer.share_gallery_email(params[:gallery_id], params[:email]['email'], current_user.id).deliver
+    emails = params[:email]['emails'].split(',')
+    emails.map { |email| email.strip }
+    SharingMailer.share_gallery_email(params[:gallery_id], emails, current_user.id, params[:email]['message']).deliver
     redirect_to :action => :index
   end
 
