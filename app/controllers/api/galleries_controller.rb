@@ -11,8 +11,6 @@
 class Api::GalleriesController < Api::BaseController
   before_filter :require_login!, :except => [:list_popular, :list_images]
 
-  N_INCLUDED_IMAGES = 4
-
   def create_gallery
     if params[:gallery]['permission']=='0'
       params[:gallery]['permission'] = 'protected'
@@ -164,17 +162,6 @@ class Api::GalleriesController < Api::BaseController
         :except => gallery.except_attributes,
         :methods => gallery.exposed_methods,
       })
-
-      images = []
-      if gallery.images.length > N_INCLUDED_IMAGES
-        images = gallery.images[0..(N_INCLUDED_IMAGES - 1)]
-      else
-        images = gallery.images
-      end
-      data[:gallery][:images] = []
-      images.each do |img|
-        data[:gallery][:images] << img.serializable_hash(img.default_serializable_options)
-      end
 
       if data[:gallery][:cover_image]
         data[:gallery][:cover_image] = data[:gallery][:cover_image].serializable_hash(Image.default_serializable_options)

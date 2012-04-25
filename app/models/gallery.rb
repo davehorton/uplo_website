@@ -101,15 +101,7 @@ class Gallery < ActiveRecord::Base
 
   # Get the cover image for this album.
   def cover_image
-    return self.images.first
-
-    if self.images.loaded?
-      # Find in memory.
-      self.images.detect{|img| img.is_gallery_cover?}
-    else
-      # Find in DB.
-      self.images.where(:is_gallery_cover => true).first
-    end
+    return self.images.last
   end
 
   def is_public?

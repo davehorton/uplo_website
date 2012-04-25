@@ -239,21 +239,12 @@ class User < ActiveRecord::Base
   end
 
   def raw_total_sales(image_paging_params = {})
-    gal_ids = []
-    self.galleries.each { |gal|
-      gal_ids << gal.id
-    }
-    if gal_ids.length > 0
-      condition = ["galleries.permission = ? and gallery_id in (#{gal_ids.join(',')})", Gallery::PUBLIC_PERMISSION]
-    else
-      condition = ['galleries.permission = ?']
-    end
     paging_info = Image.paging_options(image_paging_params, {:sort_criteria => "images.updated_at DESC"})
     images = Image.paginate(
       :page => paging_info.page_id,
       :per_page => paging_info.page_size,
       :joins => "LEFT JOIN galleries ON galleries.id = images.gallery_id",
-      :conditions => condition,
+      :conditions => ["galleries.permission = ? and galleries.user_id = ?", Gallery::PUBLIC_PERMISSION, self.id],
       :order => paging_info.sort_string) # need sort by order date
 
     return images
@@ -261,21 +252,12 @@ class User < ActiveRecord::Base
 
   def total_sales(image_paging_params = {})
     result = {:total_entries => 0, :data => []}
-    gal_ids = []
-    self.galleries.each { |gal|
-      gal_ids << gal.id
-    }
-    if gal_ids.length > 0
-      condition = ["galleries.permission = ? and gallery_id in (#{gal_ids.join(',')})", Gallery::PUBLIC_PERMISSION]
-    else
-      condition = ['galleries.permission = ?']
-    end
     paging_info = Image.paging_options(image_paging_params, {:sort_criteria => "images.updated_at DESC"})
     images = Image.paginate(
       :page => paging_info.page_id,
       :per_page => paging_info.page_size,
       :joins => "LEFT JOIN galleries ON galleries.id = images.gallery_id",
-      :conditions => condition,
+      :conditions => ["galleries.permission = ? and galleries.user_id = ?", Gallery::PUBLIC_PERMISSION, self.id],
       :order => paging_info.sort_string) # need sort by order date
 
     images.each { |img|
