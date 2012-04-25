@@ -13,7 +13,7 @@ $image-space: 0.113em;
 /* CLASS */
 /*==================================================================================*/
 .gallery-container {
-  margin: $image-space;
+  margin: $image-space $image-space 10px $image-space;
   background-color: #FFFFFF;
   border-bottom: 1px solid $fuzzy-text;
   .image-container {
@@ -24,6 +24,7 @@ $image-space: 0.113em;
   .gallery-info {
     font-size: 12px;
     padding: 0.113em;
+    margin-bottom: 10px;
   }
   .text.bold {
     font-weight: bold;
