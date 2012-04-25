@@ -14,7 +14,7 @@
     line-height: 153px; }
   .gallery-container .gallery-info {
     font-size: 12px;
-    padding: 0.113em;
+    padding: 0.113em 10px;
     margin-bottom: 10px; }
   .gallery-container .text.bold {
     font-weight: bold; }
