@@ -14,6 +14,11 @@ class Api::GalleriesController < Api::BaseController
   N_INCLUDED_IMAGES = 4
 
   def create_gallery
+    if params[:gallery]['permission']=='0'
+      params[:gallery]['permission'] = 'protected'
+    else
+      params[:gallery]['permission'] = 'public'
+    end
     gal = Gallery.new(params[:gallery])
     gal.user = @user
     if gal.save
@@ -44,6 +49,11 @@ class Api::GalleriesController < Api::BaseController
       return render :json => @result
     end
     # update gallery
+    if params[:gallery]['permission']=='0'
+      params[:gallery]['permission'] = 'protected'
+    else
+      params[:gallery]['permission'] = 'public'
+    end
     if gallery.update_attributes(params[:gallery])
       @result[:success] = true
       @result[:gallery] = gallery.serializable_hash(gallery.default_serializable_options)
