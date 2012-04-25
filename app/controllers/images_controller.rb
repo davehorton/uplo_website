@@ -24,7 +24,9 @@ class ImagesController < ApplicationController
             :image_id => image.id
           }
         }
-        render :json => @images
+        return render :json => @images
+      else
+        render :template => 'images/index_new', :layout => 'main'
       end
     end
   end

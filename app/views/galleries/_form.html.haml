@@ -1,9 +1,19 @@
 .gallery-form-container
   - gallery ||= @gallery
-  = simple_form_for(gallery, :html => {:class => "gallery-form"}) do |f|
-    = f.input(:name, :wrapper_class => "input clearfix", 
-              :input_html => {:class => "name"}, :required => true)
-    = f.input(:description, :as => "string", :wrapper_class => "input clearfix", 
-              :input_html => {:class => "description"}, :required => false)
-    = f.input :permission, :as => :select, :label => "Permission", :collection => gallery_permissions_options, :include_blank => false
-    = f.submit("Save")
+  = simple_form_for(gallery, :html => {:id => 'frm-edit-gallery', :class => "gallery-form"}) do |f|
+    .left
+      = f.input(:name, :wrapper_class => "input clearfix",
+                :input_html => {:class => "name"}, :required => true)
+      = f.input(:description, :as => 'text', :wrapper_class => "input clearfix",
+                :input_html => {:class => "description"}, :required => false)
+    .right
+      = f.input(:keyword, :as => 'text', :wrapper_class => "input clearfix",
+                :input_html => {:class => "description"}, :required => false)
+      = f.input :permission, :as => :select, :label => "Permission", :collection => gallery_permissions_options, :include_blank => false
+      .span= "<span style='color:red;'>*</span> Required Field".html_safe
+      .clear{:style => 'margin-left:110px;'}
+      #button-container.left
+        #btn-gallery-cancel.button.cancel.left
+        #btn-gallery-save.button.save.left
+
+

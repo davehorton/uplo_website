@@ -15,31 +15,37 @@ gallery = {
         });
       }
     };
-      
+
     // New gallery form
     $("#new-gallery").click(function(e){
       e.preventDefault();
       toggle_form();
     });
-    
+
     // Ajax edit gallery.
     $("#edit-gallery").click(function(e){
-      e.preventDefault();         
-      
+      e.preventDefault();
+
       if(!$(target).hasClass("hidden") || $(target).find("form.gallery-form").length > 0){
         toggle_form();
         return false;
       }
-          
+
       var link = $(this);
       $.ajax({
-        url: link.attr("href"), 
+        url: link.attr("href"),
         type: 'GET',
         success: function(res){
           $(target).html(res);
+          $('#btn-gallery-cancel').click(function(){
+            $('#gallery-form-container').addClass('hidden');
+          });
+          $('#btn-gallery-save').click(function(){
+            $('#frm-edit-gallery').submit();
+          });
           toggle_form();
         },
-        
+
         error: function(){
         }
       });

@@ -1,0 +1,58 @@
+- content_for :head do
+  = javascript_include_tag("lib/jail.min.js")
+  = javascript_include_tag("app/gallery.js")
+  = stylesheet_link_tag 'scss/new_image.css'
+
+- content_for :top_content do
+  %div{:style => "padding-top:15px;"}
+    .breadcrum.left
+      %span My Gallery /
+      %span.current= @gallery.name
+      %span.text.fuzzy= "("
+      %span.text.fuzzy= @gallery.permission_string
+      %span.text.fuzzy= ")"
+      - if !@gallery.is_owner?(current_user)
+        %span.text.fuzzy= "From "
+        %span.text.fuzzy
+          %a{:href => "#"}= @gallery.user.fullname
+    .actions.right
+      - if can_modify_gallery?(@gallery)
+        - if @images.blank?
+          - images_action = "Add Images"
+        - else
+          - images_action = "Edit Images"
+
+        .action-container
+          %a#edit-images{:href => gallery_images_list_path(:gallery_id => @gallery.id), :class => "ui-button-container icon-link"}
+            %span= images_action
+          %span.saparator= "|"
+          %a#edit-gallery{:href => edit_gallery_path(@gallery), :class => "ui-button-container icon-link"}
+            %span= "Edit Gallery"
+          %span.saparator= "|"
+          = link_to("Delete Gallery", gallery_path(@gallery),
+                    :method => :delete,
+                    :class => "ui-button-container icon-link",
+                    :confirm => I18n.t("gallery.delete_confirm"))
+    .line-separator.clear &nbsp;
+
+.wrapper
+  #gallery-form-container.clearfix.round-box.hidden{:style => "display: none"}
+  - if @images.blank?
+    .empty-data= 'There is no image in this gallery. Please add image.'
+  - else
+    - (0...@images.length). each do |idx|
+      - image = @images[idx]
+      - url = url_for(:controller => "images", :action => "show", :id => "#{image.id}")
+      - additional_class = (idx%6 == 0) ? "no-padding-left" : ((idx%6==5) ? "no-padding-right" : "")
+      .image-container.thumb{:id => "image-container-#{image.id}", :title=>"#{image.name}", :class => "#{additional_class}"}
+        %a{ :href => "#{url}" }
+          %dl.entry
+            %dt.preview
+              = async_image_tag(image.data.url(:thumb), :class => "image-thumb")
+= render_pagination(@images, {:controller => "images", :action => params[:action], :gallery_id => @gallery.id})
+
+:erb
+  <script type="text/javascript">
+    gallery.setup();
+  </script>
+
