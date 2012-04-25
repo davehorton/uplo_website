@@ -5,7 +5,7 @@
 /* CLASS */
 /*==================================================================================*/
 .gallery-container {
-  margin: 0.113em;
+  margin: 0.113em 0.113em 10px 0.113em;
   background-color: #FFFFFF;
   border-bottom: 1px solid #cbcbcb; }
   .gallery-container .image-container {
@@ -14,7 +14,8 @@
     line-height: 153px; }
   .gallery-container .gallery-info {
     font-size: 12px;
-    padding: 0.113em; }
+    padding: 0.113em;
+    margin-bottom: 10px; }
   .gallery-container .text.bold {
     font-weight: bold; }
   .gallery-container .text {

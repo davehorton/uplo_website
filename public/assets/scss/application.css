@@ -108,6 +108,8 @@ p, ul {
 
 .text.bold {
   font-weight: bold; }
+.text.highlight {
+  color: #ED3B03; }
 
 .line-separator {
   height: 10px;
@@ -534,21 +536,25 @@ p, ul {
     width: 155px;
     height: 150px; }
 
-#frm-edit-gallery {
-  padding: 5px 10px; }
-  #frm-edit-gallery .input label {
-    width: 100px; }
-  #frm-edit-gallery .input input, #frm-edit-gallery .input textarea {
-    width: 305px;
-    margin-top: 0; }
-  #frm-edit-gallery .button {
-    height: 27px; }
-    #frm-edit-gallery .button.cancel {
-      background: url("/assets/btn-cancel-57x23.png") no-repeat;
-      width: 65px;
-      margin-right: 10px; }
-    #frm-edit-gallery .button.save {
-      background: url("/assets/btn-save-changes.jpg") no-repeat;
-      width: 96px; }
-  #frm-edit-gallery #button-container {
-    margin: 5px 0 5px 110px; }
+#gallery-form-container {
+  margin-bottom: 10px; }
+
+#frm-edit-gallery .input label {
+  width: 100px; }
+#frm-edit-gallery .input input, #frm-edit-gallery .input textarea {
+  width: 305px;
+  margin-top: 0; }
+#frm-edit-gallery .button {
+  height: 27px; }
+  #frm-edit-gallery .button.cancel {
+    background: url("/assets/btn-cancel-57x23.png") no-repeat;
+    width: 65px;
+    margin-right: 10px; }
+  #frm-edit-gallery .button.save {
+    background: url("/assets/btn-save-changes.jpg") no-repeat;
+    width: 96px; }
+#frm-edit-gallery #button-container {
+  margin: 5px 0 5px 110px; }
+#frm-edit-gallery #gallery_permission {
+  height: 28px;
+  padding-top: 2px; }
