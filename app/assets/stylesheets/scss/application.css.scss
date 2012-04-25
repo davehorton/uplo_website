@@ -4,7 +4,10 @@
 $frame-width: 960px;
 $fuzzy-text: #CBCBCB;
 $normal-text: #8A8A8A;
-$bold-text: #000000;
+$color-black: #111111;
+$color-background: #f8f8f8;
+$font-size-header-nav: 12pt;
+$font-size-normal: 12pt;
 
 /*==================================================================================*/
 /* HTML */
@@ -28,12 +31,12 @@ table, caption, tbody, tfoot, thead, tr, th, td {
 }
 body {
   line-height: 1;
-  background-color: #FFFFFF;
-  font-size: 1em;
-  font-family: "Lucida Grande", Helvetica, Verdana, Arial, Sans-Serif;
+  background-color: $color-background;
+  font-size: $font-size-normal;
+  font-family: Arial;
   margin: 0;
   padding: 0;
-  color: $normal-text;
+  color: $color-black;
 }
 
 ol, ul {
@@ -64,7 +67,7 @@ table {
 }
 
 a {
-  color: $bold-text;
+  color: $color-black;
   &:link {
     font-weight: bold;
     text-decoration: none;
@@ -111,8 +114,16 @@ p, ul{
 }
 .panel {
   float: left;
-  /*border: 1px solid #999;*/
 }
+
+//new
+.text {
+  &.bold {
+    font-weight: bold;
+  }
+}
+
+// old
 .line-separator {
   height: 10px;
   margin-top: 5px;
@@ -153,7 +164,7 @@ p, ul{
   word-wrap: break-word;
   text-align: justify;
   &.bold {
-    color: $bold-text;
+    color: $color-black;
   }
   &.normal {
     color: $normal-text;
@@ -165,6 +176,7 @@ p, ul{
 .hide {
   display: none;
 }
+.hidden{ display: none !important;}
 .pagination {
   padding-top: 30px;
   text-align: center;
@@ -228,18 +240,24 @@ p, ul{
 .breadcrum {
   line-height: 2.5em;
   font-weight: bold;
-  color: $bold-text;
+  color: $color-black;
   font-size: 18px;
 
   .current {
     color: gray;
   }
   .more {
-    color: $bold-text;
+    color: $color-black;
     font-size: 10px;
     padding-left: 20px;
     padding-top: 2px;
   }
+}
+
+.actions {
+  font-size: 14px;
+  line-height: 2.5em;
+  margin-top: 5px;
 }
 
 .simple_form label {float: left; width: 140px; margin-right: 10px; margin-top: 10px}
@@ -326,7 +344,7 @@ p, ul{
       float: left;
       padding: 0px 8px;
       a, option {
-        color: $bold-text;
+        color: $color-black;
         font-size: 13.5px;
         .normal {
           font-size: 14px;
@@ -442,7 +460,7 @@ p, ul{
     font-size: 15px;
     padding: 0 15px 30px 15px;
     .header {
-      color: $bold-text;
+      color: $color-black;
       font-weight: bold;
       font-size: 18px;
       margin: 10px 0 5px;
@@ -512,7 +530,7 @@ p, ul{
     }
   }
   .close {
-    color: $bold-text;
+    color: $color-black;
     width: 100%;
     .right {
       border: 1px solid $fuzzy-text;
@@ -550,7 +568,7 @@ p, ul{
       width: 242px;
       padding: 0 11px 5px 11px;
       .text {
-        color: $bold-text;
+        color: $color-black;
         font-size: 12px;
         .left {
           font-weight: bold;
@@ -596,5 +614,33 @@ p, ul{
     background: url('/assets/advertise-devices.png') no-repeat;
     width: 155px;
     height: 150px;
+  }
+}
+
+#frm-edit-gallery {
+  padding: 5px 10px;
+  .input {
+    label {
+      width: 100px;
+    }
+    input, textarea {
+      width: 305px;
+      margin-top: 0;
+    }
+  }
+  .button {
+    height: 27px;
+    &.cancel {
+      background: url('/assets/btn-cancel-57x23.png') no-repeat;
+      width: 65px;
+      margin-right: 10px;
+    }
+    &.save {
+      background: url('/assets/btn-save-changes.jpg') no-repeat;
+      width: 96px;
+    }
+  }
+  #button-container {
+    margin: 5px 0 5px 110px;
   }
 }

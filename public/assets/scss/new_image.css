@@ -5,7 +5,9 @@
 /* CLASS */
 /*==================================================================================*/
 .gallery-container {
-  margin: 0.113em; }
+  margin: 0.113em;
+  background-color: #FFFFFF;
+  border-bottom: 1px solid #cbcbcb; }
   .gallery-container .image-container {
     margin: 0 0 10px 0 !important;
     border: 1px solid #cbcbcb;

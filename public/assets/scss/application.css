@@ -23,12 +23,12 @@ table, caption, tbody, tfoot, thead, tr, th, td {
 
 body {
   line-height: 1;
-  background-color: #FFFFFF;
-  font-size: 1em;
-  font-family: "Lucida Grande", Helvetica, Verdana, Arial, Sans-Serif;
+  background-color: #f8f8f8;
+  font-size: 12pt;
+  font-family: Arial;
   margin: 0;
   padding: 0;
-  color: #8a8a8a; }
+  color: #111111; }
 
 ol, ul {
   list-style: none outside none; }
@@ -53,7 +53,7 @@ table {
   border-spacing: 0; }
 
 a {
-  color: black; }
+  color: #111111; }
   a:link {
     font-weight: bold;
     text-decoration: none; }
@@ -104,8 +104,10 @@ p, ul {
   box-shadow: rgba(0,0,0,.45) 0 1px 6px \0/IE9;*/ }
 
 .panel {
-  float: left;
-  /*border: 1px solid #999;*/ }
+  float: left; }
+
+.text.bold {
+  font-weight: bold; }
 
 .line-separator {
   height: 10px;
@@ -147,7 +149,7 @@ p, ul {
   word-wrap: break-word;
   text-align: justify; }
   .text.bold {
-    color: black; }
+    color: #111111; }
   .text.normal {
     color: #8a8a8a; }
 
@@ -156,6 +158,9 @@ p, ul {
 
 .hide {
   display: none; }
+
+.hidden {
+  display: none !important; }
 
 .pagination {
   padding-top: 30px;
@@ -205,15 +210,20 @@ p, ul {
 .breadcrum {
   line-height: 2.5em;
   font-weight: bold;
-  color: black;
+  color: #111111;
   font-size: 18px; }
   .breadcrum .current {
     color: gray; }
   .breadcrum .more {
-    color: black;
+    color: #111111;
     font-size: 10px;
     padding-left: 20px;
     padding-top: 2px; }
+
+.actions {
+  font-size: 14px;
+  line-height: 2.5em;
+  margin-top: 5px; }
 
 .simple_form label {
   float: left;
@@ -317,7 +327,7 @@ p, ul {
     float: left;
     padding: 0px 8px; }
     #header .header-menu li a, #header .header-menu li option {
-      color: black;
+      color: #111111;
       font-size: 13.5px; }
       #header .header-menu li a .normal, #header .header-menu li option .normal {
         font-size: 14px; }
@@ -402,7 +412,7 @@ p, ul {
   font-size: 15px;
   padding: 0 15px 30px 15px; }
   #center .intro .header {
-    color: black;
+    color: #111111;
     font-weight: bold;
     font-size: 18px;
     margin: 10px 0 5px; }
@@ -454,7 +464,7 @@ p, ul {
       width: 299px;
       margin-left: 10px; }
   #email-sharing-popup .close {
-    color: black;
+    color: #111111;
     width: 100%; }
     #email-sharing-popup .close .right {
       border: 1px solid #cbcbcb;
@@ -487,7 +497,7 @@ p, ul {
       width: 242px;
       padding: 0 11px 5px 11px; }
       #social-sharing .main .container .text {
-        color: black;
+        color: #111111;
         font-size: 12px; }
         #social-sharing .main .container .text .left {
           font-weight: bold;
@@ -523,3 +533,22 @@ p, ul {
     background: url("/assets/advertise-devices.png") no-repeat;
     width: 155px;
     height: 150px; }
+
+#frm-edit-gallery {
+  padding: 5px 10px; }
+  #frm-edit-gallery .input label {
+    width: 100px; }
+  #frm-edit-gallery .input input, #frm-edit-gallery .input textarea {
+    width: 305px;
+    margin-top: 0; }
+  #frm-edit-gallery .button {
+    height: 27px; }
+    #frm-edit-gallery .button.cancel {
+      background: url("/assets/btn-cancel-57x23.png") no-repeat;
+      width: 65px;
+      margin-right: 10px; }
+    #frm-edit-gallery .button.save {
+      background: url("/assets/btn-save-changes.jpg") no-repeat;
+      width: 96px; }
+  #frm-edit-gallery #button-container {
+    margin: 5px 0 5px 110px; }
