@@ -10,6 +10,9 @@
     %a#new-gallery.right{ :href => '/galleries/new' }
 
 .wrapper
+  #gallery-form-container.clearfix.hidden{:style => "display: none"}
+    = render(:partial => "form", :locals => {:gallery => @gallery})
+
   - if @galleries.blank?
     .empty-data= "There is no gallery. Let create one."
   - else
@@ -70,6 +73,13 @@
           alert('Please enter an email address!');
           return false;
         }
+      });
+
+      $('#btn-gallery-cancel').click(function(){
+        $('#gallery-form-container').addClass('hidden');
+      });
+      $('#btn-gallery-save').click(function(){
+        $('#frm-edit-gallery').submit();
       });
 
       $(function(){

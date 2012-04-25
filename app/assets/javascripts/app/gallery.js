@@ -8,10 +8,18 @@ gallery = {
         $(target).removeClass("hidden");
         $(target).slideDown("fast");
         $(target).show();
+        if($('#edit-gallery').length > 0){
+          $('#edit-gallery').addClass('text');
+          $('#edit-gallery').addClass('highlight');
+        }
       } else {
         // Hide the form and do nothing.
         $(target).slideUp("fast", function(){
           $(target).addClass("hidden");
+          if($('#edit-gallery').length > 0){
+            $('#edit-gallery').removeClass('text');
+            $('#edit-gallery').removeClass('highlight');
+          }
         });
       }
     };
@@ -38,7 +46,7 @@ gallery = {
         success: function(res){
           $(target).html(res);
           $('#btn-gallery-cancel').click(function(){
-            $('#gallery-form-container').addClass('hidden');
+            toggle_form();
           });
           $('#btn-gallery-save').click(function(){
             $('#frm-edit-gallery').submit();

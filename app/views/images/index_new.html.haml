@@ -33,10 +33,9 @@
                     :method => :delete,
                     :class => "ui-button-container icon-link",
                     :confirm => I18n.t("gallery.delete_confirm"))
-    .line-separator.clear &nbsp;
 
 .wrapper
-  #gallery-form-container.clearfix.round-box.hidden{:style => "display: none"}
+  #gallery-form-container.clearfix.hidden{:style => "display: none"}
   - if @images.blank?
     .empty-data= 'There is no image in this gallery. Please add image.'
   - else

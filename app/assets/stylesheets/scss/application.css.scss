@@ -121,6 +121,9 @@ p, ul{
   &.bold {
     font-weight: bold;
   }
+  &.highlight {
+    color: #ED3B03;
+  }
 }
 
 // old
@@ -617,8 +620,11 @@ p, ul{
   }
 }
 
+#gallery-form-container {
+  margin-bottom: 10px;
+}
+
 #frm-edit-gallery {
-  padding: 5px 10px;
   .input {
     label {
       width: 100px;
@@ -642,5 +648,9 @@ p, ul{
   }
   #button-container {
     margin: 5px 0 5px 110px;
+  }
+  #gallery_permission {
+    height: 28px;
+    padding-top: 2px;
   }
 }
