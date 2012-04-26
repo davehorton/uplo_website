@@ -8,6 +8,7 @@ $small-image-size: 75px;
 $thumb-image-size: 155px;
 $medium-image-size: 640px;
 $image-space: 0.113em;
+$color-black: #111111;
 
 /*==================================================================================*/
 /* CLASS */
@@ -20,6 +21,7 @@ $image-space: 0.113em;
     margin: 0 0 10px 0 !important;
     border: 1px solid $fuzzy-text;
     line-height: 153px;
+    background-color: $color-black;
   }
   .gallery-info {
     font-size: 12px;
