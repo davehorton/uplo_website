@@ -11,8 +11,7 @@
   .gallery-container .image-container {
     margin: 0 0 10px 0 !important;
     border: 1px solid #cbcbcb;
-    line-height: 153px;
-    background-color: #111111; }
+    line-height: 153px; }
   .gallery-container .gallery-info {
     font-size: 12px;
     padding: 0.113em 10px;

@@ -9,15 +9,14 @@
   height: 399px;
   color: #FFFFFF; }
   .banner .wrapper {
-    background: url("/assets/banner-bg.jpg") repeat-x scroll center left transparent;
     height: 399px; }
   .banner .left {
     width: 445px; }
     .banner .left .info {
       word-wrap: break-word;
-      text-align: justify;
-      line-height: 20px;
-      font-size: 13.5px;
+      text-align: left;
+      line-height: 24.4px;
+      font-size: 16px;
       margin-top: 20px; }
   .banner .right {
     width: 500px; }
@@ -41,7 +40,6 @@
   height: 140px;
   border-bottom: 1px solid #cbcbcb; }
   .spotlight .lower .wrapper {
-    background: url("/assets/banner-lower-bg.png") repeat-x scroll center left transparent;
     height: 140px;
     border-bottom: 1px solid #cbcbcb; }
   .spotlight .lower .devider {
@@ -54,14 +52,14 @@
     margin: 20px 0;
     line-height: 22px; }
     .spotlight .lower .info .header {
-      color: black;
       font-weight: bold;
-      font-size: 15px; }
+      font-size: 14px; }
       .spotlight .lower .info .header .main {
-        font-size: 20px; }
+        font-size: 24px; }
     .spotlight .lower .info .text {
-      line-height: 16px;
-      margin-top: 7px; }
+      line-height: 18px;
+      margin-top: 7px;
+      font-size: 12px; }
 
 .the-app .left {
   margin-top: 20px; }

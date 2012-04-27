@@ -24,7 +24,7 @@ table, caption, tbody, tfoot, thead, tr, th, td {
 body {
   line-height: 1;
   background-color: #f8f8f8;
-  font-size: 12pt;
+  font-size: 12px;
   font-family: Arial;
   margin: 0;
   padding: 0;
@@ -106,10 +106,14 @@ p, ul {
 .panel {
   float: left; }
 
-.text.bold {
-  font-weight: bold; }
-.text.highlight {
-  color: #ED3B03; }
+.text {
+  text-align: left; }
+  .text.bold {
+    font-weight: bold; }
+  .text.highlight {
+    color: #ED3B03; }
+  .text.gray {
+    color: #606060; }
 
 .line-separator {
   height: 10px;
@@ -148,12 +152,11 @@ p, ul {
 
 .text {
   line-height: 22px;
-  word-wrap: break-word;
-  text-align: justify; }
+  word-wrap: break-word; }
   .text.bold {
     color: #111111; }
   .text.normal {
-    color: #8a8a8a; }
+    color: #606060; }
 
 .show {
   display: inline-block; }
@@ -210,10 +213,10 @@ p, ul {
     margin-left: 10px; }
 
 .breadcrum {
-  line-height: 2.5em;
+  line-height: 1.5em;
   font-weight: bold;
   color: #111111;
-  font-size: 18px; }
+  font-size: 16px; }
   .breadcrum .current {
     color: gray; }
   .breadcrum .more {
@@ -330,7 +333,8 @@ p, ul {
     padding: 0px 8px; }
     #header .header-menu li a, #header .header-menu li option {
       color: #111111;
-      font-size: 13.5px; }
+      font-size: 13px;
+      text-shadow: 1px 0 2px #CECECE; }
       #header .header-menu li a .normal, #header .header-menu li option .normal {
         font-size: 14px; }
   #header .devider {
@@ -558,3 +562,9 @@ p, ul {
 #frm-edit-gallery #gallery_permission {
   height: 28px;
   padding-top: 2px; }
+
+#spotlight-images {
+  width: 710px; }
+
+#recent-images {
+  width: 240px; }
