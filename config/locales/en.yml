@@ -25,7 +25,7 @@ en:
   gallery:
     permission:
       public: "Public"
-      protected: "Password Protected"
+      protected: "Private"
     create_done: "Your new gallery was created successfully"
     update_done: "Your gallery was updated successfully"
     delete_done: "Your gallery was deleted"
