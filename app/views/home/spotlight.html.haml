@@ -7,12 +7,11 @@
   = render :partial => "home/banners/spotlight"
 
 - content_for :right_content do
-  %div{:style => "padding-top:15px;"}
-    .breadcrum.left
-      .left Recent Upload
-      %a.more.left{:href => "#"} +VIEW ALL
-
-  %div{:style => "width:240px;"}
+  .breadcrum.left
+    .left Recent Upload
+    %a.more.left{:href => "#{url_for(:controller => 'home', :action => 'browse')}"} +VIEW ALL
+  .clear
+  #recent-images
     .images-wrapper.clearfix
     - if @images.blank?
       .empty-data= "There is no image. Please add image."
@@ -27,12 +26,12 @@
               %dt.preview
                 = async_image_tag(image.data.url(:thumb), :class => "image-thumb image small")
 
-%div{:style => "padding-top:15px;"}
-  .breadcrum.left
-    .left Spotlight Images
-    %a.more.left{:href => "#"} +VIEW ALL
 
-#spotlight-images{:style => "width:710px;"}
+.breadcrum.left
+  .left Spotlight Images
+  %a.more.left{:href => "#{url_for(:controller => 'home', :action => 'browse')}"} +VIEW ALL
+.clear
+#spotlight-images.left{:style => ""}
   .images-wrapper.clearfix
   - if @images.blank?
     .empty-data= "There is no image. Please add image."

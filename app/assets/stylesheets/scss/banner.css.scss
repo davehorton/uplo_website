@@ -13,16 +13,15 @@ $bold-text: #000000;
   height: 399px;
   color: #FFFFFF;
   .wrapper {
-    background: url("/assets/banner-bg.jpg") repeat-x scroll center left transparent;
     height: 399px;
   }
   .left {
     width: 445px;
     .info {
       word-wrap: break-word;
-      text-align: justify;
-      line-height: 20px;
-      font-size: 13.5px;
+      text-align: left;
+      line-height: 24.4px;
+      font-size: 16px;
       margin-top: 20px;
     }
     .buttons {
@@ -61,7 +60,6 @@ $bold-text: #000000;
     height: 140px;
     border-bottom: 1px solid $fuzzy-text;
     .wrapper {
-      background: url("/assets/banner-lower-bg.png") repeat-x scroll center left transparent;
       height: 140px;
       border-bottom: 1px solid $fuzzy-text;
     }
@@ -76,16 +74,16 @@ $bold-text: #000000;
       margin: 20px 0;
       line-height: 22px;
       .header {
-        color: $bold-text;
         font-weight: bold;
-        font-size: 15px;
+        font-size: 14px;
         .main {
-          font-size: 20px;
+          font-size: 24px;
         }
       }
       .text {
-        line-height: 16px;
+        line-height: 18px;
         margin-top: 7px;
+        font-size: 12px;
       }
     }
   }

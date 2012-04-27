@@ -3,11 +3,11 @@
 /*==================================================================================*/
 $frame-width: 960px;
 $fuzzy-text: #CBCBCB;
-$normal-text: #8A8A8A;
 $color-black: #111111;
+$color-gray: #606060;
 $color-background: #f8f8f8;
-$font-size-header-nav: 12pt;
-$font-size-normal: 12pt;
+$font-size-normal: 12px;
+$font-family: Arial;
 
 /*==================================================================================*/
 /* HTML */
@@ -118,11 +118,15 @@ p, ul{
 
 //new
 .text {
+  text-align: left;
   &.bold {
     font-weight: bold;
   }
   &.highlight {
     color: #ED3B03;
+  }
+  &.gray {
+    color: $color-gray;
   }
 }
 
@@ -165,12 +169,11 @@ p, ul{
 .text {
   line-height: 22px;
   word-wrap: break-word;
-  text-align: justify;
   &.bold {
     color: $color-black;
   }
   &.normal {
-    color: $normal-text;
+    color: $color-gray;
   }
 }
 .show {
@@ -241,10 +244,10 @@ p, ul{
 }
 
 .breadcrum {
-  line-height: 2.5em;
+  line-height: 1.5em;
   font-weight: bold;
   color: $color-black;
-  font-size: 18px;
+  font-size: 16px;
 
   .current {
     color: gray;
@@ -348,7 +351,8 @@ p, ul{
       padding: 0px 8px;
       a, option {
         color: $color-black;
-        font-size: 13.5px;
+        font-size: 13px;
+        text-shadow: 1px 0 2px #CECECE;
         .normal {
           font-size: 14px;
         }
@@ -653,4 +657,11 @@ p, ul{
     height: 28px;
     padding-top: 2px;
   }
+}
+
+#spotlight-images {
+  width: 710px;
+}
+#recent-images {
+  width: 240px;
 }
