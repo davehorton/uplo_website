@@ -66,7 +66,7 @@
         .header= "Quantity"
         .line{:style => 'width:143px;'}
           .item.left{:style => 'padding: 5px;'}
-            = f.number_field(:quantity, :style => 'padding:0pt 2px; width:122px;', :value => quantity, :size => '5', :title => 'Limit from 1 to 99999')
+            = f.text_field(:quantity, :style => 'padding:0pt 2px; width:122px;', :value => quantity, :size => '5', :title => 'Limit from 1 to 99999')
     .clear
       .add-to-cart.right
 
@@ -80,10 +80,12 @@
       $(".add-to-cart").bind("click", function(){
         $("#order-details").submit();
       });
-      $('#line_item_quantity').bind('keypress', function(e,a,b){
+      $('#line_item_quantity').bind('keypress', function(e){
         var reg = /^\d{1,5}$/;
-        var val = e.currentTarget.value + String.fromCharCode(e.charCode);
-        if(!reg.test(val)){
-          return false;
+        if(e.charCode != 0){
+          var val = e.currentTarget.value + String.fromCharCode(e.charCode);
+          if(!reg.test(val)){
+            return false;
+          }
         }
       });
