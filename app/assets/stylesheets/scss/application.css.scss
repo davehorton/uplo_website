@@ -128,6 +128,24 @@ p, ul{
   &.gray {
     color: $color-gray;
   }
+  &.black {
+    color: $color-black;
+  }
+  &.small {
+    font-size: 12px;
+  }
+  &.medium {
+    font-size: 16px;
+  }
+  &.large {
+    font-size: 18px;
+  }
+  &.line16 {
+    line-height: 16px;
+  }
+  &.line18 {
+    line-height: 18px;
+  }
 }
 
 // old
@@ -452,10 +470,6 @@ p, ul{
   margin-right: 20px;
 }
 #right {
-  .public-info {
-    width:300px;
-    margin-top:3px;
-  }
 }
 #center {
   .intro {
