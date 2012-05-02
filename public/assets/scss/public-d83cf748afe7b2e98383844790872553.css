@@ -1,0 +1,27 @@
+#right {
+  margin-top: 15px;
+  width: 285px; }
+
+#author-biography {
+  height: 93px; }
+
+#gallery-section {
+  margin-bottom: 15px; }
+
+#author-section {
+  height: 48px;
+  margin-bottom: 10px; }
+  #author-section .info {
+    margin: 6px 0 6px 10px; }
+
+.buttons-container {
+  margin-top: 10px; }
+
+.pagination {
+  padding-top: 10px; }
+
+.image-container.thumb {
+  margin: 3px !important; }
+
+.wrapper {
+  margin-top: 20px; }

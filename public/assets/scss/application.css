@@ -114,6 +114,18 @@ p, ul {
     color: #ED3B03; }
   .text.gray {
     color: #606060; }
+  .text.black {
+    color: #111111; }
+  .text.small {
+    font-size: 12px; }
+  .text.medium {
+    font-size: 16px; }
+  .text.large {
+    font-size: 18px; }
+  .text.line16 {
+    line-height: 16px; }
+  .text.line18 {
+    line-height: 18px; }
 
 .line-separator {
   height: 10px;
@@ -404,10 +416,6 @@ p, ul {
 
 #left {
   margin-right: 20px; }
-
-#right .public-info {
-  width: 300px;
-  margin-top: 3px; }
 
 #center .intro {
   width: 300px;
