@@ -55,6 +55,10 @@ $color-black: #111111;
     height: $small-image-size;
     margin: $image-space;
   }
+  &.medium {
+    width: $medium-image-size;
+    max-height: $medium-image-size;
+  }
 }
 
 .image-thumb {
@@ -74,7 +78,7 @@ $color-black: #111111;
     max-height: $thumb-image-size;
   }
   &.medium {
-    width: $medium-image-size;
+    max-width: $medium-image-size;
     max-height: $medium-image-size;
     img {
       max-width: $medium-image-size;
@@ -83,8 +87,8 @@ $color-black: #111111;
   }
 }
 
-.entry{
-  .preview{
+.entry {
+  .preview {
     text-align: center;
     margin-bottom: 5px;
   }

@@ -184,6 +184,7 @@ class ImagesController < ApplicationController
 
     # @images = @image.gallery.images.all(:order => 'name')
     @images = @image.gallery.get_images_without([@image.id])
+    @author = @image.gallery.user
     @dislike = false
     if user_signed_in?
       @dislike = @image.is_liked? current_user.id
@@ -194,12 +195,13 @@ class ImagesController < ApplicationController
   end
 
   def public
-    if user_signed_in?
-      return redirect_to :action => 'browse', :id => params[:id]
-    end
+    # if user_signed_in?
+    #   return redirect_to :action => 'browse', :id => params[:id]
+    # end
     @image = Image.find_by_id(params[:id])
+    @author = @image.gallery.user
     @purchased_info = @image.raw_purchased_info(@filtered_params)
-    render :layout => "main"
+    render :layout => 'public'
   end
 
   # PUT images/:id/slideshow_update

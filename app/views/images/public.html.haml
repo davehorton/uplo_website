@@ -4,68 +4,33 @@
   %meta{:property=>"og:image", :content=>"#{@image.data.url(:thumb)}" }
   = stylesheet_link_tag("scss/new_image.css", "scss/sale.css")
 
-
-- content_for :top_content do
-  &nbsp;
-
 - content_for :right_content do
-  .breadcrum{:style => 'line-height:12.5px;'}= @image.name
-  .line-separator{:style => 'margin: 10px 0 0px;'} &nbsp;
-  .left{:style => "height:48px; margin-bottom:10px;"}
-    .left= image_tag @image.gallery.user.avatar(:small)
-    .left{:style => 'padding-left:10px;'}
-      .text.bold= "By #{@image.user_fullname}"
-      .text.bold= @image.username
-  .line-separator.clear{:style => 'margin: 10px 0 0px;'} &nbsp;
-  .text.bold.left{:style => "margin-bottom:10px;"}= "Uploaded on #{@image.created_at.strftime('%B %d, %Y')}"
+  #image-section.left
+    .text.black.large.bold= @image.name.truncate(30)
+
+  .line-separator.clear{ :style => 'margin-top:10px;'} &nbsp;
+  #author-section.left
+    .left= image_tag @author.avatar(:small)
+    .info.left
+      .text.black.medium.line18= @author.username.truncate(20)
+      .text.gray.small.line18= "#{@author.images.length} Photos &bull; 44 Followers".html_safe
+
   .line-separator.clear{:style => 'margin: 10px 0 5px;'} &nbsp;
-  .text.normal{:style => 'width:300px;'}
+  #author-biography.text.gray.small.line16
     Lorem ipsum dolor sit amet consectetur adipisicing elit sed do eiusmod tempor incididunt ut labone et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco.
 
-  .text.bold{:style => 'margin: 10px 0 0px;'} Related images
-  .line-separator.clear &nbsp;
-  %div{:style => 'width:300px;'}
-    .clearfix
-      - if @images.blank?
-        .empty-data= "There is no image. Please add image."
-      - else
-        - (0...@images.length). each do |idx|
-          - image = @images[idx]
-          - url = url_for(:controller => "images", :action => "browse", :id => "#{image.id}")
-          - additional_class = (idx%5 == 0) ? "no-padding-left" : ((idx%5==4) ? "no-padding-right" : "")
-          .image-container.small{:id => "image-container-#{image.id}", :title=>"#{image.name}", :class => "#{additional_class}"}
-            %a{ :href => "#{url}" }
-              %dl.entry
-                %dt.preview
-                  .image.small.left= image_tag image.data(:small)
+  #app-advertise.left
+    .app-image
+    %a{ :href => '#' }
+      #download-app.clear
 
-.sections
-  .image.medium.left
-    = image_tag @image.data.url(:medium)
-  .actions.left
-    .left
-      .like.left
-        .icon.left
-        .times.left= @image.likes
-        .left &nbsp;Likes
-      .comment.left
-        .icon.left
-        .times.left= @image.likes
-        .left &nbsp;Comments
-    .text.normal.right Login to Like/Order/Share this Image
-  .line-separator.clear &nbsp;
-  .sale-info
-    .header.text.bold Comments & Faves
-    .text.fuzzy{:style => 'font-weight:bold;margin-bottom: 10px;'} Login to post comment
-    - (0...@purchased_info.length). each do |idx|
-      - line_item = @purchased_info[idx]
-      - purchaser = User.find_by_id line_item.purchaser_id.to_i
-      .line-separator.clear &nbsp;
-      .user.left.clear= image_tag(purchaser.avatar.url(:small), :class => "image small")
-      .left
-        %span.text.bold{:style => 'font-weight:bold;'}= purchaser.username
-        %span.text.fuzzy= "(#{line_item.creation_timestamp} ago)"
-        .text.normal
-          Great shot!
+- content_for :center_content do
+  .image-container.clearfix
+    = image_tag @image.data.url(:medium), :class => 'image medium'
+  .buttons-container.clear
+    %a.left{:target => '_blank', :href=>"https://twitter.com/share", :class=>"twitter-share-button", :data => {:lang => "en", :count => "horizontal", :text => "Shared from UPLO -"}}
+    .fb-like.left{ 'data-href'=>"#{ url_for(:only_path => false) }", 'data-send'=>'false', 'data-layout'=>'button_count', 'data-show-faces'=>'false', 'data-font'=>'arial' }
 
-
+- content_for :js do
+  = javascript_tag do
+    !function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");

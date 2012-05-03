@@ -12,8 +12,8 @@
   .left{:style => "height:48px; margin-bottom:10px;"}
     .left= image_tag @image.gallery.user.avatar(:small)
     .left{:style => 'padding-left:10px;'}
-      .text.bold= "By #{@image.user_fullname}"
-      .text.bold= @image.username
+      .text.bold= "By #{@image.username}"
+      .text.bold= "#{@image.user_fullname} &bull; #{@author.images.length} items".html_safe
   .line-separator.clear{:style => 'margin: 10px 0 0px;'} &nbsp;
   .text.bold.left{:style => "margin-bottom:10px;"}= "Uploaded on #{@image.created_at.strftime('%B %d, %Y')}"
   .line-separator.clear{:style => 'margin: 10px 0 5px;'} &nbsp;
@@ -60,8 +60,8 @@
           #btn-cancel.button.cancel.left
 
 .sections
-  .image.medium.left
-    = image_tag @image.data.url(:medium)
+  .image-container.medium.clearfix
+    = image_tag @image.data.url(:medium), :class => 'image medium'
 
   #social-sharing.hide
     .main.left
