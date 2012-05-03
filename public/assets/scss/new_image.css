@@ -38,6 +38,9 @@
     width: 75px;
     height: 75px;
     margin: 0.113em; }
+  .image-container.medium {
+    width: 640px;
+    max-height: 640px; }
 
 .image-thumb {
   width: 155px;
@@ -53,7 +56,7 @@
     max-width: 155px;
     max-height: 155px; }
   .image.medium {
-    width: 640px;
+    max-width: 640px;
     max-height: 640px; }
     .image.medium img {
       max-width: 640px;

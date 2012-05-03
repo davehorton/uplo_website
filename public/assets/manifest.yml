@@ -27,6 +27,7 @@ btn-cancel.png: btn-cancel-8641548e8d97c6dad9281a63ebb145f3.png
 btn-checkout.jpg: btn-checkout-213d609b81160865a8ca9d52534b3104.jpg
 btn-comment.jpg: btn-comment-0a73efa9af8378462e4d4bad7317d5fb.jpg
 btn-dowload-app.png: btn-dowload-app-2e9fc66a9ec53cf550430ad32ddc2fba.png
+btn-follow.png: btn-follow-ce4dd860ca4ed5faa085c1409ab5fd8a.png
 btn-like.jpg: btn-like-6f20784a44e6d51ea7da01afea8f9dee.jpg
 btn-more-details.jpg: btn-more-details-eff40444c687c18a1b5357a6b95d8b15.jpg
 btn-order.jpg: btn-order-3a014c1992c917f45763abe22d3d5ea1.jpg
@@ -225,8 +226,8 @@ scss/cart_new.css: scss/cart_new-d300793a176608b402735aa3c6fa65ef.css
 scss/dialog.css: scss/dialog-5dec5a3c5274437ee34726e7e4356988.css
 scss/filter.css: scss/filter-739c80ba8eabd3a953be7d9ea50b38b6.css
 scss/image.css: scss/image-64b6683d484780bff39a790b7c1d60b3.css
-scss/new_image.css: scss/new_image-eb7bfd2373081e28fb0350b9872ddfef.css
-scss/public.css: scss/public-d83cf748afe7b2e98383844790872553.css
+scss/new_image.css: scss/new_image-fad11c6c5ba625dcf7c693e53ad44716.css
+scss/public.css: scss/public-a33257a4fd2b640786a2a1334bce45bf.css
 scss/sale.css: scss/sale-e2b81e6ec387b112cc033cb7957a5570.css
 scss/search.css: scss/search-4ce78cb5c202f9d4f94d7ce58c348bd7.css
 slideshow.css: slideshow-4e9846ec17887bfc57b83c7043b75588.css
