@@ -690,9 +690,15 @@ p, ul{
     margin: 6px 0 6px 10px;
   }
   #btn-follow {
-    background: url('/assets/btn-follow.png') no-repeat;
-    width: 57px;
-    height: 23px;
     margin: 12px 0;
+    height: 23px;
+    &.follow {
+      background: url('/assets/btn-follow.png') no-repeat;
+      width: 57px;
+    }
+    &.unfollow {
+      background: url('/assets/btn-unfollow.png') no-repeat;
+      width: 68px;
+    }
   }
 }

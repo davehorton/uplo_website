@@ -153,8 +153,12 @@ $color-light-gray: #a1a1a1;
           background: url('/assets/btn-comment.jpg') no-repeat;
           width: 98px;
         }
-        &.like, &.dislike {
+        &.like {
           background: url('/assets/btn-like.jpg') no-repeat;
+          width: 65px;
+        }
+        &.dislike {
+          background: url('/assets/btn-dislike.png') no-repeat;
           width: 65px;
         }
         &.order {

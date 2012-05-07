@@ -17,8 +17,10 @@
         %span.text.black= @author.username.truncate(20)
       .text.gray.small.line18= "#{@author.fullname} &bull; #{@author.images.length} Items".html_safe
     - if current_user.id != @author.id
-      .right
-        #btn-follow.button{ :data => { 'author-id' => "#{ @author.id }", 'following' => "#{ @author.has_follower?(current_user.id)}"} }
+      - is_author_following = @author.has_follower?(current_user.id)
+      - follow_class = is_author_following ? 'unfollow' : 'follow'
+      .buttons-container.right
+        #btn-follow.button{ :class => "#{ follow_class }", :data => { 'author-id' => "#{ @author.id }", 'following' => "#{ is_author_following }"} }
   .line-separator.clear{:style => 'margin: 10px 0 0px;'} &nbsp;
   .text.black.left{:style => "margin-bottom:10px;"}= "Uploaded on #{@image.created_at.strftime('%B %d, %Y')}"
   .line-separator.clear{:style => 'margin: 10px 0 5px;'} &nbsp;
@@ -154,8 +156,12 @@
               alert(response.msg);
             } else if(is_unfollow=='false') {
               $('#btn-follow').attr('data-following', 'true');
+              $('#btn-follow').removeClass('follow');
+              $('#btn-follow').addClass('unfollow');
             } else {
               $('#btn-follow').attr('data-following', 'false');
+              $('#btn-follow').removeClass('unfollow');
+              $('#btn-follow').addClass('follow');
             }
           }
         });
@@ -212,8 +218,12 @@
               $(".actions .like .times")[0].innerHTML = response.likes;
               if(is_dislike == 'true'){
                 $("#btn-like").attr('data-dislike', 'false');
+                $('#btn-like').removeClass('dislike');
+                $('#btn-like').addClass('like');
               }else{
                 $("#btn-like").attr('data-dislike', 'true');
+                $('#btn-like').removeClass('like');
+                $('#btn-like').addClass('dislike');
               }
             }
           },
