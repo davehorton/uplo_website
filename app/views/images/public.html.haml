@@ -25,9 +25,9 @@
       #download-app.clear
 
 - content_for :center_content do
-  .image-container.clearfix
+  .image-container.medium.clearfix
     = image_tag @image.data.url(:medium), :class => 'image medium'
-  .buttons-container.clear
+  .buttons-container.left
     %a.left{:target => '_blank', :href=>"https://twitter.com/share", :class=>"twitter-share-button", :data => {:lang => "en", :count => "horizontal", :text => "Shared from UPLO -"}}
     .fb-like.left{ 'data-href'=>"#{ url_for(:only_path => false) }", 'data-send'=>'false', 'data-layout'=>'button_count', 'data-show-faces'=>'false', 'data-font'=>'arial' }
 

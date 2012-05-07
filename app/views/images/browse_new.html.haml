@@ -9,13 +9,18 @@
 - content_for :right_content do
   .breadcrum{:style => 'line-height:12.5px;'}= @image.name
   .line-separator{:style => 'margin: 10px 0 0px;'} &nbsp;
-  .left{:style => "height:48px; margin-bottom:10px;"}
-    .left= image_tag @image.gallery.user.avatar(:small)
-    .left{:style => 'padding-left:10px;'}
-      .text.bold= "By #{@image.username}"
-      .text.bold= "#{@image.user_fullname} &bull; #{@author.images.length} items".html_safe
+  #author-section.left
+    .left= image_tag @author.avatar(:small)
+    .info.left
+      .text.medium.line18
+        %span.text.gray By
+        %span.text.black= @author.username.truncate(20)
+      .text.gray.small.line18= "#{@author.fullname} &bull; #{@author.images.length} Items".html_safe
+    - if current_user.id != @author.id
+      .right
+        #btn-follow.button{ :data => { 'author-id' => "#{ @author.id }", 'following' => "#{ @author.has_follower?(current_user.id)}"} }
   .line-separator.clear{:style => 'margin: 10px 0 0px;'} &nbsp;
-  .text.bold.left{:style => "margin-bottom:10px;"}= "Uploaded on #{@image.created_at.strftime('%B %d, %Y')}"
+  .text.black.left{:style => "margin-bottom:10px;"}= "Uploaded on #{@image.created_at.strftime('%B %d, %Y')}"
   .line-separator.clear{:style => 'margin: 10px 0 5px;'} &nbsp;
   .text.normal{:style => 'width:300px;'}
     Lorem ipsum dolor sit amet consectetur adipisicing elit sed do eiusmod tempor incididunt ut labone et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco.
@@ -30,7 +35,7 @@
         - (0...@images.length). each do |idx|
           - image = @images[idx]
           - url = url_for(:controller => "images", :action => "browse", :id => "#{image.id}")
-          - additional_class = (idx%5 == 0) ? "no-padding-left" : ((idx%5==4) ? "no-padding-right" : "")
+          - additional_class = (idx%4 == 0) ? "no-padding-left" : ((idx%4==3) ? "no-padding-right" : "")
           .image-container.small{:id => "image-container-#{image.id}", :title=>"#{image.name}", :class => "#{additional_class}"}
             %a{ :href => "#{url}" }
               %dl.entry
@@ -96,9 +101,8 @@
         .left &nbsp;Comments
     .right
       - like_class = @dislike ? "dislike" : "like"
-      - liked_url = url_for(:controller => 'images', :action => 'switch_liked', :id => params[:id], :dislike => @dislike)
       - order_url = url_for(:controller => 'images', :action => 'order', :id => params[:id])
-      .button.left{:class => "#{like_class}", :onclick => 'update_liked();', :data => {:url => liked_url, :dislike => @dislike, :id => params[:id]}}
+      #btn-like.button.left{:class => "#{like_class}", :onclick => 'update_liked();', :data => { 'id' => params[:id], 'dislike' => "#{ @dislike }" }}
       .button.comment.not-implement.left
       .button.order.left{:onclick => "window.location.href = '#{order_url}';", :data => {:url => "#{order_url}"}}
       .button.share.left{:onclick => "display_sharing_box();"}
@@ -137,6 +141,25 @@
       $('#email-sharing-popup .close').click(function(){
         $.modal.close();
       });
+      $('#btn-follow').click(function(){
+        var author_id = $(this).attr('data-author-id');
+        var is_unfollow = $(this).attr('data-following');
+        $.ajax({
+          url: '/users/follow',
+          type: "GET",
+          data: { user_id:author_id, unfollow: is_unfollow },
+          dataType: "json",
+          success: function(response){
+            if(response.success==false){
+              alert(response.msg);
+            } else if(is_unfollow=='false') {
+              $('#btn-follow').attr('data-following', 'true');
+            } else {
+              $('#btn-follow').attr('data-following', 'false');
+            }
+          }
+        });
+      });
       $('#btn-cancel').click(function(){
         $.modal.close();
       });
@@ -164,7 +187,7 @@
         var box, top, left;
         box = $('#social-sharing');
         btn_share = $('.button.share');
-        img = $('.sections .image.medium');
+        img = $('.sections .image-container.medium');
         if(box.hasClass('hide')) {
           top = img.height() - box.height();
           left = img.width() - box.width() + 18;
@@ -177,26 +200,21 @@
       }
 
       function update_liked(){
+        var image_id = $('#btn-like').attr('data-id');
+        var is_dislike = $('#btn-like').attr('data-dislike');
         $.ajax({
-          url: $(".button.like").attr('data-url'),
+          url: '/images/switch_like',
           type: "GET",
+          data: { id:image_id, dislike:is_dislike },
           dataType: "json",
           success: function(response){
             if(response.success==true){
-              $(".public-preview .like .time")[0].innerHTML = response.likes;
-              id = $(".button-container .like").attr('data-id');
-              dislike = $(".button-container .like").attr('data-dislike');
-              if(dislike == "true"){
-                dislike = "false";
-                $(".button-container .like").attr('value', "Like");
+              $(".actions .like .times")[0].innerHTML = response.likes;
+              if(is_dislike == 'true'){
+                $("#btn-like").attr('data-dislike', 'false');
               }else{
-                dislike = "true";
-                $(".button-container .like").attr('value', "Dislike");
+                $("#btn-like").attr('data-dislike', 'true');
               }
-
-              liked_url = "/images/switch_like/" + id + "?dislike=" + dislike;
-              $(".button-container .like").attr('data-url', liked_url);
-              $(".button-container .like").attr('data-dislike', dislike);
             }
           },
           fail: function(){}

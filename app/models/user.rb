@@ -32,6 +32,8 @@ class User < ActiveRecord::Base
   has_many :image_likes, :dependent => :destroy
   has_many :orders
   has_one :cart, :dependent => :destroy
+  has_many :user_followers, :foreign_key => :user_id, :class_name => 'UserFollow'
+  has_many :followers, :through => :user_followers
 
   # VALIDATION
   validates_presence_of :first_name, :last_name, :email, :username, :message => 'cannot be blank'
@@ -188,6 +190,10 @@ class User < ActiveRecord::Base
 
   def is_male?
     (self.gender.to_s == GENDER_MALE)
+  end
+
+  def has_follower?(user_id)
+    return UserFollow.exists?({ :user_id => self.id, :followed_by => user_id })
   end
 
   def gender_string

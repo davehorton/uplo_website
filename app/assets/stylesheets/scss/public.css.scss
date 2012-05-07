@@ -13,7 +13,7 @@ $fuzzy-text: #CBCBCB;
   .images-wrapper {
     margin: -3px 0;
   }
-  .image-container {
+  .image-container.medium {
     height: 482px;
     line-height: 482px;
     border: 1px solid $fuzzy-text;
@@ -27,13 +27,6 @@ $fuzzy-text: #CBCBCB;
 }
 #gallery-section, #image-section {
   margin-bottom: 15px;
-}
-#author-section {
-  height: 48px;
-  margin-bottom: 10px;
-  .info {
-    margin: 6px 0 6px 10px;
-  }
 }
 
 /*==================================================================================*/

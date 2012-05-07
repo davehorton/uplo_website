@@ -9,6 +9,7 @@ $thumb-image-size: 155px;
 $medium-image-size: 640px;
 $image-space: 0.113em;
 $color-black: #111111;
+$color-light-gray: #a1a1a1;
 
 /*==================================================================================*/
 /* CLASS */
@@ -58,6 +59,9 @@ $color-black: #111111;
   &.medium {
     width: $medium-image-size;
     max-height: $medium-image-size;
+    height: 482px;
+    line-height: 482px;
+    border: 1px solid $color-light-gray;
   }
 }
 
@@ -114,7 +118,7 @@ $color-black: #111111;
 }
 
 .sections {
-  width: 640px;
+  width: 642px;
   position: relative;
   .actions {
     width: 100%;

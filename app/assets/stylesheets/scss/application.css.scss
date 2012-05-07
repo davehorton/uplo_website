@@ -2,9 +2,9 @@
 /* CONSTANT */
 /*==================================================================================*/
 $frame-width: 960px;
-$fuzzy-text: #CBCBCB;
 $color-black: #111111;
 $color-gray: #606060;
+$color-light-gray: #a1a1a1;
 $color-background: #f8f8f8;
 $font-size-normal: 12px;
 $font-family: Arial;
@@ -98,7 +98,7 @@ p, ul{
 * html .clearfix,
 *:first-child+html .clearfix { zoom: 1; }
 .round-box {
-  border: 1px solid $fuzzy-text;
+  border: 1px solid $color-light-gray;
   border-radius: 5px;
 }
 .clear {
@@ -127,6 +127,9 @@ p, ul{
   }
   &.gray {
     color: $color-gray;
+  }
+  &.light-gray {
+    color: $color-light-gray;
   }
   &.black {
     color: $color-black;
@@ -158,7 +161,7 @@ p, ul{
   font-weight: normal;
 }
 .fuzzy {
-  color: $fuzzy-text;
+  color: $color-light-gray;
 }
 .italic {
   font-style: italic;
@@ -346,7 +349,7 @@ p, ul{
   height: 27px;
 }
 .simplemodal-overlay {
-  background-color: $fuzzy-text;
+  background-color: $color-light-gray;
 }
 
 /*==================================================================================*/
@@ -499,7 +502,7 @@ p, ul{
   min-height: 100px;
   border: 1px solid transparent;
   border-radius: 5px;
-  box-shadow: 1px -1px 5px $fuzzy-text;
+  box-shadow: 1px -1px 5px $color-light-gray;
   background-color: white;
   .header {
     width: 470px;
@@ -554,7 +557,7 @@ p, ul{
     color: $color-black;
     width: 100%;
     .right {
-      border: 1px solid $fuzzy-text;
+      border: 1px solid $color-light-gray;
       height: 13px;
       line-height: 10px;
       text-align: center;
@@ -572,13 +575,13 @@ p, ul{
     padding: 10px;
     border: 1px solid transparent;
     border-radius: 5px;
-    box-shadow: 1px -1px 5px $fuzzy-text;
+    box-shadow: 1px -1px 5px $color-light-gray;
     background-color: white;
     .close {
-      color: $fuzzy-text;
+      color: $color-light-gray;
       width: 100%;
       .right {
-        border: 1px solid $fuzzy-text;
+        border: 1px solid $color-light-gray;
         height: 13px;
         line-height: 10px;
         text-align: center;
@@ -611,8 +614,8 @@ p, ul{
 }
 
 #comment-field {
-  border: 1px solid $fuzzy-text;
-  // color: $fuzzy-text;
+  border: 1px solid $color-light-gray;
+  // color: $color-light-gray;
   width: 543px;
   height: 100px;
   margin-bottom: 10px;
@@ -678,4 +681,18 @@ p, ul{
 }
 #recent-images {
   width: 240px;
+}
+#author-section {
+  width: 100%;
+  height: 48px;
+  margin-bottom: 10px;
+  .info {
+    margin: 6px 0 6px 10px;
+  }
+  #btn-follow {
+    background: url('/assets/btn-follow.png') no-repeat;
+    width: 57px;
+    height: 23px;
+    margin: 12px 0;
+  }
 }
