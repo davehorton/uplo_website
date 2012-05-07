@@ -40,7 +40,10 @@
     margin: 0.113em; }
   .image-container.medium {
     width: 640px;
-    max-height: 640px; }
+    max-height: 640px;
+    height: 482px;
+    line-height: 482px;
+    border: 1px solid #a1a1a1; }
 
 .image-thumb {
   width: 155px;
@@ -81,7 +84,7 @@
     font-size: 14px; }
 
 .sections {
-  width: 640px;
+  width: 642px;
   position: relative; }
   .sections .actions {
     width: 100%;
