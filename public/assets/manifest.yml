@@ -26,6 +26,7 @@ btn-cancel-57x23.png: btn-cancel-57x23-fe29530acbf7897decd886e286e6a299.png
 btn-cancel.png: btn-cancel-8641548e8d97c6dad9281a63ebb145f3.png
 btn-checkout.jpg: btn-checkout-213d609b81160865a8ca9d52534b3104.jpg
 btn-comment.jpg: btn-comment-0a73efa9af8378462e4d4bad7317d5fb.jpg
+btn-dislike.png: btn-dislike-7b20ce2baa59fecb897f5fbf0506b621.png
 btn-dowload-app.png: btn-dowload-app-2e9fc66a9ec53cf550430ad32ddc2fba.png
 btn-follow.png: btn-follow-ce4dd860ca4ed5faa085c1409ab5fd8a.png
 btn-like.jpg: btn-like-6f20784a44e6d51ea7da01afea8f9dee.jpg
@@ -36,6 +37,7 @@ btn-post-comment.jpg: btn-post-comment-ab1b739ac44614fe54d98665f3c7f234.jpg
 btn-save-changes.jpg: btn-save-changes-413071e9fb3dfc42c23523d7391c80e7.jpg
 btn-send.png: btn-send-ff6d3239a55ddfae94196aad81f6bffb.png
 btn-share.png: btn-share-40644dc10f0910f48bbbd6ddf49fa370.png
+btn-unfollow.png: btn-unfollow-9da24de1d8ae6551902e63b25a080bef.png
 cancel-uploadify.gif: cancel-uploadify-c195bd1e99bbcdc1a1e4649e945a00c8.gif
 cancel.png: cancel-c54ffe2f8b6e7a006dd6c45c59a8e116.png
 cart_icon.png: cart_icon-aaf11f778929f7fdfa32c3db56f0635d.png
@@ -219,14 +221,14 @@ file_upload/jquery.fileupload-ui.css: file_upload/jquery.fileupload-ui-f39575881
 file_upload/progressbar.gif: file_upload/progressbar-54dfeacc002a35b014f009faa50bf254.gif
 jquery-ui.custom.css: jquery-ui.custom-bb782aff6a70a3531739cdd09fe60b50.css
 jquery.contextMenu.css: jquery.contextMenu-5e13ffab2ad4f1c83de146893d8f0b86.css
-scss/application.css: scss/application-7f57deba6dabaf15835623cba82127b9.css
+scss/application.css: scss/application-f8ef8f904fc6b1efca9f4d899c3c9247.css
 scss/banner.css: scss/banner-b114455bc546baa1732e22ae59d0277c.css
 scss/cart.css: scss/cart-a00c819367f1c26885c93fd320e87746.css
 scss/cart_new.css: scss/cart_new-d300793a176608b402735aa3c6fa65ef.css
 scss/dialog.css: scss/dialog-5dec5a3c5274437ee34726e7e4356988.css
 scss/filter.css: scss/filter-739c80ba8eabd3a953be7d9ea50b38b6.css
 scss/image.css: scss/image-64b6683d484780bff39a790b7c1d60b3.css
-scss/new_image.css: scss/new_image-b5e9de8c955d0a972da780da37c4b5d8.css
+scss/new_image.css: scss/new_image-cfe721ca77e2a71028bd8acf2c6f2356.css
 scss/public.css: scss/public-76de5a9b2cea8bdd362e275f12311895.css
 scss/sale.css: scss/sale-e2b81e6ec387b112cc033cb7957a5570.css
 scss/search.css: scss/search-4ce78cb5c202f9d4f94d7ce58c348bd7.css

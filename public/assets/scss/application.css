@@ -586,7 +586,11 @@ p, ul {
   #author-section .info {
     margin: 6px 0 6px 10px; }
   #author-section #btn-follow {
-    background: url("/assets/btn-follow.png") no-repeat;
-    width: 57px;
-    height: 23px;
-    margin: 12px 0; }
+    margin: 12px 0;
+    height: 23px; }
+    #author-section #btn-follow.follow {
+      background: url("/assets/btn-follow.png") no-repeat;
+      width: 57px; }
+    #author-section #btn-follow.unfollow {
+      background: url("/assets/btn-unfollow.png") no-repeat;
+      width: 68px; }

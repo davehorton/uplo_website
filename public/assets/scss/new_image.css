@@ -111,8 +111,11 @@
       .sections .actions .right .button.comment {
         background: url("/assets/btn-comment.jpg") no-repeat;
         width: 98px; }
-      .sections .actions .right .button.like, .sections .actions .right .button.dislike {
+      .sections .actions .right .button.like {
         background: url("/assets/btn-like.jpg") no-repeat;
+        width: 65px; }
+      .sections .actions .right .button.dislike {
+        background: url("/assets/btn-dislike.png") no-repeat;
         width: 65px; }
       .sections .actions .right .button.order {
         background: url("/assets/btn-order.jpg") no-repeat;
