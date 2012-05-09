@@ -214,7 +214,8 @@ p, ul {
   .pagination .previous_page, .pagination .next_page {
     width: 10px;
     height: 18px;
-    padding: 0.2em 0.5em; }
+    padding: 0.2em 0.5em;
+    line-height: 18px; }
   .pagination .previous_page {
     /*
       background: url("/assets/back.png") no-repeat scroll center center transparent;
@@ -413,7 +414,7 @@ p, ul {
 
 #bottom {
   width: 100%;
-  font-size: 12px;
+  font-size: 11px;
   margin: 10px 0 30px; }
 
 #left {
