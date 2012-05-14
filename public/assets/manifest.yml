@@ -225,14 +225,14 @@ file_upload/jquery.fileupload-ui.css: file_upload/jquery.fileupload-ui-f39575881
 file_upload/progressbar.gif: file_upload/progressbar-54dfeacc002a35b014f009faa50bf254.gif
 jquery-ui.custom.css: jquery-ui.custom-bb782aff6a70a3531739cdd09fe60b50.css
 jquery.contextMenu.css: jquery.contextMenu-5e13ffab2ad4f1c83de146893d8f0b86.css
-scss/application.css: scss/application-7f49ed7be5e900186a9b5d86396fff3d.css
+scss/application.css: scss/application-591542547b00e618bbbe4337a9b82342.css
 scss/banner.css: scss/banner-630fe775345c41680ad1d61a8d708f61.css
 scss/cart.css: scss/cart-a00c819367f1c26885c93fd320e87746.css
 scss/cart_new.css: scss/cart_new-f026934959eef4690f114e94b25f3a19.css
 scss/dialog.css: scss/dialog-5dec5a3c5274437ee34726e7e4356988.css
 scss/filter.css: scss/filter-739c80ba8eabd3a953be7d9ea50b38b6.css
 scss/image.css: scss/image-64b6683d484780bff39a790b7c1d60b3.css
-scss/new_image.css: scss/new_image-e58f2e422ca65a65613528fe78d8170a.css
+scss/new_image.css: scss/new_image-914f2ee8589dd721959bc07753627f2f.css
 scss/public.css: scss/public-76de5a9b2cea8bdd362e275f12311895.css
 scss/sale.css: scss/sale-e2b81e6ec387b112cc033cb7957a5570.css
 scss/search.css: scss/search-4ce78cb5c202f9d4f94d7ce58c348bd7.css
