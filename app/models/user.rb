@@ -19,7 +19,7 @@ class User < ActiveRecord::Base
 
   # Paperclip
   has_attached_file :avatar,
-   :styles => {:thumb => "180x180>", :small => "48x48>" },
+   :styles => {:thumb => "180x180>", :medium => "48x48>", :small => '24x24>' },
    :storage => :s3,
    :s3_credentials => "#{Rails.root}/config/amazon_s3.yml",
    :path => "user/:id/avatar/:style.:extension",

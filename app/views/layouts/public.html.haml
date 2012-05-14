@@ -46,11 +46,11 @@
       #right.panel.right
         %a#logo.clear{:href => "/" }
           = image_tag("uplo_logo.png", {:alt => "UPLO"})
-        .line-separator.clear{ :style => 'margin:15px 0 5px;'} &nbsp;
+        .line-separator.clear{ :style => 'margin:15px 0 5px;'}
         = yield :right_content
 
       #bottom.panel
-        .line-separator &nbsp;
+        .line-separator
         .text.light-gray.line18 Copyright &copy; 2012 UPLO. All rights reserved
         #build-version{:style => "text-align: center; font-size: 12px"}= "Build 8: 2012-03-27"
 

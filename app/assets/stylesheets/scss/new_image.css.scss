@@ -4,43 +4,47 @@
 $fuzzy-text: #CBCBCB;
 $normal-text: #5A5A5A;
 $bold-text: #000000;
-$small-image-size: 75px;
+$small-image-size: 68px;
 $thumb-image-size: 155px;
-$medium-image-size: 640px;
-$image-space: 0.113em;
+$medium-image-size: 638px;
+$small-avatar-size: 24px;
+$medium-avatar-size: 48px;
+$image-space: 3px;
 $color-black: #111111;
+$color-gray: #606060;
 $color-light-gray: #a1a1a1;
 
 /*==================================================================================*/
 /* CLASS */
 /*==================================================================================*/
+.avatar {
+  &.small {
+    width: $small-avatar-size;
+    height: $small-avatar-size;
+  }
+  &.medium {
+    width: $medium-avatar-size;
+    height: $medium-avatar-size;
+  }
+}
 .gallery-container {
-  margin: $image-space $image-space 10px $image-space;
+  margin: $image-space $image-space 12px $image-space;
   background-color: #FFFFFF;
   border-bottom: 1px solid $fuzzy-text;
   .image-container {
-    margin: 0 0 10px 0 !important;
+    margin: 0 !important;
     border: 1px solid $fuzzy-text;
     line-height: 153px;
     // background-color: $color-black;
   }
   .gallery-info {
-    font-size: 12px;
-    padding: 0.113em 10px;
-    margin-bottom: 10px;
-  }
-  .text.bold {
-    font-weight: bold;
-  }
-  .text {
-    line-height: 18px;
+    padding: 10px 10px 20px;
   }
 }
 .image-container {
   display: inline-block;
   float: left;
-  height: auto;
-  border: 1px solid transparent;
+  // border: 1px solid transparent;
   text-align: center;
   vertical-align: middle;
   img {
@@ -58,9 +62,7 @@ $color-light-gray: #a1a1a1;
   }
   &.medium {
     width: $medium-image-size;
-    max-height: $medium-image-size;
-    height: 482px;
-    line-height: 482px;
+    line-height: 425px;
     border: 1px solid $color-light-gray;
   }
 }
@@ -177,9 +179,19 @@ $color-light-gray: #a1a1a1;
 #spotlight-images {
   width: 710px;
   .image-container.thumb {
-    width: 172px;
+    width: 170px;
     img {
-      width: 172px;
+      width: 170px;
+    }
+  }
+}
+#recent-images {
+  .image-container.small {
+    width: 75px;
+    height: 74.5px;
+    margin: 2px;
+    img {
+      height: 74.5px;
     }
   }
 }
@@ -187,4 +199,5 @@ $color-light-gray: #a1a1a1;
   background: url('/assets/btn-add-gallery.png') no-repeat;
   width: 127px;
   height: 23px;
+  margin-bottom: 8px;
 }

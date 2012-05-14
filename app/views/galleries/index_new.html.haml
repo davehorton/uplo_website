@@ -4,10 +4,8 @@
   = stylesheet_link_tag "scss/new_image.css", 'jquery.contextMenu.css'
 
 - content_for :top_content do
-  %div{:style => "padding-top:15px;"}
-    .breadcrum.left
-      %span My Galleries
-    %a#new-gallery.right{ :href => '/galleries/new' }
+  .text.black.bold.font16.line24.left My Galleries
+  %a#new-gallery.right{ :href => '/galleries/new' }
 
 .wrapper
   #gallery-form-container.clearfix.hidden{:style => "display: none"}
@@ -23,11 +21,11 @@
         %a.image-container.thumb{ :href => gallery_images_path(gallery), :title=>"#{gallery.name}" }
           = async_image_tag(gallery_cover_image_url(gallery), :class => "gallery-cover-image image thumb")
 
-        .gallery-info.clear
-          .text.bold.name{:title => gallery.name}=raw gallery.name.truncate(25)
-          .text.normal.photo-number= (gallery.images.length > 0 ? pluralize(gallery.images.length, "Image") : "No Image")
-          .text.normal.update-time= "Last Updated: #{gallery.updated_at_string}"
-          .text.fuzzy.permission= gallery.permission_string.titleize
+        .gallery-info.text.font11.line16.clear
+          .text.black.bold.name{:title => gallery.name}=raw gallery.name.truncate(25)
+          .text.gray.photo-number= (gallery.images.length > 0 ? pluralize(gallery.images.length, "Image") : "No Image")
+          .text.gray.update-time= "Last Updated: #{gallery.updated_at_string}"
+          .text.fuzzy-gray.permission= gallery.permission_string.titleize
           %a.share-link.text.normal{ :id => "share-context-menu-#{gallery.id}", :href=>'#', :data => { :public_url => "#{gallery.public_link}", :cover_url => "#{gallery_cover_image_url(gallery)}", :email_url => "#{ url_for(:controller => 'galleries', :action => 'mail_shared_gallery', :gallery_id => gallery.id) }", :gallery_name => "#{gallery.name.truncate(20)}", :gallery_user => "#{gallery.user.username.truncate(15)}" } } Share
   = render_pagination(@galleries, {:controller => "galleries", :action => params[:action]})
 

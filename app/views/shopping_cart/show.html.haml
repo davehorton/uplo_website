@@ -1,10 +1,10 @@
 - content_for :head do
-  = stylesheet_link_tag("scss/cart_new.css", "scss/dialog.css")
+  = stylesheet_link_tag("scss/cart_new.css", "scss/dialog.css", 'scss/new_image.css')
   = javascript_include_tag("app/popup.js")
 
 - content_for :top_content do
-  .breadcrum Shopping Cart
-  .line-separator &nbsp;
+  .text.black.bold.font16 Shopping Cart
+  .line-separator
 
 .wrapper
   - if @line_items.empty?
@@ -13,16 +13,16 @@
     = render :partial => "show_details_new"
 
   - if @line_items.empty?
-    .line-separator.clear{:style => 'width: 100%;'} &nbsp;
+    .line-separator.clear{:style => 'width: 100%;'}
     .actions.right
       .shopping.left= link_to "Continue shopping", "/back", :method => "get"
   - else
-    .actions.right
-      .right.italic{:style => "font-size: 12px;"}
+    .actions.text.font12.line18.right
+      .right.text.gray.italic
         Shipping is Calculated at the Next Step, Before You Pay
-      .right.clear{:style => "line-height:50px;"}
+      .right.clear{ :style => 'margin-top:20px;' }
         .shopping.left= link_to "Continue shopping", "/back", :method => "get"
-        .left &nbsp;or&nbsp;
+        .left{:style => 'line-height: 28px;'} &nbsp;&nbsp;or&nbsp;&nbsp;
         - unless @order.line_items.empty?
           %a.checkout.left{:href => "#{url_for(:controller => 'shopping_cart', :action => 'checkout')}"}
 

@@ -3,7 +3,7 @@
 
 - content_for :top_content do
   .breadcrum.left{:style => "padding-top:15px;"} My Sales
-  .line-separator.clear &nbsp;
+  .line-separator.clear
 
 .wrapper
   .clearfix
@@ -24,7 +24,7 @@
               %span= number_to_currency image.total_sales, {:precision => 2}
               %span.fuzzy Cumulative
             .details{:data => {:url => "#{url}"}}
-        .line-separator.clear &nbsp;
+        .line-separator.clear
   .clear= render_pagination(@sales, {:controller => "sales", :action => params[:action]})
 
 - content_for :js do

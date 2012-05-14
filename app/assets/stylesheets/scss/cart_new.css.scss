@@ -1,23 +1,19 @@
 /*==================================================================================*/
 /* CONSTANT */
 /*==================================================================================*/
-$fuzzier-color: #EEEEEE;
-$fuzzy-text: #CBCBCB;
-$normal-text: #5A5A5A;
-$bold-text: #000000;
+$color-line-separator: #cccccc;
 
 /*==================================================================================*/
 /* IDs */
 /*==================================================================================*/
 #order-details {
   .round-box {
-    width: 298px;
+    width: 290px;
     padding: 0;
   }
   .item {
+    margin: 8px 10px;
     width: 125px;
-    line-height: 22px;
-    padding: 5px 10px;
     input[type='radio'] {
       margin: 0;
       padding: 0;
@@ -28,11 +24,15 @@ $bold-text: #000000;
       float: none;
       margin: 0;
     }
+    #line_item_quantity {
+      margin: -5px;
+      padding: 0 5px;
+      width: 116px;
+    }
   }
 }
 
 #order-shippings {
-  color: $bold-text;
   #card_ccv {
     width: 73px;
   }
@@ -48,8 +48,8 @@ $bold-text: #000000;
     .edit {
       width: 281px;
       font-size: 11.5px;
-      background-color: #EEEEEE;
-      border: 1px solid #CBCBCB;
+      background-color: #ebebeb;
+      border: 1px solid #d8d8d8;
       padding: 15px 10px;
       a {
         text-decoration: underline;
@@ -57,19 +57,22 @@ $bold-text: #000000;
       };
     }
   }
+  .grand-total {
+    margin: 10px 0;
+  }
   .submit {
     background: url('/assets/btn-place-order.jpg') no-repeat;
     width: 94px;
     height: 28px;
+    margin: 10px 0;
   }
 }
 
 #order-summary {
   .solid-block {
-    background-color: #EEEEEE;
+    background-color: #e9e9e9;
     padding: 10px;
-    margin-top: 5px;
-    font-size: 13.5px;
+    margin-top: 10px;
     .no-background {
       background-color: white;
     }
@@ -91,7 +94,6 @@ $bold-text: #000000;
   .cell {
     width: 100px;
     text-align: center;
-    margin-top: 50px;
     &.preview {
       width: 360px;
       margin: 0;
@@ -102,51 +104,46 @@ $bold-text: #000000;
     }
   }
   .line {
-      height: 100px;
       padding: 10px 0;
-      border-bottom: 1px $fuzzy-text solid;
+      border-bottom: 1px solid $color-line-separator;
+      .cell {
+        line-height: 68px;
+      }
       .preview {
-        img {
-          width: 100px;
-          height: 100px;
-        }
         a:link {
           font-weight: normal;
+          margin-left: 3px;
         }
         .edit {
           background: url("/assets/icon-edit.jpg") no-repeat scroll 0 0 transparent;
           height: 9px;
           width: 9px;
-          margin-top: 6px;
+          margin-top: 4px;
         }
         .name{
-          color: $bold-text;
-          font-weight: bold;
           width: 250px;
           word-wrap: break-word;
-          padding-left: 10px;
-          margin-top: 50px;
+          padding: 24px 0 0 10px;
         }
       }
   }
   .header {
-    padding: 5px 0;
-    border-bottom: 1px $fuzzy-text solid;
-    color: $bold-text;
-    font-weight: bold;
-    height: 20px;
+    padding: 10px 0 5px;
+    text-shadow: 0 1px 0 #FFFFFF;
+    border-bottom: 1px solid $color-line-separator;
     .cell {
       margin: 0;
     }
   }
   .footer {
+    margin-top: 10px;
+    width: 100%;
     .summary {
-      font-weight: bold;
-      font-size: 13.5px;
-      color: $bold-text;
-    }
-    .subtotal {
-      width: 140px;
+      margin: 10px 0;
+      .cell {
+        text-align: right;
+        width: 140px;
+      }
     }
     .cell {
       margin-top: 0;
@@ -155,38 +152,33 @@ $bold-text: #000000;
 }
 
 .actions {
-  font-size: 13.5px;
-  line-height: 22px;
+  margin: 10px 0 20px 0;
   .shopping a {
-    color: $bold-text;
     font-weight: normal;
     text-decoration: underline;
+    line-height: 28px;
   }
   .checkout {
     background: url("/assets/btn-checkout.jpg") no-repeat scroll 0 0 transparent;
     height: 28px;
     width: 137px;
-    margin-top: 10px;
   }
 }
 
 .option {
-  margin-bottom: 10px;
+  margin-bottom: 15px;
   .header {
-    color: $bold-text;
-    font-size: 13px;
-    font-weight: bold;
-    padding: 9px 10px;
+    line-height: 31px;
+    padding-left: 10px;
     background: url("/assets/option-header-bg.png") repeat-x scroll 0 0 transparent;
     border: {
       top-left-radius: 5px;
       top-right-radius: 5px;
     }
-
   }
   .line {
-    border-top: 1px solid $fuzzy-text;
-    width: 298px;
+    border-top: 1px solid $color-line-separator;
+    width: 100%;
   }
 }
 
@@ -199,20 +191,12 @@ $bold-text: #000000;
 .order_summary{
   padding-right: 25px;
   width: 303px;
-  font-size: 13.5px;
   input {
     width: 200px;
   }
   .header{
-    height: 20px;
-    font-weight: bold;
-    font-size: 18px;
-    color: $bold-text;
     .italic {
-      font-size: 12px;
-      color: $normal-text;
-      font-weight: normal;
-      line-height: 20px;
+      margin-top: 5px;
     }
   }
   .inputs{
@@ -262,31 +246,16 @@ $bold-text: #000000;
 .block {
   width: 100%;
   padding: 10px 0;
-  .text {
+  .line {
     padding: 3px 5px;
     width: 273px;
-    color: $bold-text;
-    .bold, &.bold {
-      font-weight: bold;
-    }
   }
 }
 .summary {
-  padding-bottom: 10px;
   .text {
-    height: 20px;
-    padding-right: 5px;
-    .bold {
-      font-weight: bold;
-      color: $bold-text;
-    }
     .right {
       width: 120px;
       text-align: right;
     }
-  }
-  &.grand-total {
-    font-size: 17px;
-    margin: 5px 0;
   }
 }

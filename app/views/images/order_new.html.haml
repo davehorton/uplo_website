@@ -2,77 +2,76 @@
   = stylesheet_link_tag("scss/cart_new.css", "scss/new_image.css")
 
 - content_for :top_content do
-  .breadcrum{:style => "padding-top:10px;"}= @image.name
+  .text.black.bold.font16{ :style => 'margin-bottom:8px;' }= @image.name
 
 - content_for :right_content do
   - action_url = @line_item.nil? ? url_for(:controller => "shopping_cart", :action => "add_to_cart", :image_id => @image.id) : url_for(:controller => "shopping_cart", :action => "update_cart", :line_item_id => @line_item.id)
-  .right{:style => "width:300px;"}
-    .breadcrum Build Your Order
-    .line-separator &nbsp;
+  .right
+    .text.black.bold.font18 Build Your Order
+    .line-separator
     = simple_form_for(:line_item, :url => action_url, :method => 'post', :html => {:id => 'order-details'}) do |f|
       .round-box.option.left
-        .header= "Plexi Mount"
+        .header.text.black.bold.font14= "Plexi Mount"
         .line
           .item.left
             = f.radio_button(:plexi_mount, true, :checked => true)
-            = f.label(:plexi_mount_true, "Yes", :class => 'options_label')
+            = f.label(:plexi_mount_true, "Yes", :class => 'text gray font12')
           .item.left
             = f.radio_button(:plexi_mount, false)
-            = f.label(:plexi_mount_false, "No", :class => 'options_label')
+            = f.label(:plexi_mount_false, "No", :class => 'text gray font12')
 
       .round-box.option.left
-        .header= "Print Size"
+        .header.text.black.bold.font14= "Print Size"
         .line.left
           .item.left
             = f.radio_button(:size, "10x10", :checked => true)
-            = f.label(:size_300x300, "10x10", :class => 'options_label')
+            = f.label(:size_300x300, "10x10", :class => 'text gray font12')
           .item.left
             = f.radio_button(:size, "16x16")
-            = f.label(:size_500x500, "16x16", :class => 'options_label')
+            = f.label(:size_500x500, "16x16", :class => 'text gray font12')
         .line.left
           .item.left
             = f.radio_button(:size, "20x20")
-            = f.label(:size_500x500, "20x20", :class => 'options_label')
+            = f.label(:size_500x500, "20x20", :class => 'text gray font12')
           .item.left
             = f.radio_button(:size, "25x25")
-            = f.label(:size_500x500, "25x25", :class => 'options_label')
+            = f.label(:size_500x500, "25x25", :class => 'text gray font12')
 
       .round-box.option.left
-        .header= "Moulding Choice"
+        .header.text.black.bold.font14= "Moulding Choice"
         .line.left
           .item.left
             = f.radio_button(:moulding, "White", :checked => true)
-            = f.label(:moulding_white, "White", :class => 'options_label')
+            = f.label(:moulding_white, "White", :class => 'text gray font12')
           .item.left
             = f.radio_button(:moulding, "Black")
-            = f.label(:moulding_black, "Black", :class => 'options_label')
+            = f.label(:moulding_black, "Black", :class => 'text gray font12')
         .line.left
           .item.left
             = f.radio_button(:moulding, "Wood")
-            = f.label(:moulding_wood, "Wood", :class => 'options_label')
+            = f.label(:moulding_wood, "Wood", :class => 'text gray font12')
           .item.left
             = f.radio_button(:moulding, "Silver")
-            = f.label(:moulding_silver, "Silver", :class => 'options_label')
+            = f.label(:moulding_silver, "Silver", :class => 'text gray font12')
 
-      .round-box.option.left{:style => 'width:143px;'}
+      .round-box.option.left{:style => 'width:138px;'}
         - price = @line_item.nil? ? @image.price : @line_item.price
-        .header= "Price Per Item"
-        .line{:style => 'width:143px;'}
+        .header.text.black.bold.font14= "Price Per Item"
+        .line
           .item.left
             = number_to_currency(price, {:precision => 2})
 
-      .round-box.option.right{:style => 'width:143px;'}
+      .round-box.option.right{:style => 'width:138px;'}
         - quantity = @line_item.nil? ? 1 : @line_item.quantity
-        .header= "Quantity"
-        .line{:style => 'width:143px;'}
-          .item.left{:style => 'padding: 5px;'}
-            = f.text_field(:quantity, :style => 'padding:0pt 2px; width:122px;', :value => quantity, :size => '5', :title => 'Limit from 1 to 99999')
+        .header.text.black.bold.font14= "Quantity"
+        .line
+          .item.left
+            = f.text_field(:quantity, :value => quantity, :size => '5', :title => 'Limit from 1 to 99999')
     .clear
       .add-to-cart.right
 
-%div{:style => "width:640px;"}
-  .image.medium.left
-    = image_tag @image.url(:medium)
+.image-container.medium.left
+  = image_tag @image.url(:medium), :class => 'image medium'
 
 - content_for :js do
   - javascript_tag do

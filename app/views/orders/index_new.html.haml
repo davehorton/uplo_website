@@ -5,18 +5,18 @@
 - content_for :top_content do
   %div{:style => "margin: 15px 0;"}
     .breadcrum.left Checkout - Step 2 of 2
-    .line-separator.clear &nbsp;
+    .line-separator.left
 
 .wrapper
   = simple_form_for(:card, :url => "/payments/checkout?type=an", :html => {:class => "card_form", :id => 'order-shippings'}) do |f|
     #billing-address.order_summary.left{:style => "height:430px;"}
       .header
-        %span.left Billing Address
-        .italic.left
+        %span.text.black.bold.font16.left Billing Address
+        .italic.text.heavy-gray.font11.left
           %span{:style=>'color:red;'} &nbsp;&nbsp;&nbsp;*
           Required Fields
-      .line-separator.clear &nbsp;
-      .inputs
+      .line-separator.left
+      .inputs.clear
         .info
           = label_tag :billing_first_name, "First Name <span style='color:red;'>*</span>".html_safe
           = text_field :billing, :first_name, :autofocus => true, :required => true
@@ -52,15 +52,15 @@
     .left
       #shipping-address.order_summary.left
         .header
-          %span.left Shipping Address
-          .italic.left.hide
+          %span.text.black.bold.font16.left Shipping Address
+          .italic.text.heavy-gray.font11.left.hide
             %span{:style=>'color:red;'} &nbsp;&nbsp;&nbsp;*
             Required Fields
-        .line-separator.clear &nbsp;
-        .edit
+        .line-separator.left
+        .edit.clear
           %span Item(s) will be shipped to your billing address
           %a.right{:href => '#'} Edit
-        .inputs.hide
+        .inputs.clear.hide
           .info
             = label_tag :shipping_first_name, "First Name <span style='color:red;'>*</span>".html_safe
             = text_field :shipping, :first_name, :autofocus => true, :required => true
@@ -91,12 +91,12 @@
 
       .order_summary.clear{:style => "padding-top:20px;"}
         .header
-          .left Payment Information
-          .italic.left
+          .text.black.bold.font16.left Payment Information
+          .italic.text.heavy-gray.font11.left
             %span{:style=>'color:red;'} &nbsp;&nbsp;&nbsp;*
             Required Fields
-        .line-separator.clear &nbsp;
-        .inputs
+        .line-separator.left
+        .inputs.clear
           .info
             = f.label :name_on_card, "Name on Card <span style='color:red;'>*</span>".html_safe
             = f.input :name_on_card, :autofocus => true, :required => true, :label => false
@@ -117,8 +117,7 @@
           = hidden_field_tag :order_id, @order.id
 
     #order-summary.order_summary.no-padding-right.left{:style => "height:auto;min-height: 100px;"}
-      .header
-        Order Summary
+      .header.text.black.bold.font16 Order Summary
       .solid-block.left
         - subtotal = 0
         - tax_total = 0
@@ -126,34 +125,34 @@
           - line_item = @order.line_items[idx]
           - subtotal += line_item.price
           - tax_total += line_item.tax
-          .block.left{:style => "#{'padding-top:0;' if idx==0}"}
-            .text.bold.left= line_item.image.name
-            .text.normal.left.no-background
-              .left QTY
-              .bold.right= line_item.quantity
-            .text.normal.left
-              .left PRICE
-              .bold.right= number_to_currency line_item.price
-            .text.normal.left.no-background
-              .left TAX
-              .bold.right= number_to_currency line_item.tax
-        .summary.right
-          .text.right
-            .bold.left Subtotal:
-            .bold.right= number_to_currency subtotal
+          .block.text.black.line22.left{:style => "#{'padding-top:0;' if idx==0}"}
+            .line.text.bold.font11.left= line_item.image.name
+            .line.no-background.left
+              .text.font10.line11.left QTY
+              .text.bold.font13.right= line_item.quantity
+            .line.left
+              .text.font10.line11.left PRICE
+              .text.bold.font13.right= number_to_currency line_item.price
+            .line.no-background.left
+              .text.font10.line11.left TAX
+              .text.bold.font13.right= number_to_currency line_item.tax
+        .summary.text.black.font11.line18.right
+          .text.bold.right
+            .left Subtotal:
+            .right= number_to_currency subtotal
           .text.right.clear
             .left Tax:
             .right= number_to_currency tax_total
-          .text.right.clear
+          .text.clear
             .left Shipping & Handling:
             .right Free
 
-        .line-separator.clear &nbsp;
-        .grand-total.summary.right
-          .text.right.clear
-            .bold.left Grand Total:
-            .bold.right= number_to_currency(tax_total + subtotal)
-        .line-separator.clear &nbsp;
+        .line-separator.left
+        .summary.right
+          .grand-total.text.black.bold.font14.line18.right.clear
+            .left Grand Total:
+            .right= number_to_currency(tax_total + subtotal)
+        .line-separator.left
         .submit.right
 
 - content_for :js do

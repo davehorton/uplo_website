@@ -16,7 +16,7 @@ class Image < ActiveRecord::Base
 
   # Paperclip
   has_attached_file :data,
-   :styles => {:small => "75x75>", :small_preview => "100x100", :thumb => "155x155>", :spotlight => '172x155>', :medium =>  "640x640>", :large => '1000x1000>'},
+   :styles => { :small => '68x68#', :spotlight_small => '74x74#', :thumb => '155x155#', :spotlight_thumb => '174x154#', :medium => '640x640>' },
    :storage => :s3,
    :s3_credentials => "#{Rails.root}/config/amazon_s3.yml",
    :path => "image/:id/:style.:extension",

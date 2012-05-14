@@ -6,17 +6,17 @@
 
 - content_for :right_content do
   #image-section.left
-    .text.black.large.bold= @image.name.truncate(30)
+    .text.black.font18.bold= @image.name.truncate(30)
 
-  .line-separator.clear{ :style => 'margin-top:10px;'} &nbsp;
+  .line-separator.clear{ :style => 'margin-top:10px;'}
   #author-section.left
     .left= image_tag @author.avatar(:small)
     .info.left
-      .text.black.medium.line18= @author.username.truncate(20)
-      .text.gray.small.line18= "#{@author.images.length} Photos &bull; 44 Followers".html_safe
+      .text.black.font16.line18= @author.username.truncate(20)
+      .text.gray.font12.line18= "#{@author.images.length} Photos &bull; 44 Followers".html_safe
 
-  .line-separator.clear{:style => 'margin: 10px 0 5px;'} &nbsp;
-  #author-biography.text.gray.small.line16
+  .line-separator.clear{:style => 'margin: 10px 0 5px;'}
+  #author-biography.text.gray.font12.line16
     Lorem ipsum dolor sit amet consectetur adipisicing elit sed do eiusmod tempor incididunt ut labone et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco.
 
   #app-advertise.left

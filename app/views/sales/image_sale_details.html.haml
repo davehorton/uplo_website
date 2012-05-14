@@ -3,7 +3,7 @@
 
 - content_for :top_content do
   .breadcrum.left{:style => "padding-top:15px;"} My Sales
-  .line-separator.clear &nbsp;
+  .line-separator.clear
 
 .wrapper
   .clearfix
@@ -20,11 +20,11 @@
           .saled-name.text.bold= @image.name
           .saled-quantity.text.fuzzy= "#{@image.saled_quantity} Sales"
           .saled-price.text= number_to_currency @image.total_sales, {:precision => 2}
-      .line-separator.clear &nbsp;
+      .line-separator.clear
 
       .sale-chart.clear
         = render :partial => 'chart', :locals => {:total_sales => @image.total_sales, :sales => @sales}
-      .line-separator.clear &nbsp;
+      .line-separator.clear
 
       .sale-info
         .header.text.bold Purchased by
@@ -42,7 +42,7 @@
               %span= "#{line_item.moulding} Mounding,&nbsp;".html_safe
               %span= "Quantity #{line_item.quantity}"
           - if idx < (@purchased_info.length - 1)
-            .line-separator.clear &nbsp;
+            .line-separator.clear
         .clear= render_pagination(@purchased_info, {:controller => "sales", :action => params[:action]})
 
 

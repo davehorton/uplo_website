@@ -2,47 +2,39 @@
   = javascript_include_tag 'lib/jquery.simplemodal.js'
   = stylesheet_link_tag("scss/new_image.css", "scss/sale.css")
 
-
-- content_for :top_content do
-  &nbsp;
-
 - content_for :right_content do
-  .breadcrum{:style => 'line-height:12.5px;'}= @image.name
-  .line-separator{:style => 'margin: 10px 0 0px;'} &nbsp;
-  #author-section.left
-    .left= image_tag @author.avatar(:small)
-    .info.left
-      .text.medium.line18
-        %span.text.gray By
-        %span.text.black= @author.username.truncate(20)
-      .text.gray.small.line18= "#{@author.fullname} &bull; #{@author.images.length} Items".html_safe
+  .text.black.font18.bold{:style => 'line-height:12.5px;'}= @image.name
+  .line-separator
+  .author-section.left
+    = image_tag @author.avatar(:small), :class => 'left'
+    .info.text.line12.left
+      %span.text.gray.font12 By
+      %span.text.black.font12= @author.username.truncate(20)
+      .text.gray.font11= "#{@author.fullname} &bull; #{@author.images.length} Items".html_safe
     - if current_user.id != @author.id
       - is_author_following = @author.has_follower?(current_user.id)
       - follow_class = is_author_following ? 'unfollow' : 'follow'
-      .buttons-container.right
-        #btn-follow.button{ :class => "#{ follow_class }", :data => { 'author-id' => "#{ @author.id }", 'following' => "#{ is_author_following }"} }
-  .line-separator.clear{:style => 'margin: 10px 0 0px;'} &nbsp;
-  .text.black.left{:style => "margin-bottom:10px;"}= "Uploaded on #{@image.created_at.strftime('%B %d, %Y')}"
-  .line-separator.clear{:style => 'margin: 10px 0 5px;'} &nbsp;
-  .text.normal{:style => 'width:300px;'}
+      #btn-follow.button.right{ :class => "#{ follow_class }", :data => { 'author-id' => "#{ @author.id }", 'following' => "#{ is_author_following }"} }
+  .line-separator.left
+  .text.black.font12.left= "Uploaded on #{@image.created_at.strftime('%B %d, %Y')}"
+  .line-separator.left
+  .text.gray.font12.line16.left
     Lorem ipsum dolor sit amet consectetur adipisicing elit sed do eiusmod tempor incididunt ut labone et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco.
 
-  .text.bold{:style => 'margin: 10px 0 0px;'} Related images
-  .line-separator.clear &nbsp;
-  %div{:style => 'width:300px;'}
-    .clearfix
-      - if @images.blank?
-        .empty-data= "There is no image. Please add image."
-      - else
-        - (0...@images.length). each do |idx|
-          - image = @images[idx]
-          - url = url_for(:controller => "images", :action => "browse", :id => "#{image.id}")
-          - additional_class = (idx%4 == 0) ? "no-padding-left" : ((idx%4==3) ? "no-padding-right" : "")
-          .image-container.small{:id => "image-container-#{image.id}", :title=>"#{image.name}", :class => "#{additional_class}"}
-            %a{ :href => "#{url}" }
-              %dl.entry
-                %dt.preview
-                  .image.small.left= image_tag image.data(:small)
+  .clear
+  .text.black.font12{:style => 'margin-top:30px;'} Related images
+  .line-separator.left
+  .clearfix
+    - if @images.blank?
+      .empty-data= "There is no image. Please add image."
+    - else
+      - (0...@images.length). each do |idx|
+        - image = @images[idx]
+        - url = url_for(:controller => "images", :action => "browse", :id => "#{image.id}")
+        - additional_class = (idx%4 == 0) ? "no-padding-left" : ((idx%4==3) ? "no-padding-right" : "")
+        .image-container.small{:id => "image-container-#{image.id}", :title=>"#{image.name}", :class => "#{additional_class}"}
+          %a{ :href => "#{url}" }
+            .left= image_tag image.data(:small, :class => 'image small')
 
 #email-sharing-popup.left.hide
   .header.left
@@ -75,10 +67,9 @@
       %a.close{:href=>'#'}
         .right{:onclick => "$('#social-sharing').hasClass('hide');"} &times;
       .container.left
-        .text
-          .left Share this via:
-          .right Share Preferences
-        .line-separator.clear &nbsp;
+        .text.black.bold.font14.line12.left Share this via:
+        .text.black.font11.line12.right{ :style => 'padding-top:1px;'} Share Preferences
+        .line-separator.left
         .buttons-container.left
           - public_url = url_for(:controller => 'images', :action => 'public', :id => params[:id], :only_path => false)
           - flickr_request = url_for(:controller => 'images', :action => 'post_image_to_flickr', :id => params[:id], :only_path => false)
@@ -93,13 +84,13 @@
 
   .actions.left
     .left
-      .like.left
+      .like.text.fuzzy-gray.font16.left
         .icon.left
-        .times.left= @image.likes
+        .times.text.fuzzy-gray.bold.left= @image.likes
         .left &nbsp;Likes
-      .comment.left
+      .comment.text.fuzzy-gray.font16.left
         .icon.left
-        .times.left= @image.likes
+        .times.text.fuzzy-gray.bold.left= @image.likes
         .left &nbsp;Comments
     .right
       - like_class = @dislike ? "dislike" : "like"
@@ -109,20 +100,22 @@
       .button.order.left{:onclick => "window.location.href = '#{order_url}';", :data => {:url => "#{order_url}"}}
       .button.share.left{:onclick => "display_sharing_box();"}
 
-  .line-separator.clear &nbsp;
-  .sale-info
-    .header.text.bold Comments & Faves
+  .line-separator.clear
+  #comments-section
+    .header.text.black.font18.bold Comments & faves
     - (0...@purchased_info.length). each do |idx|
       - line_item = @purchased_info[idx]
       - purchaser = User.find_by_id line_item.purchaser_id.to_i
-      .user.left.clear= image_tag(purchaser.avatar.url(:small), :class => "image small")
       .left
-        %span.text.bold{:style => 'font-weight:bold;'}= purchaser.username
-        %span.text.fuzzy= "(#{line_item.creation_timestamp} ago)"
-        .text.normal
-          Great shot!
-      .line-separator.clear &nbsp;
-    .user.left.clear= image_tag('/assets/avatar-default-small.jpg', :class => "image small")
+        = image_tag(purchaser.avatar.url(:medium), :class => "avatar medium left")
+        .text.font12.line18.left
+          %span.text.black.bold= purchaser.username
+          %span.text.fuzzy-gray= "(#{line_item.creation_timestamp} ago)"
+          .text.gray
+            Great shot!
+
+      .line-separator.left
+    .user.left.clear= image_tag('/assets/avatar-default-medium.jpg', :class => "avatar medium")
     .left
       = text_area_tag 'comment', "Add your comment here...", :id => 'comment-field', :class => 'left'
       .post-comment.clear

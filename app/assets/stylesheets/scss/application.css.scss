@@ -2,10 +2,14 @@
 /* CONSTANT */
 /*==================================================================================*/
 $frame-width: 960px;
+$color-white: #ffffff;
 $color-black: #111111;
+$color-heavy-gray: #5d5d5d;
 $color-gray: #606060;
 $color-light-gray: #a1a1a1;
+$color-fuzzy-gray: #b3b3b3;
 $color-background: #f8f8f8;
+$color-line-separator: #cccccc;
 $font-size-normal: 12px;
 $font-family: Arial;
 
@@ -88,7 +92,7 @@ a {
 
 p, ul{
   text-align: justify;
-  line-height: 1.5em;
+  // line-height: 1.5em;
 }
 
 /*==================================================================================*/
@@ -98,7 +102,7 @@ p, ul{
 * html .clearfix,
 *:first-child+html .clearfix { zoom: 1; }
 .round-box {
-  border: 1px solid $color-light-gray;
+  border: 1px solid $color-line-separator;
   border-radius: 5px;
 }
 .clear {
@@ -119,6 +123,7 @@ p, ul{
 //new
 .text {
   text-align: left;
+  word-wrap: break-word;
   &.bold {
     font-weight: bold;
   }
@@ -128,20 +133,53 @@ p, ul{
   &.gray {
     color: $color-gray;
   }
+  &.heavy-gray {
+    color: $color-heavy-gray;
+  }
   &.light-gray {
     color: $color-light-gray;
+  }
+  &.fuzzy-gray {
+    color: $color-fuzzy-gray !important;
+  }
+  &.white {
+    color: #ffffff !important;
   }
   &.black {
     color: $color-black;
   }
-  &.small {
+  &.font11 {
+    font-size: 11px;
+  }
+  &.font12 {
     font-size: 12px;
   }
-  &.medium {
+  &.font13 {
+    font-size: 13px;
+  }
+  &.font14 {
+    font-size: 14px;
+  }
+  &.font16 {
     font-size: 16px;
   }
-  &.large {
+  &.font18 {
     font-size: 18px;
+  }
+  &.font20 {
+    font-size: 20px;
+  }
+  &.font24 {
+    font-size: 24px;
+  }
+  &.font32 {
+    font-size: 32px;
+  }
+  &.line11 {
+    line-height: 11px;
+  }
+  &.line12 {
+    line-height: 12px;
   }
   &.line16 {
     line-height: 16px;
@@ -149,13 +187,16 @@ p, ul{
   &.line18 {
     line-height: 18px;
   }
+  &.line24 {
+    line-height: 24px;
+  }
 }
 
 // old
 .line-separator {
-  height: 10px;
-  margin-top: 5px;
-  background: url("/assets/line_horizontal.jpg") repeat-x scroll 0 0 transparent;
+  border-bottom: 1px solid $color-line-separator;
+  width: 100%;
+  margin: 10px 0;
 }
 .normal {
   font-weight: normal;
@@ -188,7 +229,6 @@ p, ul{
   margin-left: 0 !important;
 }
 .text {
-  line-height: 22px;
   word-wrap: break-word;
   &.bold {
     color: $color-black;
@@ -323,7 +363,7 @@ p, ul{
   .button {
     width: 32px;
     height: 32px;
-    margin: 5px;
+    margin: 0 5px;
     &.email {
       background: url('/assets/icon-email.png') no-repeat;
     }
@@ -357,15 +397,12 @@ p, ul{
 /* ID */
 /*==================================================================================*/
 #header {
-  min-height: 60px;
-  height: 62px;
-  color: #ebebeb;
-  background: url("/assets/header-bg.jpg") repeat-x scroll 0 0 transparent;
+  height: 55px;
+  background: url("/assets/bg-header.png") repeat-x scroll 0 0 transparent;
+  box-shadow: 0 0 2px #1b1b1b;
 
   .wrapper {
-    height: 62px;
-    padding-top: 20px;
-    background: url("/assets/header-bg.jpg") repeat-x scroll 0 0 transparent;
+    padding-top: 16px;
   }
   .header-menu {
     li {
@@ -373,11 +410,8 @@ p, ul{
       padding: 0px 8px;
       a, option {
         color: $color-black;
-        font-size: 13px;
+        font-size: 12px;
         text-shadow: 1px 0 2px #CECECE;
-        .normal {
-          font-size: 14px;
-        }
       }
     }
   }
@@ -392,12 +426,11 @@ p, ul{
 }
 
 #banner {
-  background-color: rgb(255,255,255);
 }
 
 #top {
   width: 100%;
-  min-height: 25px;
+  margin-top: 30px;
 
   #filter-box {
     .container {
@@ -467,13 +500,37 @@ p, ul{
 
 #bottom {
   width: 100%;
-  font-size: 11px;
-  margin: 10px 0 30px;
+  margin: 20px 0;
+  .line-separator {
+    box-shadow: 0 1px 0 $color-white;
+    margin-bottom: 10px;
+  }
 }
 #left {
   margin-right: 20px;
 }
 #right {
+  width: 292px;
+  .author-section {
+    width: 100%;
+    .info {
+      margin-left: 10px;
+    }
+    #btn-follow {
+      height: 23px;
+      &.follow {
+        background: url('/assets/btn-follow.png') no-repeat;
+        width: 57px;
+      }
+      &.unfollow {
+        background: url('/assets/btn-unfollow.png') no-repeat;
+        width: 68px;
+      }
+    }
+  }
+  .line-separator {
+    margin: 10px 0;
+  }
 }
 #center {
   .intro {
@@ -494,8 +551,6 @@ p, ul{
 }
 
 #menu-items {
-  margin-left: 20px;
-  height: 40px;
 }
 
 #email-sharing-popup {
@@ -559,8 +614,7 @@ p, ul{
     width: 100%;
     .right {
       border: 1px solid $color-light-gray;
-      height: 13px;
-      line-height: 10px;
+      line-height: 13px;
       text-align: center;
       width: 13px;
     }
@@ -571,35 +625,25 @@ p, ul{
   width: 286px;
   position: absolute;
   .main {
-    width: 264px;
-    height: 95px;
+    width: 262px;
+    height: 100px;
     padding: 10px;
     border: 1px solid transparent;
     border-radius: 5px;
-    box-shadow: 1px -1px 5px $color-light-gray;
+    box-shadow: 0 0 7px #c2c2c2;
     background-color: white;
     .close {
-      color: $color-light-gray;
+      color: #bfbfbf;
       width: 100%;
       .right {
-        border: 1px solid $color-light-gray;
-        height: 13px;
-        line-height: 10px;
+        border: 1px solid #d8d8d8;
+        line-height: 14px;
         text-align: center;
-        width: 13px;
+        width: 14px;
       }
     }
     .container {
-      width: 242px;
-      padding: 0 11px 5px 11px;
-      .text {
-        color: $color-black;
-        font-size: 12px;
-        .left {
-          font-weight: bold;
-          font-size: 15px;
-        }
-      }
+      padding: 8px 10px;
     }
   }
   .tail {
@@ -612,15 +656,6 @@ p, ul{
       margin-right: 45px;
     }
   }
-}
-
-#comment-field {
-  border: 1px solid $color-light-gray;
-  // color: $color-light-gray;
-  width: 543px;
-  height: 100px;
-  margin-bottom: 10px;
-  padding: 5px;
 }
 
 #app-advertise {
@@ -690,16 +725,25 @@ p, ul{
   .info {
     margin: 6px 0 6px 10px;
   }
-  #btn-follow {
-    margin: 12px 0;
-    height: 23px;
-    &.follow {
-      background: url('/assets/btn-follow.png') no-repeat;
-      width: 57px;
-    }
-    &.unfollow {
-      background: url('/assets/btn-unfollow.png') no-repeat;
-      width: 68px;
-    }
+}
+
+#comments-section {
+  .header {
+    margin: 20px 0;
   }
+  .line-separator {
+    margin: 15px 0;
+  }
+  .avatar {
+    margin-right: 10px;
+  }
+}
+
+#comment-field {
+  border: 1px solid $color-light-gray;
+  // color: $color-light-gray;
+  width: 572px;
+  height: 100px;
+  margin-bottom: 10px;
+  padding: 5px;
 }
