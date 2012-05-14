@@ -458,15 +458,10 @@ p, ul {
   width: 300px;
   height: auto;
   word-wrap: break-word;
-  text-align: justify;
-  line-height: 20px;
-  font-size: 15px;
-  padding: 0 15px 30px 15px; }
+  margin: 10px 15px 30px; }
   #center .intro .header {
-    color: #111111;
-    font-weight: bold;
-    font-size: 18px;
-    margin: 10px 0 5px; }
+    font-size: 21px;
+    margin: 20px 0 10px; }
 
 #email-sharing-popup {
   width: 490px;
