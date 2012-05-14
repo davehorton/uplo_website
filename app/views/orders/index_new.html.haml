@@ -15,7 +15,7 @@
           %span{:style=>'color:red;'} &nbsp;&nbsp;&nbsp;*
           Required Fields
       .line-separator.left
-      .inputs.clear
+      .inputs.left
         .info
           = label_tag :billing_first_name, "First Name <span style='color:red;'>*</span>".html_safe
           = text_field :billing, :first_name, :autofocus => true, :required => true
@@ -56,7 +56,7 @@
             %span{:style=>'color:red;'} &nbsp;&nbsp;&nbsp;*
             Required Fields
         .line-separator.left
-        .edit.clear
+        .edit.left
           %span Item(s) will be shipped to your billing address
           %a.right{:href => '#'} Edit
         .inputs.clear.hide
@@ -88,14 +88,14 @@
             = label_tag :shipping_fax, "Fax Number"
             = text_field :shipping, :fax
 
-      .order_summary.clear{:style => "padding-top:20px;"}
+      .order_summary.clear{:style => "padding-top:35px;"}
         .header
           .text.black.bold.font16.left Payment Information
           .italic.text.heavy-gray.font11.left
             %span{:style=>'color:red;'} &nbsp;&nbsp;&nbsp;*
             Required Fields
         .line-separator.left
-        .inputs.clear
+        .inputs.left
           .info
             = f.label :name_on_card, "Name on Card <span style='color:red;'>*</span>".html_safe
             = f.input :name_on_card, :autofocus => true, :required => true, :label => false
