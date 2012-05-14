@@ -68,8 +68,7 @@ a {
     text-decoration: underline; }
 
 p, ul {
-  text-align: justify;
-  line-height: 1.5em; }
+  text-align: justify; }
 
 /*==================================================================================*/
 /* CLASS */
@@ -89,7 +88,7 @@ p, ul {
   zoom: 1; }
 
 .round-box {
-  border: 1px solid #a1a1a1;
+  border: 1px solid #cccccc;
   border-radius: 5px; }
 
 .clear {
@@ -107,32 +106,57 @@ p, ul {
   float: left; }
 
 .text {
-  text-align: left; }
+  text-align: left;
+  word-wrap: break-word; }
   .text.bold {
     font-weight: bold; }
   .text.highlight {
     color: #ED3B03; }
   .text.gray {
     color: #606060; }
+  .text.heavy-gray {
+    color: #5d5d5d; }
   .text.light-gray {
     color: #a1a1a1; }
+  .text.fuzzy-gray {
+    color: #b3b3b3 !important; }
+  .text.white {
+    color: #ffffff !important; }
   .text.black {
     color: #111111; }
-  .text.small {
+  .text.font11 {
+    font-size: 11px; }
+  .text.font12 {
     font-size: 12px; }
-  .text.medium {
+  .text.font13 {
+    font-size: 13px; }
+  .text.font14 {
+    font-size: 14px; }
+  .text.font16 {
     font-size: 16px; }
-  .text.large {
+  .text.font18 {
     font-size: 18px; }
+  .text.font20 {
+    font-size: 20px; }
+  .text.font24 {
+    font-size: 24px; }
+  .text.font32 {
+    font-size: 32px; }
+  .text.line11 {
+    line-height: 11px; }
+  .text.line12 {
+    line-height: 12px; }
   .text.line16 {
     line-height: 16px; }
   .text.line18 {
     line-height: 18px; }
+  .text.line24 {
+    line-height: 24px; }
 
 .line-separator {
-  height: 10px;
-  margin-top: 5px;
-  background: url("/assets/line_horizontal.jpg") repeat-x scroll 0 0 transparent; }
+  border-bottom: 1px solid #cccccc;
+  width: 100%;
+  margin: 10px 0; }
 
 .normal {
   font-weight: normal; }
@@ -165,7 +189,6 @@ p, ul {
   margin-left: 0 !important; }
 
 .text {
-  line-height: 22px;
   word-wrap: break-word; }
   .text.bold {
     color: #111111; }
@@ -309,7 +332,7 @@ p, ul {
 .buttons-container .button {
   width: 32px;
   height: 32px;
-  margin: 5px; }
+  margin: 0 5px; }
   .buttons-container .button.email {
     background: url("/assets/icon-email.png") no-repeat; }
   .buttons-container .button.facebook {
@@ -335,23 +358,18 @@ p, ul {
 /* ID */
 /*==================================================================================*/
 #header {
-  min-height: 60px;
-  height: 62px;
-  color: #ebebeb;
-  background: url("/assets/header-bg.jpg") repeat-x scroll 0 0 transparent; }
+  height: 55px;
+  background: url("/assets/bg-header.png") repeat-x scroll 0 0 transparent;
+  box-shadow: 0 0 2px #1b1b1b; }
   #header .wrapper {
-    height: 62px;
-    padding-top: 20px;
-    background: url("/assets/header-bg.jpg") repeat-x scroll 0 0 transparent; }
+    padding-top: 16px; }
   #header .header-menu li {
     float: left;
     padding: 0px 8px; }
     #header .header-menu li a, #header .header-menu li option {
       color: #111111;
-      font-size: 13px;
+      font-size: 12px;
       text-shadow: 1px 0 2px #CECECE; }
-      #header .header-menu li a .normal, #header .header-menu li option .normal {
-        font-size: 14px; }
   #header .devider {
     margin-top: -10px;
     padding: 0px 5px; }
@@ -359,12 +377,9 @@ p, ul {
     color: #333;
     display: inline-block; }
 
-#banner {
-  background-color: white; }
-
 #top {
   width: 100%;
-  min-height: 25px; }
+  margin-top: 30px; }
   #top #filter-box .container {
     padding-right: 25px; }
     #top #filter-box .container select {
@@ -414,11 +429,30 @@ p, ul {
 
 #bottom {
   width: 100%;
-  font-size: 11px;
-  margin: 10px 0 30px; }
+  margin: 20px 0; }
+  #bottom .line-separator {
+    box-shadow: 0 1px 0 white;
+    margin-bottom: 10px; }
 
 #left {
   margin-right: 20px; }
+
+#right {
+  width: 292px; }
+  #right .author-section {
+    width: 100%; }
+    #right .author-section .info {
+      margin-left: 10px; }
+    #right .author-section #btn-follow {
+      height: 23px; }
+      #right .author-section #btn-follow.follow {
+        background: url("/assets/btn-follow.png") no-repeat;
+        width: 57px; }
+      #right .author-section #btn-follow.unfollow {
+        background: url("/assets/btn-unfollow.png") no-repeat;
+        width: 68px; }
+  #right .line-separator {
+    margin: 10px 0; }
 
 #center .intro {
   width: 300px;
@@ -433,10 +467,6 @@ p, ul {
     font-weight: bold;
     font-size: 18px;
     margin: 10px 0 5px; }
-
-#menu-items {
-  margin-left: 20px;
-  height: 40px; }
 
 #email-sharing-popup {
   width: 490px;
@@ -485,8 +515,7 @@ p, ul {
     width: 100%; }
     #email-sharing-popup .close .right {
       border: 1px solid #a1a1a1;
-      height: 13px;
-      line-height: 10px;
+      line-height: 13px;
       text-align: center;
       width: 13px; }
 
@@ -494,31 +523,23 @@ p, ul {
   width: 286px;
   position: absolute; }
   #social-sharing .main {
-    width: 264px;
-    height: 95px;
+    width: 262px;
+    height: 100px;
     padding: 10px;
     border: 1px solid transparent;
     border-radius: 5px;
-    box-shadow: 1px -1px 5px #a1a1a1;
+    box-shadow: 0 0 7px #c2c2c2;
     background-color: white; }
     #social-sharing .main .close {
-      color: #a1a1a1;
+      color: #bfbfbf;
       width: 100%; }
       #social-sharing .main .close .right {
-        border: 1px solid #a1a1a1;
-        height: 13px;
-        line-height: 10px;
+        border: 1px solid #d8d8d8;
+        line-height: 14px;
         text-align: center;
-        width: 13px; }
+        width: 14px; }
     #social-sharing .main .container {
-      width: 242px;
-      padding: 0 11px 5px 11px; }
-      #social-sharing .main .container .text {
-        color: #111111;
-        font-size: 12px; }
-        #social-sharing .main .container .text .left {
-          font-weight: bold;
-          font-size: 15px; }
+      padding: 8px 10px; }
   #social-sharing .tail {
     width: 100%;
     height: 13px; }
@@ -527,13 +548,6 @@ p, ul {
       width: 23px;
       height: 12px;
       margin-right: 45px; }
-
-#comment-field {
-  border: 1px solid #a1a1a1;
-  width: 543px;
-  height: 100px;
-  margin-bottom: 10px;
-  padding: 5px; }
 
 #app-advertise {
   background: url("/assets/bg-public-ad.jpg") repeat-x;
@@ -586,12 +600,17 @@ p, ul {
   margin-bottom: 10px; }
   #author-section .info {
     margin: 6px 0 6px 10px; }
-  #author-section #btn-follow {
-    margin: 12px 0;
-    height: 23px; }
-    #author-section #btn-follow.follow {
-      background: url("/assets/btn-follow.png") no-repeat;
-      width: 57px; }
-    #author-section #btn-follow.unfollow {
-      background: url("/assets/btn-unfollow.png") no-repeat;
-      width: 68px; }
+
+#comments-section .header {
+  margin: 20px 0; }
+#comments-section .line-separator {
+  margin: 15px 0; }
+#comments-section .avatar {
+  margin-right: 10px; }
+
+#comment-field {
+  border: 1px solid #a1a1a1;
+  width: 572px;
+  height: 100px;
+  margin-bottom: 10px;
+  padding: 5px; }

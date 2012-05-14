@@ -5,12 +5,11 @@
 /* IDs */
 /*==================================================================================*/
 #order-details .round-box {
-  width: 298px;
+  width: 290px;
   padding: 0; }
 #order-details .item {
-  width: 125px;
-  line-height: 22px;
-  padding: 5px 10px; }
+  margin: 8px 10px;
+  width: 125px; }
   #order-details .item input[type='radio'] {
     margin: 0;
     padding: 0;
@@ -19,36 +18,40 @@
     vertical-align: middle;
     float: none;
     margin: 0; }
+  #order-details .item #line_item_quantity {
+    margin: -5px;
+    padding: 0 5px;
+    width: 116px; }
 
-#order-shippings {
-  color: black; }
-  #order-shippings #card_ccv {
-    width: 73px; }
-  #order-shippings #billing-address #billing_ship_to_billing {
-    margin: 10px 5px 0 0;
-    width: 10px !important; }
-  #order-shippings #shipping-address {
-    height: auto;
-    min-height: 155px; }
-    #order-shippings #shipping-address .edit {
-      width: 281px;
-      font-size: 11.5px;
-      background-color: #EEEEEE;
-      border: 1px solid #CBCBCB;
-      padding: 15px 10px; }
-      #order-shippings #shipping-address .edit a {
-        text-decoration: underline;
-        font-weight: normal; }
-  #order-shippings .submit {
-    background: url("/assets/btn-place-order.jpg") no-repeat;
-    width: 94px;
-    height: 28px; }
+#order-shippings #card_ccv {
+  width: 73px; }
+#order-shippings #billing-address #billing_ship_to_billing {
+  margin: 10px 5px 0 0;
+  width: 10px !important; }
+#order-shippings #shipping-address {
+  height: auto;
+  min-height: 155px; }
+  #order-shippings #shipping-address .edit {
+    width: 281px;
+    font-size: 11.5px;
+    background-color: #ebebeb;
+    border: 1px solid #d8d8d8;
+    padding: 15px 10px; }
+    #order-shippings #shipping-address .edit a {
+      text-decoration: underline;
+      font-weight: normal; }
+#order-shippings .grand-total {
+  margin: 10px 0; }
+#order-shippings .submit {
+  background: url("/assets/btn-place-order.jpg") no-repeat;
+  width: 94px;
+  height: 28px;
+  margin: 10px 0; }
 
 #order-summary .solid-block {
-  background-color: #EEEEEE;
+  background-color: #e9e9e9;
   padding: 10px;
-  margin-top: 5px;
-  font-size: 13.5px; }
+  margin-top: 10px; }
   #order-summary .solid-block .no-background {
     background-color: white; }
 
@@ -65,8 +68,7 @@
   line-height: 22px; }
   .cart-details .cell {
     width: 100px;
-    text-align: center;
-    margin-top: 50px; }
+    text-align: center; }
     .cart-details .cell.preview {
       width: 360px;
       margin: 0;
@@ -74,69 +76,61 @@
     .cart-details .cell.subtotal {
       text-align: right; }
   .cart-details .line {
-    height: 100px;
     padding: 10px 0;
-    border-bottom: 1px #cbcbcb solid; }
-    .cart-details .line .preview img {
-      width: 100px;
-      height: 100px; }
+    border-bottom: 1px solid #cccccc; }
+    .cart-details .line .cell {
+      line-height: 68px; }
     .cart-details .line .preview a:link {
-      font-weight: normal; }
+      font-weight: normal;
+      margin-left: 3px; }
     .cart-details .line .preview .edit {
       background: url("/assets/icon-edit.jpg") no-repeat scroll 0 0 transparent;
       height: 9px;
       width: 9px;
-      margin-top: 6px; }
+      margin-top: 4px; }
     .cart-details .line .preview .name {
-      color: black;
-      font-weight: bold;
       width: 250px;
       word-wrap: break-word;
-      padding-left: 10px;
-      margin-top: 50px; }
+      padding: 24px 0 0 10px; }
   .cart-details .header {
-    padding: 5px 0;
-    border-bottom: 1px #cbcbcb solid;
-    color: black;
-    font-weight: bold;
-    height: 20px; }
+    padding: 10px 0 5px;
+    text-shadow: 0 1px 0 #FFFFFF;
+    border-bottom: 1px solid #cccccc; }
     .cart-details .header .cell {
       margin: 0; }
-  .cart-details .footer .summary {
-    font-weight: bold;
-    font-size: 13.5px;
-    color: black; }
-  .cart-details .footer .subtotal {
-    width: 140px; }
-  .cart-details .footer .cell {
-    margin-top: 0; }
+  .cart-details .footer {
+    margin-top: 10px;
+    width: 100%; }
+    .cart-details .footer .summary {
+      margin: 10px 0; }
+      .cart-details .footer .summary .cell {
+        text-align: right;
+        width: 140px; }
+    .cart-details .footer .cell {
+      margin-top: 0; }
 
 .actions {
-  font-size: 13.5px;
-  line-height: 22px; }
+  margin: 10px 0 20px 0; }
   .actions .shopping a {
-    color: black;
     font-weight: normal;
-    text-decoration: underline; }
+    text-decoration: underline;
+    line-height: 28px; }
   .actions .checkout {
     background: url("/assets/btn-checkout.jpg") no-repeat scroll 0 0 transparent;
     height: 28px;
-    width: 137px;
-    margin-top: 10px; }
+    width: 137px; }
 
 .option {
-  margin-bottom: 10px; }
+  margin-bottom: 15px; }
   .option .header {
-    color: black;
-    font-size: 13px;
-    font-weight: bold;
-    padding: 9px 10px;
+    line-height: 31px;
+    padding-left: 10px;
     background: url("/assets/option-header-bg.png") repeat-x scroll 0 0 transparent;
     border-top-left-radius: 5px;
     border-top-right-radius: 5px; }
   .option .line {
-    border-top: 1px solid #cbcbcb;
-    width: 298px; }
+    border-top: 1px solid #cccccc;
+    width: 100%; }
 
 .add-to-cart {
   background: url("/assets/btn-add-to-cart.jpg") no-repeat scroll 0 0 transparent;
@@ -145,20 +139,11 @@
 
 .order_summary {
   padding-right: 25px;
-  width: 303px;
-  font-size: 13.5px; }
+  width: 303px; }
   .order_summary input {
     width: 200px; }
-  .order_summary .header {
-    height: 20px;
-    font-weight: bold;
-    font-size: 18px;
-    color: black; }
-    .order_summary .header .italic {
-      font-size: 12px;
-      color: #5a5a5a;
-      font-weight: normal;
-      line-height: 20px; }
+  .order_summary .header .italic {
+    margin-top: 5px; }
   .order_summary .inputs {
     width: 100%; }
     .order_summary .inputs .info {
@@ -190,24 +175,10 @@
 .block {
   width: 100%;
   padding: 10px 0; }
-  .block .text {
+  .block .line {
     padding: 3px 5px;
-    width: 273px;
-    color: black; }
-    .block .text .bold, .block .text.bold {
-      font-weight: bold; }
+    width: 273px; }
 
-.summary {
-  padding-bottom: 10px; }
-  .summary .text {
-    height: 20px;
-    padding-right: 5px; }
-    .summary .text .bold {
-      font-weight: bold;
-      color: black; }
-    .summary .text .right {
-      width: 120px;
-      text-align: right; }
-  .summary.grand-total {
-    font-size: 17px;
-    margin: 5px 0; }
+.summary .text .right {
+  width: 120px;
+  text-align: right; }
