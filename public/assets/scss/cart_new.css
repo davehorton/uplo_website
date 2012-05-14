@@ -24,19 +24,20 @@
     width: 116px; }
 
 #order-shippings #card_ccv {
-  width: 82px; }
+  width: 83px; }
 #order-shippings #billing-address #billing_ship_to_billing {
-  margin: 10px 5px 0 0;
+  margin: 6px 5px 0 0;
   width: 10px !important; }
 #order-shippings #shipping-address {
   height: auto;
   min-height: 155px; }
   #order-shippings #shipping-address .edit {
     width: 281px;
-    font-size: 11.5px;
+    font-size: 11px;
     background-color: #ebebeb;
     border: 1px solid #d8d8d8;
-    padding: 15px 10px; }
+    padding: 15px 10px;
+    margin-top: 10px; }
     #order-shippings #shipping-address .edit a {
       text-decoration: underline;
       font-weight: normal; }
@@ -146,17 +147,17 @@
   .order_summary .inputs {
     width: 100%; }
     .order_summary .inputs .info {
-      padding-bottom: 5px;
-      height: 30px; }
+      margin-top: 10px;
+      height: 28px; }
       .order_summary .inputs .info #cvv-explanation a {
         font-weight: normal; }
       .order_summary .inputs .info label {
         width: 88px;
-        margin: 9px 10px 9px 0;
+        margin: 8px 10px 8px 0;
         font-size: 11px; }
       .order_summary .inputs .info input {
-        width: 188px;
-        font-size: 13.5px; }
+        width: 190px;
+        font-size: 12px; }
       .order_summary .inputs .info select {
         width: 202px !important;
         height: 30px;
