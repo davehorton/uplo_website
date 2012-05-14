@@ -1,46 +1,62 @@
-.sale-item{
-  height: 150px;
-  padding: 5px 0 10px;
+.sale-chart {
+  margin: 30px 0;
+}
+.sales-wrapper {
+  margin-top: 10px;
+  width: 100%;
+}
+.sale-item {
+  width: 100%;
   .info {
-    margin: 37px 0 37px 8px;
-    .text{
-      max-width: 800px;
-      &.bold {
-        font-weight: bold;
-      }
-      &.saled-name {
-        font-size: 20px;
-      }
-      &.saled-quantity {
-        font-size: 16px;
-        margin: 10px 0 5px;
-      }
-      &.saled-price {
-        font-size: 2em;
-        font-weight: bold;
-      }
+    margin: 32px 0 32px 20px;
+    .price {
+      margin-top: 8px;
     }
-    .details {
+    .text {
+      max-width: 800px;
+    }
+    .btn-detail {
       background: url("/assets/btn-more-details.jpg") no-repeat scroll 0 0 transparent;
       height: 23px;
       width: 91px;
-      margin-top: 10px;
+      margin-top: 20px;
+    }
+  }
+  .line-separator {
+    margin: 3px 0;
+  }
+  &.detail {
+    margin: 10px 0;
+    .info {
+      .price {
+        margin-top: 2px;
+        font-size: 36px;
+        line-height: 36px;
+        color: #898989;
+      }
+      .quantity {
+        margin-top: 10px;
+      }
     }
   }
 }
 .sale-info {
+  width: 100%;
   .header {
-    font-weight: bold;
-    margin: 10px 0;
+    margin: 20px 0;
   }
-  .text{
+  .text {
     max-width: 800px;
   }
-  .user {
+  .avatar {
     margin-right: 10px;
-    margin-bottom: 5px;
+  }
+  .item {
+    width: 100%;
+    margin-bottom: 30px;
   }
 }
+
 .highcharts-axis {
   text tspan {
     font-weight: bold;

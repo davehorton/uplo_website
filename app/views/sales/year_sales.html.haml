@@ -2,38 +2,47 @@
   = stylesheet_link_tag("scss/sale.css", "scss/new_image.css")
 
 - content_for :top_content do
-  .breadcrum.left{:style => "padding-top:15px;"} My Sales
-  .line-separator.clear
+  .text.black.bold.font16.left My Sales
+  .line-separator.left
 
 .wrapper
-  .clearfix
-    - if @sales.blank?
-      .empty-data= "There is no image to view saled status."
-    - else
-      .sale-chart.clear
-        = render :partial => 'chart', :locals => {:total_sales => @year_sales, :sales => @monthly_sales}
-      .line-separator.clear
-
-      - (0...@sales.length). each do |idx|
+  - if @sales.blank?
+    .empty-data= "There is no image to view saled status."
+  - else
+    .sale-chart.clear
+      = render :partial => 'chart', :locals => {:total_sales => @year_sales, :sales => @monthly_sales}
+    .line-separator.left
+    .sales-wrapper.left
+      - (0...(@sales.length - 1)). each do |idx|
         - image = @sales[idx]
         - url = url_for(:controller => "sales", :action => "image_sale_details", :id => "#{image.id}")
-        .sale-item.clear
+        .sale-item.left
           .image-container.thumb.left.no-padding
-            %dl.entry
-              %dt.preview
-                = image_tag(image.data.url(:thumb), :class => "image-thumb")
+            = image_tag(image.data.url(:thumb), :class => 'image-thumb image thumb')
           .info.left
-            .text.bold= image.name
-            .text
-              %span= number_to_currency image.total_sales, {:precision => 2}
-              %span.fuzzy Cumulative
-            .details{:data => {:url => "#{url}"}}
-        .line-separator.clear
+            .text.black.bold.font22= image.name
+            .text.fuzzy-gray.price
+              %span.text.bold.fuzzy-gray.font18= number_to_currency image.total_sales, {:precision => 2}
+              %span.text.font14 Cumulative
+            .btn-detail{:data => {:url => "#{url}"}}
+          .line-separator.left
+
+      - image = @sales[@sales.length - 1]
+      .sale-item.left
+        .image-container.thumb.left.no-padding
+          = image_tag(image.data.url(:thumb), :class => 'image-thumb image thumb')
+        .info.left
+          .text.black.bold.font22= image.name
+          .text.fuzzy-gray.price
+            %span.text.bold.font18= number_to_currency image.total_sales, {:precision => 2}
+            %span.text.font14 Cumulative
+          .btn-detail{:data => {:url => "#{ url_for(:controller => 'sales', :action => 'image_sale_details', :id => '#{image.id}') }"}}
+
   .clear= render_pagination(@sales, {:controller => "sales", :action => params[:action]})
 
 - content_for :js do
   - javascript_tag do
     :erb
-      $('.details').bind('click', function(){
+      $('.btn-detail').bind('click', function(){
         window.location = $(this).attr('data-url');
       });

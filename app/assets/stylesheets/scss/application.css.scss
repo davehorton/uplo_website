@@ -120,10 +120,24 @@ p, ul{
   float: left;
 }
 
+//old
+.text {
+  word-wrap: break-word;
+  &.bold {
+    color: $color-black;
+  }
+  &.normal {
+    color: $color-gray;
+  }
+}
+
 //new
 .text {
   text-align: left;
   word-wrap: break-word;
+  .italic {
+    font-style: italic;
+  }
   &.bold {
     font-weight: bold;
   }
@@ -169,6 +183,9 @@ p, ul{
   &.font20 {
     font-size: 20px;
   }
+  &.font22 {
+    font-size: 22px;
+  }
   &.font24 {
     font-size: 24px;
   }
@@ -187,8 +204,14 @@ p, ul{
   &.line18 {
     line-height: 18px;
   }
+  &.line22 {
+    line-height: 22px;
+  }
   &.line24 {
     line-height: 24px;
+  }
+  &.line32 {
+    line-height: 32px;
   }
 }
 
@@ -227,15 +250,6 @@ p, ul{
 .no-padding-left {
   padding-left: 0 !important;
   margin-left: 0 !important;
-}
-.text {
-  word-wrap: break-word;
-  &.bold {
-    color: $color-black;
-  }
-  &.normal {
-    color: $color-gray;
-  }
 }
 .show {
   display: inline-block;

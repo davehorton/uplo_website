@@ -4,37 +4,33 @@
   = stylesheet_link_tag 'scss/new_image.css'
 
 - content_for :top_content do
-  %div{:style => "padding-top:15px;"}
-    .breadcrum.left
-      %span My Gallery /
-      %span.current= @gallery.name
-      %span.text.fuzzy= "("
-      %span.text.fuzzy= @gallery.permission_string
-      %span.text.fuzzy= ")"
-      - if !@gallery.is_owner?(current_user)
-        %span.text.fuzzy= "From "
-        %span.text.fuzzy
-          %a{:href => "#"}= @gallery.user.fullname
-    .actions.right
-      - if can_modify_gallery?(@gallery)
-        - if @images.blank?
-          - images_action = "Add Images"
-        - else
-          - images_action = "Edit Images"
+  .text.bold.font16.left
+    %span.text.black My Gallery /
+    %span.text.gray= @gallery.name
+    - if !@gallery.is_owner?(current_user)
+      %span.text.fuzzy-gray= "From "
+      %span.text.fuzzy-gray
+        %a{:href => "#"}= @gallery.user.fullname
+  .text.black.bold.font16.right
+    - if can_modify_gallery?(@gallery)
+      - if @images.blank?
+        - images_action = "Add Images"
+      - else
+        - images_action = "Edit Images"
 
-        .action-container
-          %a#edit-images{:href => gallery_images_list_path(:gallery_id => @gallery.id), :class => "ui-button-container icon-link"}
-            %span= images_action
-          %span.saparator= "|"
-          %a#edit-gallery{:href => edit_gallery_path(@gallery), :class => "ui-button-container icon-link"}
-            %span= "Edit Gallery"
-          %span.saparator= "|"
-          = link_to("Delete Gallery", gallery_path(@gallery),
-                    :method => :delete,
-                    :class => "ui-button-container icon-link",
-                    :confirm => I18n.t("gallery.delete_confirm"))
+      .action-container
+        %a#edit-images{:href => gallery_images_list_path(:gallery_id => @gallery.id), :class => "ui-button-container icon-link"}
+          %span= images_action
+        %span.saparator= "|"
+        %a#edit-gallery{:href => edit_gallery_path(@gallery), :class => "ui-button-container icon-link"}
+          %span= "Edit Gallery"
+        %span.saparator= "|"
+        = link_to("Delete Gallery", gallery_path(@gallery),
+                  :method => :delete,
+                  :class => "ui-button-container icon-link",
+                  :confirm => I18n.t("gallery.delete_confirm"))
 
-.wrapper
+.images-wrapper.wrapper
   #gallery-form-container.clearfix.hidden{:style => "display: none"}
   - if @images.blank?
     .empty-data= 'There is no image in this gallery. Please add image.'

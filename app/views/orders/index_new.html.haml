@@ -3,9 +3,8 @@
 
 
 - content_for :top_content do
-  %div{:style => "margin: 15px 0;"}
-    .breadcrum.left Checkout - Step 2 of 2
-    .line-separator.left
+  .text.black.bold.font16.left Checkout - Step 2 of 2
+  .line-separator.left
 
 .wrapper
   = simple_form_for(:card, :url => "/payments/checkout?type=an", :html => {:class => "card_form", :id => 'order-shippings'}) do |f|

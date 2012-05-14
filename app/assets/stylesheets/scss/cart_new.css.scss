@@ -34,7 +34,7 @@ $color-line-separator: #cccccc;
 
 #order-shippings {
   #card_ccv {
-    width: 73px;
+    width: 82px;
   }
   #billing-address {
     #billing_ship_to_billing {
@@ -80,8 +80,7 @@ $color-line-separator: #cccccc;
 }
 
 #cvv-explanation {
-  font-size: 11.5px;
-  font-weight: normal;
+  font-size: 9px;
   text-decoration: underline;
 }
 
@@ -188,9 +187,9 @@ $color-line-separator: #cccccc;
   width: 91px;
 }
 
-.order_summary{
-  padding-right: 25px;
-  width: 303px;
+.order_summary {
+  margin: 20px 30px 0 0;
+  width: 300px;
   input {
     width: 200px;
   }
@@ -208,24 +207,25 @@ $color-line-separator: #cccccc;
         font-weight: normal;
       }
       label {
-        width: 120px;
-        margin: 9px 0;
+        width: 88px;
+        margin: 9px 10px 9px 0;
+        font-size: 11px;
       }
       input {
-        width: 169px;
+        width: 188px;
         font-size: 13.5px;
       }
       select {
-        width: 183px !important;
+        width: 202px !important;
         height: 30px;
         padding: 3px 1px;
       }
       &.expiration-date {
         select {
-          width: 87px !important;
+          width: 96px !important;
         }
         #card_expires_on_2i {
-          margin-right: 9px;
+          margin-right: 10px;
         }
       }
     }

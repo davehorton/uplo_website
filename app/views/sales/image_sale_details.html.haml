@@ -2,8 +2,8 @@
   = stylesheet_link_tag("scss/sale.css", "scss/new_image.css")
 
 - content_for :top_content do
-  .breadcrum.left{:style => "padding-top:15px;"} My Sales
-  .line-separator.clear
+  .text.black.bold.font16.left My Sales
+  .line-separator.left
 
 .wrapper
   .clearfix
@@ -11,38 +11,49 @@
       .empty-data= "There is no image to view saled status."
     - else
       - image = @image
-      .sale-item.clear
+      .sale-item.detail.left
         .image-container.thumb.left.no-padding
-          %dl.entry
-            %dt.preview
-              = image_tag(@image.data.url(:thumb), :class => "image-thumb")
+          = image_tag(@image.data.url(:thumb), :class => "image-thumb image thumb")
         .info.left
-          .saled-name.text.bold= @image.name
-          .saled-quantity.text.fuzzy= "#{@image.saled_quantity} Sales"
-          .saled-price.text= number_to_currency @image.total_sales, {:precision => 2}
-      .line-separator.clear
-
+          .text.black.bold.font24= @image.name
+          .quantity.text.fuzzy-gray.font18= "#{@image.saled_quantity} Sales"
+          .price.text.bold= number_to_currency @image.total_sales, {:precision => 2}
+      .line-separator.left
+      .clear
       .sale-chart.clear
         = render :partial => 'chart', :locals => {:total_sales => @image.total_sales, :sales => @sales}
       .line-separator.clear
 
-      .sale-info
-        .header.text.bold Purchased by
-        - (0...@purchased_info.length). each do |idx|
+      .sale-info.left
+        .header.text.black.bold.font18 Purchased by
+        - (0...(@purchased_info.length - 1)). each do |idx|
           - line_item = @purchased_info[idx]
           - purchaser = User.find_by_id line_item.purchaser_id.to_i
-          .user.left.clear= image_tag(purchaser.avatar.url(:small), :class => "image small")
-          .left
-            %span.text.bold{:style => 'font-weight:bold;'}= purchaser.username
-            %span.text.fuzzy= "(#{line_item.creation_timestamp} ago)"
-            .text.normal
+          .item.left
+            = image_tag(purchaser.avatar.url(:small), :class => "avatar medium left")
+            .text.font12.left
+              %span.text.black.bold{:style => 'font-weight:bold;'}= purchaser.username
+              %span.text.fuzzy-gray= "(#{line_item.creation_timestamp} ago)"
+              .text.gray.line22
+                - plexi_mount = SharedMethods::Converter.Boolean(line_item.plexi_mount)
+                %span= plexi_mount ? 'Plexi Mount,&nbsp;'.html_safe : 'No Plexi Mount,&nbsp;'.html_safe
+                %span= "#{line_item.size},&nbsp;".html_safe
+                %span= "#{line_item.moulding} Mounding,&nbsp;".html_safe
+                %span= "Quantity #{line_item.quantity}"
+
+        - line_item = @purchased_info[@purchased_info.length - 1]
+        - purchaser = User.find_by_id line_item.purchaser_id.to_i
+        .item.left.no-padding
+          = image_tag(purchaser.avatar.url(:small), :class => "avatar medium left")
+          .text.font12.left
+            %span.text.black.bold{:style => 'font-weight:bold;'}= purchaser.username
+            %span.text.fuzzy-gray= "(#{line_item.creation_timestamp} ago)"
+            .text.gray.line22
               - plexi_mount = SharedMethods::Converter.Boolean(line_item.plexi_mount)
               %span= plexi_mount ? 'Plexi Mount,&nbsp;'.html_safe : 'No Plexi Mount,&nbsp;'.html_safe
               %span= "#{line_item.size},&nbsp;".html_safe
               %span= "#{line_item.moulding} Mounding,&nbsp;".html_safe
               %span= "Quantity #{line_item.quantity}"
-          - if idx < (@purchased_info.length - 1)
-            .line-separator.clear
         .clear= render_pagination(@purchased_info, {:controller => "sales", :action => params[:action]})
 
 

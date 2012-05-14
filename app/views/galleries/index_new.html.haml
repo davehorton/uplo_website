@@ -7,7 +7,7 @@
   .text.black.bold.font16.line24.left My Galleries
   %a#new-gallery.right{ :href => '/galleries/new' }
 
-.wrapper
+.images-wrapper.wrapper
   #gallery-form-container.clearfix.hidden{:style => "display: none"}
     = render(:partial => "form", :locals => {:gallery => @gallery})
 
@@ -20,7 +20,6 @@
       .gallery-container.left{ :id => "gallery-container-#{gallery.id}", :class => "#{additional_class}" }
         %a.image-container.thumb{ :href => gallery_images_path(gallery), :title=>"#{gallery.name}" }
           = async_image_tag(gallery_cover_image_url(gallery), :class => "gallery-cover-image image thumb")
-
         .gallery-info.text.font11.line16.clear
           .text.black.bold.name{:title => gallery.name}=raw gallery.name.truncate(25)
           .text.gray.photo-number= (gallery.images.length > 0 ? pluralize(gallery.images.length, "Image") : "No Image")
