@@ -24,7 +24,7 @@
     width: 116px; }
 
 #order-shippings #card_ccv {
-  width: 73px; }
+  width: 82px; }
 #order-shippings #billing-address #billing_ship_to_billing {
   margin: 10px 5px 0 0;
   width: 10px !important; }
@@ -56,8 +56,7 @@
     background-color: white; }
 
 #cvv-explanation {
-  font-size: 11.5px;
-  font-weight: normal;
+  font-size: 9px;
   text-decoration: underline; }
 
 /*==================================================================================*/
@@ -138,8 +137,8 @@
   width: 91px; }
 
 .order_summary {
-  padding-right: 25px;
-  width: 303px; }
+  margin: 20px 30px 0 0;
+  width: 300px; }
   .order_summary input {
     width: 200px; }
   .order_summary .header .italic {
@@ -152,19 +151,20 @@
       .order_summary .inputs .info #cvv-explanation a {
         font-weight: normal; }
       .order_summary .inputs .info label {
-        width: 120px;
-        margin: 9px 0; }
+        width: 88px;
+        margin: 9px 10px 9px 0;
+        font-size: 11px; }
       .order_summary .inputs .info input {
-        width: 169px;
+        width: 188px;
         font-size: 13.5px; }
       .order_summary .inputs .info select {
-        width: 183px !important;
+        width: 202px !important;
         height: 30px;
         padding: 3px 1px; }
       .order_summary .inputs .info.expiration-date select {
-        width: 87px !important; }
+        width: 96px !important; }
       .order_summary .inputs .info.expiration-date #card_expires_on_2i {
-        margin-right: 9px; }
+        margin-right: 10px; }
     .order_summary .inputs .simple_form label {
       width: 110px; }
     .order_summary .inputs .simple_form input[type=text], .order_summary .inputs .simple_form input[type=email], .order_summary .inputs .simple_form input[type=password] {
