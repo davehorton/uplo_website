@@ -40,13 +40,14 @@
       }(document, 'script', 'facebook-jssdk'));</script>
 
     .wrapper
+      #top
       #center.panel.left
         = yield :center_content
 
       #right.panel.right
-        %a#logo.clear{:href => "/" }
+        %a#logo.left{:href => "/" }
           = image_tag("uplo_logo.png", {:alt => "UPLO"})
-        .line-separator.clear{ :style => 'margin:15px 0 5px;'}
+        .line-separator.left
         = yield :right_content
 
       #bottom.panel

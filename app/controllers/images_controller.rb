@@ -232,7 +232,7 @@ class ImagesController < ApplicationController
       image = Image.find_by_id params[:id]
       img_info = params[:image].delete :filtered_effect
       image.attributes = img_info
-      file_path = "#{Rails.root}/tmp/#{image.name}.jpg"
+      file_path = "#{ Rails.root }/tmp/#{ image.name }_#{ Time.now.strftime('%Y%m%d%H%M%S%9N') }.jpg"
       img = Magick::Image.read(image.data.url).first
       img.write file_path
       image.data = File.open file_path

@@ -8,16 +8,16 @@
 - content_for :right_content do
   #gallery-section.left
     .text.black.font18.bold= @gallery.name.truncate(30)
+  .line-separator.left
 
-  .line-separator.clear{ :style => 'margin-top:10px;'}
   #author-section.left
-    .left= image_tag @author.avatar(:small)
+    = image_tag @author.avatar(:medium), :class => 'avatar medium left'
     .info.left
       .text.black.font16.line18= @author.username.truncate(20)
       .text.gray.font12.line18= "#{@author.images.length} Photos &bull; 44 Followers".html_safe
+  .line-separator.left
 
-  .line-separator.clear{:style => 'margin: 10px 0 5px;'}
-  #author-biography.text.gray.font12.line16
+  #author-biography.text.gray.font12.line16.left
     Lorem ipsum dolor sit amet consectetur adipisicing elit sed do eiusmod tempor incididunt ut labone et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco.
 
   #app-advertise.left
@@ -37,7 +37,7 @@
         .image-container.thumb{:id => "image-container-#{image.id}", :title=>"#{image.name}", :class => "#{additional_class}"}
           %a{ :href => "#{url}" }
             = async_image_tag(image.data.url(:thumb), :class => "image-thumb")
-  .buttons-container.clear
+  .buttons-container.left
     %a.left{:target => '_blank', :href=>"https://twitter.com/share", :class=>"twitter-share-button", :data => {:lang => "en", :count => "horizontal", :text => "Shared from UPLO -"}}
     .fb-like.left{ 'data-href'=>"#{ url_for(:only_path => false) }", 'data-send'=>'false', 'data-layout'=>'button_count', 'data-show-faces'=>'false', 'data-font'=>'arial' }
 
