@@ -13,14 +13,34 @@
     line-height: 482px;
     border: 1px solid #cbcbcb; }
 
-#right {
-  width: 285px; }
+#right #image-section, #right #gallery-section {
+  margin: 10px 0; }
+#right #author-section {
+  width: 100%; }
+  #right #author-section .info {
+    margin: 6px 0 6px 10px; }
+#right #author-biography {
+  margin-top: 10px; }
+#right #logo {
+  margin-bottom: 10px; }
+#right #app-advertise {
+  background: url("/assets/bg-public-ad.jpg") repeat-x;
+  height: 203px;
+  width: 100%;
+  margin-top: 30px; }
+  #right #app-advertise #download-app {
+    margin: 9px auto 0;
+    background: url("/assets/btn-dowload-app.png") no-repeat;
+    height: 32px;
+    width: 222px; }
+  #right #app-advertise .app-image {
+    margin: 4px auto 0;
+    background: url("/assets/advertise-devices.png") no-repeat;
+    width: 155px;
+    height: 150px; }
 
-#author-biography {
-  height: 93px; }
-
-#gallery-section, #image-section {
-  margin-bottom: 15px; }
+#bottom {
+  margin: 0; }
 
 /*==================================================================================*/
 /* CLASS */
@@ -30,9 +50,3 @@
 
 .pagination {
   padding-top: 10px; }
-
-.image-container.thumb {
-  margin: 3px !important; }
-
-.wrapper {
-  margin-top: 20px; }
