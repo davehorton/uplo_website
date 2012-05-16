@@ -271,8 +271,14 @@ class ImagesController < ApplicationController
     @current_tab = tab
   end
 
-  def default_page_size
-    return 12
+  def default_page_size   
+    actions = ['index']
+    if actions.index(params[:action]) == nil
+      size = 12 
+    else
+      size = 24
+    end    
+    return size
   end
 
   def find_gallery
