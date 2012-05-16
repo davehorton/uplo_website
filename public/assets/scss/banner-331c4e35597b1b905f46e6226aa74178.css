@@ -21,6 +21,8 @@
   .main.the-app .banner {
     background: url("/assets/bg-banner-the-app.png") repeat-x scroll center left transparent;
     height: 530px; }
+    .main.the-app .banner .wrapper {
+      background: url("/assets/bg-banner-the-app.png") repeat-x scroll center left transparent; }
     .main.the-app .banner .left {
       width: 500px;
       margin-top: 120px; }
@@ -45,11 +47,18 @@
   .main.spotlight .banner {
     background: url("/assets/bg-banner-spotlight.png") repeat-x scroll center left transparent;
     height: 441px; }
+    .main.spotlight .banner .wrapper {
+      background: url("/assets/bg-banner-spotlight.png") repeat-x scroll center left transparent; }
     .main.spotlight .banner .left {
       width: 435px;
       margin-top: 115px; }
       .main.spotlight .banner .left .info {
         margin: 20px 0; }
+      .main.spotlight .banner .left .logo {
+        background: url("/assets/logo-uplo-banner.png") no-repeat scroll center left transparent;
+        width: 157px;
+        height: 44px;
+        margin-bottom: 10px; }
     .main.spotlight .banner .right {
       background: url("/assets/img-banner-devices-spotlight.png") no-repeat scroll center left transparent;
       height: 316px;
@@ -59,30 +68,19 @@
 #right {
   width: 234px; }
 
-#banner .main .left .logo {
-  background: url("/assets/logo-uplo-banner.png") no-repeat scroll center left transparent;
-  width: 157px;
-  height: 44px;
-  margin-bottom: 10px; }
-#banner .sub {
-  background: url("/assets/bg-sub-banner.png") repeat-x scroll center left transparent;
-  height: 149px; }
-  #banner .sub .wrapper {
-    height: 140px; }
-  #banner .sub .devider {
-    padding: 20px 34px; }
-  #banner .sub .info {
-    width: 273px;
-    word-wrap: break-word;
-    text-align: justify;
-    font-size: 12px;
-    margin: 20px 0;
-    line-height: 22px; }
-    #banner .sub .info .header {
-      font-weight: bold;
-      font-size: 14px; }
-      #banner .sub .info .header .main {
-        font-size: 24px; }
-    #banner .sub .info .text {
-      line-height: 18px;
-      margin-top: 7px; }
+#banner {
+  /*.wrapper {
+    height: 100%;
+  }*/ }
+  #banner .sub {
+    background: url("/assets/bg-sub-banner.png") repeat-x scroll center left transparent;
+    height: 149px; }
+    #banner .sub .wrapper {
+      background: url("/assets/bg-sub-banner.png") repeat-x scroll center left transparent; }
+    #banner .sub .devider {
+      padding: 20px 34px; }
+    #banner .sub .info {
+      width: 273px;
+      margin: 20px 0px; }
+      #banner .sub .info .description {
+        margin: 5px 0px 12px 0px; }
