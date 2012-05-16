@@ -8,8 +8,8 @@
 
 - content_for :right_content do
   .text.black.bold.left
-    .text.font16.left Recent Upload
-    %a.text.font10.line18.left{:href => "#{url_for(:controller => 'home', :action => 'browse')}", :style => 'margin-left: 20px;' } +VIEW ALL
+    .text.font16.line12.left Recent Uploads
+    %a.text.font10.left{:href => "#{url_for(:controller => 'home', :action => 'browse')}", :style => 'margin: 2px 0 0 20px;' } +VIEW ALL
   .clear
   #recent-images.images-wrapper
     - if @images.blank?
@@ -24,8 +24,8 @@
             = async_image_tag(image.data.url(:thumb), :class => "image-thumb image small")
 
 .text.black.bold.left
-  .text.font16.left Spotlight Images
-  %a.text.font10.line18.left{:href => "#{url_for(:controller => 'home', :action => 'browse')}", :style => 'margin-left: 20px;' } +VIEW ALL
+  .text.font16.line12.left Spotlight Images
+  %a.text.font10.left{:href => "#{url_for(:controller => 'home', :action => 'browse')}", :style => 'margin: 2px 0 0 20px;' } +VIEW ALL
 .clear
 #spotlight-images.left.images-wrapper.clearfix
   - if @images.blank?

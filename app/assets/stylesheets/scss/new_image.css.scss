@@ -181,12 +181,14 @@ $color-light-gray: #a1a1a1;
 
 #spotlight-images {
   width: 714px;
+  margin-bottom: 10px;  
   .image-container.thumb, .image.thumb {
     width: 174px;
     height: 154px;
   }
 }
 #recent-images {
+  margin-bottom: 10px;  
   .image-container.small, .image.small {
     width: 74px;
     height: 74px;

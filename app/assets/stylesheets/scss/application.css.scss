@@ -110,6 +110,7 @@ p, ul{
 }
 .wrapper {
   width: $frame-width;
+  height: 100%;
   margin: 0 auto;
   /*-webkit-box-shadow: rgba(0,0,0,.45) 0 1px 3px;
   -moz-box-shadow: rgba(0,0,0,.45) 0 1px 3px;
@@ -161,6 +162,9 @@ p, ul{
   }
   &.black {
     color: $color-black;
+  }
+  &.font10 {
+    font-size: 10px;
   }
   &.font11 {
     font-size: 11px;
@@ -417,11 +421,13 @@ p, ul{
 
   .wrapper {
     padding-top: 16px;
+    background: url("/assets/bg-header.png") repeat-x scroll 0 0 transparent;
+    height: 39px;
   }
   .header-menu {
     li {
       float: left;
-      padding: 0px 8px;
+      padding: 0px 15px;
       a, option {
         color: $color-black;
         font-size: 12px;
@@ -461,31 +467,23 @@ p, ul{
 
   #search-box {
     .container{
-      border: {
-        top: 1px solid #cdcdcd;
-        right: 1px solid #cdcdcd;
-        bottom: none;
-        left: none;
-      }
-      width: 230px;
-      height: 25px;
-      -webkit-border-radius: 15px;
-      -moz-border-radius: 15px;
-      border-radius: 15px;
-      position: relative;
+      width: 155px;
+      height: 20px;
       vertical-align: middle;
       background-color: #ffffff;
-      -moz-box-shadow: inset 0 0 1px #000000;
-      -webkit-box-shadow: inset 0 0 1px #000000;
-      box-shadow: inset 0 0 1px #000000;
-      box-shadow: inset #000000 0 0 2px \0/IE9;
+      border-width: 1px;
+      border-style: solid none none;
+      border-radius: 15px;
+      -webkit-border-radius: 15px;
+      -moz-border-radius: 15px;
+      -moz-border-top-colors: #979797 #dfdfdf #ffffff;
+      box-shadow: 0 0 2px #dfdfdf;
 
       #search-keyword{
         border: none;
         margin-left: 10px;
         vertical-align: middle;
-        width: 180px;
-        font-size: 12px;
+        width: 110px;
         &:focus {
           outline: 0 none;
           -moz-box-shadow: none;
@@ -500,7 +498,6 @@ p, ul{
         height: 20px;
         background: url("/assets/search-13x13.png") no-repeat scroll center left transparent;
         vertical-align: middle;
-        margin: 3px 0;
         cursor: pointer;
       }
 
@@ -514,7 +511,6 @@ p, ul{
 
 #bottom {
   width: 100%;
-  margin: 20px 0;
   .line-separator {
     box-shadow: 0 1px 0 $color-white;
     margin-bottom: 10px;
@@ -547,11 +543,14 @@ p, ul{
   }
 }
 #center {
+  .wrapper.the-app {
+    margin-top: -10px;
+  }
   .intro {
     width: 300px;
     height: auto;
     word-wrap: break-word;
-    margin: 10px 15px 30px;
+    margin: 20px 15px;
     .header {
       font-size: 21px;
       margin: 20px 0 10px;
