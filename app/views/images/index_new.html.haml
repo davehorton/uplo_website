@@ -4,14 +4,14 @@
   = stylesheet_link_tag 'scss/new_image.css'
 
 - content_for :top_content do
-  .text.bold.font16.left
+  .text.bold.font16.line12.left
     %span.text.black My Gallery /
     %span.text.gray= @gallery.name
     - if !@gallery.is_owner?(current_user)
       %span.text.fuzzy-gray= "From "
       %span.text.fuzzy-gray
         %a{:href => "#"}= @gallery.user.fullname
-  .text.black.bold.font16.right
+  .text.black.bold.font12.line12.right
     - if can_modify_gallery?(@gallery)
       - if @images.blank?
         - images_action = "Add Images"
@@ -30,7 +30,7 @@
                   :class => "ui-button-container icon-link",
                   :confirm => I18n.t("gallery.delete_confirm"))
 
-.images-wrapper.wrapper
+.images-wrapper.wrapper.left
   #gallery-form-container.clearfix.hidden{:style => "display: none"}
   - if @images.blank?
     .empty-data= 'There is no image in this gallery. Please add image.'

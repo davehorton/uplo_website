@@ -28,11 +28,13 @@ $color-line-separator: #cccccc;
       margin: -5px;
       padding: 0 5px;
       width: 116px;
+      height: 20px;
     }
   }
 }
 
 #order-shippings {
+  margin-bottom: 30px;
   #card_ccv {
     width: 83px;
   }
@@ -129,7 +131,7 @@ $color-line-separator: #cccccc;
   }
   .header {
     padding: 10px 0 5px;
-    text-shadow: 0 1px 0 #FFFFFF;
+    text-shadow: 0 0 1px #c3c3c3;
     border-bottom: 1px solid $color-line-separator;
     .cell {
       margin: 0;
@@ -220,6 +222,7 @@ $color-line-separator: #cccccc;
         width: 202px !important;
         height: 30px;
         padding: 3px 1px;
+        font-size: 12px;
       }
       &.expiration-date {
         select {

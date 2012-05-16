@@ -543,6 +543,9 @@ p, ul{
   }
 }
 #center {
+  #order-preview {
+    margin-bottom: 30px;
+  }
   .wrapper.the-app {
     margin-top: -10px;
   }
@@ -714,10 +717,10 @@ p, ul{
 }
 
 #comment-field {
-  border: 1px solid $color-light-gray;
-  // color: $color-light-gray;
-  width: 572px;
-  height: 100px;
+  border: 1px solid #cdcdcd;
+  color: #cdcdcd;
+  width: 571px;
+  height: 150px;
   margin-bottom: 10px;
   padding: 5px;
 }

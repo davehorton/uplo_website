@@ -4,10 +4,10 @@
   = stylesheet_link_tag "scss/new_image.css", 'jquery.contextMenu.css'
 
 - content_for :top_content do
-  .text.black.bold.font16.line24.left My Galleries
+  .text.black.bold.font16.line12.left{ :style => 'margin-top:10px;' } My Galleries
   %a#new-gallery.right{ :href => '/galleries/new' }
 
-.images-wrapper.wrapper
+.images-wrapper.wrapper.left
   #gallery-form-container.clearfix.hidden{:style => "display: none"}
     = render(:partial => "form", :locals => {:gallery => @gallery})
 

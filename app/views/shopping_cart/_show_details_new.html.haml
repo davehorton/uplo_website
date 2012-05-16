@@ -43,10 +43,10 @@
   .footer.text.black.line18.left
     .right.summary
       .cell.text.bold.font14.left Subtotal:
-      .cell.text.font14.left= number_to_currency(@order.price_total, {:precision => 2})
+      .cell.text.bold.font14.left= number_to_currency(@order.price_total, {:precision => 2})
       .clear
-      .cell.text.bold.font12.left Tax:
-      .cell.text.bold.font12.left= number_to_currency(@order.tax, {:precision => 2})
+      .cell.text.font12.left Tax:
+      .cell.text.font12.left= number_to_currency(@order.tax, {:precision => 2})
     .line-separator.left
     .right.summary
       .cell.text.bold.font14.left Cart Total:

@@ -9,7 +9,7 @@
   .right
     .text.black.bold.font18 Build Your Order
     .line-separator
-    = simple_form_for(:line_item, :url => action_url, :method => 'post', :html => {:id => 'order-details'}) do |f|
+    = simple_form_for(:line_item, :url => action_url, :method => 'post', :html => { :id => 'order-details', :class => 'left' }) do |f|
       .round-box.option.left
         .header.text.black.bold.font14= "Plexi Mount"
         .line
@@ -70,7 +70,7 @@
     .clear
       .add-to-cart.right
 
-.image-container.medium.left
+#order-preview.image-container.medium.left
   = image_tag @image.url(:medium), :class => 'image medium'
 
 - content_for :js do

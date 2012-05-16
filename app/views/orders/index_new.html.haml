@@ -7,8 +7,8 @@
   .line-separator.left
 
 .wrapper
-  = simple_form_for(:card, :url => "/payments/checkout?type=an", :html => {:class => "card_form", :id => 'order-shippings'}) do |f|
-    #billing-address.order_summary.left{:style => "height:430px;"}
+  = simple_form_for(:card, :url => "/payments/checkout?type=an", :html => {:class => "card_form left", :id => 'order-shippings'}) do |f|
+    #billing-address.order_summary.left
       .header
         %span.text.black.bold.font16.left Billing Address
         .italic.text.heavy-gray.font11.left
@@ -36,7 +36,7 @@
           = text_field :billing, :zip, :required => true
         .info
           = label_tag :billing_state, "State <span style='color:red;'>*</span>".html_safe
-          = select :billing, :state, state_options, {:required => true,  :prompt => '- Please Select--'}
+          = select :billing, :state, state_options, {:required => true,  :prompt => '- Please Select --'}
         .info
           = label_tag :billing_phone, "Phone Number <span style='color:red;'>*</span>".html_safe
           = text_field :billing, :phone, :as => :string, :required => false, :onchange => "validateNumber()"
@@ -80,7 +80,7 @@
             = text_field :shipping, :zip, :required => true
           .info
             = label_tag :shipping_state, "State <span style='color:red;'>*</span>".html_safe
-            = select :shipping, :state, state_options, {:required => true,  :prompt => '- Please Select--'}
+            = select :shipping, :state, state_options, {:required => true,  :prompt => '- Please Select --'}
           .info
             = label_tag :shipping_phone, "Phone Number <span style='color:red;'>*</span>".html_safe
             = text_field :shipping, :phone, :as => :string, :required => false, :onchange => "validateNumber()"
@@ -101,7 +101,7 @@
             = f.input :name_on_card, :autofocus => true, :required => true, :label => false
           .info
             = f.label :card_type, "Card Type <span style='color:red;'>*</span>".html_safe
-            = f.select :card_type, options_for_select({"American Express" => "USA_express", "Discover" => "discover", "Visa" => "visa", "JCB" => "jcb", "Diners Club/ Carte Blanche" => "dinners_club", "Master Card" => "master_card"}), {:prompt => '- Please Select--'}
+            = f.select :card_type, options_for_select({"American Express" => "USA_express", "Discover" => "discover", "Visa" => "visa", "JCB" => "jcb", "Diners Club/ Carte Blanche" => "dinners_club", "Master Card" => "master_card"}), {:prompt => '- Please Select --'}
           .info
             = f.label :card_number, "Card Number <span style='color:red;'>*</span>".html_safe
             = f.input :card_number, :autofocus => true, :required => true, :label => false

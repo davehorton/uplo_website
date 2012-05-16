@@ -22,7 +22,7 @@
         Shipping is Calculated at the Next Step, Before You Pay
       .right.clear{ :style => 'margin-top:20px;' }
         .shopping.left= link_to "Continue shopping", "/back", :method => "get"
-        .left{:style => 'line-height: 28px;'} &nbsp;&nbsp;or&nbsp;&nbsp;
+        .text.gray.left{:style => 'line-height: 28px;'} &nbsp;&nbsp;or&nbsp;&nbsp;
         - unless @order.line_items.empty?
           %a.checkout.left{:href => "#{url_for(:controller => 'shopping_cart', :action => 'checkout')}"}
 
