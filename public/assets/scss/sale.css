@@ -1,5 +1,15 @@
 .sale-chart {
   margin: 30px 0; }
+  .sale-chart #total-amount {
+    width: 100%;
+    color: #080808;
+    text-align: center; }
+  .sale-chart .highcharts-axis text tspan {
+    font-size: 14px;
+    font-weight: bold;
+    font-family: Arial;
+    color: #080808;
+    fill: #080808; }
 
 .sales-wrapper {
   margin-top: 10px;
@@ -41,8 +51,3 @@
   .sale-info .item {
     width: 100%;
     margin-bottom: 30px; }
-
-.highcharts-axis text tspan {
-  font-weight: bold;
-  font-size: 18px;
-  font-family: Helvetica; }
