@@ -26,10 +26,24 @@
 
       .sale-info.left
         .header.text.black.bold.font18 Purchased by
-        - (0...(@purchased_info.length - 1)). each do |idx|
-          - line_item = @purchased_info[idx]
+        - if @purchased_info.length > 0
+          - (0...(@purchased_info.length - 1)). each do |idx|
+            - line_item = @purchased_info[idx]
+            - purchaser = User.find_by_id line_item.purchaser_id.to_i
+            .item.left
+              = image_tag(purchaser.avatar.url(:small), :class => "avatar medium left")
+              .text.font12.left
+                %span.text.black.bold{:style => 'font-weight:bold;'}= purchaser.username
+                %span.text.fuzzy-gray= "(#{line_item.creation_timestamp} ago)"
+                .text.gray.line22
+                  - plexi_mount = SharedMethods::Converter.Boolean(line_item.plexi_mount)
+                  %span= plexi_mount ? 'Plexi Mount,&nbsp;'.html_safe : 'No Plexi Mount,&nbsp;'.html_safe
+                  %span= "#{line_item.size},&nbsp;".html_safe
+                  %span= "#{line_item.moulding} Mounding,&nbsp;".html_safe
+                  %span= "Quantity #{line_item.quantity}"
+          - line_item = @purchased_info[@purchased_info.length - 1]
           - purchaser = User.find_by_id line_item.purchaser_id.to_i
-          .item.left
+          .item.left.no-padding
             = image_tag(purchaser.avatar.url(:small), :class => "avatar medium left")
             .text.font12.left
               %span.text.black.bold{:style => 'font-weight:bold;'}= purchaser.username
@@ -40,20 +54,6 @@
                 %span= "#{line_item.size},&nbsp;".html_safe
                 %span= "#{line_item.moulding} Mounding,&nbsp;".html_safe
                 %span= "Quantity #{line_item.quantity}"
-
-        - line_item = @purchased_info[@purchased_info.length - 1]
-        - purchaser = User.find_by_id line_item.purchaser_id.to_i
-        .item.left.no-padding
-          = image_tag(purchaser.avatar.url(:small), :class => "avatar medium left")
-          .text.font12.left
-            %span.text.black.bold{:style => 'font-weight:bold;'}= purchaser.username
-            %span.text.fuzzy-gray= "(#{line_item.creation_timestamp} ago)"
-            .text.gray.line22
-              - plexi_mount = SharedMethods::Converter.Boolean(line_item.plexi_mount)
-              %span= plexi_mount ? 'Plexi Mount,&nbsp;'.html_safe : 'No Plexi Mount,&nbsp;'.html_safe
-              %span= "#{line_item.size},&nbsp;".html_safe
-              %span= "#{line_item.moulding} Mounding,&nbsp;".html_safe
-              %span= "Quantity #{line_item.quantity}"
         .clear= render_pagination(@purchased_info, {:controller => "sales", :action => params[:action]})
 
 
