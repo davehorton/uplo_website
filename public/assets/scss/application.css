@@ -459,6 +459,8 @@ p, ul {
   #right .line-separator {
     margin: 10px 0; }
 
+#center #order-preview {
+  margin-bottom: 30px; }
 #center .wrapper.the-app {
   margin-top: -10px; }
 #center .intro {
@@ -582,8 +584,9 @@ p, ul {
   margin-right: 10px; }
 
 #comment-field {
-  border: 1px solid #a1a1a1;
-  width: 572px;
-  height: 100px;
+  border: 1px solid #cdcdcd;
+  color: #cdcdcd;
+  width: 571px;
+  height: 150px;
   margin-bottom: 10px;
   padding: 5px; }
