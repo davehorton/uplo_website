@@ -34,7 +34,7 @@
         .info.left
           .text.black.bold.font22= image.name
           .text.fuzzy-gray.price
-            %span.text.bold.font18= number_to_currency image.total_sales, {:precision => 2}
+            %span.text.bold.fuzzy-gray.font18= number_to_currency image.total_sales, {:precision => 2}
             %span.text.font14 Cumulative
           .btn-detail{:data => {:url => "#{ url_for(:controller => 'sales', :action => 'image_sale_details', :id => '#{image.id}') }"}}
 
