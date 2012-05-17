@@ -12,7 +12,7 @@
         var months = [];
         var month_sales = [];
         <% sales.each do |sale| %>
-                months.push("<br /><span style=\"color:black;\"><%= sale[:month] %></span>");
+                months.push("<%= sale[:month] %>");
                 month_sales.push(<%= sale[:sales] %>);
         <% end %>
 
@@ -22,7 +22,10 @@
                     renderTo: 'container',
                     type: 'column',
                     shadown: false,
-                    backgroundColor: '#f8f8f8'
+                    backgroundColor: '#f8f8f8',
+                    style: {
+                        fontFamily: 'Arial'
+                    }
                 },
                 navigation:{
                     buttonOptions:{
@@ -36,7 +39,6 @@
                     text: ''
                 },
                 xAxis: {
-                    lineWidth:2,
                     categories: months
                 },
                 yAxis: {
@@ -50,42 +52,29 @@
                     }
                 },
                 legend: {
-                    layout: 'vertical',
-                    backgroundColor: '#ffffff',
-                    align: 'right',
-                    verticalAlign: 'top',
-                    x: 100,
-                    y: 70,
-                    floating: true,
-                    shadow: true
+                    enabled: false
                 },
                 tooltip: {
-                    style: {
-                        padding: '5px',
-                        backgroundColor: 'red'
-                    },
+                    useHTML: true,
                     formatter: function() {
-
-                        return ''+
-                            this.x +'<span style="font-size:20px; font-family:Helvetica; color:black;font-weight:bold;">: $'+ this.y +'</span>';
+                        return '<span class="text gray bold font14">' + this.x + ': </span><span class="text black bold font22">$'+ this.y +'</span></div>';
                     }
                 },
                 plotOptions: {
                     column: {
+                        cursor: 'pointer',
+                        color:'#fc7700',
                         pointPadding: 0,
                         borderWidth: 0,
-                        color:'#fc7700',
                         shadow: false
-                    }
+                    },
                 },
                 series: [ {
-                    name: 'Sales',
                     data: month_sales
-
                 }]
             });
         });
 
     });
 
-= javascript_include_tag '/assets/lib/column_charts/highcharts.js', '/assets/lib/column_charts/exporting.js'
+= javascript_include_tag '/assets/lib/column_charts/highcharts.js'

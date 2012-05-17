@@ -20,8 +20,8 @@
           .image-container.thumb.left.no-padding
             = image_tag(image.data.url(:thumb), :class => 'image-thumb image thumb')
           .info.left
-            .text.black.bold.font22= image.name
-            .text.fuzzy-gray.price
+            .name.text.black.bold= image.name
+            .price.text.fuzzy-gray
               %span.text.bold.fuzzy-gray.font18= number_to_currency image.total_sales, {:precision => 2}
               %span.text.font14 Cumulative
             .btn-detail{:data => {:url => "#{url}"}}

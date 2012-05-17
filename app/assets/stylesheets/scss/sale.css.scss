@@ -5,12 +5,14 @@
     color: #080808;
     text-align: center;    
   }
-  .highcharts-axis text tspan {
-    font-size: 14px;
-    font-weight: bold;
-    font-family: Arial;
-    color: #080808;
-    fill: #080808;
+  .highcharts-container {
+    .highcharts-axis text tspan {
+      font-size: 14px;
+      font-weight: bold;
+      font-family: Arial;
+      color: #080808;
+      fill: #080808;
+    }
   }
 }
 .sales-wrapper {
@@ -21,6 +23,9 @@
   width: 100%;
   .info {
     margin: 32px 0 32px 20px;
+    .name {
+      font-size: 21px;
+    }
     .price {
       margin-top: 8px;
     }
