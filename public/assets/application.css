@@ -884,7 +884,7 @@ a.icon-link{text-decoration: none;}
 
 .image-browse .simple_form label{width: 110px; margin: 0;}
 .image-browse .simple_form span{vertical-align: middle;}
-.image.image-browse .left-container{height: auto;}
+.image.image-browse .left-container{height: auto !important; margin-bottom: 10px;}
 .image.image-browse .gallery-container{height: 430px; width: 100%;}
 
 /*** GALLERY ***/
