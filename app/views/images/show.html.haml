@@ -10,14 +10,6 @@
             .image-content
               = image_tag url_for(:controller => 'images', :action => 'get_image_data', :id => @selected_image.id, :size => 'medium'), :id => "origin-pic"
 
-          .filter-container
-            %ul#filterCarousel.jcarousel-skin-tango
-              %li
-                = image_tag "/assets/non-filter-preview.jpg", :onclick => "clearFilter()", :title => "Remove effect - back to original image"
-              - (1..10).each do |i|
-                %li
-                  = image_tag "/assets/filter-e#{i}-preview.jpg", :class => "filter-img", :data => {:effect => "e#{i}"}, :title => "Apply filter: effect #{i}"
-
       = simple_form_for(:image, :id => @selected_image, :action => :update, :method => 'put', :html => {:id => "frmImageData"}) do |f|
         .right-container.right
           .button-container.round-box.blue-gradient
