@@ -4,7 +4,7 @@
     width: 100%;
     color: #080808;
     text-align: center; }
-  .sale-chart .highcharts-axis text tspan {
+  .sale-chart .highcharts-container .highcharts-axis text tspan {
     font-size: 14px;
     font-weight: bold;
     font-family: Arial;
@@ -19,6 +19,8 @@
   width: 100%; }
   .sale-item .info {
     margin: 32px 0 32px 20px; }
+    .sale-item .info .name {
+      font-size: 21px; }
     .sale-item .info .price {
       margin-top: 8px; }
     .sale-item .info .text {
