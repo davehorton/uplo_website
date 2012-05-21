@@ -188,7 +188,7 @@
         btn_share = $('.button.share');
         img = $('.sections .image-container.medium');
         if(box.hasClass('hide')) {
-          top = img.height() - box.height();
+          top = img.height() - box.height() + 2;
           left = img.width() - box.width() + 18;
           box.removeClass('hide');
           box.css('top', top + 'px');
