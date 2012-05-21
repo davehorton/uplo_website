@@ -554,27 +554,30 @@ p, ul {
       margin-right: 45px; }
 
 #gallery-form-container {
-  margin-bottom: 10px; }
-
-#frm-edit-gallery .input label {
-  width: 100px; }
-#frm-edit-gallery .input input, #frm-edit-gallery .input textarea {
-  width: 305px;
-  margin-top: 0; }
-#frm-edit-gallery .button {
-  height: 27px; }
-  #frm-edit-gallery .button.cancel {
-    background: url("/assets/btn-cancel-57x23.png") no-repeat;
-    width: 65px;
-    margin-right: 10px; }
-  #frm-edit-gallery .button.save {
-    background: url("/assets/btn-save-changes.jpg") no-repeat;
-    width: 96px; }
-#frm-edit-gallery #button-container {
-  margin: 5px 0 5px 110px; }
-#frm-edit-gallery #gallery_permission {
-  height: 28px;
-  padding-top: 2px; }
+  margin-bottom: 15px; }
+  #gallery-form-container #frm-edit-gallery .sections {
+    width: 429px; }
+  #gallery-form-container #frm-edit-gallery .input {
+    margin: 5px 0; }
+    #gallery-form-container #frm-edit-gallery .input label {
+      width: 100px; }
+    #gallery-form-container #frm-edit-gallery .input input, #gallery-form-container #frm-edit-gallery .input textarea {
+      width: 305px;
+      margin-top: 0; }
+  #gallery-form-container #frm-edit-gallery .button {
+    height: 23px; }
+    #gallery-form-container #frm-edit-gallery .button.cancel {
+      background: url("/assets/btn-cancel-57x23.png") no-repeat;
+      width: 57px;
+      margin-right: 10px; }
+    #gallery-form-container #frm-edit-gallery .button.save {
+      background: url("/assets/btn-save-changes.jpg") no-repeat;
+      width: 96px; }
+  #gallery-form-container #frm-edit-gallery #button-container {
+    margin: 5px 0 5px 110px; }
+  #gallery-form-container #frm-edit-gallery #gallery_permission {
+    height: 28px;
+    padding-top: 2px; }
 
 #comments-section .header {
   margin: 20px 0; }
