@@ -181,8 +181,10 @@
   width: 100%;
   padding: 10px 0; }
   .block .line {
-    padding: 3px 5px;
-    width: 273px; }
+    padding: 0 10px;
+    width: 260px; }
+    .block .line.name {
+      padding-bottom: 8px; }
 
 .summary .text .right {
   width: 120px;
