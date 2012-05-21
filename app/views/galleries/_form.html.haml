@@ -2,16 +2,16 @@
 .gallery-form-container
   - gallery ||= @gallery
   = simple_form_for(gallery, :html => {:id => 'frm-edit-gallery', :class => "gallery-form"}) do |f|
-    .left
-      = f.input(:name, :wrapper_class => "input clearfix", :label => 'Gallery Name',
+    .sections.left
+      = f.input(:name, :wrapper_class => "input left", :label => 'Gallery Name',
                 :input_html => {:class => "name"}, :required => true)
-      = f.input(:description, :as => 'text', :wrapper_class => "input clearfix",
+      = f.input(:description, :as => 'text', :wrapper_class => "input left",
                 :input_html => {:class => "description"}, :required => false)
-    .right
-      = f.input(:keyword, :as => 'text', :wrapper_class => "input clearfix",
+    .sections.right
+      = f.input(:keyword, :as => 'text', :wrapper_class => "input left",
                 :input_html => {:class => "description"}, :required => false)
-      = f.input :permission, :as => :select, :label => "Permission", :collection => gallery_permissions_options, :include_blank => false
-      %span.text.gray.italic.font11.line32{ :style => 'padding-top:10px;' }= "&nbsp;<span style='color:red;'>*</span> Required Field".html_safe
+      = f.input :permission, :as => :select, :wrapper_class => "input left", :label => "Permission", :collection => gallery_permissions_options, :include_blank => false
+      %span.text.gray.italic.font11.left{ :style => 'margin-top:16px;' }= "&nbsp;<span style='color:red;'>*</span> Required Field".html_safe
       .clear
       #button-container.left
         #btn-gallery-cancel.button.cancel.left
