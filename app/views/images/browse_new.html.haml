@@ -34,7 +34,7 @@
         - additional_class = (idx%4 == 0) ? "no-padding-left" : ((idx%4==3) ? "no-padding-right" : "")
         .image-container.small{:id => "image-container-#{image.id}", :title=>"#{image.name}", :class => "#{additional_class}"}
           %a{ :href => "#{url}" }
-            .left= image_tag image.data(:small, :class => 'image small')
+            = image_tag image.data(:small), :class => 'image small left'
 
 #email-sharing-popup.left.hide
   .header.left
