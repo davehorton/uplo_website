@@ -251,8 +251,11 @@ $color-line-separator: #cccccc;
   width: 100%;
   padding: 10px 0;
   .line {
-    padding: 3px 5px;
-    width: 273px;
+    padding: 0 10px;
+    width: 260px;
+    &.name {
+      padding-bottom: 8px;
+    }
   }
 }
 .summary {

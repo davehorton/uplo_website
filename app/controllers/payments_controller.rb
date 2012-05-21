@@ -109,6 +109,7 @@ class PaymentsController < ApplicationController
 #      flash[:warn] = params[:msg]
 #    end
     @transaction_id = params[:trans_id]
+    render :layout => 'main'
   end
 
   def pp_gateway

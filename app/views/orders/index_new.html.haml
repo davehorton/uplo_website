@@ -125,15 +125,15 @@
           - subtotal += line_item.price
           - tax_total += line_item.tax
           .block.text.black.line22.left{:style => "#{'padding-top:0;' if idx==0}"}
-            .line.text.bold.font11.left= line_item.image.name
+            .name.line.text.bold.line12.left= line_item.image.name
             .line.no-background.left
-              .text.font10.line11.left QTY
+              .text.font10.left QTY
               .text.bold.font13.right= line_item.quantity
             .line.left
-              .text.font10.line11.left PRICE
+              .text.font10.left PRICE
               .text.bold.font13.right= number_to_currency line_item.price
             .line.no-background.left
-              .text.font10.line11.left TAX
+              .text.font10.left TAX
               .text.bold.font13.right= number_to_currency line_item.tax
         .summary.text.black.font11.line18.right
           .text.bold.right
@@ -166,7 +166,7 @@
           return false;
         }
       });
-      $("#address_phone").keypress(function (event) {
+      $("#billing_phone").keypress(function (event) {
         var reg = /^\d*$/;
         if (!event.charCode) return true;
         var part1 = this.value.substring(0,this.selectionStart);
@@ -184,7 +184,7 @@
           return false;
         }
       });
-      $("#address_fax").keypress(function (event) {
+      $("#billing_fax").keypress(function (event) {
         var reg = /^\d*$/;
         if (!event.charCode) return true;
         var part1 = this.value.substring(0,this.selectionStart);
@@ -202,7 +202,7 @@
           return false;
         }
       });
-      $("#address_zip").keypress(function (event) {
+      $("#billing_zip").keypress(function (event) {
         var reg = /^\d{0,5}$/;
         if (!event.charCode) return true;
         var part1 = this.value.substring(0,this.selectionStart);
