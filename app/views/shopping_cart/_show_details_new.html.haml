@@ -18,7 +18,7 @@
       - line_tax = line_item.price * line_item.quantity.to_i * PER_TAX
       .line.left
         .cell.left.preview
-          .image-container.small.no-padding.left= image_tag image.url(:small_preview), :class => 'image small'
+          .image-container.small.no-padding.left= image_tag image.url(:small), :class => 'image small'
           .text.black.line18.left
             .name.text.bold.font12= image.name
             .text.font11.left{:style => 'padding-left: 10px;'}
