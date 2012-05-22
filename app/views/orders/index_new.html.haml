@@ -125,7 +125,7 @@
           - subtotal += line_item.price
           - tax_total += line_item.tax
           .block.text.black.line22.left{:style => "#{'padding-top:0;' if idx==0}"}
-            .name.line.text.bold.line12.left= line_item.image.name
+            .name.line.text.bold.line12.left= line_item.image.name.truncate(36)
             .line.no-background.left
               .text.font10.left QTY
               .text.bold.font13.right= line_item.quantity

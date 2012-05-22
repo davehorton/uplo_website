@@ -109,12 +109,15 @@ $color-line-separator: #cccccc;
       padding: 10px 0;
       border-bottom: 1px solid $color-line-separator;
       .cell {
-        line-height: 68px;
+        line-height: 66px;
       }
       .preview {
         a:link {
           font-weight: normal;
           margin-left: 3px;
+        }
+        .edit-section {
+          margin: 22px 0 10px 10px;
         }
         .edit {
           background: url("/assets/icon-edit.jpg") no-repeat scroll 0 0 transparent;
@@ -122,10 +125,11 @@ $color-line-separator: #cccccc;
           width: 9px;
           margin-top: 4px;
         }
+        .delete {
+          margin-left: 10px;
+        }
         .name{
-          width: 250px;
-          word-wrap: break-word;
-          padding: 24px 0 0 10px;
+          width: 280px;
         }
       }
   }
