@@ -3,7 +3,7 @@
   = stylesheet_link_tag("scss/new_image.css", "scss/sale.css")
 
 - content_for :right_content do
-  .text.black.font18.bold{:style => 'line-height:12.5px;'}= @image.name
+  .text.black.font18.bold= @image.name
   .line-separator
   .author-section.left
     = image_tag @author.avatar(:small), :class => 'left'
