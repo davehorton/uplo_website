@@ -58,6 +58,8 @@
   margin-top: 10px; }
   #order-summary .solid-block .no-background {
     background-color: white; }
+  #order-summary .solid-block .summary {
+    padding-right: 10px; }
 
 #cvv-explanation {
   font-size: 9px;
