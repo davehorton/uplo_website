@@ -10,11 +10,11 @@ class Users::RegistrationsController < Devise::RegistrationsController
   def update
     super
   end
-  
+
   protected
 
   def after_sign_up_path_for(resource)
-    #'/profile'
+    #'/my_account'
     super(resource)
   end
 end

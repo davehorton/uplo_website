@@ -1,4 +1,4 @@
-= simple_form_for(@user, :url => "/profile/update", :html => {:class => "signup"}) do |f|
+= simple_form_for(@user, :url => "/my_account/update", :html => {:class => "signup"}) do |f|
   = f.error_notification
   .inputs
     = f.input :first_name, :required => true, :autofocus => true
@@ -6,7 +6,7 @@
     = f.input :gender, :as => :radio, :collection => gender_options
     = f.input :twitter
     = f.input :facebook
-    
+
   .actions
     = f.button :submit, "Update"
-    %a.cancel{:href => "/profile"}= "Cancel"
+    %a.cancel{:href => "/my_account"}= "Cancel"

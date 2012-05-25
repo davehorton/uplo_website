@@ -2,29 +2,29 @@
   .action-container.clearfix
     .header
       %h1= "My Profile"
-    %a.float-right#edit-profile{:href => "/profile/edit", :class => "ui-button-container icon-link"}
+    %a.float-right#edit-profile{:href => "/my_account/edit", :class => "ui-button-container icon-link"}
       %span= "Edit Profile"
-  
+
   .clearfix
-  
+
   .account-info-container.clearfix
     .info-container
       %span
         %h2= "Full name:"
       %span= @user.fullname
-     
+
     .info-container
       %span
         %h2= "Gender:"
       %span= @user.gender_string
-      
+
     .info-container
       %h2= "Social Networks:"
       .info-content
         .info-item
           %label.social= "Twitter:"
           %span= @user.twitter
-          
+
         .info-item
           %label.social= "Facebook:"
           %span= @user.facebook
@@ -34,6 +34,6 @@
         %h2= "Security:"
       %span
         %a#change-password{:href => "/change_password"}= "Change Password"
-      
+
     .info-container
       %h2= "Payment & Shipping Options:"

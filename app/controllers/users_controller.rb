@@ -13,7 +13,7 @@ class UsersController < ApplicationController
     @user = current_user
     respond_to do |format|
       if @user.update_profile(params[:user])
-        format.html { redirect_to("/profile", :notice => I18n.t('user.update_done')) }
+        format.html { redirect_to("/my_account", :notice => I18n.t('user.update_done')) }
       else
         format.html { render :action => "edit", :notice => @user.errors}
       end
