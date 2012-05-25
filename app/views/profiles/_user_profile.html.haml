@@ -1,0 +1,21 @@
+#user-section.left
+  .left
+    = image_tag(user.avatar(:large), :class => 'avatar large left')
+    .clear
+    .edit-pane
+      .icon.edit.left.left
+      .text.black.font11 Edit Photo
+  .info.left
+    .info-pane.left
+      .name.text.black.bold.font20= user.fullname
+      .text.fuzzy-gray.font12= "Joined #{ user.joined_date }"
+    .edit-pane.left
+      .icon.edit.left
+      .text.black.font11 Edit Profile Information
+
+.line-separator.left
+.biography.text.line16.left
+  .text.black.bold.font14 Salt Lake City, Utah
+  .text.black.bold.font12 Web Designer
+  .text.black.bold.font12 cameronmoll.com
+  .text.gray.font12 I’m primarily a designer for web and print, but I dabble with video amateurily from time to timeLorem ipsum dolor sit amet, consectetur adipiscing elit. In non quam eu ipsum tincidunt iaculis in id augue. Mauris auctor rhoncus sollicitudin.

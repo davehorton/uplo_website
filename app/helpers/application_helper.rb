@@ -30,7 +30,7 @@ module ApplicationHelper
   end
 
   def private_links_options
-    options_for_select([["My UPLO", "#"], ["My Account", "/profile"], ["My Galleries", "/galleries"], ["My Sales", "/sales"]])
+    options_for_select([["My UPLO", "#"], ['My Profile', '/my_profile'], ["My Account", "/my_account"], ["My Galleries", "/galleries"], ["My Sales", "/sales"]])
   end
 
   def redirect_back_url

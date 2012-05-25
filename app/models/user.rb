@@ -19,7 +19,7 @@ class User < ActiveRecord::Base
 
   # Paperclip
   has_attached_file :avatar,
-   :styles => {:thumb => "180x180>", :medium => "48x48>", :small => '24x24>' },
+   :styles => {:thumb => "180x180>", :large => '67x67#', :medium => "48x48>", :small => '24x24>' },
    :storage => :s3,
    :s3_credentials => "#{Rails.root}/config/amazon_s3.yml",
    :path => "user/:id/avatar/:style.:extension",
@@ -105,6 +105,10 @@ class User < ActiveRecord::Base
   end
 
   # PUBLIC INSTANCE METHODS
+  def joined_date
+    self.confirmed_at.strftime('%B %Y')
+  end
+
   def fullname
     [self.first_name, self.last_name].join(" ")
   end

@@ -16,9 +16,12 @@ Uplo::Application.routes.draw do
   get "intro", :to => "home#intro"
   get "popular", :to => "home#popular"
   get "back", :to => "application#redirect_back"
-  get "profile", :to => "users#profile"
-  get "profile/edit", :to => "users#edit"
-  put "profile/update", :to => "users#update"
+  get "my_account", :to => "users#profile"
+  get "my_account/edit", :to => "users#edit"
+  put "my_account/update", :to => "users#update"
+  get 'my_profile', :to => 'profiles#show'
+  get 'my_profile/photos', :to => 'profiles#list_photos'
+  get 'my_profile/galleries', :to => 'profiles#list_galleries'
 
   get 'images/browse/:id', :to => 'images#browse'
   get 'images/public/:id', :to => 'images#public'
