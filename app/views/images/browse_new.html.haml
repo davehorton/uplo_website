@@ -5,11 +5,11 @@
 - content_for :right_content do
   .text.black.font18.bold= @image.name
   .line-separator
-  .author-section.left
-    = image_tag @author.avatar(:small), :class => 'left'
-    .info.text.line12.left
-      %span.text.gray.font12 By
-      %span.text.black.font12= @author.username.truncate(20)
+  .user-section.left
+    = image_tag @author.avatar(:small), :class => 'avatar small left'
+    .left
+      %span.text.gray.font12.line12 By
+      %span.text.black.font12.line12= @author.username.truncate(20)
       .text.gray.font11= "#{@author.fullname} &bull; #{@author.images.length} Items".html_safe
     - if current_user.id != @author.id
       - is_author_following = @author.has_follower?(current_user.id)
@@ -106,19 +106,20 @@
     - (0...@purchased_info.length). each do |idx|
       - line_item = @purchased_info[idx]
       - purchaser = User.find_by_id line_item.purchaser_id.to_i
-      .left
+      .user-section.left
         = image_tag(purchaser.avatar.url(:medium), :class => "avatar medium left")
         .text.font12.line18.left
           %span.text.black.bold= purchaser.username
           %span.text.fuzzy-gray= "(#{line_item.creation_timestamp} ago)"
           .text.gray
             Great shot!
-
       .line-separator.left
-    .user.left.clear= image_tag('/assets/avatar-default-medium.jpg', :class => "avatar medium")
-    .left
-      = text_area_tag 'comment', "Add your comment here...", :id => 'comment-field', :class => 'left'
-      .post-comment.clear
+
+    .user-section.left
+      = image_tag('/assets/avatar-default-medium.jpg', :class => "avatar medium left")
+      .left
+        = text_area_tag 'comment', "Add your comment here...", :id => 'comment-field', :class => 'left'
+        .post-comment.clear
 
     = render_pagination(@purchased_info, {:controller => "sales", :action => params[:action]})
   .clear
