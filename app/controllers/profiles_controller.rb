@@ -1,5 +1,7 @@
 class ProfilesController < ApplicationController
+  before_filter :authenticate_user!
   layout 'main'
+
   def show
     @user = current_user
     @images = Image.load_images(@filtered_params)
