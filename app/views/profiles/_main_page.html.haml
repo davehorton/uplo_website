@@ -53,7 +53,7 @@
         - user = @followers[idx]
         - additional_class = (idx%3 == 0) ? 'no-padding-left' : ((idx%3==2) ? 'no-padding-right' : '')
         .user-section.left{ :class => "#{ additional_class }" }
-          = image_tag(user.avatar(:small), :class => "avatar small left #{ additional_class }")
+          = image_tag(user.avatar(:small), :class => "avatar small left")
           .left
             .text.black.font12.line10= user.username
             .text.gray.font11.line10= user.fullname
@@ -63,15 +63,16 @@
     .head
       .text.black.bold.font20.left You Are Following
       .text.fuzzy-gray.font20.left= "&nbsp;(#{ @images.total_entries })".html_safe
-      .right
-        %a{ :href => '#' } + View all
+      .edit-pane.right{ :data => { 'url' => "#{ url_for(:controller => 'profiles', :action => 'list_galleries') }"} }
+        .icon.edit.left
+        .text.black.font12.left Edit
     .line-separator.left
     .images-wrapper.left
       - (0...@followers.length). each do |idx|
         - user = @followers[idx]
         - additional_class = (idx%3 == 0) ? 'no-padding-left' : ((idx%3==2) ? 'no-padding-right' : '')
         .user-section.left{ :class => "#{ additional_class }" }
-          = image_tag(user.avatar(:small), :class => "avatar small left #{ additional_class }")
+          = image_tag(user.avatar(:small), :class => "avatar small left")
           .left
             .text.black.font12= user.username
             .text.gray.font12= user.fullname
