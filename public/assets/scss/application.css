@@ -116,6 +116,8 @@ p, ul {
 .text {
   text-align: left;
   word-wrap: break-word; }
+  .text.center {
+    text-align: center; }
   .text .italic {
     font-style: italic; }
   .text.bold {
@@ -131,7 +133,7 @@ p, ul {
   .text.fuzzy-gray {
     color: #b3b3b3 !important; }
   .text.white {
-    color: #ffffff !important; }
+    color: white !important; }
   .text.black {
     color: #111111; }
   .text.font10 {
@@ -170,6 +172,14 @@ p, ul {
     line-height: 24px; }
   .text.line32 {
     line-height: 32px; }
+
+.icon {
+  margin-right: 3px; }
+  .icon.edit {
+    background: url("/assets/icon-edit.jpg") no-repeat scroll 0 0 transparent;
+    height: 9px;
+    width: 9px;
+    margin-top: 1px; }
 
 .line-separator {
   border-bottom: 1px solid #cccccc;
@@ -227,7 +237,7 @@ p, ul {
       background-image: url("/assets/menu-item-hightlight-bg.png");
     */
     background-repeat: repeat-x;
-    color: #FFFFFF; }
+    color: white; }
   .pagination a {
     text-decoration: none;
     color: gray; }
@@ -302,7 +312,7 @@ p, ul {
 .simple_form input[type=password] {
   width: 200px;
   padding: 5px;
-  background-color: #FFFFFF; }
+  background-color: white; }
 
 .simple_form input[type=text],
 .simple_form input[type=email],
@@ -404,13 +414,13 @@ p, ul {
     width: 155px;
     height: 20px;
     vertical-align: middle;
-    background-color: #ffffff;
+    background-color: white;
     border-width: 1px;
     border-style: solid none none;
     border-radius: 15px;
     -webkit-border-radius: 15px;
     -moz-border-radius: 15px;
-    -moz-border-top-colors: #979797 #dfdfdf #ffffff;
+    -moz-border-top-colors: #979797 #dfdfdf white;
     box-shadow: 0 0 2px #dfdfdf; }
     #top #search-box .container #search-keyword {
       border: none;
@@ -440,20 +450,30 @@ p, ul {
     margin-bottom: 10px; }
 
 #left {
-  margin-right: 20px; }
+  margin-right: 30px;
+  width: 292px; }
+  #left .biography {
+    margin-top: 10px; }
+  #left #user-section {
+    width: 100%;
+    margin-bottom: 10px; }
+    #left #user-section .info .main {
+      width: 100%; }
+    #left #user-section .edit-pane {
+      padding: 5px 0;
+      width: 100%;
+      border-bottom: 1px solid #cccccc; }
 
 #right {
   width: 292px; }
-  #right .author-section {
+  #right .user-section {
     width: 100%; }
-    #right .author-section .info {
-      margin-left: 10px; }
-    #right .author-section #btn-follow {
+    #right .user-section #btn-follow {
       height: 23px; }
-      #right .author-section #btn-follow.follow {
+      #right .user-section #btn-follow.follow {
         background: url("/assets/btn-follow.png") no-repeat;
         width: 57px; }
-      #right .author-section #btn-follow.unfollow {
+      #right .user-section #btn-follow.unfollow {
         background: url("/assets/btn-unfollow.png") no-repeat;
         width: 68px; }
   #right .line-separator {
@@ -471,6 +491,35 @@ p, ul {
   #center .intro .header {
     font-size: 21px;
     margin: 20px 0 10px; }
+#center .profile-wrapper {
+  width: 638px; }
+  #center .profile-wrapper #container {
+    width: 100%; }
+    #center .profile-wrapper #container .main {
+      width: 636px; }
+  #center .profile-wrapper .container {
+    width: 100%;
+    margin-top: 30px; }
+    #center .profile-wrapper .container .edit-pane {
+      margin-top: 7px;
+      cursor: pointer; }
+    #center .profile-wrapper .container .images-wrapper {
+      width: 100%; }
+  #center .profile-wrapper .counter {
+    background-color: #ebebeb;
+    width: 119px;
+    border-radius: 5px;
+    box-shadow: 0 1px 0 #c9c9c9;
+    margin-right: 10px;
+    padding: 7px 0 8px; }
+    #center .profile-wrapper .counter .number {
+      font-size: 35px; }
+    #center .profile-wrapper .counter:hover {
+      background-color: #111111;
+      box-shadow: 0 1px 2px #111111;
+      -moz-box-shadow: 0 0 1px #111111; }
+      #center .profile-wrapper .counter:hover .text {
+        color: white; }
 
 #email-sharing-popup {
   width: 490px;
@@ -583,8 +632,6 @@ p, ul {
   margin: 20px 0; }
 #comments-section .line-separator {
   margin: 15px 0; }
-#comments-section .avatar {
-  margin-right: 10px; }
 
 #comment-field {
   border: 1px solid #cdcdcd;
@@ -593,3 +640,7 @@ p, ul {
   height: 150px;
   margin-bottom: 10px;
   padding: 5px; }
+
+#followers-section .user-section, #following-section .user-section {
+  width: 208px;
+  margin: 0 3px; }

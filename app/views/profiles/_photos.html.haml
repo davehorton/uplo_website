@@ -1,6 +1,6 @@
 .container.left
   .head
-    .text.black.bold.font20.left= "#{ @user.first_name }'s' Photos"
+    .text.black.bold.font20.left= "#{ @user.first_name }'s Photos"
     .text.fuzzy-gray.font20.left= "&nbsp;(#{ @images.total_entries })".html_safe
     .edit-pane.right{ :data => { 'url' => "#"} }
       .icon.edit.left

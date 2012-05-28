@@ -5,6 +5,7 @@ advertise-devices.png: advertise-devices-0136c84d4a3b18c3b67406d6d86ebb32.png
 ajaxloading.gif: ajaxloading-e26c97d156b7747cd4d45581116dc1ff.gif
 arrow-down.gif: arrow-down-6d6494c03460b35f1b63015a56604ae2.gif
 arrow-up.gif: arrow-up-b4e8950b0089bfe8db8f09b5d2b6ed72.gif
+avatar-default-large.jpg: avatar-default-large-c7051376e00871bc0713068245f252ee.jpg
 avatar-default-medium.jpg: avatar-default-medium-aeca276c9b70670096e21d5e30afae7e.jpg
 avatar-default-small.jpg: avatar-default-small-fa996b4b3f12133c444ebc8345ab71ad.jpg
 banner-button-download-big.png: banner-button-download-big-d3acf5bab216e5ba87b09a86acdd111e.png
@@ -211,10 +212,12 @@ lib/jquery.ui.draggable.js: lib/jquery.ui.draggable-14f2a11976cf750565517af608bc
 lib/jquery.ui.droppable.js: lib/jquery.ui.droppable-c7f1a9110c0d59208af4215455c35334.js
 lib/jquery.ui.mouse.js: lib/jquery.ui.mouse-85e976a4dd424706afe05ebb9f5e82fe.js
 lib/jquery.ui.position.js: lib/jquery.ui.position-4c73bddbf101b339db397296b3d26f0e.js
+lib/jquery.ui.selectmenu.js: lib/jquery.ui.selectmenu-8dd473e89f84d9b13cb347620f67ff45.js
 lib/jquery.ui.widget.js: lib/jquery.ui.widget-0d68580b40839753efc5ace9498dba90.js
 lib/jquery.url.js: lib/jquery.url-54bab1cba764049f9199d478427a17df.js
 lib/superfish.min.js: lib/superfish.min-ffabcd0209faaae3216c63369a26facf.js
 lib/supersubs.min.js: lib/supersubs.min-51d2091adc4247f2751775293b4697b7.js
+profiles.js: profiles-9fca231e07c6c302a5a45fe804d21346.js
 rails.js: rails-68b47f0ba7401778dadbcdeafc621db8.js
 application.css: application-b5ccf7188c153412298770ca08fa3746.css
 bootstrap-image-gallery.css: bootstrap-image-gallery-d5c0778ddff99fb1e8dbd314793ba0d8.css
@@ -225,14 +228,14 @@ file_upload/jquery.fileupload-ui.css: file_upload/jquery.fileupload-ui-f39575881
 file_upload/progressbar.gif: file_upload/progressbar-54dfeacc002a35b014f009faa50bf254.gif
 jquery-ui.custom.css: jquery-ui.custom-bb782aff6a70a3531739cdd09fe60b50.css
 jquery.contextMenu.css: jquery.contextMenu-5e13ffab2ad4f1c83de146893d8f0b86.css
-scss/application.css: scss/application-01bcd84d5a86ef8c467ce9722508aefa.css
+scss/application.css: scss/application-dc1ec84d95ff2acc68986edd35439c37.css
 scss/banner.css: scss/banner-331c4e35597b1b905f46e6226aa74178.css
 scss/cart.css: scss/cart-a00c819367f1c26885c93fd320e87746.css
 scss/cart_new.css: scss/cart_new-7beab8be194a78a36be9fc560944d1e4.css
 scss/dialog.css: scss/dialog-5dec5a3c5274437ee34726e7e4356988.css
 scss/filter.css: scss/filter-739c80ba8eabd3a953be7d9ea50b38b6.css
 scss/image.css: scss/image-64b6683d484780bff39a790b7c1d60b3.css
-scss/new_image.css: scss/new_image-6bbde63ea15363aa8b7e336a489b6a81.css
+scss/new_image.css: scss/new_image-f89f20c40f076f207250c4deb77d786f.css
 scss/public.css: scss/public-886b8671cefad07f57eb023123ef72cd.css
 scss/sale.css: scss/sale-e1a820202e8b3f6450832905649e4070.css
 scss/search.css: scss/search-4ce78cb5c202f9d4f94d7ce58c348bd7.css
