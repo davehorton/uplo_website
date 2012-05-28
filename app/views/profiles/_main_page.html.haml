@@ -47,6 +47,7 @@
       .text.fuzzy-gray.font20.left= "&nbsp;(#{ @images.total_entries })".html_safe
       .right
         %a{ :href => '#' } + View all
+    .line-separator.left
     .images-wrapper.left
       - (0...@followers.length). each do |idx|
         - user = @followers[idx]
@@ -57,17 +58,19 @@
             .text.black.font12.line10= user.username
             .text.gray.font11.line10= user.fullname
 
-  #following-section.container.left
+  - following_margin = 'margin-top:15px;' if @followers.length > 0
+  #following-section.container.left{ :style => "#{ following_margin }" }
     .head
       .text.black.bold.font20.left You Are Following
       .text.fuzzy-gray.font20.left= "&nbsp;(#{ @images.total_entries })".html_safe
       .right
         %a{ :href => '#' } + View all
+    .line-separator.left
     .images-wrapper.left
       - (0...@followers.length). each do |idx|
         - user = @followers[idx]
         - additional_class = (idx%3 == 0) ? 'no-padding-left' : ((idx%3==2) ? 'no-padding-right' : '')
-        .user-section
+        .user-section.left{ :class => "#{ additional_class }" }
           = image_tag(user.avatar(:small), :class => "avatar small left #{ additional_class }")
           .left
             .text.black.font12= user.username
