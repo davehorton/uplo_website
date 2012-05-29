@@ -41,13 +41,12 @@ class ProfilesController < ApplicationController
   def get_galleries
     if request.xhr?
       galleries = Gallery.load_galleries(@filtered_params)
-      template = render_to_string :partial => 'shared/photos_template',
-                    :locals => { :galleries => galleries,
-                                :photos_per_line => 4, :photo_size => 'thumb' }
+      template = render_to_string :partial => 'shared/galleries_template',
+                    :locals => { :galleries => galleries, :galleries_per_line => 4 }
       pagination = render_to_string :partial => 'shared/hidden_pagination',
                     :locals => { :data_source => galleries,
                                 :params => { :controller => "profiles",
-                                              :action => 'get_photos' } }
+                                              :action => 'get_galleries' } }
       render :json => { :galleries => template, :pagination => pagination }
     end
   end

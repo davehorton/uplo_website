@@ -1,0 +1,11 @@
+.container.left
+  .head
+    .text.black.bold.font20.left= "#{ @user.first_name }'s Photos"
+    .text.fuzzy-gray.font20.left= "&nbsp;(#{ @galleries.total_entries })".html_safe
+    .edit-pane.right{ :data => { 'url' => "#"} }
+      .icon.edit.left
+      .text.black.font12.left Edit
+  #endless-pages.images-wrapper.left
+    = render :partial => 'shared/galleries_template', :locals => { :galleries => @galleries, :galleries_per_line => 4 }
+
+= render :partial => 'shared/hidden_pagination', :locals => { :data_source => @galleries, :params => { :controller => 'profiles', :action => 'get_galleries' } }
