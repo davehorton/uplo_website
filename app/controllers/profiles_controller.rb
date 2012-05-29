@@ -26,7 +26,7 @@ class ProfilesController < ApplicationController
                     :locals => { :data_source => images,
                                 :params => { :controller => "profiles",
                                               :action => 'get_photos' } }
-      render :json => { :photos => template, :pagination => pagination }
+      render :json => { :items => template, :pagination => pagination }
     end
   end
 
@@ -47,7 +47,7 @@ class ProfilesController < ApplicationController
                     :locals => { :data_source => galleries,
                                 :params => { :controller => "profiles",
                                               :action => 'get_galleries' } }
-      render :json => { :galleries => template, :pagination => pagination }
+      render :json => { :items => template, :pagination => pagination }
     end
   end
 

@@ -23,7 +23,7 @@ helper = {
       loading_point = $(document).height() - $(window).height();
       if (url && ($(window).scrollTop() >= loading_point)) {
         $('.pagination').removeClass('hidden');
-        $('.pagination').text('Fetching more photos....');
+        $('.pagination').text('Fetching....');
         return $.ajax({
           url: url,
           type: 'GET',
@@ -31,7 +31,7 @@ helper = {
           success: function(response) {
             var result;
             result = $.parseJSON(response);
-            $('#endless-pages').append(result.photos);
+            $('#endless-pages').append(result.items);
             $('.pagination').replaceWith(result.pagination);
           }
         });
