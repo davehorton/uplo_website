@@ -536,18 +536,32 @@ p, ul{
   width: $side-pane-width;
   .biography {
     margin-top: 10px;
+    .span {
+      margin-bottom: 5px;
+    }
   }
   #user-section {
     width: 100%;
     margin-bottom: 10px;
-    .info .main {
-      width: 100%;
+    .info {
+      .info-pane {
+        padding: 15px 0 15px 10px;
+        width: 214px;
+        height: auto;
+      }
+      .edit-pane {
+        padding-left: 5px;
+        width: 219px;
+      }
     }
     .edit-pane {
       padding: 5px 0;
       width: 100%;
       border-bottom: 1px solid $color-line-separator;
       background-color: $color-white;
+      .icon.edit {
+        margin-left: 1px;
+      }
     }
   }
 }
