@@ -16,6 +16,29 @@ global = {
  * Helper methods.
  */
 helper = {
+  endless_load_more: function() {
+    return $(window).scroll(function() {
+      var loading_point, url;
+      url = $('.pagination .next_page').attr('href');
+      loading_point = $(document).height() - $(window).height();
+      if (url && ($(window).scrollTop() >= loading_point)) {
+        $('.pagination').removeClass('hidden');
+        $('.pagination').text('Fetching more photos....');
+        return $.ajax({
+          url: url,
+          type: 'GET',
+          dataType: 'html',
+          success: function(response) {
+            var result;
+            result = $.parseJSON(response);
+            $('#endless-pages').append(result.photos);
+            $('.pagination').replaceWith(result.pagination);
+          }
+        });
+      }
+    });
+  },
+
   create_message_panel: function (type, message){
     var divMsg = $("<div></div>");
     $(divMsg).attr("class", "box box-" + type);
@@ -26,21 +49,21 @@ helper = {
   // Append a message panel to #flash element.
   flash_message: function (type, message, append, delay_time, container){
     var msg = helper.create_message_panel(type, message);
-    
+
     if(!container)
       container = "#flash";
     if(append)
       $(container).append(msg);
     else
       $(container).html(msg);
-    
+
     if(typeof(delay_time) != "undefined" && !isNaN(delay_time)){
       $(msg).delay(delay_time).fadeOut(function(){
         $(msg).remove();
       });
     }
   },
-  
+
   auto_hide_flash_message: function(){
     var flash_hidden = false;
     $(document).bind('click mousemove keypress', function(event) {
@@ -50,7 +73,7 @@ helper = {
       }
     });
   },
-  
+
   // Validate IPv4 address format
   is_valid_ip4_address: function (ipaddr) {
    var re = /^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$/;
@@ -65,22 +88,22 @@ helper = {
       return false;
     }
   },
-  
+
   // Validate list of IPv4 addresses format.
   is_valid_ip4_addresses: function (ipaddresses, separator) {
     if(!separator || $.trim(separator) == ""){
       separator = ","; // set default separator.
-    }    
+    }
     var ips = ipaddresses.split(separator);
     for (var i = 0; i < ips.length; i++) {
       var ip = $.trim(ips[i]);
       if(!helper.is_valid_ip4_address(ip)){
         return false;
       }
-    }    
+    }
     return true;
   },
-  
+
   setup_async_image_tag: function(img_selector, container_selector){
     if(!img_selector)
       img_selector = "img.user-avatar";
@@ -92,45 +115,45 @@ helper = {
           $(img).parent().removeClass("default");
           $(img).error(function(){
             $(this).parent().addClass("default");
-          });         
+          });
         }
       });
     });
   },
-  
+
   is_equal_elements: function(elm1, elm2){
     return (elm1 == elm2 || $.inArray(elm1, elm2) >= 0)
   },
-  
+
   parse_date: function(date_format, value){
     var result = null
     try{
       result = $.datepicker.parseDate(date_format, value);
     }
-    catch(exc){      
+    catch(exc){
     }
     return result;
   },
-  
+
   hide_require_signs: function(){
     // Require Livequery
     $(".simple_form label.required abbr").livequery(function(){
       $(this).hide()
     });
   },
-  
+
   scroll_to: function(element, delay_time){
     if (!delay_time)
       delay_time = 300;
     $('html, body').animate({ scrollTop: $(element).offset().top - 10}, delay_time);
   },
-  
+
   rand_num: function(){
     var str_num = Math.random().toString();
     str_num = str_num.replace("0.", "");
     return parseInt(str_num);
   },
-  
+
   alert_not_implement: function(){
     alert("This feature is coming soon");
     return false;
