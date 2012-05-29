@@ -3,7 +3,7 @@
     .head
       .text.black.bold.font20.left Your Photos
       .text.fuzzy-gray.font20.left= "&nbsp;(#{ @images.total_entries })".html_safe
-      .edit-pane.right{ :data => { 'url' => "#{ url_for(:controller => 'profiles', :action => 'list_photos') }"} }
+      .edit-pane.right{ :data => { 'url' => "#{ url_for(:controller => 'profiles', :action => 'show_photos') }"} }
         .icon.edit.left
         .text.black.font12.left Edit
     .images-wrapper.left
@@ -17,7 +17,7 @@
     .head
       .text.black.bold.font20.left Your Galleries
       .text.fuzzy-gray.font20.left= "&nbsp;(#{ @images.total_entries })".html_safe
-      .edit-pane.right{ :data => { 'url' => "#{ url_for(:controller => 'profiles', :action => 'list_galleries') }"} }
+      .edit-pane.right{ :data => { 'url' => "#{ url_for(:controller => 'profiles', :action => 'show_galleries') }"} }
         .icon.edit.left
         .text.black.font12.left Edit
     .images-wrapper.left
@@ -63,7 +63,7 @@
     .head
       .text.black.bold.font20.left You Are Following
       .text.fuzzy-gray.font20.left= "&nbsp;(#{ @images.total_entries })".html_safe
-      .edit-pane.right{ :data => { 'url' => "#{ url_for(:controller => 'profiles', :action => 'list_galleries') }"} }
+      .edit-pane.right{ :data => { 'url' => "#{ url_for(:controller => 'profiles', :action => 'show_galleries') }"} }
         .icon.edit.left
         .text.black.font12.left Edit
     .line-separator.left

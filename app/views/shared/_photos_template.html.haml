@@ -1,0 +1,7 @@
+/ local values: images, photos_per_line
+- last_column_idx = photos_per_line - 1
+- (0...images.length). each do |idx|
+  - image = images[idx]
+  - additional_class = line_item_additional_class(idx, photos_per_line)
+  .image-container{ :id => "image-container-#{ image.id }", :title=>"#{ image.name }", :class => "#{ photo_size } #{ additional_class }" }
+    = image_tag(image.data.url("#{ photo_size }"), :class => "image-#{ photo_size } image #{ photo_size }")

@@ -63,14 +63,14 @@ module ApplicationHelper
     @current_tab ||= "popular"
   end
 
-  def render_pagination(data_source, params = {})
+  def render_pagination(data_source, paging_params = {}, options = {})
     return nil if data_source.blank?
-    will_paginate(data_source, {
+    will_paginate(data_source, options.merge({
       :previous_label => "<",
       :next_label => ">",
       :param_name => "page_id",
-      :params => params
-    })
+      :params => paging_params
+    }))
   end
 
   # This is a helper to use with the JAIL (jQuery Asynchronous Image Loader plugin)
@@ -112,5 +112,18 @@ module ApplicationHelper
     [ [I18n.t("common.male"), 0],
       [I18n.t("common.female"), 1]
     ]
+  end
+
+  def line_item_additional_class(index, max_item_per_line)
+    last_column_index = max_item_per_line - 1
+    if index % max_item_per_line == 0
+      additional_class = "no-padding-left"
+    elsif index % max_item_per_line == last_column_index
+      additional_class = "no-padding-right"
+    else
+      additional_class = ''
+    end
+
+    return additional_class
   end
 end

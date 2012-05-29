@@ -20,8 +20,10 @@ Uplo::Application.routes.draw do
   get "my_account/edit", :to => "users#edit"
   put "my_account/update", :to => "users#update"
   get 'my_profile', :to => 'profiles#show'
-  get 'my_profile/photos', :to => 'profiles#list_photos'
-  get 'my_profile/galleries', :to => 'profiles#list_galleries'
+  get 'my_profile/photos', :to => 'profiles#show_photos'
+  get 'my_profile/get_photos', :to => 'profiles#get_photos'
+  get 'my_profile/galleries', :to => 'profiles#show_galleries'
+  get 'my_profile/get_galleries', :to => 'profiles#get_galleries'
 
   get 'images/browse/:id', :to => 'images#browse'
   get 'images/public/:id', :to => 'images#public'

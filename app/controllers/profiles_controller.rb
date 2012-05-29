@@ -8,7 +8,7 @@ class ProfilesController < ApplicationController
     @followers = User.all
   end
 
-  def list_photos
+  def show_photos
     if request.xhr?
       @user = current_user
       @images = Image.load_images(@filtered_params)
@@ -16,9 +16,39 @@ class ProfilesController < ApplicationController
     end
   end
 
-  def list_galleries
+  def get_photos
     if request.xhr?
-      render :partial => 'photos'
+      images = Image.load_images(@filtered_params)
+      template = render_to_string :partial => 'shared/photos_template',
+                    :locals => { :images => images,
+                                :photos_per_line => 4, :photo_size => 'thumb' }
+      pagination = render_to_string :partial => 'shared/hidden_pagination',
+                    :locals => { :data_source => images,
+                                :params => { :controller => "profiles",
+                                              :action => 'get_photos' } }
+      render :json => { :photos => template, :pagination => pagination }
+    end
+  end
+
+  def show_galleries
+    if request.xhr?
+      @user = current_user
+      @galleries = Gallery.load_galleries(@filtered_params)
+      render :partial => 'galleries'
+    end
+  end
+
+  def get_galleries
+    if request.xhr?
+      galleries = Gallery.load_galleries(@filtered_params)
+      template = render_to_string :partial => 'shared/photos_template',
+                    :locals => { :galleries => galleries,
+                                :photos_per_line => 4, :photo_size => 'thumb' }
+      pagination = render_to_string :partial => 'shared/hidden_pagination',
+                    :locals => { :data_source => galleries,
+                                :params => { :controller => "profiles",
+                                              :action => 'get_photos' } }
+      render :json => { :galleries => template, :pagination => pagination }
     end
   end
 
@@ -28,7 +58,7 @@ class ProfilesController < ApplicationController
     if actions.index(params[:action])
       size = 12
     else
-      size = 24
+      size = 4
     end
     return size
   end

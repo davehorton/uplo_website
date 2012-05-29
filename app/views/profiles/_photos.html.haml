@@ -5,9 +5,7 @@
     .edit-pane.right{ :data => { 'url' => "#"} }
       .icon.edit.left
       .text.black.font12.left Edit
-  .images-wrapper.left
-    - (0...@images.length). each do |idx|
-      - image = @images[idx]
-      - additional_class = (idx%4 == 0) ? "no-padding-left" : ((idx%4==3) ? "no-padding-right" : "")
-      .image-container.thumb{:id => "image-container-#{image.id}", :title=>"#{image.name}", :class => "#{additional_class}"}
-        = image_tag(image.data.url(:thumb), :class => "image-thumb image thumb")
+  #endless-pages.images-wrapper.left
+    = render :partial => 'shared/photos_template', :locals => { :images => @images, :photos_per_line => 4, :photo_size => 'thumb' }
+
+= render :partial => 'shared/hidden_pagination', :locals => { :data_source => @images, :params => { :controller => 'profiles', :action => 'get_photos' } }
