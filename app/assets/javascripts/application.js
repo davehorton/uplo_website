@@ -16,12 +16,12 @@ global = {
  * Helper methods.
  */
 helper = {
-  endless_load_more: function() {
+  endless_load_more: function(callback) {
     return $(window).scroll(function() {
       var loading_point, url;
       url = $('.pagination .next_page').attr('href');
       loading_point = $(document).height() - $(window).height();
-      if (url && ($(window).scrollTop() >= loading_point)) {
+      if(url && ($(window).scrollTop() >= loading_point)) {
         $('.pagination').removeClass('hidden');
         $('.pagination').text('Fetching....');
         return $.ajax({
@@ -33,6 +33,7 @@ helper = {
             result = $.parseJSON(response);
             $('#endless-pages').append(result.items);
             $('.pagination').replaceWith(result.pagination);
+            callback.call();
           }
         });
       }

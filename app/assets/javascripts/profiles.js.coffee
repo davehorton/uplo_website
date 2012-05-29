@@ -5,7 +5,12 @@ load = (url, callback)->
     dataType: 'html',
     success: (response) ->
       $('#container')[0].innerHTML = response
-      helper.endless_load_more()
+      helper.endless_load_more( ()->
+        while($(document).height() == $(window).height())
+          $(window).scroll()
+        return
+      )
+      $(window).scroll();
   });
 
 $ ->
