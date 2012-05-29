@@ -1,1 +1,0 @@
-((function(){var a;a=function(a,b){return $.ajax({url:a,type:"GET",dataType:"html",success:function(a){return $("#container")[0].innerHTML=a,helper.endless_load_more()}})},$(function(){return $(".edit-pane").click(function(){return a($(this).attr("data-url"))})})})).call(this);
