@@ -11,14 +11,15 @@ class ProfilesController < ApplicationController
   def show_photos
     if request.xhr?
       @user = current_user
-      @images = Image.load_images(@filtered_params)
+      @images = @user.images.load_images(@filtered_params)
       render :partial => 'photos'
     end
   end
 
   def get_photos
     if request.xhr?
-      images = Image.load_images(@filtered_params)
+      user = current_user
+      images = user.images.load_images(@filtered_params)
       template = render_to_string :partial => 'shared/photos_template',
                     :locals => { :images => images,
                                 :photos_per_line => 4, :photo_size => 'thumb' }
@@ -33,14 +34,15 @@ class ProfilesController < ApplicationController
   def show_galleries
     if request.xhr?
       @user = current_user
-      @galleries = Gallery.load_galleries(@filtered_params)
+      @galleries = @user.galleries.load_galleries(@filtered_params)
       render :partial => 'galleries'
     end
   end
 
   def get_galleries
     if request.xhr?
-      galleries = Gallery.load_galleries(@filtered_params)
+      user = current_user
+      galleries = user.galleries.load_galleries(@filtered_params)
       template = render_to_string :partial => 'shared/galleries_template',
                     :locals => { :galleries => galleries, :galleries_per_line => 4 }
       pagination = render_to_string :partial => 'shared/hidden_pagination',
