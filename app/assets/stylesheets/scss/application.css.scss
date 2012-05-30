@@ -555,6 +555,7 @@ p, ul{
       }
     }
     .edit-pane {
+      cursor: pointer;
       padding: 5px 0;
       width: 100%;
       border-bottom: 1px solid $color-line-separator;

@@ -31,7 +31,7 @@
     .head
       .text.black.bold.font20.left Your Likes
       .text.fuzzy-gray.font20.left= "&nbsp;(#{ @images.total_entries })".html_safe
-      .edit-pane.right{ :data => { 'url' => '#'} }
+      .not-implement.edit-pane.right{ :data => { 'url' => '#'} }
         .icon.edit.left
         .text.black.font12.left Edit
     .images-wrapper.left
@@ -45,7 +45,7 @@
     .head
       .text.black.bold.font20.left Your Followers
       .text.fuzzy-gray.font20.left= "&nbsp;(#{ @images.total_entries })".html_safe
-      .right
+      .not-implement.right
         %a{ :href => '#' } + View all
     .line-separator.left
     .images-wrapper.left
@@ -63,7 +63,7 @@
     .head
       .text.black.bold.font20.left You Are Following
       .text.fuzzy-gray.font20.left= "&nbsp;(#{ @images.total_entries })".html_safe
-      .edit-pane.right{ :data => { 'url' => "#{ url_for(:controller => 'profiles', :action => 'show_galleries') }"} }
+      .not-implement.edit-pane.right{ :data => { 'url' => "#"} }
         .icon.edit.left
         .text.black.font12.left Edit
     .line-separator.left

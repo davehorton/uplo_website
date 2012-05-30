@@ -23,7 +23,7 @@ helper = {
       loading_point = $(document).height() - $(window).height();
       if(url && ($(window).scrollTop() >= loading_point)) {
         $('.pagination').removeClass('hidden');
-        $('.pagination').text('Fetching....');
+        $('.pagination').text('Loading....');
         return $.ajax({
           url: url,
           type: 'GET',

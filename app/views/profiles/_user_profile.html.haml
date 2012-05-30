@@ -2,14 +2,14 @@
   .left
     = image_tag(user.avatar(:large), :class => 'avatar large left')
     .clear
-    .edit-pane
+    .not-implement.edit-pane
       .icon.edit.left.left
       .text.black.font11 Edit Photo
   .info.left
     .info-pane.left
       .name.text.black.bold.font20= user.fullname
       .text.fuzzy-gray.font12= "Joined #{ user.joined_date }"
-    .edit-pane.left
+    .not-implement.edit-pane.left
       .icon.edit.left
       .text.black.font11 Edit Profile Information
 
