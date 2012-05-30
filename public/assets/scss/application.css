@@ -467,6 +467,7 @@ p, ul {
       padding-left: 5px;
       width: 219px; }
     #left #user-section .edit-pane {
+      cursor: pointer;
       padding: 5px 0;
       width: 100%;
       border-bottom: 1px solid #cccccc;
