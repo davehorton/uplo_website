@@ -392,6 +392,19 @@ p, ul{
 .simple_form .desc {margin-top: 30px;}
 .simple_form span.error { margin-left: 50px; padding-top: 5px; color: #EA501F; font-size: 12px; font-weight: bold; clear: both; }
 
+.button{
+  &.save-grid-changes {
+    background: url('/assets/btn-save-changes-big.png') no-repeat;
+    width: 108px;
+    height: 27px;
+  }
+  &.delete-photo {
+    background: url('/assets/btn-delete-photo.png') no-repeat;
+    width: 90px;
+    height: 23px;
+  }
+}
+
 .buttons-container {
   .button {
     width: 32px;
@@ -466,7 +479,22 @@ p, ul{
 #top {
   width: 100%;
   margin-top: 30px;
-
+  select[id='gallery_selector_id'] {
+    height: 20px;
+    font-size: 11px;
+    option {
+      height: 14px;
+    }
+  }
+  .top-nav {
+    margin-top: 4px;
+    &.text {
+      margin-right: 4px;
+    }
+  }
+  .action-container {
+    margin-top: 2px;
+  }
   #filter-box {
     .container {
       padding-right: 25px;
@@ -587,11 +615,36 @@ p, ul{
   }
 }
 #center {
+  #images-panel {
+    .info-panel {
+      width: 248px;
+      margin-left: 20px;
+      input, textarea { width: 242px; }
+      select { width: 100%; }
+      .info-line {
+        width: 100%;
+        margin: 5px 0;
+        textarea { height: 68px; }
+        .label {
+          margin: 2px 0px;
+        }
+        .half {
+          width: 120px;
+          &.option {
+            margin: 5px 0px;
+          }
+        }
+      }
+    }
+  }
   #order-preview {
     margin-bottom: 30px;
   }
   .wrapper.the-app {
     margin-top: -10px;
+  }
+  .container {
+    width: 100%;
   }
   .intro {
     width: 300px;
@@ -612,8 +665,10 @@ p, ul{
       }
     }
     .container {
-      width: 100%;
       margin-top: 30px;
+      a.edit-pane {
+        font-weight: normal;
+      }
       .edit-pane {
         margin-top: 7px;
         cursor: pointer;

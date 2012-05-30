@@ -1,0 +1,42 @@
+/ local values: image
+
+.container.left
+  .image-container.thumb.no-padding{ :id => "image-container-#{image.id}", :title=>"#{image.name}" }
+    = image_tag(image.data.url(:thumb), :class => "image-thumb image thumb")
+  .info-panel.left
+    .info-line.left
+      .label.text.black.bold.font12 Photo Name
+      = text_field :image, :name, :value => image.name
+    .info-line.left
+      .label.text.black.bold.font12 Move to Another Gallery
+      = select :image, :gallery_id, gallery_options(current_user, image.id),
+             { :class => 'left' }
+    .info-line.left
+      .half.left
+        .label.text.black.bold.font12 Permission
+        = select :image, :gallery_id, gallery_permissions_options
+      .half.right
+        .label.text.black.bold.font12 Price
+        = select :image, :gallery_id, gallery_permissions_options
+  .info-panel.left
+    .info-line.left
+      .label.text.black.bold.font12 Description
+      = text_area :image, :description, :value => image.name
+    .info-line.left
+      .label.text.black.bold.font12 Other Actions
+      .option.half.left
+        %input{ :type => 'checkbox', :name => 'image[is_album_cover]', :value => '1', :class => 'no-padding left', :checked => 'checked' }
+        = label_tag :image_is_album_cover, 'Use as album cover', :class => 'text gray font11 line16 left', :style => 'padding-left: 3px'
+        / # = radio_button(:image, :is_album_cover, true, :checked => true)
+        / # = label(:image_is_album_cover_true, 'Use as album cover', :class => 'text gray font11')
+      .option.half.right
+        %input{ :type => 'checkbox', :name => 'image[is_avatar]', :value => '1', :class => 'no-padding left', :checked => 'checked' }
+        / # = radio_button(:image, :is_avatar, true, :checked => true)
+        = label_tag :image_is_avatar, 'Use as profile picture', :class => 'text gray font11 line16 left', :style => 'padding-left: 3px'
+
+  .info-panel.left
+    .info-line.left
+      .label.text.black.bold.font12 Key Words
+      = text_area :image, :key_words, :value => image.name
+    .info-line.left
+      .button.delete-photo.right

@@ -14,6 +14,5 @@ load = (url, callback)->
   });
 
 $ ->
-  $('.not-implement').click ->
-    helper.alert_not_implement()
+  $('.not-implement').click -> helper.alert_not_implement()
   $('#container .edit-pane[data-url!="#"]').click -> load($(@).attr('data-url'))

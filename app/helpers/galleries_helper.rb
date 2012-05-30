@@ -1,4 +1,16 @@
 module GalleriesHelper
+  def gallery_options(user_id, image_id = nil)
+    user = User.find_by_id user_id
+    if image_id.nil?
+      image = user.images.first
+    else
+      image = Image.find_by_id image_id
+    end
+    selected = image.gallery_id
+    collection = user.galleries
+    return options_from_collection_for_select(collection, 'id', 'name', selected)
+  end
+
   def gallery_cover_image_url(gallery)
     img_url = "/assets/gallery-thumb-180.jpg" # Default image.
     image = gallery.cover_image

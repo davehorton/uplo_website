@@ -77,6 +77,13 @@ class GalleriesController < ApplicationController
     end
   end
 
+  def edit_images
+    @gallery = current_user.galleries.first
+    # @images = @gallery.images.load_images(@filtered_params)
+    @images = Image.load_images(@filtered_params)
+    render :layout => 'main'
+  end
+
   def update
     if find_gallery!
       respond_to do |format|
@@ -115,7 +122,13 @@ class GalleriesController < ApplicationController
   end
 
   def default_page_size
-    return 12
+    actions = ['edit_images']
+    if actions.index(params[:action])
+      size = 10
+    else
+      size = 12
+    end
+    return size
   end
 
   def find_gallery

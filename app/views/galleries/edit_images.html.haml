@@ -1,0 +1,33 @@
+- content_for :head do
+  = stylesheet_link_tag 'scss/new_image.css'
+
+- content_for :top_content do
+  .left
+    .top-nav.text.black.bold.font16.line12.left My Gallery /
+    = select :gallery_selector, :id, gallery_options(current_user), { :class => 'left' }
+  .top-nav
+    .action-container.right
+      %a#edit-gallery{ :href => '#' } Edit Gallery Info
+      %span.saparator= "|"
+      %a{ :href => gallery_path(@gallery), :data => { :method => :delete, :confirm => I18n.t("gallery.delete_confirm") } } Delete Gallery
+      %span.saparator= "|"
+      %a{ :href => '#', :data => { :method => :get } } Add Files
+  .line-separator.left
+
+.wrapper.left
+  .right
+    = render_pagination(@images, { :controller => 'galleries', :action => 'index' }, { :class => 'left' })
+    .button.save-grid-changes.left.not-implement
+  .line-separator.left
+
+  #images-panel.container.left
+    - if @images.blank?
+      .empty-data= 'There is no image in this gallery. Please add image.'
+    - else
+      - (0...@images.length). each do |idx|
+        - image = @images[idx]
+        = render :partial => 'edit_photo_template', :locals => { :image => image }
+        .line-separator.left
+  .right
+    = render_pagination(@images, { :controller => 'galleries', :action => 'index' }, { :class => 'left' })
+    .button.save-grid-changes.left.not-implement
