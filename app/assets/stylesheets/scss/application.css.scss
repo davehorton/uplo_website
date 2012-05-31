@@ -11,6 +11,7 @@ $color-light-gray: #a1a1a1;
 $color-fuzzy-gray: #b3b3b3;
 $color-background: #f8f8f8;
 $color-line-separator: #cccccc;
+$color-input-border: #cdcdcd;
 $font-size-normal: 12px;
 $font-family: Arial;
 
@@ -94,6 +95,11 @@ a {
 p, ul{
   text-align: justify;
   // line-height: 1.5em;
+}
+
+input, textarea {
+  border: 1px solid $color-input-border;
+  padding-left: 5px;
 }
 
 /*==================================================================================*/
@@ -378,7 +384,6 @@ p, ul{
 .simple_form input[type=email],
 .simple_form input[type=password],
 .simple_form textarea{
-  border: 1px solid #CDCDCD;
   height: 15px;
 }
 .simple_form input, .simple_form textarea{
@@ -488,11 +493,29 @@ p, ul{
   }
   .top-nav {
     margin-top: 4px;
+    .actions-panel {
+      .separator {
+        margin: 0 5px;
+      }
+      #add-files {
+        position: relative;
+        overflow: hidden;
+        &:hover { text-decoration: underline; }
+        input {
+          cursor: pointer;
+          position: absolute;
+          left: -242px;
+          top: -7px;
+          opacity: 0;
+          width: 100%;
+        }
+      }
+    }
     &.text {
       margin-right: 4px;
     }
   }
-  .action-container {
+  .actions-panel, .action-container {
     margin-top: 2px;
   }
   #filter-box {
@@ -619,7 +642,9 @@ p, ul{
     .info-panel {
       width: 248px;
       margin-left: 20px;
-      input, textarea { width: 242px; }
+      input, textarea {
+        width: 242px;
+      }
       select { width: 100%; }
       .info-line {
         width: 100%;
@@ -662,6 +687,11 @@ p, ul{
       width: 100%;
       .main {
         width: 636px;
+      }
+    }
+    #followers-section {
+      .actions-panel .list {
+        margin-top: 7px;
       }
     }
     .container {
@@ -856,7 +886,6 @@ p, ul{
 }
 
 #comment-field {
-  border: 1px solid #cdcdcd;
   color: #aaaaaa;
   width: 570px;
   height: 150px;

@@ -7,7 +7,7 @@
 .profile-wrapper
   #counters.right
     = render :partial => 'counters', :locals => { :photos => @images.total_entries,
-      :galleries => @images.total_entries, :likes => @images.total_entries,
+      :galleries => @galleries.total_entries, :likes => @images.total_entries,
       :followers => @followers.size, :following => @followers.size }
 
   #container.right

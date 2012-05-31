@@ -6,12 +6,14 @@
     .top-nav.text.black.bold.font16.line12.left My Gallery /
     = select :gallery_selector, :id, gallery_options(current_user), { :class => 'left' }
   .top-nav
-    .action-container.right
-      %a#edit-gallery{ :href => '#' } Edit Gallery Info
-      %span.saparator= "|"
-      %a{ :href => gallery_path(@gallery), :data => { :method => :delete, :confirm => I18n.t("gallery.delete_confirm") } } Delete Gallery
-      %span.saparator= "|"
-      %a{ :href => '#', :data => { :method => :get } } Add Files
+    .actions-panel.right
+      %a#edit-gallery.left{ :href => '#' } Edit Gallery Info
+      .separator.left= '|'
+      %a.left{ :href => gallery_path(@gallery), :data => { :method => :delete, :confirm => I18n.t("gallery.delete_confirm") } } Delete Gallery
+      .separator.left= '|'
+      #add-files.text.black.bold.font12.left{ :data => { :method => :get } }
+        Add Files
+        = file_field :image, :data, :multiple => true
   .line-separator.left
 
 .wrapper.left

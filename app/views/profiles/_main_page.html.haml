@@ -9,7 +9,7 @@
     .images-wrapper.left
       - (0...@images.length). each do |idx|
         - image = @images[idx]
-        - additional_class = (idx%6 == 0) ? "no-padding-left" : ((idx%6==5) ? "no-padding-right" : "")
+        - additional_class = line_item_additional_class(idx, 6)
         .image-container.thumb.profile{:id => "image-container-#{image.id}", :title=>"#{image.name}", :class => "#{additional_class}"}
           = image_tag(image.data.url(:thumb), :class => "image-thumb profile image thumb")
 
@@ -21,11 +21,11 @@
         .icon.edit.left
         .text.black.font12.left Edit
     .images-wrapper.left
-      - (0...@images.length). each do |idx|
-        - image = @images[idx]
-        - additional_class = (idx%6 == 0) ? "no-padding-left" : ((idx%6==5) ? "no-padding-right" : "")
-        .image-container.thumb.profile{:id => "image-container-#{image.id}", :title=>"#{image.name}", :class => "#{additional_class}"}
-          = image_tag(image.data.url(:thumb), :class => "image-thumb profile image thumb")
+      - (0...@galleries.length). each do |idx|
+        - gallery = @galleries[idx]
+        - additional_class = line_item_additional_class(idx, 6)
+        .image-container.thumb.profile{:title=>"#{ gallery.name }", :class => "#{ additional_class }"}
+          = image_tag(gallery_cover_image_url(gallery), :class => "image-thumb profile image thumb")
 
   #liked-photos-section.container.left
     .head
@@ -45,8 +45,8 @@
     .head
       .text.black.bold.font20.left Your Followers
       .text.fuzzy-gray.font20.left= "&nbsp;(#{ @images.total_entries })".html_safe
-      .not-implement.right
-        %a{ :href => '#' } + VIEW ALL
+      .not-implement.actions-panel.right
+        %a.list.text.font10.right{ :href => '#' } + VIEW ALL
     .line-separator.left
     .images-wrapper.left
       - (0...@followers.length). each do |idx|
