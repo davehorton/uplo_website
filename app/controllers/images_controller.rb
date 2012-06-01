@@ -71,19 +71,19 @@ class ImagesController < ApplicationController
     unless image.save
       result = [{:error => 'Cannot save image' }]
     else
-      result = [{
-        :name => image.name,
-        :description => image.description,
-        :size => image.data_file_size,
-        :url => image.data.url,
-        :thumbnail_url => image.data(:thumb),
-        :delete_url => "/galleries/#{params[:gallery_id]}/images/delete/#{image.id}",
-        :edit_url => url_for(:controller => 'images', :action => 'show', :id => image.id),
-        :image_id => image.id
-      }]
+      gallery = current_user.galleries.first
+      images = gallery.images.load_images(@filtered_params)
+      pagination = render_to_string :partial => 'shared/pagination',
+        :locals => {  :source => images, :params => { :controller => "profiles",
+        :action => 'get_photos' }, :classes => 'left' }
+      item = render_to_string :partial => 'images/edit_photo_template',
+                              :locals => { :image => image }
+      result = {
+        :item => item, :pagination => pagination
+      }
     end
 
-    render :text => result.to_json
+    render :json => result
   end
 
   def destroy
@@ -271,13 +271,15 @@ class ImagesController < ApplicationController
     @current_tab = tab
   end
 
-  def default_page_size   
+  def default_page_size
     actions = ['index']
-    if actions.index(params[:action]) == nil
-      size = 12 
+    if params[:action] == 'create'
+      size = 10
+    elsif actions.index(params[:action]) == nil
+      size = 12
     else
       size = 24
-    end    
+    end
     return size
   end
 

@@ -13,23 +13,93 @@
       .separator.left= '|'
       #add-files.text.black.bold.font12.left{ :data => { :method => :get } }
         Add Files
-        = file_field :image, :data, :multiple => true
+        = form_for :image, :url=>"/galleries/#{@gallery.id}/images", :method => 'post', :html => { :multipart => true, :id => 'fileupload' } do |f|
+          = f.file_field :data, :multiple => true
   .line-separator.left
 
 .wrapper.left
   .right
-    = render_pagination(@images, { :controller => 'galleries', :action => 'index' }, { :class => 'left' })
+    = render :partial => 'shared/pagination', :locals => { :source => @images, :params => { :controller => 'galleries', :action => 'index' }, :classes => 'text left' }
     .button.save-grid-changes.left.not-implement
   .line-separator.left
 
+  #upload-panel.container.left
   #images-panel.container.left
     - if @images.blank?
       .empty-data= 'There is no image in this gallery. Please add image.'
     - else
-      - (0...@images.length). each do |idx|
-        - image = @images[idx]
-        = render :partial => 'edit_photo_template', :locals => { :image => image }
-        .line-separator.left
+      = render :partial => 'edit_photos', :locals => { :images => @images }
   .right
-    = render_pagination(@images, { :controller => 'galleries', :action => 'index' }, { :class => 'left' })
+    = render :partial => 'shared/pagination', :locals => { :source => @images, :params => { :controller => 'galleries', :action => 'index' }, :classes => 'text left' }
     .button.save-grid-changes.left.not-implement
+
+:erb
+  <script>
+  var page_size = '<%= @page_size %>'
+  var fileUploadErrors = {
+      maxFileSize: 'File is too big',
+      minFileSize: 'File is too small',
+      acceptFileTypes: 'Filetype not allowed',
+      maxNumberOfFiles: 'Max number of files exceeded',
+      uploadedBytes: 'Uploaded bytes exceed file size',
+      emptyResult: 'Empty file upload result'
+  };
+  </script>
+  <script id="template-upload" type="text/html">
+  {% for (var i=0, files=o.files, l=files.length, file=files[0]; i<l; file=files[++i]) { %}
+      <tr class="template-upload fade">
+          <td class="preview"><span class="fade"></span></td>
+          <td class="image-info">
+            <div class="name">{%=file.name%}</div>
+            {% var show = false; %}
+            {% if (file.error) { %}
+                <td class="error" colspan="2"><span class="label important">Error</span> {%=fileUploadErrors[file.error] || file.error%}</td>
+            {% } else if (o.files.valid && !i) { %}
+                <div class="progressbar"><div style="width:0%;"></div></div>
+                {% show = true; %}
+            {% } %}
+          </td>
+          <td>
+            <div class="start">{% if (show == true && !o.options.autoUpload) { %}<button class="btn primary">Start</button>{% } %}</div>
+            <div class="cancel" style="float: right;">
+              {% if (!i) { %}<button class="btn info">Cancel</button>{% } %}
+            </div>
+          </td>
+      </tr>
+  {% } %}
+  </script>
+  <script id="template-download" type="text/html">
+  {% for (var i=0, files=o.files, l=files.length, file=files[0]; i<l; file=files[++i]) { %}
+      <tr class="template-download fade">
+          {% if (file.error) { %}
+              <td></td>
+              <td class="name">{%=file.name%}</td>
+              <td class="size">{%=o.formatFileSize(file.size)%}</td>
+              <td class="error" colspan="2"><span class="label important">Error</span> {%=fileUploadErrors[file.error] || file.error%}</td>
+          {% } else { %}
+              <td class="preview">{% if (file.thumbnail_url) { %}
+                  <a href="{%=file.url%}" title="{%=file.name%}" rel="gallery"><img src="{%=file.thumbnail_url%}"></a>
+              {% } %}</td>
+              <td>
+                <div class='name'>{%= file.name %}</div>
+                <div class='description'>{%= file.description %}</div>
+              </td>
+          {% } %}
+
+          <td>
+            <div class="edit"><button class="btn" data-url="{%=file.edit_url%}">Edit</button></div>
+            <div class="delete" style="float: right;">
+              <button class="btn danger" data-url="{%=file.delete_url%}">Delete</button>
+              <input type="checkbox" name="delete" value="1" data-id="{%=file.image_id%}">
+            </div>
+          </td>
+      </tr>
+  {% } %}
+  </script>
+
+= javascript_include_tag "file_upload/jquery.ui.widget.js",
+      "lib/blueimp/tmpl.min.js",
+      "lib/blueimp/load-image.min.js",
+      "file_upload/jquery.fileupload.js",
+      "file_upload/jquery.iframe-transport.js",
+      'app/edit_images.js'

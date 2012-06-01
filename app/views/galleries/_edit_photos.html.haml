@@ -1,0 +1,5 @@
+/ local values: images
+- (0...images.length). each do |idx|
+  - image = images[idx]
+  = render :partial => 'images/edit_photo_template', :locals => { :image => image }
+

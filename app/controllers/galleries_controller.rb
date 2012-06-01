@@ -79,9 +79,12 @@ class GalleriesController < ApplicationController
 
   def edit_images
     @gallery = current_user.galleries.first
-    # @images = @gallery.images.load_images(@filtered_params)
-    @images = Image.load_images(@filtered_params)
-    render :layout => 'main'
+    @images = @gallery.images.load_images(@filtered_params)
+    if request.xhr?
+      render :partial => 'edit_photos', :locals => { :images => @images }
+    else
+      render :layout => 'main'
+    end
   end
 
   def update

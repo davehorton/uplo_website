@@ -1,0 +1,3 @@
+/ local values: source, params, classes
+- classes = "" if classes.nil?
+= render_pagination(source, params, {:class => "pagination #{ classes }"})

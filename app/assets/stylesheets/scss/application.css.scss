@@ -10,6 +10,7 @@ $color-gray: #606060;
 $color-light-gray: #a1a1a1;
 $color-fuzzy-gray: #b3b3b3;
 $color-background: #f8f8f8;
+$color-highlight: #ed3b03;
 $color-line-separator: #cccccc;
 $color-input-border: #cdcdcd;
 $font-size-normal: 12px;
@@ -153,7 +154,7 @@ input, textarea {
     font-weight: bold;
   }
   &.highlight {
-    color: #ED3B03;
+    color: $color-highlight;
   }
   &.gray {
     color: $color-gray;
@@ -287,60 +288,63 @@ input, textarea {
   padding-top: 30px;
   text-align: center;
   clear: both;
-
-  .current{
+  font-size: 12px;
+  .current {
     font-style: normal;
     font-weight: bold;
-    background-color: #EA501F;
-  /*
-    background-image: url("/assets/menu-item-hightlight-bg.png");
-  */
-    background-repeat: repeat-x;
-    color: $color-white;
+    background-color: transparent;
+    color: $color-highlight;
   }
 
   a {
+    font-weight: normal;
     text-decoration: none;
-    color: gray;
+    color: $color-gray;
   }
 
   a, em, span{
-    border: 1px solid #CCCCCC;
+    margin: 2px 3px;
+    /*border: 1px solid #CCCCCC;
     display: inline-block;
     padding: 0.2em 0.5em;
     vertical-align: middle;
     -moz-border-radius: 4px;
     -webkit-border-radius: 4px;
-    border-radius: 4px;
+    border-radius: 4px;*/
   }
 
   a:hover{
-    border-color: #999999;
+    font-weight: bold;
+    /*border-color: #999999;
     -webkit-box-shadow:0 0 3px #999999;
     -moz-box-shadow:0 0 3px #999999;
     box-shadow:0 0 3px #999999;
-    box-shadow:#999999 0 0 3px \0/IE9;
+    box-shadow:#999999 0 0 3px \0/IE9;*/
   }
 
-  .previous_page, .next_page{
+  /*.previous_page, .next_page{
     width: 10px;
     height: 18px;
     padding: 0.2em 0.5em;
     line-height: 18px;
-  }
+  }*/
 
   .previous_page{
-  /*
-    background: url("/assets/back.png") no-repeat scroll center center transparent;
-  */
+    background: url("/assets/icon-previous-page.png") no-repeat scroll center center transparent;
     margin-right: 10px;
   }
 
   .next_page{
-  /*
-    background: url("/assets/next.png") no-repeat scroll center center transparent;
-  */
+    background: url("/assets/icon-next-page.png") no-repeat scroll center center transparent;
     margin-left: 10px;
+  }
+
+  &.text {
+    padding: 8px 20px;
+    .current {
+      color: $color-highlight;
+      background-color: transparent;
+    }
   }
 }
 
@@ -638,7 +642,18 @@ input, textarea {
   }
 }
 #center {
-  #images-panel {
+  #upload-panel {
+    .upload-template.container {
+      .image-container.thumb {
+        border: 1px solid $color-input-border;
+        line-height: 153px;
+        canvas {
+          vertical-align: middle;
+        }
+      }
+    }
+  }
+  #images-panel, #upload-panel {
     .info-panel {
       width: 248px;
       margin-left: 20px;
