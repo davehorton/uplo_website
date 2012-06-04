@@ -12,12 +12,9 @@
       = select :image, :gallery_id, gallery_options(current_user, image.id),
              { :class => 'left' }
     .info-line.left
-      .half.left
-        .label.text.black.bold.font12 Permission
-        = select :image, :gallery_id, gallery_permissions_options
-      .half.right
-        .label.text.black.bold.font12 Price
-        = select :image, :gallery_id, gallery_permissions_options
+      / .half.left
+      .label.text.black.bold.font12 Price
+      = select :image, :price, gallery_price_options
   .info-panel.left
     .info-line.left
       .label.text.black.bold.font12 Description

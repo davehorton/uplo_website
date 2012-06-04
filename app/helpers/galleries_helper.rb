@@ -32,6 +32,10 @@ module GalleriesHelper
     result
   end
 
+  def gallery_price_options
+    options_for_select([["Standard", "20"], ['Other', '10']])
+  end
+
   def can_modify_gallery?(gallery, user = nil)
     user ||= current_user
     return gallery.is_owner?(user)
