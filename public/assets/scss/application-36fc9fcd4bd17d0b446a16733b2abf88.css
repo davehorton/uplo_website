@@ -670,7 +670,8 @@ input, textarea {
         text-align: center;
         width: 14px; }
     #social-sharing .main .container {
-      padding: 8px 10px; }
+      padding: 8px 10px;
+      width: 242px; }
   #social-sharing .tail {
     width: 100%;
     height: 13px; }
