@@ -78,10 +78,20 @@ class GalleriesController < ApplicationController
   end
 
   def edit_images
-    @gallery = current_user.galleries.first
+    if params[:gallery_id].nil?
+      @gallery = current_user.galleries.first
+    else
+      @gallery = Gallery.find_by_id params[:gallery_id]
+    end
+
     @images = @gallery.images.load_images(@filtered_params)
     if request.xhr?
-      render :partial => 'edit_photos', :locals => { :images => @images }
+      pagination = render_to_string :partial => 'shared/pagination',
+        :locals => {  :source => @images, :params => { :controller => "galleries",
+        :action => 'edit_images', :gallery_id => @gallery.id }, :classes => 'text left' }
+      items = render_to_string :partial => 'galleries/edit_photos',
+                              :locals => { :images => @images }
+      render :json => { :items => items, :pagination => pagination }
     else
       render :layout => 'main'
     end

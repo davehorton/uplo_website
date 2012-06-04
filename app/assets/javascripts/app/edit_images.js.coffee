@@ -37,7 +37,6 @@ renderUpload = (file) ->
   return element
 
 $ ->
-  "use strict"
   $("#fileupload").fileupload()
   $("#fileupload").fileupload "option",
     maxFileSize: 5000000
@@ -73,6 +72,17 @@ $ ->
       url: 'images/update_images',
       type: 'POST',
       data: { images: $.toJSON(data), gallery_id: $('#gallery_selector_id').val() },
+      dataType: 'json',
+      success: (response) ->
+        $('#images-panel')[0].innerHTML = response.items
+        $('.pagination').replaceWith response.pagination
+    });
+
+  $('#gallery_selector_id').change ->
+    $.ajax({
+      url: 'edit_images',
+      type: 'GET',
+      data: { gallery_id: $('#gallery_selector_id').val() },
       dataType: 'json',
       success: (response) ->
         $('#images-panel')[0].innerHTML = response.items

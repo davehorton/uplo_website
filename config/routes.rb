@@ -53,7 +53,7 @@ Uplo::Application.routes.draw do
   get 'galleries/show_public', :to => 'galleries#show_public'
   get 'users/search', :to => 'users#search'
   get 'users/follow', :to => 'users#set_follow'
-  get 'edit_images', :to => 'galleries#edit_images'
+  get 'galleries/edit_images', :to => 'galleries#edit_images'
   resources :galleries do
     post 'mail_shared_gallery', :to => 'galleries#mail_shared_gallery'
     get 'public', :to => 'galleries#public'
