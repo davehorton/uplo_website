@@ -33,6 +33,8 @@
       = render :partial => 'shared/pagination', :locals => { :source => @images, :params => { :controller => 'galleries', :action => 'edit_images', :gallery_id => @gallery.id }, :classes => 'text left' }
     .button.save-grid-changes.left.not-implement
 
+= render :partial => 'edit_gallery', :layout => 'layouts/popup', :locals => { :title => 'Edit Your Gallery Infomation', :id => 'edit-gallery-popup' }
+
 :erb
   <script>
   var page_size = '<%= @page_size %>'
