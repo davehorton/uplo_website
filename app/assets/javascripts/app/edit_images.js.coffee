@@ -36,6 +36,19 @@ renderUpload = (file) ->
     canvas: true
   return element
 
+
+deletePhoto = (node) ->
+  $.ajax({
+    url: $(node).attr('data-url'),
+    type: 'GET',
+    dataType: 'json',
+    success: (response) ->
+      $('#images-panel')[0].innerHTML = response.items
+      $('.pagination-panel').each( (idx, elem) ->
+        elem.innerHTML = response.pagination
+      )
+  });
+
 $ ->
   $("#fileupload").fileupload()
   $("#fileupload").fileupload "option",
@@ -49,7 +62,9 @@ $ ->
       data.submit()
     done: (e, data) ->
       $(data.context).replaceWith data.result.item
-      $('.pagination').replaceWith data.result.pagination
+      $('.pagination-panel').each( (idx, elem) ->
+        elem.innerHTML = response.pagination
+      )
       $('#images-panel').children().last().remove()
 
   $('.button.save-grid-changes').click ->
@@ -69,13 +84,15 @@ $ ->
       }
     )
     $.ajax({
-      url: 'images/update_images',
+      url: '/images/update_images',
       type: 'POST',
       data: { images: $.toJSON(data), gallery_id: $('#gallery_selector_id').val() },
       dataType: 'json',
       success: (response) ->
         $('#images-panel')[0].innerHTML = response.items
-        $('.pagination').replaceWith response.pagination
+        $('.pagination-panel').each( (idx, elem) ->
+          elem.innerHTML = response.pagination
+        )
     });
 
   $('#gallery_selector_id').change ->
@@ -86,9 +103,12 @@ $ ->
       dataType: 'json',
       success: (response) ->
         $('#images-panel')[0].innerHTML = response.items
-        $('.pagination').replaceWith response.pagination
+        $('.pagination-panel').each( (idx, elem) ->
+          elem.innerHTML = response.pagination
+        )
     });
 
+  $('#images-panel').delegate '.button.delete-photo', 'click', (e) -> deletePhoto(e.target)
 
 
 

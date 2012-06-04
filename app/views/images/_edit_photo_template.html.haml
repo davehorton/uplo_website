@@ -36,7 +36,7 @@
       .label.text.black.bold.font12 Key Words
       = text_area :image, :key_words, :value => image.name
     .info-line.left
-      .button.delete-photo.right
+      .button.delete-photo.right{ :data => { :url => "#{ url_for(:controller => 'images', :action => 'destroy', :gallery_id => image.gallery_id, :id => image.id)}" } }
 
   .clear
   .line-separator

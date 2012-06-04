@@ -36,6 +36,27 @@ class ImagesController < ApplicationController
   def new
   end
 
+  def destroy
+    if request.xhr?
+      image = Image.find_by_id params[:id]
+      gallery = image.gallery
+      images = gallery.images.load_images(@filtered_params)
+
+      image.destroy
+      pagination = render_to_string :partial => 'shared/pagination',
+        :locals => {  :source => images, :params => { :controller => 'galleries',
+          :action => 'edit_images', :gallery_id => gallery.id }, :classes => 'text left' }
+      items = render_to_string :partial => 'galleries/edit_photos',
+                              :locals => { :images => images }
+      render :json => { :items => items, :pagination => pagination }
+    else
+      ids = params[:id]
+      ids = params[:id].join(',') if params[:id].instance_of? Array
+      Image.destroy_all("id in (#{ids})")
+      render :json => {:success => true}
+    end
+  end
+
   def public_images
     if find_gallery!
       @images = @gallery.images.load_popular_images(@filtered_params)
@@ -74,8 +95,8 @@ class ImagesController < ApplicationController
       gallery = current_user.galleries.first
       images = gallery.images.load_images(@filtered_params)
       pagination = render_to_string :partial => 'shared/pagination',
-        :locals => {  :source => images, :params => { :controller => "profiles",
-        :action => 'get_photos' }, :classes => 'text left' }
+        :locals => {  :source => images, :params => { :controller => 'galleries',
+          :action => 'edit_images', :gallery_id => gallery.id }, :classes => 'text left' }
       item = render_to_string :partial => 'images/edit_photo_template',
                               :locals => { :image => image }
       result = {
@@ -84,13 +105,6 @@ class ImagesController < ApplicationController
     end
 
     render :json => result
-  end
-
-  def destroy
-    ids = params[:id]
-    ids = params[:id].join(',') if params[:id].instance_of? Array
-    Image.destroy_all("id in (#{ids})")
-    render :json => {:success => true}
   end
 
   def list
@@ -242,8 +256,8 @@ class ImagesController < ApplicationController
     gallery = Gallery.find_by_id params[:gallery_id].to_i
     images = gallery.images.load_images(@filtered_params)
     pagination = render_to_string :partial => 'shared/pagination',
-      :locals => {  :source => images, :params => { :controller => "profiles",
-      :action => 'get_photos' }, :classes => 'text left' }
+      :locals => {  :source => images, :params => { :controller => 'galleries',
+        :action => 'edit_images', :gallery_id => gallery.id }, :classes => 'text left' }
     items = render_to_string :partial => 'galleries/edit_photos',
                             :locals => { :images => images }
     result = {
