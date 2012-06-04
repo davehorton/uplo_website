@@ -28,6 +28,7 @@ btn-cancel-57x23.png: btn-cancel-57x23-fe29530acbf7897decd886e286e6a299.png
 btn-cancel.png: btn-cancel-8641548e8d97c6dad9281a63ebb145f3.png
 btn-checkout.jpg: btn-checkout-213d609b81160865a8ca9d52534b3104.jpg
 btn-comment.jpg: btn-comment-0a73efa9af8378462e4d4bad7317d5fb.jpg
+btn-delete-photo.png: btn-delete-photo-558c2a2d4b48c0aea7c376724bf705bf.png
 btn-dislike.png: btn-dislike-7b20ce2baa59fecb897f5fbf0506b621.png
 btn-dowload-app.png: btn-dowload-app-2e9fc66a9ec53cf550430ad32ddc2fba.png
 btn-follow.png: btn-follow-ce4dd860ca4ed5faa085c1409ab5fd8a.png
@@ -36,6 +37,7 @@ btn-more-details.jpg: btn-more-details-eff40444c687c18a1b5357a6b95d8b15.jpg
 btn-order.jpg: btn-order-3a014c1992c917f45763abe22d3d5ea1.jpg
 btn-place-order.jpg: btn-place-order-972a850d8a31ba1847f592bd76655f82.jpg
 btn-post-comment.jpg: btn-post-comment-ab1b739ac44614fe54d98665f3c7f234.jpg
+btn-save-changes-big.png: btn-save-changes-big-c1dee47a00b9a004a88cddcbd1bcbfcf.png
 btn-save-changes.jpg: btn-save-changes-413071e9fb3dfc42c23523d7391c80e7.jpg
 btn-send.png: btn-send-ff6d3239a55ddfae94196aad81f6bffb.png
 btn-share.png: btn-share-40644dc10f0910f48bbbd6ddf49fa370.png
@@ -75,8 +77,10 @@ icon-facebook.png: icon-facebook-060afc76f493fb77e8da6f89b9b6b689.png
 icon-flickr-16x16.png: icon-flickr-16x16-e9c6653e8fc72138cc39a3fa1c9c6f6e.png
 icon-flickr.png: icon-flickr-acddbd300599c3734e7b549ac226763d.png
 icon-like.jpg: icon-like-0a2e5f9894431b9889b7c9d350eb3164.jpg
+icon-next-page.png: icon-next-page-bc89e8e3b4ab22ba3c3ebb49e3859cf6.png
 icon-pinterest-16x16.png: icon-pinterest-16x16-a04f59d751bcd1e9481f894fc254f367.png
 icon-pinterest.png: icon-pinterest-da63835956554d27aab97d84aa354d5b.png
+icon-previous-page.png: icon-previous-page-f5cc607950842da6c13befd8561273b7.png
 icon-sharing-tail.png: icon-sharing-tail-6762e7065ae762d827d5192e754986f2.png
 icon-tumblr-16x16.png: icon-tumblr-16x16-1961a97f1f30d78662fe1439ef37301d.png
 icon-tumblr.png: icon-tumblr-dec04bcd7477f6bb8759414328cb15b7.png
@@ -136,6 +140,7 @@ up.gif: up-7851ecffdfbb6ca3ba41bcebfa93cb35.gif
 uplo-logo.png: uplo-logo-1a1123ea4ae8aed84ec7486c1838b15e.png
 uplo_logo.png: uplo_logo-4e147b8807d73e64931db4bc3568f789.png
 uploader_file.png: uploader_file-3ab3c53af3d8adf6071f3776329ab009.png
+app/edit_images.js: app/edit_images-bb655327289a8d674e3f11e4745c4ac5.js
 app/gallery.js: app/gallery-56d1423ff8282cf24bfa0dc13979b30e.js
 app/image.js: app/image-cb8cb8666e97f0786846dd6d4af220e7.js
 app/popup.js: app/popup-3d37daf582062d5f270aa53d3da682bd.js
@@ -212,7 +217,6 @@ lib/jquery.ui.draggable.js: lib/jquery.ui.draggable-14f2a11976cf750565517af608bc
 lib/jquery.ui.droppable.js: lib/jquery.ui.droppable-c7f1a9110c0d59208af4215455c35334.js
 lib/jquery.ui.mouse.js: lib/jquery.ui.mouse-85e976a4dd424706afe05ebb9f5e82fe.js
 lib/jquery.ui.position.js: lib/jquery.ui.position-4c73bddbf101b339db397296b3d26f0e.js
-lib/jquery.ui.selectmenu.js: lib/jquery.ui.selectmenu-8dd473e89f84d9b13cb347620f67ff45.js
 lib/jquery.ui.widget.js: lib/jquery.ui.widget-0d68580b40839753efc5ace9498dba90.js
 lib/jquery.url.js: lib/jquery.url-54bab1cba764049f9199d478427a17df.js
 lib/superfish.min.js: lib/superfish.min-ffabcd0209faaae3216c63369a26facf.js
@@ -228,7 +232,7 @@ file_upload/jquery.fileupload-ui.css: file_upload/jquery.fileupload-ui-f39575881
 file_upload/progressbar.gif: file_upload/progressbar-54dfeacc002a35b014f009faa50bf254.gif
 jquery-ui.custom.css: jquery-ui.custom-bb782aff6a70a3531739cdd09fe60b50.css
 jquery.contextMenu.css: jquery.contextMenu-5e13ffab2ad4f1c83de146893d8f0b86.css
-scss/application.css: scss/application-47c1fc2fcb7134a9339bb9c03813b290.css
+scss/application.css: scss/application-82e8fbc491e7bef6cfd8512c369a4db2.css
 scss/banner.css: scss/banner-331c4e35597b1b905f46e6226aa74178.css
 scss/cart.css: scss/cart-a00c819367f1c26885c93fd320e87746.css
 scss/cart_new.css: scss/cart_new-7beab8be194a78a36be9fc560944d1e4.css

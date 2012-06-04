@@ -70,6 +70,10 @@ a {
 p, ul {
   text-align: justify; }
 
+input, textarea {
+  border: 1px solid #cdcdcd;
+  padding-left: 5px; }
+
 /*==================================================================================*/
 /* CLASS */
 /*==================================================================================*/
@@ -123,7 +127,7 @@ p, ul {
   .text.bold {
     font-weight: bold; }
   .text.highlight {
-    color: #ED3B03; }
+    color: #ed3b03; }
   .text.gray {
     color: #606060; }
   .text.heavy-gray {
@@ -228,48 +232,50 @@ p, ul {
 .pagination {
   padding-top: 30px;
   text-align: center;
-  clear: both; }
+  clear: both;
+  font-size: 12px;
+  /*.previous_page, .next_page{
+    width: 10px;
+    height: 18px;
+    padding: 0.2em 0.5em;
+    line-height: 18px;
+  }*/ }
   .pagination .current {
     font-style: normal;
     font-weight: bold;
-    background-color: #EA501F;
-    /*
-      background-image: url("/assets/menu-item-hightlight-bg.png");
-    */
-    background-repeat: repeat-x;
-    color: white; }
+    background-color: transparent;
+    color: #ed3b03; }
   .pagination a {
+    font-weight: normal;
     text-decoration: none;
-    color: gray; }
+    color: #606060; }
   .pagination a, .pagination em, .pagination span {
-    border: 1px solid #CCCCCC;
+    margin: 2px 3px;
+    /*border: 1px solid #CCCCCC;
     display: inline-block;
     padding: 0.2em 0.5em;
     vertical-align: middle;
     -moz-border-radius: 4px;
     -webkit-border-radius: 4px;
-    border-radius: 4px; }
+    border-radius: 4px;*/ }
   .pagination a:hover {
-    border-color: #999999;
-    -webkit-box-shadow: 0 0 3px #999999;
-    -moz-box-shadow: 0 0 3px #999999;
-    box-shadow: 0 0 3px #999999;
-    box-shadow: #999999 0 0 3px \0/IE9; }
-  .pagination .previous_page, .pagination .next_page {
-    width: 10px;
-    height: 18px;
-    padding: 0.2em 0.5em;
-    line-height: 18px; }
+    font-weight: bold;
+    /*border-color: #999999;
+    -webkit-box-shadow:0 0 3px #999999;
+    -moz-box-shadow:0 0 3px #999999;
+    box-shadow:0 0 3px #999999;
+    box-shadow:#999999 0 0 3px \0/IE9;*/ }
   .pagination .previous_page {
-    /*
-      background: url("/assets/back.png") no-repeat scroll center center transparent;
-    */
+    background: url("/assets/icon-previous-page.png") no-repeat scroll center center transparent;
     margin-right: 10px; }
   .pagination .next_page {
-    /*
-      background: url("/assets/next.png") no-repeat scroll center center transparent;
-    */
+    background: url("/assets/icon-next-page.png") no-repeat scroll center center transparent;
     margin-left: 10px; }
+  .pagination.text {
+    padding: 8px 20px; }
+    .pagination.text .current {
+      color: #ed3b03;
+      background-color: transparent; }
 
 .breadcrum {
   line-height: 1.5em;
@@ -318,7 +324,6 @@ p, ul {
 .simple_form input[type=email],
 .simple_form input[type=password],
 .simple_form textarea {
-  border: 1px solid #CDCDCD;
   height: 15px; }
 
 .simple_form input, .simple_form textarea {
@@ -349,6 +354,15 @@ p, ul {
   font-size: 12px;
   font-weight: bold;
   clear: both; }
+
+.button.save-grid-changes {
+  background: url("/assets/btn-save-changes-big.png") no-repeat;
+  width: 108px;
+  height: 27px; }
+.button.delete-photo {
+  background: url("/assets/btn-delete-photo.png") no-repeat;
+  width: 90px;
+  height: 23px; }
 
 .buttons-container .button {
   width: 32px;
@@ -403,6 +417,31 @@ p, ul {
 #top {
   width: 100%;
   margin-top: 30px; }
+  #top select[id='gallery_selector_id'] {
+    height: 20px;
+    font-size: 11px; }
+    #top select[id='gallery_selector_id'] option {
+      height: 14px; }
+  #top .top-nav {
+    margin-top: 4px; }
+    #top .top-nav .actions-panel .separator {
+      margin: 0 5px; }
+    #top .top-nav .actions-panel #add-files {
+      position: relative;
+      overflow: hidden; }
+      #top .top-nav .actions-panel #add-files:hover {
+        text-decoration: underline; }
+      #top .top-nav .actions-panel #add-files input {
+        cursor: pointer;
+        position: absolute;
+        left: -242px;
+        top: -7px;
+        opacity: 0;
+        width: 100%; }
+    #top .top-nav.text {
+      margin-right: 4px; }
+  #top .actions-panel, #top .action-container {
+    margin-top: 2px; }
   #top #filter-box .container {
     padding-right: 25px; }
     #top #filter-box .container select {
@@ -490,10 +529,35 @@ p, ul {
   #right .line-separator {
     margin: 10px 0; }
 
+#center #upload-panel .upload-template.container .image-container.thumb {
+  border: 1px solid #cdcdcd;
+  line-height: 153px; }
+  #center #upload-panel .upload-template.container .image-container.thumb canvas {
+    vertical-align: middle; }
+#center #images-panel .info-panel, #center #upload-panel .info-panel {
+  width: 248px;
+  margin-left: 20px; }
+  #center #images-panel .info-panel input, #center #images-panel .info-panel textarea, #center #upload-panel .info-panel input, #center #upload-panel .info-panel textarea {
+    width: 242px; }
+  #center #images-panel .info-panel select, #center #upload-panel .info-panel select {
+    width: 100%; }
+  #center #images-panel .info-panel .info-line, #center #upload-panel .info-panel .info-line {
+    width: 100%;
+    margin: 5px 0; }
+    #center #images-panel .info-panel .info-line textarea, #center #upload-panel .info-panel .info-line textarea {
+      height: 68px; }
+    #center #images-panel .info-panel .info-line .label, #center #upload-panel .info-panel .info-line .label {
+      margin: 2px 0px; }
+    #center #images-panel .info-panel .info-line .half, #center #upload-panel .info-panel .info-line .half {
+      width: 120px; }
+      #center #images-panel .info-panel .info-line .half.option, #center #upload-panel .info-panel .info-line .half.option {
+        margin: 5px 0px; }
 #center #order-preview {
   margin-bottom: 30px; }
 #center .wrapper.the-app {
   margin-top: -10px; }
+#center .container {
+  width: 100%; }
 #center .intro {
   width: 300px;
   height: auto;
@@ -508,9 +572,12 @@ p, ul {
     width: 100%; }
     #center .profile-wrapper #container .main {
       width: 636px; }
+  #center .profile-wrapper #followers-section .actions-panel .list {
+    margin-top: 7px; }
   #center .profile-wrapper .container {
-    width: 100%;
     margin-top: 30px; }
+    #center .profile-wrapper .container a.edit-pane {
+      font-weight: normal; }
     #center .profile-wrapper .container .edit-pane {
       margin-top: 7px;
       cursor: pointer; }
@@ -645,7 +712,6 @@ p, ul {
   margin: 15px 0; }
 
 #comment-field {
-  border: 1px solid #cdcdcd;
   color: #aaaaaa;
   width: 570px;
   height: 150px;
