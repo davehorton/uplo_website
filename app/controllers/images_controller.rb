@@ -209,15 +209,15 @@ class ImagesController < ApplicationController
   def update
     image = Image.find_by_id params[:id]
     img_info = params[:image]
-    if request.xhr?
-      worker = FilterWorker.new
-      worker.image_id = image.id
-      worker.image_url = image.data.url
-      worker.effect = img_info[:filtered_effect]
-      worker.queue #put task to iron worker
+    # if request.xhr?
+    #   worker = FilterWorker.new
+    #   worker.image_id = image.id
+    #   worker.image_url = image.data.url
+    #   worker.effect = img_info[:filtered_effect]
+    #   worker.queue #put task to iron worker
 
-      return render :json => {:task_id => worker.task_id}
-    end
+    #   return render :json => {:task_id => worker.task_id}
+    # end
 
     img_info.delete :filtered_effect
     image.attributes = img_info

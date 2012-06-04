@@ -4,7 +4,7 @@ gem 'rails', '>= 3.1.3'
 
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
-gem 'iron_worker'
+# gem 'iron_worker'
 # gem 'typhoeus'
 
 # Social network
