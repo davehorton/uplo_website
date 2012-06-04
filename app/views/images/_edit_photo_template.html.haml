@@ -1,6 +1,6 @@
 / local values: image
 
-.container.left
+.edit-template.container.left{ :data => {:id => "#{ image.id }"} }
   .image-container.thumb.no-padding{ :id => "image-container-#{image.id}", :title=>"#{image.name}" }
     = image_tag(image.data.url(:thumb), :class => "image-thumb image thumb")
   .info-panel.left
@@ -22,12 +22,12 @@
     .info-line.left
       .label.text.black.bold.font12 Other Actions
       .option.half.left
-        %input{ :type => 'checkbox', :name => 'image[is_album_cover]', :value => '1', :class => 'no-padding left', :checked => 'checked' }
+        %input{ :id => 'image_album_cover', :type => 'checkbox', :name => 'image[is_album_cover]', :value => '1', :class => 'no-padding left', :checked => 'checked' }
         = label_tag :image_is_album_cover, 'Use as album cover', :class => 'text gray font11 line16 left', :style => 'padding-left: 3px'
         / # = radio_button(:image, :is_album_cover, true, :checked => true)
         / # = label(:image_is_album_cover_true, 'Use as album cover', :class => 'text gray font11')
       .option.half.right
-        %input{ :type => 'checkbox', :name => 'image[is_avatar]', :value => '1', :class => 'no-padding left', :checked => 'checked' }
+        %input{ :id => 'user_avatar', :type => 'checkbox', :name => 'image[is_avatar]', :value => '1', :class => 'no-padding left', :checked => 'checked' }
         / # = radio_button(:image, :is_avatar, true, :checked => true)
         = label_tag :image_is_avatar, 'Use as profile picture', :class => 'text gray font11 line16 left', :style => 'padding-left: 3px'
 

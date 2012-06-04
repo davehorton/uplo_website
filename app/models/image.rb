@@ -92,6 +92,11 @@ class Image < ActiveRecord::Base
   end
 
   # INSTANCE METHODS
+  def set_as_album_cover
+    self.update_attribute('is_cover', true)
+    Image.update_all 'is_cover=true', "gallery_id = #{ self.gallery_id } and id <> #{ self.id }"
+  end
+
   def author
     if self.gallery && self.gallery.user
       self.gallery.user

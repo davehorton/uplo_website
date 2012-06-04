@@ -75,7 +75,7 @@ class ImagesController < ApplicationController
       images = gallery.images.load_images(@filtered_params)
       pagination = render_to_string :partial => 'shared/pagination',
         :locals => {  :source => images, :params => { :controller => "profiles",
-        :action => 'get_photos' }, :classes => 'left' }
+        :action => 'get_photos' }, :classes => 'text left' }
       item = render_to_string :partial => 'images/edit_photo_template',
                               :locals => { :image => image }
       result = {
@@ -223,6 +223,34 @@ class ImagesController < ApplicationController
     image.attributes = img_info
     image.save
     redirect_to :action => :browse
+  end
+
+  def update_images
+    data = JSON.parse params[:images]
+    data.each do |img|
+      id = img.delete 'id'
+      image = Image.find_by_id id.to_i
+      if image.nil?
+      else
+        is_cover = img.delete 'is_album_cover'
+        is_avatar = img.delete 'is_avatar'
+        image.set_as_album_cover if SharedMethods::Converter::Boolean(is_cover)
+        image.update_attributes img
+      end
+    end
+
+    gallery = Gallery.find_by_id params[:gallery_id].to_i
+    images = gallery.images.load_images(@filtered_params)
+    pagination = render_to_string :partial => 'shared/pagination',
+      :locals => {  :source => images, :params => { :controller => "profiles",
+      :action => 'get_photos' }, :classes => 'text left' }
+    items = render_to_string :partial => 'galleries/edit_photos',
+                            :locals => { :images => images }
+    result = {
+      :items => items, :pagination => pagination
+    }
+
+    render :json => result
   end
 
   def get_filter_status

@@ -33,6 +33,7 @@ Uplo::Application.routes.draw do
   get 'images/flickr_response' => 'images#flickr_response'
   get 'images/flickr_post', :to => 'images#post_image_to_flickr'
   post 'images/mail_shared_image', :to => 'images#mail_shared_image'
+  post 'images/update_images', :to => 'images#update_images'
 
   get "sales", :to => "sales#index"
   get "sales/year_sales", :to => "sales#year_sales"

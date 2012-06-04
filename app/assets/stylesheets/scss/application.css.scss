@@ -642,7 +642,7 @@ input, textarea {
   }
 }
 #center {
-  #upload-panel {
+  #images-panel {
     .upload-template.container {
       .image-container.thumb {
         border: 1px solid $color-input-border;
@@ -652,8 +652,6 @@ input, textarea {
         }
       }
     }
-  }
-  #images-panel, #upload-panel {
     .info-panel {
       width: 248px;
       margin-left: 20px;

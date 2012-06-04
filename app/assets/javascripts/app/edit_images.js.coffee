@@ -29,7 +29,7 @@ renderUpload = (file) ->
   element = $(document.createElement 'div')
   window.loadImage file, ((img) ->
       renderUploadingElement(element, img, file.name)
-      element.prependTo('#upload-panel')
+      element.prependTo('#images-panel')
     ),
     maxWidth: 155
     maxHeight: 155
@@ -52,6 +52,32 @@ $ ->
       $(data.context).replaceWith data.result.item
       $('.pagination').replaceWith data.result.pagination
       $('#images-panel').children().last().remove()
+
+  $('.button.save-grid-changes').click ->
+    data = []
+    photos =  $('#images-panel .edit-template')
+    photos.each( (idx, elem)->
+      node = $(elem)
+      data.push {
+        id: node.attr('data-id'),
+        name: node.find('#image_name').val(),
+        gallery_id: node.find('#image_gallery_id').val(),
+        price: node.find('#image_price').val(),
+        description: node.find('#image_description').val(),
+        is_album_cover: node.find('#image_album_cover').val(),
+        is_avatar: node.find('#user_avatar').val(),
+        keyword: node.find('#image_key_words').val()
+      }
+    )
+    $.ajax({
+      url: 'images/update_images',
+      type: 'POST',
+      data: { images: $.toJSON(data), gallery_id: $('#gallery_selector_id').val() },
+      dataType: 'json',
+      success: (response) ->
+        $('#images-panel')[0].innerHTML = response.items
+        $('.pagination').replaceWith response.pagination
+    });
 
 
 

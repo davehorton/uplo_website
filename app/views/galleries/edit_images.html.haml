@@ -22,8 +22,6 @@
     = render :partial => 'shared/pagination', :locals => { :source => @images, :params => { :controller => 'galleries', :action => 'index' }, :classes => 'text left' }
     .button.save-grid-changes.left.not-implement
   .line-separator.left
-
-  #upload-panel.container.left
   #images-panel.container.left
     - if @images.blank?
       .empty-data= 'There is no image in this gallery. Please add image.'
@@ -102,4 +100,5 @@
       "lib/blueimp/load-image.min.js",
       "file_upload/jquery.fileupload.js",
       "file_upload/jquery.iframe-transport.js",
+      'lib/jquery.json.min.js',
       'app/edit_images.js'
