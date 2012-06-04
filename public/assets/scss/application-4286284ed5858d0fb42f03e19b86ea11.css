@@ -529,28 +529,28 @@ input, textarea {
   #right .line-separator {
     margin: 10px 0; }
 
-#center #upload-panel .upload-template.container .image-container.thumb {
+#center #images-panel .upload-template.container .image-container.thumb {
   border: 1px solid #cdcdcd;
   line-height: 153px; }
-  #center #upload-panel .upload-template.container .image-container.thumb canvas {
+  #center #images-panel .upload-template.container .image-container.thumb canvas {
     vertical-align: middle; }
-#center #images-panel .info-panel, #center #upload-panel .info-panel {
+#center #images-panel .info-panel {
   width: 248px;
   margin-left: 20px; }
-  #center #images-panel .info-panel input, #center #images-panel .info-panel textarea, #center #upload-panel .info-panel input, #center #upload-panel .info-panel textarea {
+  #center #images-panel .info-panel input, #center #images-panel .info-panel textarea {
     width: 242px; }
-  #center #images-panel .info-panel select, #center #upload-panel .info-panel select {
+  #center #images-panel .info-panel select {
     width: 100%; }
-  #center #images-panel .info-panel .info-line, #center #upload-panel .info-panel .info-line {
+  #center #images-panel .info-panel .info-line {
     width: 100%;
     margin: 5px 0; }
-    #center #images-panel .info-panel .info-line textarea, #center #upload-panel .info-panel .info-line textarea {
+    #center #images-panel .info-panel .info-line textarea {
       height: 68px; }
-    #center #images-panel .info-panel .info-line .label, #center #upload-panel .info-panel .info-line .label {
+    #center #images-panel .info-panel .info-line .label {
       margin: 2px 0px; }
-    #center #images-panel .info-panel .info-line .half, #center #upload-panel .info-panel .info-line .half {
+    #center #images-panel .info-panel .info-line .half {
       width: 120px; }
-      #center #images-panel .info-panel .info-line .half.option, #center #upload-panel .info-panel .info-line .half.option {
+      #center #images-panel .info-panel .info-line .half.option {
         margin: 5px 0px; }
 #center #order-preview {
   margin-bottom: 30px; }
