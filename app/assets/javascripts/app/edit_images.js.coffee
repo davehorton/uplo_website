@@ -112,6 +112,7 @@ $ ->
         $('.pagination-panel').each( (idx, elem) ->
           elem.innerHTML = response.pagination
         )
+        $('#delete-gallery').attr('href', response.delete_url)
         $('#edit-gallery-popup').replaceWith response.edit_popup
     });
 

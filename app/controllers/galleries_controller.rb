@@ -94,7 +94,8 @@ class GalleriesController < ApplicationController
       edit_popup = render_to_string :partial => 'edit_gallery', :layout => 'layouts/popup',
           :locals => { :title => 'Edit Your Gallery Infomation',
           :id => 'edit-gallery-popup', :gallery => @gallery }
-      render :json => { :items => items, :pagination => pagination, :edit_popup => edit_popup }
+      render :json => { :items => items, :pagination => pagination, :edit_popup => edit_popup,
+        :delete_url => url_for(:action => 'destroy', :id => @gallery.id) }
     else
       render :layout => 'main'
     end
