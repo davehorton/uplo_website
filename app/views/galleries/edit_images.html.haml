@@ -34,7 +34,7 @@
     .button.save-grid-changes.left.not-implement
 
 = render :partial => 'edit_gallery', :layout => 'layouts/popup', :locals => { :title => 'Edit Your Gallery Infomation', :id => 'edit-gallery-popup', :gallery => @gallery }
-
+= render :partial => 'shared/delete_confirm', :layout => 'layouts/popup', :locals => { :title => 'Delete Confirm', :id => 'delete-confirm-popup' }
 
 - content_for :js do
   :erb

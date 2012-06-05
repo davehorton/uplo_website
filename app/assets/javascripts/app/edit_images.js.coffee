@@ -38,17 +38,20 @@ renderUpload = (file) ->
 
 
 deletePhoto = (node) ->
-  $.ajax({
-    url: $(node).attr('data-url'),
-    type: 'GET',
-    dataType: 'json',
-    success: (response) ->
-      $('#images-panel')[0].innerHTML = response.items
-      $('.pagination-panel').each( (idx, elem) ->
-        elem.innerHTML = response.pagination
-      )
-  });
-
+  $('#delete-confirm-popup').modal();
+  $('#btn-ok').click ->
+    $.modal.close()
+    $.ajax({
+      url: $(node).attr('data-url'),
+      type: 'GET',
+      dataType: 'json',
+      success: (response) ->
+        $('#images-panel')[0].innerHTML = response.items
+        $('.pagination-panel').each( (idx, elem) ->
+          elem.innerHTML = response.pagination
+        )
+        alert("Delete successfully!")
+    });
 
 $ ->
   $("#fileupload").fileupload()
@@ -94,6 +97,8 @@ $ ->
         $('.pagination-panel').each( (idx, elem) ->
           elem.innerHTML = response.pagination
         )
+
+        alert("Update successfully!")
     });
 
   $('#gallery_selector_id').change ->
@@ -112,7 +117,7 @@ $ ->
 
   $('#images-panel').delegate '.button.delete-photo', 'click', (e) -> deletePhoto(e.target)
   $('#edit-gallery').click -> $('#edit-gallery-popup').modal()
-  $('body').delegate '#edit-gallery-popup .close', 'click', (e) -> $.modal.close()
+  $('body').delegate '.popup .close', 'click', (e) -> $.modal.close()
   $('body').delegate '#btn-gallery-save', 'click', (e) ->
     $.ajax({
       url: $('#frm-edit-gallery').attr('action'),

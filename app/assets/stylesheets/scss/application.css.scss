@@ -285,6 +285,7 @@ input, textarea {
       textarea { height: 88px; }
       .label { margin: 5px 20px 5px 0;}
       .info-line { margin: 5px 0;}
+      .line-separator { margin: 20px 0px;}
     }
   }
 }
@@ -461,6 +462,11 @@ input, textarea {
   &.save {
     background: url('/assets/btn-save-changes.jpg') no-repeat;
     width: 96px;
+    height: 23px;
+  }
+  &.ok {
+    background: url('/assets/btn-ok.png') no-repeat;
+    width: 39px;
     height: 23px;
   }
   &.save-grid-changes {
@@ -972,10 +978,21 @@ input, textarea {
     input, textarea { width: 234px; }
     .label { width: 89px; }
     .note { margin: 10px 0 0 10px;}
-    .line-separator { margin: 20px 0px;}
     #button-container {
       margin-left: 110px;
       #btn-gallery-save { margin-right: 10px; }
+    }
+  }
+}
+#delete-confirm-popup {
+  width: 300px;
+  .main-panel {
+    width: 260px;
+    #button-container {
+      margin: 0 77px;
+      #btn-ok {
+        margin-left: 10px;
+      }
     }
   }
 }
