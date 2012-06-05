@@ -91,7 +91,10 @@ class GalleriesController < ApplicationController
         :action => 'edit_images', :gallery_id => @gallery.id }, :classes => 'text left' }
       items = render_to_string :partial => 'galleries/edit_photos',
                               :locals => { :images => @images }
-      render :json => { :items => items, :pagination => pagination }
+      edit_popup = render_to_string :partial => 'edit_gallery', :layout => 'layouts/popup',
+          :locals => { :title => 'Edit Your Gallery Infomation',
+          :id => 'edit-gallery-popup', :gallery => @gallery }
+      render :json => { :items => items, :pagination => pagination, :edit_popup => edit_popup }
     else
       render :layout => 'main'
     end
@@ -99,11 +102,23 @@ class GalleriesController < ApplicationController
 
   def update
     if find_gallery!
-      respond_to do |format|
+      if request.xhr?
         if @gallery.update_attributes(params[:gallery])
-          format.html { redirect_to(gallery_images_path(@gallery), :notice => I18n.t('gallery.update_done')) }
+          edit_popup = render_to_string :partial => 'edit_gallery', :layout => 'layouts/popup',
+            :locals => { :title => 'Edit Your Gallery Infomation',
+            :id => 'edit-gallery-popup', :gallery => @gallery }
+          result = { :success => true, :edit_popup => edit_popup }
         else
-          format.html { render :action => "edit", :notice => @gallery.errors}
+          result = { :success => false }
+        end
+        return render :json => result
+      else
+        respond_to do |format|
+          if @gallery.update_attributes(params[:gallery])
+            format.html { redirect_to(gallery_images_path(@gallery), :notice => I18n.t('gallery.update_done')) }
+          else
+            format.html { render :action => "edit", :notice => @gallery.errors}
+          end
         end
       end
     end

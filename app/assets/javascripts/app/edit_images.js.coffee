@@ -49,6 +49,7 @@ deletePhoto = (node) ->
       )
   });
 
+
 $ ->
   $("#fileupload").fileupload()
   $("#fileupload").fileupload "option",
@@ -106,9 +107,26 @@ $ ->
         $('.pagination-panel').each( (idx, elem) ->
           elem.innerHTML = response.pagination
         )
+        $('#edit-gallery-popup').replaceWith response.edit_popup
     });
 
   $('#images-panel').delegate '.button.delete-photo', 'click', (e) -> deletePhoto(e.target)
+  $('#edit-gallery').click -> $('#edit-gallery-popup').modal()
+  $('body').delegate '#edit-gallery-popup .close', 'click', (e) -> $.modal.close()
+  $('body').delegate '#btn-gallery-save', 'click', (e) ->
+    $.ajax({
+      url: $('#frm-edit-gallery').attr('action'),
+      type: 'POST',
+      data: $('#frm-edit-gallery').serialize(),
+      dataType: 'json',
+      success: (response) ->
+        if response.success
+          alert("Your gallery has been updated!")
+          $.modal.close()
+          $('#edit-gallery-popup').replaceWith response.edit_popup
+        else
+          alert("Something went wrong!")
+    });
 
 
 

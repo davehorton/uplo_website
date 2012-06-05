@@ -33,22 +33,24 @@
       = render :partial => 'shared/pagination', :locals => { :source => @images, :params => { :controller => 'galleries', :action => 'edit_images', :gallery_id => @gallery.id }, :classes => 'text left' }
     .button.save-grid-changes.left.not-implement
 
-= render :partial => 'edit_gallery', :layout => 'layouts/popup', :locals => { :title => 'Edit Your Gallery Infomation', :id => 'edit-gallery-popup' }
+= render :partial => 'edit_gallery', :layout => 'layouts/popup', :locals => { :title => 'Edit Your Gallery Infomation', :id => 'edit-gallery-popup', :gallery => @gallery }
 
-:erb
-  <script>
-  var page_size = '<%= @page_size %>'
-  var fileUploadErrors = {
-      maxFileSize: 'File is too big',
-      minFileSize: 'File is too small',
-      acceptFileTypes: 'Filetype not allowed',
-      maxNumberOfFiles: 'Max number of files exceeded',
-      uploadedBytes: 'Uploaded bytes exceed file size',
-      emptyResult: 'Empty file upload result'
-  };
-  </script>
 
 - content_for :js do
+  :erb
+    <script>
+    var page_size = '<%= @page_size %>'
+    var fileUploadErrors = {
+        maxFileSize: 'File is too big',
+        minFileSize: 'File is too small',
+        acceptFileTypes: 'Filetype not allowed',
+        maxNumberOfFiles: 'Max number of files exceeded',
+        uploadedBytes: 'Uploaded bytes exceed file size',
+
+        emptyResult: 'Empty file upload result'
+    };
+    </script>
+
   = javascript_include_tag "file_upload/jquery.ui.widget.js",
       "lib/blueimp/tmpl.min.js",
       "lib/blueimp/load-image.min.js",

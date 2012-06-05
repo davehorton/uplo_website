@@ -101,6 +101,7 @@ p, ul{
 input, textarea {
   border: 1px solid $color-input-border;
   padding-left: 5px;
+  margin: 0;
 }
 
 /*==================================================================================*/
@@ -246,6 +247,48 @@ input, textarea {
   margin: 10px 0;
 }
 
+.popup {
+  border-radius: 5px;
+  .header {
+    background: #ebebeb;
+    filter:progid:DXImageTransform.Microsoft.gradient(GradientType=0,startColorstr='#ffffff',endColorstr='#ebebeb');
+    background:-moz-linear-gradient(top, rgb(255,255,255) 0%, rgb(255,255,255) 0%, #ebebeb 100%);
+    background:-webkit-gradient(linear, left top, left bottom, color-stop(0%,rgb(255,255,255)), color-stop(0%,rgb(255,255,255)), color-stop(100%,#ebebeb));
+    background:-webkit-linear-gradient(top, rgb(255,255,255) 0%,rgb(255,255,255) 0%,#ebebeb 100%);
+    background:-o-linear-gradient(top, rgb(255,255,255) 0%,rgb(255,255,255) 0%,#ebebeb 100%);
+    background:-ms-linear-gradient(top, rgb(255,255,255) 0%,rgb(255,255,255) 0%,#ebebeb 100%);
+
+    height: 45px;
+    border-radius: 5px 5px 0 0;
+    width: 100%;
+    .title {
+      padding-left: 20px;
+      line-height: 45px;
+    }
+    .close {
+      margin: 10px 10px 0 0;
+      .right {
+        border: 1px solid #d8d8d8;
+        line-height: 14px;
+        text-align: center;
+        width: 14px;
+      }
+    }
+  }
+  .container {
+    border-radius: 0 0 5px 5px;
+    background-color: $color-white;
+    width: 100%;
+    .main-panel {
+      margin: 20px;
+      input { height: 18px; }
+      textarea { height: 88px; }
+      .label { margin: 5px 20px 5px 0;}
+      .info-line { margin: 5px 0;}
+    }
+  }
+}
+
 // old
 .normal {
   font-weight: normal;
@@ -276,6 +319,14 @@ input, textarea {
 .no-padding-left {
   padding-left: 0 !important;
   margin-left: 0 !important;
+}
+.no-padding-top {
+  padding-top: 0 !important;
+  margin-top: 0 !important;
+}
+.no-padding-bottom {
+  padding-bottom: 0 !important;
+  margin-bottom: 0 !important;
 }
 .show {
   display: inline-block;
@@ -401,7 +452,17 @@ input, textarea {
 .simple_form .desc {margin-top: 30px;}
 .simple_form span.error { margin-left: 50px; padding-top: 5px; color: #EA501F; font-size: 12px; font-weight: bold; clear: both; }
 
-.button{
+.button {
+  &.cancel {
+    background: url('/assets/btn-cancel-57x23.png') no-repeat;
+    width: 57px;
+    height: 23px;
+  }
+  &.save {
+    background: url('/assets/btn-save-changes.jpg') no-repeat;
+    width: 96px;
+    height: 23px;
+  }
   &.save-grid-changes {
     background: url('/assets/btn-save-changes-big.png') no-repeat;
     width: 108px;
@@ -445,7 +506,7 @@ input, textarea {
   height: 27px;
 }
 .simplemodal-overlay {
-  background-color: $color-light-gray;
+  background-color: $color-fuzzy-gray;
 }
 
 /*==================================================================================*/
@@ -868,17 +929,8 @@ input, textarea {
         margin-top: 0;
       }
     }
-    .button {
-      height: 23px;
-      &.cancel {
-        background: url('/assets/btn-cancel-57x23.png') no-repeat;
-        width: 57px;
-        margin-right: 10px;
-      }
-      &.save {
-        background: url('/assets/btn-save-changes.jpg') no-repeat;
-        width: 96px;
-      }
+    .button.cancel {
+      margin-right: 10px;
     }
     #button-container {
       margin: 5px 0 5px 110px;
@@ -914,3 +966,16 @@ input, textarea {
   }
 }
 
+#edit-gallery-popup {
+  width: 390px;
+  .main-panel {
+    input, textarea { width: 234px; }
+    .label { width: 89px; }
+    .note { margin: 10px 0 0 10px;}
+    .line-separator { margin: 20px 0px;}
+    #button-container {
+      margin-left: 110px;
+      #btn-gallery-save { margin-right: 10px; }
+    }
+  }
+}

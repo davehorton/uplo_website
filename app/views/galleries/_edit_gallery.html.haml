@@ -1,17 +1,19 @@
-.gallery-form-container
-  - gallery ||= @gallery
-  = simple_form_for(gallery, :html => {:id => 'frm-edit-gallery', :class => "gallery-form"}) do |f|
-
-    = f.input(:name, :wrapper_class => "input left", :label => 'Gallery Name',
-              :input_html => {:class => "name"}, :required => true)
-    = f.input(:description, :as => 'text', :wrapper_class => "input left",
-              :input_html => {:class => "description"}, :required => false)
-
-    = f.input(:keyword, :as => 'text', :wrapper_class => "input left",
-              :input_html => {:class => "description"}, :required => false)
-    = f.input :permission, :as => :select, :wrapper_class => "input left", :label => "Permission", :collection => gallery_permissions_options, :include_blank => false
-    %span.text.gray.italic.font11.left{ :style => 'margin-top:16px;' }= "&nbsp;<span style='color:red;'>*</span> Required Field".html_safe
-    .clear
-    #button-container.left
-      #btn-gallery-cancel.button.cancel.left
-      #btn-gallery-save.button.save.left
+//local values: gallery
+= form_for(gallery, :html => {:id => 'frm-edit-gallery', :class => "gallery-form left"}) do |f|
+  .info-line.left.no-padding-top
+    .label.text.black.bold.font12.left= "Gallery Name &nbsp;<span style='color:red;'>*</span>".html_safe
+    = f.text_field :name, :class => 'left', :value => gallery.name
+  .info-line.left
+    .label.text.black.bold.font12.left Description
+    = f.text_area :description, :class => 'left', :value => gallery.description
+  .info-line.left
+    .label.text.black.bold.font12.left Key Words
+    = f.text_area :keyword, :class => 'left', :value => gallery.keyword
+  .info-line.left.no-padding-bottom
+    .label.text.black.bold.font12.left Permission
+    = f.select :permission, gallery_permissions_options, {:value => gallery.permission}, { :class => 'left' }
+    .note.text.gray.italic.font11.left= "&nbsp;<span style='color:red;'>*</span> Required Field".html_safe
+.line-separator.left
+#button-container.center
+  #btn-gallery-save.button.save.left
+  .close.button.cancel.left

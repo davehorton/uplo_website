@@ -6,9 +6,9 @@
 .popup.left.hide{ :id => "#{ id }", :class => "#{ popup_class }" }
   .header.left
     .left{ :class => "#{ icon_class }" }
-    .text.black.bold.font12.left= title
-    %a.close{:href=>'#'}
+    .title.text.black.bold.font12.left= title
+    %a.close.right{:href=>'#'}
       .right &times;
-  .clear
-  .main-panel.left
-    = yield
+  .container.left
+    .main-panel.left
+      = yield
