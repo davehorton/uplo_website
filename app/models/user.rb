@@ -34,6 +34,8 @@ class User < ActiveRecord::Base
   has_one :cart, :dependent => :destroy
   has_many :user_followers, :foreign_key => :user_id, :class_name => 'UserFollow'
   has_many :followers, :through => :user_followers
+  has_many :user_followings, :foreign_key => :followed_by, :class_name => 'UserFollow'
+  has_many :followed_users, :through => :user_followings
 
   # VALIDATION
   validates_presence_of :first_name, :last_name, :email, :username, :message => 'cannot be blank'
@@ -44,6 +46,14 @@ class User < ActiveRecord::Base
 
   # CLASS METHODS
   class << self
+    def load_users(params = {})
+      paging_info = parse_paging_options(params)
+      paginate(
+        :page => paging_info.page_id,
+        :per_page => paging_info.page_size,
+        :order => paging_info.sort_string)
+    end
+
     def do_search(params = {})
       params[:filtered_params][:sort_field] = 'first_name' unless params[:filtered_params].has_key?("sort_field")
       paging_info = parse_paging_options(params[:filtered_params], {:sort_mode => :extended})

@@ -45,8 +45,8 @@
     .head
       .text.black.bold.font20.left Your Followers
       .text.fuzzy-gray.font20.left= "&nbsp;(#{ @images.total_entries })".html_safe
-      .not-implement.actions-panel.right
-        %a.list.text.font10.right{ :href => '#' } + VIEW ALL
+      .actions-panel.right
+        %a.list.text.black.bold.font10.right{ :data => { 'url' => "#{ url_for(:controller => 'profiles', :action => 'show_followers') }"} } + VIEW ALL
     .line-separator.left
     .images-wrapper.left
       - (0...@followers.length). each do |idx|

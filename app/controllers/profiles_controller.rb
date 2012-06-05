@@ -54,6 +54,28 @@ class ProfilesController < ApplicationController
     end
   end
 
+  def show_followers
+    if request.xhr?
+      user = current_user
+      @followers = user.followers.load_users(@filtered_params)
+      render :partial => 'followers'
+    end
+  end
+
+  def get_followers
+    if request.xhr?
+      user = current_user
+      followers = user.followers.load_users(@filtered_params)
+      template = render_to_string :partial => 'users/followers_template',
+                    :locals => { :users => followers, :users_per_line => 2 }
+      pagination = render_to_string :partial => 'shared/hidden_pagination',
+                    :locals => { :data_source => followers,
+                                :params => { :controller => "profiles",
+                                              :action => 'get_followers' } }
+      render :json => { :items => template, :pagination => pagination }
+    end
+  end
+
   protected
   def default_page_size
     actions = ['show']

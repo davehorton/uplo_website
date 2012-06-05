@@ -231,6 +231,10 @@ input, textarea {
   }
 }
 
+.actions-panel{
+  cursor: pointer;
+}
+
 .icon {
   margin-right: 3px;
   &.edit {
@@ -768,9 +772,24 @@ input, textarea {
       .main {
         width: 636px;
       }
+      .followers-container {
+        .user-section {
+          width: 313px;
+          margin: 6px;
+          .info-panel {
+            margin-left: 1px;
+            padding: 16px 12px;
+            width: 221px;
+            background-color: #ebebeb;
+            a { font-weight: normal; cursor: pointer; }
+            a:hover { font-weight: bold; }
+            .name { margin-bottom: 5px; }
+          }
+        }
+      }
     }
     #followers-section {
-      .actions-panel .list {
+      .list {
         margin-top: 7px;
       }
     }
