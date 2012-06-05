@@ -228,6 +228,8 @@ input, textarea {
         margin: 5px 20px 5px 0; }
       .popup .container .main-panel .info-line {
         margin: 5px 0; }
+      .popup .container .main-panel .line-separator {
+        margin: 20px 0px; }
 
 .normal {
   font-weight: normal; }
@@ -409,6 +411,10 @@ input, textarea {
 .button.save {
   background: url("/assets/btn-save-changes.jpg") no-repeat;
   width: 96px;
+  height: 23px; }
+.button.ok {
+  background: url("/assets/btn-ok.png") no-repeat;
+  width: 39px;
   height: 23px; }
 .button.save-grid-changes {
   background: url("/assets/btn-save-changes-big.png") no-repeat;
@@ -779,9 +785,16 @@ input, textarea {
     width: 89px; }
   #edit-gallery-popup .main-panel .note {
     margin: 10px 0 0 10px; }
-  #edit-gallery-popup .main-panel .line-separator {
-    margin: 20px 0px; }
   #edit-gallery-popup .main-panel #button-container {
     margin-left: 110px; }
     #edit-gallery-popup .main-panel #button-container #btn-gallery-save {
       margin-right: 10px; }
+
+#delete-confirm-popup {
+  width: 300px; }
+  #delete-confirm-popup .main-panel {
+    width: 260px; }
+    #delete-confirm-popup .main-panel #button-container {
+      margin: 0 77px; }
+      #delete-confirm-popup .main-panel #button-container #btn-ok {
+        margin-left: 10px; }

@@ -34,6 +34,7 @@ btn-dowload-app.png: btn-dowload-app-2e9fc66a9ec53cf550430ad32ddc2fba.png
 btn-follow.png: btn-follow-ce4dd860ca4ed5faa085c1409ab5fd8a.png
 btn-like.jpg: btn-like-6f20784a44e6d51ea7da01afea8f9dee.jpg
 btn-more-details.jpg: btn-more-details-eff40444c687c18a1b5357a6b95d8b15.jpg
+btn-ok.png: btn-ok-4bdb2c2855c7c42776c9e88973a13cae.png
 btn-order.jpg: btn-order-3a014c1992c917f45763abe22d3d5ea1.jpg
 btn-place-order.jpg: btn-place-order-972a850d8a31ba1847f592bd76655f82.jpg
 btn-post-comment.jpg: btn-post-comment-ab1b739ac44614fe54d98665f3c7f234.jpg
@@ -140,7 +141,7 @@ up.gif: up-7851ecffdfbb6ca3ba41bcebfa93cb35.gif
 uplo-logo.png: uplo-logo-1a1123ea4ae8aed84ec7486c1838b15e.png
 uplo_logo.png: uplo_logo-4e147b8807d73e64931db4bc3568f789.png
 uploader_file.png: uploader_file-3ab3c53af3d8adf6071f3776329ab009.png
-app/edit_images.js: app/edit_images-36ff36d85ed1e6aacdeaf12e8065027e.js
+app/edit_images.js: app/edit_images-f9fae04dd5f5767bd1e9178db6e76512.js
 app/gallery.js: app/gallery-56d1423ff8282cf24bfa0dc13979b30e.js
 app/image.js: app/image-cb8cb8666e97f0786846dd6d4af220e7.js
 app/popup.js: app/popup-3d37daf582062d5f270aa53d3da682bd.js
@@ -233,7 +234,7 @@ file_upload/jquery.fileupload-ui.css: file_upload/jquery.fileupload-ui-f39575881
 file_upload/progressbar.gif: file_upload/progressbar-54dfeacc002a35b014f009faa50bf254.gif
 jquery-ui.custom.css: jquery-ui.custom-bb782aff6a70a3531739cdd09fe60b50.css
 jquery.contextMenu.css: jquery.contextMenu-5e13ffab2ad4f1c83de146893d8f0b86.css
-scss/application.css: scss/application-420c1e3d980b934c2f4565f66eb0f077.css
+scss/application.css: scss/application-692e74eea2825ac5049f4671f53c14ae.css
 scss/banner.css: scss/banner-331c4e35597b1b905f46e6226aa74178.css
 scss/cart.css: scss/cart-a00c819367f1c26885c93fd320e87746.css
 scss/cart_new.css: scss/cart_new-7beab8be194a78a36be9fc560944d1e4.css
