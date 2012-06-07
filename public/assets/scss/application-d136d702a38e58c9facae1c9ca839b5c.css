@@ -178,6 +178,9 @@ input, textarea {
   .text.line32 {
     line-height: 32px; }
 
+.actions-panel {
+  cursor: pointer; }
+
 .icon {
   margin-right: 3px; }
   .icon.edit {
@@ -420,6 +423,14 @@ input, textarea {
   background: url("/assets/btn-save-changes-big.png") no-repeat;
   width: 108px;
   height: 27px; }
+.button.save-my-changes {
+  background: url("/assets/btn-save-my-changes.png") no-repeat;
+  width: 128px;
+  height: 27px; }
+.button.leave-not-saving {
+  background: url("/assets/btn-save-my-changes.png") no-repeat;
+  width: 148px;
+  height: 27px; }
 .button.delete-photo {
   background: url("/assets/btn-delete-photo.png") no-repeat;
   width: 90px;
@@ -489,11 +500,11 @@ input, textarea {
       margin: 0 5px; }
     #top .top-nav .actions-panel #add-files {
       position: relative;
-      overflow: hidden; }
+      overflow: hidden;
+      cursor: pointer; }
       #top .top-nav .actions-panel #add-files:hover {
         text-decoration: underline; }
       #top .top-nav .actions-panel #add-files input {
-        cursor: pointer;
         position: absolute;
         left: -242px;
         top: -7px;
@@ -633,6 +644,21 @@ input, textarea {
     width: 100%; }
     #center .profile-wrapper #container .main {
       width: 636px; }
+    #center .profile-wrapper #container .followers-container .user-section {
+      width: 313px;
+      margin: 6px; }
+      #center .profile-wrapper #container .followers-container .user-section .info-panel {
+        margin-left: 1px;
+        padding: 16px 12px;
+        width: 221px;
+        background-color: #ebebeb; }
+        #center .profile-wrapper #container .followers-container .user-section .info-panel a {
+          font-weight: normal;
+          cursor: pointer; }
+        #center .profile-wrapper #container .followers-container .user-section .info-panel a:hover {
+          font-weight: bold; }
+        #center .profile-wrapper #container .followers-container .user-section .info-panel .name {
+          margin-bottom: 5px; }
   #center .profile-wrapper #followers-section .list {
     margin-top: 7px; }
   #center .profile-wrapper .container {
