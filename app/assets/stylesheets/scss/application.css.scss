@@ -478,6 +478,16 @@ input, textarea {
     width: 108px;
     height: 27px;
   }
+  &.save-my-changes {
+    background: url('/assets/btn-save-my-changes.png') no-repeat;
+    width: 128px;
+    height: 27px;
+  }
+  &.leave-not-saving {
+    background: url('/assets/btn-save-my-changes.png') no-repeat;
+    width: 148px;
+    height: 27px;
+  }
   &.delete-photo {
     background: url('/assets/btn-delete-photo.png') no-repeat;
     width: 90px;
@@ -575,9 +585,9 @@ input, textarea {
       #add-files {
         position: relative;
         overflow: hidden;
+        cursor: pointer;
         &:hover { text-decoration: underline; }
         input {
-          cursor: pointer;
           position: absolute;
           left: -242px;
           top: -7px;
