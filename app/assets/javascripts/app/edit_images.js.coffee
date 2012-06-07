@@ -41,6 +41,8 @@ deletePhoto = (node) ->
   $('#delete-confirm-popup').modal();
   $('#btn-ok').click ->
     $.modal.close()
+    $('#mask').modal()
+    window.setTimeout "$('#mask').modal()", 500
     $.ajax({
       url: $(node).attr('data-url'),
       type: 'GET',
@@ -51,6 +53,7 @@ deletePhoto = (node) ->
           elem.innerHTML = response.pagination
         )
         alert("Delete successfully!")
+        $.modal.close()
     });
 
 $ ->
@@ -63,13 +66,15 @@ $ ->
     displayNumber: page_size
     add: (e, data) ->
       data.context = renderUpload(data.files[0])
+      $('#mask').modal()
       data.submit()
     done: (e, data) ->
       $(data.context).replaceWith data.result.item
       $('.pagination-panel').each( (idx, elem) ->
         elem.innerHTML = data.result.pagination
       )
-      $('#images-panel').children().last().remove()
+      $('#images-panel').children().last().remove() if $('.pagination-panel').find('.pagination').length > 0
+      $.modal.close()
 
   $('.button.save-grid-changes').click ->
     data = []
@@ -87,6 +92,7 @@ $ ->
         keyword: node.find('#image_key_words').val()
       }
     )
+    $('#mask').modal()
     $.ajax({
       url: '/images/update_images',
       type: 'POST',
@@ -97,8 +103,8 @@ $ ->
         $('.pagination-panel').each( (idx, elem) ->
           elem.innerHTML = response.pagination
         )
-
         alert("Update successfully!")
+        $.modal.close()
     });
 
   $('#gallery_selector_id').change ->

@@ -1,4 +1,5 @@
 load = (url, callback)->
+  $('#mask').modal()
   $.ajax({
     url: url,
     type: 'GET',
@@ -11,6 +12,7 @@ load = (url, callback)->
         return
       )
       $(window).scroll();
+      $.modal.close();
   });
 
 $ ->
@@ -22,6 +24,7 @@ $ ->
     target = $(e.target)
     author_id = target.attr('data-author-id')
     is_unfollow = target.attr('data-following')
+    $('#mask').modal()
     $.ajax({
       url: '/users/follow',
       type: "GET",
@@ -36,6 +39,7 @@ $ ->
         else
           target.attr('data-following', 'false')
           target.text('Follow')
+        $.modal.close
     });
 
   $('#counters .counter').click ->

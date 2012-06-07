@@ -92,7 +92,7 @@ class ImagesController < ApplicationController
     unless image.save
       result = [{:error => 'Cannot save image' }]
     else
-      gallery = current_user.galleries.first
+      gallery = Gallery.find_by_id params[:gallery_id]
       images = gallery.images.load_images(@filtered_params)
       pagination = render_to_string :partial => 'shared/pagination',
         :locals => {  :source => images, :params => { :controller => 'galleries',
