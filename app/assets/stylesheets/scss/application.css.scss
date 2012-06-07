@@ -744,6 +744,9 @@ input, textarea {
       input, textarea {
         width: 242px;
       }
+      input[type=checkbox] {
+        width: 10px;
+      }
       select { width: 100%; }
       .info-line {
         width: 100%;
