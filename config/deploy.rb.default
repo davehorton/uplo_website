@@ -1,0 +1,73 @@
+#$:.unshift(File.expand_path('./lib', ENV['rvm_path'])) # Add RVM's lib directory to the load path.
+require 'rvm/capistrano'                               # Load RVM's capistrano plugin.
+require 'bundler/capistrano'
+
+
+set :application,     'uplo'
+set :domain,          '<uplo domain>'
+set :deploy_to,       '<app deploy folder>'
+
+set :rvm_ruby_string, "1.9.3@uplo"            # <ruby version>@<gemset>
+set :rvm_type,        :user                   # Copy the exact line. I really mean :user here
+
+set :repository,      'git@git.assembla.com:uplo.git'
+set :branch,          'master'
+set :scm,             :git
+set :scm_verbose,     true
+default_run_options[:pty] = true
+
+set :user,            '<your username which you use to log in and deploy app>'
+set :use_sudo,        false
+set :keep_releases,   50                      # capistrano'll keep track at least 50 release
+set :ssh_options,     :forward_agent => true
+
+role :app, "<uplo app host>"
+role :db, "<uplo database host>"
+
+namespace :deploy do
+  task :start do ; end
+
+  task :stop do ; end
+
+  task :restart, :roles => :app, :except => { :no_release => true } do
+    run "#{try_sudo} touch #{File.join(current_path,'tmp','restart.txt')}"
+  end
+
+  task :trust_rvmrc do
+    run "rvm rvmrc trust #{release_path}"
+  end
+
+  task :symlink_data_to_shared_data do
+    run "ln -s #{File.expand_path(File.join(current_path, '/../shared/data'))} #{current_path}/data"
+  end
+
+  task :change_bundler_config do
+    run <<-CMD
+      echo 'BUNDLE_WITHOUT: ""' >> #{current_path}/.bundle/config
+    CMD
+  end
+
+  task :bundle_install do
+    run "cd #{current_path} && bundle install"
+  end
+  task :reset_matching do
+    run "cd #{current_path} && bundle exec rake db:reset_matching"
+  end
+
+  task :copy_database_config do
+    run "cp #{shared_path}/database.yml #{current_path}/config/database.yml"
+  end
+
+  task:migrate, :roles => :db do
+    run "cd #{current_path} && bundle exec rake db:migrate RAILS_ENV=#{rails_env}"
+  end
+end
+
+after 'deploy',
+      'deploy:symlink_data_to_shared_data',
+      'deploy:copy_database_config',
+      'deploy:trust_rvmrc',
+      'deploy:change_bundler_config',
+      'deploy:bundle_install',
+      'deploy:cleanup'
+before 'deploy:migrate', 'deploy'
