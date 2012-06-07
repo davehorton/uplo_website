@@ -37,3 +37,10 @@ $ ->
           target.attr('data-following', 'false')
           target.text('Follow')
     });
+
+  $('#counters .counter').click ->
+    url = $(@).attr('data-url')
+    if url != '#'
+      load(url)
+
+

@@ -4,7 +4,7 @@
 - content_for :top_content do
   .left
     .top-nav.text.black.bold.font16.line12.left My Gallery /
-    = select :gallery_selector, :id, gallery_options(current_user), { :class => 'left' }
+    = select :gallery_selector, :id, gallery_options(current_user, nil, true), { :class => 'left' }
   .top-nav
     .actions-panel.right
       %a#edit-gallery.left{ :href => '#' } Edit Gallery Info

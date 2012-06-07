@@ -1,5 +1,5 @@
 module GalleriesHelper
-  def gallery_options(user_id, image_id = nil)
+  def gallery_options(user_id, image_id = nil, size_necessary = false)
     user = User.find_by_id user_id
     collection = user.galleries
     if collection.size == 0
@@ -11,7 +11,8 @@ module GalleriesHelper
       image = Image.find_by_id image_id
       selected = image.gallery_id
     end
-    return options_from_collection_for_select(collection, 'id', 'name', nil)
+    collection.map { |gal| gal.name = "#{gal.name} (#{gal.images.size})" } if size_necessary
+    return options_from_collection_for_select(collection, 'id', 'name', selected)
   end
 
   def gallery_cover_image_url(gallery)

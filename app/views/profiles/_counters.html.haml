@@ -1,15 +1,15 @@
-#photos-counter.counter.left
+#photos-counter.counter.left{ :data => { :url => '/my_profile/photos' } }
   .number.text.black.bold.center= photos
   .text.gray.center.font14.line16 Photos
-#galleries-counter.counter.left
+#galleries-counter.counter.left{ :data => { :url => '/my_profile/galleries' } }
   .number.text.black.bold.center= galleries
   .text.gray.center.font14.line16 Galleries
-#likes-counter.counter.left
+#likes-counter.not-implement.counter.left{ :data => { :url => '#' } }
   .number.text.black.bold.center= likes
   .text.gray.center.font14.line16 Likes
-#followers-counter.counter.left
+#followers-counter.counter.left{ :data => { :url => '/my_profile/followers' } }
   .number.text.black.bold.center= followers
   .text.gray.center.font14.line16 Followers
-#following-counter.counter.no-padding-right.left
+#following-counter.not-implement.counter.no-padding-right.left{ :data => { :url => '#' } }
   .number.text.black.bold.center= following
   .text.gray.center.font14.line16 Following

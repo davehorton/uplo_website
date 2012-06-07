@@ -16,7 +16,7 @@
   #galleries-section.container.left
     .head
       .text.black.bold.font20.left Your Galleries
-      .text.fuzzy-gray.font20.left= "&nbsp;(#{ @images.total_entries })".html_safe
+      .text.fuzzy-gray.font20.left= "&nbsp;(#{ @galleries.total_entries })".html_safe
       .edit-pane.right{ :data => { 'url' => "#{ url_for(:controller => 'profiles', :action => 'show_galleries') }"} }
         .icon.edit.left
         .text.black.font12.left Edit
@@ -44,7 +44,7 @@
   #followers-section.container.left
     .head
       .text.black.bold.font20.left Your Followers
-      .text.fuzzy-gray.font20.left= "&nbsp;(#{ @images.total_entries })".html_safe
+      .text.fuzzy-gray.font20.left= "&nbsp;(#{ @followers.total_entries })".html_safe
       .actions-panel.right
         %a.list.text.black.bold.font10.right{ :data => { 'url' => "#{ url_for(:controller => 'profiles', :action => 'show_followers') }"} } + VIEW ALL
     .line-separator.left
@@ -62,7 +62,7 @@
   #following-section.container.left{ :style => "#{ following_margin }" }
     .head
       .text.black.bold.font20.left You Are Following
-      .text.fuzzy-gray.font20.left= "&nbsp;(#{ @images.total_entries })".html_safe
+      .text.fuzzy-gray.font20.left= "&nbsp;(#{ @followers.total_entries })".html_safe
       .not-implement.edit-pane.right{ :data => { 'url' => "#"} }
         .icon.edit.left
         .text.black.font12.left Edit

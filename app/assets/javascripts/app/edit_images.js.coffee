@@ -67,7 +67,7 @@ $ ->
     done: (e, data) ->
       $(data.context).replaceWith data.result.item
       $('.pagination-panel').each( (idx, elem) ->
-        elem.innerHTML = response.pagination
+        elem.innerHTML = data.result.pagination
       )
       $('#images-panel').children().last().remove()
 
@@ -113,6 +113,7 @@ $ ->
           elem.innerHTML = response.pagination
         )
         $('#delete-gallery').attr('href', response.delete_url)
+        $('#fileupload').attr('action', response.upload_url)
         $('#edit-gallery-popup').replaceWith response.edit_popup
     });
 
@@ -133,7 +134,3 @@ $ ->
         else
           alert("Something went wrong!")
     });
-
-
-
-

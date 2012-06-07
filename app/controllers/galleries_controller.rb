@@ -95,7 +95,8 @@ class GalleriesController < ApplicationController
           :locals => { :title => 'Edit Your Gallery Infomation',
           :id => 'edit-gallery-popup', :gallery => @gallery }
       render :json => { :items => items, :pagination => pagination, :edit_popup => edit_popup,
-        :delete_url => url_for(:action => 'destroy', :id => @gallery.id) }
+        :delete_url => url_for(:action => 'destroy', :id => @gallery.id),
+        :upload_url => url_for(:controller => 'images', :action => 'create', :gallery_id => @gallery.id) }
     else
       render :layout => 'main'
     end
