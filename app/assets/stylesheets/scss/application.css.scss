@@ -588,11 +588,16 @@ input, textarea {
         cursor: pointer;
         &:hover { text-decoration: underline; }
         input {
+          cursor: pointer;
           position: absolute;
-          left: -242px;
+          left: -100px;
           top: -7px;
           opacity: 0;
           width: 100%;
+          -moz-transform: translate(-300px, 0pt) scale(3);
+          -ms-transform: scale(5);
+          -webkit-transform: scale(5);
+          -o-transform: scale(5);
         }
       }
     }
