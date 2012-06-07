@@ -616,6 +616,8 @@ input, textarea {
   margin-left: 20px; }
   #center #images-panel .info-panel input, #center #images-panel .info-panel textarea {
     width: 242px; }
+  #center #images-panel .info-panel input[type=checkbox] {
+    width: 10px; }
   #center #images-panel .info-panel select {
     width: 100%; }
   #center #images-panel .info-panel .info-line {
