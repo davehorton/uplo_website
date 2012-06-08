@@ -57,6 +57,7 @@ deletePhoto = (node) ->
     });
 
 $ ->
+  window.is_grid_changed = false
   $("#fileupload").fileupload()
   $("#fileupload").fileupload "option",
     maxFileSize: 5000000
@@ -104,6 +105,7 @@ $ ->
           elem.innerHTML = response.pagination
         )
         alert("Update successfully!")
+        window.is_grid_changed = false
         $.modal.close()
     });
 
@@ -140,3 +142,36 @@ $ ->
         else
           alert("Something went wrong!")
     });
+
+  $('#images-panel').delegate '.edit-template input', 'change', (e) -> 
+    window.is_grid_changed = true
+  $('#images-panel').delegate '.edit-template textarea', 'change', (e) -> 
+    window.is_grid_changed = true
+  $('#images-panel').delegate '.edit-template select', 'change', (e) -> 
+    window.is_grid_changed = true
+
+  $('.pagination-panel').delegate 'a', 'click', (e) ->
+    e.preventDefault()
+    if window.is_grid_changed == true
+      console.log 154
+      $('#save-confirm-popup').modal()
+      $('.button.save-my-changes').click -> 
+        $('.button.save-grid-changes').first().click()      
+        window.location = $(e.target).attr('href')
+      $('.button.leave-not-saving').click ->      
+        window.location = $(e.target).attr('href')
+    else
+      window.location = $(e.target).attr('href')
+
+  $('.header-menu a').click (e)->
+    e.preventDefault()
+    if window.is_grid_changed == true
+      console.log 154
+      $('#save-confirm-popup').modal()
+      $('.button.save-my-changes').click -> 
+        $('.button.save-grid-changes').first().click()      
+        window.location = $(e.target).attr('href')
+      $('.button.leave-not-saving').click ->      
+        window.location = $(e.target).attr('href')
+    else
+      window.location = $(e.target).attr('href')
