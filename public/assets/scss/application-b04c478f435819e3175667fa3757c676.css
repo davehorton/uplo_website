@@ -428,7 +428,7 @@ input, textarea {
   width: 128px;
   height: 27px; }
 .button.leave-not-saving {
-  background: url("/assets/btn-save-my-changes.png") no-repeat;
+  background: url("/assets/btn-leave-changes.png") no-repeat;
   width: 148px;
   height: 27px; }
 .button.delete-photo {
@@ -831,3 +831,10 @@ input, textarea {
       margin: 0 77px; }
       #delete-confirm-popup .main-panel #button-container #btn-ok {
         margin-left: 10px; }
+
+#save-confirm-popup {
+  width: 326px; }
+  #save-confirm-popup .main-panel {
+    width: 286px; }
+    #save-confirm-popup .main-panel .button.save-my-changes {
+      margin-right: 10px; }
