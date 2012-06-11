@@ -56,6 +56,18 @@ deletePhoto = (node) ->
         $.modal.close()
     });
 
+confirmChanges = (callback) ->
+  if window.is_grid_changed == true
+    $('#save-confirm-popup').modal()
+    $('.button.save-my-changes').click ->
+      $('.button.save-grid-changes').first().click()
+      callback.call()
+    $('.button.leave-not-saving').click ->
+      callback.call()
+  else
+    callback.call()
+
+
 $ ->
   window.is_grid_changed = false
   $("#fileupload").fileupload()
@@ -109,22 +121,6 @@ $ ->
         $.modal.close()
     });
 
-  $('#gallery_selector_id').change ->
-    $.ajax({
-      url: 'edit_images',
-      type: 'GET',
-      data: { gallery_id: $('#gallery_selector_id').val() },
-      dataType: 'json',
-      success: (response) ->
-        $('#images-panel')[0].innerHTML = response.items
-        $('.pagination-panel').each( (idx, elem) ->
-          elem.innerHTML = response.pagination
-        )
-        $('#delete-gallery').attr('href', response.delete_url)
-        $('#fileupload').attr('action', response.upload_url)
-        $('#edit-gallery-popup').replaceWith response.edit_popup
-    });
-
   $('#images-panel').delegate '.button.delete-photo', 'click', (e) -> deletePhoto(e.target)
   $('#edit-gallery').click -> $('#edit-gallery-popup').modal()
   $('body').delegate '.popup .close', 'click', (e) -> $.modal.close()
@@ -143,35 +139,42 @@ $ ->
           alert("Something went wrong!")
     });
 
-  $('#images-panel').delegate '.edit-template input', 'change', (e) -> 
+  $('#images-panel').delegate '.edit-template input', 'change', (e) ->
     window.is_grid_changed = true
-  $('#images-panel').delegate '.edit-template textarea', 'change', (e) -> 
+  $('#images-panel').delegate '.edit-template textarea', 'change', (e) ->
     window.is_grid_changed = true
-  $('#images-panel').delegate '.edit-template select', 'change', (e) -> 
+  $('#images-panel').delegate '.edit-template select', 'change', (e) ->
     window.is_grid_changed = true
 
   $('.pagination-panel').delegate 'a', 'click', (e) ->
     e.preventDefault()
-    if window.is_grid_changed == true
-      console.log 154
-      $('#save-confirm-popup').modal()
-      $('.button.save-my-changes').click -> 
-        $('.button.save-grid-changes').first().click()      
-        window.location = $(e.target).attr('href')
-      $('.button.leave-not-saving').click ->      
-        window.location = $(e.target).attr('href')
-    else
+    confirmChanges ->
       window.location = $(e.target).attr('href')
 
   $('.header-menu a').click (e)->
     e.preventDefault()
-    if window.is_grid_changed == true
-      console.log 154
-      $('#save-confirm-popup').modal()
-      $('.button.save-my-changes').click -> 
-        $('.button.save-grid-changes').first().click()      
-        window.location = $(e.target).attr('href')
-      $('.button.leave-not-saving').click ->      
-        window.location = $(e.target).attr('href')
-    else
+    confirmChanges ->
       window.location = $(e.target).attr('href')
+
+  $('#my_links').unbind 'change'
+  $('#my_links').bind 'change', (e) ->
+    confirmChanges ->
+      window.location = $(e.target).val()
+
+  $('#gallery_selector_id').change ->
+    confirmChanges ->
+      $.ajax({
+        url: 'edit_images',
+        type: 'GET',
+        data: { gallery_id: $('#gallery_selector_id').val() },
+        dataType: 'json',
+        success: (response) ->
+          $('#images-panel')[0].innerHTML = response.items
+          $('.pagination-panel').each( (idx, elem) ->
+            elem.innerHTML = response.pagination
+          )
+          $('#delete-gallery').attr('href', response.delete_url)
+          $('#fileupload').attr('action', response.upload_url)
+          $('#edit-gallery-popup').replaceWith response.edit_popup
+          $.modal.close()
+      });
