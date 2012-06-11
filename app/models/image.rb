@@ -93,8 +93,12 @@ class Image < ActiveRecord::Base
 
   # INSTANCE METHODS
   def set_as_album_cover
-    self.update_attribute('is_cover', true)
-    Image.update_all 'is_cover=true', "gallery_id = #{ self.gallery_id } and id <> #{ self.id }"
+    self.update_attribute('is_gallery_cover', true)
+    Image.update_all 'is_gallery_cover=false', "gallery_id = #{ self.gallery_id } and id <> #{ self.id }"
+  end
+  def set_as_owner_avatar
+    self.update_attribute('is_owner_avatar', true)
+    Image.update_all 'is_owner_avatar=false', "gallery_id = #{ self.gallery_id } and id <> #{ self.id }"
   end
 
   def author

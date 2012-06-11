@@ -249,6 +249,7 @@ class ImagesController < ApplicationController
         is_cover = img.delete 'is_album_cover'
         is_avatar = img.delete 'is_avatar'
         image.set_as_album_cover if SharedMethods::Converter::Boolean(is_cover)
+        image.set_as_owner_avatar if SharedMethods::Converter::Boolean(is_avatar)
         image.update_attributes img
       end
     end

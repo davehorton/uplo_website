@@ -100,8 +100,8 @@ $ ->
         gallery_id: node.find('#image_gallery_id').val(),
         price: node.find('#image_price').val(),
         description: node.find('#image_description').val(),
-        is_album_cover: node.find('#image_album_cover').val(),
-        is_avatar: node.find('#user_avatar').val(),
+        is_album_cover: node.find('#image_album_cover').is(':checked'),
+        is_avatar: node.find('#user_avatar').is(':checked'),
         keyword: node.find('#image_key_words').val()
       }
     )
@@ -120,6 +120,14 @@ $ ->
         window.is_grid_changed = false
         $.modal.close()
     });
+
+  $('#images-panel .edit-template #image_album_cover').click (e)->
+    other_checkboxes = $('#images-panel .edit-template #image_album_cover').not(e.target)
+    other_checkboxes.attr('checked', false)
+
+  $('#images-panel .edit-template #user_avatar').click (e)->
+    other_checkboxes = $('#images-panel .edit-template #user_avatar').not(e.target)
+    other_checkboxes.attr('checked', false)
 
   $('#images-panel').delegate '.button.delete-photo', 'click', (e) -> deletePhoto(e.target)
   $('#edit-gallery').click -> $('#edit-gallery-popup').modal()
