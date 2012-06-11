@@ -100,8 +100,8 @@ $ ->
         gallery_id: node.find('#image_gallery_id').val(),
         price: node.find('#image_price').val(),
         description: node.find('#image_description').val(),
-        is_album_cover: node.find('#image_album_cover').is(':checked'),
-        is_avatar: node.find('#user_avatar').is(':checked'),
+        is_album_cover: node.find('.album-cover').is(':checked'),
+        is_avatar: node.find('.user-avatar').is(':checked'),
         keyword: node.find('#image_key_words').val()
       }
     )
@@ -121,12 +121,12 @@ $ ->
         $.modal.close()
     });
 
-  $('#images-panel .edit-template #image_album_cover').click (e)->
-    other_checkboxes = $('#images-panel .edit-template #image_album_cover').not(e.target)
+  $('#images-panel .edit-template .album-cover').click (e)->
+    other_checkboxes = $('#images-panel .edit-template .album-cover').not(e.target)
     other_checkboxes.attr('checked', false)
 
-  $('#images-panel .edit-template #user_avatar').click (e)->
-    other_checkboxes = $('#images-panel .edit-template #user_avatar').not(e.target)
+  $('#images-panel .edit-template .user-avatar').click (e)->
+    other_checkboxes = $('#images-panel .edit-template .user-avatar').not(e.target)
     other_checkboxes.attr('checked', false)
 
   $('#images-panel').delegate '.button.delete-photo', 'click', (e) -> deletePhoto(e.target)
