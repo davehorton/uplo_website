@@ -8,7 +8,7 @@
   #counters.right
     = render :partial => 'counters', :locals => { :photos => @images.total_entries,
       :galleries => @galleries.total_entries, :likes => @images.total_entries,
-      :followers => @followers.size, :following => @followers.size }
+      :followers => @followers.total_entries, :following => @followed_users.total_entries }
 
   #container.right
     = render :partial => 'main_page'

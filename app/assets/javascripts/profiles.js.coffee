@@ -39,7 +39,7 @@ $ ->
         else
           target.attr('data-following', 'false')
           target.text('Follow')
-        $.modal.close
+        $.modal.close()
     });
 
   $('#counters .counter').click ->

@@ -7,6 +7,7 @@ class ProfilesController < ApplicationController
     @images = @user.images.load_images(@filtered_params)
     @galleries = @user.galleries.load_galleries(@filtered_params)
     @followers = @user.followers.load_users(@filtered_params)
+    @followed_users = @user.followed_users.load_users(@filtered_params)
   end
 
   def show_photos
