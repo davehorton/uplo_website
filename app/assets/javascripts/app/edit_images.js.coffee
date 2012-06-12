@@ -132,11 +132,11 @@ $ ->
         $.modal.close()
     });
 
-  $('#images-panel .edit-template .album-cover').click (e)->
+  $('#images-panel').delegate '.edit-template .album-cover', 'click', (e)->
     other_checkboxes = $('#images-panel .edit-template .album-cover').not(e.target)
     other_checkboxes.attr('checked', false)
 
-  $('#images-panel .edit-template .user-avatar').click (e)->
+  $('#images-panel').delegate '.edit-template .user-avatar', 'click', (e)->
     other_checkboxes = $('#images-panel .edit-template .user-avatar').not(e.target)
     other_checkboxes.attr('checked', false)
 
