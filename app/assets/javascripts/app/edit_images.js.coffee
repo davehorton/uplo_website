@@ -16,6 +16,12 @@ renderUploadingElement = (element, img, img_name) ->
   name_content.text img_name
   tmp.append name_content
   name.append tmp
+  tmp = $(document.createElement 'div')
+  tmp.addClass 'progress info-line left'
+  progress_div = $(document.createElement 'div')
+  progress_div.addClass 'uploading'
+  tmp.append progress_div
+  name.append tmp
 
   element.addClass 'upload-template container left'
   element.append previewed_img
@@ -88,6 +94,11 @@ $ ->
       )
       $('#images-panel').children().last().remove() if $('.pagination-panel').find('.pagination').length > 0
       $.modal.close()
+    progress: (e, data) ->
+      progress = parseInt(data.loaded / data.total * 100, 10).toString() + '%'
+      if data.context
+        setLoadingStatus =-> $(data.context).find('.progress .uploading').css('width','80%')
+        window.setTimeout(setLoadingStatus, 300);
 
   $('.button.save-grid-changes').click ->
     data = []
