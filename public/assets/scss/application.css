@@ -678,8 +678,6 @@ input, textarea {
           font-weight: bold; }
         #center .profile-wrapper #container .followers-container .user-section .info-panel .name {
           margin-bottom: 5px; }
-  #center .profile-wrapper #followers-section .list {
-    margin-top: 7px; }
   #center .profile-wrapper .container {
     margin-top: 30px; }
     #center .profile-wrapper .container a.edit-pane {
@@ -687,6 +685,8 @@ input, textarea {
     #center .profile-wrapper .container .edit-pane {
       margin-top: 7px;
       cursor: pointer; }
+    #center .profile-wrapper .container .list {
+      margin-top: 7px; }
     #center .profile-wrapper .container .images-wrapper {
       width: 100%; }
   #center .profile-wrapper .counter {
