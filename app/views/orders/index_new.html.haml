@@ -155,6 +155,7 @@
         .submit.right
 
 - content_for :js do
+  = javascript_include_tag 'app/order.js'
   - javascript_tag do
     :erb
       $("#shipping_phone").keypress(function (event) {
