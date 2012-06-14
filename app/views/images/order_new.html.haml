@@ -22,21 +22,25 @@
 
       .round-box.option.left
         .header.text.black.bold.font14= "Print Size"
-        .line.left
-          .item.left
-            = f.radio_button(:size, "10x10", :checked => true)
-            = f.label(:size_300x300, "10x10", :class => 'text gray font12')
-          .item.left
-            = f.radio_button(:size, "16x16")
-            = f.label(:size_500x500, "16x16", :class => 'text gray font12')
-        .line.left
-          .item.left
-            = f.radio_button(:size, "20x20")
-            = f.label(:size_500x500, "20x20", :class => 'text gray font12')
-          .item.left
-            = f.radio_button(:size, "25x25")
-            = f.label(:size_500x500, "25x25", :class => 'text gray font12')
-
+        - idx = 0
+        - begin
+          .line.left
+            .item.left
+              - size = @image.printed_sizes[idx]
+              = f.radio_button(:size, size, :checked => true)
+              = f.label("size_#{size}", "#{size}\"", :class => 'text gray font12')
+            .item.left
+              - size = @image.printed_sizes[idx + 1]
+              = f.radio_button(:size, size)
+              = f.label("size_#{size}", "#{size}\"", :class => 'text gray font12')
+          - idx += 2
+        - end while idx < @image.printed_sizes.size - 1
+        - if @image.printed_sizes.size%2 == 1
+          .line.left
+            .item.left
+              - size = @image.printed_sizes[idx]
+              = f.radio_button(:size, size, :checked => true)
+              = f.label("size_#{size}", "#{size}\"", :class => 'text gray font12')
       .round-box.option.left
         .header.text.black.bold.font14= "Moulding Choice"
         .line.left
