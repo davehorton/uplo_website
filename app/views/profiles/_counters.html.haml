@@ -1,13 +1,13 @@
-#photos-counter.counter.left{ :data => { :url => '/my_profile/photos' } }
+#photos-counter.counter.left{ :data => { :url => "#{ url_for(:controller => 'profiles', :action => 'show_photos', :user_id => @user.id) }" } }
   .number.text.black.bold.center= photos
   .text.gray.center.font14.line16 Photos
-#galleries-counter.counter.left{ :data => { :url => '/my_profile/galleries' } }
+#galleries-counter.counter.left{ :data => { :url => "#{ url_for(:controller => 'profiles', :action => 'show_galleries', :user_id => @user.id) }" } }
   .number.text.black.bold.center= galleries
   .text.gray.center.font14.line16 Galleries
 #likes-counter.not-implement.counter.left{ :data => { :url => '#' } }
   .number.text.black.bold.center= likes
   .text.gray.center.font14.line16 Likes
-#followers-counter.counter.left{ :data => { :url => '/my_profile/followers' } }
+#followers-counter.counter.left{ :data => { :url => "#{ url_for(:controller => 'profiles', :action => 'show_followers', :user_id => @user.id) }" } }
   .number.text.black.bold.center= followers
   .text.gray.center.font14.line16 Followers
 #following-counter.not-implement.counter.no-padding-right.left{ :data => { :url => '#' } }

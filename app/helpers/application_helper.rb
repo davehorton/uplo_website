@@ -30,7 +30,7 @@ module ApplicationHelper
   end
 
   def private_links_options
-    options_for_select([["My UPLO", "#"], ['My Profile', '/my_profile'], ["My Account", "/my_account"], ["My Galleries", "/galleries"], ["My Sales", "/sales"]])
+    options_for_select([["My UPLO", "#"], ['My Profile', '/profile'], ["My Account", "/my_account"], ["My Galleries", "/galleries"], ["My Sales", "/sales"]])
   end
 
   def redirect_back_url
@@ -125,5 +125,9 @@ module ApplicationHelper
     end
 
     return additional_class
+  end
+
+  def is_current_user(user_id)
+    user_id == current_user.id
   end
 end

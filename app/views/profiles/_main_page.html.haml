@@ -1,11 +1,10 @@
+- user_possesive = user_possesive_form @user.id
 .main.right
   #photos-section.container.left
     .head
-      .text.black.bold.font20.left Your Photos
+      .text.black.bold.font20.left= "#{user_possesive} Photos"
       .text.fuzzy-gray.font20.left= "&nbsp;(#{ @images.total_entries })".html_safe
-      .edit-pane.right{ :data => { 'url' => "#{ url_for(:controller => 'profiles', :action => 'show_photos') }"} }
-        .icon.edit.left
-        .text.black.font12.left Edit
+      = render :partial => 'link_to_detail', :locals => { :user_id => @user.id, :url => url_for(:controller => 'profiles', :action => 'show_photos', :user_id => @user.id) }
     .images-wrapper.left
       - (0...@images.length). each do |idx|
         - image = @images[idx]
@@ -15,11 +14,9 @@
 
   #galleries-section.container.left
     .head
-      .text.black.bold.font20.left Your Galleries
+      .text.black.bold.font20.left= "#{user_possesive} Galleries"
       .text.fuzzy-gray.font20.left= "&nbsp;(#{ @galleries.total_entries })".html_safe
-      .edit-pane.right{ :data => { 'url' => "#{ url_for(:controller => 'profiles', :action => 'show_galleries') }"} }
-        .icon.edit.left
-        .text.black.font12.left Edit
+      = render :partial => 'link_to_detail', :locals => { :user_id => @user.id, :url => url_for(:controller => 'profiles', :action => 'show_galleries', :user_id => @user.id) }
     .images-wrapper.left
       - (0...@galleries.length). each do |idx|
         - gallery = @galleries[idx]
@@ -29,11 +26,10 @@
 
   #liked-photos-section.container.left
     .head
-      .text.black.bold.font20.left Your Likes
+      .text.black.bold.font20.left= "#{user_possesive} Likes"
       .text.fuzzy-gray.font20.left= "&nbsp;(#{ @images.total_entries })".html_safe
-      .not-implement.edit-pane.right{ :data => { 'url' => '#'} }
-        .icon.edit.left
-        .text.black.font12.left Edit
+      .not-implement
+        = render :partial => 'link_to_detail', :locals => { :user_id => @user.id, :url => '#' }
     .images-wrapper.left
       - (0...@images.length). each do |idx|
         - image = @images[idx]
@@ -43,10 +39,10 @@
 
   #followers-section.container.left
     .head
-      .text.black.bold.font20.left Your Followers
+      .text.black.bold.font20.left= "#{user_possesive} Followers"
       .text.fuzzy-gray.font20.left= "&nbsp;(#{ @followers.total_entries })".html_safe
       .actions-panel.right
-        %a.list.text.black.bold.font10.right{ :data => { 'url' => "#{ url_for(:controller => 'profiles', :action => 'show_followers') }"} } + VIEW ALL
+        %a.list.text.black.bold.font10.right{ :data => { 'url' => "#{ url_for(:controller => 'profiles', :action => 'show_followers', :user_id => @user.id) }"} } + VIEW ALL
     .line-separator.left
     .images-wrapper.left
       - (0...@followers.length). each do |idx|
@@ -59,13 +55,13 @@
             .text.gray.font11.line10= user.fullname
 
   - following_margin = 'margin-top:15px;' if @followed_users.length > 0
+  - verb = params[:user_id].nil? ? "Are" : "Is"
   #following-section.container.left{ :style => "#{ following_margin }" }
     .head
-      .text.black.bold.font20.left You Are Following
+      .text.black.bold.font20.left= "#{user_pronoun(@user.id)} #{verb} Following"
       .text.fuzzy-gray.font20.left= "&nbsp;(#{ @followed_users.total_entries })".html_safe
-      .not-implement.edit-pane.right{ :data => { 'url' => "#"} }
-        .icon.edit.left
-        .text.black.font12.left Edit
+      .not-implement
+        = render :partial => 'link_to_detail', :locals => { :user_id => @user.id, :url => '#' }
     .line-separator.left
     .images-wrapper.left
       - (0...@followed_users.length). each do |idx|

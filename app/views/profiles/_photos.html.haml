@@ -2,9 +2,10 @@
   .head
     .text.black.bold.font20.left= "#{ @user.first_name }'s Photos"
     .text.fuzzy-gray.font20.left= "&nbsp;(#{ @images.total_entries })".html_safe
-    %a.edit-pane.right{ :href => "#{ url_for(:controller => 'galleries', :action => 'edit_images') }" }
-      .icon.edit.left
-      .text.black.font12.left Edit
+    - if is_current_user(@user.id)
+      %a.edit-pane.right{ :href => "#{ url_for(:controller => 'galleries', :action => 'edit_images') }" }
+        .icon.edit.left
+        .text.black.font12.left Edit
   #endless-pages.images-wrapper.left
     = render :partial => 'shared/photos_template', :locals => { :images => @images, :photos_per_line => 4, :photo_size => 'thumb' }
 

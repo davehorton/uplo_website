@@ -39,7 +39,7 @@
 
 = render :partial => 'edit_gallery', :layout => 'layouts/popup', :locals => { :title => 'Edit Your Gallery Infomation', :id => 'edit-gallery-popup', :gallery => @gallery }
 = render :partial => 'shared/delete_confirm', :layout => 'layouts/popup', :locals => { :title => 'Delete Confirm', :id => 'delete-confirm-popup' }
-= render :partial => 'grid_changes_confirm', :layout => 'layouts/popup', :locals => { :title => 'Grid Changes Confirm', :id => 'save-confirm-popup' }
+= render :partial => 'grid_changes_confirm', :layout => 'layouts/popup', :locals => { :title => 'Save Changes', :id => 'save-confirm-popup' }
 
 - content_for :js do
   :erb

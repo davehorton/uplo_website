@@ -820,11 +820,7 @@ input, textarea {
         }
       }
     }
-    #followers-section {
-      .list {
-        margin-top: 7px;
-      }
-    }
+
     .container {
       margin-top: 30px;
       a.edit-pane {
@@ -833,6 +829,9 @@ input, textarea {
       .edit-pane {
         margin-top: 7px;
         cursor: pointer;
+      }
+      .list {
+        margin-top: 7px;
       }
       .images-wrapper {
         width: 100%;

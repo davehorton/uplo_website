@@ -1,9 +1,8 @@
 class ProfilesController < ApplicationController
-  before_filter :authenticate_user!
+  before_filter :authenticate_user!, :find_user
   layout 'main'
 
   def show
-    @user = current_user
     @images = @user.images.load_images(@filtered_params)
     @galleries = @user.galleries.load_galleries(@filtered_params)
     @followers = @user.followers.load_users(@filtered_params)
@@ -12,7 +11,6 @@ class ProfilesController < ApplicationController
 
   def show_photos
     if request.xhr?
-      @user = current_user
       @images = @user.images.load_images(@filtered_params)
       render :partial => 'photos'
     end
@@ -20,8 +18,7 @@ class ProfilesController < ApplicationController
 
   def get_photos
     if request.xhr?
-      user = current_user
-      images = user.images.load_images(@filtered_params)
+      images = @user.images.load_images(@filtered_params)
       template = render_to_string :partial => 'shared/photos_template',
                     :locals => { :images => images,
                                 :photos_per_line => 4, :photo_size => 'thumb' }
@@ -35,7 +32,6 @@ class ProfilesController < ApplicationController
 
   def show_galleries
     if request.xhr?
-      @user = current_user
       @galleries = @user.galleries.load_galleries(@filtered_params)
       render :partial => 'galleries'
     end
@@ -43,8 +39,7 @@ class ProfilesController < ApplicationController
 
   def get_galleries
     if request.xhr?
-      user = current_user
-      galleries = user.galleries.load_galleries(@filtered_params)
+      galleries = @user.galleries.load_galleries(@filtered_params)
       template = render_to_string :partial => 'shared/galleries_template',
                     :locals => { :galleries => galleries, :galleries_per_line => 4 }
       pagination = render_to_string :partial => 'shared/hidden_pagination',
@@ -57,16 +52,14 @@ class ProfilesController < ApplicationController
 
   def show_followers
     if request.xhr?
-      user = current_user
-      @followers = user.followers.load_users(@filtered_params)
+      @followers = @user.followers.load_users(@filtered_params)
       render :partial => 'followers'
     end
   end
 
   def get_followers
     if request.xhr?
-      user = current_user
-      followers = user.followers.load_users(@filtered_params)
+      followers = @user.followers.load_users(@filtered_params)
       template = render_to_string :partial => 'users/followers_template',
                     :locals => { :users => followers, :users_per_line => 2 }
       pagination = render_to_string :partial => 'shared/hidden_pagination',
@@ -86,5 +79,13 @@ class ProfilesController < ApplicationController
       size = 4
     end
     return size
+  end
+
+  def find_user
+    if params[:user_id].nil?
+      @user = current_user
+    else
+      @user = User.find params[:user_id]
+    end
   end
 end

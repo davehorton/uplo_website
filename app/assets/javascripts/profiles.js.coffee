@@ -18,7 +18,7 @@ load = (url, callback)->
 $ ->
   $('.not-implement').click -> helper.alert_not_implement()
   $('#container .edit-pane[data-url!="#"]').click -> load($(@).attr('data-url'))
-  $('#followers-section .list').click -> load($(@).attr('data-url'))
+  $('#container .list[data-url!="#"]').click -> load($(@).attr('data-url'))
 
   $('#container').delegate '.follow', 'click', (e) ->
     target = $(e.target)
