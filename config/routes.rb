@@ -111,6 +111,7 @@ Uplo::Application.routes.draw do
     get "sale_chart", :to => "images#sale_chart"
     get "image_purchasers", :to => "images#get_purchasers"
     get "get_images", :to => "images#get_images"
+    get 'get_printed_sizes', :to => 'images#get_printed_sizes'
 
     # Order
     get "list_orders", :to => "orders#list_orders"

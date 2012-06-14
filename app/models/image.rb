@@ -34,6 +34,11 @@ class Image < ActiveRecord::Base
     :quantity => "quantity",
     :price => "price"
   }
+  PRINTED_SIZES = {
+    :square => IMAGE_SQUARE_PRINTED_SIZES,
+    :portrait_rectangular => IMAGE_PORTRAIT_PRINTED_SIZES,
+    :landscape_rectangular => IMAGE_LANDSCAPE_PRINTED_SIZES
+  }
 
   # CLASS METHODS
   class << self
@@ -92,6 +97,16 @@ class Image < ActiveRecord::Base
   end
 
   # INSTANCE METHODS
+  def printed_sizes
+    if self.width == self.height
+      PRINTED_SIZES[:square]
+    elsif self.width > self.height
+      PRINTED_SIZES[:landscape_rectangular]
+    else
+      PRINTED_SIZES[:portrait_rectangular]
+    end
+  end
+
   def set_as_album_cover
     self.update_attribute('is_gallery_cover', true)
     Image.update_all 'is_gallery_cover=false', "gallery_id = #{ self.gallery_id } and id <> #{ self.id }"

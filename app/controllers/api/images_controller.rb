@@ -13,8 +13,20 @@ end
 =end
 
 class Api::ImagesController < Api::BaseController
-  before_filter :require_login!
+  # before_filter :require_login!
   include ::SharedMethods::Converter
+
+  # POST /api/get_printed_sizes
+  # params: image_id
+  def get_printed_sizes
+    image = Image.find_by_id params[:image_id]
+    begin
+      sizes = image.printed_sizes
+      render :json => { :success => true, :sizes => sizes}
+    rescue
+      render :json => { :success => false, :msg => 'This image does not exist' }
+    end
+  end
 
   # POST /api/upload_image
   # params: image[data], gallery_id, image[name], image[description]
