@@ -13,7 +13,7 @@ end
 =end
 
 class Api::ImagesController < Api::BaseController
-  # before_filter :require_login!
+  before_filter :require_login!
   include ::SharedMethods::Converter
 
   # POST /api/get_printed_sizes
