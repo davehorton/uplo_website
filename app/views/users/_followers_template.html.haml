@@ -10,5 +10,5 @@
     .info-panel.left
       .name.text.black.font18= user.username.truncate(20)
       .text.gray.font12.left= "#{ user.images.length } items | view&nbsp".html_safe
-      %a.not-implement.text.black.font12.left{ :data => { 'user-id' => "#{ user.id }" } } profile
+      %a.text.black.font12.left{ :href => "#{ url_for(:controller => 'profiles', :action => 'show', :user_id => user.id) }", :data => { 'user-id' => "#{ user.id }" } } profile
       %a.follow.text.black.font12.right{ :data => { 'author-id' => "#{ user.id }", 'following' => "#{ is_following }"} }= follow_label
