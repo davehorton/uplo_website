@@ -154,6 +154,9 @@ input, textarea {
   &.bold {
     font-weight: bold;
   }
+  &.normal {
+    font-weight: normal;
+  }
   &.highlight {
     color: $color-highlight;
   }

@@ -96,12 +96,13 @@ class Gallery < ActiveRecord::Base
   end
 
   def public_link
-    url_for :controller => 'galleries', :action => 'public', :gallery_id => self.id, :only_path => false, :host => DOMAIN
+    url_for :controller => 'galleries', :action => 'public', :gallery_id => self.id,
+            :only_path => false, :host => DOMAIN
   end
 
   # Get the cover image for this album.
   def cover_image
-    return self.images.last
+    return Image.find_by_gallery_id self.id, :conditions => { :is_gallery_cover => true }
   end
 
   def is_public?
