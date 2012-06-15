@@ -147,6 +147,7 @@ uploader_file.png: uploader_file-3ab3c53af3d8adf6071f3776329ab009.png
 app/edit_images.js: app/edit_images-167f3209c3617beac22a76080baf8791.js
 app/gallery.js: app/gallery-56d1423ff8282cf24bfa0dc13979b30e.js
 app/image.js: app/image-cb8cb8666e97f0786846dd6d4af220e7.js
+app/order.js: app/order-dfa498565415b9202ca386fcf687b660.js
 app/popup.js: app/popup-3d37daf582062d5f270aa53d3da682bd.js
 app/sales.js: app/sales-03318d5b60f42b484cc55e4f12ca5fcc.js
 app/user.js: app/user-7856a14fe2fceeb1f0ad1b74126f9e28.js
@@ -224,7 +225,6 @@ lib/jquery.ui.mouse.js: lib/jquery.ui.mouse-85e976a4dd424706afe05ebb9f5e82fe.js
 lib/jquery.ui.position.js: lib/jquery.ui.position-4c73bddbf101b339db397296b3d26f0e.js
 lib/jquery.ui.widget.js: lib/jquery.ui.widget-0d68580b40839753efc5ace9498dba90.js
 lib/jquery.url.js: lib/jquery.url-54bab1cba764049f9199d478427a17df.js
-lib/jquery.validate.creditcard2.js: lib/jquery.validate.creditcard2-d27355bdea7fa7896f09e3cbdcb298d4.js
 lib/superfish.min.js: lib/superfish.min-ffabcd0209faaae3216c63369a26facf.js
 lib/supersubs.min.js: lib/supersubs.min-51d2091adc4247f2751775293b4697b7.js
 profiles.js: profiles-8a117f098bf8c4c02999563d8c7c8a3d.js
