@@ -127,6 +127,8 @@ input, textarea {
     font-style: italic; }
   .text.bold {
     font-weight: bold; }
+  .text.normal {
+    font-weight: normal; }
   .text.highlight {
     color: #ed3b03; }
   .text.gray {
@@ -510,7 +512,6 @@ input, textarea {
         left: -100px;
         top: -7px;
         opacity: 0;
-        width: 100%;
         -moz-transform: translate(-300px, 0pt) scale(3);
         -ms-transform: scale(5);
         -webkit-transform: scale(5);
