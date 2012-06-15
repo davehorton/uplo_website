@@ -4,11 +4,7 @@
 - content_for :top_content do
   .left
     .top-nav.text.black.bold.font16.line12.left My Gallery /
-    - if params[:gallery_id]
-      - image = Image.first :conditions => {:gallery_id => params[:gallery_id]}
-    - else
-      - image = nil
-    = select :gallery_selector, :id, gallery_options(current_user, image, true), { :class => 'left' }
+    = select :gallery_selector, :id, gallery_options(current_user, params[:gallery_id], true), { :class => 'left' }
   .top-nav
     .actions-panel.right
       %a#edit-gallery.left{ :href => '#' } Edit Gallery Info

@@ -109,7 +109,8 @@ class GalleriesController < ApplicationController
           edit_popup = render_to_string :partial => 'edit_gallery', :layout => 'layouts/popup',
             :locals => { :title => 'Edit Your Gallery Infomation',
             :id => 'edit-gallery-popup', :gallery => @gallery }
-          result = { :success => true, :edit_popup => edit_popup }
+          gal_options = self.class.helpers.gallery_options(current_user.id, @gallery.id, true)
+          result = { :success => true, :edit_popup => edit_popup, :gallery_options => gal_options }
         else
           result = { :success => false }
         end

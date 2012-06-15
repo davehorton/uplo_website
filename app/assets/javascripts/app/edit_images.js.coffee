@@ -154,6 +154,7 @@ $ ->
           alert("Your gallery has been updated!")
           $.modal.close()
           $('#edit-gallery-popup').replaceWith response.edit_popup
+          $('#gallery_selector_id')[0].innerHTML = response.gallery_options
         else
           alert("Something went wrong!")
     });
