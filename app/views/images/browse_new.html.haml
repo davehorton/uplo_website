@@ -8,7 +8,7 @@
     = image_tag @author.avatar(:small), :class => 'avatar small left'
     .left
       %span.text.gray.font12.line12 By
-      %span.text.black.font12.line12= @author.username.truncate(20)
+      %a.text.black.normal.font12.line12{:href => "#{ url_for(:controller => 'profiles', :action => 'show', :user_id => @author.id) }"}= @author.username.truncate(20)
       .text.gray.font11= "#{@author.fullname} &bull; #{@author.images.length} Items".html_safe
     - if current_user.id != @author.id
       - is_author_following = @author.has_follower?(current_user.id)
@@ -108,7 +108,7 @@
       .user-section.left
         = image_tag(purchaser.avatar.url(:medium), :class => "avatar medium left")
         .text.font12.line18.left
-          %span.text.black.bold= purchaser.username
+          %a.text.black.bold{ :href => "#{ url_for(:controller => 'profiles', :action => 'show', :user_id => @author.id) }" }= purchaser.username
           %span.text.fuzzy-gray= "(#{line_item.creation_timestamp} ago)"
           .text.gray
             Great shot!

@@ -89,7 +89,7 @@ class Image < ActiveRecord::Base
     def parse_paging_options(options, default_opts = {})
       if default_opts.blank?
         default_opts = {
-          :sort_criteria => "images.updated_at DESC"
+          :sort_criteria => "images.created_at DESC"
         }
       end
       paging_options(options, default_opts)
