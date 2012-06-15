@@ -26,6 +26,8 @@ Uplo::Application.routes.draw do
   get 'profile/get_galleries', :to => 'profiles#get_galleries'
   get 'profile/followers', :to => 'profiles#show_followers'
   get 'profile/get_followers', :to => 'profiles#get_followers'
+  get 'profile/followed_users', :to => 'profiles#show_followed_users'
+  get 'profile/get_followed_users', :to => 'profiles#get_followed_users'
 
   get 'images/browse/:id', :to => 'images#browse'
   get 'images/public/:id', :to => 'images#public'

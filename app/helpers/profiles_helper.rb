@@ -8,12 +8,12 @@ module ProfilesHelper
     end
   end
 
-  def user_pronoun(user_id)
+  def following_header_label(user_id)
     if user_id == current_user.id
-      'You'
+      'You Are Following'
     else
       user = User.find_by_id user_id
-      user.try(:first_name)
+      "#{user.try(:first_name)} Is Following"
     end
   end
 end

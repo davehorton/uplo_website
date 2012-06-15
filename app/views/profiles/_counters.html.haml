@@ -10,6 +10,6 @@
 #followers-counter.counter.left{ :data => { :url => "#{ url_for(:controller => 'profiles', :action => 'show_followers', :user_id => @user.id) }" } }
   .number.text.black.bold.center= followers
   .text.gray.center.font14.line16 Followers
-#following-counter.not-implement.counter.no-padding-right.left{ :data => { :url => '#' } }
+#following-counter.counter.no-padding-right.left{ :data => { :url => "#{ url_for(:controller => 'profiles', :action => 'show_followed_users', :user_id => @user.id) }" } }
   .number.text.black.bold.center= following
   .text.gray.center.font14.line16 Following

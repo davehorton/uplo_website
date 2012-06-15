@@ -1,6 +1,6 @@
 .followers-container.container.left
   .head
-    .text.black.bold.font20.left Your Followers
+    .text.black.bold.font20.left= "#{user_possesive_form(@user.id)} Followers"
     .text.fuzzy-gray.font20.left= "&nbsp;(#{ @followers.total_entries })".html_safe
   .line-separator.left
   #endless-pages.left
