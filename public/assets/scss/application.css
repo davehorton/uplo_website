@@ -235,6 +235,9 @@ input, textarea {
         margin: 5px 0; }
       .popup .container .main-panel .line-separator {
         margin: 20px 0px; }
+      .popup .container .main-panel #frm-edit-gallery #gallery_permission {
+        width: 118px;
+        color: #606060; }
 
 .normal {
   font-weight: normal; }
@@ -624,11 +627,14 @@ input, textarea {
   line-height: 153px; }
   #center #images-panel .upload-template.container .image-container.thumb canvas {
     vertical-align: middle; }
+#center #images-panel .edit-template .line-separator {
+  margin: 13px 0px; }
 #center #images-panel .info-panel {
   width: 248px;
   margin-left: 20px; }
   #center #images-panel .info-panel input, #center #images-panel .info-panel textarea {
-    width: 242px; }
+    width: 242px;
+    color: #606060; }
   #center #images-panel .info-panel input[type=checkbox] {
     width: 10px; }
   #center #images-panel .info-panel select {
@@ -637,7 +643,7 @@ input, textarea {
     width: 100%;
     margin: 5px 0; }
     #center #images-panel .info-panel .info-line textarea {
-      height: 67px; }
+      height: 64px; }
     #center #images-panel .info-panel .info-line .label {
       margin: 2px 0px; }
     #center #images-panel .info-panel .info-line .half {
@@ -842,7 +848,7 @@ input, textarea {
   #edit-gallery-popup .main-panel .label {
     width: 89px; }
   #edit-gallery-popup .main-panel .note {
-    margin: 10px 0 0 10px; }
+    margin: 6px 0 0 10px; }
   #edit-gallery-popup .main-panel #button-container {
     margin-left: 110px; }
     #edit-gallery-popup .main-panel #button-container #btn-gallery-save {
