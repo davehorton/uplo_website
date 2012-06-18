@@ -2,6 +2,7 @@ class ImagesController < ApplicationController
   before_filter :authenticate_user!, :except => [:public]
   skip_authorize_resource :only => :public
   include ::SharedMethods::Converter
+  helper :galleries
 
   def mail_shared_image
     emails = params[:email]['emails'].split(',')
@@ -48,7 +49,8 @@ class ImagesController < ApplicationController
           :action => 'edit_images', :gallery_id => gallery.id }, :classes => 'text left' }
       items = render_to_string :partial => 'galleries/edit_photos',
                               :locals => { :images => images }
-      render :json => { :items => items, :pagination => pagination }
+      gal_options = self.class.helpers.gallery_options(current_user.id, gallery.id, true)
+      render :json => { :items => items, :pagination => pagination, :gallery_options => gal_options }
     else
       ids = params[:id]
       ids = params[:id].join(',') if params[:id].instance_of? Array
@@ -99,8 +101,9 @@ class ImagesController < ApplicationController
           :action => 'edit_images', :gallery_id => gallery.id }, :classes => 'text left' }
       item = render_to_string :partial => 'images/edit_photo_template',
                               :locals => { :image => image }
+      gal_options = self.class.helpers.gallery_options(current_user.id, gallery.id, true)
       result = {
-        :item => item, :pagination => pagination
+        :item => item, :pagination => pagination, :gallery_options => gal_options
       }
     end
 

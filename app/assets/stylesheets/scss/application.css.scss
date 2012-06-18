@@ -293,6 +293,7 @@ input, textarea {
       .label { margin: 5px 20px 5px 0;}
       .info-line { margin: 5px 0;}
       .line-separator { margin: 20px 0px;}
+      #frm-edit-gallery #gallery_permission { width: 118px; color: $color-gray;}
     }
   }
 }
@@ -752,11 +753,15 @@ input, textarea {
         }
       }
     }
+    .edit-template .line-separator {
+      margin: 13px 0px;
+    }
     .info-panel {
       width: 248px;
       margin-left: 20px;
       input, textarea {
         width: 242px;
+        color: $color-gray;
       }
       input[type=checkbox] {
         width: 10px;
@@ -765,7 +770,7 @@ input, textarea {
       .info-line {
         width: 100%;
         margin: 5px 0;
-        textarea { height: 67px; }
+        textarea { height: 64px; }
         .label {
           margin: 2px 0px;
         }
@@ -1041,7 +1046,7 @@ input, textarea {
   .main-panel {
     input, textarea { width: 234px; }
     .label { width: 89px; }
-    .note { margin: 10px 0 0 10px;}
+    .note { margin: 6px 0 0 10px;}
     #button-container {
       margin-left: 110px;
       #btn-gallery-save { margin-right: 10px; }

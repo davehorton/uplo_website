@@ -9,7 +9,7 @@ module GalleriesHelper
     else
       selected = selected_gallery
     end
-    collection.map { |gal| gal.name = "#{gal.name} (#{gal.images.size})" } if size_necessary
+    collection.map { |gal| gal.name = "#{gal.name} (#{gal.images.size})".html_safe } if size_necessary
     return options_from_collection_for_select(collection, 'id', 'name', selected)
   end
 

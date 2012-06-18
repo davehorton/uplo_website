@@ -58,6 +58,7 @@ deletePhoto = (node) ->
         $('.pagination-panel').each( (idx, elem) ->
           elem.innerHTML = response.pagination
         )
+        $('#gallery_selector_id')[0].innerHTML = response.gallery_options
         alert("Delete successfully!")
         $.modal.close()
     });
@@ -89,10 +90,9 @@ $ ->
       data.submit()
     done: (e, data) ->
       $(data.context).replaceWith data.result.item
-      $('.pagination-panel').each( (idx, elem) ->
-        elem.innerHTML = data.result.pagination
-      )
+      $('.pagination-panel').each((idx, elem) -> elem.innerHTML = data.result.pagination)
       $('#images-panel').children().last().remove() if $('.pagination-panel').find('.pagination').length > 0
+      $('#gallery_selector_id')[0].innerHTML = data.result.gallery_options
       $.modal.close()
     progress: (e, data) ->
       progress = parseInt(data.loaded / data.total * 100, 10).toString() + '%'
@@ -154,7 +154,8 @@ $ ->
           alert("Your gallery has been updated!")
           $.modal.close()
           $('#edit-gallery-popup').replaceWith response.edit_popup
-          $('#gallery_selector_id')[0].innerHTML = response.gallery_options
+          $('#gallery_selector_id')[0].innerHTML = response.gal_with_number_options
+          $('.edit-template #image_gallery_id').each((idx, val) -> val.innerHTML = response.gallery_options)
         else
           alert("Something went wrong!")
     });

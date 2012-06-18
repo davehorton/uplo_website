@@ -51,7 +51,7 @@
         .user-section.left{ :class => "#{ additional_class }" }
           = image_tag(user.avatar(:small), :class => "avatar small left")
           .left
-            .text.black.font12.line10= user.username
+            %a.text.black.normal.font12.line10{ :href => "#{ url_for(:controller => 'profiles', :action => 'show', :user_id => user.id) }" }= user.username
             .text.gray.font11.line10= user.fullname
 
   - following_margin = 'margin-top:15px;' if @followed_users.length > 0
@@ -68,5 +68,5 @@
         .user-section.left{ :class => "#{ additional_class }" }
           = image_tag(user.avatar(:small), :class => "avatar small left")
           .left
-            .text.black.font12= user.username
+            %a.text.black.normal.font12{ :href => "#{ url_for(:controller => 'profiles', :action => 'show', :user_id => user.id) }" }= user.username
             .text.gray.font12= user.fullname
