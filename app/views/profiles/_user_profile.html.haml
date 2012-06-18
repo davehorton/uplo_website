@@ -1,17 +1,29 @@
+- is_current_user = is_current_user user.id
+- user_profile_page = url_for(:controller => 'profiles', :action => 'show', :user_id => user.id)
 #user-section.left
-  .left
-    = image_tag(user.avatar(:large), :class => 'avatar large left')
-    .clear
-    .not-implement.edit-pane
-      .icon.edit.left.left
-      .text.black.font11 Edit Photo
-  .info.left
-    .info-pane.left
-      .name.text.black.bold.font20= user.fullname
-      .text.fuzzy-gray.font12= "Joined #{ user.joined_date }"
-    .not-implement.edit-pane.left
-      .icon.edit.left
-      .text.black.font11 Edit Profile Information
+  - if !is_current_user
+    .left
+      %a{ :href => "#{user_profile_page}" }
+        = image_tag(user.avatar(:large), :class => 'avatar large left')
+    .info.left
+      .info-pane.left
+        .name.text.black.bold.font20
+          %a{ :href => "#{user_profile_page}" }= user.fullname
+        .text.fuzzy-gray.font12= "Joined #{ user.joined_date }"
+  - else
+    .left
+      = image_tag(user.avatar(:large), :class => 'avatar large left')
+      .clear
+      .not-implement.edit-pane
+        .icon.edit.left.left
+        .text.black.font11 Edit Photo
+    .info.left
+      .info-pane.left
+        .name.text.black.bold.font20= user.fullname
+        .text.fuzzy-gray.font12= "Joined #{ user.joined_date }"
+      .not-implement.edit-pane.left
+        .icon.edit.left
+        .text.black.font11 Edit Profile Information
 
 .line-separator.left
 .biography.left
@@ -19,3 +31,9 @@
   .text.black.bold.font12.span Web Designer
   .text.black.bold.font12.span cameronmoll.com
   .text.gray.font12.line16 I’m primarily a designer for web and print, but I dabble with video amateurily from time to timeLorem ipsum dolor sit amet, consectetur adipiscing elit. In non quam eu ipsum tincidunt iaculis in id augue. Mauris auctor rhoncus sollicitudin.
+
+- unless is_current_user
+  .line-separator.left
+  - is_followed_user = user.has_follower?(current_user.id)
+  - follow_class = is_followed_user ? 'unfollow' : 'follow'
+  #btn-follow.button.left{ :class => "#{ follow_class }", :data => { 'author-id' => "#{ user.id }", 'following' => "#{ is_followed_user }"} }

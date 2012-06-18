@@ -11,9 +11,9 @@ load = (url, callback)->
           $(window).scroll()
         return
       )
-      $(window).scroll();
-      $.modal.close();
-  });
+      $(window).scroll()
+      $.modal.close()
+  })
 
 $ ->
   $('.not-implement').click -> helper.alert_not_implement()
@@ -40,11 +40,32 @@ $ ->
           target.attr('data-following', 'false')
           target.text('Follow')
         $.modal.close()
-    });
+    })
 
   $('#counters .counter').click ->
     url = $(@).attr('data-url')
     if url != '#'
       load(url)
 
-
+  $('#btn-follow').click ->
+    author_id = $(@).attr('data-author-id')
+    is_unfollow = $(@).attr('data-following')
+    $('#mask').modal()
+    $.ajax({
+      url: '/users/follow',
+      type: "GET",
+      data: { user_id:author_id, unfollow: is_unfollow },
+      dataType: "json",
+      success: (response) ->
+        if(response.success==false)
+          alert(response.msg)
+        else if(is_unfollow=='false')
+          $('#btn-follow').attr('data-following', 'true')
+          $('#btn-follow').removeClass('follow')
+          $('#btn-follow').addClass('unfollow')
+        else
+          $('#btn-follow').attr('data-following', 'false')
+          $('#btn-follow').removeClass('unfollow')
+          $('#btn-follow').addClass('follow')
+        $.modal.close()
+    })

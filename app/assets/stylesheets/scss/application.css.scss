@@ -461,6 +461,17 @@ input, textarea {
 .simple_form span.error { margin-left: 50px; padding-top: 5px; color: #EA501F; font-size: 12px; font-weight: bold; clear: both; }
 
 .button {
+  cursor: pointer;
+  &.follow {
+    background: url('/assets/btn-follow.png') no-repeat;
+    width: 57px;
+    height: 23px;
+  }
+  &.unfollow {
+    background: url('/assets/btn-unfollow.png') no-repeat;
+    width: 68px;
+    height: 23px;
+  }
   &.cancel {
     background: url('/assets/btn-cancel-57x23.png') no-repeat;
     width: 57px;
@@ -678,11 +689,12 @@ input, textarea {
   margin-right: 30px;
   width: $side-pane-width;
   .biography {
-    margin-top: 10px;
+    margin: 10px 0;
     .span {
       margin-bottom: 5px;
     }
   }
+  #btn-follow { margin: 10px 0px; }
   #user-section {
     width: 100%;
     margin-bottom: 10px;

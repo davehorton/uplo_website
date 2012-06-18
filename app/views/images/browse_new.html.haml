@@ -10,7 +10,7 @@
       %span.text.gray.font12.line12 By
       %a.text.black.normal.font12.line12{:href => "#{ url_for(:controller => 'profiles', :action => 'show', :user_id => @author.id) }"}= @author.username.truncate(20)
       .text.gray.font11= "#{@author.fullname} &bull; #{@author.images.length} Items".html_safe
-    - if current_user.id != @author.id
+    - unless is_current_user(@author.id)
       - is_author_following = @author.has_follower?(current_user.id)
       - follow_class = is_author_following ? 'unfollow' : 'follow'
       #btn-follow.button.right{ :class => "#{ follow_class }", :data => { 'author-id' => "#{ @author.id }", 'following' => "#{ is_author_following }"} }
