@@ -396,4 +396,3 @@ DEPENDENCIES
   uglifier (>= 1.0.3)
   will_paginate (>= 3.0.pre4)
   yui-compressor (>= 0.9.6)
-

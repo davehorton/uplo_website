@@ -409,34 +409,44 @@ input, textarea {
   font-weight: bold;
   clear: both; }
 
-.button.cancel {
-  background: url("/assets/btn-cancel-57x23.png") no-repeat;
-  width: 57px;
-  height: 23px; }
-.button.save {
-  background: url("/assets/btn-save-changes.jpg") no-repeat;
-  width: 96px;
-  height: 23px; }
-.button.ok {
-  background: url("/assets/btn-ok.png") no-repeat;
-  width: 39px;
-  height: 23px; }
-.button.save-grid-changes {
-  background: url("/assets/btn-save-changes-big.png") no-repeat;
-  width: 108px;
-  height: 27px; }
-.button.save-my-changes {
-  background: url("/assets/btn-save-my-changes.png") no-repeat;
-  width: 128px;
-  height: 27px; }
-.button.leave-not-saving {
-  background: url("/assets/btn-leave-changes.png") no-repeat;
-  width: 148px;
-  height: 27px; }
-.button.delete-photo {
-  background: url("/assets/btn-delete-photo.png") no-repeat;
-  width: 90px;
-  height: 23px; }
+.button {
+  cursor: pointer; }
+  .button.follow {
+    background: url("/assets/btn-follow.png") no-repeat;
+    width: 57px;
+    height: 23px; }
+  .button.unfollow {
+    background: url("/assets/btn-unfollow.png") no-repeat;
+    width: 68px;
+    height: 23px; }
+  .button.cancel {
+    background: url("/assets/btn-cancel-57x23.png") no-repeat;
+    width: 57px;
+    height: 23px; }
+  .button.save {
+    background: url("/assets/btn-save-changes.jpg") no-repeat;
+    width: 96px;
+    height: 23px; }
+  .button.ok {
+    background: url("/assets/btn-ok.png") no-repeat;
+    width: 39px;
+    height: 23px; }
+  .button.save-grid-changes {
+    background: url("/assets/btn-save-changes-big.png") no-repeat;
+    width: 108px;
+    height: 27px; }
+  .button.save-my-changes {
+    background: url("/assets/btn-save-my-changes.png") no-repeat;
+    width: 128px;
+    height: 27px; }
+  .button.leave-not-saving {
+    background: url("/assets/btn-leave-changes.png") no-repeat;
+    width: 148px;
+    height: 27px; }
+  .button.delete-photo {
+    background: url("/assets/btn-delete-photo.png") no-repeat;
+    width: 90px;
+    height: 23px; }
 
 .buttons-container .button {
   width: 32px;
@@ -570,9 +580,11 @@ input, textarea {
   margin-right: 30px;
   width: 292px; }
   #left .biography {
-    margin-top: 10px; }
+    margin: 10px 0; }
     #left .biography .span {
       margin-bottom: 5px; }
+  #left #btn-follow {
+    margin: 10px 0px; }
   #left #user-section {
     width: 100%;
     margin-bottom: 10px; }
