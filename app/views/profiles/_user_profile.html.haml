@@ -1,26 +1,23 @@
 - is_current_user = is_current_user user.id
-- user_profile_page = url_for(:controller => 'profiles', :action => 'show', :user_id => user.id)
+- if is_current_user
+  - user_profile_page = url_for(:controller => 'profiles', :action => 'show')
+- else
+  - user_profile_page = url_for(:controller => 'profiles', :action => 'show', :user_id => user.id)
 #user-section.left
-  - if !is_current_user
-    .left
-      %a{ :href => "#{user_profile_page}" }
-        = image_tag(user.avatar(:large), :class => 'avatar large left')
-    .info.left
-      .info-pane.left
-        .name.text.black.bold.font20
-          %a{ :href => "#{user_profile_page}" }= user.fullname
-        .text.fuzzy-gray.font12= "Joined #{ user.joined_date }"
-  - else
-    .left
+  .left
+    %a{ :href => "#{user_profile_page}" }
       = image_tag(user.avatar(:large), :class => 'avatar large left')
+    - if is_current_user
       .clear
       .not-implement.edit-pane
         .icon.edit.left.left
         .text.black.font11 Edit Photo
-    .info.left
-      .info-pane.left
-        .name.text.black.bold.font20= user.fullname
-        .text.fuzzy-gray.font12= "Joined #{ user.joined_date }"
+  .info.left
+    .info-pane.left
+      .name.text.black.bold.font20
+        %a{ :href => "#{user_profile_page}" }= user.fullname
+      .text.fuzzy-gray.font12= "Joined #{ user.joined_date }"
+    - if is_current_user
       .not-implement.edit-pane.left
         .icon.edit.left
         .text.black.font11 Edit Profile Information
