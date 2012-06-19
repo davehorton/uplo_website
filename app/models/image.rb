@@ -73,7 +73,7 @@ class Image < ActiveRecord::Base
     end
 
     def exposed_methods
-      [:image_url, :image_thumb_url, :username, :creation_timestamp, :user_fullname, :public_link]
+      [:image_url, :image_thumb_url, :username, :creation_timestamp, :user_fullname, :public_link, :user_id]
     end
 
     def exposed_attributes
@@ -133,6 +133,13 @@ class Image < ActiveRecord::Base
     user = author
     if user
       return user.fullname
+    end
+  end
+
+  def user_id
+    user = author
+    if user
+      return user.id
     end
   end
 
