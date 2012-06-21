@@ -165,6 +165,7 @@ class Api::GalleriesController < Api::BaseController
 
       if data[:gallery][:cover_image]
         data[:gallery][:cover_image] = data[:gallery][:cover_image].serializable_hash(Image.default_serializable_options)
+        data[:gallery][:updated_at] = gallery.updated_at.strftime('%m/%d/%y')
       end
 
       json_array << data
