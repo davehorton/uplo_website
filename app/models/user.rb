@@ -74,7 +74,7 @@ class User < ActiveRecord::Base
     end
 
     def exposed_methods
-      [:avatar_url, :fullname]
+      [:avatar_url, :fullname, :joined_date, :biography]
     end
 
     def exposed_attributes
@@ -115,6 +115,10 @@ class User < ActiveRecord::Base
   end
 
   # PUBLIC INSTANCE METHODS
+  def biography
+    "Here is this user's biography."
+  end
+
   def joined_date
     self.confirmed_at.strftime('%B %Y')
   end
