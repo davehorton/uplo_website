@@ -172,6 +172,8 @@ class Api::UsersController < Api::BaseController
     info[:avatar_url] = user.avatar_url
     info[:followers_num] = user.followers.size
     info[:following_num] = user.followed_users.size
+    info[:galleries_num] = user.galleries.size
+    info[:images_num] = user.images.size
 
     return info
   end
