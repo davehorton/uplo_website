@@ -586,8 +586,10 @@ input, textarea {
     margin: 10px 0; }
     #left .biography .span {
       margin-bottom: 5px; }
-  #left #btn-follow {
+  #left .follow-section {
     margin: 10px 0px; }
+    #left .follow-section .note {
+      margin: 5px 0px 5px 10px; }
   #left #user-section {
     width: 100%;
     margin-bottom: 10px; }
