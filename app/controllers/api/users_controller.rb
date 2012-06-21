@@ -119,7 +119,7 @@ class Api::UsersController < Api::BaseController
       followers = user.followers.load_users(@filtered_params)
       followers.map {|f| f}
       result = {
-        :success => true
+        :success => true,
         :data => process_followers_info(user.id, followers) }
     end
     render :json => result
@@ -133,7 +133,7 @@ class Api::UsersController < Api::BaseController
       result = {:success => false, :msg => 'This user does not exist.'}
     else
       result = {
-        :success => true
+        :success => true,
         :data => user.followed_users.load_users(@filtered_params) }
     end
     render :json => result
@@ -146,19 +146,19 @@ class Api::UsersController < Api::BaseController
     result = {}
     user = User.find_by_id params[:user_id]
     follower = current_user
-    if user.id == follower.id
+    if user.nil?
+      result = {:success => false, :msg => 'This user does not exist.'}
+    elsif user.id == follower.id
       result[:msg] = 'You cannot follow yourself'
       result[:success] = false
     elsif !SharedMethods::Converter.Boolean(params[:follow])
       UserFollow.destroy_all({ :user_id => user.id, :followed_by => follower.id })
-      result[:followers] = user.followers.length
       result[:success] = true
     elsif UserFollow.exists?({ :user_id => user.id, :followed_by => follower.id })
       result[:msg] = 'You have already followed this user.'
       result[:success] = false
     else
       UserFollow.create({ :user_id => user.id, :followed_by => follower.id })
-      result[:followers] = user.followers.length
       result[:success] = true
     end
     render :json => result
