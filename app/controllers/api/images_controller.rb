@@ -130,9 +130,9 @@ class Api::ImagesController < Api::BaseController
     if user.nil?
       result = {:success => false, :msg => 'This user does not exist.'}
     elsif user.id == current_user.id
-      result[:images] = user.images.load_images(@filtered_params)
+      result[:data] = user.images.load_images(@filtered_params)
     else
-      result[:images] = user.images.load_popular_images(@filtered_params)
+      result[:data] = user.images.load_popular_images(@filtered_params)
     end
 
     render :json => result
