@@ -35,6 +35,6 @@
     .btn-container
       %a.button{:href=>"uplo://type=#{@type}&id=#{@id}"} Yes, use the app!
       .clear
-      %a.button{:href=>"#{ url_for(:controller => params[:controller], :action => params[:action], :gallery_id => params[:gallery_id], :web_default => true) }"} I prefer the mobile site
+      %a.button{:href=>"#{ url_for(:controller => params[:controller], :action => params[:action], :gallery_id => params[:gallery_id], :web_default => true, :formats => 'html') }"} I prefer the mobile site
 
     = yield :js
