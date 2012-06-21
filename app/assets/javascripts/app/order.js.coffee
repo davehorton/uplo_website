@@ -25,6 +25,6 @@ $ ->
     card_num = $('#card_card_number').val()
     for validator in CARD_TYPE_VALIDATORS
       if validator.value == $(this).val()
-        if !validator.reg.test(card_num)
+        if card_num!='' && !validator.reg.test(card_num)
           alert('Your card number does not match this card_type!')
         break

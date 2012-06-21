@@ -39,7 +39,7 @@
           = select :billing, :state, state_options, {:required => true,  :prompt => '- Please Select --'}
         .info
           = label_tag :billing_phone, "Phone Number <span style='color:red;'>*</span>".html_safe
-          = text_field :billing, :phone, :as => :string, :required => false, :onchange => "validateNumber()"
+          = text_field :billing, :phone, :as => :string, :required => false
         .info
           = label_tag :billing_fax, "Fax Number"
           = text_field :billing, :fax
@@ -83,7 +83,7 @@
             = select :shipping, :state, state_options, {:required => true,  :prompt => '- Please Select --'}
           .info
             = label_tag :shipping_phone, "Phone Number <span style='color:red;'>*</span>".html_safe
-            = text_field :shipping, :phone, :as => :string, :required => false, :onchange => "validateNumber()"
+            = text_field :shipping, :phone, :as => :string, :required => false
           .info
             = label_tag :shipping_fax, "Fax Number"
             = text_field :shipping, :fax
@@ -154,8 +154,8 @@
         .line-separator.left
         .submit.right
 
+= javascript_include_tag 'app/order.js'
 - content_for :js do
-  = javascript_include_tag 'app/order.js'
   - javascript_tag do
     :erb
       $("#shipping_phone").keypress(function (event) {
