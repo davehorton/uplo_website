@@ -3,13 +3,14 @@ class ProfilesController < ApplicationController
   layout 'main'
 
   def show
-    @galleries = @user.galleries.load_galleries(@filtered_params)
     @followers = @user.followers.load_users(@filtered_params)
     @followed_users = @user.followed_users.load_users(@filtered_params)
     if @user.id == current_user.id
       @images = @user.images.load_images(@filtered_params)
+      @galleries = @user.galleries.load_galleries(@filtered_params)
     else
       @images = @user.images.load_popular_images(@filtered_params)
+      @galleries = @user.galleries.load_popular_galleries(@filtered_params)
     end
   end
 
