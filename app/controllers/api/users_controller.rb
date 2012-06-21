@@ -170,6 +170,8 @@ class Api::UsersController < Api::BaseController
     info = user.serializable_hash(user.default_serializable_options)
     # TODO: rename :avatar to :avatar_url and put it into User#exposed_methods
     info[:avatar_url] = user.avatar_url
+    info[:followers_num] = user.followers.size
+    info[:following_num] = user.followed_users.size
 
     return info
   end
