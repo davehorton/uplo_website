@@ -8,7 +8,7 @@ class GalleriesController < ApplicationController
     @gallery = Gallery.find_by_id params[:gallery_id]
     @author = @gallery.user
     @images = @gallery.load_popular_images(@filtered_params)
-    render :layout => "public"
+    render :layout => "public", :formats => 'html'
   end
 
   def mail_shared_gallery

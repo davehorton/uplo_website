@@ -220,7 +220,7 @@ class ImagesController < ApplicationController
     @image = Image.find_by_id(params[:id])
     @author = @image.gallery.user
     @purchased_info = @image.raw_purchased_info(@filtered_params)
-    render :layout => 'public'
+    render :layout => 'public', :formats => 'html'
   end
 
   # PUT images/:id/slideshow_update
