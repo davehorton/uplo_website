@@ -1,4 +1,6 @@
 class ImagesController < ApplicationController
+  has_mobile_fu
+  before_filter :detect_device, :only => [:public ]
   before_filter :authenticate_user!, :except => [:public]
   skip_authorize_resource :only => :public
   include ::SharedMethods::Converter
@@ -362,5 +364,13 @@ class ImagesController < ApplicationController
     end
     flickr.photosets.create(:title => 'UPLO', :description => "from <a href='#{DOMAIN}'>UPLO</a>", :primary_photo_id => photo_id)
     return true
+  end
+
+  def detect_device
+    if is_mobile_device? && (params[:web_default].nil? || params[:web_default]==false)
+      @type = 'image'
+      @id = params[:id]
+      return render :template => 'shared/device_request', :layout => nil
+    end
   end
 end

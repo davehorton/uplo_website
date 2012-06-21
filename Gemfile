@@ -22,6 +22,7 @@ gem "simple_form"
 gem "awesome_print"
 gem 'devise', '~> 1.5.3'
 gem 'mail'
+gem 'mobile-fu'
 
 # If using HAML:
 gem 'ruby_parser', '>= 2.3.1'
