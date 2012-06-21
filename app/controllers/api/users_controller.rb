@@ -109,8 +109,62 @@ class Api::UsersController < Api::BaseController
     render :json => result
   end
 
-  protected
+  # GET /api/user_followers
+  # params: user_id
+  def get_followers
+    user = User.find_by_id params[:user_id]
+    if user.nil?
+      result = {:success => false, :msg => 'This user does not exist.'}
+    else
+      followers = user.followers.load_users(@filtered_params)
+      followers.map {|f| f}
+      result = {
+        :success => true
+        :data => process_followers_info(user.id, followers) }
+    end
+    render :json => result
+  end
 
+  # GET /api/user_followings
+  # params: user_id
+  def get_followed_users
+    user = User.find_by_id params[:user_id]
+    if user.nil?
+      result = {:success => false, :msg => 'This user does not exist.'}
+    else
+      result = {
+        :success => true
+        :data => user.followed_users.load_users(@filtered_params) }
+    end
+    render :json => result
+  end
+
+  # /api/follow
+  # follow: T/F <follow/unfollow user>
+  # user_id: <current user will follow this user>
+  def set_follow
+    result = {}
+    user = User.find_by_id params[:user_id]
+    follower = current_user
+    if user.id == follower.id
+      result[:msg] = 'You cannot follow yourself'
+      result[:success] = false
+    elsif !SharedMethods::Converter.Boolean(params[:follow])
+      UserFollow.destroy_all({ :user_id => user.id, :followed_by => follower.id })
+      result[:followers] = user.followers.length
+      result[:success] = true
+    elsif UserFollow.exists?({ :user_id => user.id, :followed_by => follower.id })
+      result[:msg] = 'You have already followed this user.'
+      result[:success] = false
+    else
+      UserFollow.create({ :user_id => user.id, :followed_by => follower.id })
+      result[:followers] = user.followers.length
+      result[:success] = true
+    end
+    render :json => result
+  end
+
+  protected
   # Init a hash containing user's info
   def init_user_info(user)
     info = user.serializable_hash(user.default_serializable_options)
@@ -118,5 +172,16 @@ class Api::UsersController < Api::BaseController
     info[:avatar_url] = user.avatar_url
 
     return info
+  end
+
+  def process_followers_info(user_id, users)
+    result = []
+    user = User.find_by_id user_id
+    users.each { |u|
+      info = u.serializable_hash(u.default_serializable_options)
+      info[:is_following] = u.has_follower?(user.id)
+      result << {:user => info}
+    }
+    return result
   end
 end

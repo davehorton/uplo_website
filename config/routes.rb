@@ -93,6 +93,9 @@ Uplo::Application.routes.draw do
       post "register", :to => "users#create_user"
       get "reset_password", :to => "users#reset_password"
       post "update_profile", :to => "users#update_profile"
+      get 'user_followings', :to => 'users#get_followed_users'
+      get 'user_followers', :to => 'users#get_followers'
+      get 'follow', :to => 'users#set_follow'
     end
 
     # Gallery
