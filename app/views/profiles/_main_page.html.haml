@@ -69,4 +69,4 @@
           = image_tag(user.avatar(:small), :class => "avatar small left")
           .left
             %a.text.black.normal.font12{ :href => "#{ url_for(:controller => 'profiles', :action => 'show', :user_id => user.id) }" }= user.username
-            .text.gray.font12= user.fullname
+            .text.gray.font11.line10= user.fullname
