@@ -61,7 +61,7 @@ class Image < ActiveRecord::Base
         :order => paging_info.sort_string)
     end
 
-    def load_popular_images(params)
+    def load_popular_images(params = {})
       paging_info = parse_paging_options(params, {:sort_criteria => "images.likes DESC"})
       # TODO: calculate the popularity of the images: base on how many times an image is "liked".
       self.includes(:gallery).joins([:gallery]).

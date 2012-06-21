@@ -115,9 +115,27 @@ class Api::ImagesController < Api::BaseController
     render :json => @result
   end
 
+  # GET /api/get_images
+  # params: [id1, id2]
   def get_images
     images = Image.find_all_by_id JSON.parse(URI.unescape(params[:ids]))
     render :json => {:data => images}
+  end
+
+  # GET /api/user_images
+  # params: user_id
+  def get_user_images
+    result = {:success => true}
+    user = User.find_by_id params[:user_id]
+    if user.nil?
+      result = {:success => false, :msg => 'This user does not exist.'}
+    elsif user.id == current_user.id
+      result[:images] = user.images.load_images(@filtered_params)
+    else
+      result[:images] = user.images.load_popular_images(@filtered_params)
+    end
+
+    render :json => result
   end
 
   # DELETE /api/delete_image
