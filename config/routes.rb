@@ -96,6 +96,7 @@ Uplo::Application.routes.draw do
       get 'user_followings', :to => 'users#get_followed_users'
       get 'user_followers', :to => 'users#get_followers'
       get 'follow', :to => 'users#set_follow'
+      get 'check_following', :to => 'users#check_following'
     end
 
     # Gallery

@@ -164,6 +164,19 @@ class Api::UsersController < Api::BaseController
     render :json => result
   end
 
+  # /api/check_following
+  # user_id: <user to check whether current user's follow it or not>
+  def check_following
+    result = {}
+    user = User.find_by_id params[:user_id]
+    if user.nil?
+      result = {:success => false, :msg => 'This user does not exist.'}
+    else
+      result = {:success => true, :check_result => user.has_follower?(current_user.id)}
+    end
+    render :json => result
+  end
+
   protected
   # Init a hash containing user's info
   def init_user_info(user)
