@@ -188,6 +188,8 @@ class GalleriesController < ApplicationController
       @type = 'gallery'
       @id = params[:gallery_id]
       return render :template => 'shared/device_request', :layout => nil
+    else
+      session[:mobile_view] = false
     end
   end
 end

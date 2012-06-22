@@ -371,6 +371,8 @@ class ImagesController < ApplicationController
       @type = 'image'
       @id = params[:id]
       return render :template => 'shared/device_request', :layout => nil
+    else
+      session[:mobile_view] = false
     end
   end
 end
