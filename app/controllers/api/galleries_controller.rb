@@ -113,8 +113,14 @@ class Api::GalleriesController < Api::BaseController
   #   page_size
   #   sort_field
   #   sort_direction
+  #   user_id
   def list_popular
-    galleries = Gallery.load_popular_galleries(@filtered_params)
+    if params[:user_id].nil?
+      galleries = Gallery.load_popular_galleries(@filtered_params)
+    else
+      user = User.find_by_id params[:user_id]
+      galleries = user.public_galleries.load_galleries(@filtered_params)
+    end
     @result[:total] = galleries.total_entries
     @result[:data] = galleries_to_json(galleries)
     @result[:success] = true
