@@ -114,7 +114,7 @@ class Api::GalleriesController < Api::BaseController
   #   sort_field
   #   sort_direction
   def list_popular
-    galleries = Gallery.load_galleries(@filtered_params)
+    galleries = Gallery.load_popular_galleries(@filtered_params)
     @result[:total] = galleries.total_entries
     @result[:data] = galleries_to_json(galleries)
     @result[:success] = true
