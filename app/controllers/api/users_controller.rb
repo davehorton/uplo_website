@@ -183,10 +183,15 @@ class Api::UsersController < Api::BaseController
     info = user.serializable_hash(user.default_serializable_options)
     # TODO: rename :avatar to :avatar_url and put it into User#exposed_methods
     info[:avatar_url] = user.avatar_url
+    if user.id == current_user.id
+      info[:galleries_num] = user.galleries.size
+      info[:images_num] = user.images.size
+    else
+      info[:galleries_num] = user.public_galleries.size
+    info[:images_num] = user.public_images.size
+    end
     info[:followers_num] = user.followers.size
     info[:following_num] = user.followed_users.size
-    info[:galleries_num] = user.galleries.size
-    info[:images_num] = user.images.size
 
     return info
   end
