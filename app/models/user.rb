@@ -116,7 +116,7 @@ class User < ActiveRecord::Base
 
   # PUBLIC INSTANCE METHODS
   def biography
-    "Here is this user's biography."
+    "I’m primarily a designer for web and print, but I dabble with video amateurily from time to timeLorem ipsum dolor sit amet, consectetur adipiscing elit. In non quam eu ipsum tincidunt iaculis in id augue. Mauris auctor rhoncus sollicitudin."
   end
 
   def joined_date
