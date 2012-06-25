@@ -117,7 +117,6 @@ class Api::UsersController < Api::BaseController
       result = {:success => false, :msg => 'This user does not exist.'}
     else
       followers = user.followers.load_users(@filtered_params)
-      followers.map {|f| f}
       result = {
         :success => true,
         :data => process_followers_info(user.id, followers) }
@@ -132,9 +131,10 @@ class Api::UsersController < Api::BaseController
     if user.nil?
       result = {:success => false, :msg => 'This user does not exist.'}
     else
+      followed_users = user.followed_users.load_users(@filtered_params)
       result = {
         :success => true,
-        :data => user.followed_users.load_users(@filtered_params) }
+        :data => process_followed_users_info(user.id, followed_users) }
     end
     render :json => result
   end
@@ -197,6 +197,18 @@ class Api::UsersController < Api::BaseController
     users.each { |u|
       info = u.serializable_hash(u.default_serializable_options)
       info[:is_following] = u.has_follower?(user.id)
+      info[:followed_by_current_user] = u.has_follower?(current_user.id)
+      result << {:user => info}
+    }
+    return result
+  end
+
+  def process_followed_users_info(user_id, users)
+    result = []
+    user = User.find_by_id user_id
+    users.each { |u|
+      info = u.serializable_hash(u.default_serializable_options)
+      info[:followed_by_current_user] = u.has_follower?(current_user.id)
       result << {:user => info}
     }
     return result
