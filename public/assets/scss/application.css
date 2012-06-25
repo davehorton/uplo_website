@@ -73,7 +73,8 @@ p, ul {
 input, textarea {
   border: 1px solid #cdcdcd;
   padding-left: 5px;
-  margin: 0; }
+  margin: 0;
+  resize: none; }
 
 /*==================================================================================*/
 /* CLASS */
