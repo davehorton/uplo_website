@@ -11,4 +11,5 @@
       .name.text.black.font18= user.username.truncate(20)
       .text.gray.font12.left= "#{ user.images.length } items | view&nbsp".html_safe
       %a.text.black.font12.left{ :href => "#{ url_for(:controller => 'profiles', :action => 'show', :user_id => user.id) }", :data => { 'user-id' => "#{ user.id }" } } profile
-      %a.follow.text.black.font12.right{ :data => { 'author-id' => "#{ user.id }", 'following' => "#{ is_following }"} }= follow_label
+      - unless is_current_user(user.id)
+        %a.follow.text.black.font12.right{ :data => { 'author-id' => "#{ user.id }", 'following' => "#{ is_following }"} }= follow_label
