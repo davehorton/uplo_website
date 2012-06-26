@@ -34,7 +34,7 @@
     .button.save-grid-changes.left
 
 = render :partial => 'edit_gallery', :layout => 'layouts/popup', :locals => { :title => 'Edit Your Gallery Infomation', :id => 'edit-gallery-popup', :gallery => @gallery }
-= render :partial => 'shared/delete_confirm', :layout => 'layouts/popup', :locals => { :title => 'Delete Confirm', :id => 'delete-confirm-popup' }
+= render :partial => 'shared/delete_confirm', :layout => 'layouts/popup', :locals => { :title => 'Delete Confirm', :id => 'delete-confirm-popup', :text => 'Are you sure you want to delete this photo?' }
 = render :partial => 'grid_changes_confirm', :layout => 'layouts/popup', :locals => { :title => 'Save Changes', :id => 'save-confirm-popup' }
 
 - content_for :js do

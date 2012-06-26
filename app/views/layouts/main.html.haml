@@ -73,5 +73,6 @@
           = image_tag('loading.gif')
 
     = yield :js
-
+    = javascript_tag do
+      $('body').delegate('.popup .close', 'click', function(e){ $.modal.close() });
 
