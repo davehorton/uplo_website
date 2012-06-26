@@ -32,6 +32,7 @@ class User < ActiveRecord::Base
   has_many :public_images, :through => :public_galleries, :source => :images
   has_many :comments, :dependent => :destroy
   has_many :image_likes, :dependent => :destroy
+  has_many :liked_images, :through => :image_likes, :source => :image
   has_many :orders
   has_one :cart, :dependent => :destroy
   has_many :user_followers, :foreign_key => :user_id, :class_name => 'UserFollow'
@@ -295,7 +296,6 @@ class User < ActiveRecord::Base
     result[:total_entries] = images.total_entries
     return result
   end
-
 
   # indexing with thinking sphinx
   define_index do

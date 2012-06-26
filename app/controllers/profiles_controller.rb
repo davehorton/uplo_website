@@ -7,9 +7,11 @@ class ProfilesController < ApplicationController
     @followed_users = @user.followed_users.load_users(@filtered_params)
     if @user.id == current_user.id
       @images = @user.images.load_images(@filtered_params)
+      @liked_images = @user.liked_images.load_images(@filtered_params)
       @galleries = @user.galleries.load_galleries(@filtered_params)
     else
       @images = @user.images.load_popular_images(@filtered_params)
+      @liked_images = @user.liked_images.load_popular_images(@filtered_params)
       @galleries = @user.galleries.load_popular_galleries(@filtered_params)
     end
   end

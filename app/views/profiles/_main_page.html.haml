@@ -27,12 +27,12 @@
   #liked-photos-section.container.left
     .head
       .text.black.bold.font20.left= "#{user_possesive} Likes"
-      .text.fuzzy-gray.font20.left= "&nbsp;(#{ @images.total_entries })".html_safe
+      .text.fuzzy-gray.font20.left= "&nbsp;(#{ @liked_images.total_entries })".html_safe
       .not-implement
         = render :partial => 'link_to_detail', :locals => { :user_id => @user.id, :url => '#' }
     .images-wrapper.left
-      - (0...@images.length). each do |idx|
-        - image = @images[idx]
+      - (0...@liked_images.length). each do |idx|
+        - image = @liked_images[idx]
         - additional_class = (idx%6 == 0) ? "no-padding-left" : ((idx%6==5) ? "no-padding-right" : "")
         .image-container.thumb.profile{:id => "image-container-#{image.id}", :title=>"#{image.name}", :class => "#{additional_class}"}
           = image_tag(image.data.url(:thumb), :class => "image-thumb profile image thumb")
