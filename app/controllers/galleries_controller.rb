@@ -190,6 +190,7 @@ class GalleriesController < ApplicationController
       return render :template => 'shared/device_request', :layout => nil
     else
       session[:mobile_view] = false
+      request.formats.unshift Mime::HTML
     end
   end
 end

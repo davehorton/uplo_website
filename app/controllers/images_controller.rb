@@ -1,6 +1,6 @@
 class ImagesController < ApplicationController
   has_mobile_fu
-  before_filter :detect_device, :only => [:public ]
+  before_filter :detect_device, :only => [:public]
   before_filter :authenticate_user!, :except => [:public]
   skip_authorize_resource :only => :public
   include ::SharedMethods::Converter
@@ -373,6 +373,7 @@ class ImagesController < ApplicationController
       return render :template => 'shared/device_request', :layout => nil
     else
       session[:mobile_view] = false
+      request.formats.unshift Mime::HTML
     end
   end
 end
