@@ -66,7 +66,7 @@ class ProfilesController < ApplicationController
     if request.xhr?
       followers = @user.followers.load_users(@filtered_params)
       template = render_to_string :partial => 'users/followers_template',
-                    :locals => { :users => followers, :users_per_line => 2 }
+                    :locals => { :users => followers, :users_per_line => 2, :type => 'follower' }
       pagination = render_to_string :partial => 'shared/hidden_pagination',
                     :locals => { :data_source => followers,
                                 :params => { :controller => "profiles",
@@ -86,7 +86,7 @@ class ProfilesController < ApplicationController
     if request.xhr?
       followed_users = @user.followed_users.load_users(@filtered_params)
       template = render_to_string :partial => 'users/followers_template',
-                    :locals => { :users => followed_users, :users_per_line => 2 }
+                    :locals => { :users => followed_users, :users_per_line => 2, :type => 'following' }
       pagination = render_to_string :partial => 'shared/hidden_pagination',
                     :locals => { :data_source => followed_users,
                                 :params => { :controller => "profiles",

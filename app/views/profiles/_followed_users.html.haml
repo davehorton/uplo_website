@@ -1,9 +1,9 @@
-.followers-container.container.left
+.followings-container.container.left
   .head
     .text.black.bold.font20.left= following_header_label(@user.id)
-    .text.fuzzy-gray.font20.left= "&nbsp;(#{ @followed_users.total_entries })".html_safe
+    #followings-number.text.fuzzy-gray.font20.left= "(#{ @followed_users.total_entries })".html_safe
   .line-separator.left
   #endless-pages.left
-    = render :partial => 'users/followers_template', :locals => { :users => @followed_users, :users_per_line => 2 }
+    = render :partial => 'users/followers_template', :locals => { :users => @followed_users, :users_per_line => 2, :type => 'following' }
 
 = render :partial => 'shared/hidden_pagination', :locals => { :data_source => @followed_users, :params => { :controller => 'profiles', :action => 'get_followed_users' } }

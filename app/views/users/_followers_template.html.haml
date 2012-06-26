@@ -1,11 +1,11 @@
-/ local values: users, users_per_line
+/ local values: users, users_per_line, type
 - (0...users.length). each do |idx|
   - user = users[idx]
   - is_following = user.has_follower?(current_user.id)
   - follow_label = is_following ? 'Unfollow' : 'Follow'
   - additional_class = line_item_additional_class(idx, users_per_line)
 
-  .user-section.left{ :class => "#{ additional_class }"}
+  .user-section.left{ :class => "#{ additional_class } #{type}"}
     = image_tag user.avatar(:large), :class => 'avatar large left'
     .info-panel.left
       .name.text.black.font18= user.username.truncate(20)

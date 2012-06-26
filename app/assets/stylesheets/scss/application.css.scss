@@ -827,7 +827,8 @@ input, textarea {
       .main {
         width: 636px;
       }
-      .followers-container {
+      .followers-container, .followings-container {
+        #followers-number, #followings-number { margin-left: 5px;}
         .user-section {
           width: 313px;
           margin: 6px;
