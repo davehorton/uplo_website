@@ -117,22 +117,14 @@ $color-line-separator: #cccccc;
       .preview {
         a:link {
           font-weight: normal;
-          margin-left: 3px;
+          text-decoration: none;
         }
-        .edit-section {
+        .item-info {
           margin: 22px 0 10px 10px;
-        }
-        .edit {
-          background: url("/assets/icon-edit.jpg") no-repeat scroll 0 0 transparent;
-          height: 9px;
-          width: 9px;
-          margin-top: 4px;
-        }
-        .delete {
-          margin-left: 10px;
-        }
-        .name{
-          width: 280px;
+          .edit-section, .delete-section { cursor: pointer; }
+          .edit { margin-top: 4px; }
+          .delete { margin-left: 10px; }
+          .name { width: 280px; }
         }
       }
   }
@@ -162,7 +154,7 @@ $color-line-separator: #cccccc;
 
 .actions {
   margin: 10px 0 20px 0;
-  .shopping a {
+  a.shopping {
     font-weight: normal;
     text-decoration: underline;
     line-height: 28px;

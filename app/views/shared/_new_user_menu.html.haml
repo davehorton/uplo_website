@@ -5,7 +5,7 @@
     %li
       %a{:href => shopping_cart_show_path}
         My Cart
-        %span.normal (#{total_line_items})
+        %span#cart-counter.normal (#{total_line_items})
     %li.no-padding-right
       = select_tag "private_pages", private_links_options, :id => "my_links"
 

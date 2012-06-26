@@ -77,11 +77,30 @@ class ShoppingCartController < ApplicationController
   end
 
   def destroy_item
-    item = LineItem.find(params[:id])
-    if @cart.order.line_items.include?(item)
-      item.destroy
+    if request.xhr?
+      order = @cart.order
+      cart_items = order.line_items
+      item = LineItem.find_by_id params[:id]
+      if item.nil?
+        result = { :success => true, :cart_items => cart_items.count, :cart_amounts =>
+          { :price_total => self.class.helpers.number_to_currency(order.price_total, {:precision => 2}),
+            :tax => self.class.helpers.number_to_currency(order.tax, {:precision => 2}),
+            :cart_total => self.class.helpers.number_to_currency(order.order_total, {:precision => 2})} }
+      elsif cart_items.include?(item)
+        item.destroy
+        order.reload
+        result = { :success => true, :cart_items => cart_items.count,:cart_amounts =>
+          { :price_total => self.class.helpers.number_to_currency(order.price_total, {:precision => 2}),
+            :tax => self.class.helpers.number_to_currency(order.tax, {:precision => 2}),
+            :cart_total => self.class.helpers.number_to_currency(order.order_total, {:precision => 2})} }
+      else
+        result = { :success => false, :msg => 'This item is not belong to your oder!' }
+      end
+
+      render :json => result
+    else
+      redirect_to :action => :show
     end
-    redirect_to :action => "show"
   end
 
   protected

@@ -1,6 +1,5 @@
 - content_for :head do
   = stylesheet_link_tag("scss/cart_new.css", "scss/dialog.css", 'scss/new_image.css')
-  = javascript_include_tag("app/popup.js")
 
 - content_for :top_content do
   .text.black.bold.font16 Shopping Cart
@@ -13,54 +12,20 @@
     = render :partial => "show_details_new"
 
   - if @line_items.empty?
-    .line-separator.clear{:style => 'width: 100%;'}
-    .actions.right
-      .shopping.left= link_to "Continue shopping", "/back", :method => "get"
+    .line-separator.clear
+    .actions.text.font12.line18.right
+      = link_to "Continue shopping", "/back", :method => "get", :class => 'shopping left'
   - else
     .actions.text.font12.line18.right
       .right.text.gray.italic
         Shipping is Calculated at the Next Step, Before You Pay
-      .right.clear{ :style => 'margin-top:20px;' }
-        .shopping.left= link_to "Continue shopping", "/back", :method => "get"
+      .shopping.right.clear{ :style => 'margin-top:20px;' }
+        = link_to "Continue shopping", "/back", :method => "get", :class => 'shopping left'
         .text.gray.left{:style => 'line-height: 28px;'} &nbsp;&nbsp;or&nbsp;&nbsp;
         - unless @order.line_items.empty?
           %a.checkout.left{:href => "#{url_for(:controller => 'shopping_cart', :action => 'checkout')}"}
 
-:javascript
-  $(".lines .option").delegate("a.delete", "click", function(){
-    confirmDlg = new Popup({
-      id: "delete-confirm-dialog",
-      title: "Delete confirm",
-      text: "Are you sure?",
-      buttons:{
-        "Cancel": function(){
-          confirmDlg.close();
-        },
-        "Ok": function(){
-          url = $("a.delete").attr("href");
-          window.location = url;
-        }
-      }
-    });
+= render :partial => 'shared/delete_confirm', :layout => 'layouts/popup', :locals => { :title => 'Delete Confirm', :id => 'delete-confirm-popup', :text => 'Are you sure you want to remove this item?' }
 
-    confirmDlg.show();
-    return false;
-  });
-
-  function clearCartConfirm(){
-    confirmDlg = new Popup({
-      id: "clear-confirm-dialog",
-      title: "Clear cart confirm",
-      text: "Are you sure?",
-      buttons:{
-        "Cancel": function(){
-          confirmDlg.hide();
-        },
-        "Ok": function(){
-          url = $("#btn_clear").attr("data-url");
-          window.location = url;
-        }
-      }
-    });
-    confirmDlg.show();
-  }
+- content_for :js do
+  = javascript_include_tag 'app/shopping_cart.js'

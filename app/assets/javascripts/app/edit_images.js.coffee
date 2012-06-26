@@ -47,7 +47,6 @@ deletePhoto = (node) ->
   $('#delete-confirm-popup').modal();
   $('#btn-ok').click ->
     $.modal.close()
-    $('#mask').modal()
     window.setTimeout "$('#mask').modal()", 500
     $.ajax({
       url: $(node).attr('data-url'),
@@ -142,7 +141,6 @@ $ ->
 
   $('#images-panel').delegate '.button.delete-photo', 'click', (e) -> deletePhoto(e.target)
   $('#edit-gallery').click -> $('#edit-gallery-popup').modal()
-  $('body').delegate '.popup .close', 'click', (e) -> $.modal.close()
   $('body').delegate '#btn-gallery-save', 'click', (e) ->
     $.ajax({
       url: $('#frm-edit-gallery').attr('action'),
