@@ -150,6 +150,7 @@ app/image.js: app/image-cb8cb8666e97f0786846dd6d4af220e7.js
 app/order.js: app/order-1c7765d66a47c97cbf385eba76a29a7b.js
 app/popup.js: app/popup-3d37daf582062d5f270aa53d3da682bd.js
 app/sales.js: app/sales-03318d5b60f42b484cc55e4f12ca5fcc.js
+app/shopping_cart.js: app/shopping_cart-2c9911b6b27544678b72d36859fceff2.js
 app/user.js: app/user-7856a14fe2fceeb1f0ad1b74126f9e28.js
 application.js: application-05b3489c37db05fbe69cfc7553c7c163.js
 file_upload/README.md: file_upload/README-3ed47c4044fe560bd4addcb841e853cd.md
@@ -238,7 +239,7 @@ file_upload/jquery.fileupload-ui.css: file_upload/jquery.fileupload-ui-f39575881
 file_upload/progressbar.gif: file_upload/progressbar-54dfeacc002a35b014f009faa50bf254.gif
 jquery-ui.custom.css: jquery-ui.custom-bb782aff6a70a3531739cdd09fe60b50.css
 jquery.contextMenu.css: jquery.contextMenu-5e13ffab2ad4f1c83de146893d8f0b86.css
-scss/application.css: scss/application-3153d1a57e153c1febd60baa69288cfc.css
+scss/application.css: scss/application-4bbf28800f894c37b0a5ca525994de69.css
 scss/banner.css: scss/banner-331c4e35597b1b905f46e6226aa74178.css
 scss/cart.css: scss/cart-a00c819367f1c26885c93fd320e87746.css
 scss/cart_new.css: scss/cart_new-7beab8be194a78a36be9fc560944d1e4.css
