@@ -1,1 +1,0 @@
-((function(){$(function(){return $(".line .edit-section")})})).call(this);

@@ -87,18 +87,17 @@
       line-height: 66px; }
     .cart-details .line .preview a:link {
       font-weight: normal;
-      margin-left: 3px; }
-    .cart-details .line .preview .edit-section {
+      text-decoration: none; }
+    .cart-details .line .preview .item-info {
       margin: 22px 0 10px 10px; }
-    .cart-details .line .preview .edit {
-      background: url("/assets/icon-edit.jpg") no-repeat scroll 0 0 transparent;
-      height: 9px;
-      width: 9px;
-      margin-top: 4px; }
-    .cart-details .line .preview .delete {
-      margin-left: 10px; }
-    .cart-details .line .preview .name {
-      width: 280px; }
+      .cart-details .line .preview .item-info .edit-section, .cart-details .line .preview .item-info .delete-section {
+        cursor: pointer; }
+      .cart-details .line .preview .item-info .edit {
+        margin-top: 4px; }
+      .cart-details .line .preview .item-info .delete {
+        margin-left: 10px; }
+      .cart-details .line .preview .item-info .name {
+        width: 280px; }
   .cart-details .header {
     padding: 10px 0 5px;
     text-shadow: 0 0 1px #c3c3c3;
@@ -118,7 +117,7 @@
 
 .actions {
   margin: 10px 0 20px 0; }
-  .actions .shopping a {
+  .actions a.shopping {
     font-weight: normal;
     text-decoration: underline;
     line-height: 28px; }
