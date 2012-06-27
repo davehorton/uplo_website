@@ -556,14 +556,19 @@ input, textarea {
     box-shadow: 0 0 2px #dfdfdf; }
     #top #search-box .container #search-keyword {
       border: none;
-      margin-left: 10px;
+      margin: 3px 6px 0 3px;
       vertical-align: middle;
-      width: 110px; }
+      width: 120px; }
       #top #search-box .container #search-keyword:focus {
         outline: 0 none;
         -moz-box-shadow: none;
         -webkit-box-shadow: none;
         box-shadow: none; }
+    #top #search-box .container .inputHintOverlay {
+      color: #a1a1a1;
+      font-size: 11px;
+      font-style: italic;
+      float: left; }
     #top #search-box .container .search-icon {
       display: inline-block;
       width: 20px;
@@ -571,9 +576,6 @@ input, textarea {
       background: url("/assets/search-13x13.png") no-repeat scroll center left transparent;
       vertical-align: middle;
       cursor: pointer; }
-    #top #search-box .container .search-right-padding {
-      display: inline-block;
-      width: 6px; }
 
 #bottom {
   width: 100%; }

@@ -210,6 +210,7 @@ lib/jquery.cookie.js: lib/jquery.cookie-255498b1e2350af9b98284797ed86032.js
 lib/jquery.i18n.js: lib/jquery.i18n-585f84a20da5fc129e1991402e137ff9.js
 lib/jquery.inline_label.js: lib/jquery.inline_label-d42d7eb2bd7d8ec605a9eff66ef1a481.js
 lib/jquery.inline_label.min.js: lib/jquery.inline_label.min-20dbf1a32b848055fb96f644aaff5370.js
+lib/jquery.inputHintOverlay.js: lib/jquery.inputHintOverlay-87d958216cead77f03f5b327de69bc07.js
 lib/jquery.jcarousel.js: lib/jquery.jcarousel-b27a580e665d898b2b46ae6e2f0b1e82.js
 lib/jquery.json.min.js: lib/jquery.json.min-449559bf3e2ab52762f37c5bdee76ce8.js
 lib/jquery.livequery.js: lib/jquery.livequery-4aa91cfdf4e601202318e34ea9875151.js
@@ -239,7 +240,7 @@ file_upload/jquery.fileupload-ui.css: file_upload/jquery.fileupload-ui-f39575881
 file_upload/progressbar.gif: file_upload/progressbar-54dfeacc002a35b014f009faa50bf254.gif
 jquery-ui.custom.css: jquery-ui.custom-bb782aff6a70a3531739cdd09fe60b50.css
 jquery.contextMenu.css: jquery.contextMenu-5e13ffab2ad4f1c83de146893d8f0b86.css
-scss/application.css: scss/application-18de8660c480bddb5b7aa026f42db2ed.css
+scss/application.css: scss/application-548b0ad883c54a0658bbc31a172ff025.css
 scss/banner.css: scss/banner-331c4e35597b1b905f46e6226aa74178.css
 scss/cart.css: scss/cart-a00c819367f1c26885c93fd320e87746.css
 scss/cart_new.css: scss/cart_new-4cbaf8807b1ead4d0d2a1e6d80d65c5c.css
