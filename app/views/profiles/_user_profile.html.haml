@@ -9,7 +9,7 @@
       = image_tag(user.avatar(:large), :class => 'avatar large left')
     - if is_current_user
       .clear
-      .not-implement.edit-pane
+      .edit-pane
         .icon.edit.left.left
         .text.black.font11 Edit Photo
   .info.left
@@ -29,7 +29,9 @@
   .text.black.bold.font12.span cameronmoll.com
   .text.gray.font12.line16 I’m primarily a designer for web and print, but I dabble with video amateurily from time to timeLorem ipsum dolor sit amet, consectetur adipiscing elit. In non quam eu ipsum tincidunt iaculis in id augue. Mauris auctor rhoncus sollicitudin.
 
-- unless is_current_user
+- if is_current_user
+  = render :partial => 'edit_profile_photo', :layout => 'layouts/popup', :locals => { :title => 'Edit Your Profile Photo', :id => 'edit-profile-photo-popup', :user => user }
+- else
   .line-separator.left
   - is_followed_user = user.has_follower?(current_user.id)
   - follow_class = is_followed_user ? 'unfollow' : 'follow'

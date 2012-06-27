@@ -9,12 +9,14 @@ $color-heavy-gray: #5d5d5d;
 $color-gray: #606060;
 $color-light-gray: #a1a1a1;
 $color-fuzzy-gray: #b3b3b3;
+$color-fuzzier-gray: #ebebeb;
 $color-background: #f8f8f8;
 $color-highlight: #ed3b03;
 $color-line-separator: #cccccc;
 $color-input-border: #cdcdcd;
 $font-size-normal: 12px;
 $font-family: Arial;
+$extra-large-avatar-size: 96px;
 
 /*==================================================================================*/
 /* HTML */
@@ -142,6 +144,21 @@ input, textarea {
   }
 }
 
+.hidden-uploader {
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+  input {
+    cursor: pointer;
+    position: absolute;
+    opacity: 0;
+    -moz-transform: translate(-200px, 0pt) scale(3);
+    -ms-transform: translate(-200px, 0pt) scale(3);
+    -webkit-transform: translate(200px, 0pt) scale(3);
+    -o-transform: scale(5);
+  }
+}
+
 //new
 .text {
   text-align: left;
@@ -258,13 +275,13 @@ input, textarea {
 .popup {
   border-radius: 5px;
   .header {
-    background: #ebebeb;
-    filter:progid:DXImageTransform.Microsoft.gradient(GradientType=0,startColorstr='#ffffff',endColorstr='#ebebeb');
-    background:-moz-linear-gradient(top, rgb(255,255,255) 0%, rgb(255,255,255) 0%, #ebebeb 100%);
-    background:-webkit-gradient(linear, left top, left bottom, color-stop(0%,rgb(255,255,255)), color-stop(0%,rgb(255,255,255)), color-stop(100%,#ebebeb));
-    background:-webkit-linear-gradient(top, rgb(255,255,255) 0%,rgb(255,255,255) 0%,#ebebeb 100%);
-    background:-o-linear-gradient(top, rgb(255,255,255) 0%,rgb(255,255,255) 0%,#ebebeb 100%);
-    background:-ms-linear-gradient(top, rgb(255,255,255) 0%,rgb(255,255,255) 0%,#ebebeb 100%);
+    background: $color-fuzzier-gray;
+    filter:progid:DXImageTransform.Microsoft.gradient(GradientType=0,startColorstr='#ffffff',endColorstr='$color-fuzzier-gray');
+    background:-moz-linear-gradient(top, rgb(255,255,255) 0%, rgb(255,255,255) 0%, $color-fuzzier-gray 100%);
+    background:-webkit-gradient(linear, left top, left bottom, color-stop(0%,rgb(255,255,255)), color-stop(0%,rgb(255,255,255)), color-stop(100%,$color-fuzzier-gray));
+    background:-webkit-linear-gradient(top, rgb(255,255,255) 0%,rgb(255,255,255) 0%,$color-fuzzier-gray 100%);
+    background:-o-linear-gradient(top, rgb(255,255,255) 0%,rgb(255,255,255) 0%,$color-fuzzier-gray 100%);
+    background:-ms-linear-gradient(top, rgb(255,255,255) 0%,rgb(255,255,255) 0%,$color-fuzzier-gray 100%);
 
     height: 45px;
     border-radius: 5px 5px 0 0;
@@ -465,6 +482,11 @@ input, textarea {
 
 .button {
   cursor: pointer;
+  &.choose-photo {
+    background: url('/assets/btn-choose-photo.png') no-repeat;
+    width: 171px;
+    height: 27px;
+  }
   &.follow {
     background: url('/assets/btn-follow.png') no-repeat;
     width: 57px;
@@ -582,7 +604,6 @@ input, textarea {
 
 #banner {
 }
-
 #top {
   width: 100%;
   margin-top: 30px;
@@ -600,20 +621,10 @@ input, textarea {
         margin: 0 5px;
       }
       #add-files {
-        position: relative;
-        overflow: hidden;
-        cursor: pointer;
         &:hover { text-decoration: underline; }
         input {
-          cursor: pointer;
-          position: absolute;
           left: -100px;
           top: -7px;
-          opacity: 0;
-          -moz-transform: translate(-200px, 0pt) scale(3);
-          -ms-transform: translate(-200px, 0pt) scale(3);
-          -webkit-transform: translate(200px, 0pt) scale(3);
-          -o-transform: scale(5);
         }
       }
     }
@@ -835,7 +846,7 @@ input, textarea {
             margin-left: 1px;
             padding: 16px 12px;
             width: 221px;
-            background-color: #ebebeb;
+            background-color: $color-fuzzier-gray;
             a { font-weight: normal; cursor: pointer; }
             a:hover { font-weight: bold; }
             .name { margin-bottom: 5px; }
@@ -861,7 +872,7 @@ input, textarea {
       }
     }
     .counter {
-      background-color: #ebebeb;
+      background-color: $color-fuzzier-gray;
       width: 119px;
       border-radius: 5px;
       box-shadow: 0 1px 0 #c9c9c9;
@@ -884,7 +895,45 @@ input, textarea {
 
 #menu-items {
 }
-
+#edit-profile-photo-popup {
+  width: 405px;
+  .container .main-panel { margin: 10px; }
+  .line-separator { margin: 10px 0 20px 0; }
+  .current-photo {
+    width: $extra-large-avatar-size;
+    .text {
+      background-color: $color-fuzzier-gray;
+      width: 100%;
+      line-height: 25px;
+      text-align: center; }
+  }
+  .uploading {
+    width: 269px;
+    margin: 10px 0 0 20px;
+    #add-file {
+      margin: 10px 0px;
+      input {
+        left: -200px;
+        -webkit-transform: translate(400px, 0pt) scale(3); }}}
+  .held-photos .photos {
+    margin-top: 8px;
+    .avatar {
+      margin: 0 5px;
+      border: 1px solid $color-fuzzy-gray;
+      position: relative;
+      .delete {
+        cursor: pointer;
+        position: absolute;
+        top: 0;
+        left: 0;
+        color: $color-white;
+        width: 14px;
+        line-height: 14px;
+        text-align: center;
+        font-weight: bold;
+        background-color: $color-fuzzy-gray; } }
+  }
+}
 #email-sharing-popup {
   width: 490px;
   min-height: 100px;

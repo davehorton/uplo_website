@@ -20,6 +20,22 @@ class UsersController < ApplicationController
     end
   end
 
+  def update_avatar
+    if request.xhr?
+      user = User.find_by_id params[:user_id].to_i
+      if user.nil?
+        result = { :success => false, :msg => 'This user does not exist.' }
+      else
+        if user.update_attribute('avatar', params[:user][:avatar])
+          result = {:success => true}
+        else
+          result = { :success => false, :msg => user.errors.full_messages[0] }
+        end
+      end
+      render :json => result
+    end
+  end
+
   def search
     @no_async_image_tag = true
     @users = User.search params[:query], :star => true, :page => params[:page_id], :per_page => default_page_size

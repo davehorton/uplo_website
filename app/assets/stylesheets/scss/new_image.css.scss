@@ -10,6 +10,7 @@ $medium-image-size: 638px;
 $small-avatar-size: 24px;
 $medium-avatar-size: 48px;
 $large-avatar-size: 67px;
+$extra-large-avatar-size: 96px;
 $image-space: 3px;
 $color-black: #111111;
 $color-gray: #606060;
@@ -30,6 +31,10 @@ $color-light-gray: #a1a1a1;
   &.large {
     width: $large-avatar-size;
     height: $large-avatar-size;
+  }
+  &.extra {
+    width: $extra-large-avatar-size;
+    height: $extra-large-avatar-size;
   }
 }
 

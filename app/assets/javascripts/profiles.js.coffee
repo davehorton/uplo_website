@@ -19,6 +19,21 @@ $ ->
   $('.not-implement').click -> helper.alert_not_implement()
   $('#container .edit-pane[data-url!="#"]').click -> load($(@).attr('data-url'))
   $('#container .list[data-url!="#"]').click -> load($(@).attr('data-url'))
+  $('#user-section .edit-pane').click -> $('#edit-profile-photo-popup').modal()
+
+  $("#edit-profile-photo-popup #fileupload").fileupload()
+  $("#edit-profile-photo-popup #fileupload").fileupload "option",
+    maxFileSize: 5000000
+    acceptFileTypes: /(\.|\/)(gif|jpe?g|png)$/i
+    add: (e, data) ->
+      # data.context = renderUpload(data.files[0])
+      # $('#mask').modal()
+      data.submit()
+    done: (e, data) ->
+      if(data.result.success==false)
+        alert(data.result.msg)
+      else
+        alert('Update successfully!')
 
   $('#container').delegate '.follow', 'click', (e) ->
     target = $(e.target)

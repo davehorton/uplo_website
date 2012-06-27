@@ -1,0 +1,31 @@
+/ locals: user
+.current-photo.left
+  = image_tag user.avatar.url(:extra), :class => 'avatar extra left'
+  .clear
+  .text.black.bold.font12.line16.left Current Photo
+.uploading.left
+  .text.black.font14.line12 Upload a new photo
+  #add-file.hidden-uploader.button.choose-photo
+    = form_for :user, :url => "#{ url_for(:controller => 'users', :action => 'update_avatar', :user_id => user.id) }", :method => 'post', :html => { :id => 'fileupload' } do |f|
+      = f.file_field :avatar
+  .text.fuzzy-gray.font12 JPG, GIF, or PNG only please
+.line-separator.left
+.held-photos.left
+  .text.black.bold.font12 Portrait Uploads
+  .text.gray.font12.line16 Click one of the thumbnails to choose it as your current portrait
+  .photos
+    .avatar.large.left.no-padding-left
+      = image_tag user.avatar.url(:large)
+      .delete.left &times;
+    .avatar.large.left
+      = image_tag user.avatar.url(:large)
+      .delete.left &times;
+    .avatar.large.left
+      = image_tag user.avatar.url(:large)
+      .delete.left &times;
+    .avatar.large.left
+      = image_tag user.avatar.url(:large)
+      .delete.left &times;
+    .avatar.large.left.no-padding-right
+      = image_tag user.avatar.url(:large)
+      .delete.left &times;
