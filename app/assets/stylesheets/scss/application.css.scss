@@ -653,17 +653,20 @@ input, textarea {
 
       #search-keyword{
         border: none;
-        margin-left: 10px;
+        margin: 3px 6px 0 3px;
         vertical-align: middle;
-        width: 110px;
+        width: 120px;
         &:focus {
           outline: 0 none;
           -moz-box-shadow: none;
           -webkit-box-shadow: none;
-          box-shadow: none;
-        }
+          box-shadow: none; }
       }
-
+      .inputHintOverlay {
+        color: $color-light-gray;
+        font-size: 11px;
+        font-style: italic;
+        float: left; }
       .search-icon {
         display: inline-block;
         width: 20px;
@@ -671,11 +674,6 @@ input, textarea {
         background: url("/assets/search-13x13.png") no-repeat scroll center left transparent;
         vertical-align: middle;
         cursor: pointer;
-      }
-
-      .search-right-padding{
-        display: inline-block;
-        width: 6px;
       }
     }
   }

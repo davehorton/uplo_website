@@ -2,21 +2,13 @@
   %form.search-form{ :action => action, :method => 'get'}
     .container
       %input#search-keyword.text.light-gray.font11.line12{:type => "text", :name => "query",
-                            :value => params[:query], :placeHolder => I18n.t("common.search_hint"),
-                            :title => "Searching is not supported with these characters: ^, *, _" }
-      .search-right-padding
+                            :value => params[:query], :title => I18n.t("common.search_hint") }
       .search-icon.right
 
 :erb
   <script type="text/javascript">
     $(document).ready(function(){
-      $("#search-keyword").focusin(function(){
-        $("#search-box .container").addClass("focus");
-      });
-
-      $("#search-keyword").focusout(function(){
-        $("#search-box .container").removeClass("focus");
-      });
+      $('form.search-form').inputHintOverlay(5, 8);
 
       $(".search-icon").click(function(){
         $(".search-form").submit();
