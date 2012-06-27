@@ -88,7 +88,7 @@ class Api::UsersController < Api::BaseController
 
   def reset_password
     @result[:success] = true
-    user = User.find_by_email params[:email].lowercase
+    user = User.find_by_email params[:email].downcase
     if user.nil?
       @result[:success] = false
       @result[:msg] = "Email does not exist"
