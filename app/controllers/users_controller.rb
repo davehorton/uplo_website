@@ -22,15 +22,32 @@ class UsersController < ApplicationController
 
   def update_avatar
     if request.xhr?
-      user = User.find_by_id params[:user_id].to_i
-      if user.nil?
-        result = { :success => false, :msg => 'This user does not exist.' }
+      if current_user.update_attribute('avatar', params[:user][:avatar])
+        avatar = ProfileImage.new({ :user_id => current_user.id,
+                                    :data => params[:user][:avatar],
+                                    :last_used => Time.now })
+        current_user.profile_images << avatar
+        result = {:success => true}
       else
-        if user.update_attribute('avatar', params[:user][:avatar])
-          result = {:success => true}
-        else
-          result = { :success => false, :msg => user.errors.full_messages[0] }
+        result = { :success => false, :msg => current_user.errors.full_messages[0] }
+      end
+      render :json => result
+    end
+  end
+
+  def delete_profile_photo
+    if request.xhr?
+      if !ProfileImage.exists?(params[:id])
+        result = { :success => true }
+      elsif current_user.has_profile_photo?(params[:id])
+        begin
+          ProfileImage.destroy(params[:id])
+          result = { :success => true }
+        rescue e
+          result = {:success => false, :msg => 'Something went wrong!'}
         end
+      else
+        result = {:success => false, :msg => 'This is not your profile photo!'}
       end
       render :json => result
     end

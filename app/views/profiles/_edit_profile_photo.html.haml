@@ -6,7 +6,7 @@
 .uploading.left
   .text.black.font14.line12 Upload a new photo
   #add-file.hidden-uploader.button.choose-photo
-    = form_for :user, :url => "#{ url_for(:controller => 'users', :action => 'update_avatar', :user_id => user.id) }", :method => 'post', :html => { :id => 'fileupload' } do |f|
+    = form_for :user, :url => "#{ url_for(:controller => 'users', :action => 'update_avatar') }", :method => 'post', :html => { :id => 'fileupload' } do |f|
       = f.file_field :avatar
   .text.fuzzy-gray.font12 JPG, GIF, or PNG only please
 .line-separator.left
@@ -14,18 +14,9 @@
   .text.black.bold.font12 Portrait Uploads
   .text.gray.font12.line16 Click one of the thumbnails to choose it as your current portrait
   .photos
-    .avatar.large.left.no-padding-left
-      = image_tag user.avatar.url(:large)
-      .delete.left &times;
-    .avatar.large.left
-      = image_tag user.avatar.url(:large)
-      .delete.left &times;
-    .avatar.large.left
-      = image_tag user.avatar.url(:large)
-      .delete.left &times;
-    .avatar.large.left
-      = image_tag user.avatar.url(:large)
-      .delete.left &times;
-    .avatar.large.left.no-padding-right
-      = image_tag user.avatar.url(:large)
-      .delete.left &times;
+    - (0...user.profile_images.count).each do |index|
+      - additional_class = line_item_additional_class(index, HELD_AVATARS_NUMBER)
+      - img = user.profile_images[index]
+      .avatar.large.left{:class => "#{additional_class}"}
+        = image_tag img.data.url(:large)
+        .delete{:data => {:id => "#{img.id}", :url => "#{ url_for(:controller => 'users', :action => 'delete_profile_photo') }"}} &times;

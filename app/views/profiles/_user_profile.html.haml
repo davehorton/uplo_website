@@ -4,7 +4,7 @@
 - else
   - user_profile_page = url_for(:controller => 'profiles', :action => 'show', :user_id => user.id)
 #user-section.left
-  .left
+  .avatar.left
     %a{ :href => "#{user_profile_page}" }
       = image_tag(user.avatar(:large), :class => 'avatar large left')
     - if is_current_user
@@ -18,7 +18,7 @@
         %a{ :href => "#{user_profile_page}" }= user.fullname
       .text.fuzzy-gray.font12= "Joined #{ user.joined_date }"
     - if is_current_user
-      .not-implement.edit-pane.left
+      .edit-pane.left
         .icon.edit.left
         .text.black.font11 Edit Profile Information
 
@@ -31,6 +31,8 @@
 
 - if is_current_user
   = render :partial => 'edit_profile_photo', :layout => 'layouts/popup', :locals => { :title => 'Edit Your Profile Photo', :id => 'edit-profile-photo-popup', :user => user }
+  = render :partial => 'edit_profile_info', :layout => 'layouts/popup', :locals => { :title => 'Edit Your Profile Information', :id => 'edit-profile-info-popup', :user => user }
+  = render :partial => 'shared/delete_confirm', :layout => 'layouts/popup', :locals => { :title => 'Delete Confirm', :id => 'delete-confirm-popup', :popup_class => 'profile-photo', :text => 'Are you sure you want to delete this profile photo?' }
 - else
   .line-separator.left
   - is_followed_user = user.has_follower?(current_user.id)

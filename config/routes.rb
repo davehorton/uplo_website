@@ -81,6 +81,7 @@ Uplo::Application.routes.draw do
     get "change_password", :to => "users/passwords#edit_password"
     put "update_password", :to => "users/passwords#update_password"
     post 'update_avatar', :to => 'users#update_avatar'
+    get 'delete_profile_photo', :to => 'users#delete_profile_photo'
   end
 
   # API ROUTING

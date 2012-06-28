@@ -15,11 +15,60 @@ load = (url, callback)->
       $.modal.close()
   })
 
+requestFollow = (node) ->
+  target = $(node)
+  author_id = target.attr('data-author-id')
+  is_unfollow = target.attr('data-following')
+  $('#mask').modal()
+  $.ajax({
+    url: '/users/follow',
+    type: "GET",
+    data: { user_id:author_id, unfollow: is_unfollow },
+    dataType: "json",
+    success: (response) ->
+      if(response.success==false)
+        alert(response.msg)
+      else if(is_unfollow=='false')
+        target.attr('data-following', 'true')
+        target.text('Unfollow')
+        $('#followers-counter .number').text response.followers
+        $('#following-counter .number').text response.followings
+        $('#followings-number').text "(#{response.followings})"
+        $('#followers-number').text "(#{response.followers})"
+      else
+        target.attr('data-following', 'false')
+        target.text('Follow')
+        target.closest('.user-section.following').remove()
+        $('#followers-counter .number').text response.followers
+        $('#following-counter .number').text response.followings
+        $('#followings-number').text "(#{response.followings})"
+        $('#followers-number').text "(#{response.followers})"
+      $.modal.close()
+  })
+
+requestDeleteProfilePhoto = (node) ->
+  $.modal.close()
+  window.setTimeout("$('#delete-confirm-popup').modal()", 300)
+  $('#delete-confirm-popup #btn-ok').click ->
+    target = $(node)
+    $.ajax({
+      url: target.attr('data-url'),
+      type: "GET",
+      data: { id: target.attr('data-id') },
+      dataType: "json",
+      success: (response) ->
+        if(response.success==false)
+          alert(response.msg)
+        else
+          alert('Delete successfully!')
+    })
+
 $ ->
   $('.not-implement').click -> helper.alert_not_implement()
   $('#container .edit-pane[data-url!="#"]').click -> load($(@).attr('data-url'))
   $('#container .list[data-url!="#"]').click -> load($(@).attr('data-url'))
-  $('#user-section .edit-pane').click -> $('#edit-profile-photo-popup').modal()
+  $('#user-section .avatar .edit-pane').click -> $('#edit-profile-photo-popup').modal()
+  $('#user-section .info .edit-pane').click -> $('#edit-profile-info-popup').modal()
 
   $("#edit-profile-photo-popup #fileupload").fileupload()
   $("#edit-profile-photo-popup #fileupload").fileupload "option",
@@ -35,37 +84,9 @@ $ ->
       else
         alert('Update successfully!')
 
-  $('#container').delegate '.follow', 'click', (e) ->
-    target = $(e.target)
-    author_id = target.attr('data-author-id')
-    is_unfollow = target.attr('data-following')
-    $('#mask').modal()
-    $.ajax({
-      url: '/users/follow',
-      type: "GET",
-      data: { user_id:author_id, unfollow: is_unfollow },
-      dataType: "json",
-      success: (response) ->
-        if(response.success==false)
-          alert(response.msg)
-        else if(is_unfollow=='false')
-          target.attr('data-following', 'true')
-          target.text('Unfollow')
-          $('#followers-counter .number').text response.followers
-          $('#following-counter .number').text response.followings
-          $('#followings-number').text "(#{response.followings})"
-          $('#followers-number').text "(#{response.followers})"
-        else
-          target.attr('data-following', 'false')
-          target.text('Follow')
-          target.closest('.user-section.following').remove()
-          $('#followers-counter .number').text response.followers
-          $('#following-counter .number').text response.followings
-          $('#followings-number').text "(#{response.followings})"
-          $('#followers-number').text "(#{response.followers})"
-        $.modal.close()
-    })
+  $('#left').delegate '#edit-profile-photo-popup .held-photos .delete', 'click', (e) -> requestDeleteProfilePhoto(e.target)
 
+  $('#container').delegate '.follow', 'click', (e) -> requestFollow(e.target)
   $('#counters .counter').click ->
     url = $(@).attr('data-url')
     if url != '#'
@@ -93,3 +114,20 @@ $ ->
           $('#btn-follow').addClass('follow')
         $.modal.close()
     })
+
+  $('#btn-update').click ->
+    data_form = $('#frm-edit-profile-info')
+    $.ajax({
+      url: data_form.attr('action'),
+      type: 'POST',
+      data: data_form.serialize(),
+      dataType: 'json',
+      success: (response) ->
+        if response.success
+          alert("Your profile has been updated!")
+          console.log($('#user_email'))
+          $.modal.close()
+          console.log($('#user_email'))
+        else
+          alert("Something went wrong!")
+    });

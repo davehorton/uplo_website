@@ -310,9 +310,10 @@ input, textarea {
       input { height: 18px; }
       textarea { height: 88px; }
       .label { margin: 5px 20px 5px 0;}
-      .info-line { margin: 5px 0;}
+      .info-line { margin: 5px 0; width: 100%;}
       .line-separator { margin: 20px 0px;}
       #frm-edit-gallery #gallery_permission { width: 118px; color: $color-gray;}
+      .button-container { width: 100%;}
     }
   }
 }
@@ -482,6 +483,11 @@ input, textarea {
 
 .button {
   cursor: pointer;
+  &.update-profile {
+    background: url('/assets/btn-update-profile.png') no-repeat;
+    width: 106px;
+    height: 27px;
+  }
   &.choose-photo {
     background: url('/assets/btn-choose-photo.png') no-repeat;
     width: 171px;
@@ -501,6 +507,11 @@ input, textarea {
     background: url('/assets/btn-cancel-57x23.png') no-repeat;
     width: 57px;
     height: 23px;
+  }
+  &.cancel-big {
+    background: url('/assets/btn-cancel.png') no-repeat;
+    width: 65px;
+    height: 27px;
   }
   &.save {
     background: url('/assets/btn-save-changes.jpg') no-repeat;
@@ -895,6 +906,13 @@ input, textarea {
 
 #menu-items {
 }
+
+#edit-profile-info-popup {
+  width: 401px;
+  input, textarea { width: 234px; }
+  .note { width:100px; padding-top: 10px;}
+  #btn-update { margin: 0 10px 0 120px;}
+}
 #edit-profile-photo-popup {
   width: 405px;
   .container .main-panel { margin: 10px; }
@@ -1117,6 +1135,11 @@ input, textarea {
       }
     }
   }
+  &.profile-photo {
+    width: 340px;
+    .main-panel {
+      width:300px;
+      #button-container {margin: 0 97px;}}}
 }
 #save-confirm-popup {
   width: 326px;

@@ -26,6 +26,7 @@ class User < ActiveRecord::Base
    :default_url => "/assets/avatar-default-:style.jpg"
 
   # ASSOCIATIONS
+  has_many :profile_images, :dependent => :destroy
   has_many :galleries, :dependent => :destroy
   has_many :images, :through => :galleries
   has_many :public_galleries, :conditions => ["galleries.permission = '#{Gallery::PUBLIC_PERMISSION}'"], :class_name => 'Gallery'
@@ -217,6 +218,10 @@ class User < ActiveRecord::Base
     return UserFollow.exists?({ :user_id => self.id, :followed_by => user_id })
   end
 
+  def has_profile_photo?(photo_id)
+    return ProfileImage.exists?({:user_id => self.id, :id => photo_id})
+  end
+
   def gender_string
     key = "female"
     if self.is_male?
@@ -294,6 +299,30 @@ class User < ActiveRecord::Base
       result[:data] << {:image => info }
     }
     result[:total_entries] = images.total_entries
+    return result
+  end
+
+  def oldest_profile_image
+    result = nil
+    last_time = Time.now
+    self.profile_images.each do |img|
+      if img.last_used < last_time
+        last_time = img.last_used
+        result = img.id
+      end
+    end
+    return result
+  end
+
+  def hold_profile_images
+    result = true
+    if ProfileImage.count(:conditions => {:user_id => self.id}) > HELD_AVATARS_NUMBER
+      begin
+        ProfileImage.destroy self.oldest_profile_image
+      rescue
+        result = false
+      end
+    end
     return result
   end
 
