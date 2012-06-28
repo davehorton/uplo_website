@@ -367,14 +367,12 @@ class ImagesController < ApplicationController
   end
 
   def detect_device
-    if is_mobile_device?
-      if params[:action]=='public' && (params[:web_default].nil? || params[:web_default]==false)
-        @type = 'image'
-        @id = params[:id]
-        return render :template => 'shared/device_request', :layout => nil
-      else
-        request.formats.unshift Mime::HTML
-      end
+    if is_mobile_device? && params[:action]=='public' && (params[:web_default].nil? || params[:web_default]==false)
+      @type = 'image'
+      @id = params[:id]
+      return render :template => 'shared/device_request', :layout => nil
+    else
+      request.formats.unshift Mime::HTML
     end
   end
 end

@@ -184,15 +184,12 @@ class GalleriesController < ApplicationController
   end
 
   def detect_device
-    if is_mobile_device?
-      if params[:action]=='public' && (params[:web_default].nil? || params[:web_default]==false)
-        @type = 'gallery'
-        @id = params[:gallery_id]
-        return render :template => 'shared/device_request', :layout => nil
-      else
-        session[:mobile_view] = false
-        request.formats.unshift Mime::HTML
-      end
+    if is_mobile_device? && params[:action]=='public' && (params[:web_default].nil? || params[:web_default]==false)
+      @type = 'gallery'
+      @id = params[:gallery_id]
+      return render :template => 'shared/device_request', :layout => nil
+    else
+      request.formats.unshift Mime::HTML
     end
   end
 end
