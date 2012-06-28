@@ -1,6 +1,6 @@
 class GalleriesController < ApplicationController
   has_mobile_fu
-  before_filter :detect_device, :only => [:public]
+  before_filter :detect_device
   before_filter :authenticate_user!, :except => [:public]
   skip_authorize_resource :only => [:public]
 
@@ -184,13 +184,15 @@ class GalleriesController < ApplicationController
   end
 
   def detect_device
-    if is_mobile_device? && (params[:web_default].nil? || params[:web_default]==false)
-      @type = 'gallery'
-      @id = params[:gallery_id]
-      return render :template => 'shared/device_request', :layout => nil
-    else
-      session[:mobile_view] = false
-      request.formats.unshift Mime::HTML
+    if is_mobile_device?
+      if params[:action]=='public' && (params[:web_default].nil? || params[:web_default]==false)
+        @type = 'gallery'
+        @id = params[:gallery_id]
+        return render :template => 'shared/device_request', :layout => nil
+      else
+        session[:mobile_view] = false
+        request.formats.unshift Mime::HTML
+      end
     end
   end
 end
