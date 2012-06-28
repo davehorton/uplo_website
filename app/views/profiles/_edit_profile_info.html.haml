@@ -1,0 +1,28 @@
+/locals: user
+.text.gray.font12.line16.left
+  None of this information is required. Just supply as much or as little as you wish. You'll always be able to add more about yourself, or change this stuff in your Account Preferences.
+.line-separator.left
+
+= form_for(user, :url => '', :html => {:id => 'frm-edit-profile-info', :class => "left"}) do |f|
+  .info-line.left.no-padding-top
+    .label.text.black.bold.font12.left= "First Name <span style='color:red;'>*</span>".html_safe
+    = f.text_field :first_name, :class => 'right', :value => user.first_name
+  .info-line.left
+    .label.text.black.bold.font12.left= "Last Name <span style='color:red;'>*</span>".html_safe
+    = f.text_field :last_name, :class => 'right', :value => user.last_name
+  .info-line.left
+    .label.text.black.bold.font12.left= "Email <span style='color:red;'>*</span>".html_safe
+    = f.text_field :email, :class => 'right', :value => user.email
+  .info-line.left
+    .label.text.black.bold.font12.left Personal Website
+    = f.text_field :email, :class => 'right', :value => user.website
+  .info-line.left.no-padding-bottom
+    .label.text.black.bold.font12.left
+      Bio
+      .note.text.fuzzy-gray.normal.italic.font11.line12 HTML is not allowed, but URLs will turn into links.
+    = f.text_area :biography, :class => 'right', :value => user.biography
+
+.line-separator.left
+.button-container.left
+  #btn-update.button.update-profile.left
+  .close.button.cancel-big.left
