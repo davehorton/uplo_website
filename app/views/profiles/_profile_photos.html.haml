@@ -1,0 +1,7 @@
+/ locals: profile_images
+- (0...profile_images.count).each do |index|
+  - additional_class = line_item_additional_class(index, HELD_AVATARS_NUMBER)
+  - img = profile_images[index]
+  .avatar.large.left{:class => "#{additional_class}", :data => {:id => "#{img.id}"}}
+    = image_tag img.data.url(:large), :data => {:url => "#{ url_for(:controller => 'users', :action => 'set_avatar') }"}
+    .delete{:data => {:url => "#{ url_for(:controller => 'users', :action => 'delete_profile_photo') }"}} &times;

@@ -26,7 +26,11 @@ class UsersController < ApplicationController
                                   :data => params[:user][:avatar],
                                   :last_used => Time.now })
       if current_user.profile_images << avatar
-        result = {:success => true}
+        profile_photos = render_to_string :partial => 'profiles/profile_photos',
+               :locals => {:profile_images => current_user.profile_images}
+        result = {:success => true, :profile_photos => profile_photos,
+                  :extra_avatar_url => current_user.avatar_url(:extra),
+                  :large_avatar_url => current_user.avatar_url(:large)}
       else
         result = { :success => false, :msg => current_user.errors.full_messages[0] }
       end
@@ -37,11 +41,15 @@ class UsersController < ApplicationController
   def delete_profile_photo
     if request.xhr?
       if !ProfileImage.exists?(params[:id])
-        result = { :success => true }
+        profile_photos = render_to_string :partial => 'profiles/profile_photos',
+               :locals => {:profile_images => current_user.profile_images}
+        result = { :success => true, :profile_photos => profile_photos }
       elsif current_user.has_profile_photo?(params[:id])
         begin
           ProfileImage.destroy(params[:id])
-          result = { :success => true }
+          profile_photos = render_to_string :partial => 'profiles/profile_photos',
+               :locals => {:profile_images => current_user.profile_images}
+          result = { :success => true, :profile_photos => profile_photos }
         rescue
           result = {:success => false, :msg => 'Something went wrong!'}
         end

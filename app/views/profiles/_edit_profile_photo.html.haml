@@ -14,9 +14,4 @@
   .text.black.bold.font12 Portrait Uploads
   .text.gray.font12.line16 Click one of the thumbnails to choose it as your current portrait
   .photos
-    - (0...user.profile_images.count).each do |index|
-      - additional_class = line_item_additional_class(index, HELD_AVATARS_NUMBER)
-      - img = user.profile_images[index]
-      .avatar.large.left{:class => "#{additional_class}", :data => {:id => "#{img.id}"}}
-        = image_tag img.data.url(:large), :data => {:url => "#{ url_for(:controller => 'users', :action => 'set_avatar') }"}
-        .delete{:data => {:url => "#{ url_for(:controller => 'users', :action => 'delete_profile_photo') }"}} &times;
+    = render :partial => 'profile_photos', :locals => {:profile_images => user.profile_images}

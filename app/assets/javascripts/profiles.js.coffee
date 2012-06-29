@@ -60,8 +60,10 @@ requestDeleteProfilePhoto = (node) ->
         if(response.success==false)
           alert(response.msg)
         else
-          alert('Delete successfully!')
           target.closest('.avatar').remove()
+          $('#edit-profile-photo-popup .held-photos .photos')[0].innerHTML = response.profile_photos
+          alert('Delete successfully!')
+          $.modal.close()
     })
 
 requestUpdateAvatar = (node) ->
@@ -84,8 +86,8 @@ $ ->
   $('.not-implement').click -> helper.alert_not_implement()
   $('#container .edit-pane[data-url!="#"]').click -> load($(@).attr('data-url'))
   $('#container .list[data-url!="#"]').click -> load($(@).attr('data-url'))
-  $('#user-section .avatar .edit-pane').click -> $('#edit-profile-photo-popup').modal()
-  $('#user-section .info .edit-pane').click -> $('#edit-profile-info-popup').modal()
+  $('#user-section .avatar .edit-pane').click -> $('#edit-profile-photo-popup').modal({persist:true})
+  $('#user-section .info .edit-pane').click -> $('#edit-profile-info-popup').modal({persist:true})
 
   $("#edit-profile-photo-popup #fileupload").fileupload()
   $("#edit-profile-photo-popup #fileupload").fileupload "option",
@@ -100,6 +102,10 @@ $ ->
         alert(data.result.msg)
       else
         alert('Update successfully!')
+        $('#edit-profile-photo-popup .current-photo .avatar').attr 'src', data.result.extra_avatar_url
+        $('#user-section .avatar.large').attr 'src', data.result.large_avatar_url
+        $('#edit-profile-photo-popup .held-photos .photos')[0].innerHTML = data.result.profile_photos
+
 
   $('body').delegate '#edit-profile-photo-popup .held-photos .delete', 'click', (e) -> requestDeleteProfilePhoto(e.target)
   $('body').delegate '#edit-profile-photo-popup .held-photos img', 'click', (e) -> requestUpdateAvatar(e.target)
