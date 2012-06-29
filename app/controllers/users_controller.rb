@@ -41,7 +41,7 @@ class UsersController < ApplicationController
   def update_profile_info
     if request.xhr?
       if current_user.update_profile(params[:user])
-        result = {:success => true}
+        result = {:success => true, :fullname => current_user.fullname.truncate(18)}
       else
         result = {:success => false, :msg => current_user.errors.full_messages.join('<br />') }
       end

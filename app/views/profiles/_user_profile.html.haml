@@ -17,7 +17,7 @@
   .info.left
     .info-pane.left
       .name.text.black.bold.font20
-        %a{ :href => "#{user_profile_page}" }= user.fullname
+        %a{ :href => "#{user_profile_page}" }= user.fullname.truncate(18)
       .text.fuzzy-gray.font12= "Joined #{ user.joined_date }"
     - if is_current_user
       .edit-pane.left

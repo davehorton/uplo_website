@@ -160,6 +160,7 @@ $ ->
         success: (response) ->
           if response.success
             alert("Your profile has been updated!")
+            $('#user-section .name a').text response.fullname
             $.modal.close()
           else
             alert(response.msg)
