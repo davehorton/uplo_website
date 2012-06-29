@@ -31,18 +31,20 @@ requestFollow = (node) ->
       else if(is_unfollow=='false')
         target.attr('data-following', 'true')
         target.text('Unfollow')
-        $('#followers-counter .number').text response.followers
-        $('#following-counter .number').text response.followings
-        $('#followings-number').text "(#{response.followings})"
-        $('#followers-number').text "(#{response.followers})"
+        if $.parseJSON($('#counters').attr('data-current-user').toString())
+          $('#followers-counter .number').text response.followers
+          $('#following-counter .number').text response.followings
+          $('#followings-number').text "(#{response.followings})"
+          $('#followers-number').text "(#{response.followers})"
       else
         target.attr('data-following', 'false')
         target.text('Follow')
         target.closest('.user-section.following').remove()
-        $('#followers-counter .number').text response.followers
-        $('#following-counter .number').text response.followings
-        $('#followings-number').text "(#{response.followings})"
-        $('#followers-number').text "(#{response.followers})"
+        if $.parseJSON($('#counters').attr('data-current-user').toString())
+          $('#followers-counter .number').text response.followers
+          $('#following-counter .number').text response.followings
+          $('#followings-number').text "(#{response.followings})"
+          $('#followers-number').text "(#{response.followers})"
       $.modal.close()
   })
 
