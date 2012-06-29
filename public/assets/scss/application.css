@@ -216,13 +216,7 @@ textarea {
 .popup {
   border-radius: 5px; }
   .popup .header {
-    background: #ebebeb;
-    filter: progid:DXImageTransform.Microsoft.gradient(GradientType=0,startColorstr='#ffffff',endColorstr='$color-fuzzier-gray');
-    background: -moz-linear-gradient(top, white 0%, white 0%, #ebebeb 100%);
-    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, white), color-stop(0%, white), color-stop(100%, #ebebeb));
-    background: -webkit-linear-gradient(top, white 0%, white 0%, #ebebeb 100%);
-    background: -o-linear-gradient(top, white 0%, white 0%, #ebebeb 100%);
-    background: -ms-linear-gradient(top, white 0%, white 0%, #ebebeb 100%);
+    background: url("/assets/bg-popup-header.png") repeat-x;
     height: 45px;
     border-radius: 5px 5px 0 0;
     width: 100%; }
@@ -231,12 +225,10 @@ textarea {
       line-height: 45px; }
     .popup .header .close {
       margin: 10px 10px 0 0;
-      cursor: pointer; }
-      .popup .header .close .right {
-        border: 1px solid #d8d8d8;
-        line-height: 14px;
-        text-align: center;
-        width: 14px; }
+      cursor: pointer;
+      background: url("/assets/icon-close.png") no-repeat;
+      width: 16px;
+      height: 16px; }
   .popup .container {
     border-radius: 0 0 5px 5px;
     background-color: white;
@@ -730,7 +722,7 @@ textarea {
         #center .profile-wrapper #container .followers-container .user-section .info-panel .name, #center .profile-wrapper #container .followings-container .user-section .info-panel .name {
           margin-bottom: 5px; }
   #center .profile-wrapper .container {
-    margin-top: 30px; }
+    margin-top: 15px; }
     #center .profile-wrapper .container a.edit-pane {
       font-weight: normal; }
     #center .profile-wrapper .container .edit-pane {
@@ -741,20 +733,32 @@ textarea {
     #center .profile-wrapper .container .images-wrapper {
       width: 100%; }
   #center .profile-wrapper .counter {
-    background-color: #ebebeb;
     width: 119px;
-    border-radius: 5px;
-    box-shadow: 0 1px 0 #c9c9c9;
     margin-right: 10px;
-    padding: 7px 0 8px; }
-    #center .profile-wrapper .counter .number {
-      font-size: 35px; }
-    #center .profile-wrapper .counter:hover {
+    cursor: pointer; }
+    #center .profile-wrapper .counter .info {
+      background-color: #ebebeb;
+      border-radius: 5px;
+      box-shadow: 0 1px 0 #c9c9c9;
+      padding: 7px 0 8px; }
+      #center .profile-wrapper .counter .info .number {
+        font-size: 35px; }
+    #center .profile-wrapper .counter .tail {
+      visibility: hidden;
+      background: url("/assets/icon-counter-tail.png") no-repeat;
+      width: 23px;
+      height: 13px;
+      margin: 0 48px; }
+    #center .profile-wrapper .counter:hover .info {
       background-color: #111111;
       box-shadow: 0 1px 2px #111111;
       -moz-box-shadow: 0 0 1px #111111; }
-      #center .profile-wrapper .counter:hover .text {
+      #center .profile-wrapper .counter:hover .info .text {
         color: white; }
+    #center .profile-wrapper .counter.current .tail {
+      visibility: visible; }
+    #center .profile-wrapper .counter.current:hover .tail {
+      visibility: hidden; }
 
 #edit-profile-info-popup {
   width: 401px; }
@@ -816,7 +820,7 @@ textarea {
   #email-sharing-popup .header {
     width: 470px;
     padding: 10px;
-    background: url("/assets/bg-email-popup.png") repeat-x; }
+    background: url("/assets/bg-popup-header.png") repeat-x; }
     #email-sharing-popup .header .email-icon {
       background-image: url("/assets/icon-email-24x24.png");
       width: 24px;
