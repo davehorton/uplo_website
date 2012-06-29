@@ -276,13 +276,7 @@ textarea { padding-top:5px; }
 .popup {
   border-radius: 5px;
   .header {
-    background: $color-fuzzier-gray;
-    filter:progid:DXImageTransform.Microsoft.gradient(GradientType=0,startColorstr='#ffffff',endColorstr='$color-fuzzier-gray');
-    background:-moz-linear-gradient(top, rgb(255,255,255) 0%, rgb(255,255,255) 0%, $color-fuzzier-gray 100%);
-    background:-webkit-gradient(linear, left top, left bottom, color-stop(0%,rgb(255,255,255)), color-stop(0%,rgb(255,255,255)), color-stop(100%,$color-fuzzier-gray));
-    background:-webkit-linear-gradient(top, rgb(255,255,255) 0%,rgb(255,255,255) 0%,$color-fuzzier-gray 100%);
-    background:-o-linear-gradient(top, rgb(255,255,255) 0%,rgb(255,255,255) 0%,$color-fuzzier-gray 100%);
-    background:-ms-linear-gradient(top, rgb(255,255,255) 0%,rgb(255,255,255) 0%,$color-fuzzier-gray 100%);
+    background: url("/assets/bg-popup-header.png") repeat-x;
 
     height: 45px;
     border-radius: 5px 5px 0 0;
@@ -294,12 +288,9 @@ textarea { padding-top:5px; }
     .close {
       margin: 10px 10px 0 0;
       cursor: pointer;
-      .right {
-        border: 1px solid #d8d8d8;
-        line-height: 14px;
-        text-align: center;
-        width: 14px;
-      }
+      background: url('/assets/icon-close.png') no-repeat;
+      width: 16px;
+      height: 16px;
     }
   }
   .container {
@@ -806,10 +797,7 @@ textarea { padding-top:5px; }
         }
         .half {
           width: 120px;
-          &.option {
-            margin: 5px 0px;
-          }
-        }
+          &.option { margin: 5px 0px; }}
         &.progress, &.progress .uploading {
           height: 20px;
           -webkit-border-radius: 4px;
@@ -823,19 +811,10 @@ textarea { padding-top:5px; }
         &.progress .uploading {
           width: auto;
           background: url('/assets/progressbar.gif');
-        }
-      }
-    }
-  }
-  #order-preview {
-    margin-bottom: 30px;
-  }
-  .wrapper.the-app {
-    margin-top: -10px;
-  }
-  .container {
-    width: 100%;
-  }
+        }}}}
+  #order-preview { margin-bottom: 30px; }
+  .wrapper.the-app { margin-top: -10px; }
+  .container { width: 100%; }
   .intro {
     width: 300px;
     height: auto;
@@ -843,16 +822,12 @@ textarea { padding-top:5px; }
     margin: 20px 15px;
     .header {
       font-size: 21px;
-      margin: 20px 0 10px;
-    }
-  }
+      margin: 20px 0 10px; }}
   .profile-wrapper {
     width: 638px;
     #container {
       width: 100%;
-      .main {
-        width: 636px;
-      }
+      .main { width: 636px; }
       .followers-container, .followings-container {
         #followers-number, #followings-number { margin-left: 5px;}
         .user-section {
@@ -866,51 +841,43 @@ textarea { padding-top:5px; }
             a { font-weight: normal; cursor: pointer; }
             a:hover { font-weight: bold; }
             .name { margin-bottom: 5px; }
-          }
-        }
-      }
-    }
-
+          }}}}
     .container {
-      margin-top: 30px;
-      a.edit-pane {
-        font-weight: normal;
-      }
+      margin-top: 15px;
+      a.edit-pane { font-weight: normal; }
       .edit-pane {
         margin-top: 7px;
-        cursor: pointer;
-      }
-      .list {
-        margin-top: 7px;
-      }
-      .images-wrapper {
-        width: 100%;
-      }
-    }
+        cursor: pointer; }
+      .list { margin-top: 7px; }
+      .images-wrapper { width: 100%; }}
     .counter {
-      background-color: $color-fuzzier-gray;
       width: 119px;
-      border-radius: 5px;
-      box-shadow: 0 1px 0 #c9c9c9;
       margin-right: 10px;
-      padding: 7px 0 8px;
-      .number {
-        font-size: 35px;
-      }
-      &:hover {
+      cursor: pointer;
+      .info {
+        background-color: $color-fuzzier-gray;
+        border-radius: 5px;
+        box-shadow: 0 1px 0 #c9c9c9;
+        padding: 7px 0 8px;
+        .number { font-size: 35px; }}
+      .tail {
+        visibility: hidden;
+        background: url('/assets/icon-counter-tail.png') no-repeat;
+        width: 23px;
+        height: 13px;
+        margin: 0 48px; }
+      &:hover .info{
         background-color: $color-black;
         box-shadow: 0 1px 2px $color-black;
         -moz-box-shadow: 0 0 1px $color-black;;
-        .text {
-          color: $color-white;
-        }
-      }
-    }
+        .text { color: $color-white; }}
+      &.current {
+        .tail { visibility: visible; }
+        &:hover .tail {visibility: hidden;}}}
   }
 }
 
-#menu-items {
-}
+#menu-items {}
 
 #edit-profile-info-popup {
   width: 401px;
@@ -968,7 +935,7 @@ textarea { padding-top:5px; }
   .header {
     width: 470px;
     padding: 10px;
-    background: url("/assets/bg-email-popup.png") repeat-x;
+    background: url("/assets/bg-popup-header.png") repeat-x;
     .email-icon {
       background-image: url('/assets/icon-email-24x24.png');
       width: 24px;

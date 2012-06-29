@@ -112,9 +112,12 @@ $ ->
   $('body').delegate '#edit-profile-photo-popup .held-photos img', 'click', (e) -> requestUpdateAvatar(e.target)
 
   $('#container').delegate '.follow', 'click', (e) -> requestFollow(e.target)
-  $('#counters .counter').click ->
+  $('#counters .counter .info').click ->
     url = $(@).attr('data-url')
-    if url != '#'
+    counter = $(@).closest('.counter')
+    if url != '#' && !counter.hasClass('current')
+      $('#counters .counter.current').removeClass 'current'
+      counter.addClass 'current'
       load(url)
 
   $('#btn-follow').click ->
@@ -142,7 +145,7 @@ $ ->
 
   $('#btn-update').click ->
     email_reg = /^([0-9a-zA-Z]([-.\w]*[0-9a-zA-Z])*@(([0-9a-zA-Z])+([-\w]*[0-9a-zA-Z])*\.)+[a-zA-Z]{2,9})$/i
-    website_reg = /(^$)|(^[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(([0-9]{1,5})?\/.*)?$)/i
+    website_reg = /(^$)|(^((http|https):\/\/){0,1}[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(([0-9]{1,5})?\/.*)?$)/i
     if email_reg.test($('#user_email').val()) == false
       alert('Email is invalid!')
     else if website_reg.test($('#user_website').val()) == false

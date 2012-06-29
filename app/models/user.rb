@@ -47,7 +47,7 @@ class User < ActiveRecord::Base
   validates_format_of :email, :on => :create, :message => 'is invalid',
           :with => /^([0-9a-zA-Z]([-.\w]*[0-9a-zA-Z])*@(([0-9a-zA-Z])+([-\w]*[0-9a-zA-Z])*\.)+[a-zA-Z]{2,9})$/i
   validates_format_of :website, :allow_blank => true,
-          :with => /(^$)|(^[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(([0-9]{1,5})?\/.*)?$)/i
+          :with => /(^$)|(^((http|https):\/\/){0,1}[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(([0-9]{1,5})?\/.*)?$)/i
   validates_uniqueness_of :email, :message => 'must be unique'
   validates_uniqueness_of :username, :message => 'must be unique'
 

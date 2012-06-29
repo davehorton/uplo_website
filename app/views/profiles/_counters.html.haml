@@ -1,15 +1,25 @@
-#photos-counter.counter.left{ :data => { :url => "#{ url_for(:controller => 'profiles', :action => 'show_photos', :user_id => @user.id) }" } }
-  .number.text.black.bold.center= photos
-  .text.gray.center.font14.line16 Photos
-#galleries-counter.counter.left{ :data => { :url => "#{ url_for(:controller => 'profiles', :action => 'show_galleries', :user_id => @user.id) }" } }
-  .number.text.black.bold.center= galleries
-  .text.gray.center.font14.line16 Galleries
-#likes-counter.not-implement.counter.left{ :data => { :url => '#' } }
-  .number.text.black.bold.center= likes
-  .text.gray.center.font14.line16 Likes
-#followers-counter.counter.left{ :data => { :url => "#{ url_for(:controller => 'profiles', :action => 'show_followers', :user_id => @user.id) }" } }
-  .number.text.black.bold.center= followers
-  .text.gray.center.font14.line16 Followers
-#following-counter.counter.no-padding-right.left{ :data => { :url => "#{ url_for(:controller => 'profiles', :action => 'show_followed_users', :user_id => @user.id) }" } }
-  .number.text.black.bold.center= following
-  .text.gray.center.font14.line16 Following
+#photos-counter.counter.left
+  .info{ :data => { :url => "#{ url_for(:controller => 'profiles', :action => 'show_photos', :user_id => @user.id) }" } }
+    .number.text.black.bold.center= photos
+    .text.gray.center.font14.line16 Photos
+  .tail
+#galleries-counter.counter.left
+  .info{ :data => { :url => "#{ url_for(:controller => 'profiles', :action => 'show_galleries', :user_id => @user.id) }" } }
+    .number.text.black.bold.center= galleries
+    .text.gray.center.font14.line16 Galleries
+  .tail
+#likes-counter.not-implement.counter.left
+  .info{ :data => { :url => '#' } }
+    .number.text.black.bold.center= likes
+    .text.gray.center.font14.line16 Likes
+  .tail
+#followers-counter.counter.left
+  .info{ :data => { :url => "#{ url_for(:controller => 'profiles', :action => 'show_followers', :user_id => @user.id) }" } }
+    .number.text.black.bold.center= followers
+    .text.gray.center.font14.line16 Followers
+  .tail
+#following-counter.counter.no-padding-right.left
+  .info{ :data => { :url => "#{ url_for(:controller => 'profiles', :action => 'show_followed_users', :user_id => @user.id) }" } }
+    .number.text.black.bold.center= following
+    .text.gray.center.font14.line16 Following
+  .tail
