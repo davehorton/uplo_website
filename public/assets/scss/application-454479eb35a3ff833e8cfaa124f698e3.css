@@ -119,6 +119,19 @@ input, textarea {
   .text.normal {
     color: #606060; }
 
+.hidden-uploader {
+  position: relative;
+  overflow: hidden;
+  cursor: pointer; }
+  .hidden-uploader input {
+    cursor: pointer;
+    position: absolute;
+    opacity: 0;
+    -moz-transform: translate(-200px, 0pt) scale(3);
+    -ms-transform: translate(-200px, 0pt) scale(3);
+    -webkit-transform: translate(200px, 0pt) scale(3);
+    -o-transform: scale(5); }
+
 .text {
   text-align: left;
   word-wrap: break-word; }
@@ -201,7 +214,7 @@ input, textarea {
   border-radius: 5px; }
   .popup .header {
     background: #ebebeb;
-    filter: progid:DXImageTransform.Microsoft.gradient(GradientType=0,startColorstr='#ffffff',endColorstr='#ebebeb');
+    filter: progid:DXImageTransform.Microsoft.gradient(GradientType=0,startColorstr='#ffffff',endColorstr='$color-fuzzier-gray');
     background: -moz-linear-gradient(top, white 0%, white 0%, #ebebeb 100%);
     background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, white), color-stop(0%, white), color-stop(100%, #ebebeb));
     background: -webkit-linear-gradient(top, white 0%, white 0%, #ebebeb 100%);
@@ -234,12 +247,15 @@ input, textarea {
       .popup .container .main-panel .label {
         margin: 5px 20px 5px 0; }
       .popup .container .main-panel .info-line {
-        margin: 5px 0; }
+        margin: 5px 0;
+        width: 100%; }
       .popup .container .main-panel .line-separator {
         margin: 20px 0px; }
       .popup .container .main-panel #frm-edit-gallery #gallery_permission {
         width: 118px;
         color: #606060; }
+      .popup .container .main-panel .button-container {
+        width: 100%; }
 
 .normal {
   font-weight: normal; }
@@ -416,6 +432,14 @@ input, textarea {
 
 .button {
   cursor: pointer; }
+  .button.update-profile {
+    background: url("/assets/btn-update-profile.png") no-repeat;
+    width: 106px;
+    height: 27px; }
+  .button.choose-photo {
+    background: url("/assets/btn-choose-photo.png") no-repeat;
+    width: 171px;
+    height: 27px; }
   .button.follow {
     background: url("/assets/btn-follow.png") no-repeat;
     width: 57px;
@@ -428,6 +452,10 @@ input, textarea {
     background: url("/assets/btn-cancel-57x23.png") no-repeat;
     width: 57px;
     height: 23px; }
+  .button.cancel-big {
+    background: url("/assets/btn-cancel.png") no-repeat;
+    width: 65px;
+    height: 27px; }
   .button.save {
     background: url("/assets/btn-save-changes.jpg") no-repeat;
     width: 96px;
@@ -515,22 +543,11 @@ input, textarea {
     margin-top: 4px; }
     #top .top-nav .actions-panel .separator {
       margin: 0 5px; }
-    #top .top-nav .actions-panel #add-files {
-      position: relative;
-      overflow: hidden;
-      cursor: pointer; }
-      #top .top-nav .actions-panel #add-files:hover {
-        text-decoration: underline; }
-      #top .top-nav .actions-panel #add-files input {
-        cursor: pointer;
-        position: absolute;
-        left: -100px;
-        top: -7px;
-        opacity: 0;
-        -moz-transform: translate(-200px, 0pt) scale(3);
-        -ms-transform: translate(-200px, 0pt) scale(3);
-        -webkit-transform: translate(200px, 0pt) scale(3);
-        -o-transform: scale(5); }
+    #top .top-nav .actions-panel #add-files:hover {
+      text-decoration: underline; }
+    #top .top-nav .actions-panel #add-files input {
+      left: -100px;
+      top: -7px; }
     #top .top-nav.text {
       margin-right: 4px; }
   #top .actions-panel, #top .action-container {
@@ -732,6 +749,55 @@ input, textarea {
       #center .profile-wrapper .counter:hover .text {
         color: white; }
 
+#edit-profile-info-popup {
+  width: 401px; }
+  #edit-profile-info-popup input, #edit-profile-info-popup textarea {
+    width: 234px; }
+  #edit-profile-info-popup .note {
+    width: 100px;
+    padding-top: 10px; }
+  #edit-profile-info-popup #btn-update {
+    margin: 0 10px 0 120px; }
+
+#edit-profile-photo-popup {
+  width: 405px; }
+  #edit-profile-photo-popup .container .main-panel {
+    margin: 10px; }
+  #edit-profile-photo-popup .line-separator {
+    margin: 10px 0 20px 0; }
+  #edit-profile-photo-popup .current-photo {
+    width: 96px; }
+    #edit-profile-photo-popup .current-photo .text {
+      background-color: #ebebeb;
+      width: 100%;
+      line-height: 25px;
+      text-align: center; }
+  #edit-profile-photo-popup .uploading {
+    width: 269px;
+    margin: 10px 0 0 20px; }
+    #edit-profile-photo-popup .uploading #add-file {
+      margin: 10px 0px; }
+      #edit-profile-photo-popup .uploading #add-file input {
+        left: -200px;
+        -webkit-transform: translate(400px, 0pt) scale(3); }
+  #edit-profile-photo-popup .held-photos .photos {
+    margin-top: 8px; }
+    #edit-profile-photo-popup .held-photos .photos .avatar {
+      margin: 0 5px;
+      border: 1px solid #b3b3b3;
+      position: relative; }
+      #edit-profile-photo-popup .held-photos .photos .avatar .delete {
+        cursor: pointer;
+        position: absolute;
+        top: 0;
+        left: 0;
+        color: white;
+        width: 14px;
+        line-height: 14px;
+        text-align: center;
+        font-weight: bold;
+        background-color: #b3b3b3; }
+
 #email-sharing-popup {
   width: 490px;
   min-height: 100px;
@@ -870,6 +936,12 @@ input, textarea {
       margin: 0 77px; }
       #delete-confirm-popup .main-panel #button-container #btn-ok {
         margin-left: 10px; }
+  #delete-confirm-popup.profile-photo {
+    width: 340px; }
+    #delete-confirm-popup.profile-photo .main-panel {
+      width: 300px; }
+      #delete-confirm-popup.profile-photo .main-panel #button-container {
+        margin: 0 97px; }
 
 #save-confirm-popup {
   width: 326px; }

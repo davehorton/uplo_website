@@ -13,6 +13,9 @@
 .avatar.large {
   width: 67px;
   height: 67px; }
+.avatar.extra {
+  width: 96px;
+  height: 96px; }
 
 .user-section .avatar.small {
   margin-right: 8px; }
