@@ -251,10 +251,14 @@ class ImagesController < ApplicationController
       image = Image.find_by_id id.to_i
       if image.nil?
       else
-        is_cover = img.delete 'is_album_cover'
-        is_avatar = img.delete 'is_avatar'
-        image.set_as_album_cover if SharedMethods::Converter::Boolean(is_cover)
-        image.set_as_owner_avatar if SharedMethods::Converter::Boolean(is_avatar)
+        img[:is_gallery_cover] = SharedMethods::Converter::Boolean(img.delete 'is_album_cover')
+        img[:is_owner_avatar] = SharedMethods::Converter::Boolean(img.delete 'is_avatar'_
+        image.set_as_album_cover if img[:is_gallery_cover]
+        if img[:is_owner_avatar]
+          image.set_as_owner_avatar
+        elsif image.is_owner_avatar
+          current_user.rollback_avatar
+        end
         image.update_attributes img
       end
     end
