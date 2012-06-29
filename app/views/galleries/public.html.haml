@@ -11,7 +11,7 @@
   .line-separator.left
 
   #author-section.left
-    = image_tag @author.avatar(:medium), :class => 'avatar medium left'
+    = image_tag @author.avatar_url(:medium), :class => 'avatar medium left'
     .info.left
       .text.black.font16.line18= @author.username.truncate(20)
       .text.gray.font12.line18= "#{@author.images.length} Photos &bull; 44 Followers".html_safe

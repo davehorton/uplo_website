@@ -1,6 +1,6 @@
 / locals: user
 .current-photo.left
-  = image_tag user.avatar.url(:extra), :class => 'avatar extra left'
+  = image_tag user.avatar_url(:extra), :class => 'avatar extra left'
   .clear
   .text.black.bold.font12.line16.left Current Photo
 .uploading.left
@@ -17,6 +17,6 @@
     - (0...user.profile_images.count).each do |index|
       - additional_class = line_item_additional_class(index, HELD_AVATARS_NUMBER)
       - img = user.profile_images[index]
-      .avatar.large.left{:class => "#{additional_class}"}
-        = image_tag img.data.url(:large)
-        .delete{:data => {:id => "#{img.id}", :url => "#{ url_for(:controller => 'users', :action => 'delete_profile_photo') }"}} &times;
+      .avatar.large.left{:class => "#{additional_class}", :data => {:id => "#{img.id}"}}
+        = image_tag img.data.url(:large), :data => {:url => "#{ url_for(:controller => 'users', :action => 'set_avatar') }"}
+        .delete{:data => {:url => "#{ url_for(:controller => 'users', :action => 'delete_profile_photo') }"}} &times;

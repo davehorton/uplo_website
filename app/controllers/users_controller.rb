@@ -22,11 +22,10 @@ class UsersController < ApplicationController
 
   def update_avatar
     if request.xhr?
-      if current_user.update_attribute('avatar', params[:user][:avatar])
-        avatar = ProfileImage.new({ :user_id => current_user.id,
-                                    :data => params[:user][:avatar],
-                                    :last_used => Time.now })
-        current_user.profile_images << avatar
+      avatar = ProfileImage.new({ :user_id => current_user.id,
+                                  :data => params[:user][:avatar],
+                                  :last_used => Time.now })
+      if current_user.profile_images << avatar
         result = {:success => true}
       else
         result = { :success => false, :msg => current_user.errors.full_messages[0] }
@@ -43,7 +42,23 @@ class UsersController < ApplicationController
         begin
           ProfileImage.destroy(params[:id])
           result = { :success => true }
-        rescue e
+        rescue
+          result = {:success => false, :msg => 'Something went wrong!'}
+        end
+      else
+        result = {:success => false, :msg => 'This is not your profile photo!'}
+      end
+      render :json => result
+    end
+  end
+
+  def set_avatar
+    if request.xhr?
+      if current_user.has_profile_photo?(params[:id])
+        begin
+          ProfileImage.find_by_id(params[:id]).set_as_default
+          result = { :success => true, :extra_avatar_url => current_user.avatar_url(:extra), :large_avatar_url => current_user.avatar_url(:large) }
+        rescue
           result = {:success => false, :msg => 'Something went wrong!'}
         end
       else

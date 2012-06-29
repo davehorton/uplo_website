@@ -6,7 +6,7 @@
 #user-section.left
   .avatar.left
     %a{ :href => "#{user_profile_page}" }
-      = image_tag(user.avatar(:large), :class => 'avatar large left')
+      = image_tag(user.avatar_url(:large), :class => 'avatar large left')
     - if is_current_user
       .clear
       .edit-pane

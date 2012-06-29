@@ -18,12 +18,12 @@ class User < ActiveRecord::Base
                   :twitter, :facebook
 
   # Paperclip
-  has_attached_file :avatar,
-   :styles => {:thumb => '180x180#', :extra => '96x96#', :large => '67x67#', :medium => '48x48#', :small => '24x24#' },
-   :storage => :s3,
-   :s3_credentials => "#{Rails.root}/config/amazon_s3.yml",
-   :path => "user/:id/avatar/:style.:extension",
-   :default_url => "/assets/avatar-default-:style.jpg"
+  # has_attached_file :avatar,
+  #  :styles => {:thumb => '180x180#', :extra => '96x96#', :large => '67x67#', :medium => '48x48#', :small => '24x24#' },
+  #  :storage => :s3,
+  #  :s3_credentials => "#{Rails.root}/config/amazon_s3.yml",
+  #  :path => "user/:id/avatar/:style.:extension",
+  #  :default_url => "/assets/avatar-default-:style.jpg"
 
   # ASSOCIATIONS
   has_many :profile_images, :dependent => :destroy
@@ -119,6 +119,16 @@ class User < ActiveRecord::Base
   end
 
   # PUBLIC INSTANCE METHODS
+  def avatar
+    img = ProfileImage.find :first, :conditions => {:user_id => self.id, :default => true}
+    if img.nil?
+      result = nil
+    else
+      result = img.data
+    end
+    return result
+  end
+
   def biography
     "Lorem ipsum dolor sit amet, consectetur adipiscing elit. In non quam eu ipsum tincidunt iaculis in id augue. Mauris auctor rhoncus sollicitudin."
   end
@@ -131,8 +141,13 @@ class User < ActiveRecord::Base
     [self.first_name, self.last_name].join(" ")
   end
 
-  def avatar_url
-    self.avatar.url(:thumb)
+  def avatar_url(style='thumb')
+    if self.avatar.nil?
+      url = "/assets/avatar-default-#{style.to_s}.jpg"
+    else
+      url = self.avatar.url(style.to_sym)
+    end
+    return url
   end
 
   # Generate email address including full name.
@@ -314,6 +329,18 @@ class User < ActiveRecord::Base
     return result
   end
 
+  def recent_profile_image
+    result = nil
+    recent_time = Time.parse '0000-1-1'
+    self.profile_images.each do |img|
+      if img.last_used > recent_time
+        recent_time = img.last_used
+        result = img.id
+      end
+    end
+    return result
+  end
+
   def hold_profile_images
     result = true
     if ProfileImage.count(:conditions => {:user_id => self.id}) > HELD_AVATARS_NUMBER
@@ -322,6 +349,17 @@ class User < ActiveRecord::Base
       rescue
         result = false
       end
+    end
+    return result
+  end
+
+  def rollback_avatar
+    id = self.recent_profile_image
+    if id.nil?
+      result = true
+    else
+      img = ProfileImage.find_by_id id
+      img.update_attribute('default', true)
     end
     return result
   end

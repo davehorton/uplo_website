@@ -54,14 +54,31 @@ requestDeleteProfilePhoto = (node) ->
     $.ajax({
       url: target.attr('data-url'),
       type: "GET",
-      data: { id: target.attr('data-id') },
+      data: { id: target.closest('.avatar').attr('data-id') },
       dataType: "json",
       success: (response) ->
         if(response.success==false)
           alert(response.msg)
         else
           alert('Delete successfully!')
+          target.closest('.avatar').remove()
     })
+
+requestUpdateAvatar = (node) ->
+  target = $(node)
+  $.ajax({
+    url: target.attr('data-url'),
+    type: "GET",
+    data: { id: target.closest('.avatar').attr('data-id') },
+    dataType: "json",
+    success: (response) ->
+      if(response.success==false)
+        alert(response.msg)
+      else
+        alert('Update successfully!')
+        $('#edit-profile-photo-popup .current-photo .avatar').attr 'src', response.extra_avatar_url
+        $('#user-section .avatar.large').attr 'src', response.large_avatar_url
+  })
 
 $ ->
   $('.not-implement').click -> helper.alert_not_implement()
@@ -84,7 +101,8 @@ $ ->
       else
         alert('Update successfully!')
 
-  $('#left').delegate '#edit-profile-photo-popup .held-photos .delete', 'click', (e) -> requestDeleteProfilePhoto(e.target)
+  $('body').delegate '#edit-profile-photo-popup .held-photos .delete', 'click', (e) -> requestDeleteProfilePhoto(e.target)
+  $('body').delegate '#edit-profile-photo-popup .held-photos img', 'click', (e) -> requestUpdateAvatar(e.target)
 
   $('#container').delegate '.follow', 'click', (e) -> requestFollow(e.target)
   $('#counters .counter').click ->
@@ -125,9 +143,7 @@ $ ->
       success: (response) ->
         if response.success
           alert("Your profile has been updated!")
-          console.log($('#user_email'))
           $.modal.close()
-          console.log($('#user_email'))
         else
           alert("Something went wrong!")
     });

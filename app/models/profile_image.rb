@@ -1,6 +1,7 @@
 class ProfileImage < ActiveRecord::Base
   # ASSOCIATIONS
   belongs_to :user
+  belongs_to :source, :foreign_key => :link_to_image, :class_name => 'Image'
 
   # Paperclip
   has_attached_file :data,
@@ -16,7 +17,9 @@ class ProfileImage < ActiveRecord::Base
 
   # CALLBACK
   after_create :update_last_used, :set_as_default
+  after_destroy :reset_avatar
 
+  # INSTANT METHOD
   def update_last_used
     ProfileImage.transaction do
       self.last_used = Time.now
@@ -34,4 +37,14 @@ class ProfileImage < ActiveRecord::Base
       ProfileImage.update_all '"default"=false', "user_id = #{ self.user_id } and id <> #{ self.id }"
     end
   end
+
+  def is_current_avatar?
+    return self.default
+  end
+
+  private
+    def reset_avatar
+      self.user.rollback_avatar if self.is_current_avatar?
+      self.source.update_attribute('is_owner_avatar', false) if self.source
+    end
 end
