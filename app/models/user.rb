@@ -129,10 +129,6 @@ class User < ActiveRecord::Base
     return result
   end
 
-  def biography
-    "Lorem ipsum dolor sit amet, consectetur adipiscing elit. In non quam eu ipsum tincidunt iaculis in id augue. Mauris auctor rhoncus sollicitudin."
-  end
-
   def joined_date
     self.confirmed_at.strftime('%B %Y')
   end

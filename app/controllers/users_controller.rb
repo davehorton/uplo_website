@@ -43,13 +43,17 @@ class UsersController < ApplicationController
       if !ProfileImage.exists?(params[:id])
         profile_photos = render_to_string :partial => 'profiles/profile_photos',
                :locals => {:profile_images => current_user.profile_images}
-        result = { :success => true, :profile_photos => profile_photos }
+        result = { :success => true, :profile_photos => profile_photos,
+                  :extra_avatar_url => current_user.avatar_url(:extra),
+                  :large_avatar_url => current_user.avatar_url(:large) }
       elsif current_user.has_profile_photo?(params[:id])
         begin
           ProfileImage.destroy(params[:id])
           profile_photos = render_to_string :partial => 'profiles/profile_photos',
                :locals => {:profile_images => current_user.profile_images}
-          result = { :success => true, :profile_photos => profile_photos }
+          result = { :success => true, :profile_photos => profile_photos,
+                    :extra_avatar_url => current_user.avatar_url(:extra),
+                    :large_avatar_url => current_user.avatar_url(:large) }
         rescue
           result = {:success => false, :msg => 'Something went wrong!'}
         end

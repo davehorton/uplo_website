@@ -34,6 +34,7 @@ class ProfileImage < ActiveRecord::Base
   def set_as_default
     ProfileImage.transaction do
       self.update_attribute('default', true)
+      self.update_attribute('last_used', Time.now)
       ProfileImage.update_all '"default"=false', "user_id = #{ self.user_id } and id <> #{ self.id }"
     end
   end

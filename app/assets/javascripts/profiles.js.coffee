@@ -60,7 +60,8 @@ requestDeleteProfilePhoto = (node) ->
         if(response.success==false)
           alert(response.msg)
         else
-          target.closest('.avatar').remove()
+          $('#edit-profile-photo-popup .current-photo .avatar').attr 'src', response.extra_avatar_url
+          $('#user-section .avatar.large').attr 'src', response.large_avatar_url
           $('#edit-profile-photo-popup .held-photos .photos')[0].innerHTML = response.profile_photos
           alert('Delete successfully!')
           $.modal.close()
