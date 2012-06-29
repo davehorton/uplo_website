@@ -20,3 +20,5 @@ gems
 *.tmproj
 .idea
 .sass-cache/
+db/sphinx/development
+config/development.sphinx.conf

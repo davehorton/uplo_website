@@ -80,9 +80,10 @@ Uplo::Application.routes.draw do
     delete "signout", :to => "users/sessions#destroy"
     get "change_password", :to => "users/passwords#edit_password"
     put "update_password", :to => "users/passwords#update_password"
-    post 'users/update_avatar', :to => 'users#update_avatar'
-    get 'users/delete_profile_photo', :to => 'users#delete_profile_photo'
-    get 'users/set_avatar', :to => 'users#set_avatar'
+    post 'update_avatar', :to => 'users#update_avatar'
+    get 'delete_profile_photo', :to => 'users#delete_profile_photo'
+    get 'set_avatar', :to => 'users#set_avatar'
+    put 'update_profile_info', :to => 'users#update_profile_info'
   end
 
   # API ROUTING

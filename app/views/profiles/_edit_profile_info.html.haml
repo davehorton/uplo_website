@@ -3,7 +3,7 @@
   None of this information is required. Just supply as much or as little as you wish. You'll always be able to add more about yourself, or change this stuff in your Account Preferences.
 .line-separator.left
 
-= form_for(user, :url => '', :html => {:id => 'frm-edit-profile-info', :class => "left"}) do |f|
+= form_for(user, :url => "#{url_for(:controller => 'users', :action => 'update_profile_info')}", :html => {:id => 'frm-edit-profile-info', :class => "left"}) do |f|
   .info-line.left.no-padding-top
     .label.text.black.bold.font12.left= "First Name <span style='color:red;'>*</span>".html_safe
     = f.text_field :first_name, :class => 'right', :value => user.first_name
@@ -15,7 +15,7 @@
     = f.text_field :email, :class => 'right', :value => user.email
   .info-line.left
     .label.text.black.bold.font12.left Personal Website
-    = f.text_field :email, :class => 'right', :value => user.website
+    = f.text_field :website, :class => 'right', :value => user.website
   .info-line.left.no-padding-bottom
     .label.text.black.bold.font12.left
       Bio

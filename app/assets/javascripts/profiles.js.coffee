@@ -141,16 +141,23 @@ $ ->
     })
 
   $('#btn-update').click ->
-    data_form = $('#frm-edit-profile-info')
-    $.ajax({
-      url: data_form.attr('action'),
-      type: 'POST',
-      data: data_form.serialize(),
-      dataType: 'json',
-      success: (response) ->
-        if response.success
-          alert("Your profile has been updated!")
-          $.modal.close()
-        else
-          alert("Something went wrong!")
-    });
+    email_reg = /^([0-9a-zA-Z]([-.\w]*[0-9a-zA-Z])*@(([0-9a-zA-Z])+([-\w]*[0-9a-zA-Z])*\.)+[a-zA-Z]{2,9})$/i
+    website_reg = /(^$)|(^[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(([0-9]{1,5})?\/.*)?$)/i
+    if email_reg.test($('#user_email').val()) == false
+      alert('Email is invalid!')
+    else if website_reg.test($('#user_website').val()) == false
+      alert('Website is invalid!')
+    else
+      data_form = $('#frm-edit-profile-info')
+      $.ajax({
+        url: data_form.attr('action'),
+        type: 'POST',
+        data: data_form.serialize(),
+        dataType: 'json',
+        success: (response) ->
+          if response.success
+            alert("Your profile has been updated!")
+            $.modal.close()
+          else
+            alert(response.msg)
+      });

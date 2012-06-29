@@ -38,6 +38,17 @@ class UsersController < ApplicationController
     end
   end
 
+  def update_profile_info
+    if request.xhr?
+      if current_user.update_profile(params[:user])
+        result = {:success => true}
+      else
+        result = {:success => false, :msg => current_user.errors.full_messages.join('<br />') }
+      end
+      render :json => result
+    end
+  end
+
   def delete_profile_photo
     if request.xhr?
       if !ProfileImage.exists?(params[:id])
