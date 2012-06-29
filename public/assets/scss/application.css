@@ -130,8 +130,8 @@ textarea {
     cursor: pointer;
     position: absolute;
     opacity: 0;
-    -moz-transform: translate(-200px, 0pt) scale(3);
-    -ms-transform: translate(-200px, 0pt) scale(3);
+    -moz-transform: scale(3);
+    -ms-transform: scale(3);
     -webkit-transform: translate(200px, 0pt) scale(3);
     -o-transform: scale(5); }
 
@@ -550,7 +550,11 @@ textarea {
       text-decoration: underline; }
     #top .top-nav .actions-panel #add-files input {
       left: -100px;
-      top: -7px; }
+      top: -7px;
+      -moz-transform: translate(-200px, 0pt) scale(3);
+      -ms-transform: translate(-200px, 0pt) scale(3);
+      -webkit-transform: translate(200px, 0pt) scale(3);
+      -o-transform: scale(5); }
     #top .top-nav.text {
       margin-right: 4px; }
   #top .actions-panel, #top .action-container {
@@ -782,7 +786,8 @@ textarea {
       margin: 10px 0px; }
       #edit-profile-photo-popup .uploading #add-file input {
         left: -200px;
-        -webkit-transform: translate(400px, 0pt) scale(3); }
+        -webkit-transform: translate(400px, 0px) scale(3);
+        -ms-transform: translate(-50px, 0px) scale(3); }
   #edit-profile-photo-popup .held-photos .photos {
     margin-top: 8px; }
     #edit-profile-photo-popup .held-photos .photos .avatar {
