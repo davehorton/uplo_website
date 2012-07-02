@@ -1,5 +1,3 @@
-= js_menu_include_tag
-
 %ul#menu-items
   %li.first{:class => set_current_tab("popular")}
     = link_to(I18n.t("main_menu.spotlight"), "/spotlight")
@@ -11,27 +9,4 @@
     = link_to(I18n.t("main_menu.the_app"), "/intro")
 
   %li{:class => set_current_tab("friend")}
-    = link_to(I18n.t("main_menu.friend"), "#")
-
-:erb
-  <script type="text/javascript">
-    $('#menu-items').delegate(
-      "a[href='#']", "click", function() {
-        alert("This feature has not been implemented yet.");
-        return false;
-      }
-    );
-  </script>
-  <script type="text/javascript">
-    $(document).ready(function(){
-      $("#menu-items").supersubs({
-        minWidth:    5,
-        maxWidth:    10,
-        extraWidth:  0.1
-      }).superfish({
-        autoArrows:   false,
-        speed:        "normal",
-        delay:        100
-      });
-    });
-  </script>
+    = link_to(I18n.t("main_menu.friend"), "/friends")

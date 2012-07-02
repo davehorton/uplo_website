@@ -19,6 +19,11 @@ class HomeController < ApplicationController
     render :layout => "main"
   end
 
+  def friends_feed
+    @images = current_user.friends_images.load_popular_images(@filtered_params)
+    render :layout => 'main'
+  end
+
   def intro
     render :layout => "main"
   end

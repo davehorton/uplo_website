@@ -14,6 +14,7 @@ Uplo::Application.routes.draw do
   get "search", :to => "home#search"
   get "spotlight", :to => "home#spotlight"
   get "intro", :to => "home#intro"
+  get 'friends', :to => 'home#friends_feed'
   get "popular", :to => "home#popular"
   get "back", :to => "application#redirect_back"
   get "my_account", :to => "users#profile"

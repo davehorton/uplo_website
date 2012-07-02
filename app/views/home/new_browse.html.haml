@@ -4,7 +4,7 @@
   = stylesheet_link_tag("scss/new_image.css")
 
 - content_for :top_content do
-  .text.bold.font16.line12.left{ :style => 'padding-top:9px;' }
+  .data-header.text.bold.font16.line12.left
     %span.text.black Browse /
     %span.text.gray All Images
   = render(:partial => "shared/search_box_new", :locals => {:action => "search"})
