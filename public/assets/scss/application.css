@@ -534,6 +534,8 @@ textarea {
     font-size: 11px; }
     #top select[id='gallery_selector_id'] option {
       height: 14px; }
+  #top .data-header {
+    margin-top: 10px; }
   #top .top-nav {
     margin-top: 4px; }
     #top .top-nav .actions-panel .separator {
