@@ -28,7 +28,7 @@ class Image < ActiveRecord::Base
 
   # CALLBACK
   after_post_process :save_image_dimensions
-  after_initialize :init_random_price
+  after_initialize :init_random_price, :set_album_cover
 
   SALE_REPORT_TYPE = {
     :quantity => "quantity",
@@ -116,7 +116,7 @@ class Image < ActiveRecord::Base
     Image.update_all 'is_owner_avatar=false', "gallery_id = #{ self.gallery_id } and id <> #{ self.id }"
     profile_img = ProfileImage.first :conditions => {:user_id => self.author.id, :link_to_image => self.id}
     if profile_img.nil?
-      ProfileImage.create({ :user_id => self.author.id, 
+      ProfileImage.create({ :user_id => self.author.id,
                             :link_to_image => self.id,
                             :data => open(self.data.url(:thumb)),
                             :last_used => Time.now })
@@ -355,6 +355,14 @@ class Image < ActiveRecord::Base
     geo = Paperclip::Geometry.from_file(file)
     self.width = geo.width
     self.height = geo.height
+  end
+
+  def set_album_cover
+    if Image.exists?({:gallery_id => self.gallery_id, :is_gallery_cover => true})
+      self.is_gallery_cover = false
+    else
+      self.is_gallery_cover = true
+    end
   end
 
   # TODO: this method is for test only. Please REMOVE this in production mode.

@@ -102,7 +102,13 @@ class Gallery < ActiveRecord::Base
 
   # Get the cover image for this album.
   def cover_image
-    return Image.find_by_gallery_id self.id, :conditions => { :is_gallery_cover => true }
+    img = Image.find_by_gallery_id self.id, :conditions => { :is_gallery_cover => true }
+    if img.nil? && self.images.count > 0
+      result = self.images.first :order => 'images.created_at ASC'
+    else
+      result = img
+    end
+    return result
   end
 
   def is_public?
