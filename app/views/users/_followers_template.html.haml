@@ -1,6 +1,8 @@
 / local values: users, users_per_line, type
 - (0...users.length). each do |idx|
   - user = users[idx]
+  - is_current_user = is_current_user(user.id)
+  - images_number = is_current_user ? user.images.length : user.public_images.length
   - is_following = user.has_follower?(current_user.id)
   - follow_label = is_following ? 'Unfollow' : 'Follow'
   - additional_class = line_item_additional_class(idx, users_per_line)
@@ -9,7 +11,7 @@
     = image_tag user.avatar_url(:large), :class => 'avatar large left'
     .info-panel.left
       .name.text.black.font18= user.username.truncate(20)
-      .text.gray.font12.left= "#{ user.images.length } items | view&nbsp".html_safe
+      .text.gray.font12.left= "#{ images_number } items | view&nbsp".html_safe
       %a.text.black.font12.left{ :href => "#{ url_for(:controller => 'profiles', :action => 'show', :user_id => user.id) }", :data => { 'user-id' => "#{ user.id }" } } profile
-      - unless is_current_user(user.id)
+      - unless is_current_user
         %a.follow.text.black.font12.right{ :data => { 'author-id' => "#{ user.id }", 'following' => "#{ is_following }"} }= follow_label
