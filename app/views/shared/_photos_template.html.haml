@@ -1,7 +1,8 @@
-/ local values: images, photos_per_line
+/ local values: images, photos_per_line, photo_size, other_classes
+- other_classes = '' if other_classes.nil?
 - last_column_idx = photos_per_line - 1
 - (0...images.length). each do |idx|
   - image = images[idx]
   - additional_class = line_item_additional_class(idx, photos_per_line)
-  .image-container{ :id => "image-container-#{ image.id }", :title=>"#{ image.name }", :class => "#{ photo_size } #{ additional_class }" }
-    = image_tag(image.data.url("#{ photo_size }"), :class => "image-#{ photo_size } image #{ photo_size }")
+  %a.image-container{:href => "#{ url_for(:controller => 'images', :action => 'browse', :id => image.id) }", :id => "image-container-#{ image.id }", :title=>"#{ image.name }", :class => "#{ photo_size } #{ additional_class } #{ other_classes }" }
+    = image_tag(image.data.url("#{ photo_size }"), :class => "image-#{ photo_size } image #{ photo_size } #{ other_classes }")

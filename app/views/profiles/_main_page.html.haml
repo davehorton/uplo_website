@@ -6,11 +6,7 @@
       .text.fuzzy-gray.font20.left= "&nbsp;(#{ @images.total_entries })".html_safe
       = render :partial => 'link_to_detail', :locals => { :user_id => @user.id, :url => url_for(:controller => 'profiles', :action => 'show_photos', :user_id => @user.id) }
     .images-wrapper.left
-      - (0...@images.length). each do |idx|
-        - image = @images[idx]
-        - additional_class = line_item_additional_class(idx, 6)
-        .image-container.thumb.profile{:id => "image-container-#{image.id}", :title=>"#{image.name}", :class => "#{additional_class}"}
-          = image_tag(image.data.url(:thumb), :class => "image-thumb profile image thumb")
+      = render :partial => 'shared/photos_template', :locals => { :images => @images, :photos_per_line => 6, :photo_size => 'thumb', :other_classes => 'profile' }
 
   #galleries-section.container.left
     .head
@@ -31,11 +27,7 @@
       .not-implement
         = render :partial => 'link_to_detail', :locals => { :user_id => @user.id, :url => '#' }
     .images-wrapper.left
-      - (0...@liked_images.length). each do |idx|
-        - image = @liked_images[idx]
-        - additional_class = (idx%6 == 0) ? "no-padding-left" : ((idx%6==5) ? "no-padding-right" : "")
-        .image-container.thumb.profile{:id => "image-container-#{image.id}", :title=>"#{image.name}", :class => "#{additional_class}"}
-          = image_tag(image.data.url(:thumb), :class => "image-thumb profile image thumb")
+      = render :partial => 'shared/photos_template', :locals => { :images => @liked_images, :photos_per_line => 6, :photo_size => 'thumb', :other_classes => 'profile' }
 
   #followers-section.container.left
     .head
