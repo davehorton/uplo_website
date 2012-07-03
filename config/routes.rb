@@ -124,6 +124,8 @@ Uplo::Application.routes.draw do
     get "get_images", :to => "images#get_images"
     get 'get_printed_sizes', :to => 'images#get_printed_sizes'
     get 'user_images', :to => 'images#get_user_images'
+    get 'list_comments', :to => 'images#get_comments'
+    post 'post_comment', :to => 'images#post_comment'
 
     # Order
     get "list_orders", :to => "orders#list_orders"

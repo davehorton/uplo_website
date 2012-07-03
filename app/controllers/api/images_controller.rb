@@ -261,6 +261,41 @@ class Api::ImagesController < Api::BaseController
     end
   end
 
+  def get_comments
+    image = Image.find_by_id params[:image_id]
+
+    if image.nil?
+      result = { :success => false, :msg => "This image does not exist anymore!" }
+    else
+      result = {
+        :success => true,
+        :num_of_likes => image.likes,
+        :data => image.comments.load_comments(@filtered_params)
+      }
+    end
+
+    render :json => result
+  end
+
+  def post_comment
+    image = Image.find_by_id params[:image_id]
+
+    if image.nil?
+      result = { :success => false, :msg => "This image does not exist anymore!" }
+    else
+      comment = Comment.new({:image_id => image.id, :user_id => current_user.id,
+        :description => params[:comment]})
+      if comment.save
+        result = { :success => true }
+      else
+        result = { :success => false, :msg => comment.errors.full_messages[0] }
+      end
+    end
+
+    render :json => result
+
+  end
+
   protected
   def process_public_images(images)
     result = []
