@@ -1,8 +1,9 @@
-/ local values: user_id, url
-- if is_current_user(user_id)
+/ local values: user_id, url, data_empty
+- if !is_current_user(user_id)
+  .actions-panel.right
+    %a.list.text.black.bold.font10.right{ :data => { 'url' => "#{ url }"} } + VIEW ALL
+- elsif !empty
   .edit-pane.right{ :data => { 'url' => "#{ url }"} }
     .icon.edit.left
     .text.black.font12.left Edit
-- else
-  .actions-panel.right
-    %a.list.text.black.bold.font10.right{ :data => { 'url' => "#{ url }"} } + VIEW ALL
+

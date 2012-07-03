@@ -2,7 +2,7 @@
   .head
     .text.black.bold.font20.left= "#{ @user.first_name }'s Photos"
     .text.fuzzy-gray.font20.left= "&nbsp;(#{ @images.total_entries })".html_safe
-    - if is_current_user(@user.id)
+    - if is_current_user(@user.id) && @images.total_entries>0
       %a.edit-pane.right{ :href => "#{ url_for(:controller => 'galleries', :action => 'edit_images') }" }
         .icon.edit.left
         .text.black.font12.left Edit

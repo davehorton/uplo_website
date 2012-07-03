@@ -86,21 +86,25 @@ class GalleriesController < ApplicationController
       @gallery = Gallery.find_by_id params[:gallery_id]
     end
 
-    @images = @gallery.images.load_images(@filtered_params)
-    if request.xhr?
-      pagination = render_to_string :partial => 'shared/pagination',
-        :locals => {  :source => @images, :params => { :controller => "galleries",
-        :action => 'edit_images', :gallery_id => @gallery.id }, :classes => 'text left' }
-      items = render_to_string :partial => 'galleries/edit_photos',
-                              :locals => { :images => @images }
-      edit_popup = render_to_string :partial => 'edit_gallery', :layout => 'layouts/popup',
-          :locals => { :title => 'Edit Your Gallery Infomation',
-          :id => 'edit-gallery-popup', :gallery => @gallery }
-      render :json => { :items => items, :pagination => pagination, :edit_popup => edit_popup,
-        :delete_url => url_for(:action => 'destroy', :id => @gallery.id),
-        :upload_url => url_for(:controller => 'images', :action => 'create', :gallery_id => @gallery.id) }
-    else
+    if @gallery.nil?
       render :layout => 'main'
+    else
+      @images = @gallery.images.load_images(@filtered_params)
+      if request.xhr?
+        pagination = render_to_string :partial => 'shared/pagination',
+          :locals => {  :source => @images, :params => { :controller => "galleries",
+          :action => 'edit_images', :gallery_id => @gallery.id }, :classes => 'text left' }
+        items = render_to_string :partial => 'galleries/edit_photos',
+                                :locals => { :images => @images }
+        edit_popup = render_to_string :partial => 'edit_gallery', :layout => 'layouts/popup',
+            :locals => { :title => 'Edit Your Gallery Infomation',
+            :id => 'edit-gallery-popup', :gallery => @gallery }
+        render :json => { :items => items, :pagination => pagination, :edit_popup => edit_popup,
+          :delete_url => url_for(:action => 'destroy', :id => @gallery.id),
+          :upload_url => url_for(:controller => 'images', :action => 'create', :gallery_id => @gallery.id) }
+      else
+        render :layout => 'main'
+      end
     end
   end
 
@@ -116,7 +120,7 @@ class GalleriesController < ApplicationController
           result = { :success => true, :edit_popup => edit_popup,
             :gal_with_number_options => gal_number_options, :gallery_options => gal_options }
         else
-          result = { :success => false }
+          result = { :success => false, :msg => @gallery.errors.full_messages[0] }
         end
         return render :json => result
       else

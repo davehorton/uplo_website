@@ -43,7 +43,7 @@ class UsersController < ApplicationController
       if current_user.update_profile(params[:user])
         result = {:success => true, :fullname => current_user.fullname.truncate(18)}
       else
-        result = {:success => false, :msg => current_user.errors.full_messages.join('<br />') }
+        result = {:success => false, :msg => current_user.errors.full_messages.join(' and ') }
       end
       render :json => result
     end

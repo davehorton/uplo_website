@@ -155,7 +155,7 @@ $ ->
           $('#gallery_selector_id')[0].innerHTML = response.gal_with_number_options
           $('.edit-template #image_gallery_id').each((idx, val) -> val.innerHTML = response.gallery_options)
         else
-          alert("Something went wrong!")
+          alert(response.msg)
     });
 
   $('#images-panel').delegate '.edit-template input', 'change', (e) ->

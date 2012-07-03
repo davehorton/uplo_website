@@ -4,7 +4,7 @@
     .head
       .text.black.bold.font20.left= "#{user_possesive} Photos"
       .text.fuzzy-gray.font20.left= "&nbsp;(#{ @images.total_entries })".html_safe
-      = render :partial => 'link_to_detail', :locals => { :user_id => @user.id, :url => url_for(:controller => 'profiles', :action => 'show_photos', :user_id => @user.id) }
+      = render :partial => 'link_to_detail', :locals => { :empty => (@images.total_entries==0), :user_id => @user.id, :url => url_for(:controller => 'profiles', :action => 'show_photos', :user_id => @user.id) }
     .images-wrapper.left
       = render :partial => 'shared/photos_template', :locals => { :images => @images, :photos_per_line => 6, :photo_size => 'thumb', :other_classes => 'profile' }
 
@@ -12,7 +12,7 @@
     .head
       .text.black.bold.font20.left= "#{user_possesive} Galleries"
       .text.fuzzy-gray.font20.left= "&nbsp;(#{ @galleries.total_entries })".html_safe
-      = render :partial => 'link_to_detail', :locals => { :user_id => @user.id, :url => url_for(:controller => 'profiles', :action => 'show_galleries', :user_id => @user.id) }
+      = render :partial => 'link_to_detail', :locals => { :empty => (@galleries.total_entries==0), :user_id => @user.id, :url => url_for(:controller => 'profiles', :action => 'show_galleries', :user_id => @user.id) }
     .images-wrapper.left
       - (0...@galleries.length). each do |idx|
         - gallery = @galleries[idx]
@@ -25,7 +25,7 @@
       .text.black.bold.font20.left= "#{user_possesive} Likes"
       .text.fuzzy-gray.font20.left= "&nbsp;(#{ @liked_images.total_entries })".html_safe
       .not-implement
-        = render :partial => 'link_to_detail', :locals => { :user_id => @user.id, :url => '#' }
+        = render :partial => 'link_to_detail', :locals => { :empty => (@liked_images.total_entries==0), :user_id => @user.id, :url => '#' }
     .images-wrapper.left
       = render :partial => 'shared/photos_template', :locals => { :images => @liked_images, :photos_per_line => 6, :photo_size => 'thumb', :other_classes => 'profile' }
 
@@ -51,7 +51,7 @@
     .head
       .text.black.bold.font20.left= following_header_label(@user.id)
       .text.fuzzy-gray.font20.left= "&nbsp;(#{ @followed_users.total_entries })".html_safe
-      = render :partial => 'link_to_detail', :locals => { :user_id => @user.id, :url => "#{ url_for(:controller => 'profiles', :action => 'show_followed_users', :user_id => @user.id) }" }
+      = render :partial => 'link_to_detail', :locals => { :empty => (@followed_users.total_entries==0), :user_id => @user.id, :url => "#{ url_for(:controller => 'profiles', :action => 'show_followed_users', :user_id => @user.id) }" }
     .line-separator.left
     .images-wrapper.left
       - (0...@followed_users.length). each do |idx|
