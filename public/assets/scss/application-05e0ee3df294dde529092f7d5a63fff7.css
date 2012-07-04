@@ -771,7 +771,7 @@ textarea {
 #edit-profile-info-popup {
   width: 401px; }
   #edit-profile-info-popup input, #edit-profile-info-popup textarea {
-    width: 233px; }
+    width: 232px; }
   #edit-profile-info-popup .note {
     width: 100px;
     padding-top: 10px; }
@@ -938,7 +938,7 @@ textarea {
 #edit-gallery-popup {
   width: 390px; }
   #edit-gallery-popup .main-panel input, #edit-gallery-popup .main-panel textarea {
-    width: 233px; }
+    width: 232px; }
   #edit-gallery-popup .main-panel .label {
     width: 89px; }
   #edit-gallery-popup .main-panel .note {
