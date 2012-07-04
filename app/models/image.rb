@@ -29,7 +29,7 @@ class Image < ActiveRecord::Base
   # CALLBACK
   after_post_process :save_image_dimensions
   after_initialize :init_random_price
-  before_save :set_album_cover
+  # after_save :set_album_cover
 
   SALE_REPORT_TYPE = {
     :quantity => "quantity",
@@ -348,6 +348,14 @@ class Image < ActiveRecord::Base
     return result
   end
 
+  def set_album_cover
+    if Image.exists?({:gallery_id => self.gallery_id, :is_gallery_cover => true})
+      self.is_gallery_cover = false
+    else
+      self.is_gallery_cover = true
+    end
+  end
+
   protected
 
   # Detect the image dimensions.
@@ -362,13 +370,6 @@ class Image < ActiveRecord::Base
     self.height = geo.height
   end
 
-  def set_album_cover
-    if Image.exists?({:gallery_id => self.gallery_id, :is_gallery_cover => true})
-      self.is_gallery_cover = false
-    else
-      self.is_gallery_cover = true
-    end
-  end
 
   # TODO: this method is for test only. Please REMOVE this in production mode.
   def init_random_price

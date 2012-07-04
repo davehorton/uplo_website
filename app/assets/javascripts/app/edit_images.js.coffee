@@ -90,11 +90,15 @@ $ ->
       data.submit()
     done: (e, data) ->
       response = $.parseJSON(data.result)
-      $(data.context).replaceWith response.item
-      $('.pagination-panel').each((idx, elem) -> elem.innerHTML = response.pagination)
-      $('#images-panel').children().last().remove() if $('.pagination-panel').find('.pagination').length > 0
-      $('#gallery_selector_id').html response.gallery_options
-      $.modal.close()
+      if response.success
+        $(data.context).replaceWith response.item
+        $('.pagination-panel').each((idx, elem) -> elem.innerHTML = response.pagination)
+        $('#images-panel').children().last().remove() if $('.pagination-panel').find('.pagination').length > 0
+        $('#gallery_selector_id').html response.gallery_options
+        $.modal.close()
+      else
+        alert(response.msg)
+        $.modal.close()
     progress: (e, data) ->
       progress = parseInt(data.loaded / data.total * 100, 10).toString() + '%'
       if data.context

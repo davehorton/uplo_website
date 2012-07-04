@@ -93,8 +93,9 @@ class ImagesController < ApplicationController
     }
     image = Image.new image_info
     image.price = rand(50) #tmp for randomzise price
+    image.set_album_cover
     unless image.save
-      result = [{:error => 'Cannot save image' }]
+      result = { :success => false, :msg => 'Cannot save image' }
     else
       gallery = Gallery.find_by_id params[:gallery_id]
       images = gallery.images.load_images(@filtered_params)
@@ -104,9 +105,8 @@ class ImagesController < ApplicationController
       item = render_to_string :partial => 'images/edit_photo_template',
                               :locals => { :image => image }
       gal_options = self.class.helpers.gallery_options(current_user.id, gallery.id, true)
-      result = {
-        :item => item, :pagination => pagination, :gallery_options => gal_options
-      }
+      result = {:success => true, :item => item,
+                :pagination => pagination, :gallery_options => gal_options }
     end
 
     render :json => result, :content_type => 'text/plain'
