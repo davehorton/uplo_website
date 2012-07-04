@@ -28,7 +28,8 @@ class Image < ActiveRecord::Base
 
   # CALLBACK
   after_post_process :save_image_dimensions
-  after_initialize :init_random_price, :set_album_cover
+  after_initialize :init_random_price
+  before_save :set_album_cover
 
   SALE_REPORT_TYPE = {
     :quantity => "quantity",

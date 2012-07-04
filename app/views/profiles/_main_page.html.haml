@@ -40,10 +40,12 @@
       - (0...@followers.length). each do |idx|
         - user = @followers[idx]
         - additional_class = (idx%3 == 0) ? 'no-padding-left' : ((idx%3==2) ? 'no-padding-right' : '')
+        - url = url_for(:controller => 'profiles', :action => 'show', :user_id => user.id)
         .user-section.left{ :class => "#{ additional_class }" }
-          = image_tag(user.avatar_url(:small), :class => "avatar small left")
+          %a{ :href => "#{ url }" }
+            = image_tag(user.avatar_url(:small), :class => "avatar small left")
           .left
-            %a.text.black.normal.font12.line10{ :href => "#{ url_for(:controller => 'profiles', :action => 'show', :user_id => user.id) }" }= user.username
+            %a.text.black.normal.font12.line10{ :href => "#{ url }" }= user.username
             .text.gray.font11.line10= user.fullname
 
   - following_margin = 'margin-top:15px;' if @followed_users.length > 0
@@ -57,8 +59,10 @@
       - (0...@followed_users.length). each do |idx|
         - user = @followed_users[idx]
         - additional_class = (idx%3 == 0) ? 'no-padding-left' : ((idx%3==2) ? 'no-padding-right' : '')
+        - url = url_for(:controller => 'profiles', :action => 'show', :user_id => user.id)
         .user-section.left{ :class => "#{ additional_class }" }
-          = image_tag(user.avatar_url(:small), :class => "avatar small left")
+          %a{:href => "#{ url }"}
+            = image_tag(user.avatar_url(:small), :class => "avatar small left")
           .left
-            %a.text.black.normal.font12{ :href => "#{ url_for(:controller => 'profiles', :action => 'show', :user_id => user.id) }" }= user.username
+            %a.text.black.normal.font12{ :href => "#{ url }" }= user.username
             .text.gray.font11.line10= user.fullname

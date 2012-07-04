@@ -18,7 +18,7 @@ class Comment < ActiveRecord::Base
     end
 
     def exposed_methods
-      [ :duration, :commenter, :commenter_avatar ]
+      [ :duration, :commenter, :commenter_id, :commenter_avatar ]
     end
 
     def exposed_attributes
@@ -43,6 +43,10 @@ class Comment < ActiveRecord::Base
 
   def duration
     ::Util.distance_of_time_in_words_to_now(self.created_at)
+  end
+
+  def commenter_id
+    self.user.id
   end
 
   def commenter

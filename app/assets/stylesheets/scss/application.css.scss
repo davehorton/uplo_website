@@ -106,6 +106,7 @@ input, textarea {
   margin: 0;
   resize: none;
 }
+input[type=checkbox] { border: none !important; padding-left: 0;}
 textarea { padding-top:5px; }
 
 /*==================================================================================*/
@@ -841,7 +842,8 @@ textarea { padding-top:5px; }
             background-color: $color-fuzzier-gray;
             a { font-weight: normal; cursor: pointer; }
             a:hover { font-weight: bold; }
-            .name { margin-bottom: 5px; }
+            .name { margin-bottom: 5px;
+              a:hover { font-weight: normal;} }
           }}}}
     .container {
       margin-top: 15px;
@@ -1089,7 +1091,7 @@ textarea { padding-top:5px; }
 #edit-gallery-popup {
   width: 390px;
   .main-panel {
-    input, textarea { width: 234px; }
+    input, textarea { width: 233px; }
     .label { width: 89px; }
     .note { margin: 6px 0 0 10px;}
     #button-container {
