@@ -271,6 +271,7 @@ class Api::ImagesController < Api::BaseController
       result = {
         :success => true,
         :num_of_likes => image.likes,
+        :num_of_comments => image.comments.count,
         :total => data.total_entries,
         :data => data
       }
