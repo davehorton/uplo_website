@@ -109,7 +109,7 @@ class ImagesController < ApplicationController
       }
     end
 
-    render :json => result
+    render :json => result, :content_type => 'text/plain'
   end
 
   def list

@@ -78,6 +78,7 @@ $ ->
   window.is_grid_changed = false
   $("#fileupload").fileupload()
   $("#fileupload").fileupload "option",
+    dataType: 'text'
     maxFileSize: 5000000
     acceptFileTypes: /(\.|\/)(gif|jpe?g|png)$/i
     previewMaxWidth: 180
@@ -88,10 +89,11 @@ $ ->
       $('#mask').modal()
       data.submit()
     done: (e, data) ->
-      $(data.context).replaceWith data.result.item
-      $('.pagination-panel').each((idx, elem) -> elem.innerHTML = data.result.pagination)
+      response = $.parseJSON(data.result)
+      $(data.context).replaceWith response.item
+      $('.pagination-panel').each((idx, elem) -> elem.innerHTML = response.pagination)
       $('#images-panel').children().last().remove() if $('.pagination-panel').find('.pagination').length > 0
-      $('#gallery_selector_id')[0].innerHTML = data.result.gallery_options
+      $('#gallery_selector_id').html response.gallery_options
       $.modal.close()
     progress: (e, data) ->
       progress = parseInt(data.loaded / data.total * 100, 10).toString() + '%'
