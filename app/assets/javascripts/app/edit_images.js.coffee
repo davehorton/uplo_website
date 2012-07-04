@@ -62,12 +62,44 @@ deletePhoto = (node) ->
         $.modal.close()
     });
 
+saveGridChanges = (callback) ->
+  data = []
+  photos =  $('#images-panel .edit-template')
+  photos.each( (idx, elem)->
+    node = $(elem)
+    data.push {
+      id: node.attr('data-id'),
+      name: node.find('#image_name').val(),
+      gallery_id: node.find('#image_gallery_id').val(),
+      price: node.find('#image_price').val(),
+      description: node.find('#image_description').val(),
+      is_album_cover: node.find('.album-cover').is(':checked'),
+      is_avatar: node.find('.user-avatar').is(':checked'),
+      keyword: node.find('#image_key_words').val()
+    }
+  )
+  $('#mask').modal()
+  $.ajax({
+    url: '/images/update_images',
+    type: 'POST',
+    data: { images: $.toJSON(data), gallery_id: $('#gallery_selector_id').val() },
+    dataType: 'json',
+    success: (response) ->
+      $('#images-panel')[0].innerHTML = response.items
+      $('.pagination-panel').each( (idx, elem) ->
+        elem.innerHTML = response.pagination
+      )
+      alert("Update successfully!")
+      callback.call() if callback
+      window.is_grid_changed = false
+      $.modal.close()
+  });
+
 confirmChanges = (callback) ->
   if window.is_grid_changed == true
     $('#save-confirm-popup').modal()
     $('.button.save-my-changes').click ->
-      $('.button.save-grid-changes').first().click()
-      callback.call()
+      saveGridChanges(callback)
     $('.button.leave-not-saving').click ->
       callback.call()
   else
@@ -105,37 +137,7 @@ $ ->
         setLoadingStatus =-> $(data.context).find('.progress .uploading').css('width','80%')
         window.setTimeout(setLoadingStatus, 300);
 
-  $('.button.save-grid-changes').click ->
-    data = []
-    photos =  $('#images-panel .edit-template')
-    photos.each( (idx, elem)->
-      node = $(elem)
-      data.push {
-        id: node.attr('data-id'),
-        name: node.find('#image_name').val(),
-        gallery_id: node.find('#image_gallery_id').val(),
-        price: node.find('#image_price').val(),
-        description: node.find('#image_description').val(),
-        is_album_cover: node.find('.album-cover').is(':checked'),
-        is_avatar: node.find('.user-avatar').is(':checked'),
-        keyword: node.find('#image_key_words').val()
-      }
-    )
-    $('#mask').modal()
-    $.ajax({
-      url: '/images/update_images',
-      type: 'POST',
-      data: { images: $.toJSON(data), gallery_id: $('#gallery_selector_id').val() },
-      dataType: 'json',
-      success: (response) ->
-        $('#images-panel')[0].innerHTML = response.items
-        $('.pagination-panel').each( (idx, elem) ->
-          elem.innerHTML = response.pagination
-        )
-        alert("Update successfully!")
-        window.is_grid_changed = false
-        $.modal.close()
-    });
+  $('.button.save-grid-changes').click -> saveGridChanges()
 
   $('#images-panel').delegate '.edit-template .album-cover', 'click', (e)->
     other_checkboxes = $('#images-panel .edit-template .album-cover').not(e.target)
