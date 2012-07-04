@@ -270,8 +270,6 @@ class Api::ImagesController < Api::BaseController
       data = image.comments.load_comments(@filtered_params)
       result = {
         :success => true,
-        :num_of_likes => image.likes,
-        :num_of_comments => image.comments.count,
         :total => data.total_entries,
         :data => data
       }

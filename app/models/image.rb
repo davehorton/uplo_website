@@ -74,7 +74,7 @@ class Image < ActiveRecord::Base
     end
 
     def exposed_methods
-      [:image_url, :image_thumb_url, :username, :creation_timestamp, :user_fullname, :public_link, :user_id, :user_avatar, :printed_sizes]
+      [:image_url, :image_thumb_url, :username, :creation_timestamp, :user_fullname, :public_link, :user_id, :user_avatar, :printed_sizes, :comments_number]
     end
 
     def exposed_attributes
@@ -106,6 +106,10 @@ class Image < ActiveRecord::Base
     else
       PRINTED_SIZES[:portrait_rectangular]
     end
+  end
+
+  def comments_number
+    self.comments.count
   end
 
   def set_as_album_cover
