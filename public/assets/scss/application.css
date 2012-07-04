@@ -76,6 +76,10 @@ input, textarea {
   margin: 0;
   resize: none; }
 
+input[type=checkbox] {
+  border: none !important;
+  padding-left: 0; }
+
 textarea {
   padding-top: 5px; }
 
@@ -723,6 +727,8 @@ textarea {
           font-weight: bold; }
         #center .profile-wrapper #container .followers-container .user-section .info-panel .name, #center .profile-wrapper #container .followings-container .user-section .info-panel .name {
           margin-bottom: 5px; }
+          #center .profile-wrapper #container .followers-container .user-section .info-panel .name a:hover, #center .profile-wrapper #container .followings-container .user-section .info-panel .name a:hover {
+            font-weight: normal; }
   #center .profile-wrapper .container {
     margin-top: 15px; }
     #center .profile-wrapper .container a.edit-pane {
@@ -932,7 +938,7 @@ textarea {
 #edit-gallery-popup {
   width: 390px; }
   #edit-gallery-popup .main-panel input, #edit-gallery-popup .main-panel textarea {
-    width: 234px; }
+    width: 233px; }
   #edit-gallery-popup .main-panel .label {
     width: 89px; }
   #edit-gallery-popup .main-panel .note {
