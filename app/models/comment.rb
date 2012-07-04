@@ -18,7 +18,7 @@ class Comment < ActiveRecord::Base
     end
 
     def exposed_methods
-      [ :duration, :commenter ]
+      [ :duration, :commenter, :commenter_avatar ]
     end
 
     def exposed_attributes
@@ -47,5 +47,9 @@ class Comment < ActiveRecord::Base
 
   def commenter
     self.user.username
+  end
+
+  def commenter_avatar(size='large')
+    self.user.avatar_url(size)
   end
 end

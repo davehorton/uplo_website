@@ -267,10 +267,12 @@ class Api::ImagesController < Api::BaseController
     if image.nil?
       result = { :success => false, :msg => "This image does not exist anymore!" }
     else
+      data = image.comments.load_comments(@filtered_params)
       result = {
         :success => true,
         :num_of_likes => image.likes,
-        :data => image.comments.load_comments(@filtered_params)
+        :total => data.total_entries,
+        :data => data
       }
     end
 

@@ -58,3 +58,7 @@ Comment.blueprint do
   image {Image.make}
   description {Faker::Lorem.paragraph}
 end
+
+ImageFlag.blueprint do
+  # Attributes here
+end
