@@ -139,7 +139,7 @@
     $.ajaxSetup({
         converters: {
             'iframe text': function (iframe) {
-                return $(iframe[0].body).text();
+                return $(iframe[0].body).find('pre').text();
             },
             'iframe json': function (iframe) {
                 return $.parseJSON($(iframe[0].body).text());

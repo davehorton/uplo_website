@@ -94,6 +94,7 @@ $ ->
 
   $("#edit-profile-photo-popup #fileupload").fileupload()
   $("#edit-profile-photo-popup #fileupload").fileupload "option",
+    dataType: 'text'
     maxFileSize: 5000000
     acceptFileTypes: /(\.|\/)(gif|jpe?g|png)$/i
     add: (e, data) ->
@@ -105,9 +106,10 @@ $ ->
         alert(data.result.msg)
       else
         alert('Update successfully!')
-        $('#edit-profile-photo-popup .current-photo .avatar').attr 'src', data.result.extra_avatar_url
-        $('#user-section .avatar.large').attr 'src', data.result.large_avatar_url
-        $('#edit-profile-photo-popup .held-photos .photos')[0].innerHTML = data.result.profile_photos
+        response = $.parseJSON(data.result)
+        $('#edit-profile-photo-popup .held-photos .photos').html(response.profile_photos)
+        $('#edit-profile-photo-popup .current-photo .avatar').attr 'src', response.extra_avatar_url
+        $('#user-section .avatar.large').attr 'src', response.large_avatar_url
 
 
   $('body').delegate '#edit-profile-photo-popup .held-photos .delete', 'click', (e) -> requestDeleteProfilePhoto(e.target)

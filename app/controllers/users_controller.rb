@@ -21,21 +21,20 @@ class UsersController < ApplicationController
   end
 
   def update_avatar
-    if request.xhr?
-      avatar = ProfileImage.new({ :user_id => current_user.id,
-                                  :data => params[:user][:avatar],
-                                  :last_used => Time.now })
-      if current_user.profile_images << avatar
-        profile_photos = render_to_string :partial => 'profiles/profile_photos',
-               :locals => {:profile_images => current_user.profile_images}
-        result = {:success => true, :profile_photos => profile_photos,
-                  :extra_avatar_url => current_user.avatar_url(:extra),
-                  :large_avatar_url => current_user.avatar_url(:large)}
-      else
-        result = { :success => false, :msg => current_user.errors.full_messages[0] }
-      end
-      render :json => result
+    avatar = ProfileImage.new({ :user_id => current_user.id,
+                                :data => params[:user][:avatar],
+                                :last_used => Time.now })
+    if current_user.profile_images << avatar
+      profile_photos = render_to_string :partial => 'profiles/profile_photos',
+             :locals => {:profile_images => current_user.profile_images}
+      str = profile_photos.gsub('"', '\'').gsub(/\n/, '')
+      result = {:success => true, :profile_photos => profile_photos,
+                :extra_avatar_url => current_user.avatar_url(:extra),
+                :large_avatar_url => current_user.avatar_url(:large)}
+    else
+      result = { :success => false, :msg => current_user.errors.full_messages[0] }
     end
+    render :json => result, :content_type => 'text/plain'
   end
 
   def update_profile_info
