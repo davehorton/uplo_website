@@ -177,6 +177,43 @@ class Api::UsersController < Api::BaseController
     render :json => result
   end
 
+  def get_notification_settings
+    device = UserDevice.find_by_device_token params[:device_token],
+      :conditions => { :user_id => current_user.id }
+    if device.nil?
+      result = { :success => false, :msg => 'You have to log in on this device first!' }
+    else
+      result = { :success => true, :data => { :enable_comments => device.notify_comments,
+        :enable_likes => device.notify_likes, :enable_purchases => device.notify_purchases }}
+    end
+    render :json => result
+  end
+
+  def update_notification_settings
+    device = UserDevice.find_by_device_token params[:device_token],
+      :conditions => { :user_id => current_user.id }
+    if device.nil?
+      result = { :success => false, :msg => 'You have to log in on this device first!' }
+    else
+      begin
+        attrs = {
+          :notify_purchases => SharedMethods::Converter.Boolean(params[:enable_purchases]),
+          :notify_likes => SharedMethods::Converter.Boolean(params[:enable_likes]),
+          :notify_comments => SharedMethods::Converter.Boolean(params[:enable_comments]),
+          :last_notified => device.last_notified }
+        rescue ArgumentError => e
+          result = { :success => false, :msg => 'Please make sure your setting values is Boolean (0/1, t/f, true/false, y/n, yes/no)!' }
+        else
+          if device.update_attributes(attrs)
+            result = { :success => true }
+          else
+            result = { :success => false, :msg => device.errors.full_messages}
+          end
+        end
+    end
+    render :json => result
+  end
+
   protected
   # Init a hash containing user's info
   def init_user_info(user)

@@ -41,6 +41,7 @@ class User < ActiveRecord::Base
   has_many :user_followings, :foreign_key => :followed_by, :class_name => 'UserFollow'
   has_many :followed_users, :through => :user_followings
   has_many :friends_images, :through => :followed_users, :source => :images
+  has_many :devices, :class_name => 'UserDevice'
 
   # VALIDATION
   validates_presence_of :first_name, :last_name, :email, :username, :message => 'cannot be blank'

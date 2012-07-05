@@ -62,3 +62,7 @@ end
 ImageFlag.blueprint do
   # Attributes here
 end
+
+UserDevice.blueprint do
+  # Attributes here
+end
