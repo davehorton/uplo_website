@@ -70,6 +70,15 @@ class Api::UsersController < Api::BaseController
     sign_in(:user, user)
     # End of modification
 
+    unless params[:device_token].blank?
+      device = UserDevice.find_by_device_token params[:device_token].to_s
+      if device.nil?
+        UserDevice.create({:user_id => user.id, :device_token => params[:device_token].to_s, :last_notified => Time.now()})
+      elsif device.user_id!=user.id      
+        device.update_attribute(:user_id, user.id)
+      end      
+    end
+
     @result[:user_info] = init_user_info(user)
     @result[:success] = true
     render :json => @result

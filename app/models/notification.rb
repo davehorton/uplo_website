@@ -16,7 +16,7 @@ class Notification < ActiveRecord::Base
       by_user = User.find_by_id by_user.to_i
       if image.author && by_user && UserDevice.exists?({:user_id => image.author.to_i})
         tokens = []
-        user.devices.each do |d|
+        image.author.devices.each do |d|
           tokens << d.device_tokens
         end
 
