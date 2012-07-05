@@ -74,6 +74,7 @@ class Api::UsersController < Api::BaseController
       device = UserDevice.find_by_device_token params[:device_token].to_s
       if device.nil?
         UserDevice.create({:user_id => user.id, :device_token => params[:device_token].to_s, :last_notified => Time.now()})
+        Urbanairship.register_device(params[:device_token].to_s)
       elsif device.user_id!=user.id      
         device.update_attribute(:user_id, user.id)
       end      
@@ -199,7 +200,7 @@ class Api::UsersController < Api::BaseController
   end
 
   def update_notification_settings
-    device = UserDevice.find_by_device_token params[:device_token],
+    device = UserDevice.find_by_device_token params[:device_token].to_s,
       :conditions => { :user_id => current_user.id }
     if device.nil?
       result = { :success => false, :msg => 'You have to log in on this device first!' }
@@ -213,7 +214,13 @@ class Api::UsersController < Api::BaseController
         rescue ArgumentError => e
           result = { :success => false, :msg => 'Please make sure your setting values is Boolean (0/1, t/f, true/false, y/n, yes/no)!' }
         else
+          disable_all = (!attrs[:notify_purchases] && !attrs[:notify_comments] && !attrs[:notify_likes])
           if device.update_attributes(attrs)
+            if device.is_active && disable_all
+              Urbanairship.unregister_device(params[:device_token].to_s)
+            elsif !device.is_active && !disable_all
+              Urbanairship.register_device(params[:device_token].to_s)
+            end
             result = { :success => true }
           else
             result = { :success => false, :msg => device.errors.full_messages}

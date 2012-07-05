@@ -129,10 +129,11 @@ class ImagesController < ApplicationController
       result = image.disliked_by_user(current_user.id)
     else
       result = image.liked_by_user(current_user.id)
+      if current_user.id != image.author.id
+        Notification.deliver_image_notification(image.id, current_user.id, Notification::TYPE[:like])
+      end
     end
-    if result[:success] && current_user.id!=image.author.id
-      Notification.deliver_image_notification(image.id, current_user.id, Notification::Type[:like])
-    end
+    
     render :json => result
   end
 
