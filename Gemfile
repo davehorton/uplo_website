@@ -10,6 +10,7 @@ gem 'rails', '>= 3.1.3'
 # Social network
 gem 'twitter'
 gem 'flickraw'
+gem 'urbanairship'
 
 #gem "unicorn" # HTTP Server
 gem 'pg'

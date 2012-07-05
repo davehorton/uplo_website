@@ -18,8 +18,9 @@ $fuzzy-text: #CBCBCB;
   }
   .image-container.medium {
     height: 482px;
-    line-height: 482px;
+    line-height: 480px;
     border: 1px solid $fuzzy-text;
+    img { height:482px; }
   }
 }
 #right {
