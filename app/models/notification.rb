@@ -25,8 +25,7 @@ class Notification < ActiveRecord::Base
           :schedule_for => [30.second.from_now],
           :device_tokens => tokens,
           :aps => { :alert => message },
-          :data => { :image_id => image.id }
-          # :data => { :image => image.serializable_hash(image.default_serializable_options) }
+          :data => { :type => TYPE_ACTION[type], :id => image.id }
         }
         Urbanairship.push(notification)
       end

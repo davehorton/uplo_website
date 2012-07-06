@@ -11,6 +11,7 @@ class Order < ActiveRecord::Base
   has_many :images, :through => :line_items
 
   # CALLBACK
+  after_save :push_notification
   before_create :init_transaction_date
   STATUS = {
     :shopping => "shopping",
@@ -106,7 +107,6 @@ class Order < ActiveRecord::Base
 
   # PROTECTED METHODS
   protected
-
     def init_transaction_date
       if self.transaction_date.blank?
         self.transaction_date = Time.now
@@ -114,4 +114,14 @@ class Order < ActiveRecord::Base
       return self.transaction_date
     end
 
+    def push_notification
+      if self.transaction_status == TRANSACTION_STATUS[:complete]
+        items = self.line_items.select('distinct image_id')
+        items.each do |item|
+          if self.user_id != item.image.author.id
+            Notification.deliver_image_notification(image.id, current_user.id, Notification::TYPE[:comment])
+          end
+        end
+      end
+    end
 end

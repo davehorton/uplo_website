@@ -177,16 +177,17 @@ class Api::ImagesController < Api::BaseController
   end
 
   def like
-    result = {:success => false}
     image = Image.find_by_id(params[:id])
+    dislike = SharedMethods::Converter.Boolean(params[:dislike])
     if image.nil?
-      result[:msg] = "This image does not exist anymore!"
-      return render :json => result
-    end
-    if user_signed_in?
-      result = SharedMethods::Converter.Boolean(params[:dislike]) ? image.disliked_by_user(current_user.id) : image.liked_by_user(current_user.id)
+      result = { :success => false, :msg => "This image does not exist anymore!" }
+    elsif dislike
+      result = image.disliked_by_user(current_user.id)
     else
-      result[:msg] = "You have to sign in first"
+      result = image.liked_by_user(current_user.id)
+      if current_user.id != image.author.id
+        Notification.deliver_image_notification(image.id, current_user.id, Notification::TYPE[:like])
+      end
     end
     render :json => result
   end
@@ -287,6 +288,9 @@ class Api::ImagesController < Api::BaseController
       comment = Comment.new({:image_id => image.id, :user_id => current_user.id,
         :description => params[:comment]})
       if comment.save
+        if current_user.id != image.author.id
+          Notification.deliver_image_notification(image.id, current_user.id, Notification::TYPE[:comment])
+        end
         result = { :success => true }
       else
         result = { :success => false, :msg => comment.errors.full_messages[0] }
