@@ -18,7 +18,7 @@ class User < ActiveRecord::Base
                   :twitter, :facebook
 
   # ASSOCIATIONS
-  has_many :profile_images, :dependent => :destroy
+  has_many :profile_images, :dependent => :destroy, :order => 'last_used DESC'
   has_many :galleries, :dependent => :destroy
   has_many :images, :through => :galleries
   has_many :public_galleries, :conditions => ["galleries.permission = '#{Gallery::PUBLIC_PERMISSION}'"], :class_name => 'Gallery'

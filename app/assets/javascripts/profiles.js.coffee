@@ -52,6 +52,8 @@ requestDeleteProfilePhoto = (node) ->
   $.modal.close()
   window.setTimeout("$('#delete-confirm-popup').modal()", 300)
   $('#delete-confirm-popup #btn-ok').click ->
+    $.modal.close()
+    window.setTimeout("$('#mask').modal()", 300)
     target = $(node)
     $.ajax({
       url: target.attr('data-url'),
@@ -61,13 +63,17 @@ requestDeleteProfilePhoto = (node) ->
       success: (response) ->
         if(response.success==false)
           alert(response.msg)
+          $.modal.close()
+          window.setTimeout("$('#edit-profile-photo-popup').modal()", 300)
         else
           $('#edit-profile-photo-popup .current-photo .avatar').attr 'src', response.extra_avatar_url
           $('#user-section .avatar.large').attr 'src', response.large_avatar_url
           $('#edit-profile-photo-popup .held-photos .photos')[0].innerHTML = response.profile_photos
           alert('Delete successfully!')
           $.modal.close()
+          window.setTimeout("$('#edit-profile-photo-popup').modal()", 300)
     })
+  $('#delete-confirm-popup .button.cancel').click -> window.setTimeout("$('#edit-profile-photo-popup').modal()", 300)
 
 requestUpdateAvatar = (node) ->
   target = $(node)
@@ -87,8 +93,18 @@ requestUpdateAvatar = (node) ->
 
 $ ->
   $('.not-implement').click -> helper.alert_not_implement()
-  $('#container .edit-pane[data-url!="#"]').click -> load($(@).attr('data-url'))
-  $('#container .list[data-url!="#"]').click -> load($(@).attr('data-url'))
+  $('#container .edit-pane[data-url!="#"]').click ->
+    counter_id = $(@).closest('.container').attr('id').replace('-section', '-counter')
+    $('#counters .counter.current').removeClass('current')
+    $("##{counter_id}").addClass('current')
+    load($(@).attr('data-url'))
+
+  $('#container .list[data-url!="#"]').click ->
+    counter_id = $(@).closest('.container').attr('id').replace('-section', '-counter')
+    $('#counters .counter.current').removeClass('current')
+    $("##{counter_id}").addClass('current')
+    load($(@).attr('data-url'))
+
   $('#user-section .avatar .edit-pane').click -> $('#edit-profile-photo-popup').modal({persist:true})
   $('#user-section .info .edit-pane').click -> $('#edit-profile-info-popup').modal({persist:true})
 
@@ -98,19 +114,22 @@ $ ->
     maxFileSize: 5000000
     acceptFileTypes: /(\.|\/)(gif|jpe?g|png)$/i
     add: (e, data) ->
-      # data.context = renderUpload(data.files[0])
-      # $('#mask').modal()
+      $.modal.close()
+      window.setTimeout("$('#mask').modal()", 300)
       data.submit()
     done: (e, data) ->
       if(data.result.success==false)
         alert(data.result.msg)
+        $.modal.close()
+        window.setTimeout("$('#edit-profile-photo-popup').modal()", 300)
       else
         alert('Update successfully!')
         response = $.parseJSON(data.result)
         $('#edit-profile-photo-popup .held-photos .photos').html(response.profile_photos)
         $('#edit-profile-photo-popup .current-photo .avatar').attr 'src', response.extra_avatar_url
         $('#user-section .avatar.large').attr 'src', response.large_avatar_url
-
+        $.modal.close()
+        window.setTimeout("$('#edit-profile-photo-popup').modal()", 300)
 
   $('body').delegate '#edit-profile-photo-popup .held-photos .delete', 'click', (e) -> requestDeleteProfilePhoto(e.target)
   $('body').delegate '#edit-profile-photo-popup .held-photos img', 'click', (e) -> requestUpdateAvatar(e.target)
@@ -160,6 +179,8 @@ $ ->
       alert('Last name must be 2 - 30 characters in length')
     else
       data_form = $('#frm-edit-profile-info')
+      $.modal.close()
+      window.setTimeout("$('#mask').modal()", 300)
       $.ajax({
         url: data_form.attr('action'),
         type: 'POST',
@@ -170,8 +191,11 @@ $ ->
             alert("Your profile has been updated!")
             $('#user-section .name a').text response.fullname
             $.modal.close()
+            window.setTimeout("$('#edit-profile-info-popup').modal()", 300)
           else
             alert(response.msg)
+            $.modal.close()
+            window.setTimeout("$('#edit-profile-info-popup').modal()", 300)
       });
 
   $("#user_first_name").keypress (event) -> helper.prevent_exceed_characters(@, event.charCode, 30)

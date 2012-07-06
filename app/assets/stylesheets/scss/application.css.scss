@@ -839,6 +839,7 @@ textarea { padding-top:5px; }
             margin-left: 1px;
             padding: 16px 12px;
             width: 221px;
+            height: 35px;
             background-color: $color-fuzzier-gray;
             a { font-weight: normal; cursor: pointer; }
             a:hover { font-weight: bold; }
@@ -1084,7 +1085,9 @@ textarea { padding-top:5px; }
 #followers-section, #following-section {
   .user-section {
     width: 208px;
+    height: 24px;
     margin: 0 3px 15px;
+    .info-panel { width: 175px; }
   }
 }
 

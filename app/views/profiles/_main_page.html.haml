@@ -20,7 +20,7 @@
         .image-container.thumb.profile{:title=>"#{ gallery.name }", :class => "#{ additional_class }"}
           = image_tag(gallery_cover_image_url(gallery), :class => "image-thumb profile image thumb")
 
-  #liked-photos-section.container.left
+  #likes-section.container.left
     .head
       .text.black.bold.font20.left= "#{user_possesive} Likes"
       .text.fuzzy-gray.font20.left= "&nbsp;(#{ @liked_images.total_entries })".html_safe
@@ -44,9 +44,9 @@
         .user-section.left{ :class => "#{ additional_class }" }
           %a{ :href => "#{ url }" }
             = image_tag(user.avatar_url(:small), :class => "avatar small left")
-          .left
-            %a.text.black.normal.font12.line10{ :href => "#{ url }" }= user.username
-            .text.gray.font11.line10= user.fullname
+          .info-panel.left
+            %a.text.black.normal.font12.line10{ :href => "#{ url }" }= user.username.truncate(18)
+            .text.gray.font11.line10= user.fullname.truncate(21)
 
   - following_margin = 'margin-top:15px;' if @followed_users.length > 0
   #following-section.container.left{ :style => "#{ following_margin }" }
@@ -63,6 +63,6 @@
         .user-section.left{ :class => "#{ additional_class }" }
           %a{:href => "#{ url }"}
             = image_tag(user.avatar_url(:small), :class => "avatar small left")
-          .left
-            %a.text.black.normal.font12{ :href => "#{ url }" }= user.username
-            .text.gray.font11.line10= user.fullname
+          .info-panel.left
+            %a.text.black.normal.font12{ :href => "#{ url }" }= user.username.truncate(18)
+            .text.gray.font11.line10= user.fullname.truncate(21)
