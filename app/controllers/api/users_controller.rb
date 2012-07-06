@@ -75,9 +75,9 @@ class Api::UsersController < Api::BaseController
       if device.nil?
         UserDevice.create({:user_id => user.id, :device_token => params[:device_token].to_s, :last_notified => Time.now()})
         Urbanairship.register_device(params[:device_token].to_s)
-      elsif device.user_id!=user.id      
+      elsif device.user_id!=user.id
         device.update_attribute(:user_id, user.id)
-      end      
+      end
     end
 
     @result[:user_info] = init_user_info(user)

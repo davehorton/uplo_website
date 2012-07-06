@@ -17,14 +17,6 @@ class User < ActiveRecord::Base
                   :first_name, :last_name, :username, :login, :nationality, :birthday, :gender, :avatar,
                   :twitter, :facebook
 
-  # Paperclip
-  # has_attached_file :avatar,
-  #  :styles => {:thumb => '180x180#', :extra => '96x96#', :large => '67x67#', :medium => '48x48#', :small => '24x24#' },
-  #  :storage => :s3,
-  #  :s3_credentials => "#{Rails.root}/config/amazon_s3.yml",
-  #  :path => "user/:id/avatar/:style.:extension",
-  #  :default_url => "/assets/avatar-default-:style.jpg"
-
   # ASSOCIATIONS
   has_many :profile_images, :dependent => :destroy
   has_many :galleries, :dependent => :destroy
@@ -52,6 +44,7 @@ class User < ActiveRecord::Base
           :with => /(^$)|(^((http|https):\/\/){0,1}[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(([0-9]{1,5})?\/.*)?$)/i
   validates_uniqueness_of :email, :message => 'must be unique'
   validates_uniqueness_of :username, :message => 'must be unique'
+  validates_length_of :first_name, :last_name, :in => 2..30, :message => 'must be 2 - 30 characters in length'
 
   # CLASS METHODS
   class << self

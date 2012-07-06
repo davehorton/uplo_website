@@ -119,7 +119,7 @@ class Order < ActiveRecord::Base
         items = self.line_items.select('distinct image_id')
         items.each do |item|
           if self.user_id != item.image.author.id
-            Notification.deliver_image_notification(image.id, current_user.id, Notification::TYPE[:comment])
+            Notification.deliver_image_notification(image.id, current_user.id, Notification::TYPE[:order])
           end
         end
       end

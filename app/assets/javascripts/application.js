@@ -16,6 +16,31 @@ global = {
  * Helper methods.
  */
 helper = {
+  check_less_than_characters: function(string, min_chars, callback){
+    if(string.length < min_chars) {
+      if(callback == null) {
+        alert('Must be at least ' + min_chars + ' character(s)');
+      } else {
+        callback.call();
+      }
+      return false;
+    }
+    return true;
+  },
+  prevent_exceed_characters: function(node, charcode, max_chars, callback){
+    if(!charcode) { return true }
+    var part1 = node.value.substring(0, node.selectionStart);
+    var part2 = node.value.substring(node.selectionEnd, node.value.length);
+    var str = part1 + String.fromCharCode(charcode) + part2;
+    if(str.length > max_chars) {
+      if(callback == null){
+        return false;
+      } else {
+        callback.call();
+      }
+    }
+    return true;
+  },
   endless_load_more: function(callback) {
     return $(window).scroll(function() {
       var loading_point, url;

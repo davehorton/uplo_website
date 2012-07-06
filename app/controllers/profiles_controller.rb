@@ -18,14 +18,22 @@ class ProfilesController < ApplicationController
 
   def show_photos
     if request.xhr?
-      @images = @user.images.load_images(@filtered_params)
+      if @user.id == current_user.id
+        @images = @user.images.load_images(@filtered_params)
+      else
+        @images = @user.images.load_popular_images(@filtered_params)
+      end
       render :partial => 'photos'
     end
   end
 
   def get_photos
     if request.xhr?
-      images = @user.images.load_images(@filtered_params)
+      if @user.id == current_user.id
+        images = @user.images.load_images(@filtered_params)
+      else
+        images = @user.images.load_popular_images(@filtered_params)
+      end
       template = render_to_string :partial => 'shared/photos_template',
                     :locals => { :images => images,
                                 :photos_per_line => 4, :photo_size => 'thumb' }
@@ -39,14 +47,22 @@ class ProfilesController < ApplicationController
 
   def show_galleries
     if request.xhr?
-      @galleries = @user.galleries.load_galleries(@filtered_params)
+      if @user.id == current_user.id
+        @galleries = @user.galleries.load_galleries(@filtered_params)
+      else
+        @galleries = @user.galleries.load_popular_galleries(@filtered_params)
+      end
       render :partial => 'galleries'
     end
   end
 
   def get_galleries
     if request.xhr?
-      galleries = @user.galleries.load_galleries(@filtered_params)
+      if @user.id == current_user.id
+        galleries = @user.galleries.load_galleries(@filtered_params)
+      else
+        galleries = @user.galleries.load_popular_galleries(@filtered_params)
+      end
       template = render_to_string :partial => 'shared/galleries_template',
                     :locals => { :galleries => galleries, :galleries_per_line => 4 }
       pagination = render_to_string :partial => 'shared/hidden_pagination',

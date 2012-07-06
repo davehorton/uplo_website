@@ -154,6 +154,10 @@ $ ->
       alert('Email is invalid!')
     else if website_reg.test($('#user_website').val()) == false
       alert('Website is invalid!')
+    else if $("#user_first_name").val().length < 2 || $("#user_first_name").val().length > 30
+      alert('First name must be 2 - 30 characters in length')
+    else if $("#user_last_name").val().length < 2 || $("#user_last_name").val().length > 30
+      alert('Last name must be 2 - 30 characters in length')
     else
       data_form = $('#frm-edit-profile-info')
       $.ajax({
@@ -169,3 +173,10 @@ $ ->
           else
             alert(response.msg)
       });
+
+  $("#user_first_name").keypress (event) -> helper.prevent_exceed_characters(@, event.charCode, 30)
+  $("#user_last_name").keypress (event) -> helper.prevent_exceed_characters(@, event.charCode, 30)
+  $("#user_first_name").blur ->
+    helper.check_less_than_characters(@.value, 2, -> alert('First name must be at least 2 characters!'))
+  $("#user_last_name").blur ->
+    helper.check_less_than_characters(@.value, 2, -> alert('Last name must be at least 2 characters!'))
