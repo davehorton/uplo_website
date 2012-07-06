@@ -13,8 +13,10 @@
     margin: -3px 0; }
   #center .image-container.medium {
     height: 482px;
-    line-height: 482px;
+    line-height: 480px;
     border: 1px solid #cbcbcb; }
+    #center .image-container.medium img {
+      height: 482px; }
 
 #right #image-section, #right #gallery-section {
   margin: 10px 0; }
