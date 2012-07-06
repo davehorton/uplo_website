@@ -161,8 +161,8 @@ $ ->
           alert("Your gallery has been updated!")
           $.modal.close()
           $('#edit-gallery-popup').replaceWith response.edit_popup
-          $('#gallery_selector_id')[0].innerHTML = response.gal_with_number_options
-          $('.edit-template #image_gallery_id').each((idx, val) -> val.innerHTML = response.gallery_options)
+          $('#gallery_selector_id').html(response.gal_with_number_options)
+          $('.edit-template #image_gallery_id').each((idx, val) -> val.html(response.gallery_options))
         else
           alert(response.msg)
     });

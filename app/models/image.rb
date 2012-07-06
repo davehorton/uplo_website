@@ -37,8 +37,7 @@ class Image < ActiveRecord::Base
   }
   PRINTED_SIZES = {
     :square => IMAGE_SQUARE_PRINTED_SIZES,
-    :portrait_rectangular => IMAGE_PORTRAIT_PRINTED_SIZES,
-    :landscape_rectangular => IMAGE_LANDSCAPE_PRINTED_SIZES
+    :portrait_rectangular => IMAGE_PORTRAIT_PRINTED_SIZES
   }
 
   # CLASS METHODS
@@ -101,8 +100,6 @@ class Image < ActiveRecord::Base
   def printed_sizes
     if self.width == self.height
       PRINTED_SIZES[:square]
-    elsif self.width > self.height
-      PRINTED_SIZES[:landscape_rectangular]
     else
       PRINTED_SIZES[:portrait_rectangular]
     end
