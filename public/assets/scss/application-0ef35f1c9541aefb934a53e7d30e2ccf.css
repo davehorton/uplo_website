@@ -719,6 +719,7 @@ textarea {
         margin-left: 1px;
         padding: 16px 12px;
         width: 221px;
+        height: 35px;
         background-color: #ebebeb; }
         #center .profile-wrapper #container .followers-container .user-section .info-panel a, #center .profile-wrapper #container .followings-container .user-section .info-panel a {
           font-weight: normal;
@@ -933,7 +934,10 @@ textarea {
 
 #followers-section .user-section, #following-section .user-section {
   width: 208px;
+  height: 24px;
   margin: 0 3px 15px; }
+  #followers-section .user-section .info-panel, #following-section .user-section .info-panel {
+    width: 175px; }
 
 #edit-gallery-popup {
   width: 390px; }
