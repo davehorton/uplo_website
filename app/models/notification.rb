@@ -25,7 +25,7 @@ class Notification < ActiveRecord::Base
           :schedule_for => [30.second.from_now],
           :device_tokens => tokens,
           :aps => { :alert => message },
-          :data => { :type => TYPE_ACTION[type], :id => image.id }
+          :data => { :type => TYPE_ACTION[type].to_s, :id => image.id.to_s }
         }
         Urbanairship.push(notification)
       end

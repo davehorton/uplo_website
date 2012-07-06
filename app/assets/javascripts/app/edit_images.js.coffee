@@ -127,6 +127,7 @@ $ ->
         $('.pagination-panel').each((idx, elem) -> elem.innerHTML = response.pagination)
         $('#images-panel').children().last().remove() if $('.pagination-panel').find('.pagination').length > 0
         $('#gallery_selector_id').html response.gallery_options
+        $('.empty-data').remove()
         $.modal.close()
       else
         alert(response.msg)

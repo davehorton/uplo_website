@@ -191,7 +191,6 @@ $ ->
             alert("Your profile has been updated!")
             $('#user-section .name a').text response.fullname
             $.modal.close()
-            window.setTimeout("$('#edit-profile-info-popup').modal()", 300)
           else
             alert(response.msg)
             $.modal.close()
