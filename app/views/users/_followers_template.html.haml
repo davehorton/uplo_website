@@ -12,9 +12,9 @@
     %a{:href => "#{ url }"}
       = image_tag user.avatar_url(:large), :class => 'avatar large left'
     .info-panel.left
-      .name
-        %a.text.black.font18{:href => "#{ url }"}= user.username.truncate(20)
-      .text.gray.font12.left= "#{ images_number } items | view&nbsp".html_safe
-      %a.text.black.font12.left{ :href => "#{ url }", :data => { 'user-id' => "#{ user.id }" } } profile
+      .name.text.black.font18.line12
+        %a{:href => "#{ url }"}= user.username.truncate(20)
+      .text.gray.font12.line12.left= "#{ images_number } items | view&nbsp".html_safe
+      %a.text.black.font12.line12.left{ :href => "#{ url }", :data => { 'user-id' => "#{ user.id }" } } profile
       - unless is_current_user
-        %a.follow.text.black.font12.right{ :data => { 'author-id' => "#{ user.id }", 'following' => "#{ is_following }"} }= follow_label
+        %a.follow.text.black.font12.line12.right{ :data => { 'author-id' => "#{ user.id }", 'following' => "#{ is_following }"} }= follow_label

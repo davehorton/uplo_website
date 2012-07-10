@@ -24,8 +24,7 @@
     .head
       .text.black.bold.font20.left= "#{user_possesive} Likes"
       .text.fuzzy-gray.font20.left= "&nbsp;(#{ @liked_images.total_entries })".html_safe
-      .not-implement
-        = render :partial => 'link_to_detail', :locals => { :empty => (@liked_images.total_entries==0), :user_id => @user.id, :url => '#' }
+      = render :partial => 'link_to_detail', :locals => { :empty => (@liked_images.total_entries==0), :user_id => @user.id, :url => url_for(:controller => 'profiles', :action => 'show_likes', :user_id => @user.id) }
     .images-wrapper.left
       = render :partial => 'shared/photos_template', :locals => { :images => @liked_images, :photos_per_line => 6, :photo_size => 'thumb', :other_classes => 'profile' }
 

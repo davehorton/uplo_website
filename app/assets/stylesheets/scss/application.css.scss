@@ -829,23 +829,22 @@ textarea { padding-top:5px; }
     width: 638px;
     #container {
       width: 100%;
+      #counter { margin-left: 5px; }
       .main { width: 636px; }
-      .followers-container, .followings-container {
-        #followers-number, #followings-number { margin-left: 5px;}
-        .user-section {
-          width: 313px;
-          margin: 6px;
-          .info-panel {
-            margin-left: 1px;
-            padding: 16px 12px;
-            width: 221px;
-            height: 35px;
-            background-color: $color-fuzzier-gray;
-            a { font-weight: normal; cursor: pointer; }
-            a:hover { font-weight: bold; }
-            .name { margin-bottom: 5px;
-              a:hover { font-weight: normal;} }
-          }}}}
+      .followers-container .user-section, .followings-container .user-section, .likes-container .image-section {
+        width: 313px;
+        margin: 6px;
+        .info-panel {
+          margin-left: 1px;
+          padding: 18px 12px;
+          width: 221px;
+          height: 31px;
+          background-color: $color-fuzzier-gray;
+          a { font-weight: normal; cursor: pointer; }
+          a:hover { font-weight: bold; }
+          .name { margin-bottom: 9px;
+            a:hover { font-weight: normal; }}
+      }}}
     .container {
       margin-top: 15px;
       a.edit-pane { font-weight: normal; }

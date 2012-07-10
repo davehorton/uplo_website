@@ -1,0 +1,15 @@
+/ local values: images
+- (0...images.length). each do |idx|
+  - image = images[idx]
+  - author = image.author
+  - additional_class = line_item_additional_class(idx, 2)
+
+  .image-section.left{ :class => "#{ additional_class }"}
+    %a{:href => "#{ url_for(:controller => 'images', :action => 'browse', :id => image.id) }"}
+      = image_tag image.url(:smaller), :class => 'image smaller left'
+    .info-panel.left
+      .name.text.black.font18.line12= image.name.truncate(20)
+      .text.gray.font12.left= "by&nbsp;".html_safe
+      %a.text.black.font12.line12.left{ :href => "#{ url_for(:controller => 'profiles', :action => 'show', :user_id => author.id) }" }= author.username.truncate(18)
+      %a.like.text.black.font12.line12.right{ :data => { :id => "#{ image.id }" }}
+        Unlike

@@ -15,6 +15,24 @@ load = (url, callback)->
       $.modal.close()
   })
 
+requestDislike = (node) ->
+  target = $(node)
+  $('#mask').modal()
+  $.ajax({
+    url: '/unlike_image',
+    type: "GET",
+    data: { image_id: target.attr('data-id') },
+    dataType: "json",
+    success: (response) ->
+      if(response.success==false)
+        alert(response.msg)
+      else
+        $('#likes-counter .number').text response.likes
+        $('#counter').text "(#{response.likes})"
+        target.closest('.image-section').remove()
+      $.modal.close()
+  })
+
 requestFollow = (node) ->
   target = $(node)
   author_id = target.attr('data-author-id')
@@ -93,7 +111,7 @@ requestUpdateAvatar = (node) ->
 
 $ ->
   $('.not-implement').click -> helper.alert_not_implement()
-  $('#container .edit-pane[data-url!="#"]').click ->
+  $('#container .edit-pane').click ->
     counter_id = $(@).closest('.container').attr('id').replace('-section', '-counter')
     $('#counters .counter.current').removeClass('current')
     $("##{counter_id}").addClass('current')
@@ -135,6 +153,7 @@ $ ->
   $('body').delegate '#edit-profile-photo-popup .held-photos img', 'click', (e) -> requestUpdateAvatar(e.target)
 
   $('#container').delegate '.follow', 'click', (e) -> requestFollow(e.target)
+  $('#container').delegate '.like', 'click', (e) -> requestDislike(e.target)
   $('#counters .counter .info').click ->
     url = $(@).attr('data-url')
     counter = $(@).closest('.counter')

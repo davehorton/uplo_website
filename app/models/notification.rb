@@ -34,14 +34,17 @@ class Notification < ActiveRecord::Base
 
   def self.check_others(image_id)
     image = Image.find_by_id image_id.to_i
-    others_count = image.image_likes.count
+    others_count = image.image_likes.count - 1
     if others_count > 1
-      msg = " and #{others_count}"
+      msg = " and #{others_count} others "
+    elsif others_count == 1
+      msg = " and #{others_count} other "
     else
       msg = ' '
     end
     return msg
   end
+
   def self.action(image_id, type)
     image = Image.find_by_id image_id.to_i
     if image.image_likes.count > 1

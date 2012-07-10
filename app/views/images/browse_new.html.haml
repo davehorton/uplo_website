@@ -5,12 +5,16 @@
   .text.black.font18.bold= @image.name
   .line-separator
   .user-section.left
-    = image_tag @author.avatar_url(:small), :class => 'avatar small left'
+    - is_current_user = is_current_user(@author.id)
+    - images_count = is_current_user ? @author.images.count : @author.public_images.count
+    - author_profile = url_for(:controller => 'profiles', :action => 'show', :user_id => @author.id)
+    %a{:href => "#{ author_profile }"}
+      = image_tag @author.avatar_url(:small), :class => 'avatar small left'
     .left
       %span.text.gray.font12.line12 By
-      %a.text.black.normal.font12.line12{:href => "#{ url_for(:controller => 'profiles', :action => 'show', :user_id => @author.id) }"}= @author.username.truncate(20)
-      .text.gray.font11= "#{@author.fullname} &bull; #{@author.images.length} Items".html_safe
-    - unless is_current_user(@author.id)
+      %a.text.black.normal.font12.line12{:href => "#{ author_profile }"}= @author.username.truncate(20)
+      .text.gray.font11= "#{@author.fullname} &bull; #{ images_count } Items".html_safe
+    - unless is_current_user
       - is_author_following = @author.has_follower?(current_user.id)
       - follow_class = is_author_following ? 'unfollow' : 'follow'
       #btn-follow.button.right{ :class => "#{ follow_class }", :data => { 'author-id' => "#{ @author.id }", 'following' => "#{ is_author_following }"} }

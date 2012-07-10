@@ -23,6 +23,8 @@ Uplo::Application.routes.draw do
   get 'profile', :to => 'profiles#show'
   get 'profile/photos', :to => 'profiles#show_photos'
   get 'profile/get_photos', :to => 'profiles#get_photos'
+  get 'profile/likes', :to => 'profiles#show_likes'
+  get 'profile/get_likes', :to => 'profiles#get_likes'
   get 'profile/galleries', :to => 'profiles#show_galleries'
   get 'profile/get_galleries', :to => 'profiles#get_galleries'
   get 'profile/followers', :to => 'profiles#show_followers'
@@ -85,6 +87,7 @@ Uplo::Application.routes.draw do
     get 'delete_profile_photo', :to => 'users#delete_profile_photo'
     get 'set_avatar', :to => 'users#set_avatar'
     put 'update_profile_info', :to => 'users#update_profile_info'
+    get 'unlike_image', :to => 'users#unlike_image'
   end
 
   # API ROUTING

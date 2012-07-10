@@ -4,6 +4,8 @@
 $fuzzy-text: #CBCBCB;
 $normal-text: #5A5A5A;
 $bold-text: #000000;
+$smallest-image-size: 66px;
+$smaller-image-size: 67px;
 $small-image-size: 68px;
 $thumb-image-size: 155px;
 $medium-image-size: 638px;
@@ -82,6 +84,11 @@ $color-light-gray: #a1a1a1;
       height: 101px;
     }
   }
+  &.smaller {
+    width: $smaller-image-size;
+    height: $smaller-image-size;
+    margin: $image-space;
+  }
   &.small {
     width: $small-image-size;
     height: $small-image-size;
@@ -102,6 +109,14 @@ $color-light-gray: #a1a1a1;
 .image {
   text-align: center;
   vertical-align: middle;
+  &.smallest {
+    width: $smallest-image-size;
+    height: $smallest-image-size;
+  }
+  &.smaller {
+    width: $smaller-image-size;
+    height: $smaller-image-size;
+  }
   &.small {
     width: $small-image-size;
     height: $small-image-size;

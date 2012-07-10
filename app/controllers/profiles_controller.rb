@@ -45,6 +45,35 @@ class ProfilesController < ApplicationController
     end
   end
 
+  def show_likes
+    if request.xhr?
+      if @user.id == current_user.id
+        @images = @user.liked_images.load_images(@filtered_params)
+      else
+        @images = @user.liked_images.load_popular_images(@filtered_params)
+      end
+      render :partial => 'likes'
+    end
+  end
+
+  def get_likes
+    if request.xhr?
+      if @user.id == current_user.id
+        images = @user.liked_images.load_images(@filtered_params)
+        template = render_to_string :partial => 'edit_likes_template',
+          :locals => { :images => images }
+      else
+        images = @user.liked_images.load_popular_images(@filtered_params)
+        template = render_to_string :partial => 'shared/photos_template',
+          :locals => { :images => images, :photos_per_line => 4, :photo_size => 'thumb' }
+      end
+      pagination = render_to_string :partial => 'shared/hidden_pagination',
+        :locals => { :data_source => images,
+          :params => { :controller => "profiles", :action => 'get_likes' } }
+      render :json => { :items => template, :pagination => pagination }
+    end
+  end
+
   def show_galleries
     if request.xhr?
       if @user.id == current_user.id

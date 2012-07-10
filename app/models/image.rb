@@ -16,11 +16,13 @@ class Image < ActiveRecord::Base
 
   # Paperclip
   has_attached_file :data,
-   :styles => { :small => '68x68#', :spotlight_small => '74x74#', :thumb => '155x155#', :spotlight_thumb => '174x154#', :profile_thumb => '101x101#', :medium => '640x640>', :large => '1000x1000>' },
-   :storage => :s3,
-   :s3_credentials => "#{Rails.root}/config/amazon_s3.yml",
-   :path => "image/:id/:style.:extension",
-   :default_url => "/assets/image-default-:style.jpg"
+    :styles => { :smallest => '66x66#', :smaller => '67x67#', :small => '68x68#', :spotlight_small => '74x74#',
+      :thumb => '155x155#', :spotlight_thumb => '174x154#', :profile_thumb => '101x101#',
+      :medium => '640x640>', :large => '1000x1000>' },
+    :storage => :s3,
+    :s3_credentials => "#{Rails.root}/config/amazon_s3.yml",
+    :path => "image/:id/:style.:extension",
+    :default_url => "/assets/image-default-:style.jpg"
 
   #validates_attachment_presence :data
   validates_attachment_content_type :data, :content_type => [ 'image/jpeg','image/jpg','image/png',"image/gif"],
@@ -181,18 +183,6 @@ class Image < ActiveRecord::Base
   # Shortcut to get image's URL
   def url(options = nil)
     self.data.url(options)
-  end
-
-  def is_likable(user_id)
-    if !User.exists?(user_id)
-      result = false #raise exception
-    elsif ImageLikes.exists?({:image_id => self.id, :user_id => user_id})
-      result = true
-    else
-      result = false
-    end
-
-    return result
   end
 
   def liked_by_user(user_id)

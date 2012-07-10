@@ -1,7 +1,7 @@
 .container.left
   .head
-    .text.black.bold.font20.left= "#{ @user.first_name }'s Galleries"
-    .text.fuzzy-gray.font20.left= "&nbsp;(#{ @galleries.total_entries })".html_safe
+    .text.black.bold.font20.left= "#{user_possesive_form(@user.id)} Galleries"
+    #counter.text.fuzzy-gray.font20.left= "(#{ @galleries.total_entries })".html_safe
     - if is_current_user(@user.id) && @galleries.total_entries>0
       %a.edit-pane.right{ :href => "#{ url_for(:controller => 'galleries', :action => 'edit_images') }" }
         .icon.edit.left

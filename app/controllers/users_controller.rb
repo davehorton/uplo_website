@@ -131,6 +131,18 @@ class UsersController < ApplicationController
     render :json => result
   end
 
+  def unlike_image
+    image = Image.find_by_id(params[:image_id])
+    if image.nil?
+      result = { :success => false, :msg => "This image does not exist anymore!" }
+    else
+      result = image.disliked_by_user(current_user.id)
+      result[:likes] = current_user.liked_images.count if result[:success]
+    end
+
+    render :json => result
+  end
+
   protected
   def default_page_size
     return 12
