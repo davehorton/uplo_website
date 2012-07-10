@@ -708,27 +708,27 @@ textarea {
   width: 638px; }
   #center .profile-wrapper #container {
     width: 100%; }
+    #center .profile-wrapper #container #counter {
+      margin-left: 5px; }
     #center .profile-wrapper #container .main {
       width: 636px; }
-    #center .profile-wrapper #container .followers-container #followers-number, #center .profile-wrapper #container .followers-container #followings-number, #center .profile-wrapper #container .followings-container #followers-number, #center .profile-wrapper #container .followings-container #followings-number {
-      margin-left: 5px; }
-    #center .profile-wrapper #container .followers-container .user-section, #center .profile-wrapper #container .followings-container .user-section {
+    #center .profile-wrapper #container .followers-container .user-section, #center .profile-wrapper #container .followings-container .user-section, #center .profile-wrapper #container .likes-container .image-section {
       width: 313px;
       margin: 6px; }
-      #center .profile-wrapper #container .followers-container .user-section .info-panel, #center .profile-wrapper #container .followings-container .user-section .info-panel {
+      #center .profile-wrapper #container .followers-container .user-section .info-panel, #center .profile-wrapper #container .followings-container .user-section .info-panel, #center .profile-wrapper #container .likes-container .image-section .info-panel {
         margin-left: 1px;
-        padding: 16px 12px;
+        padding: 18px 12px;
         width: 221px;
-        height: 35px;
+        height: 31px;
         background-color: #ebebeb; }
-        #center .profile-wrapper #container .followers-container .user-section .info-panel a, #center .profile-wrapper #container .followings-container .user-section .info-panel a {
+        #center .profile-wrapper #container .followers-container .user-section .info-panel a, #center .profile-wrapper #container .followings-container .user-section .info-panel a, #center .profile-wrapper #container .likes-container .image-section .info-panel a {
           font-weight: normal;
           cursor: pointer; }
-        #center .profile-wrapper #container .followers-container .user-section .info-panel a:hover, #center .profile-wrapper #container .followings-container .user-section .info-panel a:hover {
+        #center .profile-wrapper #container .followers-container .user-section .info-panel a:hover, #center .profile-wrapper #container .followings-container .user-section .info-panel a:hover, #center .profile-wrapper #container .likes-container .image-section .info-panel a:hover {
           font-weight: bold; }
-        #center .profile-wrapper #container .followers-container .user-section .info-panel .name, #center .profile-wrapper #container .followings-container .user-section .info-panel .name {
-          margin-bottom: 5px; }
-          #center .profile-wrapper #container .followers-container .user-section .info-panel .name a:hover, #center .profile-wrapper #container .followings-container .user-section .info-panel .name a:hover {
+        #center .profile-wrapper #container .followers-container .user-section .info-panel .name, #center .profile-wrapper #container .followings-container .user-section .info-panel .name, #center .profile-wrapper #container .likes-container .image-section .info-panel .name {
+          margin-bottom: 9px; }
+          #center .profile-wrapper #container .followers-container .user-section .info-panel .name a:hover, #center .profile-wrapper #container .followings-container .user-section .info-panel .name a:hover, #center .profile-wrapper #container .likes-container .image-section .info-panel .name a:hover {
             font-weight: normal; }
   #center .profile-wrapper .container {
     margin-top: 15px; }

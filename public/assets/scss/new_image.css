@@ -49,6 +49,10 @@
     .image-container.thumb.profile {
       width: 101px;
       height: 101px; }
+  .image-container.smaller {
+    width: 67px;
+    height: 67px;
+    margin: 3px; }
   .image-container.small {
     width: 68px;
     height: 68px;
@@ -65,6 +69,12 @@
 .image {
   text-align: center;
   vertical-align: middle; }
+  .image.smallest {
+    width: 66px;
+    height: 66px; }
+  .image.smaller {
+    width: 67px;
+    height: 67px; }
   .image.small {
     width: 68px;
     height: 68px; }
