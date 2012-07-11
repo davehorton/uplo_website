@@ -28,3 +28,10 @@ $ ->
         if card_num!='' && !validator.reg.test(card_num)
           alert('Your card number does not match this card_type!')
         break
+
+  $('#cvv-explanation').click (e) ->
+    cvv_form = $('#cvv-form')
+    left = e.pageX - 155
+    top = e.pageY - cvv_form.height()
+    $('#cvv-form').modal({ opacity:5, overlayClose:true, position:[top, left]})
+  $('#cvv-form .close').click -> $.modal.close()

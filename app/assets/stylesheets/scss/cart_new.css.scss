@@ -35,7 +35,7 @@ $color-line-separator: #cccccc;
 
 #order-shippings {
   margin-bottom: 30px;
-  #card_ccv {
+  #card_cvv {
     width: 83px;
   }
   #billing-address {
@@ -88,6 +88,36 @@ $color-line-separator: #cccccc;
 #cvv-explanation {
   font-size: 9px;
   text-decoration: underline;
+  color: #202020;
+  margin-left: 7px;
+}
+
+#cvv-form {
+  width: 472px;
+  .wrapper {
+    width: 100%;
+    background-color: white;
+    border-radius: 5px;
+    box-shadow: 0 0 7px #777;
+    .container {
+      margin: 10px;
+      .header {
+        width: 100%;
+        margin-bottom: 10px;
+        .cvv { margin-left: 5px;}
+      }
+      .close {
+        background: url("/assets/icon-close.png") no-repeat scroll 0 0 transparent;
+        cursor: pointer;
+        height: 16px;
+        width: 16px;
+      }}}
+  .tail {
+    background: url("/assets/icon-cvv-arrow.png") no-repeat;
+    width: 34px;
+    height: 18px;
+    margin-left: 140px;
+  }
 }
 
 /*==================================================================================*/
@@ -205,27 +235,24 @@ $color-line-separator: #cccccc;
     .info {
       margin-top: 10px;
       height: 28px;
-      #cvv-explanation a {
-        font-weight: normal;
-      }
       label {
-        width: 88px;
+        width: 94px;
         margin: 8px 10px 8px 0;
         font-size: 11px;
       }
       input {
-        width: 190px;
+        width: 183px;
         font-size: 12px;
       }
       select {
-        width: 202px !important;
+        width: 195px !important;
         height: 30px;
         padding: 3px 1px;
         font-size: 12px;
       }
       &.expiration-date {
         select {
-          width: 96px !important;
+          width: 93px !important;
         }
         #card_expires_on_2i {
           margin-right: 10px;

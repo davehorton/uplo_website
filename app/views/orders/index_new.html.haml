@@ -111,8 +111,8 @@
             = f.date_select :expires_on, :discard_day => true, :start_year => Date.today.year, :end_year => (Date.today.year+10), :add_month_numbers => false, :order => [:month, :year], :required => true, :label => false, :default => { :day => '1', :mon => '12' }, :prompt => { :month => 'Month', :year => 'Year' }
 
           .info
-            = f.label :ccv, "CCV <span style='color:red;'>*</span> <span id='cvv-explanation'><a href='#'>What's This?</a></span>".html_safe
-            = f.input :ccv, :autofocus => true, :required => true, :label => false
+            = f.label :cvv, "CVV <span style='color:red;'>*</span> <span id='cvv-explanation'>What's This?</span>".html_safe
+            = f.input :cvv, :autofocus => true, :required => true, :label => false
           = hidden_field_tag :order_id, @order.id
 
     #order-summary.order_summary.no-padding-right.left{:style => "height:auto;min-height: 100px;"}
@@ -154,9 +154,11 @@
         .line-separator.left
         .submit.right
 
-= javascript_include_tag 'app/order.js'
+= render :partial => 'cvv_form'
+
 - content_for :js do
-  - javascript_tag do
+  = javascript_include_tag 'app/order.js'
+  = javascript_tag do
     :erb
       $("#shipping_phone").keypress(function (event) {
         if (!event.charCode) return true;
