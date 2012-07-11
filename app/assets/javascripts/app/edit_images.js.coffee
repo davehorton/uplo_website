@@ -130,7 +130,7 @@ $ ->
         $('.empty-data').remove()
         $.modal.close()
       else
-        alert(response.msg)
+        $(data.context).find('.progress').replaceWith("<div class='error info-line text italic font12 left'>#{response.msg}</div>")
         $.modal.close()
     progress: (e, data) ->
       progress = parseInt(data.loaded / data.total * 100, 10).toString() + '%'

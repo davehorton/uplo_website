@@ -29,7 +29,7 @@ gem 'mobile-fu'
 gem 'ruby_parser', '>= 2.3.1'
 gem "hpricot", ">= 0.8.5"
 gem "rails3-generators"
-gem "paperclip", ">= 2.4.5"
+gem "paperclip", "3.0.4"
 gem "cancan", ">= 1.6.7"
 gem "faker"
 gem "rmagick"

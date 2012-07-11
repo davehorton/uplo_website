@@ -95,7 +95,17 @@ class ImagesController < ApplicationController
     image.price = rand(50) #tmp for randomzise price
     image.set_album_cover
     unless image.save
-      result = { :success => false, :msg => 'Cannot save image' }
+      msg = []
+      key = ['data_file_size', 'data_content_type']
+      image.errors.messages.each do |k, v|
+        msg << v if key.index(k.to_s)
+      end
+      if msg.size == 0
+        msg = 'Cannot save this image'
+      else
+        msg = msg.join(' and ')
+      end
+      result = { :success => false, :msg => msg }
     else
       gallery = Gallery.find_by_id params[:gallery_id]
       images = gallery.images.load_images(@filtered_params)
@@ -133,7 +143,7 @@ class ImagesController < ApplicationController
         Notification.deliver_image_notification(image.id, current_user.id, Notification::TYPE[:like])
       end
     end
-    
+
     render :json => result
   end
 

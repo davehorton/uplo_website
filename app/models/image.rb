@@ -24,14 +24,14 @@ class Image < ActiveRecord::Base
     :path => "image/:id/:style.:extension",
     :default_url => "/assets/image-default-:style.jpg"
 
-  #validates_attachment_presence :data
-  validates_attachment_content_type :data, :content_type => [ 'image/jpeg','image/jpg','image/png',"image/gif"],
-                                      :message => 'filetype must be one of [.jpeg, .jpg, .png, .gif]'
+  validates_attachment :data, :presence => true,
+    :size => { :in => 0..10.megabytes, :message => 'File size cannot exceed 10MB' },
+    :content_type => { :content_type => [ 'image/jpeg','image/jpg','image/png',"image/gif"],
+      :message => 'File type must be one of [.jpeg, .jpg, .png, .gif]' }
 
   # CALLBACK
-  after_post_process :save_image_dimensions
+  after_create :save_image_dimensions
   after_initialize :init_random_price
-  # after_save :set_album_cover
 
   SALE_REPORT_TYPE = {
     :quantity => "quantity",
@@ -353,8 +353,8 @@ class Image < ActiveRecord::Base
     end
 
     geo = Paperclip::Geometry.from_file(file)
-    self.width = geo.width
-    self.height = geo.height
+    self.update_attribute(:width, geo.width)
+    self.update_attribute(:height, geo.height)
   end
 
 

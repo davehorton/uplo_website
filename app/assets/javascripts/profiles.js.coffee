@@ -136,13 +136,13 @@ $ ->
       window.setTimeout("$('#mask').modal()", 300)
       data.submit()
     done: (e, data) ->
-      if(data.result.success==false)
-        alert(data.result.msg)
+      response = $.parseJSON(data.result)
+      if(response.success==false)
+        alert(response.msg)
         $.modal.close()
         window.setTimeout("$('#edit-profile-photo-popup').modal()", 300)
       else
         alert('Update successfully!')
-        response = $.parseJSON(data.result)
         $('#edit-profile-photo-popup .held-photos .photos').html(response.profile_photos)
         $('#edit-profile-photo-popup .current-photo .avatar').attr 'src', response.extra_avatar_url
         $('#user-section .avatar.large').attr 'src', response.large_avatar_url

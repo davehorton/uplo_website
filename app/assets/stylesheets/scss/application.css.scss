@@ -168,7 +168,7 @@ textarea { padding-top:5px; }
   &.center {
     text-align: center;
   }
-  .italic {
+  &.italic {
     font-style: italic;
   }
   &.bold {
@@ -776,14 +776,10 @@ textarea { padding-top:5px; }
         }
       }
     }
-    .edit-template .line-separator {
-      margin: 13px 0px;
-    }
     .info-panel {
-      width: 248px;
       margin-left: 20px;
       input, textarea {
-        width: 242px;
+        width: 241px;
         color: $color-gray;
       }
       input[type=checkbox] {
@@ -813,7 +809,16 @@ textarea { padding-top:5px; }
         &.progress .uploading {
           width: auto;
           background: url('/assets/progressbar.gif');
-        }}}}
+        }}}
+    .upload-template .info-panel {
+      width: 782px;
+      .info-line{
+        &.error { color: red; }
+        &.progress { width: 248px; }}}
+    .edit-template {
+      .info-panel { width: 248px; }
+      .line-separator { margin: 13px 0px; }
+    }}
   #order-preview { margin-bottom: 30px; }
   .wrapper.the-app { margin-top: -10px; }
   .container { width: 100%; }

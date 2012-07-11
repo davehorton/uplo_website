@@ -1,5 +1,5 @@
 Uplo::Application.configure do
-  DOMAIN = 'localhost:3000'
+  DOMAIN = '192.168.7.71:3000'
   # Settings specified here will take precedence over those in config/application.rb
 
   # In the development environment your application's code is reloaded on
