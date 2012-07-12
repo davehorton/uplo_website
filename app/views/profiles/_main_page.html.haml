@@ -2,7 +2,7 @@
 .main.right
   #photos-section.container.left
     .head
-      .text.black.bold.font20.left= "#{user_possesive} Photos"
+      .text.black.bold.font20.left= "#{ user_possesive } #{ pluralize_without_count(@images.total_entries, 'Photo') }"
       .text.fuzzy-gray.font20.left= "&nbsp;(#{ @images.total_entries })".html_safe
       = render :partial => 'link_to_detail', :locals => { :empty => (@images.total_entries==0), :user_id => @user.id, :url => url_for(:controller => 'profiles', :action => 'show_photos', :user_id => @user.id) }
     .images-wrapper.left
@@ -10,7 +10,7 @@
 
   #galleries-section.container.left
     .head
-      .text.black.bold.font20.left= "#{user_possesive} Galleries"
+      .text.black.bold.font20.left= "#{ user_possesive } #{ pluralize_without_count(@galleries.total_entries, 'Gallery') }"
       .text.fuzzy-gray.font20.left= "&nbsp;(#{ @galleries.total_entries })".html_safe
       = render :partial => 'link_to_detail', :locals => { :empty => (@galleries.total_entries==0), :user_id => @user.id, :url => url_for(:controller => 'profiles', :action => 'show_galleries', :user_id => @user.id) }
     .images-wrapper.left
@@ -22,7 +22,7 @@
 
   #likes-section.container.left
     .head
-      .text.black.bold.font20.left= "#{user_possesive} Likes"
+      .text.black.bold.font20.left= "#{user_possesive} #{ pluralize_without_count(@liked_images.total_entries, 'Like') }"
       .text.fuzzy-gray.font20.left= "&nbsp;(#{ @liked_images.total_entries })".html_safe
       = render :partial => 'link_to_detail', :locals => { :empty => (@liked_images.total_entries==0), :user_id => @user.id, :url => url_for(:controller => 'profiles', :action => 'show_likes', :user_id => @user.id) }
     .images-wrapper.left
@@ -30,7 +30,7 @@
 
   #followers-section.container.left
     .head
-      .text.black.bold.font20.left= "#{user_possesive} Followers"
+      .text.black.bold.font20.left= "#{ user_possesive } #{ pluralize_without_count(@followers.total_entries, 'Follower')}"
       .text.fuzzy-gray.font20.left= "&nbsp;(#{ @followers.total_entries })".html_safe
       .actions-panel.right
         %a.list.text.black.bold.font10.right{ :data => { 'url' => "#{ url_for(:controller => 'profiles', :action => 'show_followers', :user_id => @user.id) }"} } + VIEW ALL

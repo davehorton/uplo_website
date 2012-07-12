@@ -27,8 +27,11 @@ requestDislike = (node) ->
       if(response.success==false)
         alert(response.msg)
       else
+        like_label = helper.pluralize_without_count(response.likes, 'Like', 'Likes')
         $('#likes-counter .number').text response.likes
+        $('#likes-counter .label').text like_label
         $('#counter').text "(#{response.likes})"
+        $('.container .head .label').text like_label
         target.closest('.image-section').remove()
       $.modal.close()
   })
@@ -50,19 +53,19 @@ requestFollow = (node) ->
         target.attr('data-following', 'true')
         target.text('Unfollow')
         if $.parseJSON($('#counters').attr('data-current-user').toString())
-          $('#followers-counter .number').text response.followers
           $('#following-counter .number').text response.followings
-          $('#followings-number').text "(#{response.followings})"
-          $('#followers-number').text "(#{response.followers})"
+          $('#followers-counter .number').text response.followers
+          $('.followings-container .head #counter').text "(#{response.followings})"
+          $('.followers-container .head #counter').text "(#{response.followers})"
       else
         target.attr('data-following', 'false')
         target.text('Follow')
         target.closest('.user-section.following').remove()
         if $.parseJSON($('#counters').attr('data-current-user').toString())
-          $('#followers-counter .number').text response.followers
           $('#following-counter .number').text response.followings
-          $('#followings-number').text "(#{response.followings})"
-          $('#followers-number').text "(#{response.followers})"
+          $('#followers-counter .number').text response.followers
+          $('.followings-container .head #counter').text "(#{response.followings})"
+          $('.followers-container .head #counter').text "(#{response.followers})"
       $.modal.close()
   })
 

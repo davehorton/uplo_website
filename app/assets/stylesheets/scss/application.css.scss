@@ -845,6 +845,7 @@ textarea { padding-top:5px; }
     width: 638px;
     #container {
       width: 100%;
+      .label { margin-left: 5px; }
       #counter { margin-left: 5px; }
       .main { width: 636px; }
       .followers-container .user-section, .followings-container .user-section, .likes-container .image-section {

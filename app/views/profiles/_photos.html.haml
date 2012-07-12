@@ -1,6 +1,6 @@
 .container.left
   .head
-    .text.black.bold.font20.left= "#{user_possesive_form(@user.id)} Photos"
+    .text.black.bold.font20.left= "#{ user_possesive_form(@user.id)} #{ pluralize_without_count(@images.total_entries, 'Photo')}"
     #counter.text.fuzzy-gray.font20.left= "(#{ @images.total_entries })".html_safe
     - if is_current_user(@user.id) && @images.total_entries>0
       %a.edit-pane.right{ :href => "#{ url_for(:controller => 'galleries', :action => 'edit_images') }" }

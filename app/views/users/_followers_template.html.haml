@@ -14,7 +14,7 @@
     .info-panel.left
       .name.text.black.font18.line12
         %a{:href => "#{ url }"}= user.username.truncate(20)
-      .text.gray.font12.line12.left= "#{ images_number } items | view&nbsp".html_safe
+      .text.gray.font12.line12.left= "#{ pluralize(images_number, 'item')} | view&nbsp".html_safe
       %a.text.black.font12.line12.left{ :href => "#{ url }", :data => { 'user-id' => "#{ user.id }" } } profile
       - unless is_current_user
         %a.follow.text.black.font12.line12.right{ :data => { 'author-id' => "#{ user.id }", 'following' => "#{ is_following }"} }= follow_label

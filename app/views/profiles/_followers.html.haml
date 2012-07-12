@@ -1,6 +1,7 @@
 .followers-container.container.left
-  .head
-    .text.black.bold.font20.left= "#{user_possesive_form(@user.id)} Followers"
+  .head.text.black.bold.font20
+    .left= user_possesive_form(@user.id)
+    .label.left= pluralize_without_count(@followers.total_entries, 'Follower')
     #counter.text.fuzzy-gray.font20.left= "(#{ @followers.total_entries })".html_safe
   .line-separator.left
   #endless-pages.left

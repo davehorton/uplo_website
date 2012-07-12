@@ -1,6 +1,7 @@
 .likes-container.container.left
-  .head
-    .text.black.bold.font20.left= "#{user_possesive_form(@user.id)} Likes"
+  .head.text.black.bold.font20
+    .left= user_possesive_form(@user.id)
+    .label.left= pluralize_without_count(@images.total_entries, 'Like')
     #counter.text.fuzzy-gray.font20.left= "(#{ @images.total_entries })".html_safe
   .line-separator.left
   #endless-pages.left
