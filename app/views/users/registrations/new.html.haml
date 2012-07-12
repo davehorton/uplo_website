@@ -4,7 +4,7 @@
   = jquery_ui_css_tag
   
 %h2 Sign up
-= simple_form_for(resource, :as => resource_name, :url => registration_path(resource_name), :html => {:class => "signup"}) do |f|
+= simple_form_for(resource, :as => resource_name, :url => registration_path(resource_name), :html => {:class => "signup", :id => "register-form"}) do |f|
   = f.error_notification
   .inputs
     = f.input :email, :required => true, :autofocus => true
@@ -21,5 +21,13 @@
   <script type="text/javascript">
     $(document).ready(function(){
       user.setup_datepicker();
+      
+      $('#register-form').submit(function(){
+        // Get current date.
+        var date = new Date();        
+        _gaq.push(['_setCustomVar', 2, 'UPLO Web - Sign Up Time', date.toUTCString()]);
+        _gaq.push(['_trackEvent', 'UPLO Web / Sign Up', 'sign up by UPLO web', 'status']);
+        return true;
+      });
     });
   </script>
