@@ -175,9 +175,7 @@ $color-light-gray: #a1a1a1;
     color: $fuzzy-text;
     .left {
       line-height: 27px;
-      .times {
-        font-weight: bold;
-      }
+      .label { margin-left: 5px; }
       .icon {
         height: 13px;
         width: 13px;
@@ -261,3 +259,6 @@ $color-light-gray: #a1a1a1;
   }
 }
 
+#comments-section {
+  .info-panel { width: 582px;}
+}

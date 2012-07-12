@@ -7,8 +7,8 @@
     - url = url_for(:controller => 'profiles', :action => 'show', :user_id => commenter.id)
     %a{ :href => "#{ url }" }
       = image_tag(commenter.avatar_url(:medium), :class => "avatar medium left")
-    .text.font12.line18.left
-      %a.text.black.bold{ :href => "#{ url }" }= commenter.username
-      %span.text.fuzzy-gray= "(#{ comment.duration } ago)"
-      .text.gray= comment.description
+    .info-panel.left
+      %a.text.black.bold.font12.line18{ :href => "#{ url }" }= commenter.username
+      %span.text.fuzzy-gray.font12.line18= "(#{ comment.duration } ago)"
+      #text.text.gray.font12.line18= simple_format(comment.description.to_s)
   .line-separator.left

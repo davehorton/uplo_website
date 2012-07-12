@@ -16,6 +16,13 @@ global = {
  * Helper methods.
  */
 helper = {
+  pluralize_without_count: function(number, single_form, plural_form) {
+    if(parseInt(number) > 1) {
+      return plural_form;
+    } else {
+      return single_form;
+    }
+  },
   check_less_than_characters: function(string, min_chars, callback){
     if(string.length < min_chars) {
       if(callback == null) {

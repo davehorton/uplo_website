@@ -30,6 +30,8 @@ $ ->
       success: (response) ->
         if response.success
           $('#current_comments').html(response.comments)
+          $('.comment .times').html(response.comments_number)
+          $('.comment .label').html helper.pluralize_without_count(response.comments_number, 'Comment', 'Comments')
           $('#comment_description').val('')
           $('form#frm-comment').inputHintOverlay(5, 8)
           $.modal.close()

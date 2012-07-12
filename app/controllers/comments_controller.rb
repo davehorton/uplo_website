@@ -27,9 +27,9 @@ class CommentsController < ApplicationController
         if current_user.id != image.author.id
           Notification.deliver_image_notification(image.id, current_user.id, Notification::TYPE[:comment])
         end
-        comments = render_to_string :partial => 'images/comments_template',
-          :locals => { :comments => image.comments.load_comments(@filtered_params) }
-        result = { :success => true, :comments => comments }
+        data = image.comments.load_comments(@filtered_params)
+        comments = render_to_string :partial => 'images/comments_template', :locals => { :comments => data }
+        result = { :success => true, :comments => comments, :comments_number => data.total_entries }
       else
         result = { :success => false, :msg => comment.errors.full_messages[0] }
       end
