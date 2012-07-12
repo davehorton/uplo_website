@@ -101,10 +101,9 @@
       - like_class = @dislike ? "dislike" : "like"
       - order_url = url_for(:controller => 'images', :action => 'order', :id => params[:id])
       #btn-like.button.left{:class => "#{like_class}", :onclick => 'update_liked();', :data => { 'id' => params[:id], 'dislike' => "#{ @dislike }" }}
-      .button.flag.left
+      .button.flag.left{:onclick => "$('#flag_form').modal();"}
       .button.order.left{:onclick => "window.location.href = '#{order_url}';", :data => {:url => "#{order_url}"}}
       .button.share.left{:onclick => "display_sharing_box();"}
-
   .line-separator.clear
   #comments-section{ :data => { :id => "#{@image.id}" }}
     .header.text.black.font18.bold Comments and faves
@@ -120,6 +119,7 @@
           #post-comment.button.post-comment.clear
   .clear
 
+= render :partial => 'shared/flag_form', :layout => 'layouts/popup', :locals => { :title => 'Flag for Review', :id => "flag_form"}
 
 - content_for :js do
   = javascript_include_tag('http://platform.tumblr.com/v1/share.js', 'lib/jquery.inputHintOverlay.js', 'app/image.js')
