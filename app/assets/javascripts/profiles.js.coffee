@@ -181,10 +181,12 @@ $ ->
           $('#btn-follow').attr('data-following', 'true')
           $('#btn-follow').removeClass('follow')
           $('#btn-follow').addClass('unfollow')
+          $('.note').fadeIn()
         else
           $('#btn-follow').attr('data-following', 'false')
           $('#btn-follow').removeClass('unfollow')
           $('#btn-follow').addClass('follow')
+          $('.note').fadeOut()
         $.modal.close()
     })
 

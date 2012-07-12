@@ -266,6 +266,11 @@ textarea { padding-top:5px; }
     width: 9px;
     margin-top: 1px;
   }
+  &.check {
+    background: url("/assets/icon-check.png") no-repeat scroll 0 0 transparent;
+    height: 12px;
+    width: 15px;
+  }
 }
 
 .line-separator {

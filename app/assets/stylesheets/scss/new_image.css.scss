@@ -260,5 +260,7 @@ $color-light-gray: #a1a1a1;
 }
 
 #comments-section {
-  .info-panel { width: 582px;}
+  .info-panel {
+    width: 582px;
+    .comment { margin-top: 3px; }}
 }

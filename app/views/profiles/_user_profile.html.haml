@@ -39,7 +39,9 @@
   .line-separator.left
   - is_followed_user = user.has_follower?(current_user.id)
   - follow_class = is_followed_user ? 'unfollow' : 'follow'
+  - note_class = is_followed_user ? '' : 'hide'
   .follow-section.left
     #btn-follow.button.left{ :class => "#{ follow_class }", :data => { 'author-id' => "#{ user.id }", 'following' => "#{ is_followed_user }"} }
-    - if is_followed_user
-      .note.text.light-gray.left= "&#10004; You are following this user.".html_safe
+    .note.text.light-gray.left{ :class => "#{ note_class }" }
+      .icon.check.left
+      .left= "You are following this user.".html_safe
