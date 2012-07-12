@@ -9,7 +9,10 @@ Array.prototype.remove = function(s) {
 global = {
   date_format: "mm/dd/yy",
   date_format_dev: "yy-mm-dd",
-  status_show_error: 777
+  status_show_error: 777,
+  ga_code: function(){
+    return "UA-30729550-1";
+  }
 };
 
 /**
