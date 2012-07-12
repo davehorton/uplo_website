@@ -101,7 +101,7 @@
       - like_class = @dislike ? "dislike" : "like"
       - order_url = url_for(:controller => 'images', :action => 'order', :id => params[:id])
       #btn-like.button.left{:class => "#{like_class}", :onclick => 'update_liked();', :data => { 'id' => params[:id], 'dislike' => "#{ @dislike }" }}
-      .button.comment.not-implement.left
+      .button.flag.left
       .button.order.left{:onclick => "window.location.href = '#{order_url}';", :data => {:url => "#{order_url}"}}
       .button.share.left{:onclick => "display_sharing_box();"}
 
