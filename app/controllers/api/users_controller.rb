@@ -17,14 +17,16 @@ class Api::UsersController < Api::BaseController
 
   def create_user
     info = params[:user]
+    profile_image_params = params[:profile_image]
+    profile_image_params[:last_used] = Time.now
     user = User.new(info)
     @result = {
       :success => true,
       :msg => {}
     }
-
+    user.profile_images.build profile_image_params
     if user.save
-      @result[:user_info] = init_user_info(user)
+      #@result[:user_info] = init_user_info(user)
     else
       messages = user.errors.full_messages
       if messages.is_a?(Array)
@@ -233,6 +235,7 @@ class Api::UsersController < Api::BaseController
   protected
   # Init a hash containing user's info
   def init_user_info(user)
+    user.confirmed_at = Time.now
     info = user.serializable_hash(user.default_serializable_options)
     # TODO: rename :avatar to :avatar_url and put it into User#exposed_methods
     info[:avatar_url] = user.avatar_url
