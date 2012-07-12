@@ -483,6 +483,10 @@ textarea { padding-top:5px; }
 
 .button {
   cursor: pointer;
+  &.edit {
+    background: url('/assets/btn-edit.png') no-repeat;
+    width: 43px;
+    height: 23px; }
   &.post-comment {
     background: url('/assets/btn-post-comment.jpg') no-repeat;
     width: 111px;

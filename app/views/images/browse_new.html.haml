@@ -13,8 +13,10 @@
     .left
       %span.text.gray.font12.line12 By
       %a.text.black.normal.font12.line12{:href => "#{ author_profile }"}= @author.username.truncate(20)
-      .text.gray.font11= "#{@author.fullname} &bull; #{ images_count } Items".html_safe
-    - unless is_current_user
+      .text.gray.font11= "#{@author.fullname} &bull; #{ pluralize(images_count, 'Item')}".html_safe
+    - if is_current_user
+      %a#btn-edit.button.edit.right{ :href => "#{ url_for(:controller => 'galleries', :action => 'edit_images', :gallery_id => @image.gallery_id) }" }
+    - else
       - is_author_following = @author.has_follower?(current_user.id)
       - follow_class = is_author_following ? 'unfollow' : 'follow'
       #btn-follow.button.right{ :class => "#{ follow_class }", :data => { 'author-id' => "#{ @author.id }", 'following' => "#{ is_author_following }"} }
@@ -90,11 +92,11 @@
       .like.left
         .icon.left
         .times.text.fuzzy-gray.bold.font16.left= @image.likes
-        .text.fuzzy-gray.font16.left= "&nbsp;#{ pluralize_without_count(@image.likes, 'Like') }".html_safe
+        .label.text.fuzzy-gray.font16.left= pluralize_without_count(@image.likes, 'Like')
       .comment.text.fuzzy-gray.font16.left
         .icon.left
         .times.text.fuzzy-gray.bold.left= @image.comments.count
-        .text.fuzzy-gray.font16.left= "&nbsp;#{ pluralize_without_count(@image.comments.count, 'Comment') }".html_safe
+        .label.text.fuzzy-gray.font16.left= pluralize_without_count(@image.comments.count, 'Comment')
     .right
       - like_class = @dislike ? "dislike" : "like"
       - order_url = url_for(:controller => 'images', :action => 'order', :id => params[:id])
@@ -105,7 +107,7 @@
 
   .line-separator.clear
   #comments-section{ :data => { :id => "#{@image.id}" }}
-    .header.text.black.font18.bold Comments and Faves
+    .header.text.black.font18.bold Comments and faves
     #current_comments
       = render :partial => 'comments_template', :locals => { :comments => @comments }
     .user-section.left
@@ -203,7 +205,8 @@
           dataType: "json",
           success: function(response){
             if(response.success==true){
-              $(".actions .like .times")[0].innerHTML = response.likes;
+              $(".actions .like .times").html(response.likes);
+              $(".actions .like .label").html(helper.pluralize_without_count(response.likes, 'Like', 'Likes'));
               if(is_dislike == 'true'){
                 $("#btn-like").attr('data-dislike', 'false');
                 $('#btn-like').removeClass('dislike');
