@@ -5,6 +5,7 @@ class Gallery < ActiveRecord::Base
   include ::SharedMethods::Converter
 
   PUBLIC_PERMISSION = "public"
+  PRIVATE_PERMISSION = 'protected'
 
   # ASSOCIATIONS
   belongs_to :user

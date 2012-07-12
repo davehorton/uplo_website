@@ -3,17 +3,16 @@ class ProfilesController < ApplicationController
   layout 'main'
 
   def show
-    @followers = @user.followers.load_users(@filtered_params)
-    @followed_users = @user.followed_users.load_users(@filtered_params)
     if @user.id == current_user.id
       @images = @user.images.load_images(@filtered_params)
-      @liked_images = @user.liked_images.load_images(@filtered_params)
       @galleries = @user.galleries.load_galleries(@filtered_params)
     else
       @images = @user.images.load_popular_images(@filtered_params)
-      @liked_images = @user.liked_images.load_popular_images(@filtered_params)
       @galleries = @user.galleries.load_popular_galleries(@filtered_params)
     end
+    @followers = @user.followers.load_users(@filtered_params)
+    @followed_users = @user.followed_users.load_users(@filtered_params)
+    @liked_images = @user.liked_images.load_images(@filtered_params)
   end
 
   def show_photos
@@ -47,23 +46,18 @@ class ProfilesController < ApplicationController
 
   def show_likes
     if request.xhr?
-      if @user.id == current_user.id
-        @images = @user.liked_images.load_images(@filtered_params)
-      else
-        @images = @user.liked_images.load_popular_images(@filtered_params)
-      end
+      @images = @user.liked_images.load_images(@filtered_params)
       render :partial => 'likes'
     end
   end
 
   def get_likes
     if request.xhr?
+      images = @user.liked_images.load_images(@filtered_params)
       if @user.id == current_user.id
-        images = @user.liked_images.load_images(@filtered_params)
         template = render_to_string :partial => 'edit_likes_template',
           :locals => { :images => images }
       else
-        images = @user.liked_images.load_popular_images(@filtered_params)
         template = render_to_string :partial => 'shared/photos_template',
           :locals => { :images => images, :photos_per_line => 4, :photo_size => 'thumb' }
       end
