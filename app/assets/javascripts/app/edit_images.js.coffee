@@ -54,10 +54,8 @@ deletePhoto = (node) ->
       dataType: 'json',
       success: (response) ->
         $('#images-panel')[0].innerHTML = response.items
-        $('.pagination-panel').each( (idx, elem) ->
-          elem.innerHTML = response.pagination
-        )
-        $('#gallery_selector_id')[0].innerHTML = response.gallery_options
+        $('.pagination-panel').each( (idx, elem) -> $(elem).html response.pagination )
+        $('#gallery_selector_id').html response.gallery_options
         alert("Delete successfully!")
         $.modal.close()
     });
