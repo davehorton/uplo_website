@@ -144,7 +144,7 @@ textarea {
   word-wrap: break-word; }
   .text.center {
     text-align: center; }
-  .text .italic {
+  .text.italic {
     font-style: italic; }
   .text.bold {
     font-weight: bold; }
@@ -350,6 +350,12 @@ textarea {
     .pagination.text .current {
       color: #ed3b03;
       background-color: transparent; }
+  .pagination.comments {
+    padding: 0;
+    margin-bottom: 10px; }
+    .pagination.comments .current {
+      color: #ed3b03;
+      background-color: transparent; }
 
 .breadcrum {
   line-height: 1.5em;
@@ -431,6 +437,10 @@ textarea {
 
 .button {
   cursor: pointer; }
+  .button.post-comment {
+    background: url("/assets/btn-post-comment.jpg") no-repeat;
+    width: 111px;
+    height: 27px; }
   .button.update-profile {
     background: url("/assets/btn-update-profile.png") no-repeat;
     width: 106px;
@@ -496,11 +506,6 @@ textarea {
     background: url("/assets/icon-tumblr.png") no-repeat; }
   .buttons-container .button.pinterest {
     background: url("/assets/icon-pinterest.png") no-repeat; }
-
-.post-comment {
-  background: url("/assets/btn-post-comment.jpg") no-repeat;
-  width: 111px;
-  height: 27px; }
 
 .simplemodal-overlay {
   background-color: #b3b3b3; }
@@ -655,13 +660,10 @@ textarea {
   line-height: 153px; }
   #center #images-panel .upload-template.container .image-container.thumb canvas {
     vertical-align: middle; }
-#center #images-panel .edit-template .line-separator {
-  margin: 13px 0px; }
 #center #images-panel .info-panel {
-  width: 248px;
   margin-left: 20px; }
   #center #images-panel .info-panel input, #center #images-panel .info-panel textarea {
-    width: 242px;
+    width: 241px;
     color: #606060; }
   #center #images-panel .info-panel input[type=checkbox] {
     width: 10px; }
@@ -690,6 +692,16 @@ textarea {
     #center #images-panel .info-panel .info-line.progress .uploading {
       width: auto;
       background: url("/assets/progressbar.gif"); }
+#center #images-panel .upload-template .info-panel {
+  width: 782px; }
+  #center #images-panel .upload-template .info-panel .info-line.error {
+    color: red; }
+  #center #images-panel .upload-template .info-panel .info-line.progress {
+    width: 248px; }
+#center #images-panel .edit-template .info-panel {
+  width: 248px; }
+#center #images-panel .edit-template .line-separator {
+  margin: 13px 0px; }
 #center #order-preview {
   margin-bottom: 30px; }
 #center .wrapper.the-app {
@@ -925,12 +937,13 @@ textarea {
 #comments-section .line-separator {
   margin: 15px 0; }
 
-#comment-field {
-  color: #aaaaaa;
+#frm-comment #comment_description {
   width: 570px;
   height: 150px;
   margin-bottom: 10px;
   padding: 5px; }
+#frm-comment .inputHintOverlay {
+  color: #aaaaaa; }
 
 #followers-section .user-section, #following-section .user-section {
   width: 208px;
