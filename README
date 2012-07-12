@@ -52,14 +52,12 @@ Run this command before pushing to production server (Heroku):
 Or:
   bundle exec rake assets:precompile
 
+This will compile assets to packages. Otherwise you will receive an AssetNotPrecompiledError exception.
+If you are using Heroku Cedar stack, you can skip this step, because Heroku will do it for you :).
+
 Refresh Paperclip image:
   rake paperclip:refresh:missing_styles
   rake paperclip:refresh CLASS=Image
   rake paperclip:refresh:thumbnails CLASS=Image
 
   Image.all.each {|i| i.data.reprocess! }
-
-
-This will compile assets to packages. Otherwise you will receive an AssetNotPrecompiledError exception.
-
-If you are using Heroku Cedar stack, you can skip this step, because Heroku will do it for you :).
