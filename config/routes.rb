@@ -54,6 +54,7 @@ Uplo::Application.routes.draw do
   post '/payments/auth_order' => 'payments#auth_order'
 
   resources :payments
+  resources :comments
 
   get 'galleries/search', :to => 'galleries#search'
   get 'galleries/search_public', :to => 'galleries#search_public'

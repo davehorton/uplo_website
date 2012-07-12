@@ -221,7 +221,8 @@ class ImagesController < ApplicationController
       @dislike = @image.is_liked? current_user.id
     end
 
-    @purchased_info = @image.raw_purchased_info(@filtered_params)
+    @filtered_params[:page_size] = 10
+    @comments = @image.comments.load_comments(@filtered_params)
     render :template => "images/browse_new", :layout => "main"
   end
 

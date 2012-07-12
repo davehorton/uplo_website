@@ -419,6 +419,13 @@ textarea { padding-top:5px; }
       background-color: transparent;
     }
   }
+  &.comments {
+    padding: 0;
+    margin-bottom: 10px;
+    .current {
+      color: $color-highlight;
+      background-color: transparent;
+    }}
 }
 
 .breadcrum {
@@ -476,6 +483,11 @@ textarea { padding-top:5px; }
 
 .button {
   cursor: pointer;
+  &.post-comment {
+    background: url('/assets/btn-post-comment.jpg') no-repeat;
+    width: 111px;
+    height: 27px;
+  }
   &.update-profile {
     background: url('/assets/btn-update-profile.png') no-repeat;
     width: 106px;
@@ -562,11 +574,6 @@ textarea { padding-top:5px; }
       background: url('/assets/icon-pinterest.png') no-repeat;
     }
   }
-}
-.post-comment {
-  background: url('/assets/btn-post-comment.jpg') no-repeat;
-  width: 111px;
-  height: 27px;
 }
 .simplemodal-overlay {
   background-color: $color-fuzzy-gray;
@@ -1078,12 +1085,13 @@ textarea { padding-top:5px; }
   }
 }
 
-#comment-field {
-  color: #aaaaaa;
-  width: 570px;
-  height: 150px;
-  margin-bottom: 10px;
-  padding: 5px;
+#frm-comment {
+  #comment_description {
+    width: 570px;
+    height: 150px;
+    margin-bottom: 10px;
+    padding: 5px; }
+  .inputHintOverlay { color: #aaaaaa;}
 }
 
 #followers-section, #following-section {

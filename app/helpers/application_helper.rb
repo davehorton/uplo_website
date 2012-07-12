@@ -130,4 +130,8 @@ module ApplicationHelper
   def is_current_user(user_id)
     user_id == current_user.id
   end
+
+  def pluralize_without_count(count, noun)
+    count <= 1 ? "#{noun}" : "#{noun.pluralize}"
+  end
 end

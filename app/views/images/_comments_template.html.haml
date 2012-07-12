@@ -1,0 +1,14 @@
+/ locals: comments
+.container.left
+  = render :partial => 'shared/pagination', :locals => { :source => comments, :params => { :controller => 'comments', :action => 'index' }, :classes => 'comments right' }
+- comments. each do |comment|
+  .user-section.left
+    - commenter = comment.user
+    - url = url_for(:controller => 'profiles', :action => 'show', :user_id => commenter.id)
+    %a{ :href => "#{ url }" }
+      = image_tag(commenter.avatar_url(:medium), :class => "avatar medium left")
+    .text.font12.line18.left
+      %a.text.black.bold{ :href => "#{ url }" }= commenter.username
+      %span.text.fuzzy-gray= "(#{ comment.duration } ago)"
+      .text.gray= comment.description
+  .line-separator.left
