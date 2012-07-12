@@ -211,6 +211,10 @@ textarea {
     height: 9px;
     width: 9px;
     margin-top: 1px; }
+  .icon.check {
+    background: url("/assets/icon-check.png") no-repeat scroll 0 0 transparent;
+    height: 12px;
+    width: 15px; }
 
 .line-separator {
   border-bottom: 1px solid #cccccc;
@@ -437,6 +441,10 @@ textarea {
 
 .button {
   cursor: pointer; }
+  .button.edit {
+    background: url("/assets/btn-edit.png") no-repeat;
+    width: 43px;
+    height: 23px; }
   .button.post-comment {
     background: url("/assets/btn-post-comment.jpg") no-repeat;
     width: 111px;
@@ -720,6 +728,8 @@ textarea {
   width: 638px; }
   #center .profile-wrapper #container {
     width: 100%; }
+    #center .profile-wrapper #container .label {
+      margin-left: 5px; }
     #center .profile-wrapper #container #counter {
       margin-left: 5px; }
     #center .profile-wrapper #container .main {

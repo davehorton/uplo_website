@@ -119,8 +119,8 @@
     color: #cbcbcb; }
     .sections .actions .left {
       line-height: 27px; }
-      .sections .actions .left .times {
-        font-weight: bold; }
+      .sections .actions .left .label {
+        margin-left: 5px; }
       .sections .actions .left .icon {
         height: 13px;
         width: 13px;
@@ -180,3 +180,8 @@
     background-color: #ebebeb; }
     #user-section .info .info-pane .name {
       margin-bottom: 5px; }
+
+#comments-section .info-panel {
+  width: 582px; }
+  #comments-section .info-panel .comment {
+    margin-top: 3px; }
