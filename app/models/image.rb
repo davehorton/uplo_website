@@ -104,8 +104,13 @@ class Image < ActiveRecord::Base
   end
 
   # INSTANCE METHODS
+  def square?
+    ratio = self.width*1.0 / self.height
+    (1.0/RECTANGULAR_RATIO < ratio) && (ratio < RECTANGULAR_RATIO)
+  end
+
   def printed_sizes
-    if self.width == self.height
+    if self.square?
       PRINTED_SIZES[:square]
     else
       PRINTED_SIZES[:portrait_rectangular]
