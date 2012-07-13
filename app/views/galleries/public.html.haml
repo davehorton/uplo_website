@@ -14,7 +14,7 @@
     = image_tag @author.avatar_url(:medium), :class => 'avatar medium left'
     .info.left
       .text.black.font16.line18= @author.username.truncate(20)
-      .text.gray.font12.line18= "#{@author.images.length} Photos &bull; 44 Followers".html_safe
+      .text.gray.font12.line18= "#{ pluralize(@author.public_images.length, 'Photo')} &bull; #{ pluralize(@author.followers.count, 'Follower')}".html_safe
   .line-separator.left
 
   #author-biography.text.gray.font12.line16.left
