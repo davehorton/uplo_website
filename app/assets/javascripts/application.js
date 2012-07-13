@@ -190,6 +190,24 @@ helper = {
     return parseInt(str_num);
   },
 
+  // Convert inch -> pixel
+  inch_to_px: function(inch, dpi){
+    if(!dpi)
+      dpi = 75; // Default DPI
+    return inch * dpi;
+  },
+  
+  // Detect the curent DPI of the screen.
+  // Requires: jQuery.
+  detect_dpi: function(){
+    var tmp_div = $('<div style="display: block; height: 1in; left: -100%; \
+                    position: absolute; top: -100%;  width: 1in; padding:0; margin:0;"></div>');
+    $('body').append(tmp_div);
+    var width = $(tmp_div).width();
+    $(tmp_div).remove();
+    return width;
+  },
+  
   alert_not_implement: function(){
     alert("This feature is coming soon");
     return false;
