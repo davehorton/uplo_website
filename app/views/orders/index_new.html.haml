@@ -236,6 +236,10 @@
         if($('#shipping-address .edit.hide').length==0) {
           $('#shipping-address .inputs').text("");
         }
+        
+        // Google Analytics
+        _gaq.push(['_trackEvent', 'UPLO Web / Check Out', 'Place Order', 'checkout', -1]);
+        
         $('#order-shippings').submit();
       });
 
