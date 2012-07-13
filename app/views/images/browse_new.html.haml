@@ -207,6 +207,12 @@
         $('#social-sharing').addClass('hide');
       });
 
+      $('#post-comment').click(function(){
+        // Google Analytics
+        _gaq.push(['_trackEvent', 'UPLO Web / Comment', 'post comment', 'status', 1]);
+        return true;
+      });
+      
       function showEmailPopup(){
         $('#social-sharing').addClass('hide');
         $("#email-sharing-popup").modal();
@@ -253,6 +259,14 @@
           },
           fail: function(){}
         });
+        
+        // Google Analytics
+        if(is_dislike == 'false'){
+          _gaq.push(['_trackEvent', 'UPLO Web / Like', 'like', 'status', 1]);
+        }
+        else{
+          _gaq.push(['_trackEvent', 'UPLO Web / Like', 'dislike', 'status', 0]);
+        }       
       }
 
       !function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");
