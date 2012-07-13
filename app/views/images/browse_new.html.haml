@@ -64,8 +64,11 @@
           #btn-cancel.button.cancel.left
 
 .sections
-  .image-container.medium.clearfix
-    = image_tag @image.data.url(:medium), :class => 'image medium'
+  .image-container-wrapper.clearfix
+    .image-container.medium.clearfix
+      = image_tag(@image.data.url(:medium), :class => 'image medium', 
+                'data-width' => @image.width, 
+                'data-height' => @image.height, :alt => @image.name)
 
   #social-sharing.hide
     .main.left
@@ -211,6 +214,16 @@
         // Google Analytics
         _gaq.push(['_trackEvent', 'UPLO Web / Comment', 'post comment', 'status', 1]);
         return true;
+      });
+      
+      $('.image-container-wrapper .image-container.medium img.image.medium').each(function(){
+        // Auto-resize the image frame
+        var img = $(this);
+        var width = parseInt($(img).attr('data-width'), 10);
+        var parent_width = parseInt($(img).parent().css('width'), 10);
+        if(width && parent_width && width < parent_width){
+          $(img).parent().css('width', width);
+        }
       });
       
       function showEmailPopup(){

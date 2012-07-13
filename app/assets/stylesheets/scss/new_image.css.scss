@@ -66,6 +66,11 @@ $color-light-gray: #a1a1a1;
 .images-wrapper {
   margin-top: 10px;
 }
+
+.image-container-wrapper {
+  text-align: center;
+}
+
 .image-container {
   display: inline-block;
   float: left;
@@ -96,8 +101,9 @@ $color-light-gray: #a1a1a1;
   }
   &.medium {
     width: $medium-image-size;
-    line-height: 490px;
     border: 1px solid $color-light-gray;
+    float: none;
+    padding: 5px;
   }
 }
 
