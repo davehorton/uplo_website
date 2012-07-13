@@ -18,7 +18,9 @@ class Api::UsersController < Api::BaseController
   def create_user
     info = params[:user]
     profile_image_params = params[:profile_image]
-    profile_image_params[:last_used] = Time.now
+    if (!profile_image_params.nil?)
+      profile_image_params[:last_used] = Time.now
+    end
     user = User.new(info)
     @result = {
       :success => true,

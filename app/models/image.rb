@@ -7,6 +7,7 @@ class Image < ActiveRecord::Base
 
   # ASSOCIATIONS
   belongs_to :gallery
+  has_many :image_flags, :dependent => :destroy
   has_many :image_tags, :dependent => :destroy
   has_many :tags, :through => :image_tags
   has_many :image_likes, :dependent => :destroy
@@ -61,6 +62,10 @@ class Image < ActiveRecord::Base
         :page => paging_info.page_id,
         :per_page => paging_info.page_size,
         :order => paging_info.sort_string)
+    end
+    
+    def load_unflagged_images user_id, params = {}
+      self.load_popular_images(params).all  :joins => 'left join image_flags on images.id=image_flags.image_id', :conditions => ["image_flags.reported_by<>#{user_id} or image_flags.reported_by is null"]
     end
 
     def load_popular_images(params = {})

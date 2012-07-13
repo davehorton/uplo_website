@@ -537,6 +537,16 @@ textarea { padding-top:5px; }
     width: 39px;
     height: 23px;
   }
+  &.close {
+    background: url('/assets/btn-close-photo.png') no-repeat;
+    width: 52px;
+    height: 23px;
+  }
+  &.submit {
+    background: url('/assets/btn-submit-photo.png') no-repeat;
+    width: 60px;
+    height: 23px;
+  }
   &.save-grid-changes {
     background: url('/assets/btn-save-changes-big.png') no-repeat;
     width: 108px;

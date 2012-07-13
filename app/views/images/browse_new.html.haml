@@ -130,6 +130,39 @@
         helper.alert_not_implement();
         return false;
       });
+      
+      //Flag implementation
+      $("#flag_form .cancel").click(function(e){
+        $.modal.close();
+      });
+
+      function submit_flag(desc, type){
+        var image_id = $('#btn-like').attr('data-id');
+        $.modal.close();
+        setTimeout(show_mask,100);
+        $.get('/images/flag',{id:image_id , type: type, desc: desc }, function(data) {
+          $.modal.close();
+          if (data.status == "success")
+          {
+            setTimeout(finish_flagging,100);
+          }else{
+            window.location = "/browse"
+            alert(data.message);
+          }
+          
+        });
+      }
+
+      function show_mask(){
+        $("#mask").modal();
+      }
+
+      function finish_flagging(){
+        $('#flag_form').modal();
+        show_thank_form();
+      }
+
+
       $('#email-sharing-popup .close').click(function(){
         $.modal.close();
       });

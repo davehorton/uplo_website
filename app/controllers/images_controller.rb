@@ -256,6 +256,36 @@ class ImagesController < ApplicationController
     image.save
     redirect_to :action => :browse
   end
+  
+  # PUT images/flag/:id
+  # params: id => Image ID
+  #         type => Flag type
+  #         desc => Flag description
+  def flag
+    result = {
+      :status => :fail,
+      :message => ""
+    }
+    image = Image.find_by_id params[:id]
+    if (image)
+      if (image.image_flags.find_by_reported_by(current_user.id))
+        result[:message] = "You already flagged this image."
+      else
+        image_flag = image.image_flags.new
+        image_flag.reporter = current_user
+        image_flag.description = params[:desc]
+        image_flag.flag_type = params[:type]
+        if (image_flag.save)
+          result[:status] = :success
+        else
+          result[:message] = "Can not make a flag at this moment."
+        end
+      end
+    else
+      result[:message] = "The image is not exist right now."
+    end
+    render :json => result
+  end
 
   def update_images
     data = JSON.parse params[:images]

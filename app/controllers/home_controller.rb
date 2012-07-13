@@ -10,7 +10,7 @@ class HomeController < ApplicationController
   end
 
   def browse
-    @images = Image.load_popular_images(@filtered_params)
+    @images = Image.load_unflagged_images(current_user.id, @filtered_params)
     render :template => 'home/new_browse', :layout => "main"
   end
 

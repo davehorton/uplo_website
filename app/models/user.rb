@@ -133,7 +133,10 @@ class User < ActiveRecord::Base
   end
 
   def joined_date
-    self.confirmed_at.strftime('%B %Y')
+    if !self.confirmed_at.nil?
+      return self.confirmed_at.strftime('%B %Y')
+    end
+    return ""
   end
 
   def fullname

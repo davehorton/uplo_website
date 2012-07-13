@@ -1,9 +1,72 @@
 / locals: text
-.selection_container{:style => "width:auto"}
+#selection_container
   %div
-    =radio_button("post", "category", "rails", :style=>"vertical-align: middle")
-    %span{:style=>"padding-left:6px; padding-right:16px"} Terms of Use Violation
-    =radio_button("post", "category", "rails", :style=>"vertical-align: middle")
-    %span{:style=>"padding-left:6px; padding-right:16px"} Copyright
-    =radio_button("post", "category", "rails", :style=>"vertical-align: middle")
-    %span{:style=>"padding-left:6px; padding-right:16px"} Nudity
+    =radio_button("post", "category", "rails", :target => "violation")
+    %span Terms of Use Violation
+    =radio_button("post", "category", "rails", :target => "copyright")
+    %span Copyright
+    =radio_button("post", "category", "rails", :target => "nudity")
+    %span{:style => "padding-right:0px"} Nudity
+  #violation.form_flag_element{:style => "display:none"}
+    .line-separator.left
+    Reason for reporting: 
+    %br
+    %br
+    =text_area_tag "reason", "", :style => "width: 100%; -webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing:border-box;"
+    %br
+    %br{:style => "clear:both"}
+    .button.submit.left{:style => "padding-right:10px", :target => "1"}}
+    .button.cancel.left
+  #copyright.form_flag_element{:style => "display:none"}
+    .line-separator.left
+    Who owns this photo? 
+    %br
+    %br
+    =text_area_tag "reason", "", :style => "width: 100%; -webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing:border-box;"
+    %br
+    %br{:style => "clear:both"}
+    .button.submit.left{:style => "padding-right:10px", :target => "2"}}
+    .button.cancel.left
+  #nudity.form_flag_element{:style => "display:none"}
+    .line-separator.left
+    %br
+    %br
+
+    .button.submit.left{:style => "padding-right:10px", :target => "3"}
+    .button.cancel.left
+
+#thank_form{:style => "display:none"}
+  Thanks. We'll review this photo as soon as possible.
+  .line-separator.left
+  %br
+  %br
+  .button.close.left{:target => "/browse"}
+
+- content_for :js do
+  = javascript_tag do
+    :erb
+      $("#selection_container input").click(function(){
+        $(".form_flag_element").hide();
+        $("#" + $(this).attr('target')).show();
+      });
+
+      $("#selection_container .button.submit").click(function(){
+        var desc = $(this).parent().find("textarea").val();
+        if (desc == undefined)
+          desc = "";
+        var type = $(this).attr("target");
+        submit_flag(desc, type)
+      });
+      
+      $("#thank_form .close").click(function(){
+        window.location = $(this).attr("target");
+      });
+
+      function show_thank_form(){
+        $("#selection_container").hide();
+        $("#thank_form").show();
+      }	
+	
+	
+	
+	
