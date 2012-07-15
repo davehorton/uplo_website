@@ -1,6 +1,7 @@
 - content_for :head do
   = stylesheet_link_tag('scss/new_image.css', 'scss/sale.css')
-
+  = javascript_include_tag('app/image_util.js')
+  
 - content_for :right_content do
   .text.black.font18.bold= @image.name
   .line-separator
@@ -218,12 +219,7 @@
       
       $('.image-container-wrapper .image-container.medium img.image.medium').each(function(){
         // Auto-resize the image frame
-        var img = $(this);
-        var width = parseInt($(img).attr('data-width'), 10);
-        var parent_width = parseInt($(img).parent().css('width'), 10);
-        if(width && parent_width && width < parent_width){
-          $(img).parent().css('width', width);
-        }
+        image_util.resize_frame($(this));
       });
       
       function showEmailPopup(){

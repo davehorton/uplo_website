@@ -845,7 +845,15 @@ textarea { padding-top:5px; }
       .info-panel { width: 248px; }
       .line-separator { margin: 13px 0px; }
     }}
-  #order-preview { margin-bottom: 30px; }
+  #order-preview { 
+    margin-bottom: 30px; overflow: hidden;
+    
+    #preview-frame {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+    }
+  }
   .wrapper.the-app { margin-top: -10px; }
   .container { width: 100%; }
   .intro {

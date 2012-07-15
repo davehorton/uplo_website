@@ -1,6 +1,7 @@
 - content_for :head do
   = stylesheet_link_tag("scss/cart_new.css", "scss/new_image.css")
-
+  = javascript_include_tag('app/image_util.js')
+  
 - content_for :top_content do
   .text.black.bold.font16{ :style => 'margin-bottom:8px;' }= @image.name
 
@@ -20,18 +21,22 @@
             = f.radio_button(:plexi_mount, false)
             = f.label(:plexi_mount_false, "No", :class => 'text gray font12')
 
-      .round-box.option.left
+      .round-box.option.left.print-sizes-container
         .header.text.black.bold.font14= "Print Size"
         - idx = 0
         - begin
           .line.left
             .item.left
               - size = @image.printed_sizes[idx]
-              = f.radio_button(:size, size, :checked => true)
+              - if idx == 0
+                = f.radio_button(:size, size, :checked => true, :class => 'print-size')
+              - else
+                = f.radio_button(:size, size, :class => 'print-size')
+                
               = f.label("size_#{size}", "#{size}\"", :class => 'text gray font12')
             .item.left
               - size = @image.printed_sizes[idx + 1]
-              = f.radio_button(:size, size)
+              = f.radio_button(:size, size, :class => 'print-size')
               = f.label("size_#{size}", "#{size}\"", :class => 'text gray font12')
           - idx += 2
         - end while idx < @image.printed_sizes.size - 1
@@ -39,7 +44,7 @@
           .line.left
             .item.left
               - size = @image.printed_sizes[idx]
-              = f.radio_button(:size, size, :checked => true)
+              = f.radio_button(:size, size, :class => 'print-size')
               = f.label("size_#{size}", "#{size}\"", :class => 'text gray font12')
       .round-box.option.left
         .header.text.black.bold.font14= "Moulding Choice"
@@ -74,9 +79,14 @@
     .clear
       .button.add-to-cart.right
 
-#order-preview.image-container.medium.left
-  = image_tag @image.url(:medium), :class => 'image medium'
-
+.sections.clearfix
+  .image-container-wrapper.clearfix
+    #order-preview.image-container.medium.left
+      #preview-frame.clearfix
+        = image_tag(@image.data.url(:medium), :class => 'image medium', 
+                  'data-width' => @image.width, 
+                  'data-height' => @image.height, :alt => @image.name)
+                
 - content_for :js do
   - javascript_tag do
     :erb
@@ -92,3 +102,41 @@
           }
         }
       });
+      
+      $('.image-container-wrapper .image-container.medium img.image.medium').each(function(){
+        // Auto-resize the image frame        
+        image_util.resize_frame($(this));
+      });
+
+      // Scale and change the frame based on the print-size.
+      $('.print-sizes-container .print-size').change(function(){
+        if($(this).is(':checked')) { 
+          var print_sizes = $.trim($(this).val()).split('x');
+          if(print_sizes.length >= 2){
+            var p_width = parseFloat(print_sizes[0]);
+            var p_height = parseFloat(print_sizes[1]);           
+            
+            var dpi = image_util.detect_dpi();
+            p_width = image_util.inch_to_px(p_width, dpi);
+            p_height = image_util.inch_to_px(p_height, dpi);
+            
+            var img = $('#order-preview img');
+            var parent = $(img).parents('.image-container');
+            var max_width = parseInt($(parent).css('max-width'), 10);
+            
+            if(p_width > max_width){
+              var ratio = max_width / p_width;
+              p_height = p_height * ratio;
+              p_width = max_width;
+            }                      
+            
+            var origin_width = parseInt($(img).attr('data-width'), 10);
+            var origin_height = parseInt($(img).attr('data-height'), 10);
+            //console.log('input:' + p_width + 'x' + p_height + '; ratio: ' + origin_width/origin_height);
+            image_util.resize_image(img, {width: p_width, height: p_height, ratio: origin_width/origin_height});
+            image_util.resize_frame(img);
+          }
+        }
+      });
+      // Force change of page-loading.
+      $('.print-sizes-container .print-size:checked').change();
