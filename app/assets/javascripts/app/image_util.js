@@ -51,6 +51,7 @@ image_util = {
   },
   
   resize_frame: function (img, auto){
+    var parent = $(img).parents('.image-container');
     if(auto){
       $(parent).width('auto');
       $(parent).height('auto');
@@ -61,8 +62,7 @@ image_util = {
       
       if(!width){
         width = parseInt($(img).attr('data-width'), 10);
-      }
-      var parent = $(img).parents('.image-container');
+      }      
       var parent_width = parseInt($(parent).css('max-width'), 10);
       if(width > 0 && width <= parent_width){
         $(parent).width(width);
