@@ -35,6 +35,12 @@
 .images-wrapper {
   margin-top: 10px; }
 
+.image-container-wrapper {
+  text-align: center;
+  width: 100%;
+  height: 100%;
+  position: relative; }
+
 .image-container {
   display: inline-block;
   float: left;
@@ -59,8 +65,10 @@
     margin: 3px; }
   .image-container.medium {
     width: 638px;
-    line-height: 490px;
-    border: 1px solid #a1a1a1; }
+    max-width: 638px;
+    border: 1px solid #a1a1a1;
+    float: none;
+    padding: 5px; }
 
 .image-thumb {
   width: 155px;
@@ -137,6 +145,9 @@
       .sections .actions .right .button.comment {
         background: url("/assets/btn-comment.jpg") no-repeat;
         width: 98px; }
+      .sections .actions .right .button.flag {
+        background: url("/assets/btn-flag-photo.png") no-repeat;
+        width: 62px; }
       .sections .actions .right .button.like {
         background: url("/assets/btn-like.jpg") no-repeat;
         width: 65px; }
@@ -185,3 +196,15 @@
   width: 582px; }
   #comments-section .info-panel .comment {
     margin-top: 3px; }
+
+#flag_form {
+  width: 352px; }
+
+#flag_form #selection_container input[type="radio"] {
+  vertical-align: middle; }
+
+#flag_form #selection_container span {
+  padding-left: 6px;
+  padding-right: 16px;
+  vertical-align: text-top;
+  line-height: 11px; }

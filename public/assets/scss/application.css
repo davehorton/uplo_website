@@ -481,6 +481,14 @@ textarea {
     background: url("/assets/btn-ok.png") no-repeat;
     width: 39px;
     height: 23px; }
+  .button.close {
+    background: url("/assets/btn-close-photo.png") no-repeat;
+    width: 52px;
+    height: 23px; }
+  .button.submit {
+    background: url("/assets/btn-submit-photo.png") no-repeat;
+    width: 60px;
+    height: 23px; }
   .button.save-grid-changes {
     background: url("/assets/btn-save-changes-big.png") no-repeat;
     width: 108px;
@@ -711,7 +719,12 @@ textarea {
 #center #images-panel .edit-template .line-separator {
   margin: 13px 0px; }
 #center #order-preview {
-  margin-bottom: 30px; }
+  margin-bottom: 30px;
+  overflow: hidden; }
+  #center #order-preview #preview-frame {
+    width: 100%;
+    height: 100%;
+    overflow: hidden; }
 #center .wrapper.the-app {
   margin-top: -10px; }
 #center .container {
