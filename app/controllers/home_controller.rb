@@ -3,7 +3,7 @@ class HomeController < ApplicationController
 
   def index
     session[:back_url] = url_for(:controller => 'home', :action => "browse") if session[:back_url].nil?
-    @images = Image.load_popular_images(@filtered_params)
+    @images = Image.load_unflagged_images(current_user.id, @filtered_params)
     if user_signed_in?
       redirect_to :action => :spotlight
     end
