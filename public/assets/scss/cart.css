@@ -1,0 +1,97 @@
+.button-container {
+  height: 40px; }
+
+.order label {
+  width: 100% !important; }
+  .order label.options_label {
+    width: auto !important;
+    padding-right: 5px; }
+.order .info input[type="radio"] {
+  float: left; }
+
+.add-to-cart {
+  float: right;
+  margin-left: 5px;
+  display: block;
+  padding-left: 20px;
+  width: 120px;
+  height: 42px;
+  color: #fff;
+  background: url("/assets/cart_icon.png") #2d9dd1 no-repeat center left;
+  -moz-box-shadow: 2px 2px 2px #909090;
+  -webkit-box-shadow: 2px 2px 2px #909090;
+  box-shadow: 2px 2px 2px #909090; }
+
+.solidBlock {
+  border: none;
+  background: #DEE0E0;
+  padding: 12px;
+  margin-bottom: 24px; }
+
+.cartTable {
+  border: none;
+  border-collapse: collapse; }
+  .cartTable td {
+    padding: 6px;
+    font-size: 13px;
+    width: 170px; }
+  .cartTable .text-center {
+    text-align: center; }
+  .cartTable .text-right {
+    text-align: right;
+    margin-right: 10px; }
+  .cartTable .text-left {
+    text-align: left; }
+  .cartTable tr.header, .cartTable tr.header td {
+    background-color: #DEE0E0;
+    font-size: 12px;
+    color: #505050;
+    font-family: arial, geneva, lucida sans, sans serif; }
+  .cartTable tr.footer td {
+    border-top: 1px #D4E0C7 solid;
+    background-color: #DEE0E0;
+    color: #505050;
+    font-size: 12px;
+    font-family: arial, geneva, lucida sans, sans serif; }
+    .cartTable tr.footer td .total {
+      font-weight: bold;
+      font-size: 15px; }
+  .cartTable tr.lines {
+    border-bottom: 1px #D4E0C7 solid;
+    background-color: #FFFFFF; }
+    .cartTable tr.lines .preview {
+      width: 205px; }
+      .cartTable tr.lines .preview .option {
+        font-size: 10px; }
+        .cartTable tr.lines .preview .option a:link {
+          padding-left: 5px; }
+  .cartTable .cartPrice {
+    display: inline;
+    padding-left: 6px;
+    vertical-align: top; }
+
+.button-container .left-btn {
+  float: left; }
+
+.address {
+  padding-bottom: 25px; }
+  .address .order_summary.round-box {
+    float: left;
+    width: 421px !important; }
+
+.order_summary.round-box {
+  margin: 5px;
+  padding: 20px;
+  background-color: white; }
+  .order_summary.round-box .header {
+    font-weight: bold;
+    padding-bottom: 10px; }
+.order_summary .inputs {
+  width: 100%;
+  height: 70px; }
+  .order_summary .inputs .info {
+    padding-bottom: 5px; }
+    .order_summary .inputs .info select {
+      width: 215px !important; }
+.order_summary .actions {
+  float: left; }
