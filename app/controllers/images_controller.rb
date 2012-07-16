@@ -155,7 +155,7 @@ class ImagesController < ApplicationController
     push_redirect if redirect_list.index(request.env["HTTP_REFERER"])
     # get selected Image
     @selected_image = Image.find_by_id(params[:id])
-    if (@selected_image.nil?)
+    if (@selected_image.nil? || @selected_image.image_flags.count > 0)
       return render_not_found
     end
     # get Gallery
@@ -201,7 +201,7 @@ class ImagesController < ApplicationController
   def browse
     push_redirect
     @image = Image.find_by_id(params[:id])
-    if @image.blank?
+    if @image.blank? || @image.image_flags.count > 0
       return render_not_found
     elsif @image.gallery && !@image.gallery.can_access?(current_user)
       return render_unauthorized

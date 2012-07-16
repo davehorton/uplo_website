@@ -40,7 +40,7 @@
   .line-separator.left
   %br
   %br
-  .button.close.left{:target => "/browse"}
+  .button.dismiss.left{:target => "/browse"}
 
 - content_for :js do
   = javascript_tag do
@@ -58,7 +58,7 @@
         submit_flag(desc, type)
       });
       
-      $("#thank_form .close").click(function(){
+      $("#thank_form .dismiss").click(function(){
         window.location = $(this).attr("target");
       });
 

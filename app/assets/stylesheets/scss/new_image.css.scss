@@ -281,16 +281,18 @@ $color-light-gray: #a1a1a1;
 }
 
 #flag_form{
-	width: 352px;
+	width: 340px;
+}
+
+#flag_form #selection_container{
 }
 
 #flag_form #selection_container input[type="radio"]{
-	vertical-align: middle
+	height:auto;
+	margin:0;
+	padding:0;
 }
 
-#flag_form #selection_container span{
-	padding-left:6px; 
+#flag_form #selection_container span{ 
 	padding-right:16px;
-	vertical-align: text-top;
-	line-height: 11px;
 }
