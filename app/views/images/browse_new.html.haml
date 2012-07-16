@@ -218,8 +218,11 @@
       });
       
       $('.image-container-wrapper .image-container.medium img.image.medium').each(function(){
+        image_util.resize_frame($(this), true);        
         // Auto-resize the image frame
-        image_util.resize_frame($(this));
+        $(this).load(function(){      
+          image_util.resize_frame($(this));
+        });
       });
       
       function showEmailPopup(){

@@ -50,19 +50,29 @@ image_util = {
     //console.log('output:' +  $(img).width() + 'x' + $(img).height());
   },
   
-  resize_frame: function (img){
-    var width = $(img).width();
-    if(!width){
-      width = parseInt($(img).attr('data-width'), 10);
+  resize_frame: function (img, auto){
+    if(auto){
+      $(parent).width('auto');
+      $(parent).height('auto');
     }
-    var parent = $(img).parents('.image-container');
-    var parent_width = parseInt($(parent).css('max-width'), 10);
-    if(width && parent_width && width <= parent_width){
-      $(parent).width(width);
+    else{
+      var width = $(img).width();
+      var height = $(img).height();
+      
+      if(!width){
+        width = parseInt($(img).attr('data-width'), 10);
+      }
+      var parent = $(img).parents('.image-container');
+      var parent_width = parseInt($(parent).css('max-width'), 10);
+      if(width > 0 && width <= parent_width){
+        $(parent).width(width);
+      }
+      else if(width > 0 && width > parent_width){
+        $(parent).width(parent_width);
+      }
+      
+      if(height > 0)
+        $(parent).height(height);
     }
-    else if(width && parent_width && width > parent_width){
-      $(parent).width(parent_width);
-    }
-    $(parent).height($(img).height());
   }
 };

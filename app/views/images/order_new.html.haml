@@ -104,8 +104,11 @@
       });
       
       $('.image-container-wrapper .image-container.medium img.image.medium').each(function(){
-        // Auto-resize the image frame        
-        image_util.resize_frame($(this));
+        image_util.resize_frame($(this), true);
+        // Auto-resize the image frame 
+        $(this).load(function(){      
+          image_util.resize_frame($(this));
+        });
       });
 
       // Scale and change the frame based on the print-size.
