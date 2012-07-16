@@ -40,21 +40,12 @@
 - content_for :js do
   :erb
     <script>
-    var page_size = '<%= @page_size %>'
-    var fileUploadErrors = {
-        maxFileSize: 'File is too big',
-        minFileSize: 'File is too small',
-        acceptFileTypes: 'Filetype not allowed',
-        maxNumberOfFiles: 'Max number of files exceeded',
-        uploadedBytes: 'Uploaded bytes exceed file size',
-
-        emptyResult: 'Empty file upload result'
-    };
+      if(<%= !params[:gallery_id].blank? && @gallery.images.count == 0 %>){
+        $('#image_data').click()
+      }
     </script>
 
-  = javascript_include_tag "file_upload/jquery.ui.widget.js",
-      "lib/blueimp/tmpl.min.js",
-      "lib/blueimp/load-image.min.js",
+  = javascript_include_tag "lib/blueimp/load-image.min.js",
       "file_upload/jquery.fileupload.js",
       "file_upload/jquery.iframe-transport.js",
       'lib/jquery.json.min.js',

@@ -64,9 +64,9 @@ class GalleriesController < ApplicationController
     @gallery = current_user.galleries.new(params[:gallery])
     respond_to do |format|
       if @gallery.save
-        format.html { redirect_to(gallery_images_path(@gallery), :notice => I18n.t('gallery.create_done')) }
+        format.html { redirect_to :action => 'edit_images', :gallery_id => @gallery.id }
       else
-        format.html { render :action => "new", :notice => @gallery.errors}
+        format.html { render :action => "new", :notice => @gallery.errors }
       end
     end
   end

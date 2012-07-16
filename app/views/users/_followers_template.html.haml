@@ -13,7 +13,7 @@
       = image_tag user.avatar_url(:large), :class => 'avatar large left'
     .info-panel.left
       .name.text.black.font18.line12
-        %a{:href => "#{ url }"}= user.username.truncate(20)
+        %a{:href => "#{ url }"}= user.fullname.truncate(20)
       .text.gray.font12.line12.left= "#{ pluralize(images_number, 'item')} | view&nbsp".html_safe
       %a.text.black.font12.line12.left{ :href => "#{ url }", :data => { 'user-id' => "#{ user.id }" } } profile
       - unless is_current_user

@@ -113,10 +113,8 @@ $ ->
     acceptFileTypes: /(\.|\/)(gif|jpe?g|png)$/i
     previewMaxWidth: 180
     previewMaxHeight: 180
-    displayNumber: page_size
     add: (e, data) ->
       data.context = renderUpload(data.files[0])
-      $('#mask').modal()
       data.submit()
     done: (e, data) ->
       response = $.parseJSON(data.result)
@@ -126,10 +124,8 @@ $ ->
         $('#images-panel').children().last().remove() if $('.pagination-panel').find('.pagination').length > 0
         $('#gallery_selector_id').html response.gallery_options
         $('.empty-data').remove()
-        $.modal.close()
       else
         $(data.context).find('.progress').replaceWith("<div class='error info-line text italic font12 left'>#{response.msg}</div>")
-        $.modal.close()
     progress: (e, data) ->
       progress = parseInt(data.loaded / data.total * 100, 10).toString() + '%'
       if data.context
