@@ -17,8 +17,6 @@ class Gallery < ActiveRecord::Base
 
   # CALL BACK
   after_initialize :init_permission
-  
-  before_save :check_duplicated_name
 
   # CLASS METHODS
   class << self
