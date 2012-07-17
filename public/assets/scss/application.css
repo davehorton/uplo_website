@@ -254,9 +254,6 @@ textarea {
         width: 100%; }
       .popup .container .main-panel .line-separator {
         margin: 20px 0px; }
-      .popup .container .main-panel #frm-edit-gallery #gallery_permission {
-        width: 118px;
-        color: #606060; }
       .popup .container .main-panel .button-container {
         width: 100%; }
 
@@ -526,6 +523,40 @@ textarea {
 .simplemodal-overlay {
   background-color: #b3b3b3; }
 
+/* select menu: modify of jquery.ui.theme.css */
+.ui-widget {
+  font-family: Arial; }
+
+.ui-state-default, .ui-widget-content .ui-state-default, .ui-widget-header .ui-state-default {
+  border: 1px solid #a5a5a5;
+  color: #111111; }
+
+.ui-corner-all, .ui-corner-top, .ui-corner-left, .ui-corner-tl {
+  border-top-left-radius: 5px; }
+
+.ui-corner-all, .ui-corner-top, .ui-corner-right, .ui-corner-tr {
+  border-top-right-radius: 5px; }
+
+.ui-corner-all, .ui-corner-bottom, .ui-corner-left, .ui-corner-bl {
+  border-bottom-left-radius: 5px; }
+
+.ui-corner-all, .ui-corner-bottom, .ui-corner-right, .ui-corner-br {
+  border-bottom-right-radius: 5px; }
+
+.ui-selectmenu {
+  height: 25px; }
+  .ui-selectmenu:hover {
+    text-decoration: none; }
+
+.ui-selectmenu-menu {
+  vertical-align: top; }
+
+.ui-selectmenu-menu li a, .ui-selectmenu-status {
+  font-size: 12px;
+  font-weight: normal;
+  line-height: 13px;
+  padding: 7px 0 3px 10px; }
+
 /*==================================================================================*/
 /* ID */
 /*==================================================================================*/
@@ -540,10 +571,6 @@ textarea {
   #header .header-menu li {
     float: left;
     padding: 0px 15px; }
-    #header .header-menu li a, #header .header-menu li option {
-      color: #111111;
-      font-size: 12px;
-      text-shadow: 1px 0 2px #CECECE; }
   #header .devider {
     margin-top: -10px;
     padding: 0px 5px; }
@@ -951,9 +978,6 @@ textarea {
     margin-right: 10px; }
   #gallery-form-container #frm-edit-gallery #button-container {
     margin: 5px 0 5px 110px; }
-  #gallery-form-container #frm-edit-gallery #gallery_permission {
-    height: 28px;
-    padding-top: 2px; }
 
 #comments-section .header {
   margin: 20px 0; }
@@ -1009,3 +1033,35 @@ textarea {
     width: 286px; }
     #save-confirm-popup .main-panel .button.save-my-changes {
       margin-right: 10px; }
+
+/* select button */
+#my_links-button {
+  height: 20px; }
+
+#my_links-button, #my_links-menu {
+  min-width: 110px;
+  max-width: 110px; }
+  #my_links-button li a, #my_links-button .ui-selectmenu-status, #my_links-menu li a, #my_links-menu .ui-selectmenu-status {
+    padding-top: 4px;
+    font-weight: bold; }
+
+#gallery_permission-button, #gallery_permission-menu {
+  max-width: 120px;
+  min-width: 120px; }
+  #gallery_permission-button li a, #gallery_permission-button .ui-selectmenu-status, #gallery_permission-menu li a, #gallery_permission-menu .ui-selectmenu-status {
+    font-weight: normal; }
+
+#image_gallery_id-button, #image_gallery_id-menu, #image_price-menu, #image_price-button {
+  max-width: 248px;
+  min-width: 248px; }
+
+#gallery_selector_id-button {
+  height: 20px; }
+
+#gallery_selector_id-button, #gallery_selector_id-menu {
+  max-width: 160px;
+  min-width: 160px; }
+  #gallery_selector_id-button li a, #gallery_selector_id-button .ui-selectmenu-status, #gallery_selector_id-menu li a, #gallery_selector_id-menu .ui-selectmenu-status {
+    padding-top: 4px; }
+  #gallery_selector_id-button .number, #gallery_selector_id-menu .number {
+    margin-left: 5px; }

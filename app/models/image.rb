@@ -63,15 +63,9 @@ class Image < ActiveRecord::Base
         :per_page => paging_info.page_size,
         :order => paging_info.sort_string)
     end
-<<<<<<< HEAD
-    
+
     def load_unflagged_images params = {}
       self.load_popular_images(params).all  :joins => 'left join image_flags on images.id=image_flags.image_id', :conditions => ["image_flags.reported_by is null"]
-=======
-
-    def load_unflagged_images user_id, params = {}
-      self.load_popular_images(params).all  :joins => 'left join image_flags on images.id=image_flags.image_id', :conditions => ["image_flags.reported_by<>#{user_id} or image_flags.reported_by is null"]
->>>>>>> [layout] define header section on my UPLO options
     end
 
     def load_popular_images(params = {})

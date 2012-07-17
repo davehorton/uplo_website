@@ -94,6 +94,18 @@
     height: 18px;
     margin-left: 140px; }
 
+/* select buttons */
+.ui-selectmenu, .ui-selectmenu-menu-popup {
+  min-width: 194px;
+  max-width: 194px; }
+
+#card_expires_on_1i-button {
+  margin-left: 3px; }
+
+#card_expires_on_1i-button, #card_expires_on_1i-menu, #card_expires_on_2i-menu, #card_expires_on_2i-button {
+  min-width: 93px;
+  max-width: 93px; }
+
 /*==================================================================================*/
 /* CLASS */
 /*==================================================================================*/
@@ -163,9 +175,6 @@
     background: url("/assets/option-header-bg.png") repeat-x scroll 0 0 transparent;
     border-top-left-radius: 5px;
     border-top-right-radius: 5px; }
-  .option .line {
-    border-top: 1px solid #cccccc;
-    width: 100%; }
 
 .add-to-cart {
   background: url("/assets/btn-add-to-cart.jpg") no-repeat scroll 0 0 transparent;
@@ -191,15 +200,6 @@
       .order_summary .inputs .info input {
         width: 183px;
         font-size: 12px; }
-      .order_summary .inputs .info select {
-        width: 195px !important;
-        height: 30px;
-        padding: 3px 1px;
-        font-size: 12px; }
-      .order_summary .inputs .info.expiration-date select {
-        width: 93px !important; }
-      .order_summary .inputs .info.expiration-date #card_expires_on_2i {
-        margin-right: 10px; }
     .order_summary .inputs .simple_form label {
       width: 110px; }
     .order_summary .inputs .simple_form input[type=text], .order_summary .inputs .simple_form input[type=email], .order_summary .inputs .simple_form input[type=password] {
