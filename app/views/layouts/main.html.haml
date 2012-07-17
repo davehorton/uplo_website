@@ -75,4 +75,5 @@
     = yield :js
     = javascript_tag do
       $('body').delegate('.popup .close', 'click', function(e){ $.modal.close() });
+      $('select[id!=my_links]').selectmenu({style:'popup'})
       $('#my_links').selectmenu({ style: 'popup', change: function(e, obj){ window.location = obj.value; }});

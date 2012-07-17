@@ -310,7 +310,6 @@ textarea { padding-top:5px; }
       .label { margin: 5px 20px 5px 0;}
       .info-line { margin: 5px 0; width: 100%;}
       .line-separator { margin: 20px 0px;}
-      #frm-edit-gallery #gallery_permission { width: 118px; color: $color-gray;}
       .button-container { width: 100%;}
     }
   }
@@ -608,11 +607,16 @@ textarea { padding-top:5px; }
 .ui-corner-all, .ui-corner-top, .ui-corner-right, .ui-corner-tr {  border-top-right-radius: 5px; }
 .ui-corner-all, .ui-corner-bottom, .ui-corner-left, .ui-corner-bl { border-bottom-left-radius: 5px; }
 .ui-corner-all, .ui-corner-bottom, .ui-corner-right, .ui-corner-br { border-bottom-right-radius: 5px; }
+.ui-selectmenu {
+  height: 25px;
+  &:hover { text-decoration: none; }
+}
 .ui-selectmenu-menu { vertical-align: top; }
 .ui-selectmenu-menu li a, .ui-selectmenu-status {
   font-size: 12px;
+  font-weight: normal;
   line-height: 13px;
-  padding: 4px 0 3px 10px;
+  padding: 7px 0 3px 10px;
 }
 
 /*==================================================================================*/
@@ -642,18 +646,9 @@ textarea { padding-top:5px; }
     color: #333;
     display: inline-block;
   }
-  #my_links-button {
-    height: 20px;
-    min-width: 115px;
-    &:hover { text-decoration: none; }
-  }
-}
-#my_links-menu {
-  min-width: 90px;
 }
 
-#banner {
-}
+#banner {}
 #top {
   width: 100%;
   margin-top: 30px;
@@ -1117,10 +1112,6 @@ textarea { padding-top:5px; }
     #button-container {
       margin: 5px 0 5px 110px;
     }
-    #gallery_permission {
-      height: 28px;
-      padding-top: 2px;
-    }
   }
 }
 
@@ -1188,4 +1179,32 @@ textarea { padding-top:5px; }
       margin-right: 10px;
     }
   }
+}
+
+/* select button */
+#my_links-button {
+  height: 20px;
+  min-width: 115px;
+  max-width: 115px;
+  .ui-selectmenu-status { padding-top: 4px; font-weight: bold; }
+}
+#my_links-menu {
+  min-width: 115px;
+  max-width: 115px;
+  li a { padding-top: 4px; font-weight: bold; }
+}
+#gallery_permission-button, #gallery_permission-menu {
+  max-width: 120px;
+  min-width: 120px;
+  li a, .ui-selectmenu-status { font-weight: normal; }
+}
+#image_gallery_id-button, #image_gallery_id-menu, #image_price-menu, #image_price-button {
+  max-width: 248px;
+  min-width: 248px;
+}
+#gallery_selector_id-button { height: 20px; }
+#gallery_selector_id-button, #gallery_selector_id-menu {
+  max-width: 160px;
+  min-width: 160px;
+  li a, .ui-selectmenu-status { padding-top: 4px; }
 }

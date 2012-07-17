@@ -122,6 +122,14 @@ $color-line-separator: #cccccc;
   }
 }
 
+/* select buttons */
+.ui-selectmenu, .ui-selectmenu-menu-popup { min-width: 194px; max-width: 194px; }
+#card_expires_on_1i-button { margin-left: 3px; }
+#card_expires_on_1i-button, #card_expires_on_1i-menu, #card_expires_on_2i-menu, #card_expires_on_2i-button {
+  min-width: 93px;
+  max-width: 93px;
+}
+
 /*==================================================================================*/
 /* CLASS */
 /*==================================================================================*/
@@ -245,20 +253,6 @@ $color-line-separator: #cccccc;
       input {
         width: 183px;
         font-size: 12px;
-      }
-      select {
-        width: 195px !important;
-        height: 30px;
-        padding: 3px 1px;
-        font-size: 12px;
-      }
-      &.expiration-date {
-        select {
-          width: 93px !important;
-        }
-        #card_expires_on_2i {
-          margin-right: 10px;
-        }
       }
     }
     .simple_form {
