@@ -12,11 +12,13 @@ class Gallery < ActiveRecord::Base
   has_many :images, :dependent => :destroy
 
   # VALIDATIONS
-  validates :name, :presence => true
+  validates :name, :presence => true, :uniqueness => {:scope => :user_id, :case_sensitive => false}
   validates :user, :presence => true
 
   # CALL BACK
   after_initialize :init_permission
+  
+  before_save :check_duplicated_name
 
   # CLASS METHODS
   class << self

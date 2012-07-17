@@ -24,7 +24,7 @@ class Api::GalleriesController < Api::BaseController
       @result[:public_link] = gal.public_link
       @result[:success] = true
     else
-      @result[:msg] = gal.errors
+      @result[:msg] = gal.errors.full_messages.to_sentence
     end
 
     return render :json => @result

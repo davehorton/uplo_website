@@ -48,8 +48,23 @@ class Api::UsersController < Api::BaseController
       @result[:success] = false
       @result[:msg] = I18n.t("common.invalid_params")
     elsif @user.update_profile(params[:user])
-      @result[:success] = true
-      @result[:user_info] = init_user_info(@user)
+      avatar = @user.profile_images.build({:data => params[:profile_image][:data], :last_used => Time.now})
+      if avatar.save
+         @result[:success] = true
+         @result[:user_info] = init_user_info(@user)
+      else
+        msg = []
+        key = ['data_file_size', 'data_content_type']
+        avatar.errors.messages.each do |k, v|
+          msg << v if key.index(k.to_s)
+        end
+        if msg.size == 0
+          msg = 'Invalid file!'
+        else
+          msg = msg.join(' and ')
+        end
+        @result = { :success => false, :msg => msg }
+      end
     else
       @result[:success] = false
       messages = @user.errors.full_messages
