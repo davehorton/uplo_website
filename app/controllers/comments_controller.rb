@@ -1,5 +1,5 @@
 class CommentsController < ApplicationController
-
+  before_filter :authenticate_user!
   def index
     image = Image.find_by_id params[:image_id]
     if image.nil?

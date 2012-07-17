@@ -1,4 +1,31 @@
 module ApplicationHelper
+  def sections
+    { :default => '#', :profile => '/profile', :account => '/my_account',
+      :gallery => '/galleries', :sale => '/sales' }
+  end
+
+  def current_section
+    case params[:controller]
+    when 'users' then sections[:account]
+    when 'profiles' then sections[:profile]
+    when 'galleries' then sections[:gallery]
+    when 'sales' then sections[:sale]
+    when 'images' then
+      case params[:action]
+      when 'index' then sections[:gallery]
+      else sections[:default]
+      end
+    else
+      sections[:default]
+    end
+  end
+
+  def private_links_options(active = sections[:default])
+    options_for_select([["My UPLO", sections[:default]], ['My Profile', sections[:profile]],
+      ["My Account", sections[:account]], ["My Galleries", sections[:gallery]],
+      ["My Sales", sections[:sale]]], active)
+  end
+
   def state_options
     options_for_select({
       'Alaska' => 'AK', 'Alabama' => 'AL', 'Arkansas' => 'AR', 'American Samoa' => 'AS', 'Arizona' => 'AZ',
@@ -27,10 +54,6 @@ module ApplicationHelper
 
   def popular_sort_options
     options_for_select([["Most Views", "#"]])
-  end
-
-  def private_links_options
-    options_for_select([["My UPLO", "#"], ['My Profile', '/profile'], ["My Account", "/my_account"], ["My Galleries", "/galleries"], ["My Sales", "/sales"]])
   end
 
   def redirect_back_url

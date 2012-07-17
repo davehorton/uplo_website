@@ -1182,16 +1182,11 @@ textarea { padding-top:5px; }
 }
 
 /* select button */
-#my_links-button {
-  height: 20px;
-  min-width: 115px;
-  max-width: 115px;
-  .ui-selectmenu-status { padding-top: 4px; font-weight: bold; }
-}
-#my_links-menu {
-  min-width: 115px;
-  max-width: 115px;
-  li a { padding-top: 4px; font-weight: bold; }
+#my_links-button { height: 20px; }
+#my_links-button, #my_links-menu {
+  min-width: 110px;
+  max-width: 110px;
+  li a, .ui-selectmenu-status { padding-top: 4px; font-weight: bold; }
 }
 #gallery_permission-button, #gallery_permission-menu {
   max-width: 120px;

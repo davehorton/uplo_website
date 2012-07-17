@@ -1,7 +1,7 @@
 - content_for :head do
   = stylesheet_link_tag("scss/cart_new.css", "scss/new_image.css")
   = javascript_include_tag('app/image_util.js')
-  
+
 - content_for :top_content do
   .text.black.bold.font16{ :style => 'margin-bottom:8px;' }= @image.name
 
@@ -13,69 +13,53 @@
     = simple_form_for(:line_item, :url => action_url, :method => 'post', :html => { :id => 'order-details', :class => 'left' }) do |f|
       .round-box.option.left
         .header.text.black.bold.font14= "Plexi Mount"
-        .line
-          .item.left
-            = f.radio_button(:plexi_mount, true, :checked => true)
-            = f.label(:plexi_mount_true, "Yes", :class => 'text gray font12')
-          .item.left
-            = f.radio_button(:plexi_mount, false)
-            = f.label(:plexi_mount_false, "No", :class => 'text gray font12')
+        .line-separator.no-padding
+        .item.left
+          = f.radio_button(:plexi_mount, true, :checked => true)
+          = f.label(:plexi_mount_true, "Yes", :class => 'text gray font12')
+        .item.left
+          = f.radio_button(:plexi_mount, false)
+          = f.label(:plexi_mount_false, "No", :class => 'text gray font12')
 
       .round-box.option.left.print-sizes-container
         .header.text.black.bold.font14= "Print Size"
-        - idx = 0
-        - begin
-          .line.left
-            .item.left
-              - size = @image.printed_sizes[idx]
-              - if idx == 0
-                = f.radio_button(:size, size, :checked => true, :class => 'print-size')
-              - else
-                = f.radio_button(:size, size, :class => 'print-size')
-                
-              = f.label("size_#{size}", "#{size}\"", :class => 'text gray font12')
-            .item.left
-              - size = @image.printed_sizes[idx + 1]
-              = f.radio_button(:size, size, :class => 'print-size')
-              = f.label("size_#{size}", "#{size}\"", :class => 'text gray font12')
-          - idx += 2
-        - end while idx < @image.printed_sizes.size - 1
-        - if @image.printed_sizes.size%2 == 1
-          .line.left
-            .item.left
-              - size = @image.printed_sizes[idx]
-              = f.radio_button(:size, size, :class => 'print-size')
-              = f.label("size_#{size}", "#{size}\"", :class => 'text gray font12')
+        - (0...@image.printed_sizes.count).each do |idx|
+          - if idx % 2 == 0
+            .line-separator.no-padding.left
+          .item.left
+            - size = @image.printed_sizes[idx]
+            = f.radio_button(:size, size, :checked => true, :class => 'print-size')
+            = f.label("size_#{size}", "#{size}\"", :class => 'text gray font12')
       .round-box.option.left
         .header.text.black.bold.font14= "Moulding Choice"
-        .line.left
-          .item.left
-            = f.radio_button(:moulding, "White", :checked => true)
-            = f.label(:moulding_white, "White", :class => 'text gray font12')
-          .item.left
-            = f.radio_button(:moulding, "Black")
-            = f.label(:moulding_black, "Black", :class => 'text gray font12')
-        .line.left
-          .item.left
-            = f.radio_button(:moulding, "Wood")
-            = f.label(:moulding_wood, "Wood", :class => 'text gray font12')
-          .item.left
-            = f.radio_button(:moulding, "Silver")
-            = f.label(:moulding_silver, "Silver", :class => 'text gray font12')
+        .line-separator.no-padding.left
+        .item.left
+          = f.radio_button(:moulding, "White", :checked => true)
+          = f.label(:moulding_white, "White", :class => 'text gray font12')
+        .item.left
+          = f.radio_button(:moulding, "Black")
+          = f.label(:moulding_black, "Black", :class => 'text gray font12')
+        .line-separator.no-padding.left
+        .item.left
+          = f.radio_button(:moulding, "Wood")
+          = f.label(:moulding_wood, "Wood", :class => 'text gray font12')
+        .item.left
+          = f.radio_button(:moulding, "Silver")
+          = f.label(:moulding_silver, "Silver", :class => 'text gray font12')
 
       .round-box.option.left{:style => 'width:138px;'}
         - price = @line_item.nil? ? @image.price : @line_item.price
         .header.text.black.bold.font14= "Price Per Item"
-        .line
-          .item.left
-            = number_to_currency(price, {:precision => 2})
+        .line-separator.no-padding
+        .item.left
+          = number_to_currency(price, {:precision => 2})
 
       .round-box.option.right{:style => 'width:138px;'}
         - quantity = @line_item.nil? ? 1 : @line_item.quantity
         .header.text.black.bold.font14= "Quantity"
-        .line
-          .item.left
-            = f.text_field(:quantity, :value => quantity, :size => '5', :title => 'Limit from 1 to 99999')
+        .line-separator.no-padding
+        .item.left
+          = f.text_field(:quantity, :value => quantity, :size => '5', :title => 'Limit from 1 to 99999')
     .clear
       .button.add-to-cart.right
 
@@ -83,10 +67,10 @@
   .image-container-wrapper.clearfix
     #order-preview.image-container.medium.left
       #preview-frame.clearfix
-        = image_tag(@image.data.url(:large), :class => 'image medium', 
-                  'data-width' => @image.width, 
+        = image_tag(@image.data.url(:large), :class => 'image medium',
+                  'data-width' => @image.width,
                   'data-height' => @image.height, :alt => @image.name)
-                
+
 - content_for :js do
   - javascript_tag do
     :erb
@@ -102,47 +86,47 @@
           }
         }
       });
-      
+
       $('.image-container-wrapper .image-container.medium img.image.medium').each(function(){
         image_util.resize_frame($(this), true);
-        // Auto-resize the image frame 
-        $(this).load(function(){      
+        // Auto-resize the image frame
+        $(this).load(function(){
           image_util.resize_frame($(this));
         });
       });
 
       // Scale and change the frame based on the print-size.
       $('.print-sizes-container .print-size').change(function(){
-        if($(this).is(':checked')) { 
+        if($(this).is(':checked')) {
           var print_sizes = $.trim($(this).val()).split('x');
           if(print_sizes.length >= 2){
             var img = $('#order-preview img');
             var parent = $(img).parents('.image-container');
             var max_width = parseFloat($(parent).css('max-width'), 10);
-            
+
             var p_width = parseFloat(print_sizes[0]);
-            var p_height = parseFloat(print_sizes[1]);           
-            
+            var p_height = parseFloat(print_sizes[1]);
+
             var dpi = image_util.detect_dpi();
             p_width = image_util.inch_to_px(p_width, dpi);
-            p_height = image_util.inch_to_px(p_height, dpi);           
-            
+            p_height = image_util.inch_to_px(p_height, dpi);
+
             var origin_width = parseFloat($(img).attr('data-width'), 10);
-            var origin_height = parseFloat($(img).attr('data-height'), 10);            
+            var origin_height = parseFloat($(img).attr('data-height'), 10);
             var origin_ratio = origin_width/origin_height;
             var print_ratio = p_width/p_height;
-            
+
             if(origin_ratio > 1 && print_ratio < 1){
               // Make smaller number always first.
               // Swap the width-height of print size in case of landscape image.
               var temp = p_width;
               p_width = p_height;
               p_height = temp;
-            } 
-            
-            //console.log('input:' + p_width + 'x' + p_height + '; origin ratio: ' + 
+            }
+
+            //console.log('input:' + p_width + 'x' + p_height + '; origin ratio: ' +
             //  origin_ratio + '; print ratio: ' + print_ratio);
-            
+
             image_util.resize_image(img, {width: p_width, height: p_height, ratio: origin_ratio});
             image_util.resize_frame(img);
           }

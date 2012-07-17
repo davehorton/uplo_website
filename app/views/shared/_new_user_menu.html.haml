@@ -7,7 +7,7 @@
         My Cart
         %span#cart-counter.normal (#{total_line_items})
     %li.no-padding-right
-      = select_tag "private_pages", private_links_options, :id => "my_links"
+      = select_tag "private_pages", private_links_options(current_section), :id => "my_links"
 
   - else
     %li
@@ -15,10 +15,3 @@
     %li.no-padding= "|"
     %li
       = link_to "Sign Up", "/register"
-
-:erb
-  <script type = "text/javascript">
-    jQuery(document).ready(function() {
-
-    });
-  </script>

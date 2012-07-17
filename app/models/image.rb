@@ -40,7 +40,7 @@ class Image < ActiveRecord::Base
   }
   PRINTED_SIZES = {
     :square => IMAGE_SQUARE_PRINTED_SIZES,
-    :portrait_rectangular => IMAGE_PORTRAIT_PRINTED_SIZES
+    :rectangular => IMAGE_PORTRAIT_PRINTED_SIZES
   }
 
   # CLASS METHODS
@@ -63,9 +63,15 @@ class Image < ActiveRecord::Base
         :per_page => paging_info.page_size,
         :order => paging_info.sort_string)
     end
+<<<<<<< HEAD
     
     def load_unflagged_images params = {}
       self.load_popular_images(params).all  :joins => 'left join image_flags on images.id=image_flags.image_id', :conditions => ["image_flags.reported_by is null"]
+=======
+
+    def load_unflagged_images user_id, params = {}
+      self.load_popular_images(params).all  :joins => 'left join image_flags on images.id=image_flags.image_id', :conditions => ["image_flags.reported_by<>#{user_id} or image_flags.reported_by is null"]
+>>>>>>> [layout] define header section on my UPLO options
     end
 
     def load_popular_images(params = {})
@@ -109,11 +115,39 @@ class Image < ActiveRecord::Base
     (1.0/RECTANGULAR_RATIO < ratio) && (ratio < RECTANGULAR_RATIO)
   end
 
+  def get_square_sizes
+    result = []
+    edge = [self.width, self.height].min
+    max_size = edge / PRINTER_RESOLUTION
+    PRINTED_SIZES[:square].each { |size| result << size if size.slice(0).to_i <= max_size }
+
+    # need check image size, temporarily
+    result << PRINTED_SIZES[:square][0] if result.count==0
+    return result
+  end
+
+  def get_rectangular_sizes
+    result = []
+    short_edge = [self.width, self.height].min
+    long_edge = [self.width, self.height].max
+    max_short_edge = short_edge / PRINTER_RESOLUTION
+    max_long_edge = long_edge / PRINTER_RESOLUTION
+
+    PRINTED_SIZES[:rectangular].each { |size|
+      edges = size.split('x')
+      result << size if edges[0].to_i <= max_short_edge && edges[1].to_i <= max_long_edge
+    }
+
+    # need check image size, temporarily
+    result << PRINTED_SIZES[:rectangular][0] if result.count==0
+    return result
+  end
+
   def printed_sizes
     if self.square?
-      PRINTED_SIZES[:square]
+      self.get_square_sizes
     else
-      PRINTED_SIZES[:portrait_rectangular]
+      self.get_rectangular_sizes
     end
   end
 
@@ -125,6 +159,7 @@ class Image < ActiveRecord::Base
     self.update_attribute('is_gallery_cover', true)
     Image.update_all 'is_gallery_cover=false', "gallery_id = #{ self.gallery_id } and id <> #{ self.id }"
   end
+
   def set_as_owner_avatar
     self.update_attribute('is_owner_avatar', true)
     Image.update_all 'is_owner_avatar=false', "gallery_id = #{ self.gallery_id } and id <> #{ self.id }"
