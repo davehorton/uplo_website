@@ -9,7 +9,14 @@ module GalleriesHelper
     else
       selected = selected_gallery
     end
-    collection.map { |gal| gal.name = "#{gal.name} (#{gal.images.size})".html_safe } if size_necessary
+    collection.map { |gal|
+      if size_necessary
+        gal.name = "<div class='clearfix'><span class='left'>#{gal.name.truncate(18)}</span>
+          <span class='number text fuzzy-gray left'>(#{gal.images.size})</span></div>"
+      else
+        gal.name = gal.name.truncate(25)
+      end
+    }
     return options_from_collection_for_select(collection, 'id', 'name', selected)
   end
 
