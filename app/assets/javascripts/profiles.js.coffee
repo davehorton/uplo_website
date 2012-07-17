@@ -7,7 +7,7 @@ load = (url, callback)->
     success: (response) ->
       $('#container')[0].innerHTML = response
       helper.endless_load_more( ->
-        if($(document).height() <= $(window).height())
+        if($(document).height() - 20  <= $(window).height())
           $(window).scroll()
         return
       )

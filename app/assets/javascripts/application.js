@@ -55,7 +55,7 @@ helper = {
     return $(window).scroll(function() {
       var loading_point, url;
       url = $('.pagination .next_page').attr('href');
-      loading_point = $(document).height() - $(window).height();
+      loading_point = $(document).height() - $(window).height() - 20;
       if(url && ($(window).scrollTop() >= loading_point)) {
         $('.pagination').removeClass('hidden');
         $('.pagination').text('Loading....');
@@ -189,7 +189,7 @@ helper = {
     str_num = str_num.replace("0.", "");
     return parseInt(str_num);
   },
-  
+
   alert_not_implement: function(){
     alert("This feature is coming soon");
     return false;
