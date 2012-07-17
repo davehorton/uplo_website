@@ -7,7 +7,7 @@ image_util = {
   // Convert inch -> pixel
   inch_to_px: function(inch, dpi){
     if(!dpi)
-      dpi = 75; // Default DPI
+      dpi = 72; // Default DPI
     return inch * dpi;
   },
   
@@ -59,20 +59,25 @@ image_util = {
     else{
       var width = $(img).width();
       var height = $(img).height();
+      var ratio = 1;
       
       if(!width){
-        width = parseInt($(img).attr('data-width'), 10);
+        width = parseFloat($(img).attr('data-width'), 10);
       }      
-      var parent_width = parseInt($(parent).css('max-width'), 10);
+      var parent_width = parseFloat($(parent).css('max-width'), 10);
       if(width > 0 && width <= parent_width){
         $(parent).width(width);
       }
       else if(width > 0 && width > parent_width){
-        $(parent).width(parent_width);
+        ratio = parent_width/width;
+        $(parent).width(parent_width);        
       }
       
-      if(height > 0)
-        $(parent).height(height);
+      if(height > 0){
+        $(parent).height(ratio * height);
+      }
+      
+      $(img).center();
     }
   }
 };
