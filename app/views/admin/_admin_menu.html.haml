@@ -6,7 +6,7 @@
     %div.first_item
       = link_to "Flagged Images", {:controller => :flagged_images, :action => :index}
   %li
-    %div.selected
+    %div
       = link_to "Flagged Users", {:controller => :flagged_users, :action => :index}
   %li 
     %div
@@ -14,3 +14,10 @@
   %li 
     %div
       = link_to "Promote to Spotlight", {:controller => :spotlights, :action => :index}
+
+:erb
+  <script>
+     jQuery(function() {
+       jQuery("<%= @current_tab %> div").addClass("selected");
+    })
+  </script>
