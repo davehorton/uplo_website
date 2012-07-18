@@ -1,0 +1,16 @@
+- content_for :head do
+  = stylesheet_link_tag('scss/admin.css')
+
+%ul#admin_menu
+  %li
+    %div
+      = link_to "Flagged Images", {:controler => :admin, :action => :flagged_images}
+  %li
+    %div
+      = link_to "Flagged Users", {:controler => :admin, :action => :flagged_users}
+  %li 
+    %div
+      = link_to "Member Profiles", {:controler => :admin, :action => :members}
+  %li 
+    %div
+      = link_to "Promote to Spotlight", {:controler => :admin, :action => :spotlight}

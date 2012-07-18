@@ -1,5 +1,4 @@
 Uplo::Application.routes.draw do
-  get "orders/index"
 
   # WEB ROUTING
   root :to => "home#index"
@@ -9,6 +8,14 @@ Uplo::Application.routes.draw do
   get "shopping_cart/destroy_item"
   get "shopping_cart/clear"
   get "shopping_cart/checkout"
+  
+  # ADMIN
+  get "admin/flagged_images"
+  get "admin/flagged_users"
+  get "admin/members"
+  get "admin/spotlight"
+  get "orders/index"
+  
   get "orders", :to => "orders#index"
   get "browse", :to => "home#browse"
   get "search", :to => "home#search"

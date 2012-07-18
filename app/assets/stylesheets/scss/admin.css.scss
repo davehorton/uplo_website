@@ -1,0 +1,25 @@
+#admin_menu{
+	display: block;
+	list-style-type: none;
+	background: url('/assets/admin_header_bg.png');
+	width:960px;                              
+	height:40px;
+}
+
+#admin_menu li{
+	float:left;
+}
+
+#admin_menu li div{
+	background: url('/assets/admin_header_cell_bg.png') no-repeat;
+	background-position:right center;
+	height:27px;
+	text-align:center;
+	padding-top:13px;
+}
+
+#admin_menu li a{
+	margin-left:20px;
+	margin-right:20px;
+}
+
