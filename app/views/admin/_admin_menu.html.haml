@@ -4,13 +4,13 @@
 %ul#admin_menu
   %li
     %div
-      = link_to "Flagged Images", {:controller => :admin, :action => :flagged_images}
+      = link_to "Flagged Images", {:controller => :flagged_images, :action => :index}
   %li
     %div
-      = link_to "Flagged Users", {:controller => :admin, :action => :flagged_users}
+      = link_to "Flagged Users", {:controller => :flagged_users, :action => :index}
   %li 
     %div
-      = link_to "Member Profiles", {:controller => :admin, :action => :members}
+      = link_to "Member Profiles", {:controller => :members, :action => :index}
   %li 
     %div
-      = link_to "Promote to Spotlight", {:controller => :admin, :action => :spotlight}
+      = link_to "Promote to Spotlight", {:controller => :spotlights, :action => :index}

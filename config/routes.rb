@@ -9,11 +9,6 @@ Uplo::Application.routes.draw do
   get "shopping_cart/clear"
   get "shopping_cart/checkout"
   
-  # ADMIN
-  get "admin/flagged_images"
-  get "admin/flagged_users"
-  get "admin/members"
-  get "admin/spotlight"
   get "orders/index"
   
   get "orders", :to => "orders#index"
@@ -99,6 +94,15 @@ Uplo::Application.routes.draw do
     get 'unlike_image', :to => 'users#unlike_image'
   end
 
+  # ADMIN SECTIONS
+  get '/admin', :to => "admin/admin#index"
+  namespace :admin do    
+    resources :flagged_images
+    resources :flagged_users
+    resources :members
+    resources :spotlights
+  end
+  
   # API ROUTING
   namespace :api do
     # User
