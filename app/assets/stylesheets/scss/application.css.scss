@@ -126,10 +126,6 @@ textarea { padding-top:5px; }
   width: $frame-width;
   height: 100%;
   margin: 0 auto;
-  /*-webkit-box-shadow: rgba(0,0,0,.45) 0 1px 3px;
-  -moz-box-shadow: rgba(0,0,0,.45) 0 1px 3px;
-  box-shadow: rgba(0,0,0,.45) 0 1px 3px;
-  box-shadow: rgba(0,0,0,.45) 0 1px 6px \0/IE9;*/
 }
 .panel {
   float: left;
@@ -161,6 +157,8 @@ textarea { padding-top:5px; }
   }
 }
 
+.frame-fit { width: 100%; }
+
 //new
 .text {
   text-align: left;
@@ -170,6 +168,10 @@ textarea { padding-top:5px; }
   }
   &.italic {
     font-style: italic;
+  }
+  &.underline {
+    text-decoration: underline;
+    cursor: pointer;
   }
   &.bold {
     font-weight: bold;
@@ -279,6 +281,35 @@ textarea { padding-top:5px; }
   margin: 10px 0;
 }
 
+.bubble {
+  .wrapper {
+    width: 100%;
+    background-color: white;
+    border-radius: 5px;
+    box-shadow: 0 0 7px #777;
+    .container {
+      margin: 10px;
+      .header {
+        width: 100%;
+        margin-bottom: 10px;
+        .cvv { margin-left: 5px;}
+      }
+      .close {
+        background: url("/assets/icon-close.png") no-repeat;
+        cursor: pointer;
+        height: 16px;
+        width: 16px;
+      }
+    }
+  }
+  .tail {
+    background: url("/assets/icon-cvv-arrow.png") no-repeat;
+    width: 34px;
+    height: 18px;
+    margin-left: 140px;
+  }
+}
+
 .popup {
   border-radius: 5px;
   .header {
@@ -379,32 +410,8 @@ textarea { padding-top:5px; }
     color: $color-gray;
   }
 
-  a, em, span{
-    margin: 2px 3px;
-    /*border: 1px solid #CCCCCC;
-    display: inline-block;
-    padding: 0.2em 0.5em;
-    vertical-align: middle;
-    -moz-border-radius: 4px;
-    -webkit-border-radius: 4px;
-    border-radius: 4px;*/
-  }
-
-  a:hover{
-    font-weight: bold;
-    /*border-color: #999999;
-    -webkit-box-shadow:0 0 3px #999999;
-    -moz-box-shadow:0 0 3px #999999;
-    box-shadow:0 0 3px #999999;
-    box-shadow:#999999 0 0 3px \0/IE9;*/
-  }
-
-  /*.previous_page, .next_page{
-    width: 10px;
-    height: 18px;
-    padding: 0.2em 0.5em;
-    line-height: 18px;
-  }*/
+  a, em, span { margin: 2px 3px; }
+  a:hover { font-weight: bold; }
 
   .previous_page{
     background: url("/assets/icon-previous-page.png") no-repeat scroll center center transparent;
@@ -487,6 +494,10 @@ textarea { padding-top:5px; }
 
 .button {
   cursor: pointer;
+  &.done {
+    background: url('/assets/btn-done.png') no-repeat;
+    width: 50px;
+    height: 21px; }
   &.edit {
     background: url('/assets/btn-edit.png') no-repeat;
     width: 43px;
@@ -834,9 +845,8 @@ textarea { padding-top:5px; }
         .label {
           margin: 2px 0px;
         }
-        .half {
-          width: 120px;
-          &.option { margin: 5px 0px; }}
+        .inline { margin: 5px 0px; }
+        .half { width: 120px; }
         &.progress, &.progress .uploading {
           height: 20px;
           -webkit-border-radius: 4px;
@@ -857,7 +867,10 @@ textarea { padding-top:5px; }
         &.error { color: red; }
         &.progress { width: 248px; }}}
     .edit-template {
-      .info-panel { width: 248px; }
+      .info-panel {
+        width: 248px;
+        .price { margin-left: 5px; }
+      }
       .line-separator { margin: 13px 0px; }
     }}
   #order-preview {
@@ -1181,6 +1194,31 @@ textarea { padding-top:5px; }
   }
 }
 
+#pricing-form { width: 262px; }
+#frm-pricing {
+  margin-bottom: 10px;
+  .cell {
+    width: 43px;
+    height: 25px;
+    text-align: center;
+    line-height: 25px;
+    border-right: 1px solid #e1e1e1;
+    border-bottom: 1px solid #e1e1e1;
+    &.header {
+      height: 20px;
+      line-height: 20px;
+      margin: 0;
+      background-color: $color-fuzzier-gray;
+      border-bottom: none;
+    }
+    &.type {
+      width: 65px;
+      text-align: left;
+      input[type=radio] { padding: 0; margin: 0;}
+    }
+  }
+}
+
 /* select button */
 #my_links-button { height: 20px; }
 #my_links-button, #my_links-menu {
@@ -1196,6 +1234,8 @@ textarea { padding-top:5px; }
 #image_gallery_id-button, #image_gallery_id-menu, #image_price-menu, #image_price-button {
   max-width: 248px;
   min-width: 248px;
+  height: 22px;
+  li a, .ui-selectmenu-status { padding-top: 5px; }
 }
 #gallery_selector_id-button { height: 20px; }
 #gallery_selector_id-button, #gallery_selector_id-menu {

@@ -31,7 +31,7 @@ class Image < ActiveRecord::Base
       :message => 'File type must be one of [.jpeg, .jpg, .png, .gif]' }
 
   # CALLBACK
-  after_create :save_image_dimensions
+  after_create :save_image_dimensions, :process_filename
   after_initialize :init_random_price
 
   SALE_REPORT_TYPE = {
@@ -394,6 +394,10 @@ class Image < ActiveRecord::Base
   end
 
   protected
+  def process_filename
+    reg = /(.jpeg|.jpg|.png|.gif)$/i
+    self.update_attribute(:name, self.name.gsub(reg, '')) if self.name =~ reg
+  end
 
   # Detect the image dimensions.
   def save_image_dimensions

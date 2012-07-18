@@ -154,7 +154,7 @@
         .line-separator.left
         .submit.right
 
-= render :partial => 'cvv_form'
+= render :partial => 'cvv_form', :layout => 'layouts/bubble', :locals => { :id => 'cvv-form' }
 
 - content_for :js do
   = javascript_include_tag 'app/order.js'
@@ -236,10 +236,10 @@
         if($('#shipping-address .edit.hide').length==0) {
           $('#shipping-address .inputs').text("");
         }
-        
+
         // Google Analytics
         _gaq.push(['_trackEvent', 'UPLO Web / Check Out', 'Place Order', 'checkout', -1]);
-        
+
         $('#order-shippings').submit();
       });
 

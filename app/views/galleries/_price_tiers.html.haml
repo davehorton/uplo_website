@@ -1,0 +1,15 @@
+= form_for(:price, :url => '#', :method => 'post', :html => { :id => 'frm-pricing', :class => 'left' }) do |f|
+  .frame-fit.left
+    .type.cell.header.text.black.bold.font11.left Pricing
+    .cell.header.text.black.bold.font11.left 5x7
+    .cell.header.text.black.bold.font11.left 8x10
+    .cell.header.text.black.bold.font11.left 20x22
+    .cell.header.text.black.bold.font11.left 20x22
+  .frame-fit.left
+    .type.cell.text.black.bold.font11.left
+      = f.radio_button(:tier, :first, :checked => true)
+      = f.label(:tier_first, "Tier 1", :class => 'text gray font12')
+    .cell.text.gray.font11.left 5x7
+    .cell.text.gray.font11.left 8x10
+    .cell.text.gray.font11.left 20x22
+    .cell.text.gray.font11.left 20x22

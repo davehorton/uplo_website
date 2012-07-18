@@ -1,0 +1,12 @@
+/ locals: id, extra_class
+- extra_class = '' if extra_class.nil?
+.bubble.hide{ :id => "#{ id }", :class => "#{ extra_class }" }
+  .wrapper.left
+    .container.left
+      .header.left
+        .left
+          = yield_content! :title
+        .close.right
+      .main-panel.frame-fit.left
+        = yield
+  .tail.left

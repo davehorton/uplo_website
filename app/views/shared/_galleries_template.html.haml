@@ -7,7 +7,7 @@
     %a.image-container.thumb{ :href => gallery_images_path(gallery), :title => "#{ gallery.name }" }
       = image_tag(gallery_cover_image_url(gallery), :class => "gallery-cover-image image thumb")
     .gallery-info.text.font11.line16.clear
-      .text.black.bold.name{ :title => gallery.name }=raw gallery.name.truncate(25)
+      .text.black.bold.name{ :title => gallery.name }=raw gallery.name.truncate(22)
       .text.gray.photo-number= (gallery.images.length > 0 ? pluralize(gallery.images.length, "Image") : "No Image")
       .text.gray.update-time= "Last Updated: #{ gallery.updated_at_string }"
       .text.fuzzy-gray.permission= gallery.permission_string.titleize

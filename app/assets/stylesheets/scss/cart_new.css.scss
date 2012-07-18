@@ -96,30 +96,6 @@ $color-line-separator: #cccccc;
 
 #cvv-form {
   width: 472px;
-  .wrapper {
-    width: 100%;
-    background-color: white;
-    border-radius: 5px;
-    box-shadow: 0 0 7px #777;
-    .container {
-      margin: 10px;
-      .header {
-        width: 100%;
-        margin-bottom: 10px;
-        .cvv { margin-left: 5px;}
-      }
-      .close {
-        background: url("/assets/icon-close.png") no-repeat scroll 0 0 transparent;
-        cursor: pointer;
-        height: 16px;
-        width: 16px;
-      }}}
-  .tail {
-    background: url("/assets/icon-cvv-arrow.png") no-repeat;
-    width: 34px;
-    height: 18px;
-    margin-left: 140px;
-  }
 }
 
 /* select buttons */

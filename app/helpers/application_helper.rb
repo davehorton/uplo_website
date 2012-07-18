@@ -1,15 +1,24 @@
 module ApplicationHelper
+  def yield_content!(content_key)
+    view_flow.content.delete(content_key)
+  end
+
   def sections
-    { :default => '#', :profile => '/profile', :account => '/my_account',
+    { :default => '/', :profile => '/profile', :account => '/my_account',
       :gallery => '/galleries', :sale => '/sales' }
   end
 
   def current_section
     case params[:controller]
     when 'users' then sections[:account]
-    when 'profiles' then sections[:profile]
     when 'galleries' then sections[:gallery]
     when 'sales' then sections[:sale]
+    when 'profiles' then
+      if params[:action]=='show' && is_current_user(params[:user_id])
+        sections[:default]
+      else
+        sections[:profile]
+      end
     when 'images' then
       case params[:action]
       when 'index' then sections[:gallery]

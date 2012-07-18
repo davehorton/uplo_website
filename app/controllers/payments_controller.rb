@@ -80,10 +80,12 @@ class PaymentsController < ApplicationController
         end
         redirect_to pp_gateway.redirect_url_for(setup_response.token)
       when "an"
+        address_required_info = ['first_name', 'last_name', 'street_address', 'city', 'zip', 'state', 'phone']
+        card_required_info = ['name_on_card', 'card_type', 'card_number', 'expires_on(1i)', 'expires_on(2i)', 'cvv']
+
         expires_on = Date.civil(params[:card]["expires_on(1i)"].to_i,
                          params[:card]["expires_on(2i)"].to_i,
                          1)
-        expires_on.class
         expires_on = expires_on.strftime("%m%y")
         card_string = params[:card]["card_number"]
 

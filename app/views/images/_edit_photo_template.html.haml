@@ -12,19 +12,22 @@
       = select :image, :gallery_id, gallery_options(current_user, image.gallery_id),
              { :class => 'left' }
     .info-line.left
-      / .half.left
-      .label.text.black.bold.font12 Price
-      = select :image, :price, gallery_price_options
+      / .label.text.black.bold.font12 Price
+      / = select :image, :price, gallery_price_options
+      .label.text.black.bold.font12 Pricing
+      .inline.left
+        .text.gray.font11.line16.left= "Tier 1"
+        .price.text.black.underline.font11.line16.left change this
   .info-panel.left
     .info-line.left
       .label.text.black.bold.font12 Description
       = text_area :image, :description, :value => image.description
     .info-line.left
       .label.text.black.bold.font12 Other Actions
-      .option.half.left
+      .inline.half.left
         %input{ :id => "image_album_cover_#{image.id}", :type => 'checkbox', :name => 'image[is_album_cover]', :class => 'album-cover no-padding left', :checked => image.is_gallery_cover }
         = label_tag "image_album_cover_#{image.id}", 'Use as album cover', :class => 'text gray font11 line16 left', :style => 'padding-left: 3px'
-      .option.half.right
+      .inline.half.right
         %input{ :id => "user_avatar_#{image.id}", :type => 'checkbox', :name => 'image[is_avatar]', :class => 'user-avatar no-padding left', :checked => image.is_owner_avatar }
         = label_tag "user_avatar_#{image.id}", 'Use as profile picture', :class => 'text gray font11 line16 left', :style => 'padding-left: 3px'
 

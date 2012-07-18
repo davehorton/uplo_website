@@ -53,10 +53,11 @@ deletePhoto = (node) ->
       type: 'GET',
       dataType: 'json',
       success: (response) ->
-        $('#images-panel')[0].innerHTML = response.items
+        $('#images-panel').html response.items
         $('.pagination-panel').each( (idx, elem) -> $(elem).html response.pagination )
         $('#gallery_selector_id').html response.gallery_options
         alert("Delete successfully!")
+        $('select[id!=my_links]').selectmenu({style:'popup'})
         $.modal.close()
     });
 
@@ -83,13 +84,14 @@ saveGridChanges = (callback) ->
     data: { images: $.toJSON(data), gallery_id: $('#gallery_selector_id').val() },
     dataType: 'json',
     success: (response) ->
-      $('#images-panel')[0].innerHTML = response.items
+      $('#images-panel').html response.items
       $('.pagination-panel').each( (idx, elem) ->
-        elem.innerHTML = response.pagination
+        $(elem).html response.pagination
       )
       alert("Update successfully!")
       callback.call() if callback
       window.is_grid_changed = false
+      $('select[id!=my_links]').selectmenu({style:'popup'})
       $.modal.close()
   });
 
@@ -120,10 +122,11 @@ $ ->
       response = $.parseJSON(data.result)
       if response.success
         $(data.context).replaceWith response.item
-        $('.pagination-panel').each((idx, elem) -> elem.innerHTML = response.pagination)
+        $('.pagination-panel').each((idx, elem) -> $(elem).html response.pagination)
         $('#images-panel').children().last().remove() if $('.pagination-panel').find('.pagination').length > 0
         $('#gallery_selector_id').html response.gallery_options
         $('.empty-data').remove()
+        $('select[id!=my_links]').selectmenu({style:'popup'})
       else
         $(data.context).find('.progress').replaceWith("<div class='error info-line text italic font12 left'>#{response.msg}</div>")
     progress: (e, data) ->
@@ -191,12 +194,39 @@ $ ->
         data: { gallery_id: $('#gallery_selector_id').val() },
         dataType: 'json',
         success: (response) ->
-          $('#images-panel')[0].innerHTML = response.items
+          $('#images-panel').html response.items
           $('.pagination-panel').each( (idx, elem) ->
-            elem.innerHTML = response.pagination
+            $(elem).html response.pagination
           )
           $('#delete-gallery').attr('href', response.delete_url)
           $('#fileupload').attr('action', response.upload_url)
           $('#edit-gallery-popup').replaceWith response.edit_popup
+          $('select[id!=my_links]').selectmenu({style:'popup'})
           $.modal.close()
-      });
+      })
+  $('#images-panel').delegate '.edit-template .price', 'click', ->
+    $('#pricing-form').modal({
+      onOpen: (dialog) ->
+        dialog.overlay.fadeIn('slow', ->
+          dialog.container.fadeIn('slow', ->
+            $.ajax({
+              url: 'edit_images',
+              type: 'GET',
+              data: { gallery_id: $('#gallery_selector_id').val() },
+              dataType: 'json',
+              success: (response) ->
+                $('#images-panel').html response.items
+                $('.pagination-panel').each( (idx, elem) ->
+                  $(elem).html response.pagination
+                )
+                $('#delete-gallery').attr('href', response.delete_url)
+                $('#fileupload').attr('action', response.upload_url)
+                $('#edit-gallery-popup').replaceWith response.edit_popup
+                $('select[id!=my_links]').selectmenu({style:'popup'})
+
+                dialog.data.fadeIn()
+                # window.setTimeout "$('#pricing-form .main-panel').html('meomeomeo')", 500
+            })
+          )
+        )
+    })
