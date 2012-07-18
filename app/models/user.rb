@@ -17,6 +17,10 @@ class User < ActiveRecord::Base
                   :first_name, :last_name, :username, :login, :nationality, :birthday, :gender, :avatar,
                   :twitter, :facebook
 
+  attr_accessible :id, :email, :password, :password_confirmation, :remember_me,
+                  :first_name, :last_name, :username, :login, :nationality, :birthday, :gender, :avatar,
+                  :twitter, :facebook, :is_admin, :as => :admin
+    
   # ASSOCIATIONS
   has_many :profile_images, :dependent => :destroy, :order => 'last_used DESC'
   has_many :galleries, :dependent => :destroy
@@ -118,10 +122,12 @@ class User < ActiveRecord::Base
 
   # PUBLIC INSTANCE METHODS
   def liked_images
-    self.source_liked_images.joins('LEFT JOIN galleries ON galleries.id = images.gallery_id')
-      .where("galleries.permission = '#{Gallery::PUBLIC_PERMISSION}' OR
-        (galleries.permission = '#{Gallery::PRIVATE_PERMISSION}' AND galleries.user_id = #{ self.id })")
+    self.source_liked_images.joins('LEFT JOIN galleries ON galleries.id = images.gallery_id').where(
+      "galleries.permission = '#{Gallery::PUBLIC_PERMISSION}' OR
+      (galleries.permission = '#{Gallery::PRIVATE_PERMISSION}' AND galleries.user_id = #{ self.id })"
+    )
   end
+  
   def avatar
     img = ProfileImage.find :first, :conditions => {:user_id => self.id, :default => true}
     if img.nil?
