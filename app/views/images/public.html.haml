@@ -3,7 +3,8 @@
   %meta{:property=>"og:description", :content=>"#{@image.description}" }
   %meta{:property=>"og:image", :content=>"#{@image.data.url(:thumb)}" }
   = stylesheet_link_tag("scss/new_image.css", "scss/sale.css")
-
+  = javascript_include_tag("//assets.pinterest.com/js/pinit.js")
+   
 - content_for :right_content do
   #image-section.left
     .text.black.font18.bold= @image.name.truncate(30)
@@ -28,9 +29,13 @@
   .image-container.medium.clearfix
     = image_tag @image.data.url(:medium), :class => 'image medium'
   .buttons-container.left
+    - public_url = url_for(:only_path => false)
     %a.left{:target => '_blank', :href=>"https://twitter.com/share", :class=>"twitter-share-button", :data => {:lang => "en", :count => "horizontal", :text => "Shared from UPLO -"}}
-    .fb-like.left{ 'data-href'=>"#{ url_for(:only_path => false) }", 'data-send'=>'false', 'data-layout'=>'button_count', 'data-show-faces'=>'false', 'data-font'=>'arial' }
-
+    .fb-like.left{ 'data-href'=>"#{ public_url }", 'data-send'=>'false', 'data-layout'=>'button_count', 'data-show-faces'=>'false', 'data-font'=>'arial' }
+    %a{ :href => image_pinterest_share_url(@image, public_url), 
+        :class => 'pin-it-button', 'count-layout' => 'horizontal', :target => '_blank'}
+      = image_tag("//assets.pinterest.com/images/PinExt.png", :title => "Pin It", :border => 0, :alt => "Pin It")
+      
 - content_for :js do
   = javascript_tag do
     !function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");

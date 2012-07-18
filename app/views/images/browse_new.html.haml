@@ -87,7 +87,8 @@
           %a.twitter.button.left{ :href=>"http://twitter.com/share?url=#{CGI.escape(public_url)}&text=#{CGI.escape('from UPLO')}", :title => "Share on Twitter", :target=>"_blank" }
           %a.flickr.button.left{ :href => "#{flickr_request}", :title => "Share on Flickr", :target => "_blank" }
           %a.tumblr.button.left{ :href => "http://www.tumblr.com/share/photo?source=#{CGI.escape(@image.data.url(:medium))}&caption=#{CGI.escape('from UPLO')}&clickthru=#{CGI.escape(public_url)}", :title => "Share on Tumblr" }
-          %a.pinterest.button.left.no-padding-right.not-implement{ :href => '#' }
+          %a.pinterest.button.left.no-padding-right{ :href => image_pinterest_share_url(@image, public_url), :target=>"_blank", :title => "Share on Pinterest" }
+
     .tail.left
       .icon.right
 

@@ -16,3 +16,8 @@ development:
   app: uplo-dev
   config: &default
     BUNDLE_WITHOUT: "development:test"
+
+staging:
+  app: uplo-stg
+  config: &default
+    BUNDLE_WITHOUT: "development:test"
