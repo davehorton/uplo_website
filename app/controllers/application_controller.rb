@@ -2,6 +2,7 @@ class ApplicationController < ActionController::Base
   protect_from_forgery
   before_filter :set_current_tab
   before_filter :filter_params
+  before_filter :store_current_user
 
   PAGE_SIZE = 10
   MAX_PAGE_SIZE = 100
@@ -43,6 +44,12 @@ class ApplicationController < ActionController::Base
   # You can override this method in the sub class.
   def default_page_size
     PAGE_SIZE
+  end
+  
+  def store_current_user
+    if (!current_user.nil?)
+      Image.set_current_user current_user
+    end
   end
 
   def filter_params

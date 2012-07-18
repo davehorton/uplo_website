@@ -81,7 +81,9 @@ class Gallery < ActiveRecord::Base
 
   def get_images_without(ids)
     ids = [] unless ids.instance_of? Array
-    self.images.where("id not in (#{ids.join(',')})").order('name')
+    self.images.where("images.id not in (#{ids.join(',')})").order('name')
+    .joins('left join image_flags on images.id=image_flags.image_id')
+    .where(["image_flags.reported_by is null" +  (" OR reported_by = #{Image.current_user.id}" if (!Image.current_user.nil?)) ])
   end
 
   def updated_at_string

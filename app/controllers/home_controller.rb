@@ -3,19 +3,19 @@ class HomeController < ApplicationController
 
   def index
     session[:back_url] = url_for(:controller => 'home', :action => "browse") if session[:back_url].nil?
-    @images = Image.load_unflagged_images(@filtered_params)
+    @images = Image.load_popular_images(@filtered_params)
     if user_signed_in?
       redirect_to :action => :spotlight
     end
   end
 
   def browse
-    @images = Image.load_unflagged_images(@filtered_params)
+    @images = Image.load_popular_images(@filtered_params)
     render :template => 'home/new_browse', :layout => "main"
   end
 
   def spotlight
-    @images = Image.load_unflagged_images(@filtered_params)
+    @images = Image.load_popular_images(@filtered_params)
     render :layout => "main"
   end
 
@@ -30,7 +30,7 @@ class HomeController < ApplicationController
 
   def popular
     session[:back_url] = url_for(:controller => 'home', :action => "browse") if session[:back_url].nil?
-    @images = Image.load_unflagged_images(@filtered_params)
+    @images = Image.load_popular_images(@filtered_params)
     render :layout => "main"
   end
 

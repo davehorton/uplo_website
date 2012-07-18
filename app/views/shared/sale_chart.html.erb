@@ -3,7 +3,7 @@
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
         <meta name = "viewport" content = "user-scalable = no">
-		<title>Highcharts Example</title>
+		<title>UPLO Sale Chart</title>
 
 		<script type="text/javascript" src="/assets/lib/jquery.min.js"></script>
 		<script type="text/javascript">
@@ -16,6 +16,7 @@ $(function () {
             month_sales.push(<%= sale[:sales] %>);
     <% end %>
     $(document).ready(function() {
+		
         chart = new Highcharts.Chart({
             chart: {
                 renderTo: 'container',
@@ -39,6 +40,7 @@ $(function () {
             yAxis: {
                 min: 0,
                 tickWidth: 1,
+				tickInterval:1,
                 labels: {
                       style: {
                          color: 'black',

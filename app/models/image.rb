@@ -45,6 +45,15 @@ class Image < ActiveRecord::Base
 
   # CLASS METHODS
   class << self
+    @@current_user
+    def set_current_user current_user
+      @@current_user = current_user
+    end
+    
+    def current_user
+      @@current_user
+    end
+    
     def do_search(params = {})
       params[:filtered_params][:sort_field] = 'name' unless params[:filtered_params].has_key?("sort_field")
       paging_info = parse_paging_options(params[:filtered_params], {:sort_mode => :extended})
@@ -64,15 +73,13 @@ class Image < ActiveRecord::Base
         :order => paging_info.sort_string)
     end
 
-    def load_unflagged_images params = {}
-      self.load_popular_images(params).all  :joins => 'left join image_flags on images.id=image_flags.image_id', :conditions => ["image_flags.reported_by is null"]
-    end
-
     def load_popular_images(params = {})
+      
       paging_info = parse_paging_options(params, {:sort_criteria => "images.likes DESC"})
       # TODO: calculate the popularity of the images: base on how many times an image is "liked".
       self.includes(:gallery).joins([:gallery]).
             where("galleries.permission = ?", Gallery::PUBLIC_PERMISSION).
+            joins('left join image_flags on images.id=image_flags.image_id').where(["image_flags.reported_by is null" +  (" OR reported_by = #{@@current_user.id}" if (!@@current_user.nil?)) ]).
             paginate(
               :page => paging_info.page_id,
               :per_page => paging_info.page_size,
@@ -166,6 +173,10 @@ class Image < ActiveRecord::Base
     else
       profile_img.set_as_default
     end
+  end
+  
+  def has_owner id
+    self.gallery.user.id == id
   end
 
   def author
