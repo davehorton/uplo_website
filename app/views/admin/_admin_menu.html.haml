@@ -3,10 +3,10 @@
 
 %ul#admin_menu
   %li
-    %div
+    %div.first_item
       = link_to "Flagged Images", {:controller => :flagged_images, :action => :index}
   %li
-    %div
+    %div.selected
       = link_to "Flagged Users", {:controller => :flagged_users, :action => :index}
   %li 
     %div
