@@ -1,6 +1,5 @@
 - content_for :head do
   = stylesheet_link_tag('scss/new_image.css', 'scss/sale.css')
-  = javascript_include_tag('app/image_util.js')
   
 - content_for :right_content do
   .text.black.font18.bold= @image.name
@@ -217,14 +216,6 @@
         // Google Analytics
         _gaq.push(['_trackEvent', 'UPLO Web / Comment', 'post comment', 'status', 1]);
         return true;
-      });
-      
-      $('.image-container-wrapper .image-container.medium img.image.medium').each(function(){
-        image_util.resize_frame($(this), true);        
-        // Auto-resize the image frame
-        $(this).load(function(){      
-          image_util.resize_frame($(this));
-        });
       });
       
       function showEmailPopup(){
