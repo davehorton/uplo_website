@@ -97,7 +97,9 @@ Uplo::Application.routes.draw do
   # ADMIN SECTIONS
   get '/admin', :to => "admin/admin#index"
   namespace :admin do    
-    resources :flagged_images
+    resources :flagged_images do
+      post :change_sort_type, :on => :collection
+    end
     resources :flagged_users
     resources :members
     resources :spotlights

@@ -1,4 +1,21 @@
 = render :partial => "admin/admin_menu"
+.header
+  .admin_title.left_area
+    = t('admin.flagged_images_area.title')
+  .right_area
+    = form_tag(:action => :change_sort_type, :method=>'post', :multipart => true) do
+      .left
+        Sort By:
+        = select_tag :flag_type, options_for_select(@categories), :id => "flagged_image_type"
+      .button.remove_all.left
+      .button.reinstate_all.left
 
-%admin_title
-  Flagged Images / Terms of Use Violation
+.list_flagged_images
+  - i = 0
+  - (1..12).each do
+    - i = i + 1
+    - if (i % 6) == 0
+      .flagged_image_last_element 
+        = render :partial => "admin/flagged_images/flagged_image_cell"
+    - else
+      = render :partial => "admin/flagged_images/flagged_image_cell"

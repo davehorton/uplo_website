@@ -1,0 +1,28 @@
+.flagged_image_container
+  .image_frame
+  .button_area.info_line
+    .button.reinstate.left
+    .button.remove.left
+  .image_name.info_line
+    Image Name Here
+  .author.info_line
+    usernamehere1
+  .flagged_time.info_line
+    Flagged 02/21/12
+  .flagged_time.info_line
+    by <spanc style="color:black">usernamehere2</span>
+  .type.info_line
+    Term of Use Violation
+  .description.info_line
+    Specific reason why this photo was tagged for terms of use violation goes here
+  %br{:style => "clear:both"}
+
+:erb
+  <script>
+    $(document).ready(function(){
+      $("#flagged_image_type-button").css("width", "160px");
+      $("#flagged_image_type-button").css("height", "20px");
+      $("#flagged_image_type-menu").css("width", "160px");
+      $("#flagged_image_type-button .ui-selectmenu-status").css("padding-top", "3px");
+    });
+  </script>

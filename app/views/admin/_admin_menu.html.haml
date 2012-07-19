@@ -6,16 +6,16 @@
 %ul#admin_menu
   %li
     %div.first_item
-      = link_to "Flagged Images", {:controller => :flagged_images, :action => :index}
+      = link_to t("admin.flagged_images"), {:controller => :flagged_images, :action => :index}
   %li
     %div
-      = link_to "Flagged Users", {:controller => :flagged_users, :action => :index}
+      = link_to t("admin.flagged_users"), {:controller => :flagged_users, :action => :index}
   %li 
     %div
-      = link_to "Member Profiles", {:controller => :members, :action => :index}
+      = link_to t("admin.members"), {:controller => :members, :action => :index}
   %li 
     %div
-      = link_to "Promote to Spotlight", {:controller => :spotlights, :action => :index}
+      = link_to t("admin.spolight"), {:controller => :spotlights, :action => :index}
 
 :erb
   <script>
