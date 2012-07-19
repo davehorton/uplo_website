@@ -8,6 +8,6 @@ module ImagesHelper
       :id => image.id, 
       :only_path => false
     )
-    "http://pinterest.com/pin/create/button/?url=#{CGI.escape(image_public_url)}&description=#{"Share from UPLO: " + image.name}&media=#{CGI.escape(image.data.url(:thumb))}"
+    "http://pinterest.com/pin/create/button/?url=#{CGI.escape(image_public_url)}&description=#{"Share from UPLO: " + image.name}&media=#{CGI.escape(image.data.url(:spotlight_thumb))}"
   end
 end
