@@ -7,7 +7,7 @@ class ProfilesController < ApplicationController
       @images = @user.images.load_images(@filtered_params)
       @galleries = @user.galleries.load_galleries(@filtered_params)
     else
-      @images = @user.images.load_popular_images(@filtered_params)
+      @images = @user.images.load_popular_images(@filtered_params, current_user)
       @galleries = @user.galleries.load_popular_galleries(@filtered_params)
     end
     @followers = @user.followers.load_users(@filtered_params)
@@ -20,7 +20,7 @@ class ProfilesController < ApplicationController
       if @user.id == current_user.id
         @images = @user.images.load_images(@filtered_params)
       else
-        @images = @user.images.load_popular_images(@filtered_params)
+        @images = @user.images.load_popular_images(@filtered_params, current_user)
       end
       render :partial => 'photos'
     end
@@ -31,7 +31,7 @@ class ProfilesController < ApplicationController
       if @user.id == current_user.id
         images = @user.images.load_images(@filtered_params)
       else
-        images = @user.images.load_popular_images(@filtered_params)
+        images = @user.images.load_popular_images(@filtered_params, current_user)
       end
       template = render_to_string :partial => 'shared/photos_template',
                     :locals => { :images => images,
