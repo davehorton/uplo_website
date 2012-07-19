@@ -160,7 +160,7 @@ uploader_file.png: uploader_file-3ab3c53af3d8adf6071f3776329ab009.png
 app/edit_images.js: app/edit_images-1e5c8941dac9d743669812f94529e211.js
 app/gallery.js: app/gallery-56d1423ff8282cf24bfa0dc13979b30e.js
 app/image.js: app/image-090a76bcb99a855a1064e5cb602865bf.js
-app/image_util.js: app/image_util-e7f578c894939e9068f14749cbc543ae.js
+app/image_util.js: app/image_util-e58342d34805f84c8607728b6f93d540.js
 app/order.js: app/order-30190b3eb7fd063e1a82e24879dc90ac.js
 app/popup.js: app/popup-3d37daf582062d5f270aa53d3da682bd.js
 app/sales.js: app/sales-03318d5b60f42b484cc55e4f12ca5fcc.js
@@ -266,7 +266,7 @@ scss/dialog.css: scss/dialog-5dec5a3c5274437ee34726e7e4356988.css
 scss/filter.css: scss/filter-739c80ba8eabd3a953be7d9ea50b38b6.css
 scss/image.css: scss/image-64b6683d484780bff39a790b7c1d60b3.css
 scss/mobile.css: scss/mobile-04e80fc1ee31c47abff3182e7d922adc.css
-scss/new_image.css: scss/new_image-50117b53f411be54c2574e6a96c8e41d.css
+scss/new_image.css: scss/new_image-2bd4cc22fca1d823e9220ce455cb7a0d.css
 scss/public.css: scss/public-65a5d83c6d4e387f2a7f5be64114fe92.css
 scss/sale.css: scss/sale-e1a820202e8b3f6450832905649e4070.css
 scss/search.css: scss/search-4ce78cb5c202f9d4f94d7ce58c348bd7.css
