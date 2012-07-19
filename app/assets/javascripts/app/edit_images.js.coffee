@@ -204,28 +204,30 @@ $ ->
           $('select[id!=my_links]').selectmenu({style:'popup'})
           $.modal.close()
       })
-  $('#images-panel').delegate '.edit-template .price', 'click', ->
+
+  $('#images-panel').delegate '.edit-template .price', 'click', (e) ->
+    form = $('#pricing-form')
+    left = e.pageX - 60
+    top = e.pageY - form.height()
     $('#pricing-form').modal({
+      opacity: 5,
+      position:[top, left],
       onOpen: (dialog) ->
         dialog.overlay.fadeIn('slow', ->
           dialog.container.fadeIn('slow', ->
+            dialog.data.fadeIn()
+            $('#pricing-form .button').fadeOut()
             $.ajax({
-              url: 'edit_images',
+              url: '/images/show_pricing',
               type: 'GET',
-              data: { gallery_id: $('#gallery_selector_id').val() },
+              data: { id: $(e.target).closest('.edit-template').attr('data-id') },
               dataType: 'json',
               success: (response) ->
-                $('#images-panel').html response.items
-                $('.pagination-panel').each( (idx, elem) ->
-                  $(elem).html response.pagination
-                )
-                $('#delete-gallery').attr('href', response.delete_url)
-                $('#fileupload').attr('action', response.upload_url)
-                $('#edit-gallery-popup').replaceWith response.edit_popup
-                $('select[id!=my_links]').selectmenu({style:'popup'})
-
-                dialog.data.fadeIn()
-                # window.setTimeout "$('#pricing-form .main-panel').html('meomeomeo')", 500
+                if response.success
+                  func = -> $('#price-tiers').html(response.price_table)
+                else
+                  func = -> $('#price-tiers').html(response.msg)
+                window.setTimeout func, 1000
             })
           )
         )

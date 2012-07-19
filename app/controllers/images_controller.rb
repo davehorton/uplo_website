@@ -260,7 +260,7 @@ class ImagesController < ApplicationController
     image.save
     redirect_to :action => :browse
   end
-  
+
   # PUT images/flag/:id
   # params: id => Image ID
   #         type => Flag type
@@ -356,6 +356,28 @@ class ImagesController < ApplicationController
       @line_item = LineItem.find_by_id params[:line_item]
     end
     render :template => "images/order_new", :layout => "main"
+  end
+
+  def show_pricing
+    image = Image.find_by_id params[:id]
+    if image.nil?
+      result = { :success => false, :msg => 'This image does not exist anymore' }
+    else
+      table = render_to_string :partial => 'galleries/price_tiers', :locals => { :image => image }
+      result = { :success => true, :price_table => table }
+    end
+    render :json => result
+  end
+
+  def update_pricing
+    image = Image.find_by_id params[:id]
+    if image.nil?
+      result = { :success => false, :msg => 'This image does not exist anymore' }
+    else
+      table = render_to_string :partial => 'galleries/price_tiers', :locals => { :image => image }
+      result = { :success => true, :price_table => table }
+    end
+    render :json => result
   end
 
   protected

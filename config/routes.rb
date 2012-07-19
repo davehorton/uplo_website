@@ -42,6 +42,7 @@ Uplo::Application.routes.draw do
   post 'images/mail_shared_image', :to => 'images#mail_shared_image'
   post 'images/update_images', :to => 'images#update_images'
   get "images/flag", :to => "images#flag"
+  get 'images/show_pricing', :to => 'images#show_pricing'
 
   get "sales", :to => "sales#index"
   get "sales/year_sales", :to => "sales#year_sales"

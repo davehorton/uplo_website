@@ -261,17 +261,23 @@ textarea { padding-top:5px; }
 }
 
 .icon {
-  margin-right: 3px;
   &.edit {
     background: url("/assets/icon-edit.jpg") no-repeat scroll 0 0 transparent;
     height: 9px;
     width: 9px;
     margin-top: 1px;
+    margin-right: 3px;
   }
   &.check {
     background: url("/assets/icon-check.png") no-repeat scroll 0 0 transparent;
     height: 12px;
     width: 15px;
+    margin-right: 3px;
+  }
+  &.loading-small {
+    background: url("/assets/loading-small.gif") no-repeat scroll 0 0 transparent;
+    height: 32px;
+    width: 32px;
   }
 }
 
@@ -296,7 +302,6 @@ textarea { padding-top:5px; }
       }
       .close {
         background: url("/assets/icon-close.png") no-repeat;
-        cursor: pointer;
         height: 16px;
         width: 16px;
       }
@@ -1194,9 +1199,14 @@ textarea { padding-top:5px; }
   }
 }
 
-#pricing-form { width: 262px; }
+#pricing-form {
+  width: 262px;
+  .container { width: 242px;}
+  .icon.loading-small { margin: 0 auto; }
+  .tail { margin-left: 50px; }
+  #price-tiers { margin-bottom: 10px; }
+}
 #frm-pricing {
-  margin-bottom: 10px;
   .cell {
     width: 43px;
     height: 25px;
@@ -1215,7 +1225,9 @@ textarea { padding-top:5px; }
       width: 65px;
       text-align: left;
       input[type=radio] { padding: 0; margin: 0;}
+      &.header { text-align: center; }
     }
+    &.last { border-right: none; }
   }
 }
 
