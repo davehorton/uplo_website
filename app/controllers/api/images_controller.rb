@@ -132,7 +132,7 @@ class Api::ImagesController < Api::BaseController
     elsif user.id == current_user.id
       result[:data] = user.images.load_images(@filtered_params)
     else
-      result[:data] = user.images.load_popular_images(@filtered_params)
+      result[:data] = user.images.load_popular_images(@filtered_params, current_user)
     end
 
     render :json => result
@@ -169,7 +169,7 @@ class Api::ImagesController < Api::BaseController
   end
 
   def popular_images
-    images = Image.load_popular_images(@filtered_params)
+    images = Image.load_popular_images(@filtered_params, current_user)
     @result[:total] = images.total_entries
     @result[:data] = process_public_images(images)
     @result[:success] = true

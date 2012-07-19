@@ -63,7 +63,7 @@ class ImagesController < ApplicationController
 
   def public_images
     if find_gallery!
-      @images = @gallery.images.load_popular_images(@filtered_params)
+      @images = @gallery.images.load_popular_images(@filtered_params, current_user)
     end
   end
 
@@ -155,7 +155,7 @@ class ImagesController < ApplicationController
     push_redirect if redirect_list.index(request.env["HTTP_REFERER"])
     # get selected Image
     @selected_image = Image.find_by_id(params[:id])
-    if (@selected_image.nil? || @selected_image.image_flags.count > 0)
+    if (@selected_image.nil? || (@selected_image.image_flags.count > 0 && @selected_image.author != current_user))
       return render_not_found
     end
     # get Gallery
@@ -215,7 +215,7 @@ class ImagesController < ApplicationController
 
     # @images = @image.gallery.images.all(:order => 'name')
     @is_owner = @image.has_owner(current_user.id)
-    @images = @image.gallery.get_images_without([@image.id])
+    @images = @image.gallery.get_images_without([@image.id], current_user)
     @author = @image.gallery.user
     @dislike = false
     if user_signed_in?
@@ -232,6 +232,9 @@ class ImagesController < ApplicationController
     #   return redirect_to :action => 'browse', :id => params[:id]
     # end
     @image = Image.find_by_id(params[:id])
+    if (@image.nil? || (@image.image_flags.count > 0 && @image.author != current_user))
+      return render_not_found
+    end
     @author = @image.gallery.user
     @purchased_info = @image.raw_purchased_info(@filtered_params)
     render :layout => 'public', :formats => 'html'
