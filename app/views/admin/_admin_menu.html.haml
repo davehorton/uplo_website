@@ -1,6 +1,8 @@
 - content_for :head do
   = stylesheet_link_tag('scss/admin.css')
-
+  = javascript_include_tag('lib/jquery.inputHintOverlay.js')
+  = javascript_include_tag('lib/jquery.url.js')
+   
 %ul#admin_menu
   %li
     %div.first_item

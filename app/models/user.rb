@@ -6,7 +6,8 @@ class User < ActiveRecord::Base
   GENDER_MALE = "0"
   ALLOCATION_STRING = "#{RESOURCE_LIMIT[:size]} #{RESOURCE_LIMIT[:unit]}"
   ALLOCATION = FileSizeConverter.convert RESOURCE_LIMIT[:size], RESOURCE_LIMIT[:unit], FileSizeConverter::UNITS[:byte]
-
+  FILTER_OPTIONS = %w[signup_date username num_of_likes num_of_uploads]
+  
   # Include default devise modules. Others available are:
   # :token_authenticatable, :encryptable, :confirmable, :lockable, :timeoutable and :omniauthable
   devise :database_authenticatable, :registerable,
@@ -53,6 +54,13 @@ class User < ActiveRecord::Base
   # CLASS METHODS
   class << self
     def load_users(params = {})
+      case params[:sort_field]
+        when 'signup_date' then
+          params[:sort_field] = :created_at
+        else
+          params[:sort_field] = :username
+      end
+      
       paging_info = parse_paging_options(params)
       paginate(
         :page => paging_info.page_id,

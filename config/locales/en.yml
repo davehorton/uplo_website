@@ -50,7 +50,15 @@ en:
     transaction_completed: "Your payment was completed successfully"
     email:
       transaction_finish_subject: "Your payment completed successfully."
-
+  
+  admin:
+    member_profile: "Member Profiles"
+    sort_field:
+      signup_date: "Sign Up Date"
+      username: "Username"
+      num_of_likes: "Number of Likes"
+      num_of_uploads: "Number of Uploads"
+          
   date:
     formats:
       default: "%m/%d/%Y"

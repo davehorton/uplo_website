@@ -1,4 +1,41 @@
 = render :partial => "admin/admin_menu"
 
-%h1 Admin#members
-%p Find me in app/views/admin/members.html.haml
+.admin.clearfix
+  #top.title-bar.clearfix
+    %h1.left.title= "#{t('admin.member_profile')} / #{t("admin.sort_field.#{@sort_field}")}"
+    .right
+      = render(:partial => "shared/search_box_new", :locals => {:action => "search"})
+      #search-options
+        %span= "Sort By"
+        %span
+          = select_tag('sort_field', filter_options(@sort_field), :id => 'sort-field-selection')
+      
+  .content.clearfix
+    - @users.each_with_index do |user, idx|
+      - user_css = (((idx + 1) % 3) == 0 ? 'no-margin-right' : '')
+      .user-container{:id => "user-container-#{user.id}", :class => user_css}
+        - author_profile = profile_path(:user_id => user.id)
+        %a.profile-link.left{:href => author_profile}
+          = image_tag user.avatar_url(:large), :class => 'avatar large left'
+        .user-info.left
+          .username
+            %a{:href => author_profile}= user.username
+          .numbers
+            %span= "Joined #{user.created_at.strftime('%m/%d/%Y')}"
+            %span.separator= '|'
+            %span= pluralize(user.images.length, 'item')
+            %span.separator= '|'
+            %span= pluralize(rand(1000), 'view')
+  
+    = render_pagination(@users)
+
+:erb
+  <script>
+    jQuery(function() {
+      jQuery('#sort-field-selection').change(function(){
+        var params = $.url(window.location.href).param();
+        params['sort_field'] = $(this).val();
+        window.location.search = "?" + jQuery.param(params);        
+      });
+    })
+  </script>

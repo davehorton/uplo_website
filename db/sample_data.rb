@@ -13,7 +13,7 @@ user = User.new({
 user.skip_confirmation!
 user.save!
 
-5.times do |counter|
+50.times do |counter|
   begin
     user = User.new({
       :email => Faker::Internet.email,
