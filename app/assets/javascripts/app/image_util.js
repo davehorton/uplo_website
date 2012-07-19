@@ -50,15 +50,24 @@ image_util = {
     //console.log('output:' +  $(img).width() + 'x' + $(img).height());
   },
   
-  resize_frame: function (img, auto){
+  resize_frame: function (img, params){
     var parent = $(img).parents('.image-container');
-    if(auto){
+    if(!params)
+      params = {};
+      
+    if(params.auto){
       $(parent).width('auto');
       $(parent).height('auto');
     }
     else{
       var width = $(img).width();
+      if(params.width > 0 && width > params.width)
+        width = params.width;
+
       var height = $(img).height();
+      if(params.height > 0 && height > params.height)
+        height = params.height;
+      
       var ratio = 1;
       
       if(!width){

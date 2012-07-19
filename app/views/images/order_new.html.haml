@@ -87,14 +87,6 @@
         }
       });
 
-      $('.image-container-wrapper .image-container.medium img.image.medium').each(function(){
-        image_util.resize_frame($(this), true);
-        // Auto-resize the image frame
-        $(this).load(function(){
-          image_util.resize_frame($(this));
-        });
-      });
-
       // Scale and change the frame based on the print-size.
       $('.print-sizes-container .print-size').change(function(){
         if($(this).is(':checked')) {
@@ -107,7 +99,7 @@
             var p_width = parseFloat(print_sizes[0]);
             var p_height = parseFloat(print_sizes[1]);
 
-            var dpi = image_util.detect_dpi();
+            var dpi = 72; //image_util.detect_dpi();
             p_width = image_util.inch_to_px(p_width, dpi);
             p_height = image_util.inch_to_px(p_height, dpi);
 
@@ -128,9 +120,10 @@
             //  origin_ratio + '; print ratio: ' + print_ratio);
 
             image_util.resize_image(img, {width: p_width, height: p_height, ratio: origin_ratio});
-            image_util.resize_frame(img);
+            image_util.resize_frame(img, {width: p_width, height: p_height});
           }
         }
       });
       // Force change of page-loading.
+      $('.print-sizes-container .print-size:first').attr('checked', 'true');
       $('.print-sizes-container .print-size:checked').change();
