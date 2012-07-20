@@ -33,6 +33,7 @@ btn-close-photo.png: btn-close-photo-71b4951ee1d286cebb6e9beb65c91a51.png
 btn-comment.jpg: btn-comment-0a73efa9af8378462e4d4bad7317d5fb.jpg
 btn-delete-photo.png: btn-delete-photo-558c2a2d4b48c0aea7c376724bf705bf.png
 btn-dislike.png: btn-dislike-7b20ce2baa59fecb897f5fbf0506b621.png
+btn-done.png: btn-done-352ad89527c928bddf38e2e866f81648.png
 btn-dowload-app.png: btn-dowload-app-2e9fc66a9ec53cf550430ad32ddc2fba.png
 btn-edit.png: btn-edit-c63376d30973b9e15e52837fa90208d2.png
 btn-flag-photo.png: btn-flag-photo-be681709622bcbdd34a80492c8752d99.png
@@ -115,7 +116,7 @@ intro-phone-take-pic.jpg: intro-phone-take-pic-212c620b72b204bc9695743fff152ed5.
 last-disabled.png: last-disabled-8e398010e5441986058f627827651f57.png
 last.png: last-224cc1eb9953afe7129632bc6da470d8.png
 line_horizontal.jpg: line_horizontal-86edfb41b39b4be34d46ae776795a432.jpg
-loading-small.gif: loading-small-49e6f2d14e0624a4ff56071d45d90f12.gif
+loading-small.gif: loading-small-953dd3b0ef31f00ee6256e47c289b9d8.gif
 loading-thickbox.gif: loading-thickbox-7c94fca3b7f1686494ac4ddd9ff6c7f7.gif
 loading.gif: loading-4aec309c41e2af79984dbae2a0238108.gif
 logo-uplo-banner.png: logo-uplo-banner-1877ababb9afc7d685ad149a112d31da.png
@@ -157,11 +158,11 @@ up.gif: up-7851ecffdfbb6ca3ba41bcebfa93cb35.gif
 uplo-logo.png: uplo-logo-1a1123ea4ae8aed84ec7486c1838b15e.png
 uplo_logo.png: uplo_logo-4e147b8807d73e64931db4bc3568f789.png
 uploader_file.png: uploader_file-3ab3c53af3d8adf6071f3776329ab009.png
-app/edit_images.js: app/edit_images-1e5c8941dac9d743669812f94529e211.js
+app/edit_images.js: app/edit_images-bf8d3bb4141ec428351070129e7c4522.js
 app/gallery.js: app/gallery-56d1423ff8282cf24bfa0dc13979b30e.js
 app/image.js: app/image-090a76bcb99a855a1064e5cb602865bf.js
 app/image_util.js: app/image_util-e58342d34805f84c8607728b6f93d540.js
-app/order.js: app/order-30190b3eb7fd063e1a82e24879dc90ac.js
+app/order.js: app/order-610f2d8aa30aa829b0878e061a9137a1.js
 app/popup.js: app/popup-3d37daf582062d5f270aa53d3da682bd.js
 app/sales.js: app/sales-03318d5b60f42b484cc55e4f12ca5fcc.js
 app/shopping_cart.js: app/shopping_cart-c4cd9e15d013f19ed47969caa609fcb9.js
@@ -245,7 +246,7 @@ lib/jquery.ui.widget.js: lib/jquery.ui.widget-0d68580b40839753efc5ace9498dba90.j
 lib/jquery.url.js: lib/jquery.url-54bab1cba764049f9199d478427a17df.js
 lib/superfish.min.js: lib/superfish.min-ffabcd0209faaae3216c63369a26facf.js
 lib/supersubs.min.js: lib/supersubs.min-51d2091adc4247f2751775293b4697b7.js
-profiles.js: profiles-5ec7d74479db2adc31d0188ec2e79fbf.js
+profiles.js: profiles-784977ed129256c2ca9f0702823b5e31.js
 rails.js: rails-68b47f0ba7401778dadbcdeafc621db8.js
 application.css: application-b5ccf7188c153412298770ca08fa3746.css
 bootstrap-image-gallery.css: bootstrap-image-gallery-d5c0778ddff99fb1e8dbd314793ba0d8.css
@@ -258,10 +259,10 @@ jquery-ui.custom.css: jquery-ui.custom-bb782aff6a70a3531739cdd09fe60b50.css
 jquery.contextMenu.css: jquery.contextMenu-5e13ffab2ad4f1c83de146893d8f0b86.css
 jquery.ui.selectmenu.css: jquery.ui.selectmenu-126b46b0f5616450a0711aea25ce56ec.css
 jquery.ui.theme.css: jquery.ui.theme-bc9f9116ef9708ca6340560832e3b72e.css
-scss/application.css: scss/application-bcc59659188757fbab2a25a85bfc7172.css
+scss/application.css: scss/application-970fcba2dd1a04a9be1ab862da9e7feb.css
 scss/banner.css: scss/banner-331c4e35597b1b905f46e6226aa74178.css
 scss/cart.css: scss/cart-a00c819367f1c26885c93fd320e87746.css
-scss/cart_new.css: scss/cart_new-4624f106822c261a74fc96bc9f357289.css
+scss/cart_new.css: scss/cart_new-ae43b8521bb1aede584d3c7905fedaef.css
 scss/dialog.css: scss/dialog-5dec5a3c5274437ee34726e7e4356988.css
 scss/filter.css: scss/filter-739c80ba8eabd3a953be7d9ea50b38b6.css
 scss/image.css: scss/image-64b6683d484780bff39a790b7c1d60b3.css

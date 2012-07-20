@@ -110,11 +110,7 @@ textarea {
 .wrapper {
   width: 960px;
   height: 100%;
-  margin: 0 auto;
-  /*-webkit-box-shadow: rgba(0,0,0,.45) 0 1px 3px;
-  -moz-box-shadow: rgba(0,0,0,.45) 0 1px 3px;
-  box-shadow: rgba(0,0,0,.45) 0 1px 3px;
-  box-shadow: rgba(0,0,0,.45) 0 1px 6px \0/IE9;*/ }
+  margin: 0 auto; }
 
 .panel {
   float: left; }
@@ -139,6 +135,9 @@ textarea {
     -webkit-transform: translate(200px, 0pt) scale(3);
     -o-transform: scale(5); }
 
+.frame-fit {
+  width: 100%; }
+
 .text {
   text-align: left;
   word-wrap: break-word; }
@@ -146,6 +145,9 @@ textarea {
     text-align: center; }
   .text.italic {
     font-style: italic; }
+  .text.underline {
+    text-decoration: underline;
+    cursor: pointer; }
   .text.bold {
     font-weight: bold; }
   .text.normal {
@@ -204,22 +206,48 @@ textarea {
 .actions-panel {
   cursor: pointer; }
 
-.icon {
+.icon.edit {
+  background: url("/assets/icon-edit.jpg") no-repeat scroll 0 0 transparent;
+  height: 9px;
+  width: 9px;
+  margin-top: 1px;
   margin-right: 3px; }
-  .icon.edit {
-    background: url("/assets/icon-edit.jpg") no-repeat scroll 0 0 transparent;
-    height: 9px;
-    width: 9px;
-    margin-top: 1px; }
-  .icon.check {
-    background: url("/assets/icon-check.png") no-repeat scroll 0 0 transparent;
-    height: 12px;
-    width: 15px; }
+.icon.check {
+  background: url("/assets/icon-check.png") no-repeat scroll 0 0 transparent;
+  height: 12px;
+  width: 15px;
+  margin-right: 3px; }
+.icon.loading-small {
+  background: url("/assets/loading-small.gif") no-repeat scroll 0 0 transparent;
+  height: 32px;
+  width: 32px; }
 
 .line-separator {
   border-bottom: 1px solid #cccccc;
   width: 100%;
   margin: 10px 0; }
+
+.bubble .wrapper {
+  width: 100%;
+  background-color: white;
+  border-radius: 5px;
+  box-shadow: 0 0 7px #777; }
+  .bubble .wrapper .container {
+    margin: 10px; }
+    .bubble .wrapper .container .header {
+      width: 100%;
+      margin-bottom: 10px; }
+      .bubble .wrapper .container .header .cvv {
+        margin-left: 5px; }
+    .bubble .wrapper .container .close {
+      background: url("/assets/icon-close.png") no-repeat;
+      height: 16px;
+      width: 16px; }
+.bubble .tail {
+  background: url("/assets/icon-cvv-arrow.png") no-repeat;
+  width: 34px;
+  height: 18px;
+  margin-left: 140px; }
 
 .popup {
   border-radius: 5px; }
@@ -308,13 +336,7 @@ textarea {
   padding-top: 30px;
   text-align: center;
   clear: both;
-  font-size: 12px;
-  /*.previous_page, .next_page{
-    width: 10px;
-    height: 18px;
-    padding: 0.2em 0.5em;
-    line-height: 18px;
-  }*/ }
+  font-size: 12px; }
   .pagination .current {
     font-style: normal;
     font-weight: bold;
@@ -325,21 +347,9 @@ textarea {
     text-decoration: none;
     color: #606060; }
   .pagination a, .pagination em, .pagination span {
-    margin: 2px 3px;
-    /*border: 1px solid #CCCCCC;
-    display: inline-block;
-    padding: 0.2em 0.5em;
-    vertical-align: middle;
-    -moz-border-radius: 4px;
-    -webkit-border-radius: 4px;
-    border-radius: 4px;*/ }
+    margin: 2px 3px; }
   .pagination a:hover {
-    font-weight: bold;
-    /*border-color: #999999;
-    -webkit-box-shadow:0 0 3px #999999;
-    -moz-box-shadow:0 0 3px #999999;
-    box-shadow:0 0 3px #999999;
-    box-shadow:#999999 0 0 3px \0/IE9;*/ }
+    font-weight: bold; }
   .pagination .previous_page {
     background: url("/assets/icon-previous-page.png") no-repeat scroll center center transparent;
     margin-right: 10px; }
@@ -438,6 +448,10 @@ textarea {
 
 .button {
   cursor: pointer; }
+  .button.done {
+    background: url("/assets/btn-done.png") no-repeat;
+    width: 50px;
+    height: 21px; }
   .button.edit {
     background: url("/assets/btn-edit.png") no-repeat;
     width: 43px;
@@ -719,10 +733,10 @@ textarea {
       height: 64px; }
     #center #images-panel .info-panel .info-line .label {
       margin: 2px 0px; }
+    #center #images-panel .info-panel .info-line .inline {
+      margin: 5px 0px; }
     #center #images-panel .info-panel .info-line .half {
       width: 120px; }
-      #center #images-panel .info-panel .info-line .half.option {
-        margin: 5px 0px; }
     #center #images-panel .info-panel .info-line.progress, #center #images-panel .info-panel .info-line.progress .uploading {
       height: 20px;
       -webkit-border-radius: 4px;
@@ -743,6 +757,8 @@ textarea {
     width: 248px; }
 #center #images-panel .edit-template .info-panel {
   width: 248px; }
+  #center #images-panel .edit-template .info-panel .price {
+    margin-left: 5px; }
 #center #images-panel .edit-template .line-separator {
   margin: 13px 0px; }
 #center #order-preview {
@@ -1034,6 +1050,47 @@ textarea {
     #save-confirm-popup .main-panel .button.save-my-changes {
       margin-right: 10px; }
 
+#pricing-form {
+  width: 262px; }
+  #pricing-form .container {
+    width: 242px; }
+  #pricing-form .icon.loading-small {
+    margin: 0 auto; }
+  #pricing-form .tail {
+    margin-left: 50px; }
+  #pricing-form #price-tiers {
+    margin-bottom: 10px; }
+  #pricing-form .header {
+    margin-bottom: 5px;
+    margin-top: -5px; }
+
+#frm-pricing .cell {
+  width: 43px;
+  height: 25px;
+  text-align: center;
+  line-height: 25px;
+  border-right: 1px solid #e1e1e1;
+  border-bottom: 1px solid #e1e1e1; }
+  #frm-pricing .cell.header {
+    height: 20px;
+    line-height: 20px;
+    margin: 0;
+    background-color: #ebebeb;
+    border-bottom: none; }
+  #frm-pricing .cell.type {
+    width: 65px;
+    text-align: left; }
+    #frm-pricing .cell.type input[type=radio] {
+      padding: 0;
+      margin: 0;
+      vertical-align: middle; }
+    #frm-pricing .cell.type label {
+      vertical-align: middle; }
+    #frm-pricing .cell.type.header {
+      text-align: center; }
+  #frm-pricing .cell.last {
+    border-right: none; }
+
 /* select button */
 #my_links-button {
   height: 20px; }
@@ -1053,7 +1110,10 @@ textarea {
 
 #image_gallery_id-button, #image_gallery_id-menu, #image_price-menu, #image_price-button {
   max-width: 248px;
-  min-width: 248px; }
+  min-width: 248px;
+  height: 22px; }
+  #image_gallery_id-button li a, #image_gallery_id-button .ui-selectmenu-status, #image_gallery_id-menu li a, #image_gallery_id-menu .ui-selectmenu-status, #image_price-menu li a, #image_price-menu .ui-selectmenu-status, #image_price-button li a, #image_price-button .ui-selectmenu-status {
+    padding-top: 5px; }
 
 #gallery_selector_id-button {
   height: 20px; }

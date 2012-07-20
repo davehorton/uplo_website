@@ -71,28 +71,6 @@
 
 #cvv-form {
   width: 472px; }
-  #cvv-form .wrapper {
-    width: 100%;
-    background-color: white;
-    border-radius: 5px;
-    box-shadow: 0 0 7px #777; }
-    #cvv-form .wrapper .container {
-      margin: 10px; }
-      #cvv-form .wrapper .container .header {
-        width: 100%;
-        margin-bottom: 10px; }
-        #cvv-form .wrapper .container .header .cvv {
-          margin-left: 5px; }
-      #cvv-form .wrapper .container .close {
-        background: url("/assets/icon-close.png") no-repeat scroll 0 0 transparent;
-        cursor: pointer;
-        height: 16px;
-        width: 16px; }
-  #cvv-form .tail {
-    background: url("/assets/icon-cvv-arrow.png") no-repeat;
-    width: 34px;
-    height: 18px;
-    margin-left: 140px; }
 
 /* select buttons */
 .ui-selectmenu, .ui-selectmenu-menu-popup {
@@ -103,8 +81,8 @@
   margin-left: 3px; }
 
 #card_expires_on_1i-button, #card_expires_on_1i-menu, #card_expires_on_2i-menu, #card_expires_on_2i-button {
-  min-width: 93px;
-  max-width: 93px; }
+  min-width: 92px;
+  max-width: 92px; }
 
 /*==================================================================================*/
 /* CLASS */
