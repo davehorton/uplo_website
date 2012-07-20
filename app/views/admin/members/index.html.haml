@@ -8,7 +8,7 @@
       #search-options
         %span= "Sort By"
         %span
-          = select_tag('sort_field', filter_options(@sort_field), :id => 'sort-field-selection')
+          = select_tag('sort_field', member_filter_options(@sort_field), :id => 'sort-field-selection')
       
   .content.clearfix
     - @users.each_with_index do |user, idx|

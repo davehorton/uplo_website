@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120718103543) do
+ActiveRecord::Schema.define(:version => 20120720105504) do
 
   create_table "addresses", :force => true do |t|
     t.string   "first_name"
@@ -94,6 +94,7 @@ ActiveRecord::Schema.define(:version => 20120718103543) do
     t.integer  "height"
     t.string   "keyword"
     t.boolean  "is_owner_avatar"
+    t.integer  "pageview"
   end
 
   create_table "line_items", :force => true do |t|

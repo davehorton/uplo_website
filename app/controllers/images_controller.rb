@@ -224,6 +224,10 @@ class ImagesController < ApplicationController
 
     @filtered_params[:page_size] = 10
     @comments = @image.comments.load_comments(@filtered_params)
+    
+    # Increase page view
+    @image.increase_pageview
+    
     render :template => "images/browse_new", :layout => "main"
   end
 

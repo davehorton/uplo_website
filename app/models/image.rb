@@ -393,6 +393,11 @@ class Image < ActiveRecord::Base
     end
   end
 
+  # Increase the pageview counter
+  def increase_pageview
+    self.class.increment_counter(:pageview, self.id)
+  end
+  
   protected
 
   # Detect the image dimensions.

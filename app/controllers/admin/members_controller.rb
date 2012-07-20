@@ -1,7 +1,7 @@
 class Admin::MembersController < Admin::AdminController
   def index
     # TODO: test GUI only
-    @sort_field = params[:sort_by] || "signup_date"
+    @sort_field = params[:sort_field] || "signup_date"
     @users = User.load_users(filtered_params.merge(:sort_field => @sort_field))
   end
   
