@@ -14,7 +14,14 @@ class Image < ActiveRecord::Base
   has_many :comments, :dependent => :destroy
   has_many :line_items, :dependent => :destroy
   has_many :orders, :through => :line_items
-
+  
+  # SCOPE
+  scope :flagged, joins('left join image_flags on images.id=image_flags.image_id')
+                    .where("image_flags.reported_by is not null AND is_removed = ?", false).readonly(false)
+  scope :un_flagged, joins('left join image_flags on images.id=image_flags.image_id')
+                    .where("image_flags.reported_by is null AND is_removed = ?", false).readonly(false)
+  scope :avai_images, where("is_removed = ?", false)
+                                      
   # Paperclip
   has_attached_file :data,
     :styles => { :smallest => '66x66#', :smaller => '67x67#', :small => '68x68#', :spotlight_small => '74x74#',

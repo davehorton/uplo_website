@@ -98,9 +98,19 @@ Uplo::Application.routes.draw do
   get '/admin', :to => "admin/admin#index"
   namespace :admin do    
     resources :flagged_images do
-      post :change_sort_type, :on => :collection
+      post :index, :on => :collection
+      post :reinstate_all, :on => :collection
+      post :remove_all, :on => :collection
+      post :reinstate_image, :on => :collection
+      delete :remove_image, :on => :collection
     end
-    resources :flagged_users
+    resources :flagged_users do
+      post :index, :on => :collection
+      post :reinstate_all, :on => :collection
+      post :remove_all, :on => :collection
+      post :reinstate_user, :on => :collection
+      delete :remove_user, :on => :collection
+    end
     resources :members
     resources :spotlights
   end

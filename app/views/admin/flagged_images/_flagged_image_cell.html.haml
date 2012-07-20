@@ -1,28 +1,42 @@
+/ locals image, flag, flag_type
 .flagged_image_container
   .image_frame
+    = image_tag image.data.url(:thumb), {:width => "155px", :height=> "155px"}
   .button_area.info_line
-    .button.reinstate.left
-    .button.remove.left
+    .button.reinstate.left{:class => "button_#{image.id}"}
+      = link_to '', {:action => :reinstate_image, :image_id => image.id}, method: :post, :style => "display:none"
+    .button.remove.left{:class => "button_#{image.id}"}
+      = link_to '', {:action => :remove_image, :image_id => image.id}, confirm: 'Are you sure?', method: :delete, :style => "display:none"
   .image_name.info_line
-    Image Name Here
+    = truncate(image.name, :length => 20)
   .author.info_line
-    usernamehere1
+    = image.author.username
   .flagged_time.info_line
-    Flagged 02/21/12
+    Flagged 
+    = flag.created_at.strftime "%d/%m/%Y"
   .flagged_time.info_line
-    by <spanc style="color:black">usernamehere2</span>
+    by <spanc style="color:black">
+    = flag.reporter.username
+    </span>
   .type.info_line
-    Term of Use Violation
-  .description.info_line
-    Specific reason why this photo was tagged for terms of use violation goes here
-  %br{:style => "clear:both"}
+    = flag_type
+  %textarea.description.info_line.wordwrap{:readonly => "readonly"}
+    = flag.description
 
 :erb
-  <script>
-    $(document).ready(function(){
-      $("#flagged_image_type-button").css("width", "160px");
-      $("#flagged_image_type-button").css("height", "20px");
-      $("#flagged_image_type-menu").css("width", "160px");
-      $("#flagged_image_type-button .ui-selectmenu-status").css("padding-top", "3px");
+  <script type="text/javascript">
+  $(document).ready(function(){
+    $(".reinstate<%=".button_#{image.id}"%>").click(function(e){
+      if($(e.target).is('a')) return;
+        $(this).find('a').click();
+      event.preventDefault();
     });
+    $(".remove<%=".button_#{image.id}"%>").click(function(e){
+      if($(e.target).is('a'))
+        return;
+      $(this).find('a').click();
+      event.preventDefault();
+    });
+  });
+  
   </script>

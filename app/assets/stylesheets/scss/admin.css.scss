@@ -135,6 +135,11 @@
       width: 89px;
 	  height: 21px
   }
+   &.contact_all{
+      background: url('/assets/contact_all_button.png') no-repeat;
+      width: 81px;
+	  height: 21px
+  }
     &.reinstate {
       background: url('/assets/reinstate_button.png') no-repeat;
       width: 60px;
@@ -164,6 +169,14 @@
   margin-top: 5px;
   font:11px;
 }
+.flagged_image_container .wordwrap{
+  white-space: pre-wrap;      /* CSS3 */   
+  white-space: -moz-pre-wrap; /* Firefox */    
+  white-space: -pre-wrap;     /* Opera <7 */   
+  white-space: -o-pre-wrap;   /* Opera 7 */    
+  word-wrap: break-word;      /* IE */
+}
+
 .flagged_image_container .image_frame{
 	width:155px;
 	height:155px;
@@ -190,7 +203,11 @@
 .flagged_image_container .description{
    color: #b3b3b3;
    font-style:italic;
-   height: 40px;
+   height: 60px;
+   width:155px;
+   overflow:hidden;
+   border:none;
+   background:none;
 }
 
 

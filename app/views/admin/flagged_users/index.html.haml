@@ -1,4 +1,42 @@
 = render :partial => "admin/admin_menu"
+.header
+  .admin_title.left_area
+    = t('admin.flagged_users_area.title')
+  .right_area
+    = form_tag({:action => :index}, :id => "flag_type_form", :method=>'post', :multipart => true) do
+      .button.remove_all.left#remove_flagged_images
+      .button.reinstate_all.left#reinstate_flagged_images
+      .button.contact_all.left#reinstate_flagged_images
+.list_flagged_images
+  - i = 0
+  - (1..13).each do
+    - i = i + 1
+    - user = User.first
+    - if (i % 3) == 0
+      .flagged_user_last_element 
+        = render :partial => "admin/flagged_users/flagged_user_cell", :locals => {:user => user}
+    - else
+      = render :partial => "admin/flagged_users/flagged_user_cell", :locals => {:user => user}
 
-%h1 Admin#flagged_users
-%p Find me in app/views/admin/flagged_users.html.haml
+
+:erb
+  <script type="text/javascript">
+   $(document).ready(function(){
+     $("#flagged_image_type").change(function(){
+       $("#flag_type_form").submit();
+     });
+     $("#flagged_image_type-button").css("width", "160px").css("height", "20px");
+     $("#flagged_image_type-menu").css("width", "160px");
+     $("#flagged_image_type-button .ui-selectmenu-status").css("padding-top", "3px");
+     $('#remove_flagged_images').click(function(){
+       $('#flag_type_form').attr('action','<%= url_for(:action => :remove_all)%>');
+       $("#flag_type_form").submit();
+     });
+     $('#reinstate_flagged_images').click(function(){
+       $('#flag_type_form').attr('action','<%= url_for(:action => :reinstate_all)%>');
+       $("#flag_type_form").submit();
+     });
+   });
+
+   
+  </script>

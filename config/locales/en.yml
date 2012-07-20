@@ -28,6 +28,8 @@ en:
     spolight: "Promote to Spotlight"
     flagged_images_area:
       title: "Flagged Images / Terms of Use Violation"
+    flagged_users_area:
+      title: "Flagged Users"
   gallery:
     permission:
       public: "Public"
