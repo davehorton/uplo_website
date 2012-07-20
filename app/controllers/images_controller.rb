@@ -369,13 +369,13 @@ class ImagesController < ApplicationController
     render :json => result
   end
 
-  def update_pricing
+  def update_tier
     image = Image.find_by_id params[:id]
     if image.nil?
       result = { :success => false, :msg => 'This image does not exist anymore' }
     else
-      table = render_to_string :partial => 'galleries/price_tiers', :locals => { :image => image }
-      result = { :success => true, :price_table => table }
+      image.update_attribute(:tier, params[:price]['tier'])
+      result = { :success => true }
     end
     render :json => result
   end

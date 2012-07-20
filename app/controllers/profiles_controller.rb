@@ -22,7 +22,9 @@ class ProfilesController < ApplicationController
       else
         @images = @user.images.load_popular_images(@filtered_params, current_user)
       end
-      render :partial => 'photos'
+      html = render_to_string :partial => 'photos'
+      counter = @images.count
+      render :json => {:html => html, :counter => counter}
     end
   end
 
@@ -47,7 +49,9 @@ class ProfilesController < ApplicationController
   def show_likes
     if request.xhr?
       @images = @user.liked_images.load_images(@filtered_params)
-      render :partial => 'likes'
+      html = render_to_string :partial => 'likes'
+      counter = @images.count
+      render :json => {:html => html, :counter => counter}
     end
   end
 
@@ -75,7 +79,9 @@ class ProfilesController < ApplicationController
       else
         @galleries = @user.galleries.load_popular_galleries(@filtered_params)
       end
-      render :partial => 'galleries'
+      html = render_to_string :partial => 'galleries'
+      counter = @galleries.count
+      render :json => {:html => html, :counter => counter}
     end
   end
 
@@ -99,7 +105,9 @@ class ProfilesController < ApplicationController
   def show_followers
     if request.xhr?
       @followers = @user.followers.load_users(@filtered_params)
-      render :partial => 'followers'
+      html = render_to_string :partial => 'followers'
+      counter = @followers.count
+      render :json => {:html => html, :counter => counter}
     end
   end
 
@@ -119,7 +127,9 @@ class ProfilesController < ApplicationController
   def show_followed_users
     if request.xhr?
       @followed_users = @user.followed_users.load_users(@filtered_params)
-      render :partial => 'followed_users'
+      html = render_to_string :partial => 'followed_users'
+      counter = @followed_users.count
+      render :json => {:html => html, :counter => counter}
     end
   end
 

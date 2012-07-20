@@ -31,6 +31,7 @@ class Image < ActiveRecord::Base
       :message => 'File type must be one of [.jpeg, .jpg, .png, .gif]' }
 
   # CALLBACK
+  before_create :set_default_tier
   after_create :save_image_dimensions, :process_filename
   after_initialize :init_random_price
 
@@ -41,6 +42,12 @@ class Image < ActiveRecord::Base
   PRINTED_SIZES = {
     :square => IMAGE_SQUARE_PRINTED_SIZES,
     :rectangular => IMAGE_PORTRAIT_PRINTED_SIZES
+  }
+  TIERS = { :tier_1 => 1, :tier_2 => 2, :tier_3 => 3 }
+  TIERS_PRICES = {
+    TIERS[:tier_1] => TIER_1_PRICES,
+    TIERS[:tier_2] => TIER_2_PRICES,
+    TIERS[:tier_3] => TIER_3_PRICES
   }
 
   # CLASS METHODS
@@ -76,7 +83,7 @@ class Image < ActiveRecord::Base
     def load_popular_images(params = {}, current_user = nil)
       
       paging_info = parse_paging_options(params, {:sort_criteria => "images.likes DESC"})
-      # TODO: calculate the popularity of the images: base on how many times an image is "liked".
+      # TODO: calculachute the popularity of the images: base on how many times an image is "liked".
       self.includes(:gallery).joins([:gallery]).
             where("galleries.permission = ?", Gallery::PUBLIC_PERMISSION).
             joins('left join image_flags on images.id=image_flags.image_id').where(["image_flags.reported_by is null" +  (" OR reported_by = #{current_user.id if (!current_user.nil?)}") ]).
@@ -111,6 +118,10 @@ class Image < ActiveRecord::Base
   end
 
   # INSTANCE METHODS
+  def get_price(tier, size)
+    TIERS_PRICES[tier][size]
+  end
+
   def square?
     ratio = self.width*1.0 / self.height
     (1.0/RECTANGULAR_RATIO < ratio) && (ratio < RECTANGULAR_RATIO)
@@ -394,47 +405,51 @@ class Image < ActiveRecord::Base
   end
 
   protected
-  def process_filename
-    reg = /(.jpeg|.jpg|.png|.gif)$/i
-    self.update_attribute(:name, self.name.gsub(reg, '')) if self.name =~ reg
-  end
-
-  # Detect the image dimensions.
-  def save_image_dimensions
-    file = self.data.queued_for_write[:original]
-    if file.blank?
-      file = data.url(:original)
+    def set_default_tier
+      self.tier = TIERS[:tier_1]
     end
 
-    geo = Paperclip::Geometry.from_file(file)
-    self.update_attribute(:width, geo.width)
-    self.update_attribute(:height, geo.height)
-  end
-
-
-  # TODO: this method is for test only. Please REMOVE this in production mode.
-  def init_random_price
-    if self.price.blank?
-      self.price = rand(50)
+    def process_filename
+      reg = /(.jpeg|.jpg|.png|.gif)$/i
+      self.update_attribute(:name, self.name.gsub(reg, '')) if self.name =~ reg
     end
-  end
 
-  #indexing with thinking sphinx
-  define_index do
-    indexes name
-    indexes description
+    # Detect the image dimensions.
+    def save_image_dimensions
+      file = self.data.queued_for_write[:original]
+      if file.blank?
+        file = data.url(:original)
+      end
 
-    has gallery_id
-
-    set_property :field_weights => {
-      :name => 4,
-      :description => 1,
-    }
-
-    if Rails.env.production?
-      set_property :delta => FlyingSphinx::DelayedDelta
-    else
-      set_property :delta => true
+      geo = Paperclip::Geometry.from_file(file)
+      self.update_attribute(:width, geo.width)
+      self.update_attribute(:height, geo.height)
     end
-  end
+
+
+    # TODO: this method is for test only. Please REMOVE this in production mode.
+    def init_random_price
+      if self.price.blank?
+        self.price = rand(50)
+      end
+    end
+
+    #indexing with thinking sphinx
+    define_index do
+      indexes name
+      indexes description
+
+      has gallery_id
+
+      set_property :field_weights => {
+        :name => 4,
+        :description => 1,
+      }
+
+      if Rails.env.production?
+        set_property :delta => FlyingSphinx::DelayedDelta
+      else
+        set_property :delta => true
+      end
+    end
 end

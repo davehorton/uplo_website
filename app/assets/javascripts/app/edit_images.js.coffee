@@ -57,7 +57,6 @@ deletePhoto = (node) ->
         $('.pagination-panel').each( (idx, elem) -> $(elem).html response.pagination )
         $('#gallery_selector_id').html response.gallery_options
         alert("Delete successfully!")
-        $('select[id!=my_links]').selectmenu({style:'popup'})
         $.modal.close()
     });
 
@@ -91,7 +90,6 @@ saveGridChanges = (callback) ->
       alert("Update successfully!")
       callback.call() if callback
       window.is_grid_changed = false
-      $('select[id!=my_links]').selectmenu({style:'popup'})
       $.modal.close()
   });
 
@@ -105,6 +103,23 @@ confirmChanges = (callback) ->
   else
     callback.call()
 
+requestUpdateTier = (image_id) ->
+  data = $('#frm-pricing').serialize()
+  $.modal.close()
+  window.setTimeout "$('#mask').modal()", 300
+  $.ajax({
+    url: "/images/update_tier?id=#{ image_id }",
+    type: 'POST',
+    data: data,
+    dataType: 'json',
+    success: (response) ->
+      if response.success
+        alert("Price has been updated successfully!")
+        $.modal.close()
+      else
+        alert('Something went wrong!')
+        $('#pricing-form').modal()
+  });
 
 $ ->
   window.is_grid_changed = false
@@ -126,7 +141,7 @@ $ ->
         $('#images-panel').children().last().remove() if $('.pagination-panel').find('.pagination').length > 0
         $('#gallery_selector_id').html response.gallery_options
         $('.empty-data').remove()
-        $('select[id!=my_links]').selectmenu({style:'popup'})
+        $('select[id=gallery_permission]').selectmenu({ style: 'popup' })
       else
         $(data.context).find('.progress').replaceWith("<div class='error info-line text italic font12 left'>#{response.msg}</div>")
     progress: (e, data) ->
@@ -159,7 +174,8 @@ $ ->
           $.modal.close()
           $('#edit-gallery-popup').replaceWith response.edit_popup
           $('#gallery_selector_id').html(response.gal_with_number_options)
-          $('.edit-template #image_gallery_id').each((idx, val) -> val.html(response.gallery_options))
+          $('.edit-template #image_gallery_id').each((idx, val) -> $(val).html(response.gallery_options))
+          $('select[id=gallery_permission]').selectmenu({ style: 'popup' })
         else
           alert(response.msg)
     });
@@ -201,33 +217,42 @@ $ ->
           $('#delete-gallery').attr('href', response.delete_url)
           $('#fileupload').attr('action', response.upload_url)
           $('#edit-gallery-popup').replaceWith response.edit_popup
-          $('select[id!=my_links]').selectmenu({style:'popup'})
+          $('select[id=gallery_permission]').selectmenu({ style: 'popup' })
           $.modal.close()
       })
 
   $('#images-panel').delegate '.edit-template .price', 'click', (e) ->
     form = $('#pricing-form')
-    left = e.pageX - 60
-    top = e.pageY - form.height()
+    left = e.clientX - 60
+    top = e.clientY - form.height()
     $('#pricing-form').modal({
       opacity: 5,
       position:[top, left],
+      escClose: false,
+      overlayClose: true,
       onOpen: (dialog) ->
         dialog.overlay.fadeIn('slow', ->
           dialog.container.fadeIn('slow', ->
             dialog.data.fadeIn()
             $('#pricing-form .button').fadeOut()
+            image_id = $(e.target).closest('.edit-template').attr('data-id')
             $.ajax({
               url: '/images/show_pricing',
               type: 'GET',
-              data: { id: $(e.target).closest('.edit-template').attr('data-id') },
+              data: { id: image_id },
               dataType: 'json',
               success: (response) ->
                 if response.success
-                  func = -> $('#price-tiers').html(response.price_table)
+                  $('#price-tiers').html(response.price_table)
+                  $('#pricing-form .button').fadeIn()
+                  top = e.clientY - form.height()
+                  form.closest('.simplemodal-container').css('top', "#{top}px")
+                  $('#btn-done').click -> requestUpdateTier(image_id)
                 else
-                  func = -> $('#price-tiers').html(response.msg)
-                window.setTimeout func, 1000
+                  $('#price-tiers').html(response.msg)
+                  $('#pricing-form .button.close').fadeIn()
+                  top = e.clientY - form.height()
+                  form.closest('.simplemodal-container').css('top', "#{top}px")
             })
           )
         )

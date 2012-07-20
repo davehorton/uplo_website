@@ -1,11 +1,12 @@
-load = (url, callback)->
+load = (url, counter)->
   $('#mask').modal()
   $.ajax({
     url: url,
     type: 'GET',
-    dataType: 'html',
+    dataType: 'json',
     success: (response) ->
-      $('#container')[0].innerHTML = response
+      $('#container').html response.html
+      $("##{counter}").find('.info .number').text response.counter
       helper.endless_load_more( ->
         if($(document).height() - 20  <= $(window).height())
           $(window).scroll()
@@ -89,7 +90,7 @@ requestDeleteProfilePhoto = (node) ->
         else
           $('#edit-profile-photo-popup .current-photo .avatar').attr 'src', response.extra_avatar_url
           $('#user-section .avatar.large').attr 'src', response.large_avatar_url
-          $('#edit-profile-photo-popup .held-photos .photos')[0].innerHTML = response.profile_photos
+          $('#edit-profile-photo-popup .held-photos .photos').html response.profile_photos
           alert('Delete successfully!')
           $.modal.close()
           window.setTimeout("$('#edit-profile-photo-popup').modal()", 300)
@@ -118,13 +119,13 @@ $ ->
     counter_id = $(@).closest('.container').attr('id').replace('-section', '-counter')
     $('#counters .counter.current').removeClass('current')
     $("##{counter_id}").addClass('current')
-    load($(@).attr('data-url'))
+    load $(@).attr('data-url'), counter_id
 
   $('#container .list[data-url!="#"]').click ->
     counter_id = $(@).closest('.container').attr('id').replace('-section', '-counter')
     $('#counters .counter.current').removeClass('current')
     $("##{counter_id}").addClass('current')
-    load($(@).attr('data-url'))
+    load $(@).attr('data-url'), counter_id
 
   $('#user-section .avatar .edit-pane').click -> $('#edit-profile-photo-popup').modal({persist:true})
   $('#user-section .info .edit-pane').click -> $('#edit-profile-info-popup').modal({persist:true})
@@ -163,7 +164,7 @@ $ ->
     if url != '#' && !counter.hasClass('current')
       $('#counters .counter.current').removeClass 'current'
       counter.addClass 'current'
-      load(url)
+      load url, counter.attr('id')
 
   $('#btn-follow').click ->
     author_id = $(@).attr('data-author-id')

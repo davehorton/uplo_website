@@ -31,7 +31,7 @@ $ ->
 
   $('#cvv-explanation').click (e) ->
     cvv_form = $('#cvv-form')
-    left = e.pageX - 155
-    top = e.pageY - cvv_form.height()
+    left = e.clientX - 155
+    top = e.clientY - cvv_form.height()
     $('#cvv-form').modal({ opacity:5, overlayClose:true, position:[top, left]})
   $('#cvv-form .close').click -> $.modal.close()
