@@ -21,7 +21,33 @@ en:
     spotlight: "Spotlight"
     the_app: "The App"
     friend: "Friends"
+    admin: "Admin"
 
+  admin:
+    flagged_images: "Flagged Images"
+    flagged_users: "Flagged Users"
+    member_profiles: "Member Profiles"
+    spotlights: "Promote to Spotlight"
+    flagged_images_area:
+      title: "Flagged Images / Terms of Use Violation"
+    flagged_users_area:
+      title: "Flagged Users"
+    search: "Search"
+    promote_confirm: "Are you sure you want to promote this photo ?"
+    error_image_not_found: "Image not found"
+    error_promote_failed: "Cannot promote the photo"
+    notice_promote_succeeded: "Promote photo successfully"
+    sort_field:
+      # Members
+      signup_date: "Sign Up Date"
+      username: "Username"
+      num_of_likes: "Number of Likes"
+      num_of_uploads: "Number of Uploads"
+      # Spotlights
+      date_uploaded: "Date Uploaded"
+      num_of_views: "Number of Views"
+      num_of_orders: "Number of Orders"
+      
   gallery:
     permission:
       public: "Public"
@@ -50,7 +76,7 @@ en:
     transaction_completed: "Your payment was completed successfully"
     email:
       transaction_finish_subject: "Your payment completed successfully."
-
+          
   date:
     formats:
       default: "%m/%d/%Y"

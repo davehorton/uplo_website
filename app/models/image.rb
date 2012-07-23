@@ -5,6 +5,8 @@ class Image < ActiveRecord::Base
   include ::SharedMethods::Converter
   include ::SharedMethods
 
+  FILTER_OPTIONS = ['date_uploaded', 'num_of_views', 'num_of_orders', 'num_of_likes']
+  
   # ASSOCIATIONS
   belongs_to :gallery
   has_many :image_flags, :dependent => :destroy
@@ -15,6 +17,7 @@ class Image < ActiveRecord::Base
   has_many :line_items, :dependent => :destroy
   has_many :orders, :through => :line_items
   
+  # SCOPE
   scope :avai_images, where(:images => {:is_removed => false})
   scope :flagged, avai_images.joins('left join image_flags on images.id=image_flags.image_id')
                       .where("image_flags.reported_by is not null AND is_removed = ?", false).readonly(false)
@@ -23,6 +26,9 @@ class Image < ActiveRecord::Base
   scope :joined_images, avai_images.joins('left join galleries on galleries.id=images.gallery_id')
                   .joins('left join image_flags on images.id=image_flags.image_id').readonly(false)
 
+  scope :public_images, joins(:gallery).where("galleries.permission = ?", Gallery::PUBLIC_PERMISSION)
+  scope :promoted_images, where("promote_num > ?", 0)
+  
   # Paperclip
   has_attached_file :data,
     :styles => { :smallest => '66x66#', :smaller => '67x67#', :small => '68x68#', :spotlight_small => '74x74#',
@@ -72,7 +78,7 @@ class Image < ActiveRecord::Base
     end
     
     def get_all_images_with_current_user(params = {}, current_user)
-        paging_info = parse_paging_options(params, {:sort_criteria => "images.likes DESC"})
+        paging_info = parse_paging_options(params, {:sort_criteria => "images.promote_num DESC, images.likes DESC"})
         joined_images.where("galleries.permission = 'public' 
                             AND (galleries.user_id = #{current_user.id} 
                             OR image_flags.reported_by is null)")
@@ -83,28 +89,66 @@ class Image < ActiveRecord::Base
           
     end
 
-    def load_images(params = {})
-      paging_info = parse_paging_options(params)
-      paginate(
-        :page => paging_info.page_id,
-        :per_page => paging_info.page_size,
-        :order => paging_info.sort_string)
+    def load_images(params = {})      
+      default_filter_logic = lambda do 
+        paging_info = parse_paging_options(params)
+        self.includes(:gallery).paginate(
+          :page => paging_info.page_id,
+          :per_page => paging_info.page_size,
+          :order => paging_info.sort_string
+        )
+      end
+      
+      case params[:sort_field]
+        when 'date_uploaded' then
+          params[:sort_field] = "images.created_at"
+          default_filter_logic.call
+        when 'num_of_views' then
+          params[:sort_field] = "images.pageview"
+          default_filter_logic.call
+        when 'num_of_orders' then
+          self.load_images_with_orders_count(params)
+        when 'num_of_likes' then
+          params[:sort_field] = "images.likes"
+          default_filter_logic.call
+        else
+          default_filter_logic.call
+        end 
     end
 
-    def load_popular_images(params = {})
-      
-      paging_info = parse_paging_options(params, {:sort_criteria => "images.likes DESC"})
-      # TODO: calculachute the popularity of the images: base on how many times an image is "liked".
+    def load_images_with_orders_count(params = {})
+      params[:sort_field] = "orders_data.orders_count"
+      paging_info = parse_paging_options(params)
+      self.includes(:gallery).joins(%Q{
+        LEFT JOIN (
+          SELECT image_id, COUNT(order_id) orders_count
+          FROM line_items GROUP BY image_id
+        ) orders_data ON images.id = orders_data.image_id
+      }).select("DISTINCT images.*, orders_data.orders_count").paginate(
+        :page => paging_info.page_id,
+        :per_page => paging_info.page_size,
+        :order => paging_info.sort_string
+      )
+    end
+    
+    def load_popular_images(params = {}, current_user = nil)      
+      paging_info = parse_paging_options(params, {:sort_criteria => "images.promote_num DESC, images.likes DESC"})
+      # TODO: calculate the popularity of the images: base on how many times an image is "liked".
       self.includes(:gallery).joins([:gallery]).
-                    where("galleries.permission = ?", Gallery::PUBLIC_PERMISSION).
-                    paginate(
-                      :page => paging_info.page_id,
-                      :per_page => paging_info.page_size,
-                      :order => paging_info.sort_string)
+        where("galleries.permission = ?", Gallery::PUBLIC_PERMISSION).
+        joins('left join image_flags on images.id=image_flags.image_id').where(
+          ["image_flags.reported_by is null" +  
+          (" OR reported_by = #{current_user.id if (!current_user.nil?)}") ]
+        ).paginate(
+          :page => paging_info.page_id,
+          :per_page => paging_info.page_size,
+          :order => paging_info.sort_string
+        )
     end
 
     def exposed_methods
-      [:image_url, :image_thumb_url, :username, :creation_timestamp, :user_fullname, :public_link, :user_id, :user_avatar, :printed_sizes, :comments_number]
+      [ :image_url, :image_thumb_url, :username, :creation_timestamp, :user_fullname, 
+        :public_link, :user_id, :user_avatar, :printed_sizes, :comments_number]
     end
 
     def exposed_attributes
@@ -414,6 +458,32 @@ class Image < ActiveRecord::Base
     end
   end
 
+  # Increase the pageview counter
+  def increase_pageview
+    self.class.increment_counter(:pageview, self.id)
+  end
+  
+  def orders_count
+    if !self.attributes.has_key?('orders_count')
+      self.attributes['orders_count'] = self.orders.count
+    else
+      self.attributes['orders_count'].to_i
+    end    
+  end
+  
+  def promote
+    self.update_attribute(:promote_num, 1)
+  end
+  
+  def unpromote
+    self.update_attribute(:promote_num, 0)
+  end
+  
+  def is_promoted?
+    (self.promote_num.to_i > 0)
+  end
+  alias_method :is_promoted, :is_promoted?
+  
   protected
     def set_default_tier
       self.tier = TIERS[:tier_1]

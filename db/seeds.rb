@@ -14,7 +14,8 @@
 end
 =end
 
-admin = User.new({
+admin = User.new
+admin.assign_attributes({
   :email => "admin@uplo.com",
   :username => "admin",
   :last_name => "Admin",
@@ -24,7 +25,8 @@ admin = User.new({
   :confirmation_token => nil,
   :confirmed_at => Time.now.advance(:hours => -1), #bypass email confirmation
   :confirmation_sent_at => Time.now.advance(:days => - 1, :hours => -1), #bypass email confirmation
-})
+  :is_admin => true
+}, :as => :admin)
 
 admin.skip_confirmation!
 admin.save!

@@ -53,16 +53,14 @@ deletePhoto = (node) ->
       type: 'GET',
       dataType: 'json',
       success: (response) ->
-        if (response.success){
-		   $('#images-panel').html response.items
-		   $('.pagination-panel').each( (idx, elem) -> $(elem).html response.pagination )
-		   $('#gallery_selector_id').html response.gallery_options
-		      alert("Delete successfully!")
-		}else
-		{
-			alert(response.msg)
-		}
-		 $.modal.close()
+        if (response.success)
+          $('#images-panel').html response.items
+          $('.pagination-panel').each( (idx, elem) -> $(elem).html response.pagination )
+          $('#gallery_selector_id').html response.gallery_options
+          alert("Delete successfully!")
+        else
+          alert(response.msg)
+        $.modal.close()
     });
 
 saveGridChanges = (callback) ->

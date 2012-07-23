@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120705083215) do
+ActiveRecord::Schema.define(:version => 20120723044633) do
 
   create_table "addresses", :force => true do |t|
     t.string   "first_name"
@@ -94,6 +94,10 @@ ActiveRecord::Schema.define(:version => 20120705083215) do
     t.integer  "height"
     t.string   "keyword"
     t.boolean  "is_owner_avatar"
+    t.string   "tier"
+    t.boolean  "is_removed",        :default => false
+    t.integer  "pageview"
+    t.integer  "promote_num",       :default => 0
   end
 
   create_table "line_items", :force => true do |t|
@@ -182,14 +186,14 @@ ActiveRecord::Schema.define(:version => 20120705083215) do
   end
 
   create_table "users", :force => true do |t|
-    t.string   "first_name",                                              :null => false
-    t.string   "last_name",                                               :null => false
+    t.string   "first_name",                                               :null => false
+    t.string   "last_name",                                                :null => false
     t.string   "username"
     t.datetime "birthday"
     t.string   "nationality"
     t.string   "gender"
-    t.string   "email",                                 :default => "",   :null => false
-    t.string   "encrypted_password",     :limit => 128, :default => "",   :null => false
+    t.string   "email",                                 :default => "",    :null => false
+    t.string   "encrypted_password",     :limit => 128, :default => "",    :null => false
     t.string   "reset_password_token"
     t.datetime "reset_password_sent_at"
     t.datetime "remember_created_at"
@@ -202,7 +206,7 @@ ActiveRecord::Schema.define(:version => 20120705083215) do
     t.datetime "confirmed_at"
     t.datetime "confirmation_sent_at"
     t.string   "authentication_token"
-    t.boolean  "delta",                                 :default => true, :null => false
+    t.boolean  "delta",                                 :default => true,  :null => false
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "avatar_file_name"
@@ -213,6 +217,7 @@ ActiveRecord::Schema.define(:version => 20120705083215) do
     t.string   "facebook"
     t.string   "biography"
     t.string   "website"
+    t.boolean  "is_admin",                              :default => false
   end
 
   add_index "users", ["email"], :name => "index_users_on_email", :unique => true

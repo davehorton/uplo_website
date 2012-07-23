@@ -1,6 +1,9 @@
+- can_promote = (current_user.is_admin? && !@image.is_promoted?)
 - content_for :head do
   = stylesheet_link_tag('scss/new_image.css', 'scss/sale.css')
-  
+  - if can_promote
+    = javascript_include_tag("app/admin/spotlights.js")
+    
 - content_for :right_content do
   .text.black.font18.bold= @image.name
   .line-separator
@@ -64,8 +67,13 @@
           #btn-cancel.button.cancel.left
 
 .sections
-  .image-container-wrapper.clearfix
+  .image-container-wrapper.clearfix             
     .image-container.medium.clearfix
+      - if can_promote
+        - promote_link = url_for(:controller => "admin/spotlights", :action => "promote", :id => "#{@image.id}")
+        .promote-button.button
+          = form_tag(promote_link, :class => "promote-photo-form", :id => "promote-photo-form-#{@image.id}", :method=>'post')
+      
       = image_tag(@image.data.url(:medium), :class => 'image medium', 
                 'data-width' => @image.width, 
                 'data-height' => @image.height, :alt => @image.name)
@@ -126,10 +134,21 @@
 
 = render :partial => 'shared/flag_form', :layout => 'layouts/popup', :locals => { :title => 'Flag for Review', :id => "flag_form"}
 
+- if can_promote
+  = render(:partial => 'shared/delete_confirm', 
+      :layout => 'layouts/popup', 
+      :locals => { :title => 'Confirm', :id => 'promote-confirm-popup', 
+      :text => t("admin.promote_confirm") })
+      
 - content_for :js do
   = javascript_include_tag('http://platform.tumblr.com/v1/share.js', 'lib/jquery.inputHintOverlay.js', 'app/image.js')
   = javascript_tag do
     :erb
+      <% if can_promote %>
+        // Promote
+        spotlights.setup_promote_popup();
+      <% end %>
+      
       $(".not-implement").click(function(e){
         e.preventDefault();
         helper.alert_not_implement();

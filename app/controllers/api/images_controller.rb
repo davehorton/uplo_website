@@ -172,7 +172,7 @@ class Api::ImagesController < Api::BaseController
   end
 
   def popular_images
-    images = Image.load_popular_images(@filtered_params, current_user)
+    images = Image.get_all_images_with_current_user(@filtered_params, current_user)
     @result[:total] = images.total_entries
     @result[:data] = process_public_images(images)
     @result[:success] = true

@@ -70,7 +70,7 @@ class ImagesController < ApplicationController
 
   def public_images
     if find_gallery!
-      @images = @gallery.images.load_popular_images(@filtered_params)
+      @images = @gallery.images.load_popular_images(@filtered_params, current_user)
     end
   end
 
@@ -231,6 +231,10 @@ class ImagesController < ApplicationController
 
     @filtered_params[:page_size] = 10
     @comments = @image.comments.load_comments(@filtered_params)
+    
+    # Increase page view
+    @image.increase_pageview
+    
     render :template => "images/browse_new", :layout => "main"
   end
 

@@ -21,6 +21,8 @@ $color-light-gray: #a1a1a1;
 /*==================================================================================*/
 /* CLASS */
 /*==================================================================================*/
+.popup .button{margin-right: 5px;}
+
 .avatar {
   &.small {
     width: $small-avatar-size;
@@ -80,6 +82,7 @@ $color-light-gray: #a1a1a1;
   // border: 1px solid transparent;
   text-align: center;
   vertical-align: middle;
+  position: relative;
   img {
     display: inline-block;
   }
@@ -109,6 +112,17 @@ $color-light-gray: #a1a1a1;
     float: none;
     line-height: 490px;
     padding: 5px;
+  }
+  
+  .promote-button{
+    background: url('/assets/promote-spotlight-light.png') no-repeat;
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    width: 133px;
+    height: 26px;
+    
+    &.disabled{display: none !important;}
   }
 }
 

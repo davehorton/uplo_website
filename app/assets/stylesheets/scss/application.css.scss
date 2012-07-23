@@ -421,11 +421,15 @@ textarea { padding-top:5px; }
   .previous_page{
     background: url("/assets/icon-previous-page.png") no-repeat scroll center center transparent;
     margin-right: 10px;
+    display: inline-block;
+    width: 8px;
   }
 
   .next_page{
     background: url("/assets/icon-next-page.png") no-repeat scroll center center transparent;
     margin-left: 10px;
+    display: inline-block;
+    width: 8px;
   }
 
   &.text {
@@ -441,7 +445,8 @@ textarea { padding-top:5px; }
     .current {
       color: $color-highlight;
       background-color: transparent;
-    }}
+    }
+  }
 }
 
 .breadcrum {

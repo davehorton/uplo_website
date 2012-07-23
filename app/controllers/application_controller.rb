@@ -45,6 +45,10 @@ class ApplicationController < ActionController::Base
     PAGE_SIZE
   end
 
+  def filtered_params
+    @filtered_params
+  end
+  
   def filter_params
     # TODO: filter paging info and other necessary parameters.
     @filtered_params = params

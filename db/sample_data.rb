@@ -12,39 +12,24 @@ user = User.new({
 })
 user.skip_confirmation!
 user.save!
-  
-user.galleries.create!({
-  :user_id => user.id,
-  :name => "The best of the year",
-  :description => "There are a lot of artworks which are the best of the months and weeks in this year"
-})
 
-user.galleries.create!({
-  :user_id => user.id,
-  :name => "The best of the year",
-  :description => "There are a lot of artworks which are the best of the months and weeks in this year"
-})
-
-user.galleries.create!({
-  :user_id => user.id,
-  :name => "The best of the year",
-  :description => "There are a lot of artworks which are the best of the months and weeks in this year"
-})
-
-5.times do |counter|
-  user = User.new({
-    :email => Faker::Internet.email,
-    :username => Faker::Internet.user_name,
-    :last_name =>  Faker::Name.last_name,
-    :first_name =>  Faker::Name.first_name,
-    :password => "123456",
-    :password_confirmation => "123456",
-    :confirmation_token => nil,
-    :confirmed_at => Time.now, #bypass email confirmation
-    :confirmation_sent_at => Time.now, #bypass email confirmation
-  })
-  user.skip_confirmation!
-  user.save!
+50.times do |counter|
+  begin
+    user = User.new({
+      :email => Faker::Internet.email,
+      :username => Faker::Internet.user_name,
+      :last_name =>  Faker::Name.last_name,
+      :first_name =>  Faker::Name.first_name,
+      :password => "123456",
+      :password_confirmation => "123456",
+      :confirmation_token => nil,
+      :confirmed_at => Time.now, #bypass email confirmation
+      :confirmation_sent_at => Time.now, #bypass email confirmation
+    })
+    user.skip_confirmation!
+    user.save!
+  rescue Exception
+  end
 end
 
 # Galleries

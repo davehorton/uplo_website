@@ -6,7 +6,8 @@ class User < ActiveRecord::Base
   GENDER_MALE = "0"
   ALLOCATION_STRING = "#{RESOURCE_LIMIT[:size]} #{RESOURCE_LIMIT[:unit]}"
   ALLOCATION = FileSizeConverter.convert RESOURCE_LIMIT[:size], RESOURCE_LIMIT[:unit], FileSizeConverter::UNITS[:byte]
-
+  FILTER_OPTIONS = ['signup_date', 'username', 'num_of_likes', 'num_of_uploads']
+  
   # Include default devise modules. Others available are:
   # :token_authenticatable, :encryptable, :confirmable, :lockable, :timeoutable and :omniauthable
   devise :database_authenticatable, :registerable,
@@ -17,6 +18,10 @@ class User < ActiveRecord::Base
                   :first_name, :last_name, :username, :login, :nationality, :birthday, :gender, :avatar,
                   :twitter, :facebook
 
+  attr_accessible :id, :email, :password, :password_confirmation, :remember_me,
+                  :first_name, :last_name, :username, :login, :nationality, :birthday, :gender, :avatar,
+                  :twitter, :facebook, :is_admin, :as => :admin
+    
   # ASSOCIATIONS
   has_many :profile_images, :dependent => :destroy, :order => 'last_used DESC'
   has_many :galleries, :dependent => :destroy
@@ -48,14 +53,57 @@ class User < ActiveRecord::Base
 
   # CLASS METHODS
   class << self
-    def load_users(params = {})
+    def load_users(params = {})      
+      case params[:sort_field]
+        when 'signup_date' then
+          params[:sort_field] = "users.created_at"
+          self.load_users_with_images_statistics(params)
+        when 'username' then
+          params[:sort_field] = "users.username"
+          self.load_users_with_images_statistics(params)
+        when 'num_of_likes' then
+          params[:sort_field] = 'galleries_data.images_likes_count'
+          self.load_users_with_images_statistics(params)
+        when 'num_of_uploads' then
+          params[:sort_field] = 'galleries_data.images_count'
+          self.load_users_with_images_statistics(params)
+        else
+          paging_info = parse_paging_options(params)
+          self.paginate(
+            :page => paging_info.page_id,
+            :per_page => paging_info.page_size,
+            :order => paging_info.sort_string
+          )
+      end     
+    end
+    
+    # Load users data with images_likes_count, images_count and images_pageview.
+    def load_users_with_images_statistics(params = {})
       paging_info = parse_paging_options(params)
-      paginate(
+      self.joins(%Q{
+        LEFT JOIN (
+          SELECT galleries.user_id, 
+          SUM(images_data.images_count) images_count,
+          SUM(images_data.images_likes_count) images_likes_count,
+          SUM(images_data.images_pageview) images_pageview
+          FROM galleries LEFT JOIN (
+            SELECT gallery_id, COUNT(images.id) images_count, 
+            SUM(likes) images_likes_count,
+            SUM(pageview) images_pageview
+            FROM images GROUP BY gallery_id
+          ) images_data ON galleries.id = images_data.gallery_id
+          GROUP BY galleries.user_id
+        ) galleries_data
+        ON galleries_data.user_id = users.id
+      }).select("DISTINCT users.*, galleries_data.images_count,
+                galleries_data.images_likes_count, 
+                galleries_data.images_pageview").paginate(
         :page => paging_info.page_id,
         :per_page => paging_info.page_size,
-        :order => paging_info.sort_string)
+        :order => paging_info.sort_string
+      )
     end
-
+    
     def do_search(params = {})
       params[:filtered_params][:sort_field] = 'first_name' unless params[:filtered_params].has_key?("sort_field")
       paging_info = parse_paging_options(params[:filtered_params], {:sort_mode => :extended})
@@ -118,10 +166,12 @@ class User < ActiveRecord::Base
 
   # PUBLIC INSTANCE METHODS
   def liked_images
-    self.source_liked_images.joins('LEFT JOIN galleries ON galleries.id = images.gallery_id')
-      .where("galleries.permission = '#{Gallery::PUBLIC_PERMISSION}' OR
-        (galleries.permission = '#{Gallery::PRIVATE_PERMISSION}' AND galleries.user_id = #{ self.id })")
+    self.source_liked_images.joins('LEFT JOIN galleries ON galleries.id = images.gallery_id').where(
+      "galleries.permission = '#{Gallery::PUBLIC_PERMISSION}' OR
+      (galleries.permission = '#{Gallery::PRIVATE_PERMISSION}' AND galleries.user_id = #{ self.id })"
+    )
   end
+  
   def avatar
     img = ProfileImage.find :first, :conditions => {:user_id => self.id, :default => true}
     if img.nil?
@@ -364,6 +414,30 @@ class User < ActiveRecord::Base
       img.update_attribute('default', true)
     end
     return result
+  end
+  
+  def images_count
+    if !self.attributes.has_key?('images_count')
+      self.attributes['images_count'] = self.images.count
+    else
+      self.attributes['images_count'].to_i
+    end    
+  end
+  
+  def images_likes_count
+    if !self.attributes.has_key?('images_likes_count')
+      self.attributes['images_likes_count'] = self.images.sum(:likes)
+    else
+      self.attributes['images_likes_count'].to_i
+    end
+  end 
+  
+  def images_pageview
+    if !self.attributes.has_key?('images_pageview')
+      self.attributes['images_pageview'] = self.images.sum(:pageview)
+    else
+      self.attributes['images_pageview'].to_i
+    end
   end
 
   # indexing with thinking sphinx
