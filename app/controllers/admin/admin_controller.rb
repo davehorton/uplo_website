@@ -1,7 +1,7 @@
 class Admin::AdminController < ApplicationController
   layout "main"
   
-  before_filter :authenticate_user!
+  before_filter :authenticate_admin_user!
   before_filter :select_tab
   
   def index
@@ -9,7 +9,17 @@ class Admin::AdminController < ApplicationController
   end
   
   protected
-    def select_tab
-      @current_tab = "flagged_images"
+  
+  # TODO: should define authorization in Cancan Ability.
+  def authenticate_admin_user!
+    authenticate_user!
+    # Check Admin
+    if current_user.blank? || !current_user.is_admin?
+      raise CanCan::AccessDenied
     end
+  end
+  
+  def select_tab
+    @current_tab = "flagged_images"
+  end
 end

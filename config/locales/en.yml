@@ -21,6 +21,7 @@ en:
     spotlight: "Spotlight"
     the_app: "The App"
     friend: "Friends"
+    admin: "Admin"
 
   admin:
     flagged_images: "Flagged Images"
