@@ -169,7 +169,7 @@
           type: "GET",
           data: {id:image_id , type: type, desc: desc },
           dataType: "json",
-          success: function(response){
+          success: function(data){
             $.modal.close();
             if (data.status == "success")
             {
