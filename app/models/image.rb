@@ -23,7 +23,7 @@ class Image < ActiveRecord::Base
                       .where("image_flags.reported_by is not null AND is_removed = ?", false).readonly(false)
   scope :un_flagged, avai_images.joins('left join image_flags on images.id=image_flags.image_id')
                     .where("image_flags.reported_by is null AND is_removed = ?", false).readonly(false)
-  scope :joined_images, avai_images.joins('left join galleries on galleries.id=images.gallery_id')
+  scope :joined_images, avai_images.joins('left join galleries as gall on gall.id=images.gallery_id')
                   .joins('left join image_flags on images.id=image_flags.image_id').readonly(false)
 
   scope :public_images, joins(:gallery).where("galleries.permission = ?", Gallery::PUBLIC_PERMISSION)
@@ -88,8 +88,8 @@ class Image < ActiveRecord::Base
 
     def get_all_images_with_current_user(params = {}, current_user)
         paging_info = parse_paging_options(params, {:sort_criteria => "images.promote_num DESC, images.likes DESC"})
-        joined_images.where("galleries.permission = 'public'
-                            AND (galleries.user_id = #{current_user.id}
+        joined_images.where("gall.permission = 'public'
+                            AND (gall.user_id = #{current_user.id}
                             OR image_flags.reported_by is null)")
                       .paginate(
                             :page => paging_info.page_id,

@@ -3,7 +3,7 @@
   = stylesheet_link_tag('scss/new_image.css', 'scss/sale.css')
   - if can_promote
     = javascript_include_tag("app/admin/spotlights.js")
-    
+
 - content_for :right_content do
   .text.black.font18.bold= @image.name
   .line-separator
@@ -67,15 +67,15 @@
           #btn-cancel.button.cancel.left
 
 .sections
-  .image-container-wrapper.clearfix             
+  .image-container-wrapper.clearfix
     .image-container.medium.clearfix
       - if can_promote
         - promote_link = url_for(:controller => "admin/spotlights", :action => "promote", :id => "#{@image.id}")
         .promote-button.button
           = form_tag(promote_link, :class => "promote-photo-form", :id => "promote-photo-form-#{@image.id}", :method=>'post')
-      
-      = image_tag(@image.data.url(:medium), :class => 'image medium', 
-                'data-width' => @image.width, 
+
+      = image_tag(@image.data.url(:medium), :class => 'image medium',
+                'data-width' => @image.width,
                 'data-height' => @image.height, :alt => @image.name)
 
   #social-sharing.hide
@@ -135,11 +135,11 @@
 = render :partial => 'shared/flag_form', :layout => 'layouts/popup', :locals => { :title => 'Flag for Review', :id => "flag_form"}
 
 - if can_promote
-  = render(:partial => 'shared/delete_confirm', 
-      :layout => 'layouts/popup', 
-      :locals => { :title => 'Confirm', :id => 'promote-confirm-popup', 
+  = render(:partial => 'shared/delete_confirm',
+      :layout => 'layouts/popup',
+      :locals => { :title => 'Confirm', :id => 'promote-confirm-popup',
       :text => t("admin.promote_confirm") })
-      
+
 - content_for :js do
   = javascript_include_tag('http://platform.tumblr.com/v1/share.js', 'lib/jquery.inputHintOverlay.js', 'app/image.js')
   = javascript_tag do
@@ -148,13 +148,13 @@
         // Promote
         spotlights.setup_promote_popup();
       <% end %>
-      
+
       $(".not-implement").click(function(e){
         e.preventDefault();
         helper.alert_not_implement();
         return false;
       });
-      
+
       //Flag implementation
       $("#flag_form .cancel").click(function(e){
         $.modal.close();
@@ -164,18 +164,27 @@
         var image_id = $('#btn-like').attr('data-id');
         $.modal.close();
         setTimeout(show_mask,100);
-        $.get('/images/flag',{id:image_id , type: type, desc: desc }, function(data) {
-          $.modal.close();
-          if (data.status == "success")
-          {
-            setTimeout(finish_flagging,100);
-          }else{
-            window.location = "/browse"
-            alert(data.message);
+        $.ajax({
+          url: '/images/flag',
+          type: "GET",
+          data: {id:image_id , type: type, desc: desc },
+          dataType: "json",
+          success: function(response){
+            $.modal.close();
+            if (data.status == "success")
+            {
+              setTimeout(finish_flagging,100);
+            }else{
+              window.location = "/browse"
+              alert(data.message);
+            }
+          },
+          error: function(){
+            $.modal.close();
+            alert("Can not flag this image at this time");
           }
-          
         });
-      }
+      };
 
       function show_mask(){
         $("#mask").modal();
@@ -236,7 +245,7 @@
         _gaq.push(['_trackEvent', 'UPLO Web / Comment', 'post comment', 'status', 1]);
         return true;
       });
-      
+
       function showEmailPopup(){
         $('#social-sharing').addClass('hide');
         $("#email-sharing-popup").modal();
@@ -283,14 +292,14 @@
           },
           fail: function(){}
         });
-        
+
         // Google Analytics
         if(is_dislike == 'false'){
           _gaq.push(['_trackEvent', 'UPLO Web / Like', 'like', 'status', 1]);
         }
         else{
           _gaq.push(['_trackEvent', 'UPLO Web / Like', 'dislike', 'status', 0]);
-        }       
+        }
       }
 
       !function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");
