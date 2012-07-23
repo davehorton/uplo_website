@@ -327,7 +327,7 @@ class ImagesController < ApplicationController
     end
 
     gallery = Gallery.find_by_id params[:gallery_id].to_i
-    images = gallery.images.un_flagged
+    images = gallery.images.un_flagged.load_images(@filtered_params)
     pagination = render_to_string :partial => 'shared/pagination',
       :locals => {  :source => images, :params => { :controller => 'galleries',
         :action => 'edit_images', :gallery_id => gallery.id }, :classes => 'text left' }
