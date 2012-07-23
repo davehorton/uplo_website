@@ -5,9 +5,9 @@ class Notification < ActiveRecord::Base
     :purchase => 2
   }
   TYPE_ACTION = {
-    TYPE[:like] => 'like',
-    TYPE[:comment] => 'comment',
-    TYPE[:purchase] => 'purchase'
+    TYPE[:like] => 'liked',
+    TYPE[:comment] => 'commented',
+    TYPE[:purchase] => 'purchased'
   }
 
   def self.deliver_image_notification(image_id, by_user, type)

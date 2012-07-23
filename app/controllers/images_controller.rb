@@ -222,7 +222,12 @@ class ImagesController < ApplicationController
 
     # @images = @image.gallery.images.all(:order => 'name')
     @is_owner = @image.has_owner(current_user.id)
-    @images = @image.gallery.get_images_without([@image.id], current_user)
+    if (current_user == @is_owner)
+      @images = @image.gallery.images.avai_images.where("images.id not in (#{@image.id})").order('name')
+    else
+      @images = @image.gallery.get_images_without([@image.id])
+    end
+    
     @author = @image.gallery.user
     @dislike = false
     if user_signed_in?
@@ -243,10 +248,10 @@ class ImagesController < ApplicationController
     #   return redirect_to :action => 'browse', :id => params[:id]
     # end
     @image = Image.find_by_id(params[:id])
-    if (@image.nil? || (@image.image_flags.count > 0 && @image.author != current_user))
+    if (@image.nil? || (@image.image_flags.count > 0 && !@image.has_owner(current_user.id)))
       return render_not_found
     end
-    @author = @image.gallery.user
+    @author = @image.author
     @purchased_info = @image.raw_purchased_info(@filtered_params)
     render :layout => 'public', :formats => 'html'
   end

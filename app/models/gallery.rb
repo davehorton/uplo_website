@@ -79,11 +79,9 @@ class Gallery < ActiveRecord::Base
                           :order => paging_info.sort_string )
   end
 
-  def get_images_without(ids, current_user = nil)
+  def get_images_without(ids)
     ids = [] unless ids.instance_of? Array
-    self.images.where("images.id not in (#{ids.join(',')})").order('name')
-    .joins('left join image_flags on images.id=image_flags.image_id')
-    .where(["image_flags.reported_by is null" +  (" OR reported_by = #{current_user.id}" if (!current_user.nil?)) ])
+    self.images.un_flagged.where("images.id not in (#{ids.join(',')})").order('name')
   end
 
   def updated_at_string

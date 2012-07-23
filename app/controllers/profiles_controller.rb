@@ -4,10 +4,10 @@ class ProfilesController < ApplicationController
 
   def show
     if @user.id == current_user.id
-      @images = @user.images.load_images(@filtered_params)
+      @images = @user.images.avai_images.load_images(@filtered_params)
       @galleries = @user.galleries.load_galleries(@filtered_params)
     else
-      @images = @user.images.load_popular_images(@filtered_params, current_user)
+      @images = @user.images.un_flagged.load_popular_images(@filtered_params)
       @galleries = @user.galleries.load_popular_galleries(@filtered_params)
     end
     @followers = @user.followers.load_users(@filtered_params)
@@ -18,9 +18,9 @@ class ProfilesController < ApplicationController
   def show_photos
     if request.xhr?
       if @user.id == current_user.id
-        @images = @user.images.load_images(@filtered_params)
+        @images = @user.images.avai_images.load_images(@filtered_params)
       else
-        @images = @user.images.load_popular_images(@filtered_params, current_user)
+        @images = @user.images.un_flagged.load_popular_images(@filtered_params)
       end
       html = render_to_string :partial => 'photos'
       counter = @images.count
@@ -31,9 +31,9 @@ class ProfilesController < ApplicationController
   def get_photos
     if request.xhr?
       if @user.id == current_user.id
-        images = @user.images.load_images(@filtered_params)
+        images = @user.images.avai_images.load_images(@filtered_params)
       else
-        images = @user.images.load_popular_images(@filtered_params, current_user)
+        images = @user.images.un_flagged.load_popular_images(@filtered_params, current_user)
       end
       template = render_to_string :partial => 'shared/photos_template',
                     :locals => { :images => images,
@@ -48,7 +48,7 @@ class ProfilesController < ApplicationController
 
   def show_likes
     if request.xhr?
-      @images = @user.liked_images.load_images(@filtered_params)
+      @images = @user.liked_images.un_flagged.load_images(@filtered_params)
       html = render_to_string :partial => 'likes'
       counter = @images.count
       render :json => {:html => html, :counter => counter}
@@ -57,7 +57,7 @@ class ProfilesController < ApplicationController
 
   def get_likes
     if request.xhr?
-      images = @user.liked_images.load_images(@filtered_params)
+      images = @user.liked_images.un_flagged.load_images(@filtered_params)
       if @user.id == current_user.id
         template = render_to_string :partial => 'edit_likes_template',
           :locals => { :images => images }
