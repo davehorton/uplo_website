@@ -31,7 +31,7 @@ class ShoppingCartController < ApplicationController
       line_item = LineItem.new do |item|
         item.image = image
         item.attributes = params[:line_item]
-        item.price = (image.price.nil? ? '0' : image.price)
+        item.price = image.get_price(image.tier, params[:line_item]['size'])
         item.tax = item.price * item.quantity.to_i * PER_TAX
         @cart.order.line_items << item
         @cart.save

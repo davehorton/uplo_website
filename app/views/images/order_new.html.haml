@@ -51,7 +51,7 @@
         - price = @line_item.nil? ? @image.price : @line_item.price
         .header.text.black.bold.font14= "Price Per Item"
         .line-separator.no-padding
-        .item.left
+        #image-price.item.left
           = number_to_currency(price, {:precision => 2})
 
       .round-box.option.right{:style => 'width:138px;'}
@@ -72,8 +72,9 @@
                   'data-height' => @image.height, :alt => @image.name)
 
 - content_for :js do
-  - javascript_tag do
+  = javascript_tag do
     :erb
+      var image_id = '<%= params[:id] %>';
       $(".add-to-cart").bind("click", function(){
         $("#order-details").submit();
       });
@@ -127,3 +128,5 @@
       // Force change of page-loading.
       $('.print-sizes-container .print-size:first').attr('checked', 'true');
       $('.print-sizes-container .print-size:checked').change();
+
+  = javascript_include_tag 'app/order_image.js'

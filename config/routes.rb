@@ -46,6 +46,7 @@ Uplo::Application.routes.draw do
   get "images/flag", :to => "images#flag"
   get 'images/show_pricing', :to => 'images#show_pricing'
   post 'images/update_tier', :to => 'images#update_tier'
+  get 'images/get_price',:to => 'images#get_price'
 
   get "sales", :to => "sales#index"
   get "sales/year_sales", :to => "sales#year_sales"

@@ -49,17 +49,17 @@
 
     .wrapper
       #top.panel
-        = yield :top_content
-      #left.panel.left
-        = yield :left_content
-
-      #center.panel
         #main.clearfix
         - flash_class = (flash.blank? ? "" : "content")
         #flash{:class => flash_class}
           - flash.each do |key, value|
             .box{:class => "box-#{key}"}= value
+        = yield :top_content
 
+      #left.panel.left
+        = yield :left_content
+
+      #center.panel
         = yield
 
       #right.panel.right
@@ -78,3 +78,4 @@
       $('body').delegate('.bubble .close', 'click', function(e){ $.modal.close() });
       $('select[id!=my_links]').selectmenu({style:'popup'});
       $('#my_links').selectmenu({ style: 'popup', select: function(e, obj){ window.location = obj.value; }});
+      helper.auto_hide_flash_message()

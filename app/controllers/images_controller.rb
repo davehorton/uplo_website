@@ -383,11 +383,22 @@ class ImagesController < ApplicationController
 
   def update_tier
     image = Image.find_by_id params[:id]
-    if image.nil?
+    if image.nil? || !image.has_owner(current_user.id)
       result = { :success => false, :msg => 'This image does not exist anymore' }
     else
       image.update_attribute(:tier, params[:price]['tier'])
       result = { :success => true, :tier => params[:price]['tier'] }
+    end
+    render :json => result
+  end
+
+  def get_price
+    image = Image.find_by_id params[:image_id]
+    if image.nil?
+      result = { :success => false, :msg => 'This image does not exist anymore' }
+    else
+      price = self.class.helpers.number_to_currency image.get_price(image.tier, params[:size]), {:precision => 2}
+      result = { :success => true, :price => price }
     end
     render :json => result
   end

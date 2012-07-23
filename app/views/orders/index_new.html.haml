@@ -44,7 +44,7 @@
           = label_tag :billing_fax, "Fax Number"
           = text_field :billing, :fax
         .info
-          / = hidden_field_tag 'billing[ship_to_billing]', 0hy
+          / = hidden_field_tag 'billing[ship_to_billing]', 0
           %input{ :type => 'checkbox', :name => 'billing[ship_to_billing]', :value => '1', :id => 'billing_ship_to_billing', :class => 'left', :checked => 'checked' }
           = label_tag :billing_ship_to_billing, 'Ship Items to the Above Billing Address', :style => 'width:auto;', :class => 'left'
 

@@ -83,9 +83,29 @@ class PaymentsController < ApplicationController
         address_required_info = ['first_name', 'last_name', 'street_address', 'city', 'zip', 'state', 'phone']
         card_required_info = ['name_on_card', 'card_type', 'card_number', 'expires_on(1i)', 'expires_on(2i)', 'cvv']
 
+        card_required_info.each { |val|
+          if !params[:card].has_key?(val) || params[:card][val].blank?
+            flash[:error] = 'Please fill all required fields first!'
+            return redirect_to :controller => 'orders', :action => 'index'
+          end
+        }
+        address_required_info.each { |val|
+          if !params[:billing].has_key?(val) || params[:billing][val].blank?
+            flash[:error] = 'Please fill all required fields first!'
+            return redirect_to :controller => 'orders', :action => 'index'
+          end
+        }
+        if params[:billing]['ship_to_billing'].blank? || !SharedMethods::Converter::Boolean(params[:billing]['ship_to_billing'])
+          address_required_info.each { |val|
+            if !params[:shipping].has_key?(val) || params[:shipping][val].blank?
+              flash[:error] = 'Please fill all required fields first!'
+              return redirect_to :controller => 'orders', :action => 'index'
+            end
+          }
+        end
+
         expires_on = Date.civil(params[:card]["expires_on(1i)"].to_i,
-                         params[:card]["expires_on(2i)"].to_i,
-                         1)
+                         params[:card]["expires_on(2i)"].to_i, 1)
         expires_on = expires_on.strftime("%m%y")
         card_string = params[:card]["card_number"]
 

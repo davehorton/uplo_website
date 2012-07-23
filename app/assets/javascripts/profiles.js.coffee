@@ -5,8 +5,12 @@ load = (url, counter)->
     type: 'GET',
     dataType: 'json',
     success: (response) ->
+      plural_label = counter.replace('-counter', '')
+      single_label = plural_label.replace(/[s]$/, '')
+      count_label = helper.pluralize_without_count response.counter, single_label, plural_label
       $('#container').html response.html
       $("##{counter}").find('.info .number').text response.counter
+      $("##{counter}").find('.info .label').text count_label
       helper.endless_load_more( ->
         if($(document).height() - 20  <= $(window).height())
           $(window).scroll()
