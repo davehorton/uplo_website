@@ -140,7 +140,7 @@ class ImagesController < ApplicationController
   def switch_liked
     image = Image.find_by_id(params[:id])
     dislike = SharedMethods::Converter.Boolean(params[:dislike])
-    if (image.nil? || (@image.image_flags.count > 0 && !@image.has_owner(current_user.id)))
+    if (image.nil? || (image.image_flags.count > 0 && !image.has_owner(current_user.id)))
       result = { :success => false, :msg => "This image does not exist anymore!" }
     elsif dislike
       result = image.disliked_by_user(current_user.id)
@@ -327,7 +327,7 @@ class ImagesController < ApplicationController
     end
 
     gallery = Gallery.find_by_id params[:gallery_id].to_i
-    images = gallery.images.get_all_images_with_current_user(@filtered_params, current_user)
+    images = gallery.images.un_flagged
     pagination = render_to_string :partial => 'shared/pagination',
       :locals => {  :source => images, :params => { :controller => 'galleries',
         :action => 'edit_images', :gallery_id => gallery.id }, :classes => 'text left' }
