@@ -62,10 +62,10 @@ class User < ActiveRecord::Base
           params[:sort_field] = "users.username"
           self.load_users_with_images_statistics(params)
         when 'num_of_likes' then
-          params[:sort_field] = 'images_data.images_likes_count'
+          params[:sort_field] = 'galleries_data.images_likes_count'
           self.load_users_with_images_statistics(params)
         when 'num_of_uploads' then
-          params[:sort_field] = 'images_data.images_count'
+          params[:sort_field] = 'galleries_data.images_count'
           self.load_users_with_images_statistics(params)
         else
           paging_info = parse_paging_options(params)
@@ -81,16 +81,23 @@ class User < ActiveRecord::Base
     def load_users_with_images_statistics(params = {})
       paging_info = parse_paging_options(params)
       self.joins(%Q{
-        LEFT JOIN galleries ON users.id = galleries.user_id
         LEFT JOIN (
-          SELECT gallery_id, COUNT(images.id) images_count, 
-          SUM(likes) images_likes_count,
-          SUM(pageview) images_pageview
-          FROM images GROUP BY gallery_id
-        ) images_data ON galleries.id = images_data.gallery_id
-      }).select("DISTINCT users.*, images_data.images_count,
-                images_data.images_likes_count, 
-                images_data.images_pageview").paginate(
+          SELECT galleries.user_id, 
+          SUM(images_data.images_count) images_count,
+          SUM(images_data.images_likes_count) images_likes_count,
+          SUM(images_data.images_pageview) images_pageview
+          FROM galleries LEFT JOIN (
+            SELECT gallery_id, COUNT(images.id) images_count, 
+            SUM(likes) images_likes_count,
+            SUM(pageview) images_pageview
+            FROM images GROUP BY gallery_id
+          ) images_data ON galleries.id = images_data.gallery_id
+          GROUP BY galleries.user_id
+        ) galleries_data
+        ON galleries_data.user_id = users.id
+      }).select("DISTINCT users.*, galleries_data.images_count,
+                galleries_data.images_likes_count, 
+                galleries_data.images_pageview").paginate(
         :page => paging_info.page_id,
         :per_page => paging_info.page_size,
         :order => paging_info.sort_string
