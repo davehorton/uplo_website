@@ -16,7 +16,7 @@ class ImagesController < ApplicationController
   def index
     if find_gallery!
       if (current_user == @gallery.user)
-        @images = @gallery.images.load_images(@filtered_params)
+        @images = @gallery.images.avai_images.load_images(@filtered_params)
       else
         @images = @gallery.images.un_flagged.load_images(@filtered_params)
       end
@@ -227,7 +227,7 @@ class ImagesController < ApplicationController
     else
       @images = @image.gallery.get_images_without([@image.id])
     end
-    
+
     @author = @image.gallery.user
     @dislike = false
     if user_signed_in?
@@ -236,10 +236,10 @@ class ImagesController < ApplicationController
 
     @filtered_params[:page_size] = 10
     @comments = @image.comments.load_comments(@filtered_params)
-    
+
     # Increase page view
     @image.increase_pageview
-    
+
     render :template => "images/browse_new", :layout => "main"
   end
 

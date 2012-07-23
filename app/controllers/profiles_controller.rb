@@ -13,7 +13,8 @@ class ProfilesController < ApplicationController
     @followers = @user.followers.load_users(@filtered_params)
     @followed_users = @user.followed_users.load_users(@filtered_params)
     if @user.id == current_user.id
-      @liked_images = @user.liked_images.avai_images.load_images(@filtered_params)
+      @liked_images = @user.liked_images.get_all_images_with_current_user({}, current_user)
+                            .load_images(@filtered_params)
     else
       @liked_images = @user.liked_images.un_flagged.load_images(@filtered_params)
     end
