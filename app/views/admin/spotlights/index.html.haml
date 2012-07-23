@@ -13,7 +13,11 @@
     .right
       = render(:partial => "shared/search_box_new", :locals => {:action => search_admin_spotlights_path})
       #search-options
-        %span= "Sort By: "
+        %span.sort-direction{'data-sort-direction' => 'asc', :class => current_sort_direction('asc', @sort_direction)}
+          = "A-Z"
+        %span.sort-direction{'data-sort-direction' => 'desc', :class => current_sort_direction('desc', @sort_direction)}
+          = "Z-A"
+        %span.sort-label= "Sort By: "
         %span
           = select_tag('sort_field', image_filter_options(@sort_field), :id => 'sort-field-selection')
       
@@ -65,8 +69,23 @@
       $("#sort-field-selection-button .ui-selectmenu-status").css("padding-top", "3px");
       $("#sort-field-selection-menu").css("width", "160px");
       
+      $('#search-options .sort-direction').click(function(e){
+        if($(this).hasClass('current'))
+          return false;
+        
+        // Clear all current selection
+        $('#search-options .sort-direction.current').removeClass('current');
+        $(this).addClass('current');
+        // Force change.
+        $('#sort-field-selection').change();
+      });
+      
       jQuery('#sort-field-selection').change(function(){
         var params = $.url(window.location.href).param();
+        var sort_direction = $('#search-options .sort-direction.current').attr('data-sort-direction');
+        if($.trim(sort_direction) != '')
+          params['sort_direction'] = sort_direction;
+          
         params['sort_field'] = $(this).val();
         window.location.search = "?" + jQuery.param(params);        
       });

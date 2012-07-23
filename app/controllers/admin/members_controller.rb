@@ -1,7 +1,11 @@
 class Admin::MembersController < Admin::AdminController
   def index
     @sort_field = params[:sort_field] || "signup_date"
-    @users = User.load_users(filtered_params.merge(:sort_field => @sort_field))
+    @sort_direction = params[:sort_direction] || "asc"
+    @users = User.load_users(filtered_params.merge(
+      :sort_field => @sort_field, 
+      :sort_direction => @sort_direction
+    ))
   end
   
   def search

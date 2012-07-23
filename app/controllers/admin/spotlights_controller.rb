@@ -1,7 +1,11 @@
 class Admin::SpotlightsController < Admin::AdminController
   def index
     @sort_field = params[:sort_field] || "date_uploaded"
-    @images = Image.public_images.load_images(filtered_params.merge(:sort_field => @sort_field))
+    @sort_direction = params[:sort_direction] || "asc"
+    @images = Image.public_images.load_images(filtered_params.merge(
+      :sort_field => @sort_field,
+      :sort_direction => @sort_direction
+    ))
   end
   
   def search
