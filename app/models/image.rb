@@ -24,7 +24,7 @@ class Image < ActiveRecord::Base
       "image_flags.reported_by is null AND is_removed = ?", false).readonly(false)
   scope :avai_images, where("is_removed = ?", false)
   scope :public_images, joins(:gallery).where("galleries.permission = ?", Gallery::PUBLIC_PERMISSION)
-  scope :promoted_images, where(:is_promoted => true)
+  scope :promoted_images, where("promote_num > ?", 0)
   
   # Paperclip
   has_attached_file :data,
@@ -455,12 +455,17 @@ class Image < ActiveRecord::Base
   end
   
   def promote
-    self.update_attribute(:is_promoted, true)
+    self.update_attribute(:promote_num, 1)
   end
   
   def unpromote
-    self.update_attribute(:is_promoted, false)
+    self.update_attribute(:promote_num, 0)
   end
+  
+  def is_promoted?
+    (self.promote_num.to_i > 0)
+  end
+  alias_method :is_promoted, :is_promoted?
   
   protected
 
