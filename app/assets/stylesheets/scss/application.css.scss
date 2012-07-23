@@ -748,7 +748,8 @@ textarea { padding-top:5px; }
         color: $color-light-gray;
         font-size: 11px;
         font-style: italic;
-        float: left; }
+        float: left;
+        z-index: 1; }
       .search-icon {
         display: inline-block;
         width: 20px;

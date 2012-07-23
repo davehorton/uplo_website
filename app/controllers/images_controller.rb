@@ -328,8 +328,9 @@ class ImagesController < ApplicationController
         :action => 'edit_images', :gallery_id => gallery.id }, :classes => 'text left' }
     items = render_to_string :partial => 'galleries/edit_photos',
                             :locals => { :images => images }
+    gal_options = self.class.helpers.gallery_options(current_user.id, gallery.id, true)
     result = {
-      :items => items, :pagination => pagination
+      :items => items, :pagination => pagination, :gallery_options => gal_options
     }
 
     render :json => result
@@ -386,7 +387,7 @@ class ImagesController < ApplicationController
       result = { :success => false, :msg => 'This image does not exist anymore' }
     else
       image.update_attribute(:tier, params[:price]['tier'])
-      result = { :success => true }
+      result = { :success => true, :tier => params[:price]['tier'] }
     end
     render :json => result
   end

@@ -16,7 +16,7 @@
       / = select :image, :price, gallery_price_options
       .label.text.black.bold.font12 Pricing
       .inline.left
-        .text.gray.font11.line16.left= "Tier 1"
+        .text.gray.font11.line16.left= "Tier #{ image.tier }"
         .price.text.black.underline.font11.line16.left change this
   .info-panel.left
     .info-line.left

@@ -11,8 +11,9 @@ module GalleriesHelper
     end
     collection.map { |gal|
       if size_necessary
-        gal.name = "<div class='clearfix'><span class='left'>#{gal.name.truncate(18)}</span>
-          <span class='number text fuzzy-gray left'>(#{gal.images.size})</span></div>"
+        gal.name = "#{gal.name.truncate(18)} (#{gal.images.size})"
+        # gal.name = "<div class='clearfix'><span class='left'>#{gal.name.truncate(18)}</span>
+        #   <span class='number text fuzzy-gray left'>(#{gal.images.size})</span></div>"
       else
         gal.name = gal.name.truncate(25)
       end
