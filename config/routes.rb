@@ -104,6 +104,7 @@ Uplo::Application.routes.draw do
       post :reinstate_image, :on => :collection
       delete :remove_image, :on => :collection
     end
+
     resources :flagged_users do
       post :index, :on => :collection
       post :reinstate_all, :on => :collection
@@ -111,8 +112,22 @@ Uplo::Application.routes.draw do
       post :reinstate_user, :on => :collection
       delete :remove_user, :on => :collection
     end
-    resources :members
-    resources :spotlights
+
+    resources :members do
+      collection do
+        get :search
+      end
+    end
+    
+    resources :spotlights do
+      collection do
+        get :search
+      end
+      
+      member do
+        post :promote
+      end
+    end
   end
   
   # API ROUTING

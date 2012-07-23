@@ -4,22 +4,15 @@
   = javascript_include_tag('lib/jquery.url.js')
    
 %ul#admin_menu
-  %li
+  %li{:class => set_current_tab("flagged_images")}
     %div.first_item
       = link_to t("admin.flagged_images"), {:controller => :flagged_images, :action => :index}
-  %li
+  %li{:class => set_current_tab("flagged_users")}
     %div
       = link_to t("admin.flagged_users"), {:controller => :flagged_users, :action => :index}
-  %li 
+  %li{:class => set_current_tab("member_profiles")}
     %div
-      = link_to t("admin.members"), {:controller => :members, :action => :index}
-  %li 
+      = link_to t("admin.member_profiles"), {:controller => :members, :action => :index}
+  %li{:class => set_current_tab("spotlights")}
     %div
-      = link_to t("admin.spolight"), {:controller => :spotlights, :action => :index}
-
-:erb
-  <script>
-     jQuery(function() {
-       jQuery("<%= @current_tab %> div").addClass("selected");
-    })
-  </script>
+      = link_to t("admin.spotlights"), {:controller => :spotlights, :action => :index}

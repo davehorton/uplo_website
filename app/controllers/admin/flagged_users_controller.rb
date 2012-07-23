@@ -28,7 +28,7 @@ class Admin::FlaggedUsersController < Admin::AdminController
   end
   
   protected
-   def select_tab
-     @current_tab = "#admin_menu li:contains(Flagged Users)"
-   end
+    def select_tab
+      @current_tab = "flagged_users"
+    end
 end

@@ -1,12 +1,15 @@
 = render :partial => "admin/admin_menu"
 
-.admin.clearfix
+.admin.members.clearfix
   #top.title-bar.clearfix
-    %h1.left.title= "#{t('admin.member_profile')} / #{t("admin.sort_field.#{@sort_field}")}"
+    - unless @sort_field.blank?
+      %h1.left.title= "#{t('admin.member_profiles')} / #{t("admin.sort_field.#{@sort_field}")}"
+    - else
+      %h1.left.title= "#{t('admin.member_profiles')} / #{t("admin.search")}"
     .right
-      = render(:partial => "shared/search_box_new", :locals => {:action => "search"})
+      = render(:partial => "shared/search_box_new", :locals => {:action => search_admin_members_path})
       #search-options
-        %span= "Sort By"
+        %span= "Sort By: "
         %span
           = select_tag('sort_field', member_filter_options(@sort_field), :id => 'sort-field-selection')
       
@@ -21,17 +24,22 @@
           .username
             %a{:href => author_profile}= user.username
           .numbers
-            %span= "Joined #{user.created_at.strftime('%m/%d/%Y')}"
+            %span= "Joined #{user.created_at.strftime('%m/%d/%y')}"
             %span.separator= '|'
-            %span= pluralize(user.images.length, 'item')
+            %span= pluralize(user.images_count, 'item')
             %span.separator= '|'
-            %span= pluralize(rand(1000), 'view')
+            %span= pluralize(user.images_pageview, 'view')
   
     = render_pagination(@users)
 
 :erb
   <script>
     jQuery(function() {
+      // Change selectbox
+      $("#sort-field-selection-button").css("width", "160px").css("height", "20px");
+      $("#sort-field-selection-button .ui-selectmenu-status").css("padding-top", "3px");
+      $("#sort-field-selection-menu").css("width", "160px");
+      
       jQuery('#sort-field-selection').change(function(){
         var params = $.url(window.location.href).param();
         params['sort_field'] = $(this).val();

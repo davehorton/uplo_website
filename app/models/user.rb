@@ -1,12 +1,12 @@
 class User < ActiveRecord::Base
   include ::SharedMethods::Paging
   include ::SharedMethods::Converter
-  attr_accessor :force_submit, :login, :likes_count, :images_count
+  attr_accessor :force_submit, :login
 
   GENDER_MALE = "0"
   ALLOCATION_STRING = "#{RESOURCE_LIMIT[:size]} #{RESOURCE_LIMIT[:unit]}"
   ALLOCATION = FileSizeConverter.convert RESOURCE_LIMIT[:size], RESOURCE_LIMIT[:unit], FileSizeConverter::UNITS[:byte]
-  FILTER_OPTIONS = %w[signup_date username num_of_likes num_of_uploads]
+  FILTER_OPTIONS = ['signup_date', 'username', 'num_of_likes', 'num_of_uploads']
   
   # Include default devise modules. Others available are:
   # :token_authenticatable, :encryptable, :confirmable, :lockable, :timeoutable and :omniauthable
@@ -53,60 +53,44 @@ class User < ActiveRecord::Base
 
   # CLASS METHODS
   class << self
-    def load_users(params = {})
-      default_load_logic = lambda do
-        paging_info = parse_paging_options(params)
-        self.paginate(
-          :page => paging_info.page_id,
-          :per_page => paging_info.page_size,
-          :order => paging_info.sort_string
-        )
-      end
-      
+    def load_users(params = {})      
       case params[:sort_field]
         when 'signup_date' then
-          params[:sort_field] = :created_at
-          default_load_logic.call
+          params[:sort_field] = "users.created_at"
+          self.load_users_with_images_statistics(params)
         when 'username' then
-          params[:sort_field] = :username
-          default_load_logic.call
+          params[:sort_field] = "users.username"
+          self.load_users_with_images_statistics(params)
         when 'num_of_likes' then
-          self.load_users_by_total_being_likes(params)
+          params[:sort_field] = 'images_data.images_likes_count'
+          self.load_users_with_images_statistics(params)
         when 'num_of_uploads' then
-          self.load_users_by_total_being_likes(params)
+          params[:sort_field] = 'images_data.images_count'
+          self.load_users_with_images_statistics(params)
         else
-          default_load_logic.call
+          paging_info = parse_paging_options(params)
+          self.paginate(
+            :page => paging_info.page_id,
+            :per_page => paging_info.page_size,
+            :order => paging_info.sort_string
+          )
       end     
     end
-
-    # Load users by total images liked by other users.
-    def load_users_by_total_being_likes(params = {})
-      params[:sort_field] = 'like_data.likes_count'
-      paging_info = parse_paging_options(params)
-      self.joins(%Q{
-        LEFT JOIN galleries ON users.id = galleries.user_id
-        LEFT JOIN (
-          SELECT gallery_id, COUNT(likes) likes_count
-          FROM images GROUP BY gallery_id
-        ) like_data ON galleries.id = like_data.gallery_id
-      }).select("DISTINCT users.*, like_data.likes_count").paginate(
-        :page => paging_info.page_id,
-        :per_page => paging_info.page_size,
-        :order => paging_info.sort_string
-      )
-    end
     
-    # Load users by total images
-    def load_users_by_total_images(params = {})
-      params[:sort_field] = 'images_data.images_count'
+    # Load users data with images_likes_count, images_count and images_pageview.
+    def load_users_with_images_statistics(params = {})
       paging_info = parse_paging_options(params)
       self.joins(%Q{
         LEFT JOIN galleries ON users.id = galleries.user_id
         LEFT JOIN (
-          SELECT gallery_id, COUNT(images.id) images_count
+          SELECT gallery_id, COUNT(images.id) images_count, 
+          SUM(likes) images_likes_count,
+          SUM(pageview) images_pageview
           FROM images GROUP BY gallery_id
         ) images_data ON galleries.id = images_data.gallery_id
-      }).select("DISTINCT users.*, images_data.images_count").paginate(
+      }).select("DISTINCT users.*, images_data.images_count,
+                images_data.images_likes_count, 
+                images_data.images_pageview").paginate(
         :page => paging_info.page_id,
         :per_page => paging_info.page_size,
         :order => paging_info.sort_string
@@ -423,6 +407,30 @@ class User < ActiveRecord::Base
       img.update_attribute('default', true)
     end
     return result
+  end
+  
+  def images_count
+    if !self.attributes.has_key?('images_count')
+      self.attributes['images_count'] = self.images.count
+    else
+      self.attributes['images_count'].to_i
+    end    
+  end
+  
+  def images_likes_count
+    if !self.attributes.has_key?('images_likes_count')
+      self.attributes['images_likes_count'] = self.images.sum(:likes)
+    else
+      self.attributes['images_likes_count'].to_i
+    end
+  end 
+  
+  def images_pageview
+    if !self.attributes.has_key?('images_pageview')
+      self.attributes['images_pageview'] = self.images.sum(:pageview)
+    else
+      self.attributes['images_pageview'].to_i
+    end
   end
 
   # indexing with thinking sphinx

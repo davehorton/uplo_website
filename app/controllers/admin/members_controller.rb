@@ -1,8 +1,13 @@
 class Admin::MembersController < Admin::AdminController
   def index
-    # TODO: test GUI only
     @sort_field = params[:sort_field] || "signup_date"
     @users = User.load_users(filtered_params.merge(:sort_field => @sort_field))
+  end
+  
+  def search
+    search_params = {:query => URI.unescape(params[:query]), :filtered_params => filtered_params}
+    @users = User.do_search(search_params)
+    render 'admin/members/index'
   end
   
   protected
@@ -12,6 +17,6 @@ class Admin::MembersController < Admin::AdminController
   end
   
   def select_tab
-    @current_tab = "#admin_menu li:contains(Member Profiles)"
+    @current_tab = "member_profiles"
   end
 end

@@ -9,7 +9,7 @@ class Admin::AdminController < ApplicationController
   end
   
   protected
-   def select_tab
-     @current_tab = "#admin_menu li:contains(Flagged Images)"
-   end
+    def select_tab
+      @current_tab = "flagged_images"
+    end
 end
