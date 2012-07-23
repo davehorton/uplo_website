@@ -43,7 +43,7 @@
             %a{:href => author_profile}= author.try(:username)
           
           .upload-time= "Uploaded #{image.created_at.strftime('%m/%d/%y')}"
-          .pageview= pluralize(image.pageview, 'view')
+          .pageview= pluralize(image.pageview, 'View')
           - permission = image.gallery.try(:permission)
           .permission= (permission.blank? ? "" : permission.titleize)
           
