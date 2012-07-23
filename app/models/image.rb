@@ -130,7 +130,7 @@ class Image < ActiveRecord::Base
       paging_info = parse_paging_options(params)
       self.includes(:gallery).joins(%Q{
         LEFT JOIN (
-          SELECT image_id, COUNT(order_id) orders_count
+          SELECT image_id, COUNT(order_id) AS orders_count
           FROM line_items GROUP BY image_id
         ) orders_data ON images.id = orders_data.image_id
       }).select("DISTINCT images.*, orders_data.orders_count").paginate(

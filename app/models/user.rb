@@ -83,13 +83,13 @@ class User < ActiveRecord::Base
       self.joins(%Q{
         LEFT JOIN (
           SELECT galleries.user_id, 
-          SUM(images_data.images_count) images_count,
-          SUM(images_data.images_likes_count) images_likes_count,
-          SUM(images_data.images_pageview) images_pageview
+          SUM(images_data.images_count) AS images_count,
+          SUM(images_data.images_likes_count) AS images_likes_count,
+          SUM(images_data.images_pageview) AS images_pageview
           FROM galleries LEFT JOIN (
-            SELECT gallery_id, COUNT(images.id) images_count, 
-            SUM(likes) images_likes_count,
-            SUM(pageview) images_pageview
+            SELECT gallery_id, COUNT(images.id) AS images_count, 
+            SUM(likes) AS images_likes_count,
+            SUM(pageview) AS images_pageview
             FROM images GROUP BY gallery_id
           ) images_data ON galleries.id = images_data.gallery_id
           GROUP BY galleries.user_id
