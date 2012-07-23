@@ -3,24 +3,24 @@ class HomeController < ApplicationController
 
   def index
     session[:back_url] = url_for(:controller => 'home', :action => "browse") if session[:back_url].nil?
-    @images = Image.load_popular_images(@filtered_params, current_user)
+    @images = Image.un_flagged.load_popular_images(@filtered_params)
     if user_signed_in?
       redirect_to :action => :spotlight
     end
   end
 
   def browse
-    @images = Image.load_popular_images(@filtered_params, current_user)
+    @images = Image.get_all_images_with_current_user(@filtered_params, current_user)
     render :template => 'home/new_browse', :layout => "main"
   end
 
   def spotlight
-    @images = Image.load_popular_images(@filtered_params, current_user)
+    @images = Image.get_all_images_with_current_user(@filtered_params, current_user)
     render :layout => "main"
   end
 
   def friends_feed
-    @images = current_user.friends_images.load_popular_images(@filtered_params, current_user)
+    @images = current_user.friends_images.un_flagged.load_popular_images(@filtered_params)
     render :layout => 'main'
   end
 
@@ -30,7 +30,7 @@ class HomeController < ApplicationController
 
   def popular
     session[:back_url] = url_for(:controller => 'home', :action => "browse") if session[:back_url].nil?
-    @images = Image.load_popular_images(@filtered_params, current_user)
+    @images = Image.get_all_images_with_current_user(@filtered_params, current_user)
     render :layout => "main"
   end
 
@@ -40,7 +40,7 @@ class HomeController < ApplicationController
     limit_filtered_params[:page_size] = 3
     @users = User.do_search({:query => URI.unescape(params[:query]), :filtered_params => limit_filtered_params})
     @galleries = Gallery.do_search({:query => URI.unescape(params[:query]), :filtered_params => limit_filtered_params})
-    @images = Image.do_search({:query => URI.unescape(params[:query]), :filtered_params => @filtered_params})
+    @images = Image.un_flagged.do_search({:query => URI.unescape(params[:query]), :filtered_params => @filtered_params})
   end
 
   protected

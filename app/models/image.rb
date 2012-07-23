@@ -14,6 +14,14 @@ class Image < ActiveRecord::Base
   has_many :comments, :dependent => :destroy
   has_many :line_items, :dependent => :destroy
   has_many :orders, :through => :line_items
+  
+  scope :avai_images, where(:images => {:is_removed => false})
+  scope :flagged, avai_images.joins('left join image_flags on images.id=image_flags.image_id')
+                      .where("image_flags.reported_by is not null AND is_removed = ?", false).readonly(false)
+  scope :un_flagged, avai_images.joins('left join image_flags on images.id=image_flags.image_id')
+                    .where("image_flags.reported_by is null AND is_removed = ?", false).readonly(false)
+  scope :joined_images, avai_images.joins('left join galleries on galleries.id=images.gallery_id')
+                  .joins('left join image_flags on images.id=image_flags.image_id').readonly(false)
 
   # Paperclip
   has_attached_file :data,
@@ -52,15 +60,6 @@ class Image < ActiveRecord::Base
 
   # CLASS METHODS
   class << self
-    @@current_user
-    def set_current_user current_user
-      @@current_user = current_user
-    end
-    
-    def current_user
-      @@current_user
-    end
-    
     def do_search(params = {})
       params[:filtered_params][:sort_field] = 'name' unless params[:filtered_params].has_key?("sort_field")
       paging_info = parse_paging_options(params[:filtered_params], {:sort_mode => :extended})
@@ -71,6 +70,18 @@ class Image < ActiveRecord::Base
         :page => paging_info.page_id,
         :per_page => paging_info.page_size )
     end
+    
+    def get_all_images_with_current_user(params = {}, current_user)
+        paging_info = parse_paging_options(params, {:sort_criteria => "images.likes DESC"})
+        joined_images.where("galleries.permission = 'public' 
+                            AND (galleries.user_id = #{current_user.id} 
+                            OR image_flags.reported_by is null)")
+                      .paginate(
+                            :page => paging_info.page_id,
+                            :per_page => paging_info.page_size,
+                            :order => paging_info.sort_string)
+          
+    end
 
     def load_images(params = {})
       paging_info = parse_paging_options(params)
@@ -80,17 +91,16 @@ class Image < ActiveRecord::Base
         :order => paging_info.sort_string)
     end
 
-    def load_popular_images(params = {}, current_user = nil)
+    def load_popular_images(params = {})
       
       paging_info = parse_paging_options(params, {:sort_criteria => "images.likes DESC"})
       # TODO: calculachute the popularity of the images: base on how many times an image is "liked".
       self.includes(:gallery).joins([:gallery]).
-            where("galleries.permission = ?", Gallery::PUBLIC_PERMISSION).
-            joins('left join image_flags on images.id=image_flags.image_id').where(["image_flags.reported_by is null" +  (" OR reported_by = #{current_user.id if (!current_user.nil?)}") ]).
-            paginate(
-              :page => paging_info.page_id,
-              :per_page => paging_info.page_size,
-              :order => paging_info.sort_string)
+                    where("galleries.permission = ?", Gallery::PUBLIC_PERMISSION).
+                    paginate(
+                      :page => paging_info.page_id,
+                      :per_page => paging_info.page_size,
+                      :order => paging_info.sort_string)
     end
 
     def exposed_methods

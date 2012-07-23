@@ -135,7 +135,7 @@ class Api::ImagesController < Api::BaseController
     elsif user.id == current_user.id
       result[:data] = user.images.load_images(@filtered_params)
     else
-      result[:data] = user.images.load_popular_images(@filtered_params, current_user)
+      result[:data] = user.images.un_flagged.load_images(@filtered_params)
     end
 
     render :json => result

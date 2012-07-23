@@ -147,7 +147,7 @@ class Api::GalleriesController < Api::BaseController
     #end
 
     @result[:total]  = gallery.images.count
-    images = gallery.images.load_images(@filtered_params)
+    images = gallery.images.un_flagged.load_images(@filtered_params)
     images.each do |image|
       image[:image_url] = image.data.url
       image[:image_thumb_url] = image.data.url(:thumb)

@@ -15,7 +15,11 @@ class ImagesController < ApplicationController
 
   def index
     if find_gallery!
-      @images = @gallery.images.load_images(@filtered_params)
+      if (current_user == @gallery.user)
+        @images = @gallery.images.load_images(@filtered_params)
+      else
+        @images = @gallery.images.un_flagged.load_images(@filtered_params)
+      end
 
       if request.xhr?
         @images = @images.map { |image|
@@ -43,6 +47,9 @@ class ImagesController < ApplicationController
     if request.xhr?
       image = Image.find_by_id params[:id]
       gallery = image.gallery
+      if(!image.has_owner(current_user.id))
+        return render :json => {:success => false, :msg => "The image do not belong to you"}
+      end
       images = gallery.images.load_images(@filtered_params)
 
       image.destroy
@@ -63,7 +70,7 @@ class ImagesController < ApplicationController
 
   def public_images
     if find_gallery!
-      @images = @gallery.images.load_popular_images(@filtered_params, current_user)
+      @images = @gallery.images.load_popular_images(@filtered_params)
     end
   end
 
