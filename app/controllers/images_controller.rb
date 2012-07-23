@@ -140,7 +140,7 @@ class ImagesController < ApplicationController
   def switch_liked
     image = Image.find_by_id(params[:id])
     dislike = SharedMethods::Converter.Boolean(params[:dislike])
-    if image.nil?
+    if (image.nil? || (@image.image_flags.count > 0 && !@image.has_owner(current_user.id))
       result = { :success => false, :msg => "This image does not exist anymore!" }
     elsif dislike
       result = image.disliked_by_user(current_user.id)
@@ -222,7 +222,7 @@ class ImagesController < ApplicationController
 
     # @images = @image.gallery.images.all(:order => 'name')
     @is_owner = @image.has_owner(current_user.id)
-    if (current_user == @is_owner)
+    if (@is_owner)
       @images = @image.gallery.images.avai_images.where("images.id not in (#{@image.id})").order('name')
     else
       @images = @image.gallery.get_images_without([@image.id])
