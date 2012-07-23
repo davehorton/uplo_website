@@ -15,7 +15,9 @@
           = "Z-A"
         %span.sort-label= "Sort By: "
         %span
-          = select_tag('sort_field', member_filter_options(@sort_field), :id => 'sort-field-selection')
+          = select_tag('sort_field', member_filter_options(@sort_field), 
+                      :id => 'sort-field-selection',
+                      'data-url' => url_for(:controller => "admin/members", :action => "index", :only_path => false))
       
   .content.clearfix
     - @users.each_with_index do |user, idx|
@@ -55,14 +57,22 @@
         $('#sort-field-selection').change();
       });
       
+      var on_search = <%= (params[:action] == 'search' ? 'true' : 'false') %>;
+      
       jQuery('#sort-field-selection').change(function(){
         var params = $.url(window.location.href).param();
         var sort_direction = $('#search-options .sort-direction.current').attr('data-sort-direction');
         if($.trim(sort_direction) != '')
           params['sort_direction'] = sort_direction;
-          
         params['sort_field'] = $(this).val();
-        window.location.search = "?" + jQuery.param(params);        
+        var data_url = $(this).attr('data-url');
+        if(on_search && $.trim(data_url) != ''){
+          // Redirect to the index page.
+          window.location.href = data_url + "?" + jQuery.param(params);
+        }
+        else{
+          window.location.search = "?" + jQuery.param(params);
+        }
       });
     })
   </script>
