@@ -37,6 +37,10 @@ class Admin::SpotlightsController < Admin::AdminController
   
   protected
     
+    def default_page_size
+      return 12
+    end
+    
     def set_current_tab
       @current_tab = "spotlights"
     end
