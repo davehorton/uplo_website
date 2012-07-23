@@ -4,6 +4,9 @@
 /*==================================================================================*/
 /* CLASS */
 /*==================================================================================*/
+.popup .button {
+  margin-right: 5px; }
+
 .avatar.small {
   width: 24px;
   height: 24px; }
@@ -45,7 +48,8 @@
   display: inline-block;
   float: left;
   text-align: center;
-  vertical-align: middle; }
+  vertical-align: middle;
+  position: relative; }
   .image-container img {
     display: inline-block; }
   .image-container.thumb {
@@ -70,6 +74,15 @@
     float: none;
     line-height: 490px;
     padding: 5px; }
+  .image-container .promote-button {
+    background: url("/assets/promote-spotlight-light.png") no-repeat;
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    width: 133px;
+    height: 26px; }
+    .image-container .promote-button.disabled {
+      display: none !important; }
 
 .image-thumb {
   width: 155px;

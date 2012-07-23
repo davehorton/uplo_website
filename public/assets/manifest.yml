@@ -1,6 +1,8 @@
 ---
 accept.png: accept-827150100e63c7b2f3c88f34d60d43a8.png
 add.png: add-0745403a8479f8514cd70130d79e2f20.png
+admin_header_bg.png: admin_header_bg-e2278018ba63cecc1adb72a46bb74a0b.png
+admin_header_cell_bg.png: admin_header_cell_bg-de196e43112bab324c80b4f30abed34d.png
 advertise-devices.png: advertise-devices-0136c84d4a3b18c3b67406d6d86ebb32.png
 ajaxloading.gif: ajaxloading-e26c97d156b7747cd4d45581116dc1ff.gif
 arrow-down.gif: arrow-down-6d6494c03460b35f1b63015a56604ae2.gif
@@ -56,6 +58,7 @@ btn-update-profile.png: btn-update-profile-d399912bc504c2d583854dd4f488c0bb.png
 cancel-uploadify.gif: cancel-uploadify-c195bd1e99bbcdc1a1e4649e945a00c8.gif
 cancel.png: cancel-c54ffe2f8b6e7a006dd6c45c59a8e116.png
 cart_icon.png: cart_icon-aaf11f778929f7fdfa32c3db56f0635d.png
+contact_all_button.png: contact_all_button-cba580f76fe7c4d9f4c7fa9639636747.png
 cvv.png: cvv-a7d860c68e53f0eab63a7bc7a82ae0c1.png
 delete.png: delete-5b31b278de3c2b7274dfdb45dd9c78d2.png
 divider.jpg: divider-efa2d239afb8daaccb7d7a2c62f0f6b8.jpg
@@ -134,6 +137,13 @@ prev-vertical.png: prev-vertical-eaef69b30a628022ae98a7704e5ef474.png
 prev12-disabled.png: prev12-disabled-8ea229509f8091dfef6c29a027b901c2.png
 prev12.png: prev12-50faae018f6c8d92a763de0f296e2495.png
 progressbar.gif: progressbar-54dfeacc002a35b014f009faa50bf254.gif
+promote-spotlight-disabled.png: promote-spotlight-disabled-edb300b7bd5ab8e80e4f174cf1ace8d9.png
+promote-spotlight-light.png: promote-spotlight-light-90aee63f283ace53e902477fdeaf7861.png
+promote-spotlight.png: promote-spotlight-e20cbd9409cada3a76283cf66cf4cdb9.png
+reinstate_all_button.png: reinstate_all_button-3464f877f4ee41460574459608b717c9.png
+reinstate_button.png: reinstate_button-dbe8dbec6da222c3154df2c8a3056763.png
+remove_all_button.png: remove_all_button-5459ec026de7173562a7fbe75b477c77.png
+remove_button.png: remove_button-7e2f3fc331e46e9ab24d7e1dae53f884.png
 search-13x13.png: search-13x13-ace65b27bd43db2eddafea0827f2a856.png
 search-icon.png: search-icon-5a7422008b9fcb256657d6e54dd558a7.png
 search.png: search-52aed94b16526e83fbc524b34c546cbe.png
@@ -158,11 +168,13 @@ up.gif: up-7851ecffdfbb6ca3ba41bcebfa93cb35.gif
 uplo-logo.png: uplo-logo-1a1123ea4ae8aed84ec7486c1838b15e.png
 uplo_logo.png: uplo_logo-4e147b8807d73e64931db4bc3568f789.png
 uploader_file.png: uploader_file-3ab3c53af3d8adf6071f3776329ab009.png
-app/edit_images.js: app/edit_images-bf8d3bb4141ec428351070129e7c4522.js
+app/admin/spotlights.js: app/admin/spotlights-3d3b4ffdd736aae50fbe00debcbf7869.js
+app/edit_images.js: app/edit_images-e9765177fdfa7c36fc0e7e8798e3e2da.js
 app/gallery.js: app/gallery-56d1423ff8282cf24bfa0dc13979b30e.js
 app/image.js: app/image-090a76bcb99a855a1064e5cb602865bf.js
 app/image_util.js: app/image_util-e58342d34805f84c8607728b6f93d540.js
 app/order.js: app/order-610f2d8aa30aa829b0878e061a9137a1.js
+app/order_image.js: app/order_image-6b4c1308d38044d6620d1b4a7515719f.js
 app/popup.js: app/popup-3d37daf582062d5f270aa53d3da682bd.js
 app/sales.js: app/sales-03318d5b60f42b484cc55e4f12ca5fcc.js
 app/shopping_cart.js: app/shopping_cart-c4cd9e15d013f19ed47969caa609fcb9.js
@@ -246,7 +258,7 @@ lib/jquery.ui.widget.js: lib/jquery.ui.widget-0d68580b40839753efc5ace9498dba90.j
 lib/jquery.url.js: lib/jquery.url-54bab1cba764049f9199d478427a17df.js
 lib/superfish.min.js: lib/superfish.min-ffabcd0209faaae3216c63369a26facf.js
 lib/supersubs.min.js: lib/supersubs.min-51d2091adc4247f2751775293b4697b7.js
-profiles.js: profiles-784977ed129256c2ca9f0702823b5e31.js
+profiles.js: profiles-fd029333f19fcad80e095ab9b2aad2f7.js
 rails.js: rails-68b47f0ba7401778dadbcdeafc621db8.js
 application.css: application-b5ccf7188c153412298770ca08fa3746.css
 bootstrap-image-gallery.css: bootstrap-image-gallery-d5c0778ddff99fb1e8dbd314793ba0d8.css
@@ -259,7 +271,8 @@ jquery-ui.custom.css: jquery-ui.custom-bb782aff6a70a3531739cdd09fe60b50.css
 jquery.contextMenu.css: jquery.contextMenu-5e13ffab2ad4f1c83de146893d8f0b86.css
 jquery.ui.selectmenu.css: jquery.ui.selectmenu-126b46b0f5616450a0711aea25ce56ec.css
 jquery.ui.theme.css: jquery.ui.theme-bc9f9116ef9708ca6340560832e3b72e.css
-scss/application.css: scss/application-970fcba2dd1a04a9be1ab862da9e7feb.css
+scss/admin.css: scss/admin-bb44255474916c0e2846c947330df8e0.css
+scss/application.css: scss/application-1cc66ce9982a795415bb1ec9a3935cda.css
 scss/banner.css: scss/banner-331c4e35597b1b905f46e6226aa74178.css
 scss/cart.css: scss/cart-a00c819367f1c26885c93fd320e87746.css
 scss/cart_new.css: scss/cart_new-ae43b8521bb1aede584d3c7905fedaef.css
@@ -267,7 +280,7 @@ scss/dialog.css: scss/dialog-5dec5a3c5274437ee34726e7e4356988.css
 scss/filter.css: scss/filter-739c80ba8eabd3a953be7d9ea50b38b6.css
 scss/image.css: scss/image-64b6683d484780bff39a790b7c1d60b3.css
 scss/mobile.css: scss/mobile-04e80fc1ee31c47abff3182e7d922adc.css
-scss/new_image.css: scss/new_image-2bd4cc22fca1d823e9220ce455cb7a0d.css
+scss/new_image.css: scss/new_image-be3654cc159980cfc9784c9058e4273c.css
 scss/public.css: scss/public-65a5d83c6d4e387f2a7f5be64114fe92.css
 scss/sale.css: scss/sale-e1a820202e8b3f6450832905649e4070.css
 scss/search.css: scss/search-4ce78cb5c202f9d4f94d7ce58c348bd7.css
