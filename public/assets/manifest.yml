@@ -180,7 +180,7 @@ app/popup.js: app/popup-3d37daf582062d5f270aa53d3da682bd.js
 app/sales.js: app/sales-03318d5b60f42b484cc55e4f12ca5fcc.js
 app/shopping_cart.js: app/shopping_cart-c4cd9e15d013f19ed47969caa609fcb9.js
 app/user.js: app/user-7856a14fe2fceeb1f0ad1b74126f9e28.js
-application.js: application-336563475c2f29ce1196965b70128058.js
+application.js: application-46195c44fdd7e3796762686d8e9c568d.js
 file_upload/README.md: file_upload/README-3ed47c4044fe560bd4addcb841e853cd.md
 file_upload/application.js: file_upload/application-67b136875f9a46d79de669edd697518e.js
 file_upload/jquery.fileupload-ui.js: file_upload/jquery.fileupload-ui-ff2674552f504aa5ecffac5515358763.js

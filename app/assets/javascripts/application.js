@@ -71,6 +71,8 @@ helper = {
             callback.call();
           }
         });
+      } else {
+        $.modal.close();
       }
     });
   },
