@@ -21,7 +21,7 @@ class ShoppingCartController < ApplicationController
     image = Image.find_by_id params[:image_id]
     params[:line_item].delete(:image_id)
 
-    if image.nil?
+    if(image.nil? || image.image_flags.count > 0)
       flash[:warning] = "Your recent ordered image does not exist anymore."
       redirect_to :controller => :home, :action => :browse and return
     elsif not valid_item?(params[:line_item])
