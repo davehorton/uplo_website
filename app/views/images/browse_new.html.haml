@@ -171,17 +171,20 @@
           dataType: "json",
           success: function(data){
             $.modal.close();
-            if (data.status == "success")
+            if (data.success)
             {
               setTimeout(finish_flagging,100);
             }else{
-              window.location = "/browse"
-              alert(data.message);
+              alert(data.msg);
             }
           },
           error: function(){
             $.modal.close();
             alert("Can not flag this image at this time");
+            if (history.length)
+               history.go(-1);
+            else
+               window.location = "/browse"
           }
         });
       };

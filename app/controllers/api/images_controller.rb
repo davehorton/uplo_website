@@ -304,33 +304,24 @@ class Api::ImagesController < Api::BaseController
   end
 
   # /api/flag_image
-  # params: image_id, flag_type, description
+  # Params
+  # image_id
+  # desc
+  # type
+  
   def flag_image
     image = Image.find_by_id(params[:image_id])
-
-    if image.nil?
-      result = { :success => false, :msg => "This image does not exist anymore!"}
-    elsif !ImageFlag::FLAG_TYPE.has_value?(params[:flag_type].to_i)
-      result = { :success => false, :msg => "Flag type is invalid!" }
+    result = {
+        :status => :fail,
+        :message => ""
+      }
+    image = Image.find_by_id params[:image_id]
+    if (image)
+      result = image.flag(current_user, params, result)
     else
-      description = ImageFlag.process_description(params[:flag_type].to_i, params[:description])
-      if description.nil?
-        if params[:flag_type].to_i == ImageFlag::FLAG_TYPE['copyright']
-          msg = 'Copyright flag must have photo\'s owner information'
-        else
-          msg = 'Terms of Use Violation flag must have reason reporting'
-        end
-        result = { :success => false, :msg => msg }
-      else
-        flag = ImageFlag.new({ :image_id => image.id, :reported_by => current_user.id,
-          :flag_type => params[:flag_type].to_i, :description => description })
-        if flag.save
-          result = { :success => true }
-        else
-          result = { :success => false, :msg => flag.errors.full_messages[0] }
-        end
-      end
+      result[:msg] = "The image is not exist right now."
     end
+    
     render :json => result
   end
 

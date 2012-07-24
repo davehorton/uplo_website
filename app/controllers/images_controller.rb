@@ -283,14 +283,17 @@ class ImagesController < ApplicationController
   #         desc => Flag description
   def flag
     result = {
-      :status => :fail,
-      :message => ""
+      :success => false,
+      :msg => ""
     }
     image = Image.find_by_id params[:id]
     if (image)
       result = image.flag(current_user, params, result)
     else
-      result[:message] = "The image is not exist right now."
+      result = {
+        :success => false,
+        :msg => "The image does not exist right now."
+      }
     end
     render :json => result
   end

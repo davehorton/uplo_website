@@ -1,9 +1,9 @@
 class ImageFlag < ActiveRecord::Base
   # CONSTANT
   FLAG_TYPE = {
-    'nudity' => 1,
+    'terms_of_use_violation' => 1,
     'copyright' => 2,
-    'terms_of_use_violation' => 3
+    'nudity' => 3 
   }
 
   # Associations

@@ -248,26 +248,36 @@ class Image < ActiveRecord::Base
   
   def flag(user, params={}, result = {})
     if (self.image_flags.count > 0)
-      result[:message] = "The image is already flagged."
+      result = { :success => false, :msg => "The image is already flagged." }
     else
-      image_flag = self.image_flags.new
-      image_flag.reporter = user
-      image_flag.description = params[:desc]
-      image_flag.flag_type = params[:type]
-      if (image_flag.save)
-        # Remove all images in shopping carts
-        LineItem.joins(:order)
-              .joins(:images)
-              .where(:images => {:id => self.id}, 
-                      :orders => {:transaction_status => Order::STATUS[:shopping]}).destroy_all
-        
-        # Update result
-        result[:status] = :success
+      if (self.has_owner(user.id))
+       return result = { :success => false, :msg => "You can not flag your own image" }
+      end
+      description = ImageFlag.process_description(params[:type].to_i, params[:desc])
+      if description.nil?
+        if params[:type].to_i == ImageFlag::FLAG_TYPE['copyright']
+          msg = 'Copyright flag must have photo\'s owner information'
+        else
+          msg = 'Terms of Use Violation flag must have reason reporting'
+        end
+        result = { :success => false, :msg => msg }
       else
-        result[:message] = "Can not flag at this moment."
+        flag = ImageFlag.new({ :image_id => self.id, :reported_by => user.id,
+          :flag_type => params[:desc].to_i, :description => description })
+        if flag.save
+          # Remove all images in shopping carts
+          LineItem.joins(:order)
+                .joins(:image)
+                .where(:images => {:id => self.id}, 
+                        :orders => {:transaction_status => Order::STATUS[:shopping]}).destroy_all
+          # Update result
+          result = { :success => true }
+        else
+          result = { :success => false, :msg => flag.errors.full_messages[0]}
+        end
       end
     end
-  return result
+    return result
   end
 
   def has_owner id
