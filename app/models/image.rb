@@ -269,7 +269,7 @@ class Image < ActiveRecord::Base
           LineItem.joins(:order)
                 .joins(:image)
                 .where(:images => {:id => self.id}, 
-                        :orders => {:transaction_status => Order::STATUS[:shopping]}).destroy_all
+                        :orders => {:status => Order::STATUS[:shopping]}).destroy_all
           # Update result
           result = { :success => true }
         else
