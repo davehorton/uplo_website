@@ -256,7 +256,7 @@ class Image < ActiveRecord::Base
       image_flag.flag_type = params[:type]
       if (image_flag.save)
         # Remove all images in shopping carts
-        Order.joins(:line_items)
+        LineItem.joins(:order)
               .joins(:images)
               .where(:images => {:id => self.id}, 
                       :orders => {:transaction_status => Order::STATUS[:shopping]}).destroy_all

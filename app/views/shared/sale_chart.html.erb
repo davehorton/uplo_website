@@ -40,7 +40,7 @@ $(function () {
             yAxis: {
                 min: 0,
                 tickWidth: 1,
-                <% if (@monthly_sales.max < 5) %>
+                <% if (monthly_sales.max < 5) %>
 				tickInterval:1,
 				<% end %>
                 labels: {
