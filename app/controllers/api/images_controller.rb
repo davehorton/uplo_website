@@ -20,7 +20,7 @@ class Api::ImagesController < Api::BaseController
   # params: image_id
   def get_printed_sizes
     image = Image.find_by_id params[:image_id]
-    if image.nil?
+    if(image.nil? || image.image_flags.count > 0)
       result = { :success => false, :msg => 'This image does not exist' }
     else
       sizes = []
@@ -121,7 +121,7 @@ class Api::ImagesController < Api::BaseController
   # GET /api/get_images
   # params: [id1, id2]
   def get_images
-    images = Image.find_all_by_id JSON.parse(URI.unescape(params[:ids]))
+    images = Image.un_flagged.find_all_by_id JSON.parse(URI.unescape(params[:ids]))
     render :json => {:data => images}
   end
 

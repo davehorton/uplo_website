@@ -15,7 +15,7 @@
     =text_area_tag "reason", "", :style => "width: 100%; -webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing:border-box;"
     %br
     %br{:style => "clear:both"}
-    .button.submit.left{:style => "padding-right:10px", :target => "= ImageFlag::FLAG_TYPE['nudity']"}
+    .button.submit.left{:style => "padding-right:10px", :target => ImageFlag::FLAG_TYPE['terms_of_use_violation']}
     .button.cancel.left
   #copyright.form_flag_element{:style => "display:none"}
     .line-separator.left
@@ -25,14 +25,14 @@
     =text_area_tag "reason", "", :style => "width: 100%; -webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing:border-box;"
     %br
     %br{:style => "clear:both"}
-    .button.submit.left{:style => "padding-right:10px", :target => "= ImageFlag::FLAG_TYPE['copyright']"}
+    .button.submit.left{:style => "padding-right:10px", :target => ImageFlag::FLAG_TYPE['copyright']}
     .button.cancel.left
   #nudity.form_flag_element{:style => "display:none"}
     .line-separator.left
     %br
     %br
 
-    .button.submit.left{:style => "padding-right:10px", :target => "= ImageFlag::FLAG_TYPE['terms_of_use_violation']"}
+    .button.submit.left{:style => "padding-right:10px", :target => ImageFlag::FLAG_TYPE['nudity']}
     .button.cancel.left
 
 #thank_form{:style => "display:none"}

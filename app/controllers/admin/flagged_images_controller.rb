@@ -4,9 +4,9 @@ class Admin::FlaggedImagesController < Admin::AdminController
     if (params[:flag_type].nil?)
       params[:flag_type] = 1
     end
-    @categories = [["Terms of Use Violation",1],
-                  ["Copyright",2],
-                  ["Nudity",3]]
+    @categories = [["Terms of Use Violation",ImageFlag::FLAG_TYPE['terms_of_use_violation']],
+                  ["Copyright",ImageFlag::FLAG_TYPE['copyright']],
+                  ["Nudity",ImageFlag::FLAG_TYPE['nudity']]]
     @flagged_images = Image.flagged.where("flag_type = #{params[:flag_type]}")
   end
   

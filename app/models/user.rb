@@ -166,7 +166,7 @@ class User < ActiveRecord::Base
 
   # PUBLIC INSTANCE METHODS
   def liked_images
-    self.source_liked_images.joins('LEFT JOIN galleries ON galleries.id = images.gallery_id').where(
+    self.source_liked_images.avai_images.joins('LEFT JOIN galleries ON galleries.id = images.gallery_id').where(
       "galleries.permission = '#{Gallery::PUBLIC_PERMISSION}' OR
       (galleries.permission = '#{Gallery::PRIVATE_PERMISSION}' AND galleries.user_id = #{ self.id })"
     )
@@ -422,7 +422,7 @@ class User < ActiveRecord::Base
   
   def images_count
     if !self.attributes.has_key?('images_count')
-      self.attributes['images_count'] = self.images.count
+      self.attributes['images_count'] = self.images.avai_images.count
     else
       self.attributes['images_count'].to_i
     end    
@@ -430,7 +430,7 @@ class User < ActiveRecord::Base
   
   def images_likes_count
     if !self.attributes.has_key?('images_likes_count')
-      self.attributes['images_likes_count'] = self.images.sum(:likes)
+      self.attributes['images_likes_count'] = self.images.avai_images.sum(:likes)
     else
       self.attributes['images_likes_count'].to_i
     end
@@ -438,7 +438,7 @@ class User < ActiveRecord::Base
   
   def images_pageview
     if !self.attributes.has_key?('images_pageview')
-      self.attributes['images_pageview'] = self.images.sum(:pageview)
+      self.attributes['images_pageview'] = self.images.avai_images.sum(:pageview)
     else
       self.attributes['images_pageview'].to_i
     end
