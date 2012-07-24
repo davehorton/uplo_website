@@ -288,19 +288,7 @@ class ImagesController < ApplicationController
     }
     image = Image.find_by_id params[:id]
     if (image)
-      if (image.image_flags.find_by_reported_by(current_user.id))
-        result[:message] = "You already flagged this image."
-      else
-        image_flag = image.image_flags.new
-        image_flag.reporter = current_user
-        image_flag.description = params[:desc]
-        image_flag.flag_type = params[:type]
-        if (image_flag.save)
-          result[:status] = :success
-        else
-          result[:message] = "Can not make a flag at this moment."
-        end
-      end
+      result = image.flag(current_user, params, result)
     else
       result[:message] = "The image is not exist right now."
     end
@@ -363,6 +351,9 @@ class ImagesController < ApplicationController
 
   def order
     @image = Image.find_by_id(params[:id])
+    if (@image.nil? || (@image.image_flags.count > 0 && !@image.has_owner(current_user.id)))
+      return render_not_found
+    end
     if params[:line_item].nil?
       if @image.blank?
         return render_not_found

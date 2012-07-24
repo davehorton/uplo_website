@@ -174,9 +174,13 @@ class User < ActiveRecord::Base
   
   def avatar
     img = ProfileImage.find :first, :conditions => {:user_id => self.id, :default => true}
+   
     if img.nil?
       result = nil
     else
+      if (img.source && img.source.image_flags.count > 0)
+        return nil
+      end
       result = img.data
     end
     return result

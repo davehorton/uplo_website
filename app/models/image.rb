@@ -245,6 +245,30 @@ class Image < ActiveRecord::Base
       profile_img.set_as_default
     end
   end
+  
+  def flag(user, params={}, result = {})
+    if (self.image_flags.count > 0)
+      result[:message] = "The image is already flagged."
+    else
+      image_flag = self.image_flags.new
+      image_flag.reporter = user
+      image_flag.description = params[:desc]
+      image_flag.flag_type = params[:type]
+      if (image_flag.save)
+        # Remove all images in shopping carts
+        Order.joins(:line_items)
+              .joins(:images)
+              .where(:images => {:id => self.id}, 
+                      :orders => {:transaction_status => Order::STATUS[:shopping]}).destroy_all
+        
+        # Update result
+        result[:status] = :success
+      else
+        result[:message] = "Can not flag at this moment."
+      end
+    end
+  return result
+  end
 
   def has_owner id
     self.gallery.user.id == id
