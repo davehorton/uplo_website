@@ -24,8 +24,7 @@ class Api::ImagesController < Api::BaseController
       result = { :success => false, :msg => 'This image does not exist' }
     else
       sizes = []
-      p image.tier
-      image.printed_sizes.each { |s| sizes << { :size => s, :price => image.get_price(image.tier, s) }}
+      image.printed_sizes.each { |s| sizes << { :id => image.id, :size => s, :price => image.get_price(image.tier, s) }}
       result = { :success => true, :sizes => sizes}
     end
     render :json => result
