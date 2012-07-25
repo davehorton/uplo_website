@@ -124,16 +124,12 @@ class UsersController < ApplicationController
       result[:success] = false
     elsif SharedMethods::Converter.Boolean(params[:unfollow])
       UserFollow.destroy_all({ :user_id => user.id, :followed_by => follower.id })
-      result[:followers] = current_user.followers.length
-      result[:followings] = current_user.followed_users.length
       result[:success] = true
     elsif UserFollow.exists?({ :user_id => user.id, :followed_by => follower.id })
       result[:msg] = 'You have already followed this user.'
       result[:success] = false
     else
       UserFollow.create({ :user_id => user.id, :followed_by => follower.id })
-      result[:followers] = current_user.followers.length
-      result[:followings] = current_user.followed_users.length
       result[:success] = true
     end
     render :json => result
@@ -145,7 +141,6 @@ class UsersController < ApplicationController
       result = { :success => false, :msg => "This image does not exist anymore!" }
     else
       result = image.disliked_by_user(current_user.id)
-      result[:likes] = current_user.liked_images.count if result[:success]
     end
 
     render :json => result
