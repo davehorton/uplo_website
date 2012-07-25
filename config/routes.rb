@@ -8,9 +8,9 @@ Uplo::Application.routes.draw do
   get "shopping_cart/destroy_item"
   get "shopping_cart/clear"
   get "shopping_cart/checkout"
-  
+
   get "orders/index"
-  
+
   get "orders", :to => "orders#index"
   get "browse", :to => "home#browse"
   get "search", :to => "home#search"
@@ -99,7 +99,7 @@ Uplo::Application.routes.draw do
 
   # ADMIN SECTIONS
   get '/admin', :to => "admin/admin#index"
-  namespace :admin do    
+  namespace :admin do
     resources :flagged_images do
       post :index, :on => :collection
       post :reinstate_all, :on => :collection
@@ -121,18 +121,18 @@ Uplo::Application.routes.draw do
         get :search
       end
     end
-    
+
     resources :spotlights do
       collection do
         get :search
       end
-      
+
       member do
         post :promote
       end
     end
   end
-  
+
   # API ROUTING
   namespace :api do
     # User
@@ -160,6 +160,7 @@ Uplo::Application.routes.draw do
     get "list_images", :to => "galleries#list_images"
     get "list_popular", :to => "galleries#list_popular"
     get "popular_images", :to => "images#popular_images"
+    get 'friend_images', :to => 'images#friend_images'
     get "search", :to => "search#search"
 
     # Image
