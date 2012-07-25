@@ -178,6 +178,16 @@ class Api::ImagesController < Api::BaseController
     render :json => @result
   end
 
+  # /api/friend_images
+  # params: <filter params>
+  def friend_images
+    images = current_user.friends_images.un_flagged.load_popular_images(@filtered_params)
+    result[:total] = images.total_entries
+    result[:data] = process_public_images(images)
+    result[:success] = true
+    render :json => result
+  end
+
   def like
     image = Image.find_by_id(params[:id])
     dislike = SharedMethods::Converter.Boolean(params[:dislike])
@@ -307,7 +317,7 @@ class Api::ImagesController < Api::BaseController
   # image_id
   # desc
   # type
-  
+
   def flag_image
     image = Image.find_by_id(params[:image_id])
     result = {
@@ -320,7 +330,7 @@ class Api::ImagesController < Api::BaseController
     else
       result[:msg] = "The image is not exist right now."
     end
-    
+
     render :json => result
   end
 
