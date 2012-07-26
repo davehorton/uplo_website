@@ -231,7 +231,7 @@ class ImagesController < ApplicationController
     @author = @image.gallery.user
     @dislike = false
     if user_signed_in?
-      @dislike = @image.is_liked? current_user.id
+      @dislike = @image.liked_by? current_user.id
     end
 
     @filtered_params[:page_size] = 10

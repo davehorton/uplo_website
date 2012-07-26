@@ -31,11 +31,11 @@ requestDislike = (node) ->
     success: (response) ->
       if(response.success==false)
         alert(response.msg)
+        $.modal.close()
       else
         counter = $('.counter.current')
         url = counter.find('.info').attr('data-url')
         load(url, counter.attr('id'))
-      $.modal.close()
   })
 
 requestFollow = (node) ->
@@ -51,6 +51,7 @@ requestFollow = (node) ->
     success: (response) ->
       if(response.success==false)
         alert(response.msg)
+        $.modal.close()
       else if(is_unfollow=='false')
         target.attr('data-following', 'true')
         target.text('Unfollow')

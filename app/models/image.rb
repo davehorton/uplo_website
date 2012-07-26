@@ -246,7 +246,7 @@ class Image < ActiveRecord::Base
       profile_img.set_as_default
     end
   end
-  
+
   def flag(user, params={}, result = {})
     if (self.image_flags.count > 0)
       result = { :success => false, :msg => "The image is already flagged." }
@@ -269,7 +269,7 @@ class Image < ActiveRecord::Base
           # Remove all images in shopping carts
           LineItem.joins(:order)
                 .joins(:image)
-                .where(:images => {:id => self.id}, 
+                .where(:images => {:id => self.id},
                         :orders => {:status => Order::STATUS[:shopping]}).destroy_all
           # Update result
           result = { :success => true }
@@ -338,18 +338,18 @@ class Image < ActiveRecord::Base
   def liked_by_user(user_id)
     result = {:success => false}
     Image.transaction do
-      unless self.is_liked?(user_id)
+      if !User.exists? user_id
+        result[:msg] = "User does not exist anymore"
+      elsif ImageLike.exists?({:image_id => self.id, :user_id => user_id})
+        result[:msg] = "This image has been liked"
+      else
+        img_like = ImageLike.new({:image_id => self.id, :user_id => user_id})
+        self.image_likes << img_like
         self.likes += 1
-        if User.exists? user_id
-          img_like = ImageLike.new({:image_id => self.id, :user_id => user_id})
-          self.image_likes << img_like
-        else
-          result[:msg] = "User does not exist anymore"
-        end
         self.save
+        result[:likes] = self.likes
+        result[:success] = true
       end
-      result[:likes] = self.likes
-      result[:success] = true
     end
     return result
   end
@@ -357,23 +357,23 @@ class Image < ActiveRecord::Base
   def disliked_by_user(user_id)
     result = {:success => false}
     Image.transaction do
-      if self.is_liked? user_id
+      if !User.exists? user_id
+        result[:msg] = "User does not exist anymore"
+      elsif !ImageLike.exists?({:image_id => self.id, :user_id => user_id})
+        result[:msg] = "This image has been disliked"
+      else
+        img_like = ImageLike.find_by_image_id self.id, :conditions => {:user_id => user_id}
+        img_like.destroy
         self.likes -= 1
-        if User.exists? user_id
-          img_like = ImageLike.find_by_image_id self.id, :conditions => {:user_id => user_id}
-          img_like.destroy
-        else
-          result[:msg] = "User does not exist anymore"
-        end
         self.save
+        result[:likes] = self.likes
+        result[:success] = true
       end
-      result[:likes] = self.likes
-      result[:success] = true
     end
     return result
   end
 
-  def is_liked?(user_id)
+  def liked_by?(user_id)
     ImageLike.exists?({:image_id => self.id, :user_id => user_id})
   end
 
