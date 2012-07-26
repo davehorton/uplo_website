@@ -9,6 +9,7 @@ class Image < ActiveRecord::Base
 
   # ASSOCIATIONS
   belongs_to :gallery
+  has_one :author, :through => :gallery, :source => :user
   has_many :image_flags, :dependent => :destroy
   has_many :image_tags, :dependent => :destroy
   has_many :tags, :through => :image_tags
@@ -86,7 +87,7 @@ class Image < ActiveRecord::Base
         :per_page => paging_info.page_size )
     end
 
-    def get_all_images_with_current_user(params = {}, current_user)
+    def get_all_images_with_current_user(params, current_user)
         paging_info = parse_paging_options(params, {:sort_criteria => "images.promote_num DESC, images.likes DESC"})
         joined_images.where("gall.permission = 'public'
                             AND (gall.user_id = #{current_user.id}
@@ -280,14 +281,8 @@ class Image < ActiveRecord::Base
     return result
   end
 
-  def has_owner id
+  def has_owner(id)
     self.gallery.user.id == id
-  end
-
-  def author
-    if self.gallery && self.gallery.user
-      self.gallery.user
-    end
   end
 
   def username
@@ -564,12 +559,16 @@ class Image < ActiveRecord::Base
     define_index do
       indexes name
       indexes description
-
+      indexes keyword
+      indexes author(:username), :as => :author, :sortable => true
+      
       has gallery_id
 
       set_property :field_weights => {
-        :name => 4,
-        :description => 1,
+        :name => 7,
+        :keyword => 3,
+        :author => 2,        
+        :description => 1
       }
 
       if Rails.env.production?
