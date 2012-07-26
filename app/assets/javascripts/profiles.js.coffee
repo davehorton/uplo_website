@@ -183,16 +183,29 @@ $ ->
           $('#btn-follow').removeClass('follow')
           $('#btn-follow').addClass('unfollow')
           $('.note').fadeIn()
-          $('#followers-counter .info .number').text(response.followee_followers)
-          $('#followers-counter .info .label').text helper.pluralize_without_count(response.followee_followers, 'follower', 'followers')
+          if !$.parseJSON($('#counters').attr('data-current-user').toString())
+            if $('.counter.current').attr('id') == 'followers-counter'
+              load($('.counter.current .info').attr('data-url'), 'followers-counter')
+            else
+              $('#followers-counter .info .number').text(response.followee_followers)
+              $('#followers-counter .info .label').text helper.pluralize_without_count(response.followee_followers, 'follower', 'followers')
+              $.modal.close()
+          else
+            $.modal.close()
         else
           $('#btn-follow').attr('data-following', 'false')
           $('#btn-follow').removeClass('unfollow')
           $('#btn-follow').addClass('follow')
           $('.note').fadeOut()
-          $('#followers-counter .info .number').text(response.followee_followers)
-          $('#followers-counter .info .label').text helper.pluralize_without_count(response.followee_followers, 'follower', 'followers')
-        $.modal.close()
+          if !$.parseJSON($('#counters').attr('data-current-user').toString())
+            if $('.counter.current').attr('id') == 'followers-counter'
+              load($('.counter.current .info').attr('data-url'), 'followers-counter')
+            else
+              $('#followers-counter .info .number').text(response.followee_followers)
+              $('#followers-counter .info .label').text helper.pluralize_without_count(response.followee_followers, 'follower', 'followers')
+              $.modal.close()
+          else
+            $.modal.close()
     })
 
   $('#btn-update').click ->
