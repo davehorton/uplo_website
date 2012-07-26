@@ -108,7 +108,7 @@ module ApplicationHelper
   def empty_space
     "&nbsp".html_safe
   end
-  
+
   # This is a helper to use with the JAIL (jQuery Asynchronous Image Loader plugin)
   def async_image_tag(source, options = {})
     options ||= {}
@@ -168,6 +168,6 @@ module ApplicationHelper
   end
 
   def pluralize_without_count(count, noun)
-    count <= 1 ? "#{noun}" : "#{noun.pluralize}"
+    count == 1 ? "#{noun}" : "#{noun.pluralize}"
   end
 end

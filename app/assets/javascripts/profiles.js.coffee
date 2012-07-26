@@ -35,6 +35,7 @@ requestDislike = (node) ->
         counter = $('.counter.current')
         url = counter.find('.info').attr('data-url')
         load(url, counter.attr('id'))
+      $.modal.close()
   })
 
 requestFollow = (node) ->
@@ -50,10 +51,22 @@ requestFollow = (node) ->
     success: (response) ->
       if(response.success==false)
         alert(response.msg)
-      else
+      else if(is_unfollow=='false')
+        target.attr('data-following', 'true')
+        target.text('Unfollow')
         counter = $('.counter.current')
         url = counter.find('.info').attr('data-url')
         load(url, counter.attr('id'))
+        if counter.attr('id')=='followers-counter' && $.parseJSON($('#counters').attr('data-current-user').toString())
+          $('#following-counter .number').text response.followings
+      else
+        target.attr('data-following', 'false')
+        target.text('Follow')
+        counter = $('.counter.current')
+        url = counter.find('.info').attr('data-url')
+        load(url, counter.attr('id'))
+        if counter.attr('id')=='followers-counter' && $.parseJSON($('#counters').attr('data-current-user').toString())
+          $('#following-counter .number').text response.followings
   })
 
 requestDeleteProfilePhoto = (node) ->
