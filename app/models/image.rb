@@ -514,7 +514,7 @@ class Image < ActiveRecord::Base
     self.update_attribute(:promote_num, 1)
   end
 
-  def unpromote
+  def demote
     self.update_attribute(:promote_num, 0)
   end
 

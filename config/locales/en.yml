@@ -34,9 +34,11 @@ en:
       title: "Flagged Users"
     search: "Search"
     promote_confirm: "Are you sure you want to promote this photo ?"
+    demote_confirm: "Are you sure you want to demote this photo ?"
     error_image_not_found: "Image not found"
     error_promote_failed: "Cannot promote the photo"
     notice_promote_succeeded: "Promote photo successfully"
+    notice_demote_succeeded: "Demote photo successfully"
     sort_field:
       # Members
       signup_date: "Sign Up Date"
