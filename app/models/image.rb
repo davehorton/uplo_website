@@ -264,7 +264,7 @@ class Image < ActiveRecord::Base
         result = { :success => false, :msg => msg }
       else
         flag = ImageFlag.new({ :image_id => self.id, :reported_by => user.id,
-          :flag_type => params[:desc].to_i, :description => description })
+          :flag_type => params[:type].to_i, :description => description })
         if flag.save
           # Remove all images in shopping carts
           LineItem.joins(:order)
@@ -561,13 +561,13 @@ class Image < ActiveRecord::Base
       indexes description
       indexes keyword
       indexes author(:username), :as => :author, :sortable => true
-      
+
       has gallery_id
 
       set_property :field_weights => {
         :name => 7,
         :keyword => 3,
-        :author => 2,        
+        :author => 2,
         :description => 1
       }
 

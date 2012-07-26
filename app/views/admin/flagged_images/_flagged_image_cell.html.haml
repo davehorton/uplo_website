@@ -1,6 +1,6 @@
 / locals image, flag, flag_type
 .flagged_image_container
-  .image_frame
+  %a.image_frame{ :href => "#{url_for(:controller => '/profiles', :action => 'show', :user_id => image.author.id)}" }
     = image_tag image.data.url(:thumb), {:width => "155px", :height=> "155px"}
   .button_area.info_line
     .button.reinstate.left{:class => "button_#{image.id}"}
@@ -8,15 +8,18 @@
     .button.remove.left{:class => "button_#{image.id}"}
       = link_to '', {:action => :remove_image, :image_id => image.id}, confirm: 'Are you sure?', method: :delete, :style => "display:none"
   .image_name.info_line
-    = truncate(image.name, :length => 20)
+    %a{ :href => "#{url_for(:controller => '/images', :action => 'browse', :id => image.id)}" }
+      = truncate(image.name, :length => 20)
   .author.info_line
-    = image.author.username
+    %a{ :href => "#{url_for(:controller => '/profiles', :action => 'show', :user_id => image.author.id)}" }
+      = image.author.username
   .flagged_time.info_line
-    Flagged 
+    Flagged
     = flag.created_at.strftime "%d/%m/%Y"
   .flagged_time.info_line
     by <spanc style="color:black">
-    = flag.reporter.username
+    %a{ :href => "#{url_for(:controller => '/profiles', :action => 'show', :user_id => image.author.id)}" }
+      = flag.reporter.username
     </span>
   .type.info_line
     = flag_type
@@ -38,5 +41,5 @@
       event.preventDefault();
     });
   });
-  
+
   </script>
