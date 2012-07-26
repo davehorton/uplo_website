@@ -9,7 +9,7 @@
       = link_to t("admin.flagged_images"), {:controller => :flagged_images, :action => :index}
   %li{:class => set_current_tab("flagged_users")}
     %div
-      = link_to t("admin.flagged_users"), {:controller => :flagged_users, :action => :index}, {:class => 'not-implement'}
+      = link_to t("admin.flagged_users"), {:controller => :flagged_users, :action => :index}
   %li{:class => set_current_tab("member_profiles")}
     %div
       = link_to t("admin.member_profiles"), {:controller => :members, :action => :index}

@@ -51,6 +51,24 @@ class User < ActiveRecord::Base
   validates_uniqueness_of :username, :message => 'must be unique'
   validates_length_of :first_name, :last_name, :in => 2..30, :message => 'must be 2 - 30 characters in length'
 
+  # SCOPE
+  scope :flagged_users, lambda { 
+    self.joins(%Q{
+      JOIN (
+        SELECT galleries.user_id,
+        SUM(images_data.flagged_images_count) AS flagged_images_count
+        FROM galleries JOIN (
+          SELECT gallery_id, COUNT(flagged_images.id) AS flagged_images_count
+          FROM (#{Image.flagged.to_sql}) AS flagged_images GROUP BY gallery_id
+        ) images_data ON galleries.id = images_data.gallery_id
+        GROUP BY galleries.user_id
+      ) galleries_data
+      ON galleries_data.user_id = users.id
+    }).where("galleries_data.flagged_images_count >= ?", 3).select(
+      "DISTINCT users.*, galleries_data.flagged_images_count"
+    )
+  }
+  
   # CLASS METHODS
   class << self
     def load_users(params = {})

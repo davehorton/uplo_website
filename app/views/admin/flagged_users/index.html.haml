@@ -1,23 +1,32 @@
+- content_for :head do
+  = javascript_include_tag("lib/jail.min.js")
+  
 = render :partial => "admin/admin_menu"
-.header
-  .admin_title.left_area
-    = t('admin.flagged_users_area.title')
-  .right_area
-    = form_tag({:action => :index}, :id => "flag_type_form", :method=>'post', :multipart => true) do
-      .button.remove_all.left#remove_flagged_images
-      .button.reinstate_all.left#reinstate_flagged_images
-      .button.contact_all.left#reinstate_flagged_images
-.list_flagged_images
-  - i = 0
-  - (1..13).each do
-    - i = i + 1
-    - user = User.first
-    - if (i % 3) == 0
-      .flagged_user_last_element 
-        = render :partial => "admin/flagged_users/flagged_user_cell", :locals => {:user => user}
-    - else
-      = render :partial => "admin/flagged_users/flagged_user_cell", :locals => {:user => user}
 
+.admin.flagged-users.clearfix
+  #top.title-bar.clearfix
+    %h1.left.title= t('admin.flagged_users_area.title')
+    .right
+      .button.remove_all#remove_flagged_users
+      .button.reinstate_all#reinstate_flagged_users
+      .button.contact_all#contact_flagged_users
+                      
+  .content.clearfix
+    - (@users + @users + @users + @users).each_with_index do |user, idx|
+      - user_css = (((idx + 1) % 3) == 0 ? 'no-margin-right' : '')
+      .user-container{:id => "user-container-#{user.id}", :class => user_css}
+        - author_profile = profile_path(:user_id => user.id)
+        %a.profile-link.left{:href => author_profile}
+          = image_tag user.avatar_url(:large), :class => 'avatar large left'
+        .user-info.left
+          .username
+            %a{:href => author_profile}= user.username
+          .flagged-images
+            - user.images.limit(3).each do |image|
+              %span.flagged-image-thumb-container.left
+                = image_tag image.data.url(:smallest), :class => 'flagged-image-thumb'
+  
+    = render_pagination(@users)
 
 :erb
   <script type="text/javascript">
