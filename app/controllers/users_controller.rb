@@ -127,6 +127,7 @@ class UsersController < ApplicationController
         UserFollow.destroy_all({ :user_id => user.id, :followed_by => follower.id })
         result[:followers] = current_user.followers.length
         result[:followings] = current_user.followed_users.length
+        result[:followee_followers] = user.followers.length
         result[:success] = true
       else
         result[:msg] = 'You have already unfollowed this user.'
@@ -140,6 +141,7 @@ class UsersController < ApplicationController
         UserFollow.create({ :user_id => user.id, :followed_by => follower.id })
         result[:followers] = current_user.followers.length
         result[:followings] = current_user.followed_users.length
+        result[:followee_followers] = user.followers.length
         result[:success] = true
       end
     end

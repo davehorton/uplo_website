@@ -339,7 +339,7 @@ class Api::ImagesController < Api::BaseController
     result = []
     images.map { |img|
       info = img.serializable_hash(img.default_serializable_options)
-      info[:liked] = current_user.nil? ? false : img.is_liked?(current_user.id)
+      info[:liked] = current_user.nil? ? false : img.liked_by?(current_user.id)
       result << {:image => info}
     }
     return result
