@@ -42,7 +42,7 @@
         - url = url_for(:controller => 'profiles', :action => 'show', :user_id => user.id)
         .user-section.left{ :class => "#{ additional_class }" }
           %a{ :href => "#{ url }" }
-            = image_tag(user.avatar_url(:small), :class => "avatar small left")
+            = image_tag(user.avatar_url(:small, is_current_user(user.id)), :class => "avatar small left")
           .info-panel.left
             %a.text.black.normal.font12.line10{ :href => "#{ url }" }= user.username.truncate(18)
             .text.gray.font11.line10= user.fullname.truncate(21)
@@ -61,7 +61,7 @@
         - url = url_for(:controller => 'profiles', :action => 'show', :user_id => user.id)
         .user-section.left{ :class => "#{ additional_class }" }
           %a{:href => "#{ url }"}
-            = image_tag(user.avatar_url(:small), :class => "avatar small left")
+            = image_tag(user.avatar_url(:small, is_current_user(user.id)), :class => "avatar small left")
           .info-panel.left
             %a.text.black.normal.font12{ :href => "#{ url }" }= user.username.truncate(18)
             .text.gray.font11.line10= user.fullname.truncate(21)

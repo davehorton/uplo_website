@@ -5,7 +5,7 @@ class Notification < ActiveRecord::Base
     :purchase => 2
   }
   TYPE_ACTION = {
-    TYPE[:like] => 'liked',
+    TYPE[:like] => 'like',
     TYPE[:comment] => 'commented',
     TYPE[:purchase] => 'purchased'
   }
@@ -47,7 +47,9 @@ class Notification < ActiveRecord::Base
 
   def self.action(image_id, type)
     image = Image.find_by_id image_id.to_i
-    if image.image_likes.count > 1
+    if type != TYPE[:like]
+      msg = " #{TYPE_ACTION[type]}"
+    elsif image.image_likes.count > 1
       msg = " #{TYPE_ACTION[type]}"
     else
       msg = " #{TYPE_ACTION[type]}s"

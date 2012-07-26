@@ -27,8 +27,8 @@ class UsersController < ApplicationController
              :locals => {:profile_images => current_user.profile_images}
       str = profile_photos.gsub('"', '\'').gsub(/\n/, '')
       result = {:success => true, :profile_photos => profile_photos,
-                :extra_avatar_url => current_user.avatar_url(:extra),
-                :large_avatar_url => current_user.avatar_url(:large)}
+                :extra_avatar_url => current_user.avatar_url(:extra, true),
+                :large_avatar_url => current_user.avatar_url(:large, true)}
     else
       msg = []
       key = ['data_file_size', 'data_content_type']
@@ -62,16 +62,16 @@ class UsersController < ApplicationController
         profile_photos = render_to_string :partial => 'profiles/profile_photos',
                :locals => {:profile_images => current_user.profile_images}
         result = { :success => true, :profile_photos => profile_photos,
-                  :extra_avatar_url => current_user.avatar_url(:extra),
-                  :large_avatar_url => current_user.avatar_url(:large) }
+                  :extra_avatar_url => current_user.avatar_url(:extra, true),
+                  :large_avatar_url => current_user.avatar_url(:large, true) }
       elsif current_user.has_profile_photo?(params[:id])
         begin
           ProfileImage.destroy(params[:id])
           profile_photos = render_to_string :partial => 'profiles/profile_photos',
                :locals => {:profile_images => current_user.profile_images}
           result = { :success => true, :profile_photos => profile_photos,
-                    :extra_avatar_url => current_user.avatar_url(:extra),
-                    :large_avatar_url => current_user.avatar_url(:large) }
+                    :extra_avatar_url => current_user.avatar_url(:extra, true),
+                    :large_avatar_url => current_user.avatar_url(:large, true) }
         rescue
           result = {:success => false, :msg => 'Something went wrong!'}
         end
@@ -87,7 +87,8 @@ class UsersController < ApplicationController
       if current_user.has_profile_photo?(params[:id])
         begin
           ProfileImage.find_by_id(params[:id]).set_as_default
-          result = { :success => true, :extra_avatar_url => current_user.avatar_url(:extra), :large_avatar_url => current_user.avatar_url(:large) }
+          result = { :success => true, :extra_avatar_url => current_user.avatar_url(:extra, true),
+            :large_avatar_url => current_user.avatar_url(:large, true) }
         rescue
           result = {:success => false, :msg => 'Something went wrong!'}
         end

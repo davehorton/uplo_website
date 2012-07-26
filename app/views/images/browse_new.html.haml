@@ -12,7 +12,7 @@
     - images_count = is_current_user ? @author.images.count : @author.public_images.count
     - author_profile = url_for(:controller => 'profiles', :action => 'show', :user_id => @author.id)
     %a{:href => "#{ author_profile }"}
-      = image_tag @author.avatar_url(:small), :class => 'avatar small left'
+      = image_tag @author.avatar_url(:small, is_current_user), :class => 'avatar small left'
     .left
       %span.text.gray.font12.line12 By
       %a.text.black.normal.font12.line12{:href => "#{ author_profile }"}= @author.username.truncate(20)
@@ -124,7 +124,7 @@
       = render :partial => 'comments_template', :locals => { :comments => @comments }
     .user-section.left
       %a{ :href => "#{ url_for(:controller => 'profiles', :action => 'show', :user_id => current_user.id)}" }
-        = image_tag current_user.avatar_url(:medium), :class => "avatar medium left"
+        = image_tag current_user.avatar_url(:medium, true), :class => "avatar medium left"
       .left
         = form_for :comment, :url => '/comments', :method => 'post', :html => {:id =>'frm-comment'} do |f|
           = f.text_area :description, :class => 'text gray font12 left', :title => 'Add your comment here...'

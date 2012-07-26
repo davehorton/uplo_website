@@ -15,17 +15,17 @@
           = "Z-A"
         %span.sort-label= "Sort By: "
         %span
-          = select_tag('sort_field', member_filter_options(@sort_field), 
+          = select_tag('sort_field', member_filter_options(@sort_field),
                       :id => 'sort-field-selection',
                       'data-url' => url_for(:controller => "admin/members", :action => "index", :only_path => false))
-      
+
   .content.clearfix
     - @users.each_with_index do |user, idx|
       - user_css = (((idx + 1) % 3) == 0 ? 'no-margin-right' : '')
       .user-container{:id => "user-container-#{user.id}", :class => user_css}
         - author_profile = profile_path(:user_id => user.id)
         %a.profile-link.left{:href => author_profile}
-          = image_tag user.avatar_url(:large), :class => 'avatar large left'
+          = image_tag user.avatar_url(:large, true), :class => 'avatar large left'
         .user-info.left
           .username
             %a{:href => author_profile}= user.username
@@ -35,7 +35,7 @@
             %span= pluralize(user.images_count, 'item')
             %span.separator= '|'
             %span= pluralize(user.images_pageview, 'view')
-  
+
     = render_pagination(@users)
 
 :erb
@@ -45,20 +45,20 @@
       $("#sort-field-selection-button").css("width", "160px").css("height", "20px");
       $("#sort-field-selection-button .ui-selectmenu-status").css("padding-top", "3px");
       $("#sort-field-selection-menu").css("width", "160px");
-      
+
       $('#search-options .sort-direction').click(function(e){
         if($(this).hasClass('current'))
           return false;
-        
+
         // Clear all current selection
         $('#search-options .sort-direction.current').removeClass('current');
         $(this).addClass('current');
         // Force change.
         $('#sort-field-selection').change();
       });
-      
+
       var on_search = <%= (params[:action] == 'search' ? 'true' : 'false') %>;
-      
+
       jQuery('#sort-field-selection').change(function(){
         var params = $.url(window.location.href).param();
         var sort_direction = $('#search-options .sort-direction.current').attr('data-sort-direction');

@@ -7,7 +7,7 @@ class User < ActiveRecord::Base
   ALLOCATION_STRING = "#{RESOURCE_LIMIT[:size]} #{RESOURCE_LIMIT[:unit]}"
   ALLOCATION = FileSizeConverter.convert RESOURCE_LIMIT[:size], RESOURCE_LIMIT[:unit], FileSizeConverter::UNITS[:byte]
   FILTER_OPTIONS = ['signup_date', 'username', 'num_of_likes', 'num_of_uploads']
-  
+
   # Include default devise modules. Others available are:
   # :token_authenticatable, :encryptable, :confirmable, :lockable, :timeoutable and :omniauthable
   devise :database_authenticatable, :registerable,
@@ -21,7 +21,7 @@ class User < ActiveRecord::Base
   attr_accessible :id, :email, :password, :password_confirmation, :remember_me,
                   :first_name, :last_name, :username, :login, :nationality, :birthday, :gender, :avatar,
                   :twitter, :facebook, :is_admin, :as => :admin
-    
+
   # ASSOCIATIONS
   has_many :profile_images, :dependent => :destroy, :order => 'last_used DESC'
   has_many :galleries, :dependent => :destroy
@@ -53,7 +53,7 @@ class User < ActiveRecord::Base
 
   # CLASS METHODS
   class << self
-    def load_users(params = {})      
+    def load_users(params = {})
       case params[:sort_field]
         when 'signup_date' then
           params[:sort_field] = "users.created_at"
@@ -74,20 +74,20 @@ class User < ActiveRecord::Base
             :per_page => paging_info.page_size,
             :order => paging_info.sort_string
           )
-      end     
+      end
     end
-    
+
     # Load users data with images_likes_count, images_count and images_pageview.
     def load_users_with_images_statistics(params = {})
       paging_info = parse_paging_options(params)
       self.joins(%Q{
         LEFT JOIN (
-          SELECT galleries.user_id, 
+          SELECT galleries.user_id,
           SUM(images_data.images_count) AS images_count,
           SUM(images_data.images_likes_count) AS images_likes_count,
           SUM(images_data.images_pageview) AS images_pageview
           FROM galleries LEFT JOIN (
-            SELECT gallery_id, COUNT(images.id) AS images_count, 
+            SELECT gallery_id, COUNT(images.id) AS images_count,
             SUM(likes) AS images_likes_count,
             SUM(pageview) AS images_pageview
             FROM images GROUP BY gallery_id
@@ -96,14 +96,14 @@ class User < ActiveRecord::Base
         ) galleries_data
         ON galleries_data.user_id = users.id
       }).select("DISTINCT users.*, galleries_data.images_count,
-                galleries_data.images_likes_count, 
+                galleries_data.images_likes_count,
                 galleries_data.images_pageview").paginate(
         :page => paging_info.page_id,
         :per_page => paging_info.page_size,
         :order => paging_info.sort_string
       )
     end
-    
+
     def do_search(params = {})
       params[:filtered_params][:sort_field] = 'first_name' unless params[:filtered_params].has_key?("sort_field")
       paging_info = parse_paging_options(params[:filtered_params], {:sort_mode => :extended})
@@ -171,14 +171,14 @@ class User < ActiveRecord::Base
       (galleries.permission = '#{Gallery::PRIVATE_PERMISSION}' AND galleries.user_id = #{ self.id })"
     )
   end
-  
-  def avatar
+
+  def avatar(allow_flagged=true)
     img = ProfileImage.find :first, :conditions => {:user_id => self.id, :default => true}
-   
+
     if img.nil?
       result = nil
     else
-      if (img.source && img.source.image_flags.count > 0)
+      if (!allow_flagged && img.source && img.source.image_flags.count > 0)
         return nil
       end
       result = img.data
@@ -197,11 +197,13 @@ class User < ActiveRecord::Base
     [self.first_name, self.last_name].join(" ")
   end
 
-  def avatar_url(style='thumb')
-    if self.avatar.nil?
+  # allow_flagged=true: show avatar even when flagged
+  def avatar_url(style='thumb', allow_flagged=false)
+    avatar = self.avatar(allow_flagged)
+    if avatar.nil?
       url = "/assets/avatar-default-#{style.to_s}.jpg"
     else
-      url = self.avatar.url(style.to_sym)
+      url = avatar.url(style.to_sym)
     end
     return url
   end
@@ -419,23 +421,23 @@ class User < ActiveRecord::Base
     end
     return result
   end
-  
+
   def images_count
     if !self.attributes.has_key?('images_count')
       self.attributes['images_count'] = self.images.avai_images.count
     else
       self.attributes['images_count'].to_i
-    end    
+    end
   end
-  
+
   def images_likes_count
     if !self.attributes.has_key?('images_likes_count')
       self.attributes['images_likes_count'] = self.images.avai_images.sum(:likes)
     else
       self.attributes['images_likes_count'].to_i
     end
-  end 
-  
+  end
+
   def images_pageview
     if !self.attributes.has_key?('images_pageview')
       self.attributes['images_pageview'] = self.images.avai_images.sum(:pageview)

@@ -213,7 +213,7 @@ class Api::UsersController < Api::BaseController
   end
 
   def get_notification_settings
-    device = UserDevice.find_by_device_token params[:device_token],
+    device = UserDevice.find_by_device_token params[:device_token].to_s,
       :conditions => { :user_id => current_user.id }
     if device.nil?
       result = { :success => false, :msg => 'You have to log in on this device first!' }
@@ -261,7 +261,7 @@ class Api::UsersController < Api::BaseController
     user.confirmed_at = Time.now
     info = user.serializable_hash(user.default_serializable_options)
     # TODO: rename :avatar to :avatar_url and put it into User#exposed_methods
-    info[:avatar_url] = user.avatar_url
+    info[:avatar_url] = user.avatar_url(:thumb, user.id==current_user.id)
     if user.id == current_user.id
       info[:galleries_num] = user.galleries.size
       info[:images_num] = user.images.avai_images.size

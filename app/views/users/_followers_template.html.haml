@@ -10,7 +10,7 @@
   .user-section.left{ :class => "#{ additional_class } #{type}"}
     - url = url_for(:controller => 'profiles', :action => 'show', :user_id => user.id)
     %a{:href => "#{ url }"}
-      = image_tag user.avatar_url(:large), :class => 'avatar large left'
+      = image_tag user.avatar_url(:large, is_current_user), :class => 'avatar large left'
     .info-panel.left
       .name.text.black.font18.line12
         %a{:href => "#{ url }"}= user.fullname.truncate(20)
