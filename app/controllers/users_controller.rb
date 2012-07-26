@@ -123,18 +123,25 @@ class UsersController < ApplicationController
       result[:msg] = 'You cannot follow yourself'
       result[:success] = false
     elsif SharedMethods::Converter.Boolean(params[:unfollow])
-      UserFollow.destroy_all({ :user_id => user.id, :followed_by => follower.id })
-      result[:followers] = current_user.followers.length
-      result[:followings] = current_user.followed_users.length
-      result[:success] = true
-    elsif UserFollow.exists?({ :user_id => user.id, :followed_by => follower.id })
-      result[:msg] = 'You have already followed this user.'
-      result[:success] = false
+      if UserFollow.exists?({ :user_id => user.id, :followed_by => follower.id })
+        UserFollow.destroy_all({ :user_id => user.id, :followed_by => follower.id })
+        result[:followers] = current_user.followers.length
+        result[:followings] = current_user.followed_users.length
+        result[:success] = true
+      else
+        result[:msg] = 'You have already unfollowed this user.'
+        result[:success] = false
+      end
     else
-      UserFollow.create({ :user_id => user.id, :followed_by => follower.id })
-      result[:followers] = current_user.followers.length
-      result[:followings] = current_user.followed_users.length
-      result[:success] = true
+      if UserFollow.exists?({ :user_id => user.id, :followed_by => follower.id })
+        result[:msg] = 'You have already followed this user.'
+        result[:success] = false
+      else
+        UserFollow.create({ :user_id => user.id, :followed_by => follower.id })
+        result[:followers] = current_user.followers.length
+        result[:followings] = current_user.followed_users.length
+        result[:success] = true
+      end
     end
     render :json => result
   end
