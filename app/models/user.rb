@@ -1,6 +1,8 @@
 class User < ActiveRecord::Base
   include ::SharedMethods::Paging
   include ::SharedMethods::Converter
+  include ::SharedMethods::SerializationConfig
+  
   attr_accessor :force_submit, :login
 
   GENDER_MALE = "0"
@@ -153,23 +155,6 @@ class User < ActiveRecord::Base
       []
     end
 
-    def except_attributes
-      attrs = []
-      self.attribute_names.each do |n|
-        if !exposed_attributes.include?(n.to_sym)
-          attrs << n
-        end
-      end
-      attrs
-    end
-
-    def default_serializable_options
-      { :except => self.except_attributes,
-        :methods => self.exposed_methods,
-        :include => self.exposed_associations
-      }
-    end
-
     protected
 
     def parse_paging_options(options, default_opts = {})
@@ -240,36 +225,7 @@ class User < ActiveRecord::Base
       end
     end
     self.send(:write_attribute, :birthday, date)
-  end
-
-  # Override Rails as_json method
-  def as_json(options={})
-    if (!options.blank?)
-      super(self.default_serializable_options.merge(options))
-    else
-      super(self.default_serializable_options)
-    end
-  end
-
-  def exposed_methods
-    self.class.exposed_methods
-  end
-
-  def exposed_attributes
-    self.class.except_attributes
-  end
-
-  def exposed_associations
-    self.class.exposed_associations
-  end
-
-  def except_attributes
-    self.class.except_attributes
-  end
-
-  def default_serializable_options
-    self.class.default_serializable_options
-  end
+  end 
 
   def update_profile(params)
     result = nil
@@ -464,6 +420,18 @@ class User < ActiveRecord::Base
     end
   end
 
+  def remove_flagged_images    
+    self.images.flagged.update_all(:is_removed => true)
+  end
+  
+  def reinstate_flagged_images
+    Image.transaction do
+      self.images.flagged.each do |image|
+        image.reinstate
+      end
+    end
+  end
+  
   # indexing with thinking sphinx
   define_index do
     indexes first_name
