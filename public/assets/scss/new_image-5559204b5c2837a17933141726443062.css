@@ -72,8 +72,7 @@
     max-width: 638px;
     border: 1px solid #a1a1a1;
     float: none;
-    line-height: 490px;
-    padding: 5px; }
+    line-height: 490px; }
   .image-container .promote-button {
     background: url("/assets/promote-spotlight-light.png") no-repeat;
     position: absolute;
