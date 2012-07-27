@@ -22,15 +22,15 @@ class Image < ActiveRecord::Base
   scope :removed_images, where(:is_removed => true)
   scope :avai_images, where(:is_removed => false)
   scope :flagged, avai_images.joins('left join image_flags on images.id=image_flags.image_id')
-                      .where("image_flags.reported_by is not null AND is_removed = ?", false).readonly(false)
+                      .where("image_flags.reported_by is not null AND images.is_removed = ?", false).readonly(false)
   scope :un_flagged, avai_images.joins('left join image_flags on images.id=image_flags.image_id')
-                    .where("image_flags.reported_by is null AND is_removed = ?", false).readonly(false)
+                    .where("image_flags.reported_by is null AND images.is_removed = ?", false).readonly(false)
   scope :joined_images, avai_images.joins('left join galleries as gall on gall.id=images.gallery_id')
                   .joins('left join image_flags on images.id=image_flags.image_id').readonly(false)
   
   scope :removed_or_flagged_images, joins(
       "JOIN image_flags ON images.id = image_flags.image_id"
-    ).where("image_flags.reported_by IS NOT NULL OR is_removed = ?", true).readonly(false)
+    ).where("image_flags.reported_by IS NOT NULL OR images.is_removed = ?", true).readonly(false)
   
   scope :public_images, joined_images.where("galleries.permission = ? AND image_flags.reported_by IS NULL", 
                                             Gallery::PUBLIC_PERMISSION)
