@@ -35,7 +35,7 @@ btn-choose-photo.png: btn-choose-photo-24993ba6dcc909002602d858232256a1.png
 btn-close-photo.png: btn-close-photo-71b4951ee1d286cebb6e9beb65c91a51.png
 btn-comment.jpg: btn-comment-0a73efa9af8378462e4d4bad7317d5fb.jpg
 btn-delete-photo.png: btn-delete-photo-558c2a2d4b48c0aea7c376724bf705bf.png
-btn-dislike.png: btn-dislike-7b20ce2baa59fecb897f5fbf0506b621.png
+btn-dislike.png: btn-dislike-f0bb0bd46a62435d0b9700c1526bef8c.png
 btn-done.png: btn-done-352ad89527c928bddf38e2e866f81648.png
 btn-dowload-app.png: btn-dowload-app-2e9fc66a9ec53cf550430ad32ddc2fba.png
 btn-edit.png: btn-edit-c63376d30973b9e15e52837fa90208d2.png
@@ -143,8 +143,10 @@ promote-spotlight-light.png: promote-spotlight-light-90aee63f283ace53e902477fdea
 promote-spotlight.png: promote-spotlight-e20cbd9409cada3a76283cf66cf4cdb9.png
 reinstate_all_button.png: reinstate_all_button-3464f877f4ee41460574459608b717c9.png
 reinstate_button.png: reinstate_button-dbe8dbec6da222c3154df2c8a3056763.png
+reinstate_button_light.png: reinstate_button_light-172552ef0d315a5cf81b5a8b26687abb.png
 remove_all_button.png: remove_all_button-5459ec026de7173562a7fbe75b477c77.png
 remove_button.png: remove_button-7e2f3fc331e46e9ab24d7e1dae53f884.png
+remove_button_light.png: remove_button_light-46908e1b8495ce016387bcb1974a2b2e.png
 search-13x13.png: search-13x13-ace65b27bd43db2eddafea0827f2a856.png
 search-icon.png: search-icon-5a7422008b9fcb256657d6e54dd558a7.png
 search.png: search-52aed94b16526e83fbc524b34c546cbe.png
@@ -169,7 +171,8 @@ up.gif: up-7851ecffdfbb6ca3ba41bcebfa93cb35.gif
 uplo-logo.png: uplo-logo-1a1123ea4ae8aed84ec7486c1838b15e.png
 uplo_logo.png: uplo_logo-4e147b8807d73e64931db4bc3568f789.png
 uploader_file.png: uploader_file-3ab3c53af3d8adf6071f3776329ab009.png
-app/admin/spotlights.js: app/admin/spotlights-3d3b4ffdd736aae50fbe00debcbf7869.js
+app/admin/flagged_users.js: app/admin/flagged_users-fe4fa59383540bfc1c02fec0a0115831.js
+app/admin/spotlights.js: app/admin/spotlights-cc9044ca8faa26f2a3bbad503aef6fd7.js
 app/edit_images.js: app/edit_images-e9765177fdfa7c36fc0e7e8798e3e2da.js
 app/gallery.js: app/gallery-56d1423ff8282cf24bfa0dc13979b30e.js
 app/image.js: app/image-090a76bcb99a855a1064e5cb602865bf.js
@@ -272,7 +275,7 @@ jquery-ui.custom.css: jquery-ui.custom-bb782aff6a70a3531739cdd09fe60b50.css
 jquery.contextMenu.css: jquery.contextMenu-5e13ffab2ad4f1c83de146893d8f0b86.css
 jquery.ui.selectmenu.css: jquery.ui.selectmenu-126b46b0f5616450a0711aea25ce56ec.css
 jquery.ui.theme.css: jquery.ui.theme-bc9f9116ef9708ca6340560832e3b72e.css
-scss/admin.css: scss/admin-bb44255474916c0e2846c947330df8e0.css
+scss/admin.css: scss/admin-e9fe21b419fcffd1d9cc0d0267709878.css
 scss/application.css: scss/application-1cc66ce9982a795415bb1ec9a3935cda.css
 scss/banner.css: scss/banner-331c4e35597b1b905f46e6226aa74178.css
 scss/cart.css: scss/cart-a00c819367f1c26885c93fd320e87746.css

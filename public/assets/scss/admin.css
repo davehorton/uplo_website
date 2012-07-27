@@ -136,6 +136,36 @@
   font-size: 16px;
   font-weight: bold; }
 
+/* FLAGGED USERS */
+.flagged-users .title-bar .right {
+  width: auto; }
+.flagged-users .title-bar .button {
+  float: left; }
+.flagged-users .content .user-container {
+  position: relative; }
+  .flagged-users .content .user-container .user-info {
+    padding-top: 8px;
+    padding-left: 10px; }
+  .flagged-users .content .user-container .username {
+    font-size: 14pt; }
+  .flagged-users .content .user-container .button, .flagged-users .content .user-container .action-container, .flagged-users .content .user-container .flagged-images {
+    float: left; }
+  .flagged-users .content .user-container .action-container {
+    margin-top: 10px;
+    margin-left: 5px; }
+  .flagged-users .content .user-container .contact-link {
+    position: absolute;
+    right: 15px;
+    top: 10px;
+    text-decoration: underline;
+    font-size: 10pt; }
+.flagged-users .flagged-image-thumb-container {
+  display: inline-block;
+  margin-right: 5px; }
+  .flagged-users .flagged-image-thumb-container .flagged-image-thumb {
+    width: 28px;
+    height: 28px; }
+
 /* FLAGGED IMAGES */
 .header {
   width: 100%;
@@ -178,10 +208,14 @@
     background: url("/assets/reinstate_button.png") no-repeat;
     width: 60px;
     height: 18px; }
+  .button.reinstate.disabled {
+    background: url("/assets/reinstate_button_light.png") no-repeat; }
   .button.remove {
     background: url("/assets/remove_button.png") no-repeat;
     width: 53px;
     height: 18px; }
+  .button.remove.disabled {
+    background: url("/assets/remove_button_light.png") no-repeat; }
 
 /* FLAGGED IMAGE CELL */
 .flagged_image_last_element .flagged_image_container {
