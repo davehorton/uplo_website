@@ -235,7 +235,7 @@ class Image < ActiveRecord::Base
 
   def set_as_owner_avatar
     self.update_attribute('is_owner_avatar', true)
-    Image.update_all 'is_owner_avatar=false', "gallery_id = #{ self.gallery_id } and id <> #{ self.id }"
+    Image.update_all 'is_owner_avatar=false', "gallery_id in (#{ self.author.galleries.collect(&:id).join(',') }) and id <> #{ self.id }"
     profile_img = ProfileImage.first :conditions => {:user_id => self.author.id, :link_to_image => self.id}
     if profile_img.nil?
       ProfileImage.create({ :user_id => self.author.id,
