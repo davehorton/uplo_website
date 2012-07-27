@@ -3,7 +3,8 @@
   = stylesheet_link_tag('scss/new_image.css', 'scss/sale.css')
   - if can_promote
     = javascript_include_tag("app/admin/spotlights.js")
-
+    = javascript_include_tag('lib/jquery.url.js')
+      
 - content_for :right_content do
   .text.black.font18.bold= @image.name
   .line-separator

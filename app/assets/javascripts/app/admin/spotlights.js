@@ -24,7 +24,7 @@ spotlights = {
     
     $('#btn-ok').click(function(){
       $.modal.close();
-      window.setTimeout("$('#mask').modal()", 500);
+      window.setTimeout("$('#mask').modal()", 200);
       var form = $(photo).find('form.promote-photo-form');
       var post_url = $(form).attr('action');
       var params = $(form).serialize();
@@ -54,10 +54,11 @@ spotlights = {
             // Change the form action URL.
             $(form).attr('action', post_url);
           }
-          
-          if(jQuery.trim(response.message) != ''){
-            alert(response.message);
-          }
+          else{
+            if(jQuery.trim(response.message) != ''){
+              alert(response.message);
+            }
+          }         
           
           $.modal.close();
         }

@@ -35,7 +35,7 @@
           - if image.is_promoted?
             - demote_link = url_for(:controller => "admin/spotlights", 
                                     :action => "promote", 
-                                    :id => "#{image.id}",
+                                    :id => image.id,
                                     :demote => true)
             .promote-button.button.disabled
               %form{:action => demote_link, :class => "promote-photo-form demote", 
@@ -43,7 +43,7 @@
                 = hidden_field_tag(:authenticity_token, form_authenticity_token)
                 
           - else
-            - promote_link = url_for(:controller => "admin/spotlights", :action => "promote", :id => "#{image.id}")
+            - promote_link = url_for(:controller => "admin/spotlights", :action => "promote", :id => image.id)
             .promote-button.button
               %form{:action => promote_link, :class => "promote-photo-form", 
                     :id => "promote-photo-form-#{image.id}", :method=>'post'}
