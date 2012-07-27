@@ -109,11 +109,15 @@ Uplo::Application.routes.draw do
     end
 
     resources :flagged_users do
-      post :index, :on => :collection
-      post :reinstate_all, :on => :collection
-      post :remove_all, :on => :collection
-      post :reinstate_images, :on => :collection
-      delete :remove_images, :on => :collection
+      collection do
+        post :reinstate_all
+        post :remove_all
+      end
+      
+      member do
+        post :reinstate_user
+        post :remove_user
+      end
     end
 
     resources :members do

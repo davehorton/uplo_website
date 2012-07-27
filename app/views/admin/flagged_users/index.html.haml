@@ -7,15 +7,26 @@
 .admin.flagged-users.clearfix
   #top.title-bar.clearfix
     %h1.left.title= t('admin.flagged_users_area.title')
-    .right
-      .button.remove_all#remove_flagged_users
-      .button.reinstate_all#reinstate_flagged_users      
-      = flagged_users_mail_link(@users, {:bcc => true, :link_label => "",
-          :class => "button contact_all",
-          :id => "contact_flagged_users"})
+    .right.action-container
+      - if @users.length > 0
+        .button.remove_all#remove_flagged_users{'data-confirm' => t('admin.remove_all_users_confirm')}
+          - remove_link = url_for(:controller => "admin/flagged_users", :action => "remove_all")
+          %form{:action => remove_link, :class => "remove-form action-form", 
+                :id => "remove-all-form", :method =>'post'}
+            = hidden_field_tag(:authenticity_token, form_authenticity_token)
+                    
+        .button.reinstate_all#reinstate_flagged_users{'data-confirm' => t('admin.reinstate_all_users_confirm')}
+          - reinstate_link = url_for(:controller => "admin/flagged_users", :action => "reinstate_all")
+          %form{:action => reinstate_link, :class => "remove-form action-form", 
+                :id => "reinstate-all-form", :method =>'post'}
+            = hidden_field_tag(:authenticity_token, form_authenticity_token)
+                
+        = flagged_users_mail_link(@users, {:bcc => true, :link_label => "",
+            :class => "button contact_all",
+            :id => "contact_flagged_users"})
         
   .content.clearfix
-    - (@users + @users + @users + @users).each_with_index do |user, idx|
+    - @users.each_with_index do |user, idx|
       - user_css = (((idx + 1) % 3) == 0 ? 'no-margin-right' : '')
       .user-container{:id => "user-container-#{user.id}", :class => user_css}
         - author_profile = profile_path(:user_id => user.id)
@@ -26,22 +37,30 @@
             %a{:href => author_profile}= user.username
           
           .flagged-images
-            - user.images.take(3).each do |image|
+            - user.images.removed_or_flagged_images.take(3).each do |image|
               %span.flagged-image-thumb-container.left
                 = image_tag image.data.url(:smallest), :class => 'flagged-image-thumb'
           
-          .action-container            
-            .button.reinstate
-              - reinstate_link = url_for(:controller => "admin/flagged_users", :action => "reinstate_images", :id => user.id)
-              %form{:action => reinstate_link, :class => "reinstate-form", 
-                    :id => "reinstate-form-#{user.id}", :method=>'post'}
-                = hidden_field_tag(:authenticity_token, form_authenticity_token)
-                
-            .button.remove
-              - remove_link = url_for(:controller => "admin/flagged_users", :action => "remove_images", :id => user.id)
-              %form{:action => remove_link, :class => "remove-form", 
-                    :id => "remove-form-#{user.id}", :method=>'post'}
-                = hidden_field_tag(:authenticity_token, form_authenticity_token)
+          .action-container
+            - if user.is_banned?
+              .button.reinstate{'data-confirm' => t('admin.reinstate_user_confirm')}
+                - reinstate_link = url_for(:controller => "admin/flagged_users", :action => "reinstate_user", :id => user.id)
+                %form{:action => reinstate_link, :class => "reinstate-form action-form", 
+                      :id => "reinstate-form-#{user.id}", :method => 'post'}
+                  = hidden_field_tag(:authenticity_token, form_authenticity_token)
+
+            - else
+              .button.reinstate.disabled
+              
+            - if user.is_removed?
+              .button.remove.disabled
+            
+            - else
+              .button.remove{'data-confirm' => t('admin.remove_user_confirm')}
+                - remove_link = url_for(:controller => "admin/flagged_users", :action => "remove_user", :id => user.id)
+                %form{:action => remove_link, :class => "remove-form action-form", 
+                      :id => "remove-form-#{user.id}", :method =>'post'}
+                  = hidden_field_tag(:authenticity_token, form_authenticity_token)
                 
           .contact-link
             = flagged_users_mail_link(user)
@@ -51,26 +70,11 @@
     = render(:partial => 'shared/delete_confirm', 
         :layout => 'layouts/popup', 
         :locals => { :title => 'Confirm', :id => 'flagged-users-confirm-popup', 
-        :text => "Please confirm"})
+        :text => t('admin.reinstate_user_confirm')})
         
 :erb
   <script type="text/javascript">
-   $(document).ready(function(){
-     $("#flagged_image_type").change(function(){
-       $("#flag_type_form").submit();
-     });
-     $("#flagged_image_type-button").css("width", "160px").css("height", "20px");
-     $("#flagged_image_type-menu").css("width", "160px");
-     $("#flagged_image_type-button .ui-selectmenu-status").css("padding-top", "3px");
-     $('#remove_flagged_images').click(function(){
-       $('#flag_type_form').attr('action','<%= url_for(:action => :remove_all)%>');
-       $("#flag_type_form").submit();
-     });
-     $('#reinstate_flagged_images').click(function(){
-       $('#flag_type_form').attr('action','<%= url_for(:action => :reinstate_all)%>');
-       $("#flag_type_form").submit();
-     });
-   });
-
-   
+    $(document).ready(function(){
+      flagged_users.setup_forms();
+    });
   </script>

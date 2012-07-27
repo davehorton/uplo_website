@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120723044633) do
+ActiveRecord::Schema.define(:version => 20120727054245) do
 
   create_table "addresses", :force => true do |t|
     t.string   "first_name"
@@ -96,7 +96,7 @@ ActiveRecord::Schema.define(:version => 20120723044633) do
     t.boolean  "is_owner_avatar"
     t.string   "tier"
     t.boolean  "is_removed",        :default => false
-    t.integer  "pageview",          :default => 0
+    t.integer  "pageview"
     t.integer  "promote_num",       :default => 0
   end
 
@@ -218,6 +218,8 @@ ActiveRecord::Schema.define(:version => 20120723044633) do
     t.string   "biography"
     t.string   "website"
     t.boolean  "is_admin",                              :default => false
+    t.boolean  "is_removed",                            :default => false
+    t.boolean  "is_banned",                             :default => false
   end
 
   add_index "users", ["email"], :name => "index_users_on_email", :unique => true

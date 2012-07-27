@@ -19,15 +19,21 @@ class Image < ActiveRecord::Base
   has_many :orders, :through => :line_items
 
   # SCOPE
-  scope :avai_images, where(:images => {:is_removed => false})
+  scope :removed_images, where(:is_removed => true)
+  scope :avai_images, where(:is_removed => false)
   scope :flagged, avai_images.joins('left join image_flags on images.id=image_flags.image_id')
                       .where("image_flags.reported_by is not null AND is_removed = ?", false).readonly(false)
   scope :un_flagged, avai_images.joins('left join image_flags on images.id=image_flags.image_id')
                     .where("image_flags.reported_by is null AND is_removed = ?", false).readonly(false)
   scope :joined_images, avai_images.joins('left join galleries as gall on gall.id=images.gallery_id')
                   .joins('left join image_flags on images.id=image_flags.image_id').readonly(false)
-
-  scope :public_images, joins(:gallery).where("galleries.permission = ?", Gallery::PUBLIC_PERMISSION)
+  
+  scope :removed_or_flagged_images, joins(
+      "JOIN image_flags ON images.id = image_flags.image_id"
+    ).where("image_flags.reported_by IS NOT NULL OR is_removed = ?", true).readonly(false)
+  
+  scope :public_images, joined_images.where("galleries.permission = ? AND image_flags.reported_by IS NULL", 
+                                            Gallery::PUBLIC_PERMISSION)
   scope :promoted_images, where("promote_num > ?", 0)
 
   # Paperclip
@@ -271,10 +277,16 @@ class Image < ActiveRecord::Base
           :flag_type => params[:type].to_i, :description => description })
         if flag.save
           # Remove all images in shopping carts
-          LineItem.joins(:order)
-                .joins(:image)
-                .where(:images => {:id => self.id},
-                        :orders => {:status => Order::STATUS[:shopping]}).destroy_all
+          LineItem.joins(:order).joins(:image).where(
+            :images => {:id => self.id},
+            :orders => {:status => Order::STATUS[:shopping]}
+          ).destroy_all          
+          
+          if self.author.will_be_banned?
+            # Ban the image's author.
+            self.author.update_attribute(:is_banned, true)
+          end
+          
           # Update result
           result = { :success => true }
         else
@@ -287,6 +299,7 @@ class Image < ActiveRecord::Base
 
   def reinstate
     self.image_flags.destroy_all
+    self.update_attribute(:is_removed, false)
   end
   
   def has_owner(id)
