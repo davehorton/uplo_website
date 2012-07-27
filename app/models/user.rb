@@ -1,9 +1,13 @@
 class User < ActiveRecord::Base
   include ::SharedMethods::Paging
   include ::SharedMethods::Converter
+  include ::SharedMethods::SerializationConfig
+  
   attr_accessor :force_submit, :login
 
   GENDER_MALE = "0"
+  MIN_FLAGGED_IMAGES = 3
+  
   ALLOCATION_STRING = "#{RESOURCE_LIMIT[:size]} #{RESOURCE_LIMIT[:unit]}"
   ALLOCATION = FileSizeConverter.convert RESOURCE_LIMIT[:size], RESOURCE_LIMIT[:unit], FileSizeConverter::UNITS[:byte]
   FILTER_OPTIONS = ['signup_date', 'username', 'num_of_likes', 'num_of_uploads']
@@ -51,6 +55,25 @@ class User < ActiveRecord::Base
   validates_uniqueness_of :username, :message => 'must be unique'
   validates_length_of :first_name, :last_name, :in => 2..30, :message => 'must be 2 - 30 characters in length'
 
+  # SCOPE
+  scope :active_users, where(:is_removed => false, :is_banned => false)
+  scope :removed_users, where(:is_removed => true)
+  scope :flagged_users, lambda { 
+    self.joins(%Q{
+      JOIN (
+        SELECT galleries.user_id,
+        SUM(images_data.flagged_images_count) AS flagged_images_count
+        FROM galleries JOIN (
+          SELECT gallery_id, COUNT(flagged_images.id) AS flagged_images_count
+          FROM (#{Image.removed_or_flagged_images.to_sql}) AS flagged_images GROUP BY gallery_id
+        ) images_data ON galleries.id = images_data.gallery_id
+        GROUP BY galleries.user_id
+      ) galleries_data
+      ON galleries_data.user_id = users.id
+    }).where("users.is_banned = ? OR galleries_data.flagged_images_count >= ?", true, MIN_FLAGGED_IMAGES).select(
+      "DISTINCT users.*, galleries_data.flagged_images_count")
+  }
+  
   # CLASS METHODS
   class << self
     def load_users(params = {})
@@ -134,24 +157,23 @@ class User < ActiveRecord::Base
     def exposed_associations
       []
     end
-
-    def except_attributes
-      attrs = []
-      self.attribute_names.each do |n|
-        if !exposed_attributes.include?(n.to_sym)
-          attrs << n
+    
+    def remove_flagged_users
+      self.transaction do
+        self.flagged_users.each do |user|
+          user.remove
         end
       end
-      attrs
     end
 
-    def default_serializable_options
-      { :except => self.except_attributes,
-        :methods => self.exposed_methods,
-        :include => self.exposed_associations
-      }
+    def reinstate_flagged_users
+      self.transaction do
+        self.flagged_users.each do |user|
+          user.reinstate
+        end
+      end
     end
-
+    
     protected
 
     def parse_paging_options(options, default_opts = {})
@@ -222,36 +244,7 @@ class User < ActiveRecord::Base
       end
     end
     self.send(:write_attribute, :birthday, date)
-  end
-
-  # Override Rails as_json method
-  def as_json(options={})
-    if (!options.blank?)
-      super(self.default_serializable_options.merge(options))
-    else
-      super(self.default_serializable_options)
-    end
-  end
-
-  def exposed_methods
-    self.class.exposed_methods
-  end
-
-  def exposed_attributes
-    self.class.except_attributes
-  end
-
-  def exposed_associations
-    self.class.exposed_associations
-  end
-
-  def except_attributes
-    self.class.except_attributes
-  end
-
-  def default_serializable_options
-    self.class.default_serializable_options
-  end
+  end 
 
   def update_profile(params)
     result = nil
@@ -446,6 +439,37 @@ class User < ActiveRecord::Base
     end
   end
 
+  def remove
+    self.class.transaction do
+      self.update_attribute(:is_removed, true)
+      self.remove_flagged_images
+    end
+  end
+  
+  def remove_flagged_images    
+    self.images.flagged.update_all(:is_removed => true)
+  end
+  
+  def reinstate
+    self.class.transaction do
+      self.update_attribute(:is_banned, false)
+      self.reinstate_flagged_images
+    end
+  end
+  
+  def reinstate_flagged_images
+    Image.transaction do
+      self.images.removed_or_flagged_images.each do |image|
+        image.reinstate
+      end
+    end
+  end
+  
+  # Detect if this user is ready for being flagged.
+  def will_be_banned?
+    (!self.is_banned && self.images.flagged.length >= MIN_FLAGGED_IMAGES)
+  end
+  
   # indexing with thinking sphinx
   define_index do
     indexes first_name

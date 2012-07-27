@@ -1,6 +1,6 @@
 class ApplicationController < ActionController::Base
   protect_from_forgery
-  before_filter :set_current_tab
+  before_filter :set_current_tab, :check_banned_user
   before_filter :filter_params
 
   PAGE_SIZE = 10
@@ -19,6 +19,10 @@ class ApplicationController < ActionController::Base
     render :file => "public/403.html", :status => :unauthorized, :layout => false
   end
 
+  def render_banned_message
+    render :file => "public/banned_user.html", :status => :unauthorized, :layout => false
+  end
+  
   def push_redirect
     session[:back_url] = request.env["HTTP_REFERER"]
   end
@@ -67,5 +71,11 @@ class ApplicationController < ActionController::Base
     end
 
     return @filtered_params
+  end
+  
+  def check_banned_user
+    if current_user && (current_user.is_banned? && current_user.is_removed?)
+      render_banned_message
+    end
   end
 end

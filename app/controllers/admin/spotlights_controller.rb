@@ -20,12 +20,18 @@ class Admin::SpotlightsController < Admin::AdminController
     image = Image.find_by_id(params[:id])
     result = {}
     if image
-      if image.promote
+      method = :promote
+      if params[:demote]
+        # Unpromote this image
+        method = :demote
+      end
+      
+      if image.send(method)
         result[:status] = 'ok'
-        result[:message] = I18n.t("admin.notice_promote_succeeded")
+        result[:message] = I18n.t("admin.notice_#{method}_succeeded")
       else
         result[:status] = 'error'
-        result[:message] = I18n.t("admin.error_promote_failed")
+        result[:message] = I18n.t("admin.error_#{method}_failed")
       end
     else
       result[:status] = 'error'

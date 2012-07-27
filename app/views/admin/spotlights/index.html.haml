@@ -33,9 +33,17 @@
           
         .image-info
           - if image.is_promoted?
+            - demote_link = url_for(:controller => "admin/spotlights", 
+                                    :action => "promote", 
+                                    :id => image.id,
+                                    :demote => true)
             .promote-button.button.disabled
+              %form{:action => demote_link, :class => "promote-photo-form demote", 
+                    :id => "demote-photo-form-#{image.id}", :method=>'post'}
+                = hidden_field_tag(:authenticity_token, form_authenticity_token)
+                
           - else
-            - promote_link = url_for(:controller => "admin/spotlights", :action => "promote", :id => "#{image.id}")
+            - promote_link = url_for(:controller => "admin/spotlights", :action => "promote", :id => image.id)
             .promote-button.button
               %form{:action => promote_link, :class => "promote-photo-form", 
                     :id => "promote-photo-form-#{image.id}", :method=>'post'}
@@ -55,10 +63,12 @@
           
     = render_pagination(@images)
     
-    = render(:partial => 'shared/delete_confirm', 
-      :layout => 'layouts/popup', 
-      :locals => { :title => 'Confirm', :id => 'promote-confirm-popup', 
-      :text => t("admin.promote_confirm") })
+    #promote-confirm-popup-container{'data-promote-confirm' => t("admin.promote_confirm"),
+      'data-demote-confirm' => t("admin.demote_confirm") }
+      = render(:partial => 'shared/delete_confirm', 
+        :layout => 'layouts/popup', 
+        :locals => { :title => 'Confirm', :id => 'promote-confirm-popup', 
+        :text => t("admin.promote_confirm") })
 
 :erb
   <script>

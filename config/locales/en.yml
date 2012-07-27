@@ -33,10 +33,32 @@ en:
     flagged_users_area:
       title: "Flagged Users"
     search: "Search"
+    
     promote_confirm: "Are you sure you want to promote this photo ?"
+    demote_confirm: "Are you sure you want to demote this photo ?"
     error_image_not_found: "Image not found"
     error_promote_failed: "Cannot promote the photo"
+    error_demote_failed: "Cannot demote the photo"
     notice_promote_succeeded: "Promote photo successfully"
+    notice_demote_succeeded: "Demote photo successfully"
+    
+    reinstate_user_confirm: "Are you sure you want to reinstate this user ? All flagged images of the user will be also reinstated."
+    reinstate_all_users_confirm: "Are you sure you want to reinstate all users ? All flagged images of the users will be also reinstated."
+    remove_user_confirm: "Are you sure you want to remove this user ? All flagged images of the user will be also removed and the user will not be able to access UPLO anymore."
+    remove_all_users_confirm: "Are you sure you want to remove all users ? All flagged images of the users will be also removed and the users will not be able to access UPLO anymore."
+    
+    error_user_not_found: "User not found"
+    error_reinstate_user_failed: "Cannot reinstate the user"
+    error_reinstate_users_failed: "Cannot reinstate flagged users"
+    error_remove_user_failed: "Cannot remove the user"
+    error_remove_users_failed: "Cannot remove flagged userss"
+    notice_reinstate_user_succeeded: "Reinstate user successfully"
+    notice_reinstate_users_succeeded: "Reinstate users successfully"
+    notice_remove_user_succeeded: "Remove user successfully"
+    notice_remove_users_succeeded: "Remove users successfully"
+    
+    contact_user: "Contact User"
+    
     sort_field:
       # Members
       signup_date: "Sign Up Date"

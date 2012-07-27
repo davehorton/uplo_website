@@ -7,15 +7,15 @@ class Admin::FlaggedImagesController < Admin::AdminController
     @categories = [["Terms of Use Violation",ImageFlag::FLAG_TYPE['terms_of_use_violation']],
                   ["Copyright",ImageFlag::FLAG_TYPE['copyright']],
                   ["Nudity",ImageFlag::FLAG_TYPE['nudity']]]
-    @flagged_images = Image.flagged.where("flag_type = #{params[:flag_type]}")
+    @flagged_images = Image.flagged.where("flag_type = ?", params[:flag_type])
   end
   
   # Params:
   # flag_type
   
   def reinstate_all
-    flagged_images = Image.flagged.where("flag_type = #{params[:flag_type]}")
-    flagged_images.each {|image| image.image_flags.destroy_all}
+    flagged_images = Image.flagged.where("flag_type = ?", params[:flag_type])
+    flagged_images.each {|image| image.reinstate }
     redirect_to :action => :index, :flag_type => params[:flag_type]
   end
   
@@ -23,7 +23,7 @@ class Admin::FlaggedImagesController < Admin::AdminController
   # flag_type
   
   def remove_all
-    flagged_images = Image.flagged.where("flag_type = #{params[:flag_type]}")
+    flagged_images = Image.flagged.where("flag_type = ?", params[:flag_type])
     flagged_images.each {|image| image.is_removed = true; image.save;}
     redirect_to :action => :index, :flag_type => params[:flag_type]
   end
@@ -31,20 +31,17 @@ class Admin::FlaggedImagesController < Admin::AdminController
   # Params:
   # image_id
   def reinstate_image
-    flagged_images = Image.flagged
-    image = flagged_images.where("images.id = ?", params[:image_id]).first
+    image = Image.flagged.find_by_id(params[:image_id])
     if (image)
-      image.image_flags.destroy_all
+      image.reinstate
     end
     redirect_to :action => :index, :flag_type => params[:flag_type]
-  end
-  
+  end  
   
   # Params:
   # image_id
   def remove_image
-    flagged_images = Image.flagged
-    image = flagged_images.where("images.id = ?", params[:image_id]).first
+    image = Image.flagged.find_by_id(params[:image_id])
     if (image)
       image.is_removed = true
       image.save
