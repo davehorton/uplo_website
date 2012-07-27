@@ -161,10 +161,9 @@
           error: function(){
             $.modal.close();
             alert("Can not flag this image at this time");
-            if (history.length)
-               history.go(-1);
-            else
-               window.location = "/browse"
+            if (history.length){
+              window.location.href = document.referrer
+            }else{ window.location = "/browse" }
           }
         });
       };
