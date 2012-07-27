@@ -247,6 +247,10 @@ class Image < ActiveRecord::Base
     end
   end
 
+  def is_flagged?
+    ImageFlag.exists?(:image_id => self.id)
+  end
+
   def flag(user, params={}, result = {})
     if (self.image_flags.count > 0)
       result = { :success => false, :msg => "The image is already flagged." }

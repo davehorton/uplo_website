@@ -5,11 +5,16 @@ module ApplicationHelper
 
   def sections
     { :default => '/', :profile => '/profile', :account => '/my_account',
-      :gallery => '/galleries', :sale => '/sales' }
+      :gallery => '/galleries', :sale => '/sales', :admin => '/admin' }
   end
 
   def current_section
     case params[:controller]
+    when 'admin' then sections[:admin]
+    when 'admin/flagged_images' then sections[:admin]
+    when 'admin/flagged_users' then sections[:admin]
+    when 'admin/members' then sections[:admin]
+    when 'admin/spotlights' then sections[:admin]
     when 'users' then sections[:account]
     when 'galleries' then sections[:gallery]
     when 'sales' then sections[:sale]
@@ -30,9 +35,11 @@ module ApplicationHelper
   end
 
   def private_links_options(active = sections[:default])
-    options_for_select([["My UPLO", sections[:default]], ['My Profile', sections[:profile]],
+    options = [["My UPLO", sections[:default]], ['My Profile', sections[:profile]],
       ["My Account", sections[:account]], ["My Galleries", sections[:gallery]],
-      ["My Sales", sections[:sale]]], active)
+      ["My Sales", sections[:sale]]]
+    options << ["Admin", sections[:admin]] if current_user.is_admin?
+    options_for_select(options, active)
   end
 
   def state_options

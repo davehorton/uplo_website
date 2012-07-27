@@ -111,9 +111,8 @@ $color-light-gray: #a1a1a1;
     border: 1px solid $color-light-gray;
     float: none;
     line-height: 490px;
-    padding: 5px;
   }
-  
+
   .promote-button{
     background: url('/assets/promote-spotlight-light.png') no-repeat;
     position: absolute;
@@ -121,7 +120,7 @@ $color-light-gray: #a1a1a1;
     top: 10px;
     width: 133px;
     height: 26px;
-    
+
     &.disabled{display: none !important;}
   }
 }
@@ -308,6 +307,6 @@ $color-light-gray: #a1a1a1;
 	padding:0;
 }
 
-#flag_form #selection_container span{ 
+#flag_form #selection_container span{
 	padding-right:16px;
 }

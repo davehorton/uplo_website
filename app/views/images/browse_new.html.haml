@@ -73,32 +73,11 @@
         - promote_link = url_for(:controller => "admin/spotlights", :action => "promote", :id => "#{@image.id}")
         .promote-button.button
           = form_tag(promote_link, :class => "promote-photo-form", :id => "promote-photo-form-#{@image.id}", :method=>'post')
-
       = image_tag(@image.data.url(:medium), :class => 'image medium',
                 'data-width' => @image.width,
                 'data-height' => @image.height, :alt => @image.name)
-
-  #social-sharing.hide
-    .main.left
-      %a.close{:href=>'#'}
-        .right{:onclick => "$('#social-sharing').hasClass('hide');"} &times;
-      .container.left
-        .text.black.bold.font14.line12.left Share this via:
-        .text.black.font11.line12.right{ :style => 'padding-top:1px;'} Share Preferences
-        .line-separator.left
-        .buttons-container.left
-          - public_url = url_for(:controller => 'images', :action => 'public', :id => params[:id], :only_path => false)
-          - flickr_request = url_for(:controller => 'images', :action => 'post_image_to_flickr', :id => params[:id], :only_path => false)
-          %a.email.button.left.no-padding-left{ :href => '#', :onclick => 'showEmailPopup();' }
-          %a.facebook.button.left{ :href => "http://www.facebook.com/sharer.php?u=#{public_url}", :title => "Share on Facebook", :target=>"_blank" }
-          %a.twitter.button.left{ :href=>"http://twitter.com/share?url=#{CGI.escape(public_url)}&text=#{CGI.escape('from UPLO')}", :title => "Share on Twitter", :target=>"_blank" }
-          %a.flickr.button.left{ :href => "#{flickr_request}", :title => "Share on Flickr", :target => "_blank" }
-          %a.tumblr.button.left{ :href => "http://www.tumblr.com/share/photo?source=#{CGI.escape(@image.data.url(:medium))}&caption=#{CGI.escape('from UPLO')}&clickthru=#{CGI.escape(public_url)}", :title => "Share on Tumblr" }
-          %a.pinterest.button.left.no-padding-right{ :href => image_pinterest_share_url(@image, public_url), :target=>"_blank", :title => "Share on Pinterest" }
-
-    .tail.left
-      .icon.right
-
+  - if !@image.is_flagged?
+    = render :partial => 'sharing_popup'
   .actions.left
     .left
       .like.left
@@ -116,7 +95,8 @@
       - if !@is_owner
         .button.flag.left{:onclick => "$('#flag_form').modal();"}
       .button.order.left{:onclick => "window.location.href = '#{order_url}';", :data => {:url => "#{order_url}"}}
-      .button.share.left{:onclick => "display_sharing_box();"}
+      - if !@image.is_flagged?
+        .button.share.left{:onclick => "display_sharing_box();"}
   .line-separator.clear
   #comments-section{ :data => { :id => "#{@image.id}" }}
     .header.text.black.font18.bold Comments and faves

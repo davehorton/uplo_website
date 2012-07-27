@@ -10,7 +10,3 @@
 
   %li{:class => set_current_tab("friend")}
     = link_to(I18n.t("main_menu.friend"), "/friends")
-
-  - if current_user.is_admin?
-    %li{:class => set_current_tab("admin")}
-      = link_to(I18n.t("main_menu.admin"), "/admin")

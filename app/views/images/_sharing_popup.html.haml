@@ -1,0 +1,20 @@
+#social-sharing.hide
+  .main.left
+    %a.close{:href=>'#'}
+      .right{:onclick => "$('#social-sharing').hasClass('hide');"} &times;
+    .container.left
+      .text.black.bold.font14.line12.left Share this via:
+      .text.black.font11.line12.right{ :style => 'padding-top:1px;'} Share Preferences
+      .line-separator.left
+      .buttons-container.left
+        - public_url = url_for(:controller => 'images', :action => 'public', :id => params[:id], :only_path => false)
+        - flickr_request = url_for(:controller => 'images', :action => 'post_image_to_flickr', :id => params[:id], :only_path => false)
+        %a.email.button.left.no-padding-left{ :href => '#', :onclick => 'showEmailPopup();' }
+        %a.facebook.button.left{ :href => "http://www.facebook.com/sharer.php?u=#{public_url}", :title => "Share on Facebook", :target=>"_blank" }
+        %a.twitter.button.left{ :href=>"http://twitter.com/share?url=#{CGI.escape(public_url)}&text=#{CGI.escape('from UPLO')}", :title => "Share on Twitter", :target=>"_blank" }
+        %a.flickr.button.left{ :href => "#{flickr_request}", :title => "Share on Flickr", :target => "_blank" }
+        %a.tumblr.button.left{ :href => "http://www.tumblr.com/share/photo?source=#{CGI.escape(@image.data.url(:medium))}&caption=#{CGI.escape('from UPLO')}&clickthru=#{CGI.escape(public_url)}", :title => "Share on Tumblr" }
+        %a.pinterest.button.left.no-padding-right{ :href => image_pinterest_share_url(@image, public_url), :target=>"_blank", :title => "Share on Pinterest" }
+
+  .tail.left
+    .icon.right
