@@ -4,27 +4,25 @@ class Admin::FlaggedUsersController < Admin::AdminController
   end
   
   def reinstate_all
-    redirect_to :action => :index
   end
-  
-  # Params:
-  # flag_type
-  
+    
   def remove_all
-    redirect_to :action => :index
   end
   
-  # Params:
-  # image_id
-  def reinstate_user
-    redirect_to :action => :index
+  # Reinstate all flagged images of a user.
+  def reinstate_images
+    user = User.find_by_id(params[:id])
+    if user && user.reinstate_flagged_images
+      
+    end
   end
   
-  
-  # Params:
-  # image_id
-  def remove_user
-    redirect_to :action => :index
+  # Remove all flagged images of a user.
+  def remove_images
+    user = User.find_by_id(params[:id])
+    if user && user.remove_flagged_images
+      
+    end
   end
   
   protected

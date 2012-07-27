@@ -285,6 +285,10 @@ class Image < ActiveRecord::Base
     return result
   end
 
+  def reinstate
+    self.image_flags.destroy_all
+  end
+  
   def has_owner(id)
     self.gallery.user.id == id
   end

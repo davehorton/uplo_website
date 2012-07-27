@@ -112,8 +112,8 @@ Uplo::Application.routes.draw do
       post :index, :on => :collection
       post :reinstate_all, :on => :collection
       post :remove_all, :on => :collection
-      post :reinstate_user, :on => :collection
-      delete :remove_user, :on => :collection
+      post :reinstate_images, :on => :collection
+      delete :remove_images, :on => :collection
     end
 
     resources :members do

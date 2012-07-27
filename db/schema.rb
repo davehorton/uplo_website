@@ -96,7 +96,7 @@ ActiveRecord::Schema.define(:version => 20120723044633) do
     t.boolean  "is_owner_avatar"
     t.string   "tier"
     t.boolean  "is_removed",        :default => false
-    t.integer  "pageview"
+    t.integer  "pageview",          :default => 0
     t.integer  "promote_num",       :default => 0
   end
 

@@ -1,5 +1,6 @@
 - content_for :head do
   = javascript_include_tag("lib/jail.min.js")
+  = javascript_include_tag("app/admin/flagged_users.js")
   
 = render :partial => "admin/admin_menu"
 
@@ -8,9 +9,11 @@
     %h1.left.title= t('admin.flagged_users_area.title')
     .right
       .button.remove_all#remove_flagged_users
-      .button.reinstate_all#reinstate_flagged_users
-      .button.contact_all#contact_flagged_users
-                      
+      .button.reinstate_all#reinstate_flagged_users      
+      = flagged_users_mail_link(@users, {:bcc => true, :link_label => "",
+          :class => "button contact_all",
+          :id => "contact_flagged_users"})
+        
   .content.clearfix
     - (@users + @users + @users + @users).each_with_index do |user, idx|
       - user_css = (((idx + 1) % 3) == 0 ? 'no-margin-right' : '')
@@ -21,13 +24,35 @@
         .user-info.left
           .username
             %a{:href => author_profile}= user.username
+          
           .flagged-images
-            - user.images.limit(3).each do |image|
+            - user.images.take(3).each do |image|
               %span.flagged-image-thumb-container.left
                 = image_tag image.data.url(:smallest), :class => 'flagged-image-thumb'
-  
+          
+          .action-container            
+            .button.reinstate
+              - reinstate_link = url_for(:controller => "admin/flagged_users", :action => "reinstate_images", :id => user.id)
+              %form{:action => reinstate_link, :class => "reinstate-form", 
+                    :id => "reinstate-form-#{user.id}", :method=>'post'}
+                = hidden_field_tag(:authenticity_token, form_authenticity_token)
+                
+            .button.remove
+              - remove_link = url_for(:controller => "admin/flagged_users", :action => "remove_images", :id => user.id)
+              %form{:action => remove_link, :class => "remove-form", 
+                    :id => "remove-form-#{user.id}", :method=>'post'}
+                = hidden_field_tag(:authenticity_token, form_authenticity_token)
+                
+          .contact-link
+            = flagged_users_mail_link(user)
+            
     = render_pagination(@users)
 
+    = render(:partial => 'shared/delete_confirm', 
+        :layout => 'layouts/popup', 
+        :locals => { :title => 'Confirm', :id => 'flagged-users-confirm-popup', 
+        :text => "Please confirm"})
+        
 :erb
   <script type="text/javascript">
    $(document).ready(function(){

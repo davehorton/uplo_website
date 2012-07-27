@@ -39,6 +39,8 @@ en:
     error_promote_failed: "Cannot promote the photo"
     notice_promote_succeeded: "Promote photo successfully"
     notice_demote_succeeded: "Demote photo successfully"
+    contact_user: "Contact User"
+    
     sort_field:
       # Members
       signup_date: "Sign Up Date"
