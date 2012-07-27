@@ -24,7 +24,7 @@ module GalleriesHelper
   def gallery_cover_image_url(gallery)
     img_url = "/assets/gallery-thumb-180.jpg" # Default image.
     image = gallery.cover_image
-    if image
+    if image && (is_current_user(image.author.id) || (!image.is_flagged? && !image.is_removed?))
       img_url = image.url(:thumb)
     end
 
