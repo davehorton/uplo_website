@@ -2,12 +2,12 @@ class User < ActiveRecord::Base
   include ::SharedMethods::Paging
   include ::SharedMethods::Converter
   include ::SharedMethods::SerializationConfig
-  
+
   attr_accessor :force_submit, :login
 
   GENDER_MALE = "0"
   MIN_FLAGGED_IMAGES = 3
-  
+
   ALLOCATION_STRING = "#{RESOURCE_LIMIT[:size]} #{RESOURCE_LIMIT[:unit]}"
   ALLOCATION = FileSizeConverter.convert RESOURCE_LIMIT[:size], RESOURCE_LIMIT[:unit], FileSizeConverter::UNITS[:byte]
   FILTER_OPTIONS = ['signup_date', 'username', 'num_of_likes', 'num_of_uploads']
@@ -58,7 +58,7 @@ class User < ActiveRecord::Base
   # SCOPE
   scope :active_users, where(:is_removed => false, :is_banned => false)
   scope :removed_users, where(:is_removed => true)
-  scope :flagged_users, lambda { 
+  scope :flagged_users, lambda {
     self.joins(%Q{
       JOIN (
         SELECT galleries.user_id,
@@ -73,7 +73,7 @@ class User < ActiveRecord::Base
     }).where("users.is_banned = ? OR galleries_data.flagged_images_count >= ?", true, MIN_FLAGGED_IMAGES).select(
       "DISTINCT users.*, galleries_data.flagged_images_count")
   }
-  
+
   # CLASS METHODS
   class << self
     def load_users(params = {})
@@ -157,7 +157,7 @@ class User < ActiveRecord::Base
     def exposed_associations
       []
     end
-    
+
     def remove_flagged_users
       self.transaction do
         self.flagged_users.each do |user|
@@ -173,7 +173,7 @@ class User < ActiveRecord::Base
         end
       end
     end
-    
+
     protected
 
     def parse_paging_options(options, default_opts = {})
@@ -244,7 +244,7 @@ class User < ActiveRecord::Base
       end
     end
     self.send(:write_attribute, :birthday, date)
-  end 
+  end
 
   def update_profile(params)
     result = nil
@@ -336,23 +336,29 @@ class User < ActiveRecord::Base
     return remaining
   end
 
-  def paid_items
-    items = LineItem.all :joins => 'LEFT JOIN orders ON orders.id = line_items.order_id',
+  def paid_items(image_id=nil)
+    if image_id.blank?
+      from_condition = '(SELECT * FROM line_items) AS lis'
+    else
+      from_condition = "(SELECT * FROM line_items WHERE line_items.image_id=#{image_id}) AS lis"
+    end
+    items = LineItem.all :from => from_condition, :select => 'lis.*',
+      :joins => 'LEFT JOIN orders ON orders.id = lis.order_id',
       :conditions => ['orders.user_id=? and orders.transaction_status=?',
         self.id, Order::TRANSACTION_STATUS[:complete]]
     return items
   end
 
-  def paid_items_number
+  def paid_items_number(image_id=nil)
     result = 0
-    items = self.paid_items
+    items = self.paid_items(image_id)
     items.each {|item| result += item.quantity }
     return result
   end
 
-  def total_paid
+  def total_paid(image_id=nil)
     result = 0
-    items = self.paid_items
+    items = self.paid_items(image_id)
     items.each {|item| result += item.quantity * (item.tax + item.price) }
     return result
   end
@@ -466,18 +472,18 @@ class User < ActiveRecord::Base
       self.remove_flagged_images
     end
   end
-  
-  def remove_flagged_images    
+
+  def remove_flagged_images
     self.images.flagged.update_all(:is_removed => true)
   end
-  
+
   def reinstate
     self.class.transaction do
       self.update_attribute(:is_banned, false)
       self.reinstate_flagged_images
     end
   end
-  
+
   def reinstate_flagged_images
     Image.transaction do
       self.images.removed_or_flagged_images.each do |image|
@@ -485,12 +491,12 @@ class User < ActiveRecord::Base
       end
     end
   end
-  
+
   # Detect if this user is ready for being flagged.
   def will_be_banned?
     (!self.is_banned && self.images.flagged.length >= MIN_FLAGGED_IMAGES)
   end
-  
+
   # indexing with thinking sphinx
   define_index do
     indexes first_name

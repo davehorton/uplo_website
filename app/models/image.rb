@@ -27,12 +27,12 @@ class Image < ActiveRecord::Base
                     .where("image_flags.reported_by is null AND images.is_removed = ?", false).readonly(false)
   scope :joined_images, avai_images.joins('left join galleries as gall on gall.id=images.gallery_id')
                   .joins('left join image_flags on images.id=image_flags.image_id').readonly(false)
-  
+
   scope :removed_or_flagged_images, joins(
       "JOIN image_flags ON images.id = image_flags.image_id"
     ).where("image_flags.reported_by IS NOT NULL OR images.is_removed = ?", true).readonly(false)
-  
-  scope :public_images, joined_images.where("galleries.permission = ? AND image_flags.reported_by IS NULL", 
+
+  scope :public_images, joined_images.where("galleries.permission = ? AND image_flags.reported_by IS NULL",
                                             Gallery::PUBLIC_PERMISSION)
   scope :promoted_images, where("promote_num > ?", 0)
 
@@ -280,13 +280,13 @@ class Image < ActiveRecord::Base
           LineItem.joins(:order).joins(:image).where(
             :images => {:id => self.id},
             :orders => {:status => Order::STATUS[:shopping]}
-          ).destroy_all          
-          
+          ).destroy_all
+
           if self.author.will_be_banned?
             # Ban the image's author.
             self.author.update_attribute(:is_banned, true)
           end
-          
+
           # Update result
           result = { :success => true }
         else
@@ -301,7 +301,7 @@ class Image < ActiveRecord::Base
     self.image_flags.destroy_all
     self.update_attribute(:is_removed, false)
   end
-  
+
   def has_owner(id)
     self.gallery.user.id == id
   end
@@ -455,7 +455,7 @@ class Image < ActiveRecord::Base
   end
 
   def get_purchased_info(item_paging_params = {})
-    result = {:data => [], :total => 0}
+    result = {:data => [], :total_quantity => 0, :total_sale => 0}
     orders = self.orders.where({:transaction_status => Order::TRANSACTION_STATUS[:complete]}).collect { |o| o.id }
     if orders.length > 0
       paging_info = LineItem.paging_options(item_paging_params)
@@ -468,7 +468,6 @@ class Image < ActiveRecord::Base
         :conditions => ["image_id=? and order_id in (#{orders.join(',')})", self.id]
       )
 
-      result[:total] = saled_items.total_entries
       saled_items.each { |item|
         user = User.find_by_id item.purchaser_id
         purchased_date = DateTime.parse(item.purchased_date).strftime "%B %d, %Y"
@@ -478,10 +477,10 @@ class Image < ActiveRecord::Base
           :size => item.size,
           :quantity => item.quantity,
           :moulding => item.moulding,
-          :date => purchased_date,
-          :total_paid_items => user.paid_items_number,
-          :total_paid => user.total_paid
+          :date => purchased_date
         }
+        result[:total_quantity] += user.paid_items_number(self.id)
+        result[:total_sale] += user.total_paid(self.id)
       }
     end
 

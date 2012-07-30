@@ -250,7 +250,8 @@ class Api::ImagesController < Api::BaseController
       purchased_info = image.get_purchased_info(@filtered_params)
       result = {
         :success => true,
-        :total => purchased_info[:total],
+        :total_sale => purchased_info[:total_sale],
+        :total_quantity => purchased_info[:total_quantity],
         :data => purchased_info[:data]
       }
     end
