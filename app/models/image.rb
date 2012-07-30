@@ -473,13 +473,14 @@ class Image < ActiveRecord::Base
         user = User.find_by_id item.purchaser_id
         purchased_date = DateTime.parse(item.purchased_date).strftime "%B %d, %Y"
         result[:data] << {
-          # :purchaser => user.serializable_hash(user.default_serializable_options),
           :username => user.username,
           :plexi_mount => item.plexi_mount ? 'Plexi Mount' : 'No Plexi Mount',
           :size => item.size,
           :quantity => item.quantity,
           :moulding => item.moulding,
-          :date => purchased_date
+          :date => purchased_date,
+          :total_paid_items => user.paid_items_number,
+          :total_paid => user.total_paid
         }
       }
     end

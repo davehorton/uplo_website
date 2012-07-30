@@ -336,6 +336,27 @@ class User < ActiveRecord::Base
     return remaining
   end
 
+  def paid_items
+    items = LineItem.all :joins => 'LEFT JOIN orders ON orders.id = line_items.order_id',
+      :conditions => ['orders.user_id=? and orders.transaction_status=?',
+        self.id, Order::TRANSACTION_STATUS[:complete]]
+    return items
+  end
+
+  def paid_items_number
+    result = 0
+    items = self.paid_items
+    items.each {|item| result += item.quantity }
+    return result
+  end
+
+  def total_paid
+    result = 0
+    items = self.paid_items
+    items.each {|item| result += item.quantity * (item.tax + item.price) }
+    return result
+  end
+
   def raw_total_sales(image_paging_params = {})
     paging_info = Image.paging_options(image_paging_params, {:sort_criteria => "images.updated_at DESC"})
     images = Image.paginate(
