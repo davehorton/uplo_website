@@ -1,0 +1,15 @@
+#finish_reset_password
+  %br
+  %br
+  .info
+    <b>Thank you!</b></br>
+    Your request has been sent. Would you now like to lauch the app?
+  %br
+  %br
+  .button
+    %a{:href => "uplo://fromweb"}
+      = image_tag("bg_finish_reset_yes.jpg")
+  %br
+  .button
+    %a{:href => "http://uplo.heroku.com"}
+      = image_tag("bg_finish_reset_prefer.jpg")
