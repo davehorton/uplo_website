@@ -24,7 +24,11 @@ bg-banner-the-app.png: bg-banner-the-app-2f610573c9de94a0ab6041feb319d6fd.png
 bg-header.png: bg-header-b3c896053934b1754991a91dac321d97.png
 bg-popup-header.png: bg-popup-header-cf0fe9259335acfa4013b990e576f17d.png
 bg-public-ad.jpg: bg-public-ad-1cbbaa661fec3a44012995de5de889a6.jpg
+bg-reset-password.png: bg-reset-password-7eac670dc8dce5d5dd04ecc58eacf35b.png
 bg-sub-banner.png: bg-sub-banner-01492526824862bd39687c63431146b0.png
+bg_finish_reset_prefer.jpg: bg_finish_reset_prefer-277bddd698937d063df697cb3ee3ce8e.jpg
+bg_finish_reset_yes.jpg: bg_finish_reset_yes-0db6f0e8ecd8b1c65b1bf63335476121.jpg
+bg_iphone_password.png: bg_iphone_password-b2140ca27ebe69752b03392f0a6c5809.png
 blank.png: blank-45063a26a92d2a4b47566e6252de160d.png
 btn-add-gallery.png: btn-add-gallery-f113135bc3379b8fdd7568ded7c0cef8.png
 btn-add-to-cart.jpg: btn-add-to-cart-c30eb12ea88816756e7b963de90e5a20.jpg
@@ -138,7 +142,7 @@ prev-vertical.png: prev-vertical-eaef69b30a628022ae98a7704e5ef474.png
 prev12-disabled.png: prev12-disabled-8ea229509f8091dfef6c29a027b901c2.png
 prev12.png: prev12-50faae018f6c8d92a763de0f296e2495.png
 progressbar.gif: progressbar-54dfeacc002a35b014f009faa50bf254.gif
-promote-spotlight-disabled.png: promote-spotlight-disabled-edb300b7bd5ab8e80e4f174cf1ace8d9.png
+promote-spotlight-disabled.png: promote-spotlight-disabled-c55bc1551fd489b38be9d1ae54fb4191.png
 promote-spotlight-light.png: promote-spotlight-light-90aee63f283ace53e902477fdeaf7861.png
 promote-spotlight.png: promote-spotlight-e20cbd9409cada3a76283cf66cf4cdb9.png
 reinstate_all_button.png: reinstate_all_button-3464f877f4ee41460574459608b717c9.png
@@ -277,6 +281,7 @@ jquery.ui.selectmenu.css: jquery.ui.selectmenu-126b46b0f5616450a0711aea25ce56ec.
 jquery.ui.theme.css: jquery.ui.theme-bc9f9116ef9708ca6340560832e3b72e.css
 scss/admin.css: scss/admin-e9fe21b419fcffd1d9cc0d0267709878.css
 scss/application.css: scss/application-1cc66ce9982a795415bb1ec9a3935cda.css
+scss/application.mobile.css: scss/application.mobile-b7d9afe5686708c93c49eadcd9057bb5.css
 scss/banner.css: scss/banner-331c4e35597b1b905f46e6226aa74178.css
 scss/cart.css: scss/cart-a00c819367f1c26885c93fd320e87746.css
 scss/cart_new.css: scss/cart_new-ae43b8521bb1aede584d3c7905fedaef.css
