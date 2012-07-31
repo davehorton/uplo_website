@@ -196,11 +196,10 @@ class User < ActiveRecord::Base
 
   def avatar(allow_flagged=true)
     img = ProfileImage.find :first, :conditions => {:user_id => self.id, :default => true}
-
     if img.nil?
       result = nil
     else
-      if (!allow_flagged && img.source && img.source.image_flags.count > 0)
+      if img.source && (img.source.is_removed || (!allow_flagged && img.source.is_flagged?))
         return nil
       end
       result = img.data

@@ -12,7 +12,10 @@ load = (url, counter)->
     dataType: 'json',
     success: (response) ->
       plural_label = counter.replace('-counter', '')
-      single_label = plural_label.replace(/[s]$/, '')
+      if plural_label=='galleries'
+        single_label = 'gallery'
+      else
+        single_label = plural_label.replace(/[s]$/, '')
       count_label = helper.pluralize_without_count response.counter, single_label, plural_label
       $('#container').html response.html
       $("##{counter}").find('.info .number').text response.counter
