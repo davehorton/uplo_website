@@ -21,19 +21,27 @@ class Image < ActiveRecord::Base
   # SCOPE
   scope :removed_images, where(:is_removed => true)
   scope :avai_images, where(:is_removed => false)
-  scope :flagged, avai_images.joins('left join image_flags on images.id=image_flags.image_id')
-                      .where("image_flags.reported_by is not null AND images.is_removed = ?", false).readonly(false)
-  scope :un_flagged, avai_images.joins('left join image_flags on images.id=image_flags.image_id')
-                    .where("image_flags.reported_by is null AND images.is_removed = ?", false).readonly(false)
-  scope :joined_images, avai_images.joins('left join galleries as gall on gall.id=images.gallery_id')
-                  .joins('left join image_flags on images.id=image_flags.image_id').readonly(false)
+  
+  scope :flagged, avai_images.joins(
+      "LEFT JOIN image_flags ON images.id = image_flags.image_id"
+    ).where("image_flags.reported_by IS NOT NULL AND images.is_removed = ?", false).readonly(false)
+  
+  scope :un_flagged, avai_images.joins(
+      "LEFT JOIN image_flags ON images.id = image_flags.image_id"
+    ).where("image_flags.reported_by IS NULL AND images.is_removed = ?", false).readonly(false)
+    
+  scope :joined_images, avai_images.joins(
+      "LEFT JOIN galleries ON galleries.id = images.gallery_id"
+    ).joins("LEFT JOIN image_flags ON images.id = image_flags.image_id").readonly(false)
 
   scope :removed_or_flagged_images, joins(
       "JOIN image_flags ON images.id = image_flags.image_id"
     ).where("image_flags.reported_by IS NOT NULL OR images.is_removed = ?", true).readonly(false)
 
-  scope :public_images, joined_images.where("galleries.permission = ? AND image_flags.reported_by IS NULL",
-                                            Gallery::PUBLIC_PERMISSION)
+  scope :public_images, joined_images.where(
+    "galleries.permission = ? AND image_flags.reported_by IS NULL AND images.is_removed = ?",
+    Gallery::PUBLIC_PERMISSION, false)
+                                            
   scope :promoted_images, where("promote_num > ?", 0)
 
   # Paperclip
@@ -90,19 +98,22 @@ class Image < ActiveRecord::Base
         SharedMethods::Converter::SearchStringConverter.process_special_chars(params[:query]),
         :star => true,
         :page => paging_info.page_id,
-        :per_page => paging_info.page_size )
+        :per_page => paging_info.page_size)
     end
 
     def get_all_images_with_current_user(params, current_user)
-        paging_info = parse_paging_options(params, {:sort_criteria => "images.promote_num DESC, images.likes DESC"})
-        joined_images.where("gall.permission = 'public'
-                            AND (gall.user_id = #{current_user.id}
-                            OR image_flags.reported_by is null)")
-                      .paginate(
-                            :page => paging_info.page_id,
-                            :per_page => paging_info.page_size,
-                            :order => paging_info.sort_string)
-
+        paging_info = parse_paging_options(params, 
+          {:sort_criteria => "images.promote_num DESC, images.likes DESC, images.updated_at DESC"})
+        
+        self.joined_images.where(
+          "gall.permission = 'public'
+          AND (gall.user_id = ? 
+          OR image_flags.reported_by is null)", 
+          current_user.id
+        ).paginate(
+          :page => paging_info.page_id,
+          :per_page => paging_info.page_size,
+          :order => paging_info.sort_string)
     end
 
     def load_images(params = {})
@@ -111,8 +122,7 @@ class Image < ActiveRecord::Base
         self.includes(:gallery).paginate(
           :page => paging_info.page_id,
           :per_page => paging_info.page_size,
-          :order => paging_info.sort_string
-        )
+          :order => paging_info.sort_string)
       end
 
       case params[:sort_field]
@@ -143,20 +153,17 @@ class Image < ActiveRecord::Base
       }).select("DISTINCT images.*, orders_data.orders_count").paginate(
         :page => paging_info.page_id,
         :per_page => paging_info.page_size,
-        :order => paging_info.sort_string
-      )
+        :order => paging_info.sort_string)
     end
 
     def load_popular_images(params = {}, current_user = nil)
       paging_info = parse_paging_options(params, {:sort_criteria => "images.promote_num DESC, images.likes DESC"})
       # TODO: calculate the popularity of the images: base on how many times an image is "liked".
       self.includes(:gallery).joins([:gallery]).
-        where("galleries.permission = ?", Gallery::PUBLIC_PERMISSION)
-        .paginate(
+        where("galleries.permission = ?", Gallery::PUBLIC_PERMISSION).paginate(
           :page => paging_info.page_id,
           :per_page => paging_info.page_size,
-          :order => paging_info.sort_string
-        )
+          :order => paging_info.sort_string)
     end
 
     def exposed_methods

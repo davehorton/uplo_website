@@ -1,4 +1,5 @@
-- can_promote = (current_user.is_admin? && !@image.is_promoted?)
+- can_promote = can_promote_image?(@image)
+
 - content_for :head do
   = stylesheet_link_tag('scss/new_image.css', 'scss/sale.css')
   - if can_promote
