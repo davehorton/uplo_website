@@ -381,7 +381,7 @@ class Image < ActiveRecord::Base
       if !User.exists? user_id
         result[:msg] = "User does not exist anymore"
       elsif !ImageLike.exists?({:image_id => self.id, :user_id => user_id})
-        result[:msg] = "This image has been disliked"
+        result[:msg] = "This image has been unliked"
       else
         img_like = ImageLike.find_by_image_id self.id, :conditions => {:user_id => user_id}
         img_like.destroy

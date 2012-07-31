@@ -363,15 +363,39 @@ class User < ActiveRecord::Base
     return result
   end
 
-  def raw_total_sales(image_paging_params = {})
-    paging_info = Image.paging_options(image_paging_params, {:sort_criteria => "images.updated_at DESC"})
+#===============================================================================
+# Description:
+# - get saled ($) and saled quantity of each images
+# - sort by highest saled ($)
+# Note:
+#===============================================================================
+  def raw_sales(paging_params = {})
+    paging_info = Image.parse_paging_options(paging_params)
     images = Image.paginate(
       :page => paging_info.page_id,
       :per_page => paging_info.page_size,
-      :joins => "LEFT JOIN galleries ON galleries.id = images.gallery_id",
-      :conditions => ["galleries.permission = ? and galleries.user_id = ?", Gallery::PUBLIC_PERMISSION, self.id],
-      :order => paging_info.sort_string) # need sort by order date
-
+      :select => ' img.*, purchased_items.saled AS saled,
+                   purchased_items.saled_quantity AS saled_quantity',
+      :from => "
+        ( SELECT    images.*
+          FROM      images
+          LEFT JOIN galleries ON galleries.id = images.gallery_id
+          WHERE     galleries.user_id = #{ self.id })
+        AS img",
+      :joins => "
+        LEFT JOIN
+          ( SELECT    l.image_id AS image_id,
+                      SUM(l.quantity *(l.tax+l.price)) AS saled,
+                      SUM(l.quantity) AS saled_quantity
+            FROM      line_items AS l
+            LEFT JOIN orders ON orders.id = l.order_id
+            WHERE     orders.transaction_status = '#{ Order::TRANSACTION_STATUS[:complete] }'
+            GROUP BY  l.image_id )
+        AS purchased_items
+        ON purchased_items.image_id = img.id",
+      :order => "(CASE WHEN purchased_items.saled IS NULL THEN 0 ELSE 1 END) desc,
+                 purchased_items.saled DESC, img.name ASC"
+    )
     return images
   end
 

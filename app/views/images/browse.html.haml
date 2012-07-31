@@ -34,7 +34,7 @@
                   %input.not-implement{:type => "button", :value => "Comment"}
               %li
                 %div
-                  - liked_label = @dislike ? "Dislike" : "Like"
+                  - liked_label = @dislike ? "Unlike" : "Like"
                   - liked_url = url_for(:controller => 'images', :action => 'switch_liked', :id => params[:id], :dislike => @dislike)
                   = button_to_function liked_label, "update_liked()", :class => "like", :data => {:url => liked_url, :dislike => @dislike, :id => params[:id]}
               %li
@@ -119,7 +119,7 @@
             $(".button-container .like").attr('value', "Like");
           }else{
             dislike = "true";
-            $(".button-container .like").attr('value', "Dislike");
+            $(".button-container .like").attr('value', "Unlike");
           }
 
           liked_url = "/images/switch_like/" + id + "?dislike=" + dislike;

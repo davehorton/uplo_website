@@ -15,7 +15,7 @@ class SalesController < ApplicationController
 
   def year_sales
     user = current_user
-    @sales = user.raw_total_sales(@filtered_params)
+    @sales = user.raw_sales(@filtered_params)
     @monthly_sales = user_monthly_sales(@sales)
     @year_sales = user_year_sales(@monthly_sales)
   end
