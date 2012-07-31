@@ -374,8 +374,8 @@ class User < ActiveRecord::Base
     images = Image.paginate(
       :page => paging_info.page_id,
       :per_page => paging_info.page_size,
-      :select => ' img.*, purchased_items.saled AS saled,
-                   purchased_items.saled_quantity AS saled_quantity',
+      :select => ' img.*, purchased_items.saled AS sales,
+                   purchased_items.saled_quantity AS quantity_sales',
       :from => "
         ( SELECT    images.*
           FROM      images
@@ -397,6 +397,24 @@ class User < ActiveRecord::Base
                  purchased_items.saled DESC, img.name ASC"
     )
     return images
+  end
+
+#===============================================================================
+# Description:
+# - get sales of all images over months
+# - report over nearest 12 months from report date
+# Note:
+#===============================================================================
+  def monthly_sales(report_date=Time.now)
+    result = []
+    date = DateTime.parse report_date.to_s
+    prior_months = SharedMethods::TimeCalculator.prior_year_period(date, {:format => '%b'})
+    prior_months.each { |mon|
+      total_sales = 0
+      self.images.each { |img| total_sales += img.total_sales(mon) }
+      result << { :month => mon, :sales => total_sales }
+    }
+    return result
   end
 
   def total_sales(image_paging_params = {})

@@ -14,37 +14,19 @@ class SalesController < ApplicationController
   end
 
   def year_sales
-    user = current_user
-    @sales = user.raw_sales(@filtered_params)
-    @monthly_sales = user_monthly_sales(@sales)
-    @year_sales = user_year_sales(@monthly_sales)
+    @sales = current_user.raw_sales(@filtered_params)
+    @monthly_sales = current_user.monthly_sales(Time.now)
+    @year_sales = total_sales(@monthly_sales)
   end
 
   protected
-
   def set_current_tab
     @current_tab = "sales"
   end
 
-  def user_monthly_sales(sales)
-    result = []
-    date = DateTime.parse Time.now.to_s
-    prior_months = TimeCalculator.prior_year_period(date, {:format => '%b'})
-    prior_months.each { |mon|
-      total_sales = 0
-      sales.each { |img|
-        total_sales += img.total_sales(mon);
-      }
-      result << {:month => mon, :sales => total_sales}
-    }
-    return result
-  end
-
-  def user_year_sales(sales)
+  def total_sales(sales)
     rs = 0
-    sales.each { |sale|
-      rs += sale[:sales]
-    }
+    sales.each { |sale| rs += sale[:sales] }
     return rs
   end
 end
