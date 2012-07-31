@@ -20,13 +20,9 @@ class SalesController < ApplicationController
   end
 
   protected
-  def set_current_tab
-    @current_tab = "sales"
-  end
-
-  def total_sales(sales)
-    rs = 0
-    sales.each { |sale| rs += sale[:sales] }
-    return rs
-  end
+    def total_sales(sales)
+      rs = 0
+      sales.each { |sale| rs += sale[:sales] }
+      return rs
+    end
 end

@@ -22,7 +22,7 @@ class ApplicationController < ActionController::Base
   def render_banned_message
     render :file => "public/banned_user.html", :status => :unauthorized, :layout => false
   end
-  
+
   def push_redirect
     session[:back_url] = request.env["HTTP_REFERER"]
   end
@@ -38,44 +38,43 @@ class ApplicationController < ActionController::Base
   end
 
   protected
-
-  def set_current_tab
-    "please override this method in your sub class"
-    # @current_tab = "home"
-  end
-
-  # You can override this method in the sub class.
-  def default_page_size
-    PAGE_SIZE
-  end
-
-  def filtered_params
-    @filtered_params
-  end
-  
-  def filter_params
-    # TODO: filter paging info and other necessary parameters.
-    @filtered_params = params
-    @filtered_params = @filtered_params.symbolize_keys
-    # Check the page_size params.
-    if @filtered_params[:page_size].to_i <= 0
-      @filtered_params[:page_size] = default_page_size
-    elsif @filtered_params[:page_size].to_i > MAX_PAGE_SIZE
-      @filtered_params[:page_size] = MAX_PAGE_SIZE
+    def set_current_tab
+      "please override this method in your sub class"
+      # @current_tab = "home"
     end
 
-    unless @filtered_params[:lang].blank?
-      I18n.locale = @filtered_params[:lang]
-    else
-      I18n.locale = :en
+    # You can override this method in the sub class.
+    def default_page_size
+      PAGE_SIZE
     end
 
-    return @filtered_params
-  end
-  
-  def check_banned_user
-    if current_user && (current_user.is_banned? && current_user.is_removed?)
-      render_banned_message
+    def filtered_params
+      @filtered_params
     end
-  end
+
+    def filter_params
+      # TODO: filter paging info and other necessary parameters.
+      @filtered_params = params
+      @filtered_params = @filtered_params.symbolize_keys
+      # Check the page_size params.
+      if @filtered_params[:page_size].to_i <= 0
+        @filtered_params[:page_size] = default_page_size
+      elsif @filtered_params[:page_size].to_i > MAX_PAGE_SIZE
+        @filtered_params[:page_size] = MAX_PAGE_SIZE
+      end
+
+      unless @filtered_params[:lang].blank?
+        I18n.locale = @filtered_params[:lang]
+      else
+        I18n.locale = :en
+      end
+
+      return @filtered_params
+    end
+
+    def check_banned_user
+      if current_user && (current_user.is_banned? && current_user.is_removed?)
+        render_banned_message
+      end
+    end
 end

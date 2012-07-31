@@ -17,7 +17,6 @@ Uplo::Application.routes.draw do
   get "spotlight", :to => "home#spotlight"
   get "intro", :to => "home#intro"
   get 'friends', :to => 'home#friends_feed'
-  get "popular", :to => "home#popular"
   get "back", :to => "application#redirect_back"
   get "my_account", :to => "users#profile"
   get "my_account/edit", :to => "users#edit"
@@ -74,7 +73,6 @@ Uplo::Application.routes.draw do
     get 'public_images', :to => 'images#public_images'
     get 'images/search', :to => 'images#search'
     get 'images/delete/:id', :to => 'images#destroy'
-    get 'images/list', :to => 'images#list'
     get 'images/load_image', :to => 'images#get_image_data'
     put 'filter_status', :to => 'images#get_filter_status'
     resources :images
@@ -113,7 +111,7 @@ Uplo::Application.routes.draw do
         post :reinstate_all
         post :remove_all
       end
-      
+
       member do
         post :reinstate_user
         post :remove_user

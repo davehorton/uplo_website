@@ -5,6 +5,7 @@ class ImagesController < ApplicationController
   skip_authorize_resource :only => :public
   include ::SharedMethods::Converter
   helper :galleries
+  layout 'main'
 
   def mail_shared_image
     emails = params[:email]['emails'].split(',')
@@ -19,23 +20,6 @@ class ImagesController < ApplicationController
         @images = @gallery.images.avai_images.load_images(@filtered_params)
       else
         @images = @gallery.images.un_flagged.load_images(@filtered_params)
-      end
-
-      if request.xhr?
-        @images = @images.map { |image|
-          { :name => image.name,
-            :description => image.description,
-            :size => image.data_file_size,
-            :url => image.data.url,
-            :thumbnail_url => image.data(:thumb),
-            :delete_url => "/galleries/#{@gallery.id}/images/delete/#{image.id}",
-            :edit_url => url_for(:controller => 'images', :action => 'show', :id => image.id),
-            :image_id => image.id
-          }
-        }
-        return render :json => @images
-      else
-        render :template => 'images/index_new', :layout => 'main'
       end
     end
   end
@@ -72,6 +56,7 @@ class ImagesController < ApplicationController
     if find_gallery!
       @images = @gallery.images.load_popular_images(@filtered_params, current_user)
     end
+    render :layout => 'application'
   end
 
   def get_image_data
@@ -129,14 +114,6 @@ class ImagesController < ApplicationController
     render :json => result, :content_type => 'text/plain'
   end
 
-  def list
-    if find_gallery!
-      @images = @gallery.images.load_images(@filtered_params)
-      @page_id = @filtered_params[:page_id].nil? ? 1 : @filtered_params[:page_id]
-      @page_size = @filtered_params[:page_size]
-    end
-  end
-
   def switch_liked
     image = Image.find_by_id(params[:id])
     dislike = SharedMethods::Converter.Boolean(params[:dislike])
@@ -157,8 +134,7 @@ class ImagesController < ApplicationController
   # GET images/:id/slideshow
   # params: id => Image ID
   def show
-    redirect_list = [ url_for(:controller=>"images", :action=>"list", :only_path => false),
-                      url_for(:controller=>"images", :action=>"index", :only_path => false)]
+    redirect_list = [ url_for(:controller=>"images", :action=>"index", :only_path => false)]
     push_redirect if redirect_list.index(request.env["HTTP_REFERER"])
     # get selected Image
     @selected_image = Image.find_by_id(params[:id])
@@ -168,6 +144,7 @@ class ImagesController < ApplicationController
     # get Gallery
     @images = @selected_image.gallery.images.all(:order => 'id')
     # get Images belongs Gallery
+    render :layout => 'application'
   end
 
   def get_flickr_authorize
@@ -239,8 +216,6 @@ class ImagesController < ApplicationController
 
     # Increase page view
     @image.increase_pageview
-
-    render :template => "images/browse_new", :layout => "main"
   end
 
   def public
@@ -366,7 +341,6 @@ class ImagesController < ApplicationController
     else
       @line_item = LineItem.find_by_id params[:line_item]
     end
-    render :template => "images/order_new", :layout => "main"
   end
 
   def show_pricing
@@ -403,71 +377,60 @@ class ImagesController < ApplicationController
   end
 
   protected
-
-  def set_current_tab
-    tab = "galleries"
-    browse_actions = ["browse", "order", "public_images"]
-    unless browse_actions.index(params[:action]).nil?
-      tab = "browse"
+    def default_page_size
+      actions = ['index']
+      if params[:action] == 'create'
+        size = 10
+      elsif actions.index(params[:action]) == nil
+        size = 12
+      else
+        size = 24
+      end
+      return size
     end
 
-    @current_tab = tab
-  end
-
-  def default_page_size
-    actions = ['index']
-    if params[:action] == 'create'
-      size = 10
-    elsif actions.index(params[:action]) == nil
-      size = 12
-    else
-      size = 24
+    def find_gallery
+      @gallery = Gallery.find_by_id(params[:gallery_id])
     end
-    return size
-  end
 
-  def find_gallery
-    @gallery = Gallery.find_by_id(params[:gallery_id])
-  end
-
-  def find_gallery!
-    self.find_gallery
-    if @gallery.blank?
-      render_not_found
-      return false
-    elsif !@gallery.can_access?(current_user) ||
-          (!@gallery.is_owner?(current_user) && %w(edit update destroy create list).include?(params[:action]))
-      render_unauthorized
-      return false
+    def find_gallery!
+      self.find_gallery
+      if @gallery.blank?
+        render_not_found
+        return false
+      elsif !@gallery.can_access?(current_user) ||
+            (!@gallery.is_owner?(current_user) && %w(edit update destroy create list).include?(params[:action]))
+        render_unauthorized
+        return false
+      end
+      @gallery
     end
-    @gallery
-  end
 
-  def push_to_uplo_photoset(image_id)
-    image = Image.find_by_id image_id
-    image_data = Magick::Image.read(image.data.url(:medium)).first
-    image_tmp_path = "#{Rails.root}/tmp/#{image.name}"
-    image_data.write image_tmp_path
-    photo_id = flickr.upload_photo image_tmp_path, :title => image.name, :description => "#{image.description} \ndetail at <a href='#{url_for(:controller => 'images', :action => 'browse', :id => image_id)}'>UPLO"
-    photosets = flickr.photosets.getList
-    photosets.each do |photoset|
-      if photoset['title'] == 'UPLO'
-        flickr.photosets.addPhoto :photoset_id => photoset['id'], :photo_id => photo_id
-        flickr.photosets.setPrimaryPhoto :photoset_id => photoset['id'], :photo_id => photo_id
-        return true
+    def push_to_uplo_photoset(image_id)
+      image = Image.find_by_id image_id
+      image_data = Magick::Image.read(image.data.url(:medium)).first
+      image_tmp_path = "#{Rails.root}/tmp/#{image.name}"
+      image_data.write image_tmp_path
+      photo_id = flickr.upload_photo image_tmp_path, :title => image.name, :description => "#{image.description} \ndetail at <a href='#{url_for(:controller => 'images', :action => 'browse', :id => image_id)}'>UPLO"
+      photosets = flickr.photosets.getList
+      photosets.each do |photoset|
+        if photoset['title'] == 'UPLO'
+          flickr.photosets.addPhoto :photoset_id => photoset['id'], :photo_id => photo_id
+          flickr.photosets.setPrimaryPhoto :photoset_id => photoset['id'], :photo_id => photo_id
+          return true
+        end
+      end
+      flickr.photosets.create(:title => 'UPLO', :description => "from <a href='#{DOMAIN}'>UPLO</a>", :primary_photo_id => photo_id)
+      return true
+    end
+
+    def detect_device
+      if is_mobile_device? && params[:action]=='public' && (params[:web_default].nil? || params[:web_default]==false)
+        @type = 'image'
+        @id = params[:id]
+        return render :template => 'shared/device_request', :layout => nil
+      else
+        request.formats.unshift Mime::HTML
       end
     end
-    flickr.photosets.create(:title => 'UPLO', :description => "from <a href='#{DOMAIN}'>UPLO</a>", :primary_photo_id => photo_id)
-    return true
-  end
-
-  def detect_device
-    if is_mobile_device? && params[:action]=='public' && (params[:web_default].nil? || params[:web_default]==false)
-      @type = 'image'
-      @id = params[:id]
-      return render :template => 'shared/device_request', :layout => nil
-    else
-      request.formats.unshift Mime::HTML
-    end
-  end
 end

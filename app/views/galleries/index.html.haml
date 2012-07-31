@@ -1,32 +1,150 @@
 - content_for :head do
-  = javascript_include_tag("lib/jail.min.js")
-  = javascript_include_tag("app/gallery.js")
-  
-.galleries
-  = render(:partial => "add_gallery", :locals => {:gallery => @gallery}) unless @gallery.nil?
-  .galleries-wrapper.clearfix
-    - if @galleries.blank?
-      .empty-data= "There is no gallery. Let create one."
-    - else
-      - count = 0
-      - @galleries.each do |gallery|
-        .gallery-container{:id => "gallery-container-#{gallery.id}"}
-          %a.gallery-image{:href => gallery_images_path(gallery)}
-            %span.gallery-link.default
-              = async_image_tag(gallery_cover_image_url(gallery), :class => "gallery-cover-image")
-          .gallery-info
-            .name{:title => gallery.name}=raw gallery.name
-            .photo-number= (gallery.images.length > 0 ? pluralize(gallery.images.length, "image") : "No image")
-            .update-time= "Last updated: #{gallery.updated_at_string}"
-            .permission= gallery.permission_string.titleize
-        
-        - count = count + 1
-        - if (count % 2 == 0)
-          .separator.clearfix
-      
+  = javascript_include_tag "lib/jail.min.js", 'lib/jquery.ui.position.js', 'lib/jquery.contextMenu.js'
+  = javascript_include_tag 'app/gallery.js'
+  = stylesheet_link_tag "scss/new_image.css", 'jquery.contextMenu.css'
+
+- content_for :top_content do
+  .text.black.bold.font16.line12.left{ :style => 'margin-top:10px;' } My Galleries
+  %a#new-gallery.right{ :href => '/galleries/new' }
+
+.images-wrapper.wrapper.left
+  #gallery-form-container.clearfix.hidden{:style => "display: none"}
+    = render(:partial => "form", :locals => {:gallery => @gallery})
+
+  - if @galleries.blank?
+    .empty-data= "There is no gallery. Let create one."
+  - else
+    - (0...@galleries.length). each do |idx|
+      - gallery = @galleries[idx]
+      - additional_class = (idx%6 == 0) ? "no-padding-left" : ((idx%6==5) ? "no-padding-right" : "")
+      .gallery-container.left{ :id => "gallery-container-#{gallery.id}", :class => "#{additional_class}" }
+        %a.image-container.thumb{ :href => gallery_images_path(gallery), :title=>"#{gallery.name}" }
+          = async_image_tag(gallery_cover_image_url(gallery), :class => "gallery-cover-image image thumb")
+        .gallery-info.text.font11.line16.clear
+          .text.black.bold.name{:title => gallery.name}=raw gallery.name.truncate(25)
+          .text.gray.photo-number= (gallery.images.un_flagged.length > 0 ? pluralize(gallery.images.un_flagged.length, "Image") : "No Image")
+          .text.gray.update-time= "Last Updated: #{gallery.updated_at_string}"
+          .text.fuzzy-gray.permission= gallery.permission_string.titleize
+          %a.share-link.text.normal{ :id => "share-context-menu-#{gallery.id}", :href=>'#', :data => { :public_url => "#{gallery.public_link}", :cover_url => "#{gallery_cover_image_url(gallery)}", :email_url => "#{ url_for(:controller => 'galleries', :action => 'mail_shared_gallery', :gallery_id => gallery.id) }", :gallery_name => "#{gallery.name.truncate(20)}", :gallery_user => "#{gallery.user.username.truncate(15)}" } } Share
   = render_pagination(@galleries, {:controller => "galleries", :action => params[:action]})
 
-:erb
-  <script type="text/javascript">
-    gallery.setup();
-  </script>
+#email-sharing-popup.left.hide
+  .header.left
+    .email-icon.left
+    .text.bold.left Share Via Email
+    %a.close{:href=>'#'}
+      .right{:onclick => "$('#social-sharing').hasClass('hide');"} &times;
+  .main.right
+    #preview.left
+      .image-container.thumb
+        / # = image_tag @image.data.url(:thumb), :class => 'image thumb'
+      #name.text.bold.clear
+        / = @image.name.truncate(20)
+      #username.text.fuzzy.clear
+        / = "by #{ @image.username.truncate(15) }"
+    #info.right
+      .text.bold{ :style => 'margin-top:-4px;' } Email Address
+      = simple_form_for(:email, :method => 'post', :class => 'left', :html => { :id => 'email-details' }) do |f|
+        = f.input :emails, :label => false, :required => true, :as => :string
+        = f.input :message, :as => :text, :label => false, :required => false
+        #button-container.right
+          #btn-send.button.send.left
+          #btn-cancel.button.cancel.left
+
+- content_for :js do
+  = javascript_tag do
+    :erb
+      gallery.setup();
+
+      $('#email-sharing-popup .close').click(function(){
+        $.modal.close();
+      });
+      $('#btn-cancel').click(function(){
+        $.modal.close();
+      });
+      $('#btn-send').click(function(){
+        var emails = $('#email_emails').val().split(',');
+        var reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+        for(var i=0; i < emails.lenght; i++){
+          if( !reg.test(emails[i].trim()) ){
+            alert('Please enter an email address!');
+            return false;
+          }
+        }
+        $('#email-details').submit();
+      });
+
+      $('#btn-gallery-cancel').click(function(){
+        $('#gallery-form-container').addClass('hidden');
+      });
+      $('#btn-gallery-save').click(function(){
+        $('#frm-edit-gallery').submit();
+      });
+
+      $(function(){
+        $.contextMenu({
+          selector: '.share-link',
+          trigger: 'left',
+          ignoreRightClick: true,
+          items: {
+            "email": {
+              name: "Share via Email",
+              icon: "email",
+              callback: function(key, opt){
+                window.selected_gallery = $(this);
+                $('#email-sharing-popup').modal({
+                  onShow: function(dialog) {
+                    if(window.selected_gallery != null) {
+                      var action_url = window.selected_gallery.attr('data-email_url');
+                      var cover_image = window.selected_gallery.attr('data-cover_url');
+                      var img = document.createElement('img');
+                      img.classList.add('image');
+                      img.classList.add('thumb');
+                      $(img).attr('src', cover_image);
+                      $('#preview .image-container.thumb').append(img);
+                      $('#name')[0].innerHTML = window.selected_gallery.attr('data-gallery_name');
+                      $('#username')[0].innerHTML = 'by ' + window.selected_gallery.attr('data-gallery_user');
+                      $('#email-details').attr('action', action_url);
+                    }
+                  }
+                });
+              }
+            },
+            "facebook": {
+              name: "Share on Facebook",
+              icon: "facebook",
+              callback: function(key, opt, e){
+                url = 'http://www.facebook.com/sharer.php?u=' + $(this).attr('data-public_url');
+                window.open(url,'_blank');
+              }
+            },
+            "twitter": {
+              name: "Share on Twitter",
+              icon: "twitter",
+              callback: function(key, opt, e){
+                public_url = encodeURIComponent($(this).attr('data-public_url'));
+                url = 'http://twitter.com/share?url=' + public_url + '&text=' + encodeURIComponent('from UPLO');
+                window.open(url,'_blank');
+              }
+            },
+            "tumblr": {
+              name: "Share on Tumblr",
+              icon: "tumblr",
+              callback: function(key, opt, e){
+                cover_url = encodeURIComponent($(this).attr('data-cover_url'));
+                public_url = encodeURIComponent($(this).attr('data-public_url'));
+                url = 'http://www.tumblr.com/share/photo?source=' + cover_url + '&caption=' + encodeURIComponent('from UPLO') + '&clickthru=' + public_url;
+                window.open(url,'_blank');
+              }
+            },
+            "pinterest": {
+              name: "Share on Pinterest",
+              icon: "pinterest",
+              callback: function(key, opt, e){
+                url = $(this).attr('data-public_url');
+                alert('This feature is coming soon.');
+              }
+            }
+          }
+        });
+      });

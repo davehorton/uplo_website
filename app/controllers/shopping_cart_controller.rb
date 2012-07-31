@@ -104,56 +104,52 @@ class ShoppingCartController < ApplicationController
   end
 
   protected
-  # The member may or may not be logged in.
-  # If the member is not logged in, get the cart from the session.
-  # Otherwise, get it from the logged in member's member record.
-  def get_cart
-    unless current_user.nil?
-      @cart = current_user.init_cart
-    else
-      @cart = init_cart
-    end
-  end
-
-  def init_cart
-    @cart = Cart.find_by_id(session[:cart]) if session[:cart]
-    if @cart.blank?
-      if current_user.cart.blank?
-        @cart = Cart.new({:user => current_user})
+    # The member may or may not be logged in.
+    # If the member is not logged in, get the cart from the session.
+    # Otherwise, get it from the logged in member's member record.
+    def get_cart
+      unless current_user.nil?
+        @cart = current_user.init_cart
       else
-        @cart = current_user.cart
+        @cart = init_cart
       end
+    end
 
-      if @cart.order.blank?
+    def init_cart
+      @cart = Cart.find_by_id(session[:cart]) if session[:cart]
+      if @cart.blank?
+        if current_user.cart.blank?
+          @cart = Cart.new({:user => current_user})
+        else
+          @cart = current_user.cart
+        end
+
+        if @cart.order.blank?
+          @cart.order = current_user.recent_empty_order
+        end
+
+        if @cart.changed?
+          @cart.save
+        end
+
+        session[:cart] = @cart.id
+      elsif @cart.order.blank?
         @cart.order = current_user.recent_empty_order
-      end
-
-      if @cart.changed?
         @cart.save
       end
 
-      session[:cart] = @cart.id
-    elsif @cart.order.blank?
-      @cart.order = current_user.recent_empty_order
-      @cart.save
+      return @cart
     end
 
-    return @cart
-  end
+    def valid_item?(hash)
+      required_fields = ["plexi_mount", "size", "moulding", "quantity"]
+      required_fields.each { |k| return false if hash.has_key?(k)==false }
+      if hash["quantity"] =~ /^\d*$/
+        return false if hash["quantity"].to_i<=0
+      else
+        return false
+      end
 
-  def valid_item?(hash)
-    required_fields = ["plexi_mount", "size", "moulding", "quantity"]
-    required_fields.each { |k| return false if hash.has_key?(k)==false }
-    if hash["quantity"] =~ /^\d*$/
-      return false if hash["quantity"].to_i<=0
-    else
-      return false
+      return true
     end
-
-    return true
-  end
-
-  def set_current_tab
-    @current_tab = "browse"
-  end
 end

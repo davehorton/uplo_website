@@ -6,6 +6,7 @@ class PaymentsController < ApplicationController
 
   include ActiveMerchant::Billing::Integrations
   include CartsHelper
+  layout 'main'
 
   def index
     @pp_payment = Payment.create_paypal_test
@@ -131,7 +132,6 @@ class PaymentsController < ApplicationController
 #      flash[:warn] = params[:msg]
 #    end
     @transaction_id = params[:trans_id]
-    render :layout => 'main'
   end
 
   def pp_gateway
@@ -200,19 +200,14 @@ class PaymentsController < ApplicationController
   end
 
   protected
-
-  def set_current_tab
-    @current_tab = "browse"
-  end
-
-  def finalize_cart
-    if find_cart
-      @order = @cart.order
-      @order.status = Order::STATUS[:complete]
-      @order.transaction_status = Order::TRANSACTION_STATUS[:complete]
-      @order.save
-      session[:cart] = nil
-      @cart.destroy if @cart
+    def finalize_cart
+      if find_cart
+        @order = @cart.order
+        @order.status = Order::STATUS[:complete]
+        @order.transaction_status = Order::TRANSACTION_STATUS[:complete]
+        @order.save
+        session[:cart] = nil
+        @cart.destroy if @cart
+      end
     end
-  end
 end

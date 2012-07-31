@@ -3,11 +3,12 @@ class GalleriesController < ApplicationController
   before_filter :detect_device
   before_filter :authenticate_user!, :except => [:public]
   skip_authorize_resource :only => [:public]
+  layout 'main'
 
   def public
     @gallery = Gallery.find_by_id params[:gallery_id]
     @author = @gallery.user
-    @images = @gallery.un_flagged.load_popular_images(@filtered_params)
+    @images = @gallery.images.un_flagged.load_popular_images(@filtered_params)
     render :layout => "public", :formats => 'html'
   end
 
@@ -21,7 +22,6 @@ class GalleriesController < ApplicationController
   def index
     @galleries = current_user.galleries.load_galleries(@filtered_params)
     @gallery = Gallery.new
-    render :template => 'galleries/index_new', :layout => 'main'
   end
 
   def show_public
@@ -54,6 +54,7 @@ class GalleriesController < ApplicationController
 
     @no_async_image_tag = true
     @galleries = Gallery.search params[:query], :star => true, :page => params[:page_id], :per_page => default_page_size, :with => with_condition
+    render :layout => 'application'
   end
 
   def new
@@ -86,9 +87,7 @@ class GalleriesController < ApplicationController
       @gallery = Gallery.find_by_id params[:gallery_id]
     end
 
-    if @gallery.nil?
-      render :layout => 'main'
-    else
+    if !@gallery.nil?
       @images = @gallery.images.un_flagged.load_images(@filtered_params)
       if request.xhr?
         pagination = render_to_string :partial => 'shared/pagination',
@@ -102,8 +101,6 @@ class GalleriesController < ApplicationController
         render :json => { :items => items, :pagination => pagination, :edit_popup => edit_popup,
           :delete_url => url_for(:action => 'destroy', :id => @gallery.id),
           :upload_url => url_for(:controller => 'images', :action => 'create', :gallery_id => @gallery.id) }
-      else
-        render :layout => 'main'
       end
     end
   end
@@ -148,52 +145,40 @@ class GalleriesController < ApplicationController
   end
 
   protected
-
-  def set_current_tab
-    tab = "galleries"
-
-    browse_actions = ["search_public", "show_public"]
-    unless browse_actions.index(params[:action]).nil?
-      tab = "browse"
+    def default_page_size
+      actions = ['edit_images']
+      if actions.index(params[:action])
+        size = 10
+      else
+        size = 12
+      end
+      return size
     end
 
-    @current_tab = tab
-  end
-
-  def default_page_size
-    actions = ['edit_images']
-    if actions.index(params[:action])
-      size = 10
-    else
-      size = 12
+    def find_gallery
+      @gallery = Gallery.find_by_id(params[:id])
     end
-    return size
-  end
 
-  def find_gallery
-    @gallery = Gallery.find_by_id(params[:id])
-  end
-
-  def find_gallery!
-    self.find_gallery
-    if @gallery.blank?
-      render_not_found
-      return false
-    elsif !@gallery.can_access?(current_user) ||
-          (!@gallery.is_owner?(current_user) && %w(edit update destroy).include?(params[:action]))
-      render_unauthorized
-      return false
+    def find_gallery!
+      self.find_gallery
+      if @gallery.blank?
+        render_not_found
+        return false
+      elsif !@gallery.can_access?(current_user) ||
+            (!@gallery.is_owner?(current_user) && %w(edit update destroy).include?(params[:action]))
+        render_unauthorized
+        return false
+      end
+      @gallery
     end
-    @gallery
-  end
 
-  def detect_device
-    if is_mobile_device? && params[:action]=='public' && (params[:web_default].nil? || params[:web_default]==false)
-      @type = 'gallery'
-      @id = params[:gallery_id]
-      return render :template => 'shared/device_request', :layout => nil
-    else
-      request.formats.unshift Mime::HTML
+    def detect_device
+      if is_mobile_device? && params[:action]=='public' && (params[:web_default].nil? || params[:web_default]==false)
+        @type = 'gallery'
+        @id = params[:gallery_id]
+        return render :template => 'shared/device_request', :layout => nil
+      else
+        request.formats.unshift Mime::HTML
+      end
     end
-  end
 end

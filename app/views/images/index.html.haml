@@ -1,62 +1,43 @@
 - content_for :head do
   = javascript_include_tag("lib/jail.min.js")
   = javascript_include_tag("app/gallery.js")
+  = stylesheet_link_tag 'scss/new_image.css'
 
-.galleries.images
-  .gallery-header
-    - is_owner = @gallery.is_owner?(current_user)
-    %h2.gallery-name= @gallery.name
-    %span= "("
-    %span.gallery-permission
-      - if is_owner
-        %a{:href => "#"}= @gallery.permission_string
+- content_for :top_content do
+  .text.bold.font16.line12.left
+    %span.text.black My Gallery /
+    %span.text.gray= @gallery.name
+    - if !@gallery.is_owner?(current_user)
+      %span.text.fuzzy-gray= "From "
+      %span.text.fuzzy-gray
+        %a{:href => "#"}= @gallery.user.fullname
+  .text.black.bold.font12.line12.right
+    - if can_modify_gallery?(@gallery)
+      - if @images.blank?
+        - images_action = "Add Images"
       - else
-        = @gallery.permission_string
-    %span= ")"
-    - if !is_owner
-      %span.author-info
-        %span= "From "
-        %span.author-link
-          %a{:href => "#"}= @gallery.user.fullname
-    .description
-      = @gallery.description
+        - images_action = "Edit Images"
 
-  - if can_modify_gallery?(@gallery)
-    - if @images.blank?
-      - images_action = "Add Images"
-    - else
-      - images_action = "Edit Images"
+      .action-container
+        %a#edit-images{:href => "#{ url_for(:controller => 'galleries', :action => 'edit_images', :gallery_id => @gallery.id) }", :class => "ui-button-container icon-link"}= images_action
+        %span.saparator= "|"
+        %a#edit-gallery{:href => edit_gallery_path(@gallery), :class => "ui-button-container icon-link"} Edit Gallery
+        %span.saparator= "|"
+        = link_to("Delete Gallery", gallery_path(@gallery),
+                  :method => :delete,
+                  :class => "ui-button-container icon-link",
+                  :confirm => I18n.t("gallery.delete_confirm"))
 
-    .action-container
-      %a#edit-images{:href => gallery_images_list_path(:gallery_id => @gallery.id), :class => "ui-button-container icon-link"}
-        %span= images_action
-
-      %span.saparator= "|"
-      %a#edit-gallery{:href => edit_gallery_path(@gallery), :class => "ui-button-container icon-link"}
-        %span= "Edit Gallery"
-
-      %span.saparator= "|"
-      = link_to("Delete Gallery", gallery_path(@gallery),
-                :method => :delete,
-                :class => "ui-button-container icon-link",
-                :confirm => I18n.t("gallery.delete_confirm"))
-
-  #gallery-form-container.clearfix.round-box.hidden{:style => "display: none"}
-
-  .images-wrapper.clearfix
-    - if @images.blank?
-      .empty-data= "There is no image in this gallery. Please add image."
-    - else
-      - @images.each do |image|
-        .gallery-container.image-container{:id => "image-container-#{image.id}"}
-          - url = url_for(:controller => "images", :action => "show", :id => "#{image.id}")
-          %a.gallery-image{:href => "#{url}" }
-            %span.image-link.default
-              = async_image_tag(image.url(:thumb), :class => "image-thumb")
-
-  = render_pagination(@images, {:controller => "images", :action => params[:action], :gallery_id => @gallery.id})
+.images-wrapper.wrapper.left
+  #gallery-form-container.clearfix.hidden{:style => "display: none"}
+  - if @images.blank?
+    .empty-data= 'There is no image in this gallery. Please add image.'
+  - else
+    = render :partial => 'shared/photos_template', :locals => { :images => @images, :photos_per_line => 6, :photo_size => 'thumb' }
+= render_pagination(@images, {:controller => "images", :action => params[:action], :gallery_id => @gallery.id})
 
 :erb
   <script type="text/javascript">
     gallery.setup();
   </script>
+
