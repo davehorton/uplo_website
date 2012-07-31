@@ -401,16 +401,18 @@ class Image < ActiveRecord::Base
   def total_sales(mon = nil) # mon with year, return saled $$
     total = 0
 
-    if mon.nil?
+    if mon.blank?
       orders = self.orders.where({:transaction_status => Order::TRANSACTION_STATUS[:complete]})
     else
       start_date = DateTime.parse("01 #{mon}")
-      end_date = TimeCalculator.last_day_of_month(start_date.mon, start_date.year).strftime("%Y-%m-%d %T")
+      end_date = TimeCalculator.last_day_of_month(start_date.mon, start_date.year).end_of_day
+      end_date = end_date.strftime("%Y-%m-%d %T")
       start_date = start_date.strftime("%Y-%m-%d %T")
-      orders = self.orders.where "transaction_status ='#{Order::TRANSACTION_STATUS[:complete]}' and transaction_date > '#{start_date.to_s}' and transaction_date < '#{end_date.to_s}'"
+      orders = self.orders.where "transaction_status ='#{Order::TRANSACTION_STATUS[:complete]}'
+        and transaction_date > '#{start_date.to_s}' and transaction_date < '#{end_date.to_s}'"
     end
 
-    orders_in = orders.collect { |o| o.id }
+    orders_in = orders.collect &:id
     saled_items = (orders.length==0) ? [] : self.line_items.where("order_id in (#{orders_in.join(',')})")
     saled_items.each { |item| total += (item.price + item.tax)*item.quantity }
     return total

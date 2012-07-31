@@ -208,7 +208,7 @@ class ImagesController < ApplicationController
   def browse
     push_redirect
     @image = Image.find_by_id(params[:id])
-    if @image.blank? || @image.is_removed? || (@image.image_flags.count > 0 && !@image.has_owner(current_user.id))
+    if @image.blank? || @image.is_removed? || (@image.image_flags.count > 0 && !@image.has_owner(current_user.id) && !current_user.is_admin)
       return render_not_found
     elsif @image.gallery && !@image.gallery.can_access?(current_user)
       return render_unauthorized
