@@ -1,29 +1,50 @@
-/ locals: text
-#flagged_image_popup
-  .image_container
-  .right_side
-    .image_name
-    %hr
-    .user_info_wrapper
-      .user_photo
-      .user_info
-        .first_line
-          By Cameron.moll
-        .second_line
-          .user_name
-            Cameron Moll
-          .items_number
-            583 Items
-     %hr
-     .flag_user_wrapper
-       .flag_info
-         Flagged 02/21/12 by <a href="#">usernamehere</a>
-       .flag_type
-     %hr
-     .flag_description
-       Specific description will be put here
-     %hr
-     .button_area
-       .button.reinstate.left
-       .button.remove.left
-       .button.cancel.right
+/ locals flag
+.left{:style => "background:white; width:auto; height:auto"}
+  .left{:style => "width:640px; height:400px; line-height:500px; background: url('#{flag.image.data.url(:medium)}') no-repeat; background-position:center"}
+  .main-panel.left
+    %div{:style => "background:white; width:100%; height:20px"}
+      .close.right{:style => "margin: 10px 10px 0 0;cursor: pointer;background: url('/assets/icon-close.png') no-repeat;width: 16px; height: 16px;"}
+    %div{:style => "background:white; width:100%; height:auto"}
+    #flagged_image_popup
+      .image_name.text.black.font18.bold
+        Photo Name Here
+      %hr
+      .user_info_wrapper
+        .user_photo.left
+          = image_tag flag.image.author.avatar_url, :width => "24px", :height => "24px"
+        .user_info.left
+          .first_line
+            By 
+            %a.text.black.font12.normal{ :href => "#{url_for(:controller => '/profiles', :action => 'show', :user_id => 2)}" } Cameron.moll
+      
+          %pr.second_line.font11.text
+            = flag.image.author.fullname
+            &nbsp;&nbsp;•&nbsp;&nbsp;
+            = pluralize(flag.image.author.images.avai_images.count, "item")
+        .clear
+            
+      %hr
+      .flag_user_wrapper
+        .flag_info.font12
+          = flag.created_at.strftime("%m/%d/%y") 
+          by
+          %a.text.black.font12.normal{:href => "#{url_for(:controller => '/profiles', :action => 'show', :user_id => flag.reporter.username)}"}
+            = flag.reporter.username
+        %p.flag_type
+          = (flag.flag_type == 1 ? "Terms of Use Violation" : (flag.flag_type == 2 ? "Copyright" : "Nudity"))
+      %hr
+      %br
+      .button_area
+        = button_to '', {:action => :reinstate_image, :image_id => flag.image.id}, method: :post, :confirm => 'Are you sure you want to reinstate this image?', :class=> "button reinstate_large left"
+        = button_to '', {:action => :remove_image, :image_id => flag.image.id}, confirm: 'Are you sure?', method: :delete, :class=> "button remove_large left", :confirm => 'Are you sure you want to remove this image?'
+        .button.cancel.right
+
+:erb
+  <script type="text/javascript">
+     $(".close").click(function(){
+       $.modal.close();
+     });
+     $(".cancel").click(function(){
+       $.modal.close();
+     });
+  </script>

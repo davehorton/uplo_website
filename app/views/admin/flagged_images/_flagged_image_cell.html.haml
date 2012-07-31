@@ -1,12 +1,11 @@
 / locals image, flag, flag_type
 .flagged_image_container
-  %a.image_frame{ :href => "#{url_for(:controller => '/images', :action => 'browse', :id => image.id)}" }
+  .image_frame{:target => flag.image.id, :href => "#{url_for(:controller => '/images', :action => 'browse', :id => image.id)}" }
     = image_tag image.data.url(:thumb), {:width => "155px", :height=> "155px"}
   .button_area.info_line
     .button.reinstate.left{:class => "button_#{image.id}"}
       = link_to '', {:action => :reinstate_image, :image_id => image.id}, method: :post, :style => "display:none", :confirm => 'Are you sure you want to reinstate this image?'
-    .button.remove.left{:class => "button_#{image.id}"}
-      = link_to '', {:action => :remove_image, :image_id => image.id}, confirm: 'Are you sure?', method: :delete, :style => "display:none", :confirm => 'Are you sure you want to remove this image?'
+    = link_to '', {:action => :remove_image, :image_id => image.id}, confirm: 'Are you sure?', method: :delete, :confirm => 'Are you sure you want to remove this image?', :class => "button_#{image.id} button remove left"
   .image_name.info_line
     %a.text.black.font11{ :href => "#{url_for(:controller => '/images', :action => 'browse', :id => image.id)}" }= truncate(image.name, :length => 20)
   .author.info_line

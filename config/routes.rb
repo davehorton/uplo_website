@@ -99,11 +99,14 @@ Uplo::Application.routes.draw do
   get '/admin', :to => "admin/admin#index"
   namespace :admin do
     resources :flagged_images do
-      post :index, :on => :collection
-      post :reinstate_all, :on => :collection
-      post :remove_all, :on => :collection
-      post :reinstate_image, :on => :collection
-      delete :remove_image, :on => :collection
+      collection do
+        get :index
+        get :get_image_popup
+        post :reinstate_all
+        post :remove_all
+        post :reinstate_image
+        delete :remove_image
+      end
     end
 
     resources :flagged_users do

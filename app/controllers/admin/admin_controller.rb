@@ -21,4 +21,5 @@ class Admin::AdminController < ApplicationController
   def set_current_tab
     @current_tab = "flagged_images"
   end
+  
 end
