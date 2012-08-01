@@ -155,6 +155,8 @@ $ ->
       if data.context
         setLoadingStatus =-> $(data.context).find('.progress .uploading').css('width','80%')
         window.setTimeout(setLoadingStatus, 300);
+    fail: (e, data) ->
+      $(data.context).find('.progress').replaceWith("<div class='error info-line text italic font12 left'>Cannot upload this image right now! Please try again later!</div>")
 
   $('.button.save-grid-changes').click -> saveGridChanges()
 
@@ -223,6 +225,7 @@ $ ->
           $('#delete-gallery').attr('href', response.delete_url)
           $('#fileupload').attr('action', response.upload_url)
           $('#edit-gallery-popup').replaceWith response.edit_popup
+          $(@).html response.gallery_options
           $('select').selectmenu({ style: 'popup' })
           $.modal.close()
       })
