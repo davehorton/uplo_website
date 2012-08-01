@@ -73,6 +73,8 @@ class User < ActiveRecord::Base
     }).where("users.is_banned = ? OR galleries_data.flagged_images_count >= ?", true, MIN_FLAGGED_IMAGES).select(
       "DISTINCT users.*, galleries_data.flagged_images_count")
   }
+  
+  scope :confirmed_users, where("confirmed_at IS NOT NULL")
 
   # CLASS METHODS
   class << self
@@ -85,10 +87,10 @@ class User < ActiveRecord::Base
           params[:sort_field] = "users.username"
           self.load_users_with_images_statistics(params)
         when 'num_of_likes' then
-          params[:sort_field] = 'galleries_data.images_likes_count'
+          params[:sort_field] = 'images_likes_count'
           self.load_users_with_images_statistics(params)
         when 'num_of_uploads' then
-          params[:sort_field] = 'galleries_data.images_count'
+          params[:sort_field] = 'images_count'
           self.load_users_with_images_statistics(params)
         else
           paging_info = parse_paging_options(params)
@@ -103,24 +105,30 @@ class User < ActiveRecord::Base
     # Load users data with images_likes_count, images_count and images_pageview.
     def load_users_with_images_statistics(params = {})
       paging_info = parse_paging_options(params)
-      self.joins(%Q{
-        LEFT JOIN (
+      
+      self.joins(self.sanitize_sql([
+        "LEFT JOIN (
           SELECT galleries.user_id,
-          SUM(images_data.images_count) AS images_count,
-          SUM(images_data.images_likes_count) AS images_likes_count,
-          SUM(images_data.images_pageview) AS images_pageview
+          COALESCE(SUM(images_data.images_count), 0) AS images_count,
+          COALESCE(SUM(images_data.images_likes_count), 0) AS images_likes_count,
+          COALESCE(SUM(images_data.images_pageview), 0) AS images_pageview
           FROM galleries LEFT JOIN (
             SELECT gallery_id, COUNT(images.id) AS images_count,
             SUM(likes) AS images_likes_count,
             SUM(pageview) AS images_pageview
-            FROM images GROUP BY gallery_id
+            FROM images 
+            WHERE images.is_removed = :is_removed
+            GROUP BY gallery_id
           ) images_data ON galleries.id = images_data.gallery_id
           GROUP BY galleries.user_id
         ) galleries_data
-        ON galleries_data.user_id = users.id
-      }).select("DISTINCT users.*, galleries_data.images_count,
-                galleries_data.images_likes_count,
-                galleries_data.images_pageview").paginate(
+        ON galleries_data.user_id = users.id",
+        {:is_removed => false}])
+      ).select("DISTINCT users.*, 
+        COALESCE(galleries_data.images_count, 0) AS images_count,
+        COALESCE(galleries_data.images_likes_count, 0) AS images_likes_count,
+        COALESCE(galleries_data.images_pageview, 0) AS images_pageview"
+      ).paginate(
         :page => paging_info.page_id,
         :per_page => paging_info.page_size,
         :order => paging_info.sort_string
@@ -131,13 +139,26 @@ class User < ActiveRecord::Base
       params[:filtered_params][:sort_field] = 'first_name' unless params[:filtered_params].has_key?("sort_field")
       paging_info = parse_paging_options(params[:filtered_params], {:sort_mode => :extended})
 
-      self.search(
-        SharedMethods::Converter::SearchStringConverter.process_special_chars(params[:query]),
+      sphinx_search_options = params[:sphinx_search_options]
+      sphinx_search_options = {} if sphinx_search_options.blank?
+      
+      sphinx_search_options.merge!({
         :star => true,
         :page => paging_info.page_id,
-        :per_page => paging_info.page_size )
+        :per_page => paging_info.page_size
+      })
+      
+      self.search(
+        SharedMethods::Converter::SearchStringConverter.process_special_chars(params[:query]),
+        sphinx_search_options)
+    end   
+    
+    # Search within confirmed users only
+    def do_search_confirmed_users(params = {})
+      params[:sphinx_search_options] = {:with => {:confirmed => true}}
+      self.do_search(params)
     end
-
+    
     # Override Devise method so that User can log in with username or email.
     def find_for_database_authentication(warden_conditions)
       conditions = warden_conditions.dup
@@ -174,6 +195,16 @@ class User < ActiveRecord::Base
       end
     end
 
+    # Get the current user.
+    def current_user
+      Thread.current[:current_user]
+    end
+    
+    # Set the current user in this thread.
+    def current_user=(user)
+      Thread.current[:current_user] = user
+    end
+    
     protected
 
     def parse_paging_options(options, default_opts = {})
@@ -543,7 +574,10 @@ class User < ActiveRecord::Base
     indexes first_name
     indexes last_name
     indexes username
-
+    indexes email
+    
+    has "confirmed_at IS NOT NULL", :as => :confirmed, :type => :boolean
+    
     if Rails.env.production?
       set_property :delta => FlyingSphinx::DelayedDelta
     else

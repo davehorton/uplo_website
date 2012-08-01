@@ -2,7 +2,7 @@ class Admin::MembersController < Admin::AdminController
   def index
     @sort_field = params[:sort_field] || "signup_date"
     @sort_direction = params[:sort_direction] || "asc"
-    @users = User.load_users(filtered_params.merge(
+    @users = User.confirmed_users.load_users(filtered_params.merge(
       :sort_field => @sort_field, 
       :sort_direction => @sort_direction
     ))
@@ -10,7 +10,7 @@ class Admin::MembersController < Admin::AdminController
   
   def search
     search_params = {:query => URI.unescape(params[:query]), :filtered_params => filtered_params}
-    @users = User.do_search(search_params)
+    @users = User.do_search_confirmed_users(search_params)
     render 'admin/members/index'
   end
   
