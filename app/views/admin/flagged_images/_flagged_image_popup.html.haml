@@ -15,7 +15,8 @@
         .user_info.left
           .first_line
             By 
-            %a.text.black.font12.normal{ :href => "#{url_for(:controller => '/profiles', :action => 'show', :user_id => 2)}" } Cameron.moll
+            %a.text.black.font12.normal{ :href => "#{url_for(:controller => '/profiles', :action => 'show', :user_id => flag.image.author.id)}"}
+              = flag.image.author.username
       
           %pr.second_line.font11.text
             = flag.image.author.fullname
