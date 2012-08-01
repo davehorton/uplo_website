@@ -36,7 +36,7 @@ class ProfilesController < ApplicationController
       else
         images = @user.images.un_flagged.load_popular_images(@filtered_params, current_user)
       end
-      template = render_to_string :partial => 'shared/photos_template',
+      template = render_to_string :partial => 'images/photos_template',
                     :locals => { :images => images,
                                 :photos_per_line => 4, :photo_size => 'thumb' }
       pagination = render_to_string :partial => 'shared/hidden_pagination',
@@ -63,7 +63,7 @@ class ProfilesController < ApplicationController
         template = render_to_string :partial => 'edit_likes_template',
           :locals => { :images => images }
       else
-        template = render_to_string :partial => 'shared/photos_template',
+        template = render_to_string :partial => 'images/photos_template',
           :locals => { :images => images, :photos_per_line => 4, :photo_size => 'thumb' }
       end
       pagination = render_to_string :partial => 'shared/hidden_pagination',

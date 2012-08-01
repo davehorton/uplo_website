@@ -1,0 +1,8 @@
+/ locals: action
+.right
+  = form_for :query, :url => "#{ url_for(:controller => params[:controller], :action => action) }", :method => 'get', :html => {:id => 'filtering-search-box'} do |f|
+    = f.text_field :text, :class => 'left'
+    .left= f.select :filtered_by, search_filter_options
+    .button.search.left
+    .sort.text.black.font11.left Sort by
+    .left= f.select :sort_by, search_sort_options

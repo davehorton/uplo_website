@@ -177,4 +177,12 @@ module ApplicationHelper
   def pluralize_without_count(count, noun)
     count == 1 ? "#{noun}" : "#{noun.pluralize}"
   end
+
+  def search_filter_options(selected = 'photos')
+    options_for_select({'Photos' => 'photos', 'Users' => 'users'}, selected)
+  end
+
+  def search_sort_options(selected = 'recent')
+    options_for_select({'Recent Uploads' => 'recent'}, selected)
+  end
 end

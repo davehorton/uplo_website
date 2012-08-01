@@ -35,11 +35,11 @@ class Image < ActiveRecord::Base
     ).joins("LEFT JOIN image_flags ON images.id = image_flags.image_id").readonly(false)
 
   scope :public_images, joined_images.joins("JOIN users ON gals.user_id = users.id").where(
-    "gals.permission = :gallery_permission 
-    AND image_flags.reported_by IS NULL 
-    AND users.is_banned = :user_banned 
+    "gals.permission = :gallery_permission
+    AND image_flags.reported_by IS NULL
+    AND users.is_banned = :user_banned
     AND users.is_removed = :user_removed",
-    { :gallery_permission => Gallery::PUBLIC_PERMISSION, 
+    { :gallery_permission => Gallery::PUBLIC_PERMISSION,
       :user_banned => false,
       :user_removed => false
     })
@@ -112,9 +112,9 @@ class Image < ActiveRecord::Base
         conditions = [
           "gals.permission = :gallery_permission
           AND image_flags.reported_by IS NULL
-          AND users.is_banned = :user_banned 
+          AND users.is_banned = :user_banned
           AND users.is_removed = :user_removed",
-          { :gallery_permission => Gallery::PUBLIC_PERMISSION, 
+          { :gallery_permission => Gallery::PUBLIC_PERMISSION,
             :image_removed => false,
             :user_banned => false,
             :user_removed => false
@@ -124,9 +124,9 @@ class Image < ActiveRecord::Base
         conditions = [
           "gals.permission = :gallery_permission
           AND (gals.user_id = :user_id OR image_flags.reported_by IS NULL)
-          AND users.is_banned = :user_banned 
+          AND users.is_banned = :user_banned
           AND users.is_removed = :user_removed",
-          { :gallery_permission => Gallery::PUBLIC_PERMISSION, 
+          { :gallery_permission => Gallery::PUBLIC_PERMISSION,
             :user_id => current_user.id,
             :image_removed => false,
             :user_banned => false,
@@ -137,7 +137,7 @@ class Image < ActiveRecord::Base
 
       paging_info = parse_paging_options(params,
         {:sort_criteria => "images.promote_num DESC, images.updated_at DESC, images.likes DESC"})
-      
+
       self.joined_images.joins("JOIN users ON gals.user_id = users.id").where(conditions).paginate(
         :page => paging_info.page_id,
         :per_page => paging_info.page_size,
@@ -185,7 +185,7 @@ class Image < ActiveRecord::Base
     end
 
     def load_popular_images(params = {}, current_user = nil)
-      paging_info = parse_paging_options(params, 
+      paging_info = parse_paging_options(params,
         {:sort_criteria => "images.promote_num DESC, images.updated_at DESC, images.likes DESC"})
       # TODO: calculate the popularity of the images: base on how many times an image is "liked".
       self.includes(:gallery).joins([:gallery]).
