@@ -66,15 +66,21 @@ class Order < ActiveRecord::Base
   # PUBLIC INSTANCE METHODS
 
   def compute_totals
-    self.price_total = compute_image_total
-    self.tax = self.price_total * PER_TAX
-    self.order_total = self.price_total + self.tax
+    self.price_total = self.compute_image_total
+    self.tax = self.compute_tax_total
+    self.shipping_fee = SHIPPING_FEE
+    self.order_total = self.price_total + self.tax + self.shipping_fee
     self.save
   end
 
   def compute_image_total
-    items_with_gifts = line_items.select{ |item| !item.price.nil? }
+    items_with_gifts = self.line_items.select{ |item| !item.price.nil? }
     items_with_gifts.inject(0) {|sum, g| sum += g.price * g.quantity.to_i }
+  end
+
+  def compute_tax_total
+    items_with_gifts = self.line_items.select{ |item| !item.price.nil? }
+    items_with_gifts.inject(0) {|sum, g| sum += g.tax * g.quantity.to_i }
   end
 
   # Finish a transaction
