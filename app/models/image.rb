@@ -24,11 +24,11 @@ class Image < ActiveRecord::Base
 
   scope :flagged, avai_images.joins(
       "LEFT JOIN image_flags ON images.id = image_flags.image_id"
-    ).where("image_flags.reported_by IS NOT NULL AND images.is_removed = ?", false).readonly(false)
+    ).where("image_flags.reported_by IS NOT NULL").readonly(false)
 
   scope :un_flagged, avai_images.joins(
       "LEFT JOIN image_flags ON images.id = image_flags.image_id"
-    ).where("image_flags.reported_by IS NULL AND images.is_removed = ?", false).readonly(false)
+    ).where("image_flags.reported_by IS NULL").readonly(false)
 
   scope :joined_images, avai_images.joins(
       "JOIN galleries AS gals ON gals.id = images.gallery_id"
@@ -43,6 +43,9 @@ class Image < ActiveRecord::Base
       :user_banned => false,
       :user_removed => false
     })
+
+  scope :belongs_to_avai_user, joined_images.joins('LEFT JOIN users ON gals.user_id=users.id'
+    ).where('users.is_banned = ?', false).readonly(false)
 
   scope :promoted_images, where("promote_num > ?", 0)
 

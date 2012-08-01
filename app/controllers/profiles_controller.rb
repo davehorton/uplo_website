@@ -6,11 +6,11 @@ class ProfilesController < ApplicationController
     if @user.id == current_user.id
       @images = @user.images.avai_images.load_images(@filtered_params)
       @galleries = @user.galleries.load_galleries(@filtered_params)
-      @liked_images = @user.liked_images.get_all_images_with_current_user(@filtered_params, current_user)
+      @liked_images = @user.liked_images.belongs_to_avai_user.get_all_images_with_current_user(@filtered_params, current_user)
     else
       @images = @user.images.un_flagged.load_popular_images(@filtered_params)
       @galleries = @user.galleries.load_popular_galleries(@filtered_params)
-      @liked_images = @user.liked_images.un_flagged.load_images(@filtered_params)
+      @liked_images = @user.liked_images.belongs_to_avai_user.un_flagged.load_images(@filtered_params)
     end
     @followers = @user.followers.load_users(@filtered_params)
     @followed_users = @user.followed_users.load_users(@filtered_params)
