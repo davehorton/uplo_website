@@ -1,52 +1,55 @@
-%table.cartTable
-  %tr.header
-    %td.text-left Item
-    %td.text-left Size
-    %td.text-left Moulding
-    %td.text-left Quantity
-    %td.text-left Price
-    %td.text-left Tax
+.cart-details
+  .header.text.black.bold.font11.line18.left
+    .cell.left.preview ITEM
+    .cell.left SIZE
+    .cell.left MOULDING
+    .cell.left QTY
+    .cell.left PRICE
+    .cell.left TAX
+    .cell.left.subtotal SUBTOTAL
+
 
   - total_quantity = 0
   - @line_items.each do |line_item|
     - unless line_item.image.nil?
       - total_quantity += line_item.quantity.to_i
       - image = line_item.image
-      %tr.lines
-        %td.preview
-          %p= image_tag image.url(:small_preview)
-          %span.option 
-            = link_to("edit", {:controller => "images", :action => "order", :id => image.id, :line_item => line_item.id}, html_options = {:class => "edit"})
-          %span.option 
-            = link_to("delete", {:controller => "shopping_cart", :action => "destroy_item", :id => line_item.id}, html_options = {:class => "delete"}, :data => {:id => line_item.id})
-
-        %td.text-left
+      - line_price = line_item.price * line_item.quantity.to_i
+      - line_tax = line_item.price * line_item.quantity.to_i * PER_TAX
+      .line.left
+        .cell.left.preview
+          .image-container.small.no-padding.left= image_tag image.url(:smallest), :class => 'image smallest'
+          .item-info.text.black.line18.left
+            .name.text.bold.font12= image.name.truncate(40)
+            .edit-section
+              .icon.edit.left
+              %a.text.font11.left{:href => "#{url_for(:controller => 'images', :action => 'order', :id => image.id, :line_item => line_item.id)}"} Edit
+            .delete-section{:data => {:id => "#{line_item.id}",:url => "#{url_for(:controller => 'shopping_cart', :action => 'destroy_item')}"}}
+              .icon.delete.text.font20.left &times;
+              .text.font11.left Remove
+        .cell.text.gray.font12.line18.left
           = line_item.size
-        %td.text-left
+        .cell.text.gray.font12.line18.left
           = line_item.moulding
-        %td.text-left
+        .cell.text.gray.font12.line18.left
           = line_item.quantity
-        %td.text-left
-          = number_to_currency(line_item.price * line_item.quantity.to_i, {:precision => 2})
-        %td.text-left
-          = number_to_currency((line_item.price * line_item.quantity.to_i * PER_TAX), {:precision => 2})
+        .cell.text.gray.font12.line18.left
+          = number_to_currency(line_price, {:precision => 2})
+        .cell.text.gray.font12.line18.left
+          = number_to_currency(line_tax, {:precision => 2})
+        .cell.text.gray.font12.line18.left.subtotal
+          = number_to_currency(line_price + line_tax, {:precision => 2})
 
-  %tr.footer
-    %td 
-      %p Total:
-      %p.total= number_to_currency(@order.order_total, {:precision => 2})
-    %td 
-    %td
-    %td
-      %p.text-left Quantity:
-      %p.text-left
-        = total_quantity
-    %td
-      %p.text-left Price:
-      %p.text-left
-        = number_to_currency(@order.price_total, {:precision => 2})
-    %td
-      %p.text-left Tax:
-      %p.blBody.text-left
-        = number_to_currency(@order.tax, {:precision => 2})
+  .footer.text.black.line18.left
+    .right.summary
+      .cell.text.bold.font14.left Subtotal:
+      #subtotal.cell.text.bold.font14.left= number_to_currency(@order.price_total, {:precision => 2})
+      .clear
+      .cell.text.font12.left Tax:
+      #tax-total.cell.text.font12.left= number_to_currency(@order.tax, {:precision => 2})
+    .line-separator.left
+    .right.summary
+      .cell.text.bold.font14.left Cart Total:
+      #cart-total.cell.text.bold.font14.left= number_to_currency(@order.price_total + @order.tax, {:precision => 2})
+    .line-separator.left
 
