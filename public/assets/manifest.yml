@@ -144,7 +144,7 @@ prev-vertical.png: prev-vertical-eaef69b30a628022ae98a7704e5ef474.png
 prev12-disabled.png: prev12-disabled-8ea229509f8091dfef6c29a027b901c2.png
 prev12.png: prev12-50faae018f6c8d92a763de0f296e2495.png
 progressbar.gif: progressbar-54dfeacc002a35b014f009faa50bf254.gif
-promote-spotlight-disabled.png: promote-spotlight-disabled-c55bc1551fd489b38be9d1ae54fb4191.png
+promote-spotlight-disabled.png: promote-spotlight-disabled-e3e9f550b7e76ddf712abb90e84b2e9e.png
 promote-spotlight-light.png: promote-spotlight-light-90aee63f283ace53e902477fdeaf7861.png
 promote-spotlight.png: promote-spotlight-e20cbd9409cada3a76283cf66cf4cdb9.png
 reinstate_all_button.png: reinstate_all_button-3464f877f4ee41460574459608b717c9.png
@@ -178,7 +178,7 @@ uplo-logo.png: uplo-logo-1a1123ea4ae8aed84ec7486c1838b15e.png
 uplo_logo.png: uplo_logo-4e147b8807d73e64931db4bc3568f789.png
 uploader_file.png: uploader_file-3ab3c53af3d8adf6071f3776329ab009.png
 app/admin/flagged_users.js: app/admin/flagged_users-fe4fa59383540bfc1c02fec0a0115831.js
-app/admin/spotlights.js: app/admin/spotlights-cc9044ca8faa26f2a3bbad503aef6fd7.js
+app/admin/spotlights.js: app/admin/spotlights-036e6455abad7a3a57c963c428e8f12c.js
 app/edit_images.js: app/edit_images-416c61a4642168c61d029b3cd9412ae2.js
 app/gallery.js: app/gallery-56d1423ff8282cf24bfa0dc13979b30e.js
 app/image.js: app/image-090a76bcb99a855a1064e5cb602865bf.js
@@ -281,7 +281,7 @@ jquery-ui.custom.css: jquery-ui.custom-bb782aff6a70a3531739cdd09fe60b50.css
 jquery.contextMenu.css: jquery.contextMenu-5e13ffab2ad4f1c83de146893d8f0b86.css
 jquery.ui.selectmenu.css: jquery.ui.selectmenu-126b46b0f5616450a0711aea25ce56ec.css
 jquery.ui.theme.css: jquery.ui.theme-bc9f9116ef9708ca6340560832e3b72e.css
-scss/admin.css: scss/admin-85a61a29aedd90748a33386f1d260572.css
+scss/admin.css: scss/admin-0c3b32b7b0def55cf679cb991cefd3fe.css
 scss/application.css: scss/application-1cc66ce9982a795415bb1ec9a3935cda.css
 scss/application.mobile.css: scss/application.mobile-b7d9afe5686708c93c49eadcd9057bb5.css
 scss/banner.css: scss/banner-331c4e35597b1b905f46e6226aa74178.css

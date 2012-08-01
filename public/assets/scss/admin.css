@@ -125,6 +125,11 @@
     margin-bottom: 5px; }
     .admin .content .image-container .promote-button.disabled {
       background: url("/assets/promote-spotlight-disabled.png") no-repeat; }
+  .admin .content .image-container.promoted {
+    -webkit-box-shadow: rgba(0, 0, 0, 0.3) 0 2px 3px;
+    -moz-box-shadow: rgba(0, 0, 0, 0.3) 0 2px 3px;
+    box-shadow: rgba(0, 0, 0, 0.3) 0 2px 3px;
+    zoom: 1; }
 .admin .content .image-container.no-margin-right {
   margin-right: 0; }
 .admin .content .pagination {
