@@ -87,10 +87,10 @@ class User < ActiveRecord::Base
           params[:sort_field] = "users.username"
           self.load_users_with_images_statistics(params)
         when 'num_of_likes' then
-          params[:sort_field] = 'galleries_data.images_likes_count'
+          params[:sort_field] = 'images_likes_count'
           self.load_users_with_images_statistics(params)
         when 'num_of_uploads' then
-          params[:sort_field] = 'galleries_data.images_count'
+          params[:sort_field] = 'images_count'
           self.load_users_with_images_statistics(params)
         else
           paging_info = parse_paging_options(params)
@@ -105,24 +105,30 @@ class User < ActiveRecord::Base
     # Load users data with images_likes_count, images_count and images_pageview.
     def load_users_with_images_statistics(params = {})
       paging_info = parse_paging_options(params)
-      self.joins(%Q{
-        LEFT JOIN (
+      
+      self.joins(self.sanitize_sql([
+        "LEFT JOIN (
           SELECT galleries.user_id,
-          SUM(images_data.images_count) AS images_count,
-          SUM(images_data.images_likes_count) AS images_likes_count,
-          SUM(images_data.images_pageview) AS images_pageview
+          COALESCE(SUM(images_data.images_count), 0) AS images_count,
+          COALESCE(SUM(images_data.images_likes_count), 0) AS images_likes_count,
+          COALESCE(SUM(images_data.images_pageview), 0) AS images_pageview
           FROM galleries LEFT JOIN (
             SELECT gallery_id, COUNT(images.id) AS images_count,
             SUM(likes) AS images_likes_count,
             SUM(pageview) AS images_pageview
-            FROM images GROUP BY gallery_id
+            FROM images 
+            WHERE images.is_removed = :is_removed
+            GROUP BY gallery_id
           ) images_data ON galleries.id = images_data.gallery_id
           GROUP BY galleries.user_id
         ) galleries_data
-        ON galleries_data.user_id = users.id
-      }).select("DISTINCT users.*, galleries_data.images_count,
-                galleries_data.images_likes_count,
-                galleries_data.images_pageview").paginate(
+        ON galleries_data.user_id = users.id",
+        {:is_removed => false}])
+      ).select("DISTINCT users.*, 
+        COALESCE(galleries_data.images_count, 0) AS images_count,
+        COALESCE(galleries_data.images_likes_count, 0) AS images_likes_count,
+        COALESCE(galleries_data.images_pageview, 0) AS images_pageview"
+      ).paginate(
         :page => paging_info.page_id,
         :per_page => paging_info.page_size,
         :order => paging_info.sort_string
