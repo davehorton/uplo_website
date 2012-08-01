@@ -7,11 +7,20 @@ class Admin::FlaggedUsersController < Admin::AdminController
   def reinstate_all
     result = {}
     
-    if User.reinstate_flagged_users
-      result[:status] = 'ok'
-      result[:message] = I18n.t("admin.notice_reinstate_users_succeeded")
-      result[:redirect_url] = admin_flagged_users_path
-    else
+    begin
+      if User.reinstate_flagged_users
+        result[:status] = 'ok'
+        result[:message] = I18n.t("admin.notice_reinstate_users_succeeded")
+        result[:redirect_url] = admin_flagged_users_path
+      else
+        result[:status] = 'error'
+        result[:message] = I18n.t("admin.error_reinstate_users_failed")
+      end
+    rescue User::NotReadyForReinstatingError
+      result[:status] = 'error'
+      result[:message] = I18n.t("admin.error_not_ready_for_reinstating")
+    rescue Exception => exc
+      ::Util.log_error(exc, "Admin::FlaggedUsersController#reinstate_all")
       result[:status] = 'error'
       result[:message] = I18n.t("admin.error_reinstate_users_failed")
     end
@@ -23,13 +32,22 @@ class Admin::FlaggedUsersController < Admin::AdminController
   def remove_all
     result = {}
     
-    if User.remove_flagged_users
-      result[:status] = 'ok'
-      result[:message] = I18n.t("admin.notice_remove_users_succeeded")
-      result[:redirect_url] = admin_flagged_users_path
-    else
+    begin
+      if User.remove_flagged_users
+        result[:status] = 'ok'
+        result[:message] = I18n.t("admin.notice_remove_users_succeeded")
+        result[:redirect_url] = admin_flagged_users_path
+      else
+        result[:status] = 'error'
+        result[:message] = I18n.t("admin.error_remove_users_failed")
+      end    
+    rescue User::NotReadyForReinstatingError
       result[:status] = 'error'
-      result[:message] = I18n.t("admin.error_remove_users_failed")
+      result[:message] = I18n.t("admin.error_not_ready_for_removing")
+    rescue Exception => exc
+      ::Util.log_error(exc, "Admin::FlaggedUsersController#remove_all")
+      result[:status] = 'error'
+      result[:message] = I18n.t("admin.error_reinstate_users_failed")
     end
     
     render(:json => result)
@@ -37,21 +55,31 @@ class Admin::FlaggedUsersController < Admin::AdminController
   
   # Reinstate all flagged images of a user.
   def reinstate_user
-    user = User.find_by_id(params[:id])
     result = {}
     
-    if user
-      if user.reinstate
-        result[:status] = 'ok'
-        result[:message] = I18n.t("admin.notice_reinstate_user_succeeded")
-        result[:redirect_url] = admin_flagged_users_path
+    begin
+      user = User.find_by_id(params[:id])
+      
+      if user
+        if user.reinstate
+          result[:status] = 'ok'
+          result[:message] = I18n.t("admin.notice_reinstate_user_succeeded")
+          result[:redirect_url] = admin_flagged_users_path
+        else
+          result[:status] = 'error'
+          result[:message] = I18n.t("admin.error_reinstate_user_failed")
+        end
       else
         result[:status] = 'error'
-        result[:message] = I18n.t("admin.error_reinstate_user_failed")
-      end
-    else
+        result[:message] = I18n.t("admin.error_user_not_found")
+      end      
+    rescue User::NotReadyForReinstatingError
       result[:status] = 'error'
-      result[:message] = I18n.t("admin.error_user_not_found")
+      result[:message] = I18n.t("admin.error_not_ready_for_reinstating")
+    rescue Exception => exc
+      ::Util.log_error(exc, "Admin::FlaggedUsersController#reinstate_user")
+      result[:status] = 'error'
+      result[:message] = I18n.t("admin.error_reinstate_users_failed")
     end
     
     render(:json => result)
@@ -59,20 +87,31 @@ class Admin::FlaggedUsersController < Admin::AdminController
   
   # Remove all flagged images of a user.
   def remove_user
-    user = User.find_by_id(params[:id])
     result = {}
     
-    if user
-      if user.remove
-        result[:status] = 'ok'
-        result[:message] = I18n.t("admin.notice_remove_user_succeeded")
+    begin
+      user = User.find_by_id(params[:id])
+      
+      if user
+        if user.remove
+          result[:status] = 'ok'
+          result[:message] = I18n.t("admin.notice_remove_user_succeeded")
+        else
+          result[:status] = 'error'
+          result[:message] = I18n.t("admin.error_remove_user_failed")
+        end
       else
         result[:status] = 'error'
-        result[:message] = I18n.t("admin.error_remove_user_failed")
+        result[:message] = I18n.t("admin.error_user_not_found")
       end
-    else
+    
+    rescue User::NotReadyForReinstatingError
       result[:status] = 'error'
-      result[:message] = I18n.t("admin.error_user_not_found")
+      result[:message] = I18n.t("admin.error_not_ready_for_removing")
+    rescue Exception => exc
+      ::Util.log_error(exc, "Admin::FlaggedUsersController#remove_user")
+      result[:status] = 'error'
+      result[:message] = I18n.t("admin.error_reinstate_users_failed")
     end
     
     render(:json => result)

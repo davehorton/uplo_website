@@ -34,10 +34,6 @@ class Image < ActiveRecord::Base
       "JOIN galleries AS gals ON gals.id = images.gallery_id"
     ).joins("LEFT JOIN image_flags ON images.id = image_flags.image_id").readonly(false)
 
-  scope :removed_or_flagged_images, joins(
-      "JOIN image_flags ON images.id = image_flags.image_id"
-    ).where("image_flags.reported_by IS NOT NULL OR images.is_removed = ?", true).readonly(false)
-
   scope :public_images, joined_images.where(
     "galleries.permission = ? AND image_flags.reported_by IS NULL AND images.is_removed = ?",
     Gallery::PUBLIC_PERMISSION, false)
@@ -107,8 +103,8 @@ class Image < ActiveRecord::Base
 
     def get_all_images_with_current_user(params, current_user)
         paging_info = parse_paging_options(params,
-          {:sort_criteria => "images.promote_num DESC, images.likes DESC, images.updated_at DESC"})
-
+          {:sort_criteria => "images.promote_num DESC, images.updated_at DESC, images.likes DESC"})
+        
         self.joined_images.where(
           "gals.permission = 'public'
           AND (gals.user_id = ?
@@ -147,21 +143,22 @@ class Image < ActiveRecord::Base
     end
 
     def load_images_with_orders_count(params = {})
-      params[:sort_field] = "orders_data.orders_count"
+      params[:sort_field] = "orders_count"
       paging_info = parse_paging_options(params)
       self.includes(:gallery).joins(%Q{
         LEFT JOIN (
           SELECT image_id, COUNT(order_id) AS orders_count
           FROM line_items GROUP BY image_id
         ) orders_data ON images.id = orders_data.image_id
-      }).select("DISTINCT images.*, orders_data.orders_count").paginate(
+      }).select("DISTINCT images.*, COALESCE(orders_data.orders_count, 0) AS orders_count").paginate(
         :page => paging_info.page_id,
         :per_page => paging_info.page_size,
         :order => paging_info.sort_string)
     end
 
     def load_popular_images(params = {}, current_user = nil)
-      paging_info = parse_paging_options(params, {:sort_criteria => "images.promote_num DESC, images.likes DESC"})
+      paging_info = parse_paging_options(params, 
+        {:sort_criteria => "images.promote_num DESC, images.updated_at DESC, images.likes DESC"})
       # TODO: calculate the popularity of the images: base on how many times an image is "liked".
       self.includes(:gallery).joins([:gallery]).
         where("galleries.permission = ?", Gallery::PUBLIC_PERMISSION).paginate(
@@ -296,6 +293,8 @@ class Image < ActiveRecord::Base
           if self.author.will_be_banned?
             # Ban the image's author.
             self.author.update_attribute(:is_banned, true)
+            # Send email.
+            UserMailer.user_is_banned(self.author).deliver
           end
 
           # Update result

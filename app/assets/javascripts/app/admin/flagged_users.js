@@ -27,6 +27,16 @@ flagged_users = {
         flagged_users.do_action(target);
       }
     });
+    
+    // Setup tool tip, require jquery.poshytip
+    $('.button.tooltip').poshytip({
+      className: 'tip-yellowsimple',
+      showTimeout: 100,
+      alignTo: 'target',
+      alignX: 'center',
+      offsetY: 5,
+      allowTipHover: false
+    });
   },
   
   do_action: function(user){
