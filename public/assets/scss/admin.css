@@ -188,10 +188,14 @@
   margin-top: 10px;
   float: left; }
 
+.pagination_area {
+  float: right; }
+
 /* BUTTON */
 .button {
   margin-right: 5px;
-  height: 27px; }
+  height: 27px;
+  border: none; }
   .button.remove_all {
     background: url("/assets/remove_all_button.png") no-repeat;
     width: 81px;
@@ -208,12 +212,20 @@
     background: url("/assets/reinstate_button.png") no-repeat;
     width: 60px;
     height: 18px; }
+  .button.reinstate_large {
+    background: url("/assets/btn-reinstate-large.jpg") no-repeat;
+    width: 72px;
+    height: 23px; }
   .button.reinstate.disabled {
     background: url("/assets/reinstate_button_light.png") no-repeat; }
   .button.remove {
     background: url("/assets/remove_button.png") no-repeat;
     width: 53px;
     height: 18px; }
+  .button.remove_large {
+    background: url("/assets/btn-remove-large.jpg") no-repeat;
+    width: 63px;
+    height: 23px; }
   .button.remove.disabled {
     background: url("/assets/remove_button_light.png") no-repeat; }
 
@@ -225,50 +237,67 @@
   width: 155px;
   margin-right: 6px;
   margin-top: 10px;
-  float: left; }
+  float: left;
+  background: white;
+  border-bottom: 1px solid #d6d6d6; }
+  .flagged_image_container .info_line {
+    padding-left: 10px;
+    margin-top: 5px;
+    font: 11px; }
+  .flagged_image_container .wordwrap {
+    white-space: pre-wrap;
+    /* CSS3 */
+    white-space: -moz-pre-wrap;
+    /* Firefox */
+    white-space: -pre-wrap;
+    /* Opera <7 */
+    white-space: -o-pre-wrap;
+    /* Opera 7 */
+    word-wrap: break-word;
+    /* IE */ }
+  .flagged_image_container .image_frame {
+    width: 155px;
+    height: 155px; }
+  .flagged_image_container .button_area {
+    width: 100%;
+    margin-top: 10px;
+    height: 20px; }
+  .flagged_image_container .image_name {
+    font-weight: bold;
+    color: black; }
+  .flagged_image_container .flagged_time {
+    color: #606060; }
+  .flagged_image_container .type {
+    color: #606060; }
+  .flagged_image_container .description {
+    color: #b3b3b3;
+    font-style: italic;
+    height: 60px;
+    width: 155px;
+    overflow: hidden;
+    border: none;
+    background: none; }
 
-.flagged_image_container .info_line {
-  padding-left: 10px;
-  margin-top: 5px;
-  font: 11px; }
-
-.flagged_image_container .wordwrap {
-  white-space: pre-wrap;
-  /* CSS3 */
-  white-space: -moz-pre-wrap;
-  /* Firefox */
-  white-space: -pre-wrap;
-  /* Opera <7 */
-  white-space: -o-pre-wrap;
-  /* Opera 7 */
-  word-wrap: break-word;
-  /* IE */ }
-
-.flagged_image_container .image_frame {
-  width: 155px;
-  height: 155px;
-  background: black; }
-
-.flagged_image_container .button_area {
-  width: 100%;
-  margin-top: 10px;
-  height: 20px; }
-
-.flagged_image_container .image_name {
-  font-weight: bold;
-  color: black; }
-
-.flagged_image_container .flagged_time {
-  color: #606060; }
-
-.flagged_image_container .type {
-  color: #606060; }
-
-.flagged_image_container .description {
-  color: #b3b3b3;
-  font-style: italic;
-  height: 60px;
-  width: 155px;
-  overflow: hidden;
-  border: none;
-  background: none; }
+#flagged_image_popup {
+  width: 320px;
+  padding: 20px;
+  padding-top: 10px; }
+  #flagged_image_popup .user_info.left {
+    color: #606060;
+    margin-left: 10px; }
+  #flagged_image_popup .flag_info {
+    color: #606060; }
+  #flagged_image_popup .button.cancel {
+    margin: 0; }
+  #flagged_image_popup .button.remove_large {
+    margin-left: 5px; }
+  #flagged_image_popup .second_line {
+    margin-top: 3px; }
+  #flagged_image_popup .flag_type {
+    color: #b3b3b3;
+    padding-top: 3px; }
+  #flagged_image_popup hr {
+    border-bottom: none;
+    border-left: none;
+    border-right: none;
+    border-top: 1px solid #cccccc; }
