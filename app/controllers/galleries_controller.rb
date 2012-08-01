@@ -98,7 +98,9 @@ class GalleriesController < ApplicationController
         edit_popup = render_to_string :partial => 'edit_gallery', :layout => 'layouts/popup',
             :locals => { :title => 'Edit Your Gallery Infomation',
             :id => 'edit-gallery-popup', :gallery => @gallery }
-        render :json => { :items => items, :pagination => pagination, :edit_popup => edit_popup,
+        gal_options = self.class.helpers.gallery_options(current_user.id, @gallery.id, true)
+        render :json => { :items => items, :pagination => pagination,
+          :edit_popup => edit_popup, :gallery_options => gal_options,
           :delete_url => url_for(:action => 'destroy', :id => @gallery.id),
           :upload_url => url_for(:controller => 'images', :action => 'create', :gallery_id => @gallery.id) }
       end
