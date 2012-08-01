@@ -31,7 +31,7 @@ class Image < ActiveRecord::Base
     ).where("image_flags.reported_by IS NULL AND images.is_removed = ?", false).readonly(false)
     
   scope :joined_images, avai_images.joins(
-      "LEFT JOIN galleries ON galleries.id = images.gallery_id"
+      "JOIN galleries ON galleries.id = images.gallery_id"
     ).joins("LEFT JOIN image_flags ON images.id = image_flags.image_id").readonly(false)
 
   scope :removed_or_flagged_images, joins(
@@ -81,33 +81,37 @@ class Image < ActiveRecord::Base
 
   # CLASS METHODS
   class << self
-    @@current_user
-    def set_current_user current_user
-      @@current_user = current_user
-    end
-
-    def current_user
-      @@current_user
-    end
-
     def do_search(params = {})
       params[:filtered_params][:sort_field] = 'name' unless params[:filtered_params].has_key?("sort_field")
       paging_info = parse_paging_options(params[:filtered_params], {:sort_mode => :extended})
 
-      self.search(
-        SharedMethods::Converter::SearchStringConverter.process_special_chars(params[:query]),
+      sphinx_search_options = params[:sphinx_search_options]
+      sphinx_search_options = {} if sphinx_search_options.blank?
+      
+      sphinx_search_options.merge!({
         :star => true,
         :page => paging_info.page_id,
-        :per_page => paging_info.page_size)
+        :per_page => paging_info.page_size
+      })
+      
+      self.search(
+        SharedMethods::Converter::SearchStringConverter.process_special_chars(params[:query]),
+        sphinx_search_options)
     end
 
+    # Search within public images only
+    def do_search_public_images(params = {})
+      params[:sphinx_search_options] = {:index => "public_images"}
+      self.do_search(params)
+    end
+    
     def get_all_images_with_current_user(params, current_user)
         paging_info = parse_paging_options(params, 
           {:sort_criteria => "images.promote_num DESC, images.likes DESC, images.updated_at DESC"})
         
         self.joined_images.where(
-          "gall.permission = 'public'
-          AND (gall.user_id = ? 
+          "galleries.permission = 'public'
+          AND (galleries.user_id = ? 
           OR image_flags.reported_by is null)", 
           current_user.id
         ).paginate(
@@ -593,6 +597,30 @@ class Image < ActiveRecord::Base
       indexes author(:username), :as => :author, :sortable => true
 
       has gallery_id
+      
+      set_property :field_weights => {
+        :name => 7,
+        :keyword => 3,
+        :author => 2,
+        :description => 1
+      }
+
+      if Rails.env.production?
+        set_property :delta => FlyingSphinx::DelayedDelta
+      else
+        set_property :delta => true
+      end
+    end
+    
+    # Index for public images
+    define_index :public_images do
+      indexes name
+      indexes description
+      indexes keyword
+      indexes is_removed
+      indexes author(:username), :as => :author, :sortable => true
+
+      has gallery_id
 
       set_property :field_weights => {
         :name => 7,
@@ -600,6 +628,8 @@ class Image < ActiveRecord::Base
         :author => 2,
         :description => 1
       }
+      
+      where("images.id IN (SELECT id FROM (#{Image.public_images.to_sql}) public_images)")
 
       if Rails.env.production?
         set_property :delta => FlyingSphinx::DelayedDelta

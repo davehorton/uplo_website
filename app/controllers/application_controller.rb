@@ -1,6 +1,6 @@
 class ApplicationController < ActionController::Base
   protect_from_forgery
-  before_filter :set_current_tab, :check_banned_user
+  before_filter :set_current_tab, :set_current_user, :check_banned_user
   before_filter :filter_params
 
   PAGE_SIZE = 10
@@ -43,6 +43,10 @@ class ApplicationController < ActionController::Base
       # @current_tab = "home"
     end
 
+    def set_current_user
+      User.current_user = current_user
+    end
+  
     # You can override this method in the sub class.
     def default_page_size
       PAGE_SIZE

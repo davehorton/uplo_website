@@ -73,6 +73,8 @@ class User < ActiveRecord::Base
     }).where("users.is_banned = ? OR galleries_data.flagged_images_count >= ?", true, MIN_FLAGGED_IMAGES).select(
       "DISTINCT users.*, galleries_data.flagged_images_count")
   }
+  
+  scope :confirmed_users, where("confirmed_at IS NOT NULL")
 
   # CLASS METHODS
   class << self
@@ -131,13 +133,26 @@ class User < ActiveRecord::Base
       params[:filtered_params][:sort_field] = 'first_name' unless params[:filtered_params].has_key?("sort_field")
       paging_info = parse_paging_options(params[:filtered_params], {:sort_mode => :extended})
 
-      self.search(
-        SharedMethods::Converter::SearchStringConverter.process_special_chars(params[:query]),
+      sphinx_search_options = params[:sphinx_search_options]
+      sphinx_search_options = {} if sphinx_search_options.blank?
+      
+      sphinx_search_options.merge!({
         :star => true,
         :page => paging_info.page_id,
-        :per_page => paging_info.page_size )
+        :per_page => paging_info.page_size
+      })
+      
+      self.search(
+        SharedMethods::Converter::SearchStringConverter.process_special_chars(params[:query]),
+        sphinx_search_options)
+    end   
+    
+    # Search within confirmed users only
+    def do_search_confirmed_users(params = {})
+      params[:sphinx_search_options] = {:with => {:confirmed => true}}
+      self.do_search(params)
     end
-
+    
     # Override Devise method so that User can log in with username or email.
     def find_for_database_authentication(warden_conditions)
       conditions = warden_conditions.dup
@@ -174,6 +189,16 @@ class User < ActiveRecord::Base
       end
     end
 
+    # Get the current user.
+    def current_user
+      Thread.current[:current_user]
+    end
+    
+    # Set the current user in this thread.
+    def current_user=(user)
+      Thread.current[:current_user] = user
+    end
+    
     protected
 
     def parse_paging_options(options, default_opts = {})
@@ -543,7 +568,10 @@ class User < ActiveRecord::Base
     indexes first_name
     indexes last_name
     indexes username
-
+    indexes email
+    
+    has "confirmed_at IS NOT NULL", :as => :confirmed, :type => :boolean
+    
     if Rails.env.production?
       set_property :delta => FlyingSphinx::DelayedDelta
     else

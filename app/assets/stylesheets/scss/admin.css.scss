@@ -124,7 +124,7 @@
       margin-bottom: 10px;
       float: left;
       overflow: hidden;
-      
+          
       .image-link{
         display: block;
         width: 155px;
@@ -146,6 +146,13 @@
         &.disabled {
           background: url('/assets/promote-spotlight-disabled.png') no-repeat;
         }
+      }
+      
+      &.promoted{
+        -webkit-box-shadow:rgba(0,0,0,0.30) 0 2px 3px;
+        -moz-box-shadow:rgba(0,0,0,0.30) 0 2px 3px;
+	      box-shadow:rgba(0,0,0,0.30) 0 2px 3px;
+        zoom: 1;
       }
     }
     

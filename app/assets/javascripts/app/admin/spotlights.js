@@ -42,11 +42,14 @@ spotlights = {
             var params = url.param();
             
             if(on_promoting){
-              $(photo).addClass('disabled');                         
-              params['demote'] = true;              
+              $(photo).addClass('disabled');
+              // Change parent container style
+              $(photo).parents(".image-container").addClass('promoted');
+              params['demote'] = true;
             }
             else{
               $(photo).removeClass('disabled');
+              $(photo).parents(".image-container").removeClass('promoted');
               delete params['demote'];
             }
             

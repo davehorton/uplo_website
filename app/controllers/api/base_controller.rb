@@ -1,6 +1,7 @@
 # Contains base methods for all API controllers.
 class Api::BaseController < ActionController::Base
   before_filter :setup_device_call
+  before_filter :set_current_user
   before_filter :filter_params
   before_filter :set_global_variable
   
@@ -51,10 +52,14 @@ class Api::BaseController < ActionController::Base
     request.format = :json
   end
   
+  def set_current_user
+    User.current_user = current_user
+  end
+    
   # You can override this method in the sub class.
   def default_page_size
     PAGE_SIZE
-  end
+  end 
   
   def filter_params
     # TODO: filter paging info and other necessary parameters.
@@ -74,6 +79,10 @@ class Api::BaseController < ActionController::Base
     end
     
     return @filtered_params
+  end
+  
+  def filtered_params
+    @filtered_params
   end
   
   def set_global_variable
