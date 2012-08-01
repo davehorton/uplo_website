@@ -21,17 +21,17 @@ class Image < ActiveRecord::Base
   # SCOPE
   scope :removed_images, where(:is_removed => true)
   scope :avai_images, where(:is_removed => false)
-  
+
   scope :flagged, avai_images.joins(
       "LEFT JOIN image_flags ON images.id = image_flags.image_id"
     ).where("image_flags.reported_by IS NOT NULL AND images.is_removed = ?", false).readonly(false)
-  
+
   scope :un_flagged, avai_images.joins(
       "LEFT JOIN image_flags ON images.id = image_flags.image_id"
     ).where("image_flags.reported_by IS NULL AND images.is_removed = ?", false).readonly(false)
-    
+
   scope :joined_images, avai_images.joins(
-      "JOIN galleries ON galleries.id = images.gallery_id"
+      "JOIN galleries AS gals ON gals.id = images.gallery_id"
     ).joins("LEFT JOIN image_flags ON images.id = image_flags.image_id").readonly(false)
 
   scope :removed_or_flagged_images, joins(
@@ -41,7 +41,7 @@ class Image < ActiveRecord::Base
   scope :public_images, joined_images.where(
     "galleries.permission = ? AND image_flags.reported_by IS NULL AND images.is_removed = ?",
     Gallery::PUBLIC_PERMISSION, false)
-                                            
+
   scope :promoted_images, where("promote_num > ?", 0)
 
   # Paperclip
@@ -87,13 +87,13 @@ class Image < ActiveRecord::Base
 
       sphinx_search_options = params[:sphinx_search_options]
       sphinx_search_options = {} if sphinx_search_options.blank?
-      
+
       sphinx_search_options.merge!({
         :star => true,
         :page => paging_info.page_id,
         :per_page => paging_info.page_size
       })
-      
+
       self.search(
         SharedMethods::Converter::SearchStringConverter.process_special_chars(params[:query]),
         sphinx_search_options)
@@ -104,15 +104,15 @@ class Image < ActiveRecord::Base
       params[:sphinx_search_options] = {:index => "public_images"}
       self.do_search(params)
     end
-    
+
     def get_all_images_with_current_user(params, current_user)
-        paging_info = parse_paging_options(params, 
+        paging_info = parse_paging_options(params,
           {:sort_criteria => "images.promote_num DESC, images.likes DESC, images.updated_at DESC"})
-        
+
         self.joined_images.where(
-          "galleries.permission = 'public'
-          AND (galleries.user_id = ? 
-          OR image_flags.reported_by is null)", 
+          "gals.permission = 'public'
+          AND (gals.user_id = ?
+          OR image_flags.reported_by is null)",
           current_user.id
         ).paginate(
           :page => paging_info.page_id,
@@ -597,7 +597,7 @@ class Image < ActiveRecord::Base
       indexes author(:username), :as => :author, :sortable => true
 
       has gallery_id
-      
+
       set_property :field_weights => {
         :name => 7,
         :keyword => 3,
@@ -611,7 +611,7 @@ class Image < ActiveRecord::Base
         set_property :delta => true
       end
     end
-    
+
     # Index for public images
     define_index :public_images do
       indexes name
@@ -628,7 +628,7 @@ class Image < ActiveRecord::Base
         :author => 2,
         :description => 1
       }
-      
+
       where("images.id IN (SELECT id FROM (#{Image.public_images.to_sql}) public_images)")
 
       if Rails.env.production?
