@@ -1,9 +1,12 @@
 class User < ActiveRecord::Base
+  class NotReadyForReinstatingError < StandardError
+  end
+   
   include ::SharedMethods::Paging
   include ::SharedMethods::Converter
   include ::SharedMethods::SerializationConfig
 
-  attr_accessor :force_submit, :login
+  attr_accessor :force_submit, :login, :skip_state_changed_tracking
 
   GENDER_MALE = "0"
   MIN_FLAGGED_IMAGES = 3
@@ -58,24 +61,32 @@ class User < ActiveRecord::Base
   # SCOPE
   scope :active_users, where(:is_removed => false, :is_banned => false)
   scope :removed_users, where(:is_removed => true)
-  scope :flagged_users, lambda {
-    self.joins(%Q{
-      JOIN (
+  
+  # Usage:
+  # User.flagged_users # => return users that banned OR flagged images count >= MIN_FLAGGED_IMAGES
+  # User.flagged_users(true) # => return users that banned AND flagged images count >= MIN_FLAGGED_IMAGES
+  scope :flagged_users, lambda {   
+    self.joins(self.sanitize_sql([
+      "JOIN (
         SELECT galleries.user_id,
         SUM(images_data.flagged_images_count) AS flagged_images_count
         FROM galleries JOIN (
           SELECT gallery_id, COUNT(flagged_images.id) AS flagged_images_count
-          FROM (#{Image.removed_or_flagged_images.to_sql}) AS flagged_images GROUP BY gallery_id
+          FROM (#{Image.flagged.to_sql}) AS flagged_images GROUP BY gallery_id
         ) images_data ON galleries.id = images_data.gallery_id
         GROUP BY galleries.user_id
       ) galleries_data
       ON galleries_data.user_id = users.id
-    }).where("users.is_banned = ? OR galleries_data.flagged_images_count >= ?", true, MIN_FLAGGED_IMAGES).select(
+      AND (users.is_banned = ? OR galleries_data.flagged_images_count >= ?)",
+      true, MIN_FLAGGED_IMAGES])
+    ).select(
       "DISTINCT users.*, galleries_data.flagged_images_count")
   }
   
+  scope :reinstate_ready_users, flagged_users.where("flagged_images_count < ?", MIN_FLAGGED_IMAGES)
+  
   scope :confirmed_users, where("confirmed_at IS NOT NULL")
-
+  
   # CLASS METHODS
   class << self
     def load_users(params = {})
@@ -109,9 +120,9 @@ class User < ActiveRecord::Base
       self.joins(self.sanitize_sql([
         "LEFT JOIN (
           SELECT galleries.user_id,
-          COALESCE(SUM(images_data.images_count), 0) AS images_count,
-          COALESCE(SUM(images_data.images_likes_count), 0) AS images_likes_count,
-          COALESCE(SUM(images_data.images_pageview), 0) AS images_pageview
+          SUM(images_data.images_count) AS images_count,
+          SUM(images_data.images_likes_count) AS images_likes_count,
+          SUM(images_data.images_pageview) AS images_pageview
           FROM galleries LEFT JOIN (
             SELECT gallery_id, COUNT(images.id) AS images_count,
             SUM(likes) AS images_likes_count,
@@ -181,7 +192,7 @@ class User < ActiveRecord::Base
 
     def remove_flagged_users
       self.transaction do
-        self.flagged_users.each do |user|
+        self.reinstate_ready_users.each do |user|
           user.remove
         end
       end
@@ -189,7 +200,7 @@ class User < ActiveRecord::Base
 
     def reinstate_flagged_users
       self.transaction do
-        self.flagged_users.each do |user|
+        self.reinstate_ready_users.each do |user|
           user.reinstate
         end
       end
@@ -539,9 +550,16 @@ class User < ActiveRecord::Base
   end
 
   def remove
+    if !self.ready_for_reinstating?
+      raise NotReadyForReinstatingError
+    end
+    
     self.class.transaction do
-      self.update_attribute(:is_removed, true)
-      self.remove_flagged_images
+      if !self.is_removed?
+        self.update_attribute(:is_removed, true)
+        # Send email.
+        UserMailer.user_is_removed(self).deliver
+      end
     end
   end
 
@@ -550,15 +568,22 @@ class User < ActiveRecord::Base
   end
 
   def reinstate
+    if !self.ready_for_reinstating?
+      raise NotReadyForReinstatingError
+    end
+    
     self.class.transaction do
-      self.update_attribute(:is_banned, false)
-      self.reinstate_flagged_images
+      if self.is_banned?
+        self.update_attribute(:is_banned, false)
+        # Send email.
+        UserMailer.user_is_reinstated(self).deliver
+      end
     end
   end
 
   def reinstate_flagged_images
     Image.transaction do
-      self.images.removed_or_flagged_images.each do |image|
+      self.images.flagged.each do |image|
         image.reinstate
       end
     end
@@ -566,7 +591,11 @@ class User < ActiveRecord::Base
 
   # Detect if this user is ready for being flagged.
   def will_be_banned?
-    (!self.is_banned && self.images.flagged.length >= MIN_FLAGGED_IMAGES)
+    (!self.is_banned && !self.ready_for_reinstating?)
+  end
+  
+  def ready_for_reinstating?
+    (self.images.flagged.length < MIN_FLAGGED_IMAGES)
   end
 
   # indexing with thinking sphinx
@@ -584,4 +613,5 @@ class User < ActiveRecord::Base
       set_property :delta => true
     end
   end
+  
 end

@@ -42,13 +42,15 @@ en:
     notice_promote_succeeded: "Promote photo successfully"
     notice_demote_succeeded: "Remove the photo successfully from spotlight"
     
-    reinstate_user_confirm: "Are you sure you want to reinstate this user ? All flagged images of the user will be also reinstated."
-    reinstate_all_users_confirm: "Are you sure you want to reinstate all users ? All flagged images of the users will be also reinstated."
-    remove_user_confirm: "Are you sure you want to remove this user ? All flagged images of the user will be also removed and the user will not be able to access UPLO anymore."
-    remove_all_users_confirm: "Are you sure you want to remove all users ? All flagged images of the users will be also removed and the users will not be able to access UPLO anymore."
+    reinstate_user_confirm: "Are you sure you want to reinstate this user ?"
+    reinstate_all_users_confirm: "Are you sure you want to reinstate all users ? Only users have less than 3 flagged images will be reinstated."
+    remove_user_confirm: "Are you sure you want to remove this user ? The user will not be able to access UPLO anymore."
+    remove_all_users_confirm: "Are you sure you want to remove all users ? Only users have less than 3 flagged images will be removed. The users will not be able to access UPLO anymore."
     
     error_user_not_found: "User not found"
     error_reinstate_user_failed: "Cannot reinstate the user"
+    error_not_ready_for_reinstating: "User is not ready for resintating. Please reinstate flagged images first"
+    error_not_ready_for_removing: "User is not ready for removing. Please remove or reinstate flagged images first"
     error_reinstate_users_failed: "Cannot reinstate flagged users"
     error_remove_user_failed: "Cannot remove the user"
     error_remove_users_failed: "Cannot remove flagged userss"
@@ -91,6 +93,23 @@ en:
     update_done: "Your profile was updated successfully"
     update_password_done: "Your password was changed successfully"
 
+  user_mailer:
+    mail_greeting: "Hi %{name},"
+    
+    subject_banned_user: "Your account has been suspended"
+    message_banned_user: "We are very sorry that your account has been suspended because you have too many flagged images."
+
+    subject_removed_user: "Your account has been removed from UPLO"
+    message_removed_user: "We are very sorry that your account has been removed from UPLO by the administrator."
+    
+    subject_reinstated_user: "Your account has been reactivated"
+    message_reinstated_user: "Congratulation! You account has been reactivated, you can access UPLO again. Welcome back!"
+    
+    message_removed_user: "We are very sorry that your account has been removed from UPLO by the administrator."
+    
+    sub_message: "Please contact the administrator if there is something wrong."
+    mail_end: "Best regards."
+  
   order:
     transaction_canceled: "You've canceled the transaction"
     cart_empty: "Sorry, your shopping cart is empty. (Did you already submit your order? Check your email for receipts.)"

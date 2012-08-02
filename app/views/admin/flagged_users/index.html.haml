@@ -1,6 +1,8 @@
 - content_for :head do
+  = javascript_include_tag("lib/jquery.poshytip.js")
   = javascript_include_tag("lib/jail.min.js")
   = javascript_include_tag("app/admin/flagged_users.js")
+  = stylesheet_link_tag("tip-yellowsimple/tip-yellowsimple.css")
   
 = render :partial => "admin/admin_menu"
 
@@ -37,12 +39,12 @@
             %a{:href => author_profile}= user.username
           
           .flagged-images
-            - user.images.removed_or_flagged_images.take(3).each do |image|
+            - user.images.flagged.take(3).each do |image|
               %span.flagged-image-thumb-container.left
                 = image_tag image.data.url(:smallest), :class => 'flagged-image-thumb'
           
           .action-container
-            - if user.is_banned?
+            - if user.is_banned? && user.ready_for_reinstating?
               .button.reinstate{'data-confirm' => t('admin.reinstate_user_confirm')}
                 - reinstate_link = url_for(:controller => "admin/flagged_users", :action => "reinstate_user", :id => user.id)
                 %form{:action => reinstate_link, :class => "reinstate-form action-form", 
@@ -50,17 +52,17 @@
                   = hidden_field_tag(:authenticity_token, form_authenticity_token)
 
             - else
-              .button.reinstate.disabled
+              .button.reinstate.disabled.tooltip{:title => t("admin.error_not_ready_for_reinstating")}
               
-            - if user.is_removed?
-              .button.remove.disabled
-            
-            - else
+            - if !user.is_removed? && user.ready_for_reinstating?
               .button.remove{'data-confirm' => t('admin.remove_user_confirm')}
                 - remove_link = url_for(:controller => "admin/flagged_users", :action => "remove_user", :id => user.id)
                 %form{:action => remove_link, :class => "remove-form action-form", 
                       :id => "remove-form-#{user.id}", :method =>'post'}
                   = hidden_field_tag(:authenticity_token, form_authenticity_token)
+            
+            - else
+              .button.remove.disabled.tooltip{:title => t("admin.error_not_ready_for_removing")}
                 
           .contact-link
             = flagged_users_mail_link(user)

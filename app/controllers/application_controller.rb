@@ -77,7 +77,7 @@ class ApplicationController < ActionController::Base
     end
 
     def check_banned_user
-      if current_user && (current_user.is_banned? && current_user.is_removed?)
+      if current_user && (current_user.is_banned? || current_user.is_removed?)
         render_banned_message
       end
     end

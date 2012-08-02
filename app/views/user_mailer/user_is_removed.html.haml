@@ -1,0 +1,12 @@
+!!!
+%html
+  %head
+    %meta{ :content=>"text/html; charset=UTF-8", :http_equiv=>"Content-Type" }
+
+  %body
+    %p= t("user_mailer.mail_greeting", :name => @user.fullname)
+    %p
+      = t("user_mailer.message_removed_user")
+      %br
+      = t("user_mailer.sub_message")
+    %p= t("user_mailer.mail_end")
