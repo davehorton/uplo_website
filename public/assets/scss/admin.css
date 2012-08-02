@@ -277,9 +277,7 @@
   .flagged_image_container .description {
     color: #b3b3b3;
     font-style: italic;
-    height: 60px;
-    width: 155px;
-    overflow: hidden;
+    width: 135px;
     border: none;
     background: none; }
 
@@ -306,3 +304,6 @@
     border-left: none;
     border-right: none;
     border-top: 1px solid #cccccc; }
+
+#flagged-users-confirm-popup #confirm-message-container {
+  line-height: 1.5em; }
