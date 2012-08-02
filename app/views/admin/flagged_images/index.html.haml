@@ -38,7 +38,7 @@
      });
      $("#flagged_image_type-button").css("width", "160px").css("height", "20px");
      $("#flagged_image_type-menu").css("width", "160px");
-     $("#flagged_image_type-button .ui-selectmenu-status").css("padding-top", "3px");
+     $("#flagged_image_type-button .ui-selectmenu-status").css("padding-top", "4px");
      $('#remove_flagged_images').click(function(){
        $('#flag_type_form').attr('action','<%= url_for(:action => :remove_all)%>');
        $("#flag_type_form").submit();

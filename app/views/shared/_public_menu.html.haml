@@ -1,12 +1,12 @@
 %ul#menu-items
-  %li.first{:class => set_current_tab("popular")}
-    = link_to(I18n.t("main_menu.spotlight"), "/spotlight")
-
   %li{:class => set_current_tab("browse")}
     = link_to(I18n.t("main_menu.browse"), "/browse")
 
-  %li{:class => set_current_tab("galleries")}
-    = link_to(I18n.t("main_menu.the_app"), "/intro")
+  %li.first{:class => set_current_tab("popular")}
+    = link_to(I18n.t("main_menu.spotlight"), "/spotlight")
 
   %li{:class => set_current_tab("friend")}
     = link_to(I18n.t("main_menu.friend"), "/friends")
+
+  %li{:class => set_current_tab("galleries")}
+    = link_to(I18n.t("main_menu.the_app"), "/intro")

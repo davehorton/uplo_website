@@ -734,15 +734,35 @@ textarea { padding-top:5px; }
 .ui-corner-all, .ui-corner-bottom, .ui-corner-left, .ui-corner-bl { border-bottom-left-radius: 5px; }
 .ui-corner-all, .ui-corner-bottom, .ui-corner-right, .ui-corner-br { border-bottom-right-radius: 5px; }
 .ui-selectmenu {
-  height: 25px;
+  height: 20px;
   &:hover { text-decoration: none; }
 }
 .ui-selectmenu-menu { vertical-align: top; }
 .ui-selectmenu-menu li a, .ui-selectmenu-status {
-  font-size: 12px;
+  font-size: 11px;
   font-weight: normal;
-  line-height: 13px;
-  padding: 7px 0 3px 10px;
+  line-height: 12px;
+  padding: 3px 0 3px 10px;
+}
+
+/*JQUERY MODIFY */
+.ui-widget.ui-widget-content.ui-selectmenu-menu-dropdown.ui-corner-bottom{
+	li{
+	
+		a{
+			font-weight:normal;
+			color:#606060;
+			padding-left:20px;
+		}
+	}
+	
+	.ui-selectmenu-item-focus.ui-state-hover{
+		background: url('/assets/bg-dropdown-selection.png') repeat-x;
+		a{
+			background: url('/assets/icon-dropdown-selection.png') no-repeat;
+			color:white;
+		}
+	}
 }
 
 /*==================================================================================*/
@@ -772,6 +792,15 @@ textarea { padding-top:5px; }
   #user-box{
     color: #333;
     display: inline-block;
+  }
+
+  #cart-counter{
+	color:white;
+	padding: 1px 3px 2px 3px;
+	background:url('/assets/bg-shopping-cart.jpg') no-repeat;
+	background-size:100%;
+	font-size:12px;
+	font-weight:bold;
   }
 }
 
@@ -824,49 +853,56 @@ textarea { padding-top:5px; }
       }
     }
   }
-
-  #search-box {
-    .container{
-      width: 155px;
-      height: 20px;
-      vertical-align: middle;
-      background-color: $color-white;
-      border-width: 1px;
-      border-style: solid none none;
-      border-radius: 15px;
-      -webkit-border-radius: 15px;
-      -moz-border-radius: 15px;
-      -moz-border-top-colors: #979797 #dfdfdf $color-white;
-      box-shadow: 0 0 2px #dfdfdf;
-
-      #search-keyword{
-        border: none;
-        margin: 3px 6px 0 3px;
-        vertical-align: middle;
-        width: 120px;
-        &:focus {
-          outline: 0 none;
-          -moz-box-shadow: none;
-          -webkit-box-shadow: none;
-          box-shadow: none; }
-      }
-      .inputHintOverlay {
-        color: $color-light-gray;
-        font-size: 11px;
-        font-style: italic;
-        float: left;
-        z-index: 1; }
-      .search-icon {
-        display: inline-block;
-        width: 20px;
-        height: 20px;
-        background: url("/assets/search-13x13.png") no-repeat scroll center left transparent;
-        vertical-align: middle;
-        cursor: pointer;
-      }
-    }
-  }
 }
+
+#search-box {
+    .container{
+     width: 155px;
+     height: 20px;
+     vertical-align: middle;
+     background-color: $color-white;
+     border-width: 1px;
+     border-style: solid none none;
+     border-radius: 15px;
+     -webkit-border-radius: 15px;
+     -moz-border-radius: 15px;
+     -moz-border-top-colors: #979797 #dfdfdf $color-white;
+     box-shadow: 0 0 2px #dfdfdf;
+
+     #search-keyword{
+       border: none;
+       margin: 3px 6px 0 3px;
+       vertical-align: middle;
+       width: 120px;
+       &:focus {
+         outline: 0 none;
+         -moz-box-shadow: none;
+         -webkit-box-shadow: none;
+         box-shadow: none; }
+     }
+     .inputHintOverlay {
+       color: $color-light-gray;
+       font-size: 11px;
+       float: left;
+       z-index: 1; 
+     }
+	#wrapSearchjqiho{
+		input[type=text]{
+			background:transparent;
+		}
+		margin-top:-5px;
+	}
+     .search-icon {
+       display: inline-block;
+       width: 20px;
+       height: 20px;
+       background: url("/assets/search-13x13.png") no-repeat scroll center left transparent;
+       vertical-align: middle;
+       cursor: pointer;
+     }
+   }
+ }
+
 
 #bottom {
   width: 100%;
@@ -1352,7 +1388,7 @@ textarea { padding-top:5px; }
 #my_links-button, #my_links-menu {
   min-width: 110px;
   max-width: 110px;
-  li a, .ui-selectmenu-status { padding-top: 4px; font-weight: bold; }
+  li a, .ui-selectmenu-status {font-size:11px; padding-top: 4px;}
 }
 #gallery_permission-button, #gallery_permission-menu {
   max-width: 120px;
@@ -1372,3 +1408,5 @@ textarea { padding-top:5px; }
   li a, .ui-selectmenu-status { padding-top: 4px; }
   .number { margin-left: 5px;}
 }
+
+

@@ -5,10 +5,11 @@
     %li
       %a{:href => shopping_cart_show_path}
         My Cart
-        %span#cart-counter.normal (#{total_line_items})
-    %li.no-padding-right
+        %span#cart-counter.normal #{total_line_items}
+    %li
       = select_tag "private_pages", private_links_options(current_section), :id => "my_links"
-
+    %li.no-padding-right{:style => "margin-top: 2px"}
+      = render :partial => "/shared/search_box_new", :locals => {:action => :search}
   - else
     %li
       = link_to "Login", "/signin", :method => "get"

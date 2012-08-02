@@ -13,6 +13,7 @@
     = stylesheet_link_tag 'jquery.ui.theme.css', 'jquery.ui.selectmenu.css', 'scss/application.css', 'scss/dialog.css'
     = jquery_include_tag
     = javascript_include_tag 'rails.js', 'application.js', 'lib/jquery.ui.widget.js', 'lib/jquery.ui.position.js', 'lib/jquery.ui.selectmenu.js', 'lib/jquery.simplemodal.js'
+    = javascript_include_tag("app/gallery.js", 'lib/jquery.inputHintOverlay.js')
     = csrf_meta_tag
     = yield :head
     :erb
@@ -76,6 +77,6 @@
     = javascript_tag do
       $('body').delegate('.popup .close', 'click', function(e){ $.modal.close() });
       $('body').delegate('.bubble .close', 'click', function(e){ $.modal.close() });
-      $('select[id!=my_links]').selectmenu({style:'popup'});
-      $('#my_links').selectmenu({ style: 'popup', select: function(e, obj){ window.location = obj.value; }});
+      $('select[id!=my_links]').selectmenu({style:'dropdown'});
+      $('#my_links').selectmenu({ style: 'dropdown', select: function(e, obj){ window.location = obj.value; }});
       helper.auto_hide_flash_message()

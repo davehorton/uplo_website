@@ -57,7 +57,7 @@ deletePhoto = (node) ->
           $('#images-panel').html response.items
           $('.pagination-panel').each( (idx, elem) -> $(elem).html response.pagination )
           $('#gallery_selector_id').html response.gallery_options
-          $('select').selectmenu({ style: 'popup' })
+          $('select').selectmenu({ style: 'dropdown' })
           alert("Delete successfully!")
         else
           alert(response.msg)
@@ -90,7 +90,7 @@ saveGridChanges = (callback) ->
       $('#images-panel').html response.items
       $('.pagination-panel').each((idx, elem) -> $(elem).html response.pagination)
       $('#gallery_selector_id').html response.gallery_options
-      $('select').selectmenu({ style: 'popup' })
+      $('select').selectmenu({ style: 'dropdown' })
       alert("Update successfully!")
       callback.call() if callback
       window.is_grid_changed = false
@@ -147,7 +147,7 @@ $ ->
         $('#images-panel').children().last().remove() if $('.pagination-panel').find('.pagination').length > 0
         $('#gallery_selector_id').html response.gallery_options
         $('.empty-data').remove()
-        $('select[id=gallery_permission]').selectmenu({ style: 'popup' })
+        $('select[id=gallery_permission]').selectmenu({ style: 'dropdown' })
       else
         $(data.context).find('.progress').replaceWith("<div class='error info-line text italic font12 left'>#{response.msg}</div>")
     progress: (e, data) ->
@@ -183,7 +183,7 @@ $ ->
           $('#edit-gallery-popup').replaceWith response.edit_popup
           $('#gallery_selector_id').html(response.gal_with_number_options)
           $('.edit-template #image_gallery_id').each((idx, val) -> $(val).html(response.gallery_options))
-          $('select[id=gallery_permission]').selectmenu({ style: 'popup' })
+          $('select[id=gallery_permission]').selectmenu({ style: 'dropdown' })
         else
           alert(response.msg)
     });
@@ -200,15 +200,17 @@ $ ->
     confirmChanges ->
       window.location = $(e.target).attr('href')
 
-  $('.header-menu a').click (e)->
+  $('.header-menu ul li > a').click (e)->
     e.preventDefault()
     confirmChanges ->
       window.location = $(e.target).attr('href')
 
-  $('#my_links').unbind 'change'
-  $('#my_links').bind 'change', (e) ->
-    confirmChanges ->
-      window.location = $(e.target).val()
+  $('#my_links').selectmenu({ 
+    style: 'dropdown',
+    select: (e, obj)-> 
+      confirmChanges -> window.location = obj.value
+  })
+
 
   $('#gallery_selector_id').change ->
     confirmChanges ->
@@ -226,7 +228,7 @@ $ ->
           $('#fileupload').attr('action', response.upload_url)
           $('#edit-gallery-popup').replaceWith response.edit_popup
           $(@).html response.gallery_options
-          $('select').selectmenu({ style: 'popup' })
+          $('select').selectmenu({ style: 'dropdown' })
           $.modal.close()
       })
 

@@ -1,13 +1,12 @@
 - content_for :head do
   = javascript_include_tag("lib/jail.min.js")
-  = javascript_include_tag("app/gallery.js", 'lib/jquery.inputHintOverlay.js')
   = stylesheet_link_tag("scss/new_image.css")
 
 - content_for :top_content do
   .data-header.text.bold.font16.line12.left
     %span.text.black Browse /
     %span.text.gray All Images
-  = render(:partial => "shared/search_box_new", :locals => {:action => "search"})
+  =# render(:partial => "shared/search_box_new", :locals => {:action => "search"})
 
 .wrapper.images-wrapper.left
   - if @images.blank?
