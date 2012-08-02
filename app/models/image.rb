@@ -519,8 +519,8 @@ class Image < ActiveRecord::Base
           :moulding => item.moulding,
           :date => purchased_date
         }
-        result[:total_quantity] += user.paid_items_number(self.id)
-        result[:total_sale] += user.total_paid(self.id)
+        result[:total_quantity] += item.quantity
+        result[:total_sale] += item.quantity * (item.tax + item.price)
       }
     end
 
