@@ -34,9 +34,15 @@ class Image < ActiveRecord::Base
       "JOIN galleries AS gals ON gals.id = images.gallery_id"
     ).joins("LEFT JOIN image_flags ON images.id = image_flags.image_id").readonly(false)
 
-  scope :public_images, joined_images.where(
-    "galleries.permission = ? AND image_flags.reported_by IS NULL AND images.is_removed = ?",
-    Gallery::PUBLIC_PERMISSION, false)
+  scope :public_images, joined_images.joins("JOIN users ON gals.user_id = users.id").where(
+    "gals.permission = :gallery_permission 
+    AND image_flags.reported_by IS NULL 
+    AND users.is_banned = :user_banned 
+    AND users.is_removed = :user_removed",
+    { :gallery_permission => Gallery::PUBLIC_PERMISSION, 
+      :user_banned => false,
+      :user_removed => false
+    })
 
   scope :promoted_images, where("promote_num > ?", 0)
 
@@ -101,19 +107,41 @@ class Image < ActiveRecord::Base
       self.do_search(params)
     end
 
-    def get_all_images_with_current_user(params, current_user)
-        paging_info = parse_paging_options(params,
-          {:sort_criteria => "images.promote_num DESC, images.updated_at DESC, images.likes DESC"})
-        
-        self.joined_images.where(
-          "gals.permission = 'public'
-          AND (gals.user_id = ?
-          OR image_flags.reported_by is null)",
-          current_user.id
-        ).paginate(
-          :page => paging_info.page_id,
-          :per_page => paging_info.page_size,
-          :order => paging_info.sort_string)
+    def get_all_images_with_current_user(params, current_user = nil)
+      if current_user.blank?
+        conditions = [
+          "gals.permission = :gallery_permission
+          AND image_flags.reported_by IS NULL
+          AND users.is_banned = :user_banned 
+          AND users.is_removed = :user_removed",
+          { :gallery_permission => Gallery::PUBLIC_PERMISSION, 
+            :image_removed => false,
+            :user_banned => false,
+            :user_removed => false
+          }
+        ]
+      else
+        conditions = [
+          "gals.permission = :gallery_permission
+          AND (gals.user_id = :user_id OR image_flags.reported_by IS NULL)
+          AND users.is_banned = :user_banned 
+          AND users.is_removed = :user_removed",
+          { :gallery_permission => Gallery::PUBLIC_PERMISSION, 
+            :user_id => current_user.id,
+            :image_removed => false,
+            :user_banned => false,
+            :user_removed => false
+          }
+        ]
+      end
+
+      paging_info = parse_paging_options(params,
+        {:sort_criteria => "images.promote_num DESC, images.updated_at DESC, images.likes DESC"})
+      
+      self.joined_images.joins("JOIN users ON gals.user_id = users.id").where(conditions).paginate(
+        :page => paging_info.page_id,
+        :per_page => paging_info.page_size,
+        :order => paging_info.sort_string)
     end
 
     def load_images(params = {})
