@@ -40,7 +40,7 @@ class HomeController < ApplicationController
   protected
     def default_page_size
       size = 30
-      if params[:action] == "browse" || params[:action] == 'friends_feed'
+      if params[:action] == "browse" || params[:action] == 'friends_feed' || params[:action] == 'index'
         size = 24
       elsif params[:action] == "search" || params[:action] == "spotlight"
         size = 12

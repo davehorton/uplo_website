@@ -1,6 +1,4 @@
 - content_for :head do
-  = javascript_include_tag("lib/jail.min.js")
-  = javascript_include_tag("app/gallery.js", 'lib/jquery.inputHintOverlay.js')
   = stylesheet_link_tag("scss/new_image.css")
 
 - content_for :top_content do
@@ -9,12 +7,12 @@
     %span.text.gray Recent Uploads
   = render :partial => "shared/filter_search_box", :locals => {:action => "search"}
 
-/ = render :partial => "shared/welcome"
-.wrapper.images-wrapper.left
+#non-login-container.wrapper.images-wrapper.left
   = render :partial => 'images/photos_template', :locals => { :images => @images, :photos_per_line => 6, :photo_size => 'thumb', :other_classes => '' }
+  = render :partial => "shared/welcome"
 = render_pagination(@images, {:controller => "home", :action => params[:action]})
+.overlay
 
-:erb
-  <script type="text/javascript">
-    gallery.setup();
-  </script>
+- content_for :js do
+  = javascript_tag do
+    helper.show_overlay();

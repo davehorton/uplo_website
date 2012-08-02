@@ -1,0 +1,6 @@
+/locals: emails
+- emails.each do |req|
+  .line
+    .email.text.black.font12.left= req.email
+    .button.accept.right{ :data => {:id => "#{ req.id }"}}
+    .line-separator.left

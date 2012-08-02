@@ -1,6 +1,6 @@
 #admin_menu{
 	background: url('/assets/admin_header_bg.png');
-	width:959px;                              
+	width:959px;
 	height:40px;
 	padding-left:1px;
 	margin-top:10px;
@@ -44,15 +44,15 @@
 
 .admin{
   .title{font-size: 16px;}
-  
+
   .title-bar{
     vertical-align: middle;
     margin-bottom: 15px;
-    
+
     .left{width: 35%;}
     .right{width: 60%;}
-    
-    
+
+
     #search-options{
       float: right;
       margin-right: 25px;
@@ -60,9 +60,9 @@
         height: 20px;
         .ui-selectmenu-status{padding-top: 0.405em;}
       }
-      
+
       .sort-label{margin-right: 5px;}
-      
+
       .sort-direction{
         border: 1px solid #CCCCCC;
         display: inline-block;
@@ -74,15 +74,15 @@
         cursor: pointer;
         margin-right: 5px;
       }
-      
+
       .sort-direction:hover{
         border-color: #999999;
-        -webkit-box-shadow:0 0 3px #999999; 
-        -moz-box-shadow:0 0 3px #999999; 
-        box-shadow:0 0 3px #999999; 
+        -webkit-box-shadow:0 0 3px #999999;
+        -moz-box-shadow:0 0 3px #999999;
+        box-shadow:0 0 3px #999999;
         box-shadow:#999999 0 0 3px \0/IE9;
       }
-      
+
       .sort-direction.current{
         background-color: #696969;
         background-repeat: repeat-x;
@@ -95,7 +95,7 @@
 	#search-icon-admin{width: 20px;}
 	#search-box-admin .container #wrapSearchjqiho {margin:0px;}
   }
-  
+
   .content{
     .user-container{
       width: 312px;
@@ -104,43 +104,43 @@
       margin-right: 10px;
       margin-bottom: 10px;
       float: left;
-      
+
       .profile-link{display: inline-block;}
       .user-info{padding-left: 15px; padding-top: 15px;}
       .username{font-size: 18pt; padding-bottom: 5px;}
       .numbers{
-        color: #4D4D4D; 
+        color: #4D4D4D;
         font-size: 11.5px;
         span.separator{margin: 0 2px}
       }
       a{font-weight: normal;}
     }
-    
+
     .user-container.no-margin-right{margin-right: 0;}
-    
+
     .image-container{
       width: 155px;
-      height: 276px;      
+      height: 276px;
       background-color: #FFFFFF;
       margin-right: 6px;
       margin-bottom: 10px;
       float: left;
       overflow: hidden;
-          
+
       .image-link{
         display: block;
         width: 155px;
         height: 155px;
       }
-      
+
       .image-info{
         padding-left: 10px;
         padding-top: 10px;
         line-height: 15px;
       }
-      
+
       .permission{color: #868686;}
-      
+
       .promote-button{
         background: url('/assets/promote-spotlight.png') no-repeat;
         height: 18px;
@@ -149,7 +149,7 @@
           background: url('/assets/promote-spotlight-disabled.png') no-repeat;
         }
       }
-      
+
       &.promoted{
         -webkit-box-shadow:rgba(0,0,0,0.30) 0 2px 3px;
         -moz-box-shadow:rgba(0,0,0,0.30) 0 2px 3px;
@@ -157,9 +157,9 @@
         zoom: 1;
       }
     }
-    
+
     .image-container.no-margin-right{margin-right: 0;}
-    
+
     .pagination{text-align: right; padding-top: 15px;}
   }
 }
@@ -176,31 +176,31 @@
     .right{width: auto;}
     .button{float: left;}
   }
-  
+
   .content .user-container {
     position: relative;
     .user-info{padding-top: 8px; padding-left: 10px;}
     .username{font-size: 14pt;}
     .button, .action-container, .flagged-images{float: left;}
-    
+
     .action-container{
       margin-top: 10px;
       margin-left: 5px
     }
-    
-    .contact-link{      
+
+    .contact-link{
       position: absolute;
       right: 15px;
       top: 10px;
       text-decoration: underline;
-      font-size: 10pt;    
+      font-size: 10pt;
     }
   }
-  
+
   .flagged-image-thumb-container{
     display: inline-block;
     margin-right: 5px;
-    
+
     .flagged-image-thumb{
       width: 28px;
       height: 28px;
@@ -217,7 +217,7 @@
 	float:right;
 	height: 25px;
 	color:#606060;
-	
+
 }
 
 #flagged_image_type-button{
@@ -244,25 +244,25 @@
     margin-right: 5px;
     height: 27px;
     border:none;
-    
+
   &.remove_all {
     background: url('/assets/remove_all_button.png') no-repeat;
     width: 81px;
 	  height: 21px;
   }
-  
+
   &.reinstate_all {
     background: url('/assets/reinstate_all_button.png') no-repeat;
     width: 89px;
 	  height: 21px
   }
-  
+
   &.contact_all{
     background: url('/assets/contact_all_button.png') no-repeat;
     width: 81px;
 	  height: 21px
   }
-    
+
   &.reinstate {
     background: url('/assets/reinstate_button.png') no-repeat;
     width: 60px;
@@ -274,11 +274,11 @@
     width: 72px;
 	  height: 23px;
   }
-  
+
   &.reinstate.disabled{
-    background: url('/assets/reinstate_button_light.png') no-repeat;    
+    background: url('/assets/reinstate_button_light.png') no-repeat;
   }
-  
+
   &.remove {
     background: url('/assets/remove_button.png') no-repeat;
     width: 53px;
@@ -290,9 +290,9 @@
     width: 63px;
 	  height: 23px;
   }
-  
+
   &.remove.disabled{
-    background: url('/assets/remove_button_light.png') no-repeat;    
+    background: url('/assets/remove_button_light.png') no-repeat;
   }
 }
 
@@ -302,7 +302,7 @@
    margin-right: 0px;
 }
 
-.flagged_image_container{ 
+.flagged_image_container{
   width:155px;
   margin-right: 6px;
   margin-top: 10px;
@@ -315,10 +315,10 @@
 	  font:11px;
 	}
   .wordwrap{
-	  white-space: pre-wrap;      /* CSS3 */   
-	  white-space: -moz-pre-wrap; /* Firefox */    
-	  white-space: -pre-wrap;     /* Opera <7 */   
-	  white-space: -o-pre-wrap;   /* Opera 7 */    
+	  white-space: pre-wrap;      /* CSS3 */
+	  white-space: -moz-pre-wrap; /* Firefox */
+	  white-space: -pre-wrap;     /* Opera <7 */
+	  white-space: -o-pre-wrap;   /* Opera 7 */
 	  word-wrap: break-word;      /* IE */
 	}
    	.image_frame{
@@ -351,12 +351,12 @@
 	   border:none;
 	   background:none;
 	}
-	
-} 
+
+}
 
 // IMAGE POPUP
 #flagged_image_popup{
-	width:280px; 
+	width:280px;
 	padding:20px;
 	padding-top:10px;
 	.user_info.left{color:#606060; margin-left:10px}
@@ -383,3 +383,12 @@
   line-height: 1.5em;
 }
 
+#incoming-invites, #outgoing-invites {
+  width: 465px;
+  .header { height: 21px; }
+}
+#incoming-invites {
+  #btn-accept-all { margin-left: 20px;}
+  .button.accept { margin: 0; }
+  .email { margin-top: 5px;}
+}

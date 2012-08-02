@@ -1,17 +1,28 @@
-#session-container.clearfix
+#session-container
   #signup-area.clearfix.left
-    %h1.intro= "Broadcast your photos"
-    .signup
-      %a{:href => "/register", :class => "ui-button-container icon-link"}
-        %span.round-button= "Sign up now"
+    .main
+      .header.text.white.bold New to UPLO?
+      .title.text.bold.font16.line18 UPLO is invite-only. Request a free invite by entering your email address below.
+      = form_for(:user, :url => '/request_invitation', :html => {:id => 'frm-request', :class => 'left'}) do |f|
+        = f.label :user_email, 'Email', :class => 'left'
+        = f.text_field :email, :autofocus => true, :required => true
+        .line
+          #btn-request-inv.button.request-invite.left
+          .button.app-store.right
 
-  #signin-area.right.box.column
-    .header= "Member sign in"
-    .content
-      = simple_form_for(:user, :url => user_session_path) do |f|
-        = f.input :login, :wrapper_class => "input clearfix", :label_html => {:class => "signin"}, :input_html => {:class => 'signin'}, :required => true
-        = f.error :email
-        = f.input :password, :wrapper_class => "input clearfix", :label_html => {:class => "signin"}, :input_html => {:class => 'signin'}, :label => "Password", :required => true    
-        .input.clearfix
-          = link_to "Forgot your password?", new_password_path(:user), :class => "icon info-link small"
-          = f.submit "Sign in", :class => "signin-button"
+  #signin-area.clearfix.right
+    .main
+      .header.text.white.bold Member Sign In
+      = simple_form_for(:user, :url => user_session_path, :id => 'frm-login') do |f|
+        .line
+          = f.input :login, :wrapper_class => "input clearfix", :label_html => {:class => "signin"}, :input_html => {:class => 'signin'}, :required => false
+          = f.error :email
+        .line
+          = f.input :password, :wrapper_class => "input clearfix", :label_html => {:class => "signin"}, :input_html => {:class => 'signin'}, :label => "Password", :required => false
+        .line
+          / #btn-login.button.login.left
+          = f.submit 'login'
+          %a.text.white.font12.left{ :href => "#{ new_password_path(:user) }"} Forgot your password?
+
+= javascript_tag do
+  helper.setup_login()

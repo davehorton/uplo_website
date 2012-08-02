@@ -217,7 +217,16 @@ textarea { padding-top:5px; }
 
 /*----- END BOXES -----*/
 
-.clearfix:after { clear: both; content: ' '; display: block; font-size: 0; height: 0; line-height: 0; visibility: hidden; width: 0; }
+.clearfix:after {
+  clear: both;
+  content: ' ';
+  display: block;
+  font-size: 0;
+  height: 0;
+  line-height: 0;
+  visibility: hidden;
+  width: 0;
+}
 * html .clearfix,
 *:first-child+html .clearfix { zoom: 1; }
 .round-box {
@@ -360,8 +369,15 @@ textarea { padding-top:5px; }
     line-height: 32px;
   }
 }
-
-.actions-panel{
+.overlay {
+  z-index:1000;
+  top: 0;
+  left: 0;
+  opacity: 0.5;
+  position: fixed;
+  background-color: $color-white;
+}
+.actions-panel {
   cursor: pointer;
 }
 
@@ -609,6 +625,30 @@ textarea { padding-top:5px; }
 
 .button {
   cursor: pointer;
+  &.accept {
+    background: url('/assets/btn-accept.png') no-repeat;
+    width: 59px;
+    height: 21px; }
+  &.accept-all {
+    background: url('/assets/btn-accept-all.png') no-repeat;
+    width: 75px;
+    height: 21px; }
+  &.send-invite {
+    background: url('/assets/btn-send-invite.png') no-repeat;
+    width: 81px;
+    height: 21px; }
+  &.login {
+    background: url('/assets/btn-login.png') no-repeat;
+    width: 56px;
+    height: 27px; }
+  &.app-store {
+    background: url('/assets/btn-app-store.png') no-repeat;
+    width: 96px;
+    height: 27px; }
+  &.request-invite {
+    background: url('/assets/btn-request-invite.png') no-repeat;
+    width: 126px;
+    height: 27px; }
   &.search {
     background: url('/assets/btn-search.png') no-repeat;
     width: 57px;
@@ -1433,4 +1473,40 @@ textarea { padding-top:5px; }
   #query_sort_by-button { margin-left: 6px; }
   .button.search { margin-right: 10px;}
   .text.sort{ margin-top: 6px;}
+}
+#non-login-container {
+  position: relative;
+  #session-container {
+    position: absolute;
+    top: 0;
+    left: 161px;
+    width: 638px;
+    z-index: 1001;
+    label {
+      text-transform: uppercase;
+      color: $color-white;
+      font-weight: bold;
+      margin: 0 0 5px 0;
+      line-height: 10px;
+    }
+    input[type=text], input[type=password] { width: 238px; }
+    .header { font-size: 31px; line-height:35px; }
+    #signup-area, #signin-area {
+      width: 319px;
+      height: 316px;
+      .main { margin: 45px 36px 0 38px; }
+      .line { margin-top: 20px;}
+    }
+    #signup-area {
+      background-color: #000000;
+      input { height: 25px; }
+      .title { color: #898989; margin-top: 14px; }
+      #frm-request { margin-top: 14px;}
+    }
+    #signin-area {
+      background-color: rgba(0, 0, 0, 0.5);
+      #btn-login { margin-right: 20px; }
+      a { margin-top: 8px; text-decoration: underline; }
+    }
+  }
 }

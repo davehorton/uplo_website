@@ -1,0 +1,17 @@
+= render :partial => "admin/admin_menu"
+
+#incoming-invites.left
+  .header
+    .text.black.bold.font16.left Incoming Invites
+    #btn-accept-all.button.accept-all.left
+  .line-separator.left
+  #emails-container
+    = render :partial => 'emails_for_invite', :locals => { :emails => @inv_requests }
+
+#outgoing-invites.right
+  .header
+    .text.black.bold.font16.left Outgoing Invites
+  .line-separator.left
+
+- content_for :js do
+  = javascript_include_tag 'app/admin/invites.js'

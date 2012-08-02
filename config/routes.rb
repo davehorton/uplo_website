@@ -1,5 +1,7 @@
 Uplo::Application.routes.draw do
 
+  get "invites/index"
+
   # WEB ROUTING
   root :to => "home#index"
   get "shopping_cart/show"
@@ -93,6 +95,7 @@ Uplo::Application.routes.draw do
     get 'set_avatar', :to => 'users#set_avatar'
     put 'update_profile_info', :to => 'users#update_profile_info'
     get 'unlike_image', :to => 'users#unlike_image'
+    post 'request_invitation', :to => 'users#request_invitation'
   end
 
   # ADMIN SECTIONS
@@ -134,6 +137,13 @@ Uplo::Application.routes.draw do
 
       member do
         post :promote
+      end
+    end
+
+    resources :invites do
+      collection do
+        post :send_invitation
+        get :confirm_invitation_request
       end
     end
   end

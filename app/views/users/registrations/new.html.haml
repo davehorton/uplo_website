@@ -2,12 +2,12 @@
   = javascript_include_tag("lib/jquery.ui.datepicker.js")
   = javascript_include_tag("app/user.js")
   = jquery_ui_css_tag
-  
+
 %h2 Sign up
 = simple_form_for(resource, :as => resource_name, :url => registration_path(resource_name), :html => {:class => "signup", :id => "register-form"}) do |f|
   = f.error_notification
   .inputs
-    = f.input :email, :required => true, :autofocus => true
+    = f.input :email, :required => true, :autofocus => true, :value => @inv.email
     = f.input :username, :required => true, :autofocus => true
     = f.input :first_name, :required => true, :autofocus => true
     = f.input :last_name, :required => true, :autofocus => true
@@ -21,10 +21,10 @@
   <script type="text/javascript">
     $(document).ready(function(){
       user.setup_datepicker();
-      
+
       $('#register-form').submit(function(){
         // Get current date.
-        var date = new Date();        
+        var date = new Date();
         _gaq.push(['_setCustomVar', 2, 'UPLO Web - Sign Up Time', date.toUTCString()]);
         _gaq.push(['_trackEvent', 'UPLO Web / Sign Up', 'sign up by UPLO web', 'status']);
         return true;

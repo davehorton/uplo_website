@@ -195,5 +195,19 @@ helper = {
   alert_not_implement: function(){
     alert("This feature is coming soon");
     return false;
+  },
+
+  show_overlay: function(){
+    $('.overlay').css('width', $(document).width() + 'px');
+    $('.overlay').css('height', $(document).height() + 'px');
+  },
+
+  setup_login: function(){
+    $('#btn-login').click(function(){
+      $('#frm-login').submit();
+    });
+    $('#btn-request-inv').click(function(){
+      $('#frm-request').submit();
+    });
   }
 };

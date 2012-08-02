@@ -1,5 +1,15 @@
 class UsersController < ApplicationController
-  before_filter :authenticate_user!
+  before_filter :authenticate_user!, :except => [:request_invitation]
+
+  def request_invitation
+    req = Invitation.new_invitation(params[:user][:email])
+    if req.save
+      flash[:success] = "Your request has been sent"
+    else
+      flash[:error] = req.errors.full_messages[0]
+    end
+    redirect_to :controller => 'home', :action => 'index'
+  end
 
   def profile
     @user = current_user

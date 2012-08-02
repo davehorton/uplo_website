@@ -158,16 +158,15 @@ module ApplicationHelper
   end
 
   def line_item_additional_class(index, max_item_per_line)
+    # page_size = @filtered_params[:page_size]
     last_column_index = max_item_per_line - 1
-    if index % max_item_per_line == 0
-      additional_class = "no-padding-left"
-    elsif index % max_item_per_line == last_column_index
-      additional_class = "no-padding-right"
-    else
-      additional_class = ''
-    end
+    additional_class = []
+    additional_class << 'no-padding-left' if (index % max_item_per_line == 0)
+    additional_class << 'no-padding-right' if (index % max_item_per_line == last_column_index)
+    additional_class << 'no-padding-top' if (index / max_item_per_line == 0)
+    # additional_class << 'no-padding-bottom' if page_size > 0 && (index + max_item_per_line)/ page_size == 1
 
-    return additional_class
+    return additional_class.join(' ')
   end
 
   def is_current_user(user_id)
