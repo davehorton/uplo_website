@@ -166,7 +166,7 @@ class User < ActiveRecord::Base
     
     # Search within confirmed users only
     def do_search_confirmed_users(params = {})
-      params[:sphinx_search_options] = {:with => {:confirmed => true}}
+      params[:sphinx_search_options] = {:index => "confirmed_users"}
       self.do_search(params)
     end
     
@@ -605,7 +605,7 @@ class User < ActiveRecord::Base
     indexes username
     indexes email
     
-    has "confirmed_at IS NOT NULL", :as => :confirmed, :type => :boolean
+    #has "confirmed_at IS NOT NULL", :as => :confirmed, :type => :boolean
     
     if Rails.env.production?
       set_property :delta => FlyingSphinx::DelayedDelta
@@ -614,4 +614,19 @@ class User < ActiveRecord::Base
     end
   end
   
+  define_index :confirmed_users do
+    indexes first_name
+    indexes last_name
+    indexes username
+    indexes email
+    indexes confirmed_at
+    
+    where "confirmed_at IS NOT NULL"
+    
+    if Rails.env.production?
+      set_property :delta => FlyingSphinx::DelayedDelta
+    else
+      set_property :delta => true
+    end
+  end
 end
