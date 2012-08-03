@@ -10,8 +10,8 @@
       .left
         Sort By:
         = select_tag :flag_type, options_for_select(@categories, params[:flag_type]), :id => "flagged_image_type"
-      = link_to '', {:action => :remove_all}, method: :post, :confirm => 'Are you sure you want to remove all images?', :class => "button remove_all left"
-      = link_to '', {:action => :reinstate_all}, method: :post, :confirm => 'Are you sure you want to reinstate all images?', :class => "button reinstate_all left"
+      = link_to '', {:action => :remove_all, :flag_type => params[:flag_type]}, method: :post, :confirm => 'Are you sure you want to remove all images?', :class => "button remove_all left"
+      = link_to '', {:action => :reinstate_all, :flag_type => params[:flag_type]}, method: :post, :confirm => 'Are you sure you want to reinstate all images?', :class => "button reinstate_all left"
 
 .list_flagged_images
   - i = 0

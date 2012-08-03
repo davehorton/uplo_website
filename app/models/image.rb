@@ -294,41 +294,45 @@ class Image < ActiveRecord::Base
   end
 
   def flag(user, params={}, result = {})
-    if (self.image_flags.count > 0)
-      result = { :success => false, :msg => "The image is already flagged." }
+    if (self.author.is_banned)
+      result = { :success => false, :msg => "The author is already banned." }
     else
-      if (self.has_owner(user.id))
-       return result = { :success => false, :msg => "You can not flag your own image" }
-      end
-      description = ImageFlag.process_description(params[:type].to_i, params[:desc])
-      if description.nil?
-        if params[:type].to_i == ImageFlag::FLAG_TYPE['copyright']
-          msg = 'Copyright flag must have photo\'s owner information'
-        else
-          msg = 'Terms of Use Violation flag must have reason reporting'
-        end
-        result = { :success => false, :msg => msg }
+      if (self.image_flags.count > 0)
+        result = { :success => false, :msg => "The image is already flagged." }
       else
-        flag = ImageFlag.new({ :image_id => self.id, :reported_by => user.id,
-          :flag_type => params[:type].to_i, :description => description })
-        if flag.save
-          # Remove all images in shopping carts
-          LineItem.joins(:order).joins(:image).where(
-            :images => {:id => self.id},
-            :orders => {:status => Order::STATUS[:shopping]}
-          ).destroy_all
-
-          if self.author.will_be_banned?
-            # Ban the image's author.
-            self.author.update_attribute(:is_banned, true)
-            # Send email.
-            UserMailer.user_is_banned(self.author).deliver
+        if (self.has_owner(user.id))
+         return result = { :success => false, :msg => "You can not flag your own image" }
+        end
+        description = ImageFlag.process_description(params[:type].to_i, params[:desc])
+        if description.nil?
+          if params[:type].to_i == ImageFlag::FLAG_TYPE['copyright']
+            msg = 'Copyright flag must have photo\'s owner information'
+          else
+            msg = 'Terms of Use Violation flag must have reason reporting'
           end
-
-          # Update result
-          result = { :success => true }
+          result = { :success => false, :msg => msg }
         else
-          result = { :success => false, :msg => flag.errors.full_messages[0]}
+          flag = ImageFlag.new({ :image_id => self.id, :reported_by => user.id,
+            :flag_type => params[:type].to_i, :description => description })
+          if flag.save
+            # Remove all images in shopping carts
+            LineItem.joins(:order).joins(:image).where(
+              :images => {:id => self.id},
+              :orders => {:status => Order::STATUS[:shopping]}
+            ).destroy_all
+
+            if self.author.will_be_banned?
+              # Ban the image's author.
+              self.author.update_attribute(:is_banned, true)
+              # Send email.
+              UserMailer.user_is_banned(self.author).deliver
+            end
+
+            # Update result
+            result = { :success => true }
+          else
+            result = { :success => false, :msg => flag.errors.full_messages[0]}
+          end
         end
       end
     end
