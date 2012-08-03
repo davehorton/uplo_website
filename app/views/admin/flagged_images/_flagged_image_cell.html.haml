@@ -1,6 +1,6 @@
 / locals image, flag, flag_type
 .flagged_image_container
-  .image_frame{:target => flag.image.id, :href => "#{url_for(:controller => '/images', :action => 'browse', :id => image.id)}" }
+  .button.image_frame{:target => flag.image.id, :href => "#{url_for(:controller => '/images', :action => 'browse', :id => image.id)}" }
     = image_tag image.data.url(:thumb), {:width => "155px", :height=> "155px"}
   .button_area.info_line
     .button.reinstate.left{:class => "button_#{image.id}"}
