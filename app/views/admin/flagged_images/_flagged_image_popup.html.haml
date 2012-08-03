@@ -33,7 +33,10 @@
             = flag.reporter.username
         %p.flag_type
           = (flag.flag_type == 1 ? "Terms of Use Violation" : (flag.flag_type == 2 ? "Copyright" : "Nudity"))
+        %p.flag_description.wordwrap
+          = flag.description
       %hr
+      
       %br
       .button_area
         = button_to '', {:action => :reinstate_image, :image_id => flag.image.id}, method: :post, :confirm => 'Are you sure you want to reinstate this image?', :class=> "button reinstate_large left"

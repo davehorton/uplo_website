@@ -353,7 +353,7 @@
 
 // IMAGE POPUP
 #flagged_image_popup{
-	width:320px; 
+	width:280px; 
 	padding:20px;
 	padding-top:10px;
 	.user_info.left{color:#606060; margin-left:10px}
@@ -362,6 +362,17 @@
 	.button.remove_large{margin-left:5px}
 	.second_line{margin-top:3px}
 	.flag_type{color:#b3b3b3; padding-top:3px}
+	.flag_description{padding-top:3px; width: 100%;
+		white-space: pre-wrap;
+	    /* CSS3 */
+	    white-space: -moz-pre-wrap;
+	    /* Firefox */
+	    white-space: -pre-wrap;
+	    /* Opera <7 */
+	    white-space: -o-pre-wrap;
+	    /* Opera 7 */
+	    word-wrap: break-word;
+	    /* IE */ }
 	hr{border-bottom:none; border-left:none; border-right:none; border-top:1px solid #cccccc}
 }
 
