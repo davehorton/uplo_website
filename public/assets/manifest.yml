@@ -1,4 +1,5 @@
 ---
+UPLO_site_admin.jpg: UPLO_site_admin-6aa45a9d7ffae565f7e50d497b97ef62.jpg
 accept.png: accept-827150100e63c7b2f3c88f34d60d43a8.png
 add.png: add-0745403a8479f8514cd70130d79e2f20.png
 admin_header_bg.png: admin_header_bg-e2278018ba63cecc1adb72a46bb74a0b.png
@@ -21,10 +22,13 @@ banner-logo-broadcast.png: banner-logo-broadcast-0b6239ad5d645b08c427fc318545586
 banner-lower-bg.png: banner-lower-bg-5a0747d6225576e4688c307a8afcaa35.png
 bg-banner-spotlight.png: bg-banner-spotlight-8e68e96bdf6f6e9ab5e87adc35036811.png
 bg-banner-the-app.png: bg-banner-the-app-2f610573c9de94a0ab6041feb319d6fd.png
+bg-dropdown-selection.png: bg-dropdown-selection-b357d879a580df76d365b28ff8c01633.png
 bg-header.png: bg-header-b3c896053934b1754991a91dac321d97.png
+bg-main-search.png: bg-main-search-595dd5f3ef2c98b0adb6a7ce3a43d758.png
 bg-popup-header.png: bg-popup-header-cf0fe9259335acfa4013b990e576f17d.png
 bg-public-ad.jpg: bg-public-ad-1cbbaa661fec3a44012995de5de889a6.jpg
 bg-reset-password.png: bg-reset-password-7eac670dc8dce5d5dd04ecc58eacf35b.png
+bg-shopping-cart.jpg: bg-shopping-cart-2e9e149fec681a73509ddefd3032f7d4.jpg
 bg-sub-banner.png: bg-sub-banner-01492526824862bd39687c63431146b0.png
 bg_finish_reset_prefer.jpg: bg_finish_reset_prefer-277bddd698937d063df697cb3ee3ce8e.jpg
 bg_finish_reset_yes.jpg: bg_finish_reset_yes-0db6f0e8ecd8b1c65b1bf63335476121.jpg
@@ -94,6 +98,7 @@ icon-close.png: icon-close-fb19d8451f8009e1233ba016f8577045.png
 icon-comment.jpg: icon-comment-e6a95090a762ef10ef4dc508084d60ff.jpg
 icon-counter-tail.png: icon-counter-tail-7db9524e62858271a68743bbb9224c8c.png
 icon-cvv-arrow.png: icon-cvv-arrow-1935b9db9cde90a2bf425d624106464c.png
+icon-dropdown-selection.png: icon-dropdown-selection-40ed8c154bf5bc9fc7d5943b1802a8a5.png
 icon-edit.jpg: icon-edit-20de540a8626f41767d86841b0c86395.jpg
 icon-email-16x16.png: icon-email-16x16-9f3bc0023032a1b5675e259e9054c3cc.png
 icon-email-24x24.png: icon-email-24x24-dc20e675ec415a88e662608c3553ca68.png
@@ -123,6 +128,7 @@ intro-phone-like-comment.jpg: intro-phone-like-comment-cc4dd997e93c7192ce89070b5
 intro-phone-order.jpg: intro-phone-order-13a1c0d5ba1adace7018a9cc5e4a28a8.jpg
 intro-phone-sales.jpg: intro-phone-sales-5d86e83427b8123bb41345fbcc9ace0a.jpg
 intro-phone-take-pic.jpg: intro-phone-take-pic-212c620b72b204bc9695743fff152ed5.jpg
+ison-search.png: ison-search-ace65b27bd43db2eddafea0827f2a856.png
 last-disabled.png: last-disabled-8e398010e5441986058f627827651f57.png
 last.png: last-224cc1eb9953afe7129632bc6da470d8.png
 line_horizontal.jpg: line_horizontal-86edfb41b39b4be34d46ae776795a432.jpg
@@ -179,7 +185,7 @@ uplo_logo.png: uplo_logo-4e147b8807d73e64931db4bc3568f789.png
 uploader_file.png: uploader_file-3ab3c53af3d8adf6071f3776329ab009.png
 app/admin/flagged_users.js: app/admin/flagged_users-86d161d17e066b899bd84a911d8e0338.js
 app/admin/spotlights.js: app/admin/spotlights-036e6455abad7a3a57c963c428e8f12c.js
-app/edit_images.js: app/edit_images-416c61a4642168c61d029b3cd9412ae2.js
+app/edit_images.js: app/edit_images-4fb25e25234973dc16862a879910a79b.js
 app/gallery.js: app/gallery-56d1423ff8282cf24bfa0dc13979b30e.js
 app/image.js: app/image-090a76bcb99a855a1064e5cb602865bf.js
 app/image_util.js: app/image_util-e58342d34805f84c8607728b6f93d540.js
@@ -282,7 +288,7 @@ jquery.contextMenu.css: jquery.contextMenu-5e13ffab2ad4f1c83de146893d8f0b86.css
 jquery.ui.selectmenu.css: jquery.ui.selectmenu-126b46b0f5616450a0711aea25ce56ec.css
 jquery.ui.theme.css: jquery.ui.theme-bc9f9116ef9708ca6340560832e3b72e.css
 scss/admin.css: scss/admin-18ed5a57048fb03b462ac2101e0a55ea.css
-scss/application.css: scss/application-1cc66ce9982a795415bb1ec9a3935cda.css
+scss/application.css: scss/application-063c42d8419b2fef2e178fe248dbeab0.css
 scss/application.mobile.css: scss/application.mobile-b7d9afe5686708c93c49eadcd9057bb5.css
 scss/banner.css: scss/banner-331c4e35597b1b905f46e6226aa74178.css
 scss/cart.css: scss/cart-a00c819367f1c26885c93fd320e87746.css
