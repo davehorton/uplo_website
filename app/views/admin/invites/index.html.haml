@@ -12,6 +12,14 @@
   .header
     .text.black.bold.font16.left Outgoing Invites
   .line-separator.left
+  = form_for :inv, :url => 'send_invitation', :html => {:id => 'frm-emails'} do |f|
+    .line.left
+      = f.label :inv_emails, 'Email Address', :class => 'text black bold font12 left'
+      = f.text_field :emails, :title => 'username1@url.com, username2@url.com,...', :class => 'right'
+    .line.left
+      = f.label :inv_message, 'Message', :class => 'text black bold font12 left'
+      = f.text_area :message, :class => 'right'
+    .button.send-invite.left
 
 - content_for :js do
-  = javascript_include_tag 'app/admin/invites.js'
+  = javascript_include_tag 'lib/jquery.inputHintOverlay.js', 'app/admin/invites.js'

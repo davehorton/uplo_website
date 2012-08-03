@@ -1,4 +1,6 @@
 $ ->
+  $('form#frm-emails').inputHintOverlay(10, 8)
+
   $('#incoming-invites').delegate '.button.accept', 'click', ->
     $('#mask').modal()
     $.ajax({
@@ -9,11 +11,12 @@ $ ->
       success: (response) ->
         if response.success
           $('#emails-container').html(response.emails)
+          alert('The invitation has been sent!')
           $.modal.close()
         else
           alert(msg)
           $.modal.close()
       error: ->
-          alert('Cannot invite this email right now! Please try again later!')
-          $.modal.close()
+        alert('Cannot invite this email right now! Please try again later!')
+        $.modal.close()
     })

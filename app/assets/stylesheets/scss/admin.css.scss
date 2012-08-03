@@ -1,3 +1,19 @@
+/*==================================================================================*/
+/* CONSTANT */
+/*==================================================================================*/
+$color-white: #ffffff;
+$color-black: #111111;
+$color-heavy-gray: #5d5d5d;
+$color-gray: #606060;
+$color-light-gray: #a1a1a1;
+$color-fuzzy-gray: #b3b3b3;
+$color-fuzzier-gray: #ebebeb;
+$color-background: #f8f8f8;
+$color-highlight: #ed3b03;
+$color-line-separator: #cccccc;
+$color-input-border: #cdcdcd;
+
+
 #admin_menu{
 	background: url('/assets/admin_header_bg.png');
 	width:959px;
@@ -344,7 +360,7 @@
 		color: #606060;
 	}
 	.description{
-	   color: #b3b3b3;
+	   color: $color-fuzzy-gray;
 	   font-style:italic;
 	   width:135px;
 	   height:70px;
@@ -364,7 +380,7 @@
 	.button.cancel{margin:0}
 	.button.remove_large{margin-left:5px}
 	.second_line{margin-top:3px}
-	.flag_type{color:#b3b3b3; padding-top:3px}
+  .flag_type{color:$color-fuzzy-gray; padding-top:3px}
 	.flag_description{padding-top:3px; width: 100%;
 		white-space: pre-wrap;
 	    /* CSS3 */
@@ -391,4 +407,15 @@
   #btn-accept-all { margin-left: 20px;}
   .button.accept { margin: 0; }
   .email { margin-top: 5px;}
+}
+#outgoing-invites {
+  #frm-emails {
+    input, textarea { width: 355px; }
+    input { height: 22px; }
+    textarea { height: 90px; }
+    .line > label { margin-top: 9px;}
+    .line { width: 100%; margin-bottom: 10px; }
+    .inputHintOverlay { color: $color-fuzzy-gray; font-size: 11px; }
+    .button.send-invite { margin-left: 103px; }
+  }
 }
