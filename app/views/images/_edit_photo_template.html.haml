@@ -6,11 +6,11 @@
   .info-panel.left
     .info-line.left
       .label.text.black.bold.font12 Photo Name
-      = text_field :image, :name, :value => image.name
+      = text_field :image, :name, :value => image.name, :style => "font-size:12px; margin-top:5px;"
     .info-line.left
-      .label.text.black.bold.font12 Move to Another Gallery
+      .label.text.black.bold.font12{:style => "margin-bottom:5px;" } Move to Another Gallery
       = select :image, :gallery_id, gallery_options(current_user, image.gallery_id),
-             { :class => 'left' }
+             { :class => 'left'}
     .info-line.left
       / .label.text.black.bold.font12 Price
       / = select :image, :price, gallery_price_options
@@ -26,16 +26,16 @@
       .label.text.black.bold.font12 Other Actions
       .inline.half.left
         %input{ :id => "image_album_cover_#{image.id}", :type => 'checkbox', :name => 'image[is_album_cover]', :class => 'album-cover no-padding left', :checked => image.is_gallery_cover }
-        = label_tag "image_album_cover_#{image.id}", 'Use as album cover', :class => 'text gray font11 line16 left', :style => 'padding-left: 3px'
+        = label_tag "image_album_cover_#{image.id}", 'Use as album cover', :class => 'text gray font11 left', :style => 'padding-left: 3px; line-height:10px'
       .inline.half.right
         %input{ :id => "user_avatar_#{image.id}", :type => 'checkbox', :name => 'image[is_avatar]', :class => 'user-avatar no-padding left', :checked => image.is_owner_avatar }
-        = label_tag "user_avatar_#{image.id}", 'Use as profile picture', :class => 'text gray font11 line16 left', :style => 'padding-left: 3px'
+        = label_tag "user_avatar_#{image.id}", 'Use as profile picture', :class => 'text gray font11 left', :style => 'padding-left: 3px; line-height:10px'
 
   .info-panel.left
     .info-line.left
       .label.text.black.bold.font12 Key Words
       = text_area :image, :key_words, :value => image.keyword
-    .info-line.left
+    .info-line.left{:style => "margin-top:12px"}
       .button.delete-photo.right{ :data => { :url => "#{ url_for(:controller => 'images', :action => 'destroy', :gallery_id => image.gallery_id, :id => image.id)}" } }
 
   .clear
