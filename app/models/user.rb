@@ -472,6 +472,7 @@ class User < ActiveRecord::Base
       info = img.serializable_hash(img.default_serializable_options)
       info[:total_sale] = img.total_sales
       info[:quantity_sale] = img.saled_quantity
+      info[:no_longer_avai] = img.is_flagged?
       array << {:image => info }
     }
     result[:data] = (array.sort! { |a,b| b[:image][:total_sale] <=> a[:image][:total_sale] })
