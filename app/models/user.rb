@@ -467,14 +467,14 @@ class User < ActiveRecord::Base
       :joins => "LEFT JOIN galleries ON galleries.id = images.gallery_id",
       :conditions => ["galleries.permission = ? and galleries.user_id = ?", Gallery::PUBLIC_PERMISSION, self.id],
       :order => paging_info.sort_string) # need sort by order date
-
+    array = []
     images.each { |img|
       info = img.serializable_hash(img.default_serializable_options)
       info[:total_sale] = img.total_sales
       info[:quantity_sale] = img.saled_quantity
-      result[:data] << {:image => info }
+      array << {:image => info }
     }
-    result[:data].sort! { |a,b| a[:total_sale] <=> b[:total_sale] }
+    result[:data] = (array.sort! { |a,b| b[:total_sale] <=> a[:total_sale] })
     result[:total_entries] = images.total_entries
     return result
   end
