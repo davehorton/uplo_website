@@ -7,7 +7,7 @@
     - else
       %h1.left.title= "#{t('admin.member_profiles')} / #{t("admin.search")}"
     .right
-      = render(:partial => "shared/search_box_new", :locals => {:action => search_admin_members_path})
+      = render(:partial => "shared/admin_search_box", :locals => {:action => search_admin_members_path})
       #search-options
         %span.sort-direction{'data-sort-direction' => 'asc', :class => current_sort_direction('asc', @sort_direction)}
           = "A-Z"

@@ -718,47 +718,6 @@ textarea { padding-top:5px; }
       }
     }
   }
-
-  #search-box {
-    .container{
-      width: 155px;
-      height: 20px;
-      vertical-align: middle;
-      background-color: $color-white;
-      border-width: 1px;
-      border-style: solid none none;
-      border-radius: 15px;
-      -webkit-border-radius: 15px;
-      -moz-border-radius: 15px;
-      -moz-border-top-colors: #979797 #dfdfdf $color-white;
-      box-shadow: 0 0 2px #dfdfdf;
-
-      #search-keyword{
-        border: none;
-        margin: 3px 6px 0 3px;
-        vertical-align: middle;
-        width: 120px;
-        &:focus {
-          outline: 0 none;
-          -moz-box-shadow: none;
-          -webkit-box-shadow: none;
-          box-shadow: none; }
-      }
-      .inputHintOverlay {
-        color: $color-light-gray;
-        font-size: 11px;
-        font-style: italic;
-        float: left; }
-      .search-icon {
-        display: inline-block;
-        width: 20px;
-        height: 20px;
-        background: url("/assets/search-13x13.png") no-repeat scroll center left transparent;
-        vertical-align: middle;
-        cursor: pointer;
-      }
-    }
-  }
 }
 
 #bottom {

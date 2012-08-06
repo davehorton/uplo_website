@@ -9,7 +9,7 @@ class Admin::MembersController < Admin::AdminController
   end
   
   def search
-    search_params = {:query => URI.unescape(params[:query]), :filtered_params => filtered_params}
+    search_params = {:query => URI.unescape(params[:admin_query]), :filtered_params => filtered_params}
     @users = User.do_search_confirmed_users(search_params)
     render 'admin/members/index'
   end

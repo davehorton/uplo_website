@@ -1,0 +1,28 @@
+#search-box-admin.right.search-box
+  %form#search-form-admin.search-form{:action => action, :method => :get}
+    .container
+      %input#search-keyword-admin.search-keyword.text.light-gray.font11.line12{:type => "text", :name => "admin_query",
+                            :value => params[:admin_query], :title => I18n.t("common.search_hint") }
+      #search-icon-admin.search-icon.right
+
+:erb
+  <script type="text/javascript">
+    $(document).ready(function(){
+      $('#search-form-admin').inputHintOverlay(5, 8);
+
+      $("#search-icon-admin").click(function(){
+        $("#search-form-admin").submit();
+      });
+
+      $("#search-form-admin").submit(function(){
+        var not_support = ["^", "*", "_"];
+        var val = $("#search-keyword-main").attr('value');
+        for(var i=0; i<not_support.length; i++){
+          if(val.indexOf(not_support[i]) > -1){
+            alert("Search can't be performed with these characters: ^, *, _");
+            return false;
+          }
+        }
+      });
+    });
+  </script>

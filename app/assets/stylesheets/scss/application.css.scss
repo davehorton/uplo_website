@@ -857,7 +857,7 @@ textarea { padding-top:5px; }
   }
 }
 
-#search-box {
+.search-box {
     .container{
      width: 155px;
      height: 20px;
@@ -871,7 +871,7 @@ textarea { padding-top:5px; }
      -moz-border-top-colors: #979797 #dfdfdf $color-white;
      box-shadow: 0 0 2px #dfdfdf;
 
-     #search-keyword{
+     .search-keyword{
        border: none;
        margin: 3px 6px 0 3px;
        vertical-align: middle;

@@ -1,22 +1,22 @@
-#search-box.right
-  %form.search-form{ :action => action, :method => 'get', :controller => "home"}
+#search-box-main.right.search-box
+  %form#search-form-main.search-form{:action => action, :method => :get}
     .container
-      %input#search-keyword.text.light-gray.font11.line12{:type => "text", :name => "query",
+      %input#search-keyword-main.search-keyword.text.light-gray.font11.line12{:type => "text", :name => "query",
                             :value => params[:query], :title => I18n.t("common.search_hint") }
-      .search-icon.right
+      #search-icon-main.search-icon.right
 
 :erb
   <script type="text/javascript">
     $(document).ready(function(){
-      $('form.search-form').inputHintOverlay(0, 8);
+      $('#search-form-main').inputHintOverlay(0, 8);
 
-      $(".search-icon").click(function(){
-        $(".search-form").submit();
+      $("#search-icon-main").click(function(){
+        $("#search-form-main").submit();
       });
 
-      $(".search-form").submit(function(){
+      $("#search-form-main").submit(function(){
         var not_support = ["^", "*", "_"];
-        var val = $("#search-keyword").attr('value');
+        var val = $("#search-keyword-main").attr('value');
         for(var i=0; i<not_support.length; i++){
           if(val.indexOf(not_support[i]) > -1){
             alert("Search can't be performed with these characters: ^, *, _");
