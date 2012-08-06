@@ -254,6 +254,27 @@ class Api::UsersController < Api::BaseController
     end
     render :json => result
   end
+  
+  # POST /api/check_emails
+  # Params
+  # emails => JSON ARRAY
+  
+  def check_emails
+    result = { :success => false, :msg => "", :emails => []}
+    if (params[:emails])
+      parsed_json = ActiveSupport::JSON.decode(params[:emails])
+      avai_emails = []
+      parsed_json.each do |email| 
+        if (User.find_by_email(email))
+          avai_emails << email
+        end
+      end
+      result = { :success => true, :emails => avai_emails}
+    else
+      result = { :success => false, :msg => "No email found", :emails => []}
+    end
+    render :json => result
+  end
 
   protected
   # Init a hash containing user's info

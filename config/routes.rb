@@ -155,6 +155,7 @@ Uplo::Application.routes.draw do
       get 'check_following', :to => 'users#check_following'
       post 'get_notification_settings', :to => 'users#get_notification_settings'
       post 'update_notification_settings', :to => 'users#update_notification_settings'
+      post "check_emails", :to => "users#check_emails"
     end
 
     # Gallery
