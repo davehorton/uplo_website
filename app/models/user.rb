@@ -474,6 +474,7 @@ class User < ActiveRecord::Base
       info[:quantity_sale] = img.saled_quantity
       result[:data] << {:image => info }
     }
+    result[:data] .sort! { |a,b| a[:total_sale] <=> b[:total_sale] }
     result[:total_entries] = images.total_entries
     return result
   end
