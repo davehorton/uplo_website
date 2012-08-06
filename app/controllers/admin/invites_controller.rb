@@ -2,33 +2,67 @@ class Admin::InvitesController < ApplicationController
   layout 'main'
 
   def index
-    @inv_requests = Invitation.load_invitations(@filtered_params)
-    # @inv_requests = Invitation.where('invited_at is null').load_invitations(@filtered_params)
+    # @inv_requests = Invitation.load_invitations(@filtered_params)
+    @inv_requests = Invitation.where('invited_at is null').load_invitations(@filtered_params)
   end
 
   def confirm_invitation_request
-    inv = Invitation.find_by_id params[:id]
-    if inv.nil?
-      result = {:success => false, :msg => 'This request does not exist anymore.' }
+    result = { :success => false }
+    if params[:ids].blank?
+      result[:msg] = 'There is not any request left!'
     else
-      inv.update_attribute(:invited_at, Time.now())
-      #send email
-      InvitationMailer.send_invitation(inv.id).deliver
-      emails = render_to_string :partial => 'emails_for_invite',
-        :locals => { :emails => Invitation.where('invited_at is null').load_invitations(@filtered_params) }
-      result = { :success => true, :emails => emails }
+      params[:ids].each { |id|
+        inv = Invitation.find_by_id id
+        if inv.nil?
+          result = {:success => false, :msg => 'This request does not exist anymore.' }
+        else
+          inv.update_attribute(:invited_at, Time.now())
+          #send email
+          InvitationMailer.send_invitation(inv.id).deliver
+        end
+      }
+      if result[:success]
+        emails = render_to_string :partial => 'emails_for_invite',
+          :locals => { :emails => Invitation.where('invited_at is null').load_invitations(@filtered_params) }
+        result = { :success => true, :emails => emails }
+      end
     end
     render :json => result
   end
 
   def send_invitation
-    req = Invitation.new_invitation(params[:email])
-    if req.save
-      #send email
-      result = { :success => true }
+    result = { :success => false }
+    if !params[:inv].has_key?('emails') || params[:inv]['emails'].blank?
+      result[:msg] = 'Input at least 1 email first!'
     else
-      result = { :success => true, :msg => req.errors.full_messages[0] }
+      invs = []
+      existent_email = ''
+      Invitation.transaction do
+        emails = params[:inv]['emails'].split(',')
+        emails.each { |email|
+          # check email format & unique
+          if Invitation.exists?(:email => email) || User.exists?(:email => email)
+            existent_email = email
+            raise ActiveRecord::Rollback
+          else
+            inv = Invitation.new_invitation email.strip
+            inv[:invited_at] = Time.now()
+            inv.save(:validation => false)
+            invs << inv.id
+            result = { :success => true, :msg => 'Invitations have been sent!' }
+          end
+        }
+      end
+
+      if result[:success]
+        invs.each { |id| InvitationMailer.send_invitation(id, params[:inv]['message']).deliver }
+      elsif existent_email.blank?
+        result[:msg] = "#{existent_email} has been invited!"
+      else
+        result[:msg] = 'Cannot invite any emails right now! Please try again later!'
+      end
     end
+
     render :json => result
   end
 
