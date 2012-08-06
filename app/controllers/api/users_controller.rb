@@ -270,7 +270,7 @@ class Api::UsersController < Api::BaseController
           avai_emails << user
         end
       end
-      result = { :success => true, :data => process_followers_info(user.id, avai_emails)}
+      result = { :success => true, :data => (current_user.id, avai_emails)}
     else
       result = { :success => false, :msg => "No email found", :emails => []}
     end
