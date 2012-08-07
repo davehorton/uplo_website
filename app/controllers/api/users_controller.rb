@@ -264,13 +264,8 @@ class Api::UsersController < Api::BaseController
     if (params[:emails])
       parsed_json = ActiveSupport::JSON.decode(params[:emails])
       avai_emails = []
-      parsed_json.each do |email| 
-        user = User.find_by_email(email)
-        if (user)
-          avai_emails << user
-        end
-      end
-      result = { :success => true, :data => process_followers_info(current_user.id, avai_emails)}
+      users = User.active_users.find_all_by_email(parsed_json)
+      result = { :success => true, :data => process_followers_info(current_user.id, users)}
     else
       result = { :success => false, :msg => "No email found", :emails => []}
     end
