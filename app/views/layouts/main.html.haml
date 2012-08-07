@@ -43,7 +43,7 @@
 
         %nav#menu.header-menu.text.line24.right
           = render(:partial => "shared/public_menu")
-
+        = render :partial => "shared/notification_box"
     #banner
       = yield :banner
     .clear
@@ -51,10 +51,6 @@
     .wrapper
       #top.panel
         #main.clearfix
-        - flash_class = (flash.blank? ? "" : "content")
-        #flash{:class => flash_class}
-          - flash.each do |key, value|
-            .box{:class => "box-#{key}"}= value
         = yield :top_content
 
       #left.panel.left

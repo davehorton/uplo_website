@@ -19,6 +19,7 @@ global = {
  * Helper methods.
  */
 helper = {
+  timerID: null,
   pluralize_without_count: function(number, single_form, plural_form) {
     if(parseInt(number) == 1) {
       return single_form;
@@ -103,14 +104,19 @@ helper = {
   },
 
   auto_hide_flash_message: function(){
-    var flash_hidden = false;
-    $(document).bind('click mousemove keypress', function(event) {
-      if(!flash_hidden){
-        $("#flash").delay(5000).slideUp();
-        flash_hidden = true;
-      }
-    });
+	clearInterval(helper.timerID);
+	helper.timerID = setInterval(function() {
+    	$('#flash').stop(true, true).fadeOut('fast');
+	}, 5000);
   },
+
+  show_notification: function(message){
+	$('#flash').stop(true, true).fadeIn('fast');
+	var string = "<div class='icon_notification left'></div><div class='left'>" + message + "</div>";
+	$("#flash").find('.messages').html(string);
+    helper.auto_hide_flash_message();
+  },
+
 
   // Validate IPv4 address format
   is_valid_ip4_address: function (ipaddr) {

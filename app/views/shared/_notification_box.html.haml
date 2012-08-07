@@ -1,0 +1,26 @@
+/ local value: notification, title, id
+- id = '' if id.nil?
+- title = '' if title.nil?
+- notification = '' if notification.nil?
+.fixed
+  .container{:style => "margin: 0 auto; width: 960px; height: 100px"}
+    #flash.notification.right{:style => flash.count > 0 ? "" : "display:none"}
+      .header.left
+        .left
+        .title.text.black.bold.font12.left{:style => "font-size:12px"}UPLO Notification
+        #notification_close.right
+      .container.left
+        .main-panel.left.messages.wordwrap
+          - flash.each do |key, value|
+            .icon_notification.left
+            .left= value
+
+- content_for :js do
+  = javascript_tag do
+    :erb
+      $(document).ready(function(){
+       $("#notification_close").click(function(){
+         $('#flash').stop(true, true).fadeOut('fast');
+        });
+      });
+
