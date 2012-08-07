@@ -1,11 +1,11 @@
 / locals: action
 .right
-  = form_for :query, :url => "#{ url_for(:controller => params[:controller], :action => action) }", :method => 'get', :html => {:id => 'filtering-search-box'} do |f|
-    = f.text_field :text, :class => 'left'
-    .left= f.select :filtered_by, search_filter_options
+  = form_tag({:action => action}, :method => 'get', :id => 'filtering-search-box') do
+    = text_field_tag :query, params[:query], :class => 'left'
+    .left= select_tag :filtered_by, search_filter_options(params[:filtered_by])
     .button.search.left
     .sort.text.black.font11.left Sort by
-    .left= f.select :sort_by, search_sort_options
+    .left= select_tag :sort_by, search_sort_options(params[:filtered_by], params[:sort_by])
 
 = javascript_tag do
   $('.button.search').click(function(){ $('#filtering-search-box').submit() })

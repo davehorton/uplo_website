@@ -775,6 +775,25 @@ textarea { padding-top:5px; }
   background-color: $color-fuzzy-gray;
 }
 
+.user-container{
+  width: 312px;
+  height: 67px;
+  background-color: #EAEAEA;
+  margin: 6px;
+  float: left;
+  position: relative;
+
+  .profile-link{display: inline-block; width: 67px;}
+  .user-info{padding-left: 15px; padding-top: 20px;}
+  .username{font-size: 15pt; padding-bottom: 5px;}
+  .numbers{
+    color: #4D4D4D;
+    font-size: 11.5px;
+    span.separator{margin: 0 2px}
+  }
+  a{font-weight: normal;}
+}
+
 /* select menu: modify of jquery.ui.theme.css */
 .ui-widget { font-family: $font-family;}
 .ui-state-default, .ui-widget-content .ui-state-default, .ui-widget-header .ui-state-default {
@@ -869,7 +888,10 @@ textarea { padding-top:5px; }
       height: 14px;
     }
   }
-  .data-header { margin-top: 10px;}
+  .data-header {
+    margin-top: 10px;
+    .result-number { color: #898989; }
+  }
   .top-nav {
     margin-top: 4px;
     .actions-panel {
@@ -1476,9 +1498,9 @@ textarea { padding-top:5px; }
 }
 #filtering-search-box {
   margin-top: 6px;
-  #query_text { width: 230px; height: 18px; font-size: 12px; }
-  #query_filtered_by-button { margin: 0 6px; }
-  #query_sort_by-button { margin-left: 6px; }
+  #query { width: 230px; height: 18px; font-size: 12px; }
+  #filtered_by-button { margin: 0 6px; }
+  #sort_by-button { margin-left: 6px; }
   .button.search { margin-right: 10px;}
   .text.sort{ margin-top: 6px;}
 }

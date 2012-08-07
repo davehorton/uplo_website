@@ -5,7 +5,28 @@ class Image < ActiveRecord::Base
   include ::SharedMethods::Converter
   include ::SharedMethods
 
+  SEARCH_TYPE = 'photos'
+  SORT_OPTIONS = { :spotlight => 'spotlight', :view => 'views', :recent => 'recent'}
+  SORT_CRITERIA = {
+    SORT_OPTIONS[:view] => 'images.pageview DESC',
+    SORT_OPTIONS[:recent] => 'images.created_at DESC',
+    SORT_OPTIONS[:spotlight] => 'images.promote_num DESC'
+  }
   FILTER_OPTIONS = ['date_uploaded', 'num_of_views', 'num_of_orders', 'num_of_likes']
+  SALE_REPORT_TYPE = {
+    :quantity => "quantity",
+    :price => "price"
+  }
+  PRINTED_SIZES = {
+    :square => IMAGE_SQUARE_PRINTED_SIZES,
+    :rectangular => IMAGE_PORTRAIT_PRINTED_SIZES
+  }
+  TIERS = { :tier_1 => '1', :tier_2 => '2', :tier_3 => '3' }
+  TIERS_PRICES = {
+    TIERS[:tier_1] => TIER_1_PRICES,
+    TIERS[:tier_2] => TIER_2_PRICES,
+    TIERS[:tier_3] => TIER_3_PRICES
+  }
 
   # ASSOCIATIONS
   belongs_to :gallery
@@ -44,8 +65,8 @@ class Image < ActiveRecord::Base
       :user_removed => false
     })
 
-  scope :belongs_to_avai_user, joined_images.joins('LEFT JOIN users ON gals.user_id=users.id'
-    ).where('users.is_banned = ?', false).readonly(false)
+  scope :belongs_to_avai_user, joined_images.joins('LEFT JOIN users AS avai_users ON gals.user_id=avai_users.id'
+    ).where('avai_users.is_banned = ?', false).readonly(false)
 
   scope :promoted_images, where("promote_num > ?", 0)
 
@@ -69,21 +90,6 @@ class Image < ActiveRecord::Base
   after_create :save_image_dimensions, :process_filename
   after_initialize :init_random_price, :init_tier
 
-  SALE_REPORT_TYPE = {
-    :quantity => "quantity",
-    :price => "price"
-  }
-  PRINTED_SIZES = {
-    :square => IMAGE_SQUARE_PRINTED_SIZES,
-    :rectangular => IMAGE_PORTRAIT_PRINTED_SIZES
-  }
-  TIERS = { :tier_1 => '1', :tier_2 => '2', :tier_3 => '3' }
-  TIERS_PRICES = {
-    TIERS[:tier_1] => TIER_1_PRICES,
-    TIERS[:tier_2] => TIER_2_PRICES,
-    TIERS[:tier_3] => TIER_3_PRICES
-  }
-
   # CLASS METHODS
   class << self
     def do_search(params = {})
@@ -96,7 +102,8 @@ class Image < ActiveRecord::Base
       sphinx_search_options.merge!({
         :star => true,
         :page => paging_info.page_id,
-        :per_page => paging_info.page_size
+        :per_page => paging_info.page_size,
+        :order_by => paging_info.sort_criteria
       })
 
       self.search(
@@ -151,6 +158,9 @@ class Image < ActiveRecord::Base
         :page => paging_info.page_id,
         :per_page => paging_info.page_size,
         :order => paging_info.sort_string)
+    end
+
+    def do_search_accessible_images(user_id, params = {})
     end
 
     def get_all_images_with_current_user(params, current_user = nil)

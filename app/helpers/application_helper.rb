@@ -177,11 +177,25 @@ module ApplicationHelper
     count == 1 ? "#{noun}" : "#{noun.pluralize}"
   end
 
-  def search_filter_options(selected = 'photos')
-    options_for_select({'Photos' => 'photos', 'Users' => 'users'}, selected)
+  def search_filter_options(selected = Image::SEARCH_TYPE)
+    options_for_select({'Photos' => Image::SEARCH_TYPE, 'Users' => User::SEARCH_TYPE}, selected)
   end
 
-  def search_sort_options(selected = 'recent')
-    options_for_select({'Recent Uploads' => 'recent'}, selected)
+  def search_sort_options(type = Image::SEARCH_TYPE, selected)
+    type = Image::SEARCH_TYPE if type.blank?
+    if type == Image::SEARCH_TYPE
+      selected = Image::SORT_OPTIONS[:recent] if selected.blank?
+      options_for_select({
+        'Recent Uploads' => Image::SORT_OPTIONS[:recent],
+        'Most Views' => Image::SORT_OPTIONS[:view],
+        'Spotlight Images' => Image::SORT_OPTIONS[:spotlight]
+      }, selected)
+    else
+      selected = User::SORT_OPTIONS[:name] if selected.blank?
+      options_for_select({
+        'Best Match' => User::SORT_OPTIONS[:name],
+        'Date Joined' => User::SORT_OPTIONS[:date_joined]
+      }, selected)
+    end
   end
 end

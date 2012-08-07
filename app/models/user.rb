@@ -14,6 +14,12 @@ class User < ActiveRecord::Base
   ALLOCATION_STRING = "#{RESOURCE_LIMIT[:size]} #{RESOURCE_LIMIT[:unit]}"
   ALLOCATION = FileSizeConverter.convert RESOURCE_LIMIT[:size], RESOURCE_LIMIT[:unit], FileSizeConverter::UNITS[:byte]
   FILTER_OPTIONS = ['signup_date', 'username', 'num_of_likes', 'num_of_uploads']
+  SEARCH_TYPE = 'users'
+  SORT_OPTIONS = { :name => 'name', :date_joined => 'date' }
+  SORT_CRITERIA = {
+    SORT_OPTIONS[:name] => '',
+    SORT_OPTIONS[:date_joined] => 'users.confirmed_at DESC'
+  }
 
   # Include default devise modules. Others available are:
   # :token_authenticatable, :encryptable, :confirmable, :lockable, :timeoutable and :omniauthable
@@ -22,12 +28,13 @@ class User < ActiveRecord::Base
 
   # Setup accessible (or protected) attributes for your model
   attr_accessible :id, :email, :password, :password_confirmation, :remember_me,
-                  :first_name, :last_name, :username, :login, :nationality, :birthday, :gender, :avatar,
-                  :twitter, :facebook
+                  :first_name, :last_name, :username, :login, :nationality,
+                  :birthday, :gender, :avatar, :twitter, :facebook
 
   attr_accessible :id, :email, :password, :password_confirmation, :remember_me,
-                  :first_name, :last_name, :username, :login, :nationality, :birthday, :gender, :avatar,
-                  :twitter, :facebook, :is_admin, :as => :admin
+                  :first_name, :last_name, :username, :login, :nationality,
+                  :birthday, :gender, :avatar, :twitter, :facebook, :is_admin,
+                  :as => :admin
 
   # ASSOCIATIONS
   has_many :profile_images, :dependent => :destroy, :order => 'last_used DESC'
@@ -153,7 +160,8 @@ class User < ActiveRecord::Base
       sphinx_search_options.merge!({
         :star => true,
         :page => paging_info.page_id,
-        :per_page => paging_info.page_size
+        :per_page => paging_info.page_size,
+        :order_by => paging_info.sort_criteria
       })
 
       self.search(

@@ -15,12 +15,11 @@
       .header.text.white.bold Member Sign In
       = form_for(:user, :url => user_session_path, :html => {:id => 'frm-login'}) do |f|
         .line
-          = f.label :user_login, 'Email/Username', :class => 'left'
+          = f.label :user_login, 'Email/Username', :class => 'left', :required => true
           = f.text_field :login, :required => true
-          / = f.error :email
         .line
           = f.label :user_password, 'Password', :class => 'left'
-          = f.text_field :password, :required => false
+          = f.text_field :password, :type => 'password', :required => false
         .line
           #btn-login.button.login.left
           / = f.submit 'login'

@@ -113,28 +113,6 @@ $color-input-border: #cdcdcd;
   }
 
   .content{
-    .user-container{
-      width: 312px;
-      height: 67px;
-      background-color: #EAEAEA;
-      margin-right: 10px;
-      margin-bottom: 10px;
-      float: left;
-      position: relative;
-      
-      .profile-link{display: inline-block; width: 67px;}
-      .user-info{padding-left: 15px; padding-top: 20px;}
-      .username{font-size: 15pt; padding-bottom: 5px;}
-      .numbers{
-        color: #4D4D4D;
-        font-size: 11.5px;
-        span.separator{margin: 0 2px}
-      }
-      a{font-weight: normal;}
-    }
-
-    .user-container.no-margin-right{margin-right: 0;}
-
     .image-container{
       width: 155px;
       height: 276px;
