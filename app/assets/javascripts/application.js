@@ -30,7 +30,7 @@ helper = {
   check_less_than_characters: function(string, min_chars, callback){
     if(string.length < min_chars) {
       if(callback == null) {
-        alert('Must be at least ' + min_chars + ' character(s)');
+        helper.show_notification('Must be at least ' + min_chars + ' character(s)');
       } else {
         callback.call();
       }
@@ -199,7 +199,7 @@ helper = {
   },
 
   alert_not_implement: function(){
-    alert("This feature is coming soon");
+    helper.show_notification("This feature is coming soon");
     return false;
   },
 

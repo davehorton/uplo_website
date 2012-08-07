@@ -67,7 +67,7 @@
         var reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
         for(var i=0; i < emails.lenght; i++){
           if( !reg.test(emails[i].trim()) ){
-            alert('Please enter an email address!');
+            helper.show_notification('Please enter an email address!');
             return false;
           }
         }
@@ -142,7 +142,7 @@
               icon: "pinterest",
               callback: function(key, opt, e){
                 url = $(this).attr('data-public_url');
-                alert('This feature is coming soon.');
+                helper.show_notification('This feature is coming soon.');
               }
             }
           }

@@ -58,9 +58,9 @@ deletePhoto = (node) ->
           $('.pagination-panel').each( (idx, elem) -> $(elem).html response.pagination )
           $('#gallery_selector_id').html response.gallery_options
           $('select').selectmenu({ style: 'dropdown' })
-          alert("Delete successfully!")
+          helper.show_notification("Delete successfully!")
         else
-          alert(response.msg)
+          helper.show_notification(response.msg)
         $.modal.close()
     });
 
@@ -91,7 +91,7 @@ saveGridChanges = (callback) ->
       $('.pagination-panel').each((idx, elem) -> $(elem).html response.pagination)
       $('#gallery_selector_id').html response.gallery_options
       $('select').selectmenu({ style: 'dropdown' })
-      alert("Update successfully!")
+      helper.show_notification("Update successfully!")
       callback.call() if callback
       window.is_grid_changed = false
       $.modal.close()
@@ -119,11 +119,11 @@ requestUpdateTier = (node) ->
     dataType: 'json',
     success: (response) ->
       if response.success
-        alert("Price has been updated successfully!")
+        helper.show_notification("Price has been updated successfully!")
         $(node).siblings().text "Tier #{response.tier}"
         $.modal.close()
       else
-        alert('Something went wrong!')
+        helper.show_notification('Something went wrong!')
         $('#pricing-form').modal()
   });
 
@@ -178,14 +178,14 @@ $ ->
       dataType: 'json',
       success: (response) ->
         if response.success
-          alert("Your gallery has been updated!")
+          helper.show_notification("Your gallery has been updated!")
           $.modal.close()
           $('#edit-gallery-popup').replaceWith response.edit_popup
           $('#gallery_selector_id').html(response.gal_with_number_options)
           $('.edit-template #image_gallery_id').each((idx, val) -> $(val).html(response.gallery_options))
           $('select[id=gallery_permission]').selectmenu({ style: 'dropdown' })
         else
-          alert(response.msg)
+          helper.show_notification(response.msg)
     });
 
   $('#images-panel').delegate '.edit-template input', 'change', (e) ->

@@ -61,7 +61,7 @@
              setTimeout(show_popup,100);
              $('#flagged_image_popup').html(data.data);
            }else{
-             alert(data.msg);
+             helper.show_notification(data.msg);
            }
          },
          error: function(){

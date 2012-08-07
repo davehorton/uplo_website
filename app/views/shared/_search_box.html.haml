@@ -30,7 +30,7 @@
         var val = $("#search-textbox").attr('value');
         for(var i=0; i<not_support.length; i++){
           if(val.indexOf(not_support[i]) > -1){
-            alert("Search can't be performed with these characters: ^, *, _");
+            helper.show_notification("Search can't be performed with these characters: ^, *, _");
             return false;
           }
         }

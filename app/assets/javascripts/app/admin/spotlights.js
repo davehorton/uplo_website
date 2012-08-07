@@ -59,7 +59,7 @@ spotlights = {
           }
           else{
             if(jQuery.trim(response.message) != ''){
-              alert(response.message);
+              helper.show_notification(response.message);
             }
           }         
           

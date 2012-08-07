@@ -9,9 +9,9 @@ deleteItem = (node)->
       dataType: 'json',
       success: (response) ->
         if(response.success == false)
-          alert(response.msg)
+          helper.show_notification(response.msg)
         else
-          alert('The item has been removed successfully!')
+          helper.show_notification('The item has been removed successfully!')
           $(node).closest('.line').remove()
           $('#cart-counter').text "(#{response.cart_items})"
           if response.cart_items == 0

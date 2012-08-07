@@ -244,7 +244,7 @@
                                 template.addClass('in');
                             });
                         } else {
-                            alert('Something went wrong! Cannot delete this picture');
+                            helper.show_notification('Something went wrong! Cannot delete this picture');
                         }
                     };
                     $.ajax(data);

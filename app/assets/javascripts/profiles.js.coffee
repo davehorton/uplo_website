@@ -33,7 +33,7 @@ requestDislike = (node) ->
     dataType: "json",
     success: (response) ->
       if(response.success==false)
-        alert(response.msg)
+        helper.show_notification(response.msg)
         $.modal.close()
       else
         counter = $('.counter.current')
@@ -53,7 +53,7 @@ requestFollow = (node) ->
     dataType: "json",
     success: (response) ->
       if(response.success==false)
-        alert(response.msg)
+        helper.show_notification(response.msg)
         $.modal.close()
       else if(is_unfollow=='false')
         target.attr('data-following', 'true')
@@ -87,14 +87,14 @@ requestDeleteProfilePhoto = (node) ->
       dataType: "json",
       success: (response) ->
         if(response.success==false)
-          alert(response.msg)
+          helper.show_notification(response.msg)
           $.modal.close()
           window.setTimeout("$('#edit-profile-photo-popup').modal()", 300)
         else
           $('#edit-profile-photo-popup .current-photo .avatar').attr 'src', response.extra_avatar_url
           $('#user-section .avatar.large').attr 'src', response.large_avatar_url
           $('#edit-profile-photo-popup .held-photos .photos').html response.profile_photos
-          alert('Delete successfully!')
+          helper.show_notification('Delete successfully!')
           $.modal.close()
           window.setTimeout("$('#edit-profile-photo-popup').modal()", 300)
     })
@@ -109,9 +109,9 @@ requestUpdateAvatar = (node) ->
     dataType: "json",
     success: (response) ->
       if(response.success==false)
-        alert(response.msg)
+        helper.show_notification(response.msg)
       else
-        alert('Update successfully!')
+        helper.show_notification('Update successfully!')
         $('#edit-profile-photo-popup .current-photo .avatar').attr 'src', response.extra_avatar_url
         $('#user-section .avatar.large').attr 'src', response.large_avatar_url
   })
@@ -145,11 +145,11 @@ $ ->
     done: (e, data) ->
       response = $.parseJSON(data.result)
       if(response.success==false)
-        alert(response.msg)
+        helper.show_notification(response.msg)
         $.modal.close()
         window.setTimeout("$('#edit-profile-photo-popup').modal()", 300)
       else
-        alert('Update successfully!')
+        helper.show_notification('Update successfully!')
         $('#edit-profile-photo-popup .held-photos .photos').html(response.profile_photos)
         $('#edit-profile-photo-popup .current-photo .avatar').attr 'src', response.extra_avatar_url
         $('#user-section .avatar.large').attr 'src', response.large_avatar_url
@@ -180,7 +180,7 @@ $ ->
       dataType: "json",
       success: (response) ->
         if(response.success==false)
-          alert(response.msg)
+          helper.show_notification(response.msg)
         else if(is_unfollow=='false')
           $('#btn-follow').attr('data-following', 'true')
           $('#btn-follow').removeClass('follow')
@@ -215,13 +215,13 @@ $ ->
     email_reg = /^([0-9a-zA-Z]([-.\w]*[0-9a-zA-Z])*@(([0-9a-zA-Z])+([-\w]*[0-9a-zA-Z])*\.)+[a-zA-Z]{2,9})$/i
     website_reg = /(^$)|(^((http|https):\/\/){0,1}[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(([0-9]{1,5})?\/.*)?$)/i
     if email_reg.test($('#user_email').val()) == false
-      alert('Email is invalid!')
+      helper.show_notification('Email is invalid!')
     else if website_reg.test($('#user_website').val()) == false
-      alert('Website is invalid!')
+      helper.show_notification('Website is invalid!')
     else if $("#user_first_name").val().length < 2 || $("#user_first_name").val().length > 30
-      alert('First name must be 2 - 30 characters in length')
+      helper.show_notification('First name must be 2 - 30 characters in length')
     else if $("#user_last_name").val().length < 2 || $("#user_last_name").val().length > 30
-      alert('Last name must be 2 - 30 characters in length')
+      helper.show_notification('Last name must be 2 - 30 characters in length')
     else
       data_form = $('#frm-edit-profile-info')
       $.modal.close()
@@ -233,11 +233,11 @@ $ ->
         dataType: 'json',
         success: (response) ->
           if response.success
-            alert("Your profile has been updated!")
+            helper.show_notification("Your profile has been updated!")
             $('#user-section .name a').text response.fullname
             $.modal.close()
           else
-            alert(response.msg)
+            helper.show_notification(response.msg)
             $.modal.close()
             window.setTimeout("$('#edit-profile-info-popup').modal()", 300)
       });
@@ -245,6 +245,6 @@ $ ->
   $("#user_first_name").keypress (event) -> helper.prevent_exceed_characters(@, event.charCode, 30)
   $("#user_last_name").keypress (event) -> helper.prevent_exceed_characters(@, event.charCode, 30)
   $("#user_first_name").blur ->
-    helper.check_less_than_characters(@.value, 2, -> alert('First name must be at least 2 characters!'))
+    helper.check_less_than_characters(@.value, 2, -> helper.show_notification('First name must be at least 2 characters!'))
   $("#user_last_name").blur ->
-    helper.check_less_than_characters(@.value, 2, -> alert('Last name must be at least 2 characters!'))
+    helper.check_less_than_characters(@.value, 2, -> helper.show_notification('Last name must be at least 2 characters!'))

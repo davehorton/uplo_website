@@ -36,7 +36,7 @@ $ ->
           $('form#frm-comment').inputHintOverlay(5, 8)
           $.modal.close()
         else
-          alert('Something went wrong! Try to post your comment later!')
+          helper.show_notification('Something went wrong! Try to post your comment later!')
           $.modal.close()
     });
 
@@ -54,6 +54,6 @@ $ ->
           $('#current_comments').html(response.comments)
           $.modal.close()
         else
-          alert('Something went wrong!')
+          helper.show_notification('Something went wrong!')
           $.modal.close()
     });

@@ -15,13 +15,13 @@ $ ->
       success: (response) ->
         if response.success
           $('#emails-container').html(response.emails)
-          alert('The invitation has been sent!')
+          helper.show_notification('The invitation has been sent!')
           $.modal.close()
         else
-          alert(response.msg)
+          helper.show_notification(response.msg)
           $.modal.close()
       error: ->
-        alert('Cannot invite this email right now! Please try again later!')
+        helper.show_notification('Cannot invite this email right now! Please try again later!')
         $.modal.close()
     })
 
@@ -35,13 +35,13 @@ $ ->
       success: (response) ->
         if response.success
           $('#emails-container').html(response.emails)
-          alert('The invitation has been sent!')
+          helper.show_notification('The invitation has been sent!')
           $.modal.close()
         else
-          alert(response.msg)
+          helper.show_notification(response.msg)
           $.modal.close()
       error: ->
-        alert('Cannot invite this email right now! Please try again later!')
+        helper.show_notification('Cannot invite this email right now! Please try again later!')
         $.modal.close()
     })
 
@@ -53,9 +53,9 @@ $ ->
       dataType: 'json',
       data: $('#frm-invite').serialize(),
       success: (response) ->
-        alert(response.msg)
+        helper.show_notification(response.msg)
         $.modal.close()
       error: ->
-        alert('Cannot invite any emails right now! Please try again later!')
+        helper.show_notification('Cannot invite any emails right now! Please try again later!')
         $.modal.close()
     })

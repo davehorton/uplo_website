@@ -9,7 +9,7 @@ loadDefaultPrice = ->
         $('#image-price').text response.price
         $.modal.close()
       else
-        alert(response.msg)
+        helper.show_notification(response.msg)
         window.location = '/browse'
   });
 
@@ -27,6 +27,6 @@ $ ->
           $('#image-price').text response.price
           $.modal.close()
         else
-          alert(response.msg)
+          helper.show_notification(response.msg)
           window.location = '/browse'
     });

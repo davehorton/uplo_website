@@ -160,12 +160,12 @@
             {
               setTimeout(finish_flagging,100);
             }else{
-              alert(data.msg);
+              helper.show_notification(data.msg);
             }
           },
           error: function(){
             $.modal.close();
-            alert("Can not flag this image at this time");
+            helper.show_notification("Can not flag this image at this time");
             if (history.length){
               window.location.href = document.referrer
             }else{ window.location = "/browse" }
@@ -198,7 +198,7 @@
           dataType: "json",
           success: function(response){
             if(response.success==false){
-              alert(response.msg);
+              helper.show_notification(response.msg);
             } else if(is_unfollow=='false') {
               $('#btn-follow').attr('data-following', 'true');
               $('#btn-follow').removeClass('follow');
@@ -219,7 +219,7 @@
         var reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
         for(var i=0; i < emails.lenght; i++){
           if( !reg.test(emails[i].trim()) ){
-            alert('Please enter an email address!');
+            helper.show_notification('Please enter an email address!');
             return false;
           }
         }
@@ -277,7 +277,7 @@
                 $('#btn-like').removeClass('like');
                 $('#btn-like').addClass('dislike');
               }
-            }else{ alert(response.msg); }
+            }else{ helper.show_notification(response.msg); }
           },
           fail: function(){}
         });

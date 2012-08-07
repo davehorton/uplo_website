@@ -61,7 +61,7 @@
   <script type="text/javascript">
     $(".button-container").delegate(
       ".not-implement", "click", function() {
-        alert("This feature has not been implemented yet.");
+        helper.show_notification("This feature has not been implemented yet.");
         return false;
       }
     );
@@ -100,9 +100,9 @@
           if(response.success == false){
             window.setTimeout( function(){ update_status(task_id); }, 5000);
           }else if(response.status=="error"){
-            alert("ERROR! Your process has been stop!");
+            helper.show_notification("ERROR! Your process has been stop!");
           }else if(response.status=="cancelled"){
-            alert("Your process has been cancelled!");
+            helper.show_notification("Your process has been cancelled!");
           }
         },
         fail: function(){}
