@@ -525,7 +525,8 @@ class Image < ActiveRecord::Base
           :quantity => item.quantity,
           :moulding => item.moulding,
           :date => purchased_date,
-          :avatar_url => user.avatar_url
+          :avatar_url => user.avatar_url,
+          :user_id => user.id
         }
         result[:total_quantity] += item.quantity
         result[:total_sale] += item.quantity * (item.tax + item.price)
