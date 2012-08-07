@@ -2,11 +2,19 @@ class UsersController < ApplicationController
   before_filter :authenticate_user!, :except => [:request_invitation]
 
   def request_invitation
-    req = Invitation.new_invitation(params[:user][:email])
-    if req.save
-      flash[:success] = "Your request has been sent"
+    if params[:user].nil? || !params[:user].has_key?('email') || params[:user][:email].blank?
+      flash[:error] = "Please input an email first"
+    elsif (User::EMAIL_REG_EXP =~ params[:user][:email]).nil?
+      flash[:error] = 'The email is invalid'
+    elsif Invitation.exists?(:email => email) || User.exists?(:email => email)
+      flash[:error] = 'The email has been used'
     else
-      flash[:error] = req.errors.full_messages[0]
+      req = Invitation.new_invitation(params[:user][:email])
+      if req.save
+        flash[:success] = "Your request has been sent"
+      else
+        flash[:error] = req.errors.full_messages[0]
+      end
     end
     redirect_to :controller => 'home', :action => 'index'
   end

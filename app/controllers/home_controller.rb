@@ -37,6 +37,10 @@ class HomeController < ApplicationController
     render :layout => 'application'
   end
 
+  def filtering_search
+    redirect_to '/'
+  end
+
   protected
     def default_page_size
       size = 30

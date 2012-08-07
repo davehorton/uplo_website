@@ -6,3 +6,6 @@
     .button.search.left
     .sort.text.black.font11.left Sort by
     .left= f.select :sort_by, search_sort_options
+
+= javascript_tag do
+  $('.button.search').click(function(){ $('#filtering-search-box').submit() })

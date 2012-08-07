@@ -209,5 +209,13 @@ helper = {
     $('#btn-request-inv').click(function(){
       $('#frm-request').submit();
     });
+    $('#login-overlay').click(function(){
+      $(this).fadeOut();
+      $('#session-container').fadeOut();
+    });
+    $('#user-box a').click(function(){
+      $('#login-overlay').fadeIn();
+      $('#session-container').fadeIn();
+    });
   }
 };

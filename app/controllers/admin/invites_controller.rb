@@ -36,13 +36,17 @@ class Admin::InvitesController < ApplicationController
       result[:msg] = 'Input at least 1 email first!'
     else
       invs = []
-      existent_email = ''
+      msg = ''
       Invitation.transaction do
         emails = params[:inv]['emails'].split(',')
         emails.each { |email|
+          email.strip!
           # check email format & unique
-          if Invitation.exists?(:email => email) || User.exists?(:email => email)
-            existent_email = email
+          if (User::EMAIL_REG_EXP =~ email).nil?
+            msg = "#{email} is invalid email!"
+            raise ActiveRecord::Rollback
+          elsif Invitation.exists?(:email => email) || User.exists?(:email => email)
+            msg = "#{email} has been invited!"
             raise ActiveRecord::Rollback
           else
             inv = Invitation.new_invitation email.strip
@@ -56,10 +60,10 @@ class Admin::InvitesController < ApplicationController
 
       if result[:success]
         invs.each { |id| InvitationMailer.send_invitation(id, params[:inv]['message']).deliver }
-      elsif existent_email.blank?
-        result[:msg] = "#{existent_email} has been invited!"
-      else
+      elsif msg.blank?
         result[:msg] = 'Cannot invite any emails right now! Please try again later!'
+      else
+        result[:msg] = msg
       end
     end
 

@@ -1,16 +1,16 @@
 class User < ActiveRecord::Base
   class NotReadyForReinstatingError < StandardError
   end
-   
+
   include ::SharedMethods::Paging
   include ::SharedMethods::Converter
   include ::SharedMethods::SerializationConfig
 
   attr_accessor :force_submit, :login, :skip_state_changed_tracking
 
+  EMAIL_REG_EXP = /^([0-9a-zA-Z]([-.\w]*[0-9a-zA-Z])*@(([0-9a-zA-Z])+([-\w]*[0-9a-zA-Z])*\.)+[a-zA-Z]{2,9})$/i
   GENDER_MALE = "0"
   MIN_FLAGGED_IMAGES = 3
-
   ALLOCATION_STRING = "#{RESOURCE_LIMIT[:size]} #{RESOURCE_LIMIT[:unit]}"
   ALLOCATION = FileSizeConverter.convert RESOURCE_LIMIT[:size], RESOURCE_LIMIT[:unit], FileSizeConverter::UNITS[:byte]
   FILTER_OPTIONS = ['signup_date', 'username', 'num_of_likes', 'num_of_uploads']
@@ -61,11 +61,11 @@ class User < ActiveRecord::Base
   # SCOPE
   scope :active_users, where(:is_removed => false, :is_banned => false)
   scope :removed_users, where(:is_removed => true)
-  
+
   # Usage:
   # User.flagged_users # => return users that banned OR flagged images count >= MIN_FLAGGED_IMAGES
   # User.flagged_users(true) # => return users that banned AND flagged images count >= MIN_FLAGGED_IMAGES
-  scope :flagged_users, lambda {   
+  scope :flagged_users, lambda {
     self.joins(self.sanitize_sql([
       "JOIN (
         SELECT galleries.user_id,
@@ -82,11 +82,11 @@ class User < ActiveRecord::Base
     ).select(
       "DISTINCT users.*, galleries_data.flagged_images_count")
   }
-  
+
   scope :reinstate_ready_users, flagged_users.where("flagged_images_count < ?", MIN_FLAGGED_IMAGES)
-  
+
   scope :confirmed_users, where("confirmed_at IS NOT NULL")
-  
+
   # CLASS METHODS
   class << self
     def load_users(params = {})
@@ -116,7 +116,7 @@ class User < ActiveRecord::Base
     # Load users data with images_likes_count, images_count and images_pageview.
     def load_users_with_images_statistics(params = {})
       paging_info = parse_paging_options(params)
-      
+
       self.joins(self.sanitize_sql([
         "LEFT JOIN (
           SELECT galleries.user_id,
@@ -127,7 +127,7 @@ class User < ActiveRecord::Base
             SELECT gallery_id, COUNT(images.id) AS images_count,
             SUM(likes) AS images_likes_count,
             SUM(pageview) AS images_pageview
-            FROM images 
+            FROM images
             WHERE images.is_removed = :is_removed
             GROUP BY gallery_id
           ) images_data ON galleries.id = images_data.gallery_id
@@ -135,7 +135,7 @@ class User < ActiveRecord::Base
         ) galleries_data
         ON galleries_data.user_id = users.id",
         {:is_removed => false}])
-      ).select("DISTINCT users.*, 
+      ).select("DISTINCT users.*,
         COALESCE(galleries_data.images_count, 0) AS images_count,
         COALESCE(galleries_data.images_likes_count, 0) AS images_likes_count,
         COALESCE(galleries_data.images_pageview, 0) AS images_pageview"
@@ -152,24 +152,24 @@ class User < ActiveRecord::Base
 
       sphinx_search_options = params[:sphinx_search_options]
       sphinx_search_options = {} if sphinx_search_options.blank?
-      
+
       sphinx_search_options.merge!({
         :star => true,
         :page => paging_info.page_id,
         :per_page => paging_info.page_size
       })
-      
+
       self.search(
         SharedMethods::Converter::SearchStringConverter.process_special_chars(params[:query]),
         sphinx_search_options)
-    end   
-    
+    end
+
     # Search within confirmed users only
     def do_search_confirmed_users(params = {})
       params[:sphinx_search_options] = {:index => "confirmed_users"}
       self.do_search(params)
     end
-    
+
     # Override Devise method so that User can log in with username or email.
     def find_for_database_authentication(warden_conditions)
       conditions = warden_conditions.dup
@@ -210,12 +210,12 @@ class User < ActiveRecord::Base
     def current_user
       Thread.current[:current_user]
     end
-    
+
     # Set the current user in this thread.
     def current_user=(user)
       Thread.current[:current_user] = user
     end
-    
+
     protected
 
     def parse_paging_options(options, default_opts = {})
@@ -555,7 +555,7 @@ class User < ActiveRecord::Base
     if !self.ready_for_reinstating?
       raise NotReadyForReinstatingError
     end
-    
+
     self.class.transaction do
       if !self.is_removed?
         self.update_attribute(:is_removed, true)
@@ -573,7 +573,7 @@ class User < ActiveRecord::Base
     if !self.ready_for_reinstating?
       raise NotReadyForReinstatingError
     end
-    
+
     self.class.transaction do
       if self.is_banned?
         self.update_attribute(:is_banned, false)
@@ -595,7 +595,7 @@ class User < ActiveRecord::Base
   def will_be_banned?
     (!self.is_banned && !self.ready_for_reinstating?)
   end
-  
+
   def ready_for_reinstating?
     (self.images.flagged.length < MIN_FLAGGED_IMAGES)
   end
@@ -606,25 +606,25 @@ class User < ActiveRecord::Base
     indexes last_name
     indexes username
     indexes email
-    
+
     #has "confirmed_at IS NOT NULL", :as => :confirmed, :type => :boolean
-    
+
     if Rails.env.production?
       set_property :delta => FlyingSphinx::DelayedDelta
     else
       set_property :delta => true
     end
   end
-  
+
   define_index :confirmed_users do
     indexes first_name
     indexes last_name
     indexes username
     indexes email
     indexes confirmed_at
-    
+
     where "confirmed_at IS NOT NULL"
-    
+
     if Rails.env.production?
       set_property :delta => FlyingSphinx::DelayedDelta
     else

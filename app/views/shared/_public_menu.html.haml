@@ -4,9 +4,9 @@
 
   %li.first{:class => set_current_tab("popular")}
     = link_to(I18n.t("main_menu.spotlight"), "/spotlight")
-
-  %li{:class => set_current_tab("friend")}
-    = link_to(I18n.t("main_menu.friend"), "/friends")
+  - if user_signed_in?
+    %li{:class => set_current_tab("friend")}
+      = link_to(I18n.t("main_menu.friend"), "/friends")
 
   %li{:class => set_current_tab("galleries")}
     = link_to(I18n.t("main_menu.the_app"), "/intro")

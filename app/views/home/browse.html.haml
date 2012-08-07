@@ -6,7 +6,7 @@
   .data-header.text.bold.font16.line12.left
     %span.text.black Browse /
     %span.text.gray All Images
-  =# render(:partial => "shared/search_box_new", :locals => {:action => "search"})
+  = render :partial => "shared/filter_search_box", :locals => {:action => "filtering_search"}
 
 .wrapper.images-wrapper.left
   - if @images.blank?

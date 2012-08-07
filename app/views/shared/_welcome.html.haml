@@ -13,16 +13,15 @@
   #signin-area.clearfix.right
     .main
       .header.text.white.bold Member Sign In
-      = simple_form_for(:user, :url => user_session_path, :id => 'frm-login') do |f|
+      = form_for(:user, :url => user_session_path, :html => {:id => 'frm-login'}) do |f|
         .line
-          = f.input :login, :wrapper_class => "input clearfix", :label_html => {:class => "signin"}, :input_html => {:class => 'signin'}, :required => false
-          = f.error :email
+          = f.label :user_login, 'Email/Username', :class => 'left'
+          = f.text_field :login, :required => true
+          / = f.error :email
         .line
-          = f.input :password, :wrapper_class => "input clearfix", :label_html => {:class => "signin"}, :input_html => {:class => 'signin'}, :label => "Password", :required => false
+          = f.label :user_password, 'Password', :class => 'left'
+          = f.text_field :password, :required => false
         .line
-          / #btn-login.button.login.left
-          = f.submit 'login'
+          #btn-login.button.login.left
+          / = f.submit 'login'
           %a.text.white.font12.left{ :href => "#{ new_password_path(:user) }"} Forgot your password?
-
-= javascript_tag do
-  helper.setup_login()

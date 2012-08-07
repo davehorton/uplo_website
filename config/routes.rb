@@ -16,6 +16,7 @@ Uplo::Application.routes.draw do
   get "orders", :to => "orders#index"
   get "browse", :to => "home#browse"
   get "search", :to => "home#search"
+  get 'filtering_search', :to => 'home#filtering_search'
   get "spotlight", :to => "home#spotlight"
   get "intro", :to => "home#intro"
   get 'friends', :to => 'home#friends_feed'
