@@ -109,6 +109,7 @@ icon-flickr-16x16.png: icon-flickr-16x16-e9c6653e8fc72138cc39a3fa1c9c6f6e.png
 icon-flickr.png: icon-flickr-acddbd300599c3734e7b549ac226763d.png
 icon-like.jpg: icon-like-0a2e5f9894431b9889b7c9d350eb3164.jpg
 icon-next-page.png: icon-next-page-bc89e8e3b4ab22ba3c3ebb49e3859cf6.png
+icon-notification-check.png: icon-notification-check-f5ab8331e5fa1f446502f77193d275ea.png
 icon-pinterest-16x16.png: icon-pinterest-16x16-a04f59d751bcd1e9481f894fc254f367.png
 icon-pinterest.png: icon-pinterest-da63835956554d27aab97d84aa354d5b.png
 icon-previous-page.png: icon-previous-page-f5cc607950842da6c13befd8561273b7.png
@@ -195,7 +196,7 @@ app/popup.js: app/popup-3d37daf582062d5f270aa53d3da682bd.js
 app/sales.js: app/sales-03318d5b60f42b484cc55e4f12ca5fcc.js
 app/shopping_cart.js: app/shopping_cart-c4cd9e15d013f19ed47969caa609fcb9.js
 app/user.js: app/user-7856a14fe2fceeb1f0ad1b74126f9e28.js
-application.js: application-46195c44fdd7e3796762686d8e9c568d.js
+application.js: application-54c51e11f3686e253fd3f2ff683792eb.js
 file_upload/README.md: file_upload/README-3ed47c4044fe560bd4addcb841e853cd.md
 file_upload/application.js: file_upload/application-67b136875f9a46d79de669edd697518e.js
 file_upload/jquery.fileupload-ui.js: file_upload/jquery.fileupload-ui-ff2674552f504aa5ecffac5515358763.js
@@ -293,7 +294,7 @@ scss/application.mobile.css: scss/application.mobile-ca2184ad6ac977edd387b6813c3
 scss/banner.css: scss/banner-331c4e35597b1b905f46e6226aa74178.css
 scss/cart.css: scss/cart-a00c819367f1c26885c93fd320e87746.css
 scss/cart_new.css: scss/cart_new-ae43b8521bb1aede584d3c7905fedaef.css
-scss/dialog.css: scss/dialog-5dec5a3c5274437ee34726e7e4356988.css
+scss/dialog.css: scss/dialog-9a4daa1f1f5c7c2a03af111170496bc5.css
 scss/filter.css: scss/filter-739c80ba8eabd3a953be7d9ea50b38b6.css
 scss/image.css: scss/image-64b6683d484780bff39a790b7c1d60b3.css
 scss/mobile.css: scss/mobile-04e80fc1ee31c47abff3182e7d922adc.css
