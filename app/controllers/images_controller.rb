@@ -208,7 +208,7 @@ class ImagesController < ApplicationController
     end
 
     @filtered_params[:page_size] = 10
-    @comments = @image.comments.load_comments(@filtered_params)
+    @comments = @image.comments.active_users.load_comments(@filtered_params)
 
     # Increase page view
     @image.increase_pageview
