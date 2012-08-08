@@ -284,7 +284,7 @@ class Api::UsersController < Api::BaseController
       info[:images_num] = user.images.un_flagged.size
     else
       info[:galleries_num] = user.public_galleries.size
-      info[:images_num] = user.public_images.un_flagged.size
+      info[:images_num] = user.public_images.size
     end
     
     info[:followers_num] = user.followers.size
