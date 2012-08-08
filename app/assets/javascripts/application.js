@@ -112,7 +112,7 @@ helper = {
 
   show_notification: function(message){
 	$('#flash').stop(true, true).fadeIn('fast');
-	var string = "<div class='icon_notification left'></div><div class='left'>" + message + "</div>";
+	var string = "<div class='icon_notification left'></div><div class='left message wordwrap'>" + message + "</div>";
 	$("#flash").find('.messages').html(string);
     helper.auto_hide_flash_message();
   },
