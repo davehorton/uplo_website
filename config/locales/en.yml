@@ -53,6 +53,7 @@ en:
     error_not_ready_for_removing: "User is not ready for removing. Please remove or reinstate flagged images first"
     error_reinstate_users_failed: "Cannot reinstate flagged users"
     error_remove_user_failed: "Cannot remove the user"
+    error_remove_myself: "You cannot remove yourself"
     error_remove_users_failed: "Cannot remove flagged userss"
     notice_reinstate_user_succeeded: "Reinstate user successfully"
     notice_reinstate_users_succeeded: "Reinstate users successfully"

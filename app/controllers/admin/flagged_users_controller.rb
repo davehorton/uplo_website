@@ -93,12 +93,17 @@ class Admin::FlaggedUsersController < Admin::AdminController
       user = User.find_by_id(params[:id])
       
       if user
-        if user.remove
-          result[:status] = 'ok'
-          result[:message] = I18n.t("admin.notice_remove_user_succeeded")
-        else
+        if user.id == current_user.id
           result[:status] = 'error'
-          result[:message] = I18n.t("admin.error_remove_user_failed")
+          result[:message] = I18n.t("admin.error_remove_myself")
+        else
+          if user.remove
+            result[:status] = 'ok'
+            result[:message] = I18n.t("admin.notice_remove_user_succeeded")
+          else
+            result[:status] = 'error'
+            result[:message] = I18n.t("admin.error_remove_user_failed")
+          end
         end
       else
         result[:status] = 'error'

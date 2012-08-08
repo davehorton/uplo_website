@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120727054245) do
+ActiveRecord::Schema.define(:version => 20120802094623) do
 
   create_table "addresses", :force => true do |t|
     t.string   "first_name"
@@ -96,8 +96,16 @@ ActiveRecord::Schema.define(:version => 20120727054245) do
     t.boolean  "is_owner_avatar"
     t.string   "tier"
     t.boolean  "is_removed",        :default => false
-    t.integer  "pageview"
     t.integer  "promote_num",       :default => 0
+    t.integer  "pageview",          :default => 0
+  end
+
+  create_table "invitations", :force => true do |t|
+    t.string   "email",      :null => false
+    t.string   "token",      :null => false
+    t.datetime "invited_at"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "line_items", :force => true do |t|
@@ -144,6 +152,7 @@ ActiveRecord::Schema.define(:version => 20120727054245) do
     t.string   "card_number"
     t.string   "expiration"
     t.string   "cvv"
+    t.float    "shipping_fee",                                       :default => 0.0
   end
 
   create_table "profile_images", :force => true do |t|
