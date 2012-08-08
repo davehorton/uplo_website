@@ -115,3 +115,5 @@
     width: 13px;
     height: 12px;
     margin-right: 5px; }
+  .notification .message {
+    width: 170px; }
