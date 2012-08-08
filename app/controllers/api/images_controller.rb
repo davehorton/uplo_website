@@ -135,7 +135,7 @@ class Api::ImagesController < Api::BaseController
       if (user.id == current_user.id)
         result[:data] = user.images.un_flagged.load_images(@filtered_params)
       else
-        result[:data] = user.images.un_flagged.public_images.load_images(@filtered_params)
+        result[:data] = user.images.public_images.load_images(@filtered_params)
       end
     end
 
