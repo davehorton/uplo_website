@@ -378,6 +378,9 @@ class Image < ActiveRecord::Base
               self.author.update_attribute(:is_banned, true)
               # Send email.
               UserMailer.user_is_banned(self.author).deliver
+            else
+              # Send email about the flagged image.
+              UserMailer.image_is_flagged(self.author, self).deliver
             end
 
             # Update result

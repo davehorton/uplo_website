@@ -25,8 +25,26 @@ class ImageFlag < ActiveRecord::Base
     return result
   end
 
+  def self.flag_type_string(number)
+    result = ""
+    number = number.to_i
+    
+    FLAG_TYPE.each do |name, num|
+      if number == num
+        result = I18n.t("admin.flagged_images_type.#{name}")
+        break
+      end
+    end
+    
+    return result
+  end
+  
   # Instant methods
   def reported_date
     self.created_at.strftime('%b %d, %Y')
+  end
+  
+  def flag_type_string
+    self.class.flag_type_string(self.flag_type)
   end
 end

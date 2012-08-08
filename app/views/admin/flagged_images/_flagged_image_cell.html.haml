@@ -1,42 +1,45 @@
 / locals image, flag, flag_type
+
 .flagged_image_container
-  .button.image_frame{:target => flag.image.id, :href => "#{url_for(:controller => '/images', :action => 'browse', :id => image.id)}" }
+  .button.image_frame{:target => flag.image.id, 
+      :href => url_for(:controller => '/images', :action => 'browse', :id => image.id) }
     = image_tag image.data.url(:thumb), {:width => "155px", :height=> "155px"}
+  
   .button_area.info_line
-    .button.reinstate.left{:class => "button_#{image.id}"}
-      = link_to '', {:action => :reinstate_image, :image_id => image.id}, method: :post, :style => "display:none", :confirm => 'Are you sure you want to reinstate this image?'
-    = link_to '', {:action => :remove_image, :image_id => image.id}, confirm: 'Are you sure?', method: :delete, :confirm => 'Are you sure you want to remove this image?', :class => "button_#{image.id} button remove left"
+    .button.reinstate.left{:id => "button-reinstate-#{image.id}"}
+      = link_to('#', {:action => :reinstate_image, :image_id => image.id}, 
+              :method => :post, 
+              :style => "display:none", 
+              :confirm => t('admin.reinstate_image_confirm'))
+    
+    .button.remove.left{:id => "button-remove-#{image.id}"}
+      = link_to('#', {:action => :remove_image, :image_id => image.id}, 
+            :method => :delete, 
+            :style => "display:none", 
+            :confirm => t('admin.remove_image_confirm'), 
+            :class => "button_#{image.id} button remove left")
+          
   .image_name.info_line
-    %a.text.black.font11{ :href => "#{url_for(:controller => '/images', :action => 'browse', :id => image.id)}" }= truncate(image.name, :length => 20)
+    %a.text.black.font11{ :href => url_for(:controller => '/images', 
+        :action => 'browse', :id => image.id) }
+      = truncate(image.name, :length => 20)
+  
   .author.info_line
-    %a.text.black.font11.normal{ :href => "#{url_for(:controller => '/profiles', :action => 'show', :user_id => image.author.id)}" }= image.author.username
+    %a.text.black.font11.normal{ :href => url_for(:controller => '/profiles', 
+        :action => 'show', :user_id => image.author.id) }
+      = image.author.username
+  
   .flagged_time.info_line
     Flagged
     = flag.created_at.strftime "%m/%d/%y"
+  
   .flagged_time.info_line
-    by <spanc style="color:black">
-    %a.text.black.font11.normal{ :href => "#{url_for(:controller => '/profiles', :action => 'show', :user_id => flag.reporter.id)}" }
+    by
+    %a.text.black.font11.normal{ :href => url_for(:controller => '/profiles', 
+        :action => 'show', :user_id => flag.reporter.id) }
       = flag.reporter.username
-    </span>
+    
   .type.info_line
     = flag_type
   .description.info_line.wordwrap
     = truncate(flag.description, :length => 90)
-
-:erb
-  <script type="text/javascript">
-  $(document).ready(function(){
-    $(".reinstate<%=".button_#{image.id}"%>").click(function(e){
-      if($(e.target).is('a')) return;
-        $(this).find('a').click();
-      event.preventDefault();
-    });
-    $(".remove<%=".button_#{image.id}"%>").click(function(e){
-      if($(e.target).is('a'))
-        return;
-      $(this).find('a').click();
-      event.preventDefault();
-    });
-  });
-
-  </script>

@@ -1,0 +1,15 @@
+!!!
+%html
+  %head
+    %meta{ :content=>"text/html; charset=UTF-8", :http_equiv=>"Content-Type" }
+
+  %body
+    %p= t("user_mailer.mail_greeting", :name => @user.fullname)
+    %p
+      - if @image.blank?
+        = t("user_mailer.message_removed_images")
+      - else
+        = t("user_mailer.message_removed_image", :image_name => @image.name)
+      %br
+      = t("user_mailer.sub_message")
+    %p= t("user_mailer.mail_end")

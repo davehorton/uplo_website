@@ -17,4 +17,34 @@ class UserMailer < ApplicationMailer
     mail(:to => @user.friendly_email, :subject => subject)
   end
   
+  def image_is_flagged(user, image)
+    @user = user
+    @image = image
+    subject = I18n.t("user_mailer.subject_flagged_image")
+    mail(:to => @user.friendly_email, :subject => subject)
+  end
+  
+  def flagged_image_is_removed(user, image = nil)
+    @user = user
+    if image.blank?
+      subject = I18n.t("user_mailer.subject_removed_images")
+    else
+      @image = image
+      subject = I18n.t("user_mailer.subject_removed_image")
+    end
+    
+    mail(:to => @user.friendly_email, :subject => subject)    
+  end
+  
+  def flagged_image_is_reinstated(user, image = nil)
+    @user = user
+    if image.blank?
+      subject = I18n.t("user_mailer.subject_reinstated_images")
+    else
+      @image = image
+      subject = I18n.t("user_mailer.subject_reinstated_image")
+    end
+    
+    mail(:to => @user.friendly_email, :subject => subject) 
+  end
 end

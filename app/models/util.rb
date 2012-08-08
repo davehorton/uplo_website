@@ -78,7 +78,7 @@ module Util
     
     def log_error(exc, description = "")
       Rails.logger.error "===== ERROR: #{description} ====="
-      Rails.logger.error exc
+      Rails.logger.error exc.inspect
       Rails.logger.error exc.backtrace.join("\n")
     end
   
