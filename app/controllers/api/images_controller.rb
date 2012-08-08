@@ -19,7 +19,7 @@ class Api::ImagesController < Api::BaseController
   # POST /api/get_printed_sizes
   # params: image_id
   def get_printed_sizes
-    image = Image.find_by_id params[:image_id]
+    image = Image.un_flagged.find_by_id params[:image_id]
     if(image.nil? || image.image_flags.count > 0)
       result = { :success => false, :msg => 'This image does not exist' }
     else
@@ -63,7 +63,7 @@ class Api::ImagesController < Api::BaseController
       img_info.delete :effect_id
     end
 
-    image = gallery.images.create(img_info)
+    image = gallery.images.un_flagged.create(img_info)
     if !image.save
       @result[:msg] = image.errors
       @result[:success] = false
@@ -98,7 +98,7 @@ class Api::ImagesController < Api::BaseController
 
     user = current_user
     # find image
-    image = Image.find_by_id(params[:image][:id])
+    image = Image.un_flagged.find_by_id(params[:image][:id])
     if image.nil?
       @result[:msg] = "Could not find Image"
       return render :json => @result
@@ -131,10 +131,12 @@ class Api::ImagesController < Api::BaseController
     user = User.find_by_id params[:user_id]
     if user.nil?
       result = {:success => false, :msg => 'This user does not exist.'}
-    elsif user.id == current_user.id
-      result[:data] = user.images.load_images(@filtered_params)
     else
-      result[:data] = user.images.un_flagged.load_images(@filtered_params)
+      if (user.id == current_user.id)
+        result[:data] = user.images.un_flagged.load_images(@filtered_params)
+      else
+        result[:data] = user.images.un_flagged.public_images.load_images(@filtered_params)
+      end
     end
 
     render :json => result
@@ -153,7 +155,7 @@ class Api::ImagesController < Api::BaseController
     #user = User.find_by_username :admin
 
     # find image
-    image = Image.find_by_id(params[:id])
+    image = Image.un_flagged.find_by_id(params[:id])
     if image.nil?
       @result[:msg] = "Could not find Image"
       return render :json => @result
@@ -189,7 +191,7 @@ class Api::ImagesController < Api::BaseController
   end
 
   def like
-    image = Image.find_by_id(params[:id])
+    image = Image.un_flagged.find_by_id(params[:id])
     dislike = SharedMethods::Converter.Boolean(params[:dislike])
     if image.nil?
       result = { :success => false, :msg => "This image does not exist anymore!" }
@@ -205,7 +207,7 @@ class Api::ImagesController < Api::BaseController
   end
 
   def total_sales
-    image = Image.find_by_id params[:image_id]
+    image = Image.un_flagged.find_by_id params[:image_id]
     user = current_user
 
     if image.nil?
@@ -233,7 +235,7 @@ class Api::ImagesController < Api::BaseController
   end
 
   def get_purchasers
-    image = Image.find_by_id params[:image_id]
+    image = Image.un_flagged.find_by_id params[:image_id]
     user = current_user
 
     if image.nil?
@@ -260,7 +262,7 @@ class Api::ImagesController < Api::BaseController
   end
 
   def sale_chart
-    image = Image.find_by_id params[:image_id]
+    image = Image.un_flagged.find_by_id params[:image_id]
     user = current_user
 
     if image.nil?
@@ -276,7 +278,7 @@ class Api::ImagesController < Api::BaseController
   end
 
   def get_comments
-    image = Image.find_by_id params[:image_id]
+    image = Image.un_flagged.find_by_id params[:image_id]
 
     if image.nil?
       result = { :success => false, :msg => "This image does not exist anymore!" }
@@ -293,7 +295,7 @@ class Api::ImagesController < Api::BaseController
   end
 
   def post_comment
-    image = Image.find_by_id params[:image_id]
+    image = Image.un_flagged.find_by_id params[:image_id]
 
     if image.nil?
       result = { :success => false, :msg => "This image does not exist anymore!" }
@@ -320,12 +322,11 @@ class Api::ImagesController < Api::BaseController
   # type
 
   def flag_image
-    image = Image.find_by_id(params[:image_id])
     result = {
         :status => :fail,
         :message => ""
       }
-    image = Image.find_by_id params[:image_id]
+    image = Image.un_flagged.find_by_id params[:image_id]
     if (image)
       result = image.flag(current_user, params, result)
     else

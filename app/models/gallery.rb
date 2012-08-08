@@ -74,7 +74,7 @@ class Gallery < ActiveRecord::Base
   # PUBLIC INSTANCE METHODS
   def load_popular_images(params)
     paging_info = Image.parse_paging_options(params)
-    self.images.paginate( :page => paging_info.page_id,
+    self.images.un_flagged.paginate( :page => paging_info.page_id,
                           :per_page => paging_info.page_size,
                           :order => paging_info.sort_string )
   end
@@ -104,8 +104,8 @@ class Gallery < ActiveRecord::Base
   # Get the cover image for this album.
   def cover_image
     img = Image.find_by_gallery_id self.id, :conditions => { :is_gallery_cover => true }
-    if img.nil? && self.images.count > 0
-      result = self.images.first :order => 'images.created_at ASC'
+    if img.nil? && self.images.un_flagged.count > 0
+      result = self.images.un_flagged.first :order => 'images.created_at ASC'
     else
       result = img
     end
@@ -125,7 +125,7 @@ class Gallery < ActiveRecord::Base
   end
 
   def total_images
-    self.images.length
+    self.images.un_flagged.length
   end
 
   # PROTECTED INSTANCE METHODS

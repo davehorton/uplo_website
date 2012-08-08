@@ -1,10 +1,7 @@
 / local values: galleries, galleries_per_line
 - (0...galleries.length). each do |idx|
   - gallery = galleries[idx]
-  - if is_current_user(gallery.user.id)
-    - gal_items = gallery.images.avai_images.count
-  - else
-    - gal_items = gallery.images.un_flagged.count
+  - gal_items = gallery.images.un_flagged.count
   - additional_class = line_item_additional_class(idx, galleries_per_line)
 
   .gallery-container.left{ :id => "gallery-container-#{ gallery.id }", :class => "#{ additional_class }" }

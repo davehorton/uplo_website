@@ -119,7 +119,11 @@ class Api::GalleriesController < Api::BaseController
       galleries = Gallery.load_popular_galleries(@filtered_params)
     else
       user = User.find_by_id params[:user_id]
-      galleries = user.public_galleries.load_galleries(@filtered_params)
+      if (user.id == current_user.id)
+        galleries = user.load_galleries(@filtered_params)
+      else
+        galleries = user.public_galleries.load_galleries(@filtered_params)
+      end
     end
     @result[:total] = galleries.total_entries
     @result[:data] = galleries_to_json(galleries)

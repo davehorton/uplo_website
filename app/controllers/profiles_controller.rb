@@ -4,25 +4,19 @@ class ProfilesController < ApplicationController
 
   def show
     if @user.id == current_user.id
-      @images = @user.images.avai_images.load_images(@filtered_params)
       @galleries = @user.galleries.load_galleries(@filtered_params)
-      @liked_images = @user.liked_images.belongs_to_avai_user.get_all_images_with_current_user(@filtered_params, current_user)
     else
-      @images = @user.images.un_flagged.load_popular_images(@filtered_params)
       @galleries = @user.galleries.load_popular_galleries(@filtered_params)
-      @liked_images = @user.liked_images.belongs_to_avai_user.un_flagged.load_images(@filtered_params)
     end
+    @liked_images = @user.liked_images.belongs_to_avai_user.un_flagged.load_images(@filtered_params)
+    @images = @user.images.un_flagged.load_popular_images(@filtered_params)
     @followers = @user.followers.load_users(@filtered_params)
     @followed_users = @user.followed_users.load_users(@filtered_params)
   end
 
   def show_photos
     if request.xhr?
-      if @user.id == current_user.id
-        @images = @user.images.avai_images.load_images(@filtered_params)
-      else
-        @images = @user.images.un_flagged.load_popular_images(@filtered_params)
-      end
+      @images = @user.images.un_flagged.load_popular_images(@filtered_params)
       html = render_to_string :partial => 'photos'
       counter = @images.count
       render :json => {:html => html, :counter => counter}
@@ -31,11 +25,7 @@ class ProfilesController < ApplicationController
 
   def get_photos
     if request.xhr?
-      if @user.id == current_user.id
-        images = @user.images.avai_images.load_images(@filtered_params)
-      else
-        images = @user.images.un_flagged.load_popular_images(@filtered_params, current_user)
-      end
+      images = @user.images.un_flagged.load_popular_images(@filtered_params, current_user)
       template = render_to_string :partial => 'images/photos_template',
                     :locals => { :images => images,
                                 :photos_per_line => 4, :photo_size => 'thumb' }
