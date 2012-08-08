@@ -11,14 +11,18 @@ class ProfilesController < ApplicationController
       @images = @user.images.un_flagged.load_popular_images(@filtered_params)
     end
     @liked_images = @user.liked_images.belongs_to_avai_user.un_flagged.load_images(@filtered_params)
-    
     @followers = @user.followers.load_users(@filtered_params)
     @followed_users = @user.followed_users.load_users(@filtered_params)
   end
 
   def show_photos
     if request.xhr?
-      @images = @user.images.un_flagged.load_popular_images(@filtered_params)
+      if @user.id == current_user.id
+        @images = @user.images.un_flagged.load_images(@filtered_params)
+      else
+        @images = @user.images.un_flagged.load_popular_images(@filtered_params)
+      end
+      
       html = render_to_string :partial => 'photos'
       counter = @images.count
       render :json => {:html => html, :counter => counter}
