@@ -1,7 +1,9 @@
 / locals: comments
 .container.left
   = render :partial => 'shared/pagination', :locals => { :source => comments, :params => { :controller => 'comments', :action => 'index' }, :classes => 'comments right' }
-- comments. each do |comment|
+- comments.each do |comment|
+  - if (commenter.is_banned || commenter.is_removed)
+    - next
   .user-section.left
     - commenter = comment.user
     - url = url_for(:controller => 'profiles', :action => 'show', :user_id => commenter.id)
