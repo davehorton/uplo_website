@@ -49,7 +49,7 @@ class ProfilesController < ApplicationController
 
   def show_likes
     if request.xhr?
-      @images = @user.liked_images.un_flagged.load_images(@filtered_params)
+      @images = @user.liked_images.belongs_to_avai_user.un_flagged.load_images(@filtered_params)
       html = render_to_string :partial => 'likes'
       counter = @images.count
       render :json => {:html => html, :counter => counter}
@@ -58,7 +58,7 @@ class ProfilesController < ApplicationController
 
   def get_likes
     if request.xhr?
-      images = @user.liked_images.un_flagged.load_images(@filtered_params)
+      images = @user.liked_images.belongs_to_avai_user.un_flagged.load_images(@filtered_params)
       template = render_to_string :partial => 'images/photos_template',
         :locals => { :images => images, :photos_per_line => 4, :photo_size => 'thumb' }
       pagination = render_to_string :partial => 'shared/hidden_pagination',
