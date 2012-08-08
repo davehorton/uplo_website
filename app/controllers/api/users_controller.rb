@@ -281,7 +281,7 @@ class Api::UsersController < Api::BaseController
     info[:avatar_url] = user.avatar_url(:thumb, user.id==current_user.id)
     if user.id == current_user.id
       info[:galleries_num] = user.galleries.size
-      info[:images_num] = user.un_flagged.size
+      info[:images_num] = user.images.un_flagged.size
     else
       info[:galleries_num] = user.public_galleries.size
       info[:images_num] = user.public_images.un_flagged.size
