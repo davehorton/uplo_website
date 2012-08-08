@@ -5,11 +5,13 @@ class ProfilesController < ApplicationController
   def show
     if @user.id == current_user.id
       @galleries = @user.galleries.load_galleries(@filtered_params)
+      @images = @user.images.un_flagged.load_images(@filtered_params)
     else
       @galleries = @user.galleries.load_popular_galleries(@filtered_params)
+      @images = @user.images.un_flagged.load_popular_images(@filtered_params)
     end
     @liked_images = @user.liked_images.belongs_to_avai_user.un_flagged.load_images(@filtered_params)
-    @images = @user.images.un_flagged.load_popular_images(@filtered_params)
+    
     @followers = @user.followers.load_users(@filtered_params)
     @followed_users = @user.followed_users.load_users(@filtered_params)
   end
@@ -25,7 +27,11 @@ class ProfilesController < ApplicationController
 
   def get_photos
     if request.xhr?
-      images = @user.images.un_flagged.load_popular_images(@filtered_params, current_user)
+      if @user.id == current_user.id
+        images = @user.images.un_flagged.load_images(@filtered_params)
+      else
+        images = @user.images.un_flagged.load_popular_images(@filtered_params)
+      end
       template = render_to_string :partial => 'images/photos_template',
                     :locals => { :images => images,
                                 :photos_per_line => 4, :photo_size => 'thumb' }
