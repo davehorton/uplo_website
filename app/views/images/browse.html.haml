@@ -2,6 +2,8 @@
 
 - content_for :head do
   = stylesheet_link_tag('scss/new_image.css', 'scss/sale.css')
+  = javascript_include_tag('app/image_util.js')
+    
   - if can_promote
     = javascript_include_tag("app/admin/spotlights.js")
     = javascript_include_tag('lib/jquery.url.js')
@@ -50,8 +52,8 @@
   .header.left
     .email-icon.left
     .text.bold.left Share Via Email
-    %a.close{:href=>'#'}
-      .right{:onclick => "$('#social-sharing').hasClass('hide');"} &times;
+    %a.close{:href=>'#', :onclick => "$('#social-sharing').hasClass('hide'); return false;"}
+      .right &times;
   .main.right
     #preview.left
       .image-container.thumb
@@ -69,15 +71,16 @@
           #btn-cancel.button.cancel.left
 
 .sections
+  - if can_promote
+    .image-container.promote-container.clearfix    
+      - promote_link = url_for(:controller => "admin/spotlights", :action => "promote", :id => "#{@image.id}")
+      .promote-button.button
+        %form{:action => promote_link, :class => "promote-photo-form",
+                  :id => "promote-photo-form-#{@image.id}", :method=>'post'}
+          = hidden_field_tag(:authenticity_token, form_authenticity_token)
+            
   .image-container-wrapper.clearfix
     .image-container.medium.clearfix
-      - if can_promote
-        - promote_link = url_for(:controller => "admin/spotlights", :action => "promote", :id => "#{@image.id}")
-        .promote-button.button
-          %form{:action => promote_link, :class => "promote-photo-form",
-                    :id => "promote-photo-form-#{@image.id}", :method=>'post'}
-            = hidden_field_tag(:authenticity_token, form_authenticity_token)
-
       = image_tag(@image.data.url(:medium), :class => 'image medium',
                 'data-width' => @image.width,
                 'data-height' => @image.height, :alt => @image.name)
@@ -129,22 +132,86 @@
   = javascript_include_tag('http://platform.tumblr.com/v1/share.js', 'lib/jquery.inputHintOverlay.js', 'app/image.js')
   = javascript_tag do
     :erb
-      <% if can_promote %>
-        // Promote
-        spotlights.setup_promote_popup();
-      <% end %>
+      $(document).ready(function(){
+        <% if can_promote %>
+          // Promote
+          spotlights.setup_promote_popup();
+        <% end %>
 
-      $(".not-implement").click(function(e){
-        e.preventDefault();
-        helper.alert_not_implement();
-        return false;
+        $(".not-implement").click(function(e){
+          e.preventDefault();
+          helper.alert_not_implement();
+          return false;
+        });
+
+        //Flag implementation
+        $("#flag_form .cancel").click(function(e){
+          $.modal.close();
+        });      
+
+        $('#email-sharing-popup .close').click(function(){
+          $.modal.close();
+        });
+        
+        $('#btn-follow').click(function(){
+          var author_id = $(this).attr('data-author-id');
+          var is_unfollow = $(this).attr('data-following');
+          $.ajax({
+            url: '/users/follow',
+            type: "GET",
+            data: { user_id:author_id, unfollow: is_unfollow },
+            dataType: "json",
+            success: function(response){
+              if(response.success==false){
+                helper.show_notification(response.msg);
+              } else if(is_unfollow=='false') {
+                $('#btn-follow').attr('data-following', 'true');
+                $('#btn-follow').removeClass('follow');
+                $('#btn-follow').addClass('unfollow');
+              } else {
+                $('#btn-follow').attr('data-following', 'false');
+                $('#btn-follow').removeClass('unfollow');
+                $('#btn-follow').addClass('follow');
+              }
+            }
+          });
+        });
+        
+        $('#btn-cancel').click(function(){
+          $.modal.close();
+        });
+        
+        $('#btn-send').click(function(){
+          var emails = $('#email_emails').val().split(',');
+          var reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+          for(var i=0; i < emails.lenght; i++){
+            if( !reg.test(emails[i].trim()) ){
+              helper.show_notification('Please enter an email address!');
+              return false;
+            }
+          }
+          $('#email-details').submit();
+        });
+        
+        $('#social-sharing .close .right').click(function(){
+          $('#social-sharing').addClass('hide');
+        });
+
+        $('#post-comment').click(function(){
+          // Google Analytics
+          _gaq.push(['_trackEvent', 'UPLO Web / Comment', 'post comment', 'status', 1]);
+          return true;
+        });
+
+        $('.image-container-wrapper .image-container.medium img.image.medium').each(function(){
+          image_util.resize_frame($(this), {auto: true});        
+          // Auto-resize the image frame
+          $(this).load(function(){
+            image_util.resize_frame($(this));
+          });
+        });
       });
-
-      //Flag implementation
-      $("#flag_form .cancel").click(function(e){
-        $.modal.close();
-      });
-
+      
       function submit_flag(desc, type){
         var image_id = $('#btn-like').attr('data-id');
         $.modal.close();
@@ -180,58 +247,7 @@
         $('.button.share').remove();
         show_thank_form();
       }
-
-
-      $('#email-sharing-popup .close').click(function(){
-        $.modal.close();
-      });
-      $('#btn-follow').click(function(){
-        var author_id = $(this).attr('data-author-id');
-        var is_unfollow = $(this).attr('data-following');
-        $.ajax({
-          url: '/users/follow',
-          type: "GET",
-          data: { user_id:author_id, unfollow: is_unfollow },
-          dataType: "json",
-          success: function(response){
-            if(response.success==false){
-              helper.show_notification(response.msg);
-            } else if(is_unfollow=='false') {
-              $('#btn-follow').attr('data-following', 'true');
-              $('#btn-follow').removeClass('follow');
-              $('#btn-follow').addClass('unfollow');
-            } else {
-              $('#btn-follow').attr('data-following', 'false');
-              $('#btn-follow').removeClass('unfollow');
-              $('#btn-follow').addClass('follow');
-            }
-          }
-        });
-      });
-      $('#btn-cancel').click(function(){
-        $.modal.close();
-      });
-      $('#btn-send').click(function(){
-        var emails = $('#email_emails').val().split(',');
-        var reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
-        for(var i=0; i < emails.lenght; i++){
-          if( !reg.test(emails[i].trim()) ){
-            helper.show_notification('Please enter an email address!');
-            return false;
-          }
-        }
-        $('#email-details').submit();
-      });
-      $('#social-sharing .close .right').click(function(){
-        $('#social-sharing').addClass('hide');
-      });
-
-      $('#post-comment').click(function(){
-        // Google Analytics
-        _gaq.push(['_trackEvent', 'UPLO Web / Comment', 'post comment', 'status', 1]);
-        return true;
-      });
-
+      
       function showEmailPopup(){
         $('#social-sharing').addClass('hide');
         $("#email-sharing-popup").modal();
@@ -240,11 +256,12 @@
       function display_sharing_box() {
         var box, top, left;
         box = $('#social-sharing');
-        btn_share = $('.button.share');
-        img = $('.sections .image-container.medium');
+        var btn_share = $('.button.share');
+        var img = $('.sections .image-container.medium');
+        var img_container = $(img).parents('.image-container-wrapper');
         if(box.hasClass('hide')) {
           top = img.height() - box.height() + 2;
-          left = img.width() - box.width() + 18;
+          left = img_container.width() - box.width() + 18;
           box.removeClass('hide');
           box.css('top', top + 'px');
           box.css('left', left + 'px');

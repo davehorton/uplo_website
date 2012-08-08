@@ -1,7 +1,7 @@
 #social-sharing.hide
   .main.left
     %a.close{:href=>'#'}
-      .right{:onclick => "$('#social-sharing').hasClass('hide');"} &times;
+      .right{:onclick => "$('#social-sharing').hasClass('hide'); return false;"} &times;
     .container.left
       .text.black.bold.font14.line12.left Share this via:
       .text.black.font11.line12.right{ :style => 'padding-top:1px;'} Share Preferences

@@ -113,11 +113,15 @@ $color-light-gray: #a1a1a1;
     line-height: 490px;
   }
 
-  .promote-button{
-    background: url('/assets/promote-spotlight-light.png') no-repeat;
+  &.promote-container{
     position: absolute;
     right: 10px;
     top: 10px;
+    z-index: 5;
+  }
+  
+  .promote-button{
+    background: url('/assets/promote-spotlight-light.png') no-repeat;    
     width: 133px;
     height: 26px;
 
