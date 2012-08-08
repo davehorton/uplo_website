@@ -1,6 +1,6 @@
 / locals: user
 .current-photo.left
-  = image_tag user.avatar_url(:extra, is_current_user(user.id)), :class => 'avatar extra left'
+  = image_tag user.avatar_url(:extra), :class => 'avatar extra left'
   .clear
   .text.black.bold.font12.line16.left Current Photo
 .uploading.left

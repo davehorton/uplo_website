@@ -59,13 +59,8 @@ class ProfilesController < ApplicationController
   def get_likes
     if request.xhr?
       images = @user.liked_images.un_flagged.load_images(@filtered_params)
-      if @user.id == current_user.id
-        template = render_to_string :partial => 'edit_likes_template',
-          :locals => { :images => images }
-      else
-        template = render_to_string :partial => 'images/photos_template',
-          :locals => { :images => images, :photos_per_line => 4, :photo_size => 'thumb' }
-      end
+      template = render_to_string :partial => 'images/photos_template',
+        :locals => { :images => images, :photos_per_line => 4, :photo_size => 'thumb' }
       pagination = render_to_string :partial => 'shared/hidden_pagination',
         :locals => { :data_source => images,
           :params => { :controller => "profiles", :action => 'get_likes' } }

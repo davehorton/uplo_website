@@ -105,8 +105,8 @@ class UsersController < ApplicationController
       if current_user.has_profile_photo?(params[:id])
         begin
           ProfileImage.find_by_id(params[:id]).set_as_default
-          result = { :success => true, :extra_avatar_url => current_user.avatar_url(:extra, true),
-            :large_avatar_url => current_user.avatar_url(:large, true) }
+          result = { :success => true, :extra_avatar_url => current_user.avatar_url(:extra),
+            :large_avatar_url => current_user.avatar_url(:large) }
         rescue
           result = {:success => false, :msg => 'Something went wrong!'}
         end
