@@ -24,6 +24,7 @@ module SharedMethods
           }
         end
 
+        default_opts[:page_id] = 1 if default_opts[:page_id].blank?
         page_id = default_opts[:page_id]
         #page_size = PAGE_SIZE
 
@@ -90,7 +91,7 @@ module SharedMethods
       base.send(:include, InstanceMethods)
       base.send(:extend, ClassMethods)
     end
-    
+
     module InstanceMethods
       # Override Rails as_json method
       def as_json(options={})
@@ -100,45 +101,45 @@ module SharedMethods
           super(self.default_serializable_options)
         end
       end
-      
+
       def exposed_methods
         self.class.exposed_methods
       end
-        
+
       def exposed_attributes
         self.class.except_attributes
       end
-      
+
       def exposed_associations
         self.class.exposed_associations
       end
-      
+
       def except_attributes
         self.class.except_attributes
       end
-      
+
       def default_serializable_options
         self.class.default_serializable_options
       end
-      
+
       def to_hash
         self.serializable_hash(self.default_serializable_options)
       end
     end # End InstanceMethods.
-    
+
     module ClassMethods
       def exposed_methods
         []
       end
-      
+
       def exposed_attributes
         []
       end
-      
+
       def exposed_associations
         []
       end
-      
+
       def except_attributes
         attrs = []
         self.attribute_names.each do |n|
@@ -148,16 +149,16 @@ module SharedMethods
         end
         attrs
       end
-      
+
       def default_serializable_options
         { :except => self.except_attributes,
-          :methods => self.exposed_methods, 
+          :methods => self.exposed_methods,
           :include => self.exposed_associations
         }
       end
-      
+
     end # ClassMethods.
-  
+
   end # SerializationConfig.
 
   module Converter

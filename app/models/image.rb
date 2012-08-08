@@ -8,9 +8,9 @@ class Image < ActiveRecord::Base
   SEARCH_TYPE = 'photos'
   SORT_OPTIONS = { :spotlight => 'spotlight', :view => 'views', :recent => 'recent'}
   SORT_CRITERIA = {
-    SORT_OPTIONS[:view] => 'images.pageview DESC',
-    SORT_OPTIONS[:recent] => 'images.created_at DESC',
-    SORT_OPTIONS[:spotlight] => 'images.promote_num DESC'
+    SORT_OPTIONS[:view] => 'pageview DESC',
+    SORT_OPTIONS[:recent] => 'created_at DESC',
+    SORT_OPTIONS[:spotlight] => 'promote_num DESC'
   }
   FILTER_OPTIONS = ['date_uploaded', 'num_of_views', 'num_of_orders', 'num_of_likes']
   SALE_REPORT_TYPE = {
@@ -94,6 +94,7 @@ class Image < ActiveRecord::Base
   class << self
     def do_search(params = {})
       params[:filtered_params][:sort_field] = 'name' unless params[:filtered_params].has_key?("sort_field")
+      default_opt = {}
       paging_info = parse_paging_options(params[:filtered_params], {:sort_mode => :extended})
 
       sphinx_search_options = params[:sphinx_search_options]
@@ -103,12 +104,11 @@ class Image < ActiveRecord::Base
         :star => true,
         :page => paging_info.page_id,
         :per_page => paging_info.page_size,
-        :order_by => paging_info.sort_criteria
+        :order => paging_info.sort_string
       })
 
-      self.search(
-        SharedMethods::Converter::SearchStringConverter.process_special_chars(params[:query]),
-        sphinx_search_options)
+      self.search(SharedMethods::Converter::SearchStringConverter.process_special_chars(params[:query]),
+        sphinx_search_options )
     end
 
     # Search within public images only
@@ -160,7 +160,35 @@ class Image < ActiveRecord::Base
         :order => paging_info.sort_string)
     end
 
+    # Search within public images & private of user
     def do_search_accessible_images(user_id, params = {})
+      default_opt = { :sort_criteria => params[:filtered_params].delete(:sort_criteria)} if params[:filtered_params].has_key?(:sort_criteria)
+      paging_info = parse_paging_options params[:filtered_params], default_opt
+      sphinx_search_options = params[:sphinx_search_options]
+      sphinx_search_options = {} if sphinx_search_options.blank?
+      with_display = "*, IF(author_id = #{user_id} OR perm = '#{Gallery::PUBLIC_PERMISSION.to_crc32}', 1, 0) AS display"
+      sphinx_search_options.merge!({
+        :star => true,
+        :page => paging_info.page_id,
+        :per_page => paging_info.page_size,
+        :order => paging_info.sort_string,
+        :sort_mode => :extended,
+        :joins => '
+          LEFT JOIN galleries AS gals ON gals.id = images.gallery_id
+          LEFT JOIN image_flags ON images.id = image_flags.image_id
+          LEFT JOIN users ON gals.user_id = users.id',
+        # :sphinx_select => with_display,
+        :with => {
+          :banned_user => false,
+          :removed_user => false,
+          :flagged_by => '' }
+          # :display => 1 }
+      })
+
+      Image.search(
+        SharedMethods::Converter::SearchStringConverter.process_special_chars(params[:query]),
+        sphinx_search_options)
+
     end
 
     def get_all_images_with_current_user(params, current_user = nil)
@@ -689,18 +717,33 @@ class Image < ActiveRecord::Base
 
     #indexing with thinking sphinx
     define_index do
+      # fields
       indexes name
       indexes description
       indexes keyword
       indexes author(:username), :as => :author, :sortable => true
+      indexes gallery(:name), :as => :album
+      # indexes created_at, :sortable => true
+      # indexes pageview, :sortable => true
+      # indexes promote_num, :sortable => true
+      indexes gallery(:permission), :as => :perma
 
-      has gallery_id
 
+      # attributes
+      has gallery_id, created_at, pageview, promote_num
+      has author(:is_banned), :as => :banned_user
+      has author(:is_removed), :as => :removed_user
+      has image_flags(:reported_by), :as => :flagged_by
+      has author(:id), :as => :author_id
+      has "CAST(gallery(:permission) AS INT)", :type => :integer, :as => :perm
+
+      # weight
       set_property :field_weights => {
-        :name => 7,
-        :keyword => 3,
-        :author => 2,
-        :description => 1
+        :name => 15,
+        :keyword => 7,
+        :description => 3,
+        :author => 1,
+        :album => 1
       }
 
       if Rails.env.production?
@@ -711,28 +754,35 @@ class Image < ActiveRecord::Base
     end
 
     # Index for public images
-    define_index :public_images do
-      indexes name
-      indexes description
-      indexes keyword
-      indexes is_removed
-      indexes author(:username), :as => :author, :sortable => true
+    # define_index :public_images do
+    #   # fields
+    #   indexes name
+    #   indexes description
+    #   indexes keyword
+    #   indexes author(:username), :as => :author, :sortable => true
+    #   indexes gallery(:name), :as => :album
+    #   indexes created_at, :sortable => true
+    #   indexes pageview, :sortable => true
+    #   indexes promote_num, :sortable => true
 
-      has gallery_id
+    #   # attributes
+    #   has gallery_id
 
-      set_property :field_weights => {
-        :name => 7,
-        :keyword => 3,
-        :author => 2,
-        :description => 1
-      }
+    #   # weight
+    #   set_property :field_weights => {
+    #     :name => 15,
+    #     :keyword => 7,
+    #     :description => 3,
+    #     :author => 1,
+    #     :album => 1
+    #   }
 
-      where("images.id IN (SELECT id FROM (#{Image.public_images.to_sql}) public_images)")
+    #   where("images.id IN (SELECT id FROM (#{Image.public_images.to_sql}) public_images)")
 
-      if Rails.env.production?
-        set_property :delta => FlyingSphinx::DelayedDelta
-      else
-        set_property :delta => true
-      end
-    end
+    #   if Rails.env.production?
+    #     set_property :delta => FlyingSphinx::DelayedDelta
+    #   else
+    #     set_property :delta => true
+    #   end
+    # end
 end

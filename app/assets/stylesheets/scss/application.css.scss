@@ -100,7 +100,7 @@ p, ul{
   // line-height: 1.5em;
 }
 
-input[type=text], textarea {
+input[type=text], input[type=password], textarea {
   border: 1px solid $color-input-border;
   padding-left: 5px;
   margin: 0;
@@ -1519,7 +1519,11 @@ textarea { padding-top:5px; }
       margin: 0 0 5px 0;
       line-height: 10px;
     }
-    input[type=text], input[type=password] { width: 238px; }
+    input[type=text], input[type=password] {
+      width: 238px;
+      border-radius: 0;
+      border-width: 1px solid $color-line-separator;
+    }
     .header { font-size: 31px; line-height:35px; }
     #signup-area, #signin-area {
       width: 319px;
@@ -1535,7 +1539,7 @@ textarea { padding-top:5px; }
     }
     #signin-area {
       background-color: rgba(0, 0, 0, 0.5);
-      #btn-login { margin-right: 20px; }
+      #btn-login { height: 27px; margin-right: 20px; border: none; }
       a { margin-top: 8px; text-decoration: underline; }
     }
   }

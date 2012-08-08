@@ -5,7 +5,7 @@
 - content_for :top_content do
   .data-header.text.font16.line12.left
     %span.text.black.bold Search /
-    %span.result-number= "#{ pluralize @data.count, result_type } found"
+    %span.result-number= "#{ pluralize @data.total_entries, result_type } found"
   = render :partial => "shared/filter_search_box", :locals => {:action => "search"}
 
 .wrapper.images-wrapper.left

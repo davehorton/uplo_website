@@ -130,29 +130,33 @@ class Gallery < ActiveRecord::Base
 
   # PROTECTED INSTANCE METHODS
   protected
-
-  def init_permission
-    if self.new_record? && self.permission.blank?
-      self.permission = PUBLIC_PERMISSION
+    def init_permission
+      if self.new_record? && self.permission.blank?
+        self.permission = PUBLIC_PERMISSION
+      end
     end
-  end
 
-  # indexing with thinking sphinx
-  define_index do
-    indexes name
-    indexes description
+    # indexing with thinking sphinx
+    define_index do
+      # fields
+      indexes name
+      indexes description
+      indexes keyword
 
-    has user_id
+      # attributes
+      has user_id
 
-    set_property :field_weights => {
-      :name => 4,
-      :description => 1,
-    }
+      # weight
+      set_property :field_weights => {
+        :name => 7,
+        :keyword => 3,
+        :description => 1
+      }
 
-    if Rails.env.production?
-      set_property :delta => FlyingSphinx::DelayedDelta
-    else
-      set_property :delta => true
+      if Rails.env.production?
+        set_property :delta => FlyingSphinx::DelayedDelta
+      else
+        set_property :delta => true
+      end
     end
-  end
 end

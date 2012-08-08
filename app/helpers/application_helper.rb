@@ -181,7 +181,7 @@ module ApplicationHelper
     options_for_select({'Photos' => Image::SEARCH_TYPE, 'Users' => User::SEARCH_TYPE}, selected)
   end
 
-  def search_sort_options(type = Image::SEARCH_TYPE, selected)
+  def search_sort_options(type = Image::SEARCH_TYPE, selected=nil)
     type = Image::SEARCH_TYPE if type.blank?
     if type == Image::SEARCH_TYPE
       selected = Image::SORT_OPTIONS[:recent] if selected.blank?

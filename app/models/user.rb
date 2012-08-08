@@ -17,8 +17,8 @@ class User < ActiveRecord::Base
   SEARCH_TYPE = 'users'
   SORT_OPTIONS = { :name => 'name', :date_joined => 'date' }
   SORT_CRITERIA = {
-    SORT_OPTIONS[:name] => '',
-    SORT_OPTIONS[:date_joined] => 'users.confirmed_at DESC'
+    SORT_OPTIONS[:name] => 'username ASC',
+    SORT_OPTIONS[:date_joined] => 'date_joined DESC'
   }
 
   # Include default devise modules. Others available are:
@@ -151,8 +151,8 @@ class User < ActiveRecord::Base
     end
 
     def do_search(params = {})
-      params[:filtered_params][:sort_field] = 'first_name' unless params[:filtered_params].has_key?("sort_field")
-      paging_info = parse_paging_options(params[:filtered_params], {:sort_mode => :extended})
+      default_opt = { :sort_criteria => params[:filtered_params].delete(:sort_criteria)} if !params[:filtered_params][:sort_criteria].blank?
+      paging_info = parse_paging_options params[:filtered_params], default_opt
 
       sphinx_search_options = params[:sphinx_search_options]
       sphinx_search_options = {} if sphinx_search_options.nil?
@@ -161,7 +161,8 @@ class User < ActiveRecord::Base
         :star => true,
         :page => paging_info.page_id,
         :per_page => paging_info.page_size,
-        :order_by => paging_info.sort_criteria
+        :order => paging_info.sort_string,
+        :sort_mode => :extended
       })
 
       self.search(
@@ -609,10 +610,10 @@ class User < ActiveRecord::Base
   define_index do
     indexes first_name
     indexes last_name
-    indexes username
+    indexes username, :sortable => true
     indexes email
 
-    #has "confirmed_at IS NOT NULL", :as => :confirmed, :type => :boolean
+    has confirmed_at, :as => :date_joined
 
     if Rails.env.production?
       set_property :delta => FlyingSphinx::DelayedDelta

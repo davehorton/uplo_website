@@ -32,9 +32,9 @@ class HomeController < ApplicationController
     process_search_params
     if params[:filtered_by] == Image::SEARCH_TYPE
       @filtered_params[:sort_criteria] = Image::SORT_CRITERIA[params[:sort_by]]
-      @data = Image.un_flagged.public_images.do_search({
-        :query => URI.unescape(params[:query]),
-        :filtered_params => @filtered_params })
+      @data = Image.do_search_accessible_images( current_user.id,
+        { :query => URI.unescape(params[:query]),
+          :filtered_params => @filtered_params })
     else #filtered by user
       @filtered_params[:sort_criteria] = User::SORT_CRITERIA[params[:sort_by]]
       @data = User.active_users.do_search({
@@ -57,9 +57,9 @@ class HomeController < ApplicationController
     def process_search_params
       params[:filtered_by] = Image::SEARCH_TYPE if params[:filtered_by].blank?
       if params[:filtered_by] == Image::SEARCH_TYPE
-        params[:sort_by] = Image::SORT_OPTIONS[:recent]
+        params[:sort_by] = Image::SORT_OPTIONS[:recent] if params[:sort_by].blank?
       else #filtered by user
-        params[:sort_by] = User::SORT_OPTIONS[:name]
+        params[:sort_by] = User::SORT_OPTIONS[:name] if params[:sort_by].blank?
       end
     end
 end

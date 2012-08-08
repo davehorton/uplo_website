@@ -8,4 +8,5 @@
     .left= select_tag :sort_by, search_sort_options(params[:filtered_by], params[:sort_by])
 
 = javascript_tag do
-  $('.button.search').click(function(){ $('#filtering-search-box').submit() })
+  helper.setup_filtering_search()
+
