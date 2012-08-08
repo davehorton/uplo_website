@@ -181,7 +181,7 @@ class ImagesController < ApplicationController
   def browse
     push_redirect
     @image = Image.un_flagged.find_by_id(params[:id])
-    if (@image.nil? || (@image.author.is_banned? && !current_user.is_admin))
+    if (@image.nil? || ((@image.author.is_banned? || @image.author.is_removed) && !current_user.is_admin))
       return render_not_found
     elsif @image.gallery && !@image.gallery.can_access?(current_user)
       return render_unauthorized
@@ -219,7 +219,7 @@ class ImagesController < ApplicationController
     #   return redirect_to :action => 'browse', :id => params[:id]
     # end
     @image = Image.un_flagged.find_by_id(params[:id])
-    if (@image.nil? || (@image.author.is_banned? && !current_user.is_admin))
+    if (@image.nil? || ((@image.author.is_banned? || @image.author.is_removed) && !current_user.is_admin))
       return render_not_found
     end
     @author = @image.author
@@ -258,7 +258,7 @@ class ImagesController < ApplicationController
       :msg => ""
     }
     image = Image.un_flagged.find_by_id params[:id]
-    if (image.nil? || (image.author.is_banned? && !current_user.is_admin))
+    if (image.nil? || ((image.author.is_banned? || image.author.is_removed) && !current_user.is_admin))
       result = {
         :success => false,
         :msg => "The image does not exist right now."
@@ -326,7 +326,7 @@ class ImagesController < ApplicationController
 
   def order
     @image = Image.un_flagged.find_by_id(params[:id])
-    if (@image.nil? || (@image.author.is_banned? && !current_user.is_admin))
+    if (@image.nil? || ((@image.author.is_banned? || @image.author.is_removed) && !current_user.is_admin))
       return render_not_found
     end
     if params[:line_item].nil?
@@ -342,7 +342,7 @@ class ImagesController < ApplicationController
 
   def show_pricing
     image = Image.un_flagged.find_by_id params[:id]
-    if (image.nil? || (image.author.is_banned? && !current_user.is_admin))
+    if (image.nil? || ((image.author.is_banned? || image.author.is_removed) && !current_user.is_admin))
       result = { :success => false, :msg => 'This image does not exist anymore' }
     else
       table = render_to_string :partial => 'galleries/price_tiers', :locals => { :image => image }
@@ -353,7 +353,7 @@ class ImagesController < ApplicationController
 
   def update_tier
     image = Image.un_flagged.find_by_id params[:id]
-    if (image.nil? || (@image.author.is_banned? && !current_user.is_admin))
+    if (image.nil? || ((image.author.is_banned? || image.author.is_removed) && !current_user.is_admin))
       result = { :success => false, :msg => 'This image does not exist anymore' }
     else
       image.update_attribute(:tier, params[:price]['tier'])
@@ -364,7 +364,7 @@ class ImagesController < ApplicationController
 
   def get_price
     image = Image.un_flagged.find_by_id params[:image_id]
-    if (@image.nil? || (@image.author.is_banned? && !current_user.is_admin))
+    if (image.nil? || ((image.author.is_banned? || image.author.is_removed) && !current_user.is_admin))
       result = { :success => false, :msg => 'This image does not exist anymore' }
     else
       price = self.class.helpers.number_to_currency image.get_price(image.tier, params[:size]), {:precision => 2}
