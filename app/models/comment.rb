@@ -7,7 +7,7 @@ class Comment < ActiveRecord::Base
   belongs_to :image
 
   validates_presence_of :user_id, :image_id, :messages => 'cannot be blank'
-  scope :available, joins(:user).where('users.is_banned <> ? or users.is_removed <> ?', true, true).readonly(false)
+  scope :available, joins(:user).where('users.is_banned <> ? AND users.is_removed <> ?', true, true).readonly(false)
 
   class << self
     def load_comments(params = {})
