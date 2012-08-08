@@ -364,10 +364,14 @@ class Image < ActiveRecord::Base
             :flag_type => params[:type].to_i, :description => description })
           if flag.save
             # Remove all images in shopping carts
-            LineItem.joins(:order).joins(:image).where(
+            line_items = LineItem.joins(:order).joins(:image).where(
               :images => {:id => self.id},
               :orders => {:status => Order::STATUS[:shopping]}
-            ).destroy_all
+            )
+            
+            line_items.each do |line_item|
+              line_item.update_attributes {:quantity => 0}
+            end
 
             if self.author.will_be_banned?
               # Ban the image's author.
