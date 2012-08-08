@@ -6,7 +6,7 @@
     - commenter = comment.user
     - url = url_for(:controller => 'profiles', :action => 'show', :user_id => commenter.id)
     %a{ :href => "#{ url }" }
-      = image_tag(commenter.avatar_url(:medium, is_current_user(commenter.id)), :class => "avatar medium left")
+      = image_tag(commenter.avatar_url(:medium), :class => "avatar medium left")
     .info-panel.left
       %a.text.black.bold.font12.line12{ :href => "#{ url }" }= commenter.username
       %span.text.fuzzy-gray.font12.line12= "(#{ comment.duration } ago)"

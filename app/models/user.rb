@@ -233,12 +233,12 @@ class User < ActiveRecord::Base
     )
   end
 
-  def avatar(allow_flagged=true)
+  def avatar
     img = ProfileImage.find :first, :conditions => {:user_id => self.id, :default => true}
     if img.nil?
       result = nil
     else
-      if img.source && (img.source.is_removed || (!allow_flagged && img.source.is_flagged?))
+      if img.source && (img.source.is_removed || (img.source.is_flagged?))
         return nil
       end
       result = img.data
@@ -258,8 +258,8 @@ class User < ActiveRecord::Base
   end
 
   # allow_flagged=true: show avatar even when flagged
-  def avatar_url(style='thumb', allow_flagged=false)
-    avatar = self.avatar(allow_flagged)
+  def avatar_url(style='thumb')
+    avatar = self.avatar
     if avatar.nil?
       url = "/assets/avatar-default-#{style.to_s}.jpg"
     else

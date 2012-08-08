@@ -33,7 +33,7 @@
             - line_item = @purchased_info[idx]
             - purchaser = User.find_by_id line_item.purchaser_id.to_i
             .item.left
-              = image_tag(purchaser.avatar_url(:small, is_current_user(purchaser.id)), :class => "avatar medium left")
+              = image_tag(purchaser.avatar_url(:small), :class => "avatar medium left")
               .text.font12.left
                 %span.text.black.bold{:style => 'font-weight:bold;'}= purchaser.username
                 %span.text.fuzzy-gray= "(#{line_item.creation_timestamp} ago)"
@@ -46,7 +46,7 @@
           - line_item = @purchased_info[@purchased_info.length - 1]
           - purchaser = User.find_by_id line_item.purchaser_id.to_i
           .item.left.no-padding
-            = image_tag(purchaser.avatar_url(:small, is_current_user(purchaser.id)), :class => "avatar medium left")
+            = image_tag(purchaser.avatar_url(:small), :class => "avatar medium left")
             .text.font12.left
               %span.text.black.bold{:style => 'font-weight:bold;'}= purchaser.username
               %span.text.fuzzy-gray= "(#{line_item.creation_timestamp} ago)"
