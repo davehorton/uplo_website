@@ -367,10 +367,10 @@ class Image < ActiveRecord::Base
             line_items = LineItem.joins(:order).joins(:image).where(
               :images => {:id => self.id},
               :orders => {:status => Order::STATUS[:shopping]}
-            )
+            ).readonly(false)
             
             line_items.each do |line_item|
-              line_item.update_attributes {:quantity => 0}
+              line_item.update_attributes :quantity => 0
             end
 
             if self.author.will_be_banned?
