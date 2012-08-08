@@ -25,7 +25,7 @@ class ImagesController < ApplicationController
 
   def destroy
     if request.xhr?
-      image = Image.find_by_id params[:id]
+      image = current_user.images.find_by_id params[:id]
       gallery = image.gallery
       if(!image.has_owner(current_user.id))
         return render :json => {:success => false, :msg => "The image do not belong to you"}
@@ -43,7 +43,7 @@ class ImagesController < ApplicationController
     else
       ids = params[:id]
       ids = params[:id].join(',') if params[:id].instance_of? Array
-      Image.destroy_all("id in (#{ids})")
+      current_user.images.destroy_all("id in (#{ids})")
       render :json => {:success => true}
     end
   end
@@ -230,7 +230,7 @@ class ImagesController < ApplicationController
   # PUT images/:id/slideshow_update
   # params: id => Image ID
   def update
-    image = Image.un_flagged.find_by_id params[:id]
+    image = current_user.images.un_flagged.find_by_id params[:id]
     img_info = params[:image]
     # if request.xhr?
     #   worker = FilterWorker.new
