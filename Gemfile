@@ -24,6 +24,7 @@ gem "awesome_print"
 gem 'devise', '~> 1.5.3'
 gem 'mail'
 gem 'mobile-fu'
+gem 'rufus-scheduler'
 
 # If using HAML:
 gem 'ruby_parser', '>= 2.3.1'

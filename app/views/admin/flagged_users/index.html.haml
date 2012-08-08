@@ -55,7 +55,7 @@
               .button.reinstate.disabled.tooltip{:title => t("admin.error_not_ready_for_reinstating")}
               
             - if !user.is_removed? && user.ready_for_reinstating?
-              .button.remove{'data-confirm' => t('admin.remove_user_confirm')}
+              .button.remove{'data-confirm' => t('admin.remove_user_confirm', :username => user.username)}
                 - remove_link = url_for(:controller => "admin/flagged_users", :action => "remove_user", :id => user.id)
                 %form{:action => remove_link, :class => "remove-form action-form", 
                       :id => "remove-form-#{user.id}", :method =>'post'}

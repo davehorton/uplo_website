@@ -1,15 +1,19 @@
 - content_for :head do
   = stylesheet_link_tag 'scss/new_image.css'
 
+- categories = flag_image_types_collection(params[:flag_type])
+
 = render :partial => "admin/admin_menu"
+
 .header
   .admin_title.left_area
-    = t('admin.flagged_images_area.title')
+    = "#{t('admin.flagged_images')} / #{t("admin.flagged_images_type.#{@flag_type_key}")}"
+  
   .right_area
     = form_tag({:action => :index}, :id => "flag_type_form", :method=>'get', :multipart => true) do
       .left
-        Sort By:
-        = select_tag :flag_type, options_for_select(@categories, params[:flag_type]), :id => "flagged_image_type"
+        Sort By:        
+        = select_tag :flag_type, options_for_select(categories, params[:flag_type]), :id => "flagged_image_type"
       = link_to '', {:action => :remove_all, :flag_type => params[:flag_type]}, method: :post, :confirm => 'Are you sure you want to remove all images?', :class => "button remove_all left"
       = link_to '', {:action => :reinstate_all, :flag_type => params[:flag_type]}, method: :post, :confirm => 'Are you sure you want to reinstate all images?', :class => "button reinstate_all left"
 
@@ -18,7 +22,8 @@
   - @flagged_images.each do |image|
     - i = i + 1
     - flag = image.image_flags.first
-    - flag_type = (flag.flag_type == 1 ? "Terms of Use Violation" : (flag.flag_type == 2 ? "Copyright" : "Nudity"))
+    - flag_type = flag.flag_type_string
+    
     - if (i % 6) == 0
       .flagged_image_last_element 
         = render :partial => "admin/flagged_images/flagged_image_cell", :locals => {:image => image, :flag => flag, :flag_type => flag_type}
@@ -32,22 +37,25 @@
 
 :erb
   <script type="text/javascript">
-   $(document).ready(function(){
-     $("#flagged_image_type").change(function(){
+    $(document).ready(function(){
+      $("#flagged_image_type").change(function(){
        $("#flag_type_form").submit();
-     });
-     $("#flagged_image_type-button").css("width", "160px").css("height", "20px");
-     $("#flagged_image_type-menu").css("width", "160px");
-     $("#flagged_image_type-button .ui-selectmenu-status").css("padding-top", "4px");
-     $('#remove_flagged_images').click(function(){
+      });
+
+      $("#flagged_image_type-button").css("width", "160px").css("height", "20px");
+      $("#flagged_image_type-menu").css("width", "160px");
+      $("#flagged_image_type-button .ui-selectmenu-status").css("padding-top", "4px");
+      $('#remove_flagged_images').click(function(){
        $('#flag_type_form').attr('action','<%= url_for(:action => :remove_all)%>');
        $("#flag_type_form").submit();
-     });
-     $('#reinstate_flagged_images').click(function(){
+      });
+
+      $('#reinstate_flagged_images').click(function(){
        $('#flag_type_form').attr('action','<%= url_for(:action => :reinstate_all)%>');
        $("#flag_type_form").submit();
-     });
-     $(".image_frame").click(function(){
+      });
+
+      $(".image_frame").click(function(){
        $("#mask").modal();
        $.ajax({
          url: '<%= url_for(:action => :get_image_popup)%>',
@@ -68,11 +76,27 @@
            $.modal.close();
          }
        });
-     });
-   });
+      });
+      
+      $(".button.reinstate").click(function(e){
+        e.preventDefault();
+        
+        if($(e.target).is('a')) 
+          return;
+        $(this).find('a').click();      
+      });
+      
+      $(".button.remove").click(function(e){
+        e.preventDefault();
+        
+        if($(e.target).is('a'))
+          return;
+        $(this).find('a').click();      
+      });
+    });
 
-   function show_popup(){
+    function show_popup(){
      $('#flagged_image_popup').modal();
-   }
+    }  
 
   </script>

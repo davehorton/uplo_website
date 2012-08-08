@@ -3,10 +3,7 @@ class Admin::FlaggedImagesController < Admin::AdminController
   def index
     if (params[:flag_type].nil?)
       params[:flag_type] = 1
-    end
-    @categories = [["Terms of Use Violation",ImageFlag::FLAG_TYPE['terms_of_use_violation']],
-                  ["Copyright",ImageFlag::FLAG_TYPE['copyright']],
-                  ["Nudity",ImageFlag::FLAG_TYPE['nudity']]]
+    end    
     @flagged_images = Image.flagged.where("flag_type = ?", params[:flag_type]).load_images(filtered_params)
   end
   
@@ -14,8 +11,30 @@ class Admin::FlaggedImagesController < Admin::AdminController
   # flag_type
   
   def reinstate_all
-    flagged_images = Image.flagged.where("flag_type = ?", params[:flag_type])
-    flagged_images.each {|image| image.reinstate }
+    flagged_images = Image.flagged.where("flag_type = ?", params[:flag_type]).includes(:author)
+    users = []
+    flagged_images.each do |image|
+      if image.reinstate
+        users << image.author
+      end
+    end
+    
+    # Make the users collection unique
+    users.uniq_by!(&:id)
+    
+    if !users.blank?
+      # Async. send notification email per users
+      Scheduler.delay do      
+        users.each do |user|
+          begin
+            UserMailer.flagged_image_is_reinstated(user).deliver
+          rescue Exception => exc
+            ::Util.log_error(exc, "UserMailer.flagged_image_is_reinstated")
+          end
+        end
+      end
+    end
+    
     redirect_to :action => :index, :flag_type => params[:flag_type]
   end
   
@@ -23,8 +42,31 @@ class Admin::FlaggedImagesController < Admin::AdminController
   # flag_type
   
   def remove_all
-    flagged_images = Image.flagged.where("flag_type = ?", params[:flag_type])
-    flagged_images.each {|image| image.is_removed = true; image.save;}
+    flagged_images = Image.flagged.where("flag_type = ?", params[:flag_type]).includes(:author)
+    
+    users = []
+    flagged_images.each do |image|
+      if image.update_attribute(:is_removed, true)
+        users << image.author
+      end
+    end
+    
+    # Make the users collection unique
+    users.uniq_by!(&:id)
+    
+    if !users.blank?
+      # Async. send notification email per users
+      Scheduler.delay do
+        users.each do |user|
+          begin
+            UserMailer.flagged_image_is_removed(user).deliver
+          rescue Exception => exc
+            ::Util.log_error(exc, "UserMailer.flagged_image_is_removed")
+          end
+        end
+      end
+    end
+    
     redirect_to :action => :index, :flag_type => params[:flag_type]
   end
   
@@ -32,8 +74,8 @@ class Admin::FlaggedImagesController < Admin::AdminController
   # image_id
   def reinstate_image
     image = Image.flagged.find_by_id(params[:image_id])
-    if (image)
-      image.reinstate
+    if image && image.reinstate
+      UserMailer.flagged_image_is_reinstated(image.author, image).deliver
     end
     redirect_to :action => :index, :flag_type => params[:flag_type]
   end  
@@ -42,9 +84,8 @@ class Admin::FlaggedImagesController < Admin::AdminController
   # image_id
   def remove_image
     image = Image.flagged.find_by_id(params[:image_id])
-    if (image)
-      image.is_removed = true
-      image.save
+    if image && image.update_attribute(:is_removed, true)
+      UserMailer.flagged_image_is_removed(image.author, image).deliver
     end
     redirect_to :action => :index, :flag_type => params[:flag_type]
   end
@@ -69,9 +110,8 @@ class Admin::FlaggedImagesController < Admin::AdminController
     render :json => result
   end
   
-  
-  
   protected
+  
     def set_current_tab
       @current_tab = "flagged_images"
     end
@@ -85,6 +125,5 @@ class Admin::FlaggedImagesController < Admin::AdminController
       end
       return size
     end
-    
-    
+        
 end
