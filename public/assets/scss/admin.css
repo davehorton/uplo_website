@@ -90,9 +90,11 @@
   background-color: #EAEAEA;
   margin-right: 10px;
   margin-bottom: 10px;
-  float: left; }
+  float: left;
+  position: relative; }
   .admin .content .user-container .profile-link {
-    display: inline-block; }
+    display: inline-block;
+    width: 67px; }
   .admin .content .user-container .user-info {
     padding-left: 15px;
     padding-top: 15px; }
@@ -177,6 +179,12 @@
   .flagged-users .flagged-image-thumb-container .flagged-image-thumb {
     width: 28px;
     height: 28px; }
+
+/* MEMBER PROFILE */
+.members .user-container .action-container {
+  position: absolute;
+  right: 5px;
+  top: 10px; }
 
 /* FLAGGED IMAGES */
 .header {
