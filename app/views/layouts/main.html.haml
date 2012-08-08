@@ -30,6 +30,7 @@
       </script>
 
   %body
+    = render :partial => "shared/notification_box"
     #header
       .wrapper
         %a#logo{:href => "/"}
@@ -43,7 +44,6 @@
 
         %nav#menu.header-menu.text.line24.right
           = render(:partial => "shared/public_menu")
-        = render :partial => "shared/notification_box"
     #banner
       = yield :banner
     .clear

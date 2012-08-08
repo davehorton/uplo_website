@@ -59,7 +59,7 @@ class Api::OrdersController < Api::BaseController
     result = []
     items.each do |item_info|
       line_item = LineItem.new do |item|
-        image = Image.find_by_id item_info['image_id']
+        image = Image.un_flagged.find_by_id item_info['image_id']
         unless image.nil?
           item.attributes = item_info
           item.price = (item.price.nil? ? '0' : image.price)

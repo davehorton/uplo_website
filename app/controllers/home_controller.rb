@@ -13,11 +13,11 @@ class HomeController < ApplicationController
   end
 
   def browse
-    @images = Image.get_all_images_with_current_user(@filtered_params, current_user)
+    @images = Image.get_all_images_with_current_user(@filtered_params)
   end
 
   def spotlight
-    @images = Image.get_all_images_with_current_user(@filtered_params, current_user)
+    @images = Image.get_all_images_with_current_user(@filtered_params)
   end
 
   def friends_feed
