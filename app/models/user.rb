@@ -62,9 +62,6 @@ class User < ActiveRecord::Base
   scope :active_users, where(:is_removed => false, :is_banned => false)
   scope :removed_users, where(:is_removed => true)
 
-  # Usage:
-  # User.flagged_users # => return users that banned OR flagged images count >= MIN_FLAGGED_IMAGES
-  # User.flagged_users(true) # => return users that banned AND flagged images count >= MIN_FLAGGED_IMAGES
   scope :flagged_users, lambda {
     self.joins(self.sanitize_sql([
       "JOIN (
@@ -85,7 +82,7 @@ class User < ActiveRecord::Base
 
   scope :reinstate_ready_users, flagged_users.where("flagged_images_count < ?", MIN_FLAGGED_IMAGES)
 
-  scope :confirmed_users, where("confirmed_at IS NOT NULL")
+  scope :confirmed_users, where("confirmed_at IS NOT NULL AND is_removed = ?", false)
 
   # CLASS METHODS
   class << self
@@ -151,7 +148,7 @@ class User < ActiveRecord::Base
       paging_info = parse_paging_options(params[:filtered_params], {:sort_mode => :extended})
 
       sphinx_search_options = params[:sphinx_search_options]
-      sphinx_search_options = {} if sphinx_search_options.blank?
+      sphinx_search_options = {} if sphinx_search_options.nil?
 
       sphinx_search_options.merge!({
         :star => true,
@@ -623,8 +620,8 @@ class User < ActiveRecord::Base
     indexes email
     indexes confirmed_at
 
-    where "confirmed_at IS NOT NULL"
-
+    where sanitize_sql(["confirmed_at IS NOT NULL AND is_removed = ?", false])
+    
     if Rails.env.production?
       set_property :delta => FlyingSphinx::DelayedDelta
     else

@@ -120,8 +120,9 @@ $color-input-border: #cdcdcd;
       margin-right: 10px;
       margin-bottom: 10px;
       float: left;
-
-      .profile-link{display: inline-block;}
+      position: relative;
+      
+      .profile-link{display: inline-block; width: 67px;}
       .user-info{padding-left: 15px; padding-top: 15px;}
       .username{font-size: 18pt; padding-bottom: 5px;}
       .numbers{
@@ -222,6 +223,13 @@ $color-input-border: #cdcdcd;
       height: 28px;
     }
   }
+}
+
+/* MEMBER PROFILE */
+.members .user-container .action-container {
+  position: absolute;
+  right: 5px;
+  top: 10px;
 }
 
 /* FLAGGED IMAGES */

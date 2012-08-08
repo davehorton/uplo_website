@@ -19,14 +19,3 @@
   %li{:class => set_current_tab("invites")}
     %div
       = link_to 'Invites', {:controller => :invites, :action => :index}
-
-:erb
-  <script type="text/javascript">
-  $(document).ready(function(){
-    $(".not-implement").click(function(e){
-      e.preventDefault();
-      helper.alert_not_implement();
-      return false;
-    });
-  });
-  </script>
