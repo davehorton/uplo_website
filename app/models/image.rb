@@ -718,7 +718,7 @@ class Image < ActiveRecord::Base
     #indexing with thinking sphinx
     define_index do
       # fields
-      indexes name
+      indexes name, :sortable => true
       indexes description
       indexes keyword
       indexes author(:username), :as => :author, :sortable => true
@@ -756,7 +756,7 @@ class Image < ActiveRecord::Base
     # Index for public images
     define_index :public_images do
       # fields
-      indexes name
+      indexes name, :sortable => true
       indexes description
       indexes keyword
       indexes author(:username), :as => :author, :sortable => true
