@@ -1,7 +1,7 @@
 - content_for :head do
   = javascript_include_tag("lib/jail.min.js")
   = javascript_include_tag("app/admin/spotlights.js")
-  
+
 = render :partial => "admin/admin_menu"
 
 .admin.spotlights.clearfix
@@ -19,57 +19,57 @@
           = "Z-A"
         %span.sort-label= "Sort By: "
         %span
-          = select_tag('sort_field', image_filter_options(@sort_field), 
+          = select_tag('sort_field', image_filter_options(@sort_field),
                       :id => 'sort-field-selection',
                       'data-url' => url_for(:controller => "admin/spotlights", :action => "index", :only_path => false))
-      
+
   .content.clearfix
     - @images.each_with_index do |image, idx|
       - image_css = (((idx + 1) % 6) == 0 ? 'no-margin-right' : '')
       - image_css << " promoted" if image.is_promoted?
-        
+
       .image-container{:id => "image-container-#{image.id}", :class => image_css}
         - image_link = url_for(:controller => "/images", :action => "browse", :id => "#{image.id}")
         %a.image-link{:href => image_link}
           = async_image_tag(image.data.url(:thumb), :class => "image-thumb image small", :alt => image.name)
-          
+
         .image-info
           - if image.is_promoted?
-            - demote_link = url_for(:controller => "admin/spotlights", 
-                                    :action => "promote", 
+            - demote_link = url_for(:controller => "admin/spotlights",
+                                    :action => "promote",
                                     :id => image.id,
                                     :demote => true)
             .promote-button.button.disabled
-              %form{:action => demote_link, :class => "promote-photo-form demote", 
+              %form{:action => demote_link, :class => "promote-photo-form demote",
                     :id => "demote-photo-form-#{image.id}", :method=>'post'}
                 = hidden_field_tag(:authenticity_token, form_authenticity_token)
-                
+
           - else
             - promote_link = url_for(:controller => "admin/spotlights", :action => "promote", :id => image.id)
             .promote-button.button
-              %form{:action => promote_link, :class => "promote-photo-form", 
+              %form{:action => promote_link, :class => "promote-photo-form",
                     :id => "promote-photo-form-#{image.id}", :method=>'post'}
                 = hidden_field_tag(:authenticity_token, form_authenticity_token)
-            
+
           .image-name
             %a{:href => image_link, :title => image.name}= truncate(image.name, :length => 20)
           .username
             - author = image.author
             - author_profile = (author ? profile_path(:user_id => author.id) : '#')
             %a{:href => author_profile}= author.try(:username)
-          
+
           .upload-time= "Uploaded #{image.created_at.strftime('%m/%d/%y')}"
           .pageview= pluralize(image.pageview, 'View')
           - permission = image.gallery.try(:permission)
-          .permission= (permission.blank? ? "" : permission.titleize)
-          
+          .permission= permission.blank? ? '' : (I18n.t("gallery.permission")[permission])
+
     = render_pagination(@images)
-    
+
     #promote-confirm-popup-container{'data-promote-confirm' => t("admin.promote_confirm"),
       'data-demote-confirm' => t("admin.demote_confirm") }
-      = render(:partial => 'shared/delete_confirm', 
-        :layout => 'layouts/popup', 
-        :locals => { :title => 'Confirm', :id => 'promote-confirm-popup', 
+      = render(:partial => 'shared/delete_confirm',
+        :layout => 'layouts/popup',
+        :locals => { :title => 'Confirm', :id => 'promote-confirm-popup',
         :text => t("admin.promote_confirm") })
 
 :erb
@@ -77,25 +77,25 @@
     jQuery(function() {
       helper.setup_async_image_tag("img.image-thumb");
       spotlights.setup_promote_popup();
-      
+
       // Change selectbox
       $("#sort-field-selection-button").css("width", "160px").css("height", "20px");
       $("#sort-field-selection-button .ui-selectmenu-status").css("padding-top", "3px");
       $("#sort-field-selection-menu").css("width", "160px");
-      
+
       $('#search-options .sort-direction').click(function(e){
         if($(this).hasClass('current'))
           return false;
-        
+
         // Clear all current selection
         $('#search-options .sort-direction.current').removeClass('current');
         $(this).addClass('current');
         // Force change.
         $('#sort-field-selection').change();
       });
-      
+
       var on_search = <%= (params[:action] == 'search' ? 'true' : 'false') %>;
-      
+
       jQuery('#sort-field-selection').change(function(){
         var params = $.url(window.location.href).param();
         var sort_direction = $('#search-options .sort-direction.current').attr('data-sort-direction');

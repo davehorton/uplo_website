@@ -25,7 +25,7 @@
 
 .text.black.bold.left
   .text.font16.line12.left Spotlight Images
-  %a.text.font10.left{:href => "#{url_for(:controller => 'home', :action => 'browse')}", :style => 'margin: 2px 0 0 20px;' } +VIEW ALL
+  %a.text.font10.left{:href => "#{url_for(:controller => 'home', :action => 'spotlight')}", :style => 'margin: 2px 0 0 20px;' } +VIEW ALL
 .clear
 #spotlight-images.left.images-wrapper.clearfix
   - if @images.blank?

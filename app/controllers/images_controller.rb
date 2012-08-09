@@ -39,7 +39,7 @@ class ImagesController < ApplicationController
       items = render_to_string :partial => 'galleries/edit_photos',
                               :locals => { :images => images }
       gal_options = self.class.helpers.gallery_options(current_user.id, gallery.id, true)
-      render :json => { :items => items, :pagination => pagination, :gallery_options => gal_options }
+      render :json => { :success => true, :items => items, :pagination => pagination, :gallery_options => gal_options }
     else
       ids = params[:id]
       ids = params[:id].join(',') if params[:id].instance_of? Array

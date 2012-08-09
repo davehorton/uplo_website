@@ -4,11 +4,11 @@ class HomeController < ApplicationController
 
   def index
     session[:back_url] = url_for(:controller => 'home', :action => "browse") if session[:back_url].nil?
+    @images = Image.get_spotlight_images(@filtered_params)
     if user_signed_in?
-      @images = Image.un_flagged.load_popular_images(@filtered_params)
-      redirect_to :action => :spotlight
-    else
-      @images = Image.get_all_images_with_current_user(@filtered_params)
+      @current_views = 'recent images'
+      @recent_images = Image.get_browse_images(@filtered_params)
+      render :template => 'home/spotlight'
     end
   end
 
@@ -17,8 +17,10 @@ class HomeController < ApplicationController
   end
 
   def spotlight
+    @current_views = 'spotlight images'
     @images = Image.get_spotlight_images(@filtered_params)
-    @recent_images = Image.get_browse_images(@filtered_params)
+    # @recent_images = Image.get_browse_images(@filtered_params)
+    render :template => 'home/browse'
   end
 
   def friends_feed

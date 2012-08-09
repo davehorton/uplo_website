@@ -32,11 +32,11 @@ en:
       terms_of_use_violation: "Terms of Use Violation"
       copyright: "Copyright"
       nudity: "Nudity"
-      
+
     flagged_users_area:
       title: "Flagged Users"
     search: "Search"
-    
+
     promote_confirm: "Are you sure you want to promote this photo to spotlight ?"
     demote_confirm: "Are you sure you want to remove this photo from spotlight ?"
     error_image_not_found: "Image not found"
@@ -44,15 +44,15 @@ en:
     error_demote_failed: "Cannot remove this photo from spotlight"
     notice_promote_succeeded: "Promote photo successfully"
     notice_demote_succeeded: "Remove the photo successfully from spotlight"
-    
+
     reinstate_image_confirm: "Are you sure you want to reinstate this image ?"
     remove_image_confirm: "Are you sure you want to remove this image ?"
-    
+
     reinstate_user_confirm: "Are you sure you want to reinstate this user ?"
     reinstate_all_users_confirm: "Are you sure you want to reinstate all users ? Only users have less than 3 flagged images will be reinstated."
     remove_user_confirm: "Do you really want to remove '%{username}' ? This action is not reversible."
     remove_all_users_confirm: "Are you sure you want to remove all users ? Only users have less than 3 flagged images will be removed. The users will not be able to access UPLO anymore."
-    
+
     error_user_not_found: "User not found"
     error_reinstate_user_failed: "Cannot reinstate the user"
     error_not_ready_for_reinstating: "User is not ready for resintating. Please reinstate flagged images first"
@@ -65,9 +65,9 @@ en:
     notice_reinstate_users_succeeded: "Reinstate users successfully"
     notice_remove_user_succeeded: "Remove user successfully"
     notice_remove_users_succeeded: "Remove users successfully"
-    
+
     contact_user: "Contact User"
-    
+
     sort_field:
       # Members
       signup_date: "Sign Up Date"
@@ -78,11 +78,11 @@ en:
       date_uploaded: "Date Uploaded"
       num_of_views: "Number of Views"
       num_of_orders: "Number of Orders"
-      
+
   gallery:
     permission:
-      public: "Public"
-      protected: "Private"
+      1: "Public"
+      0: "Private"
     create_done: "Your new gallery was created successfully"
     update_done: "Your gallery was updated successfully"
     delete_done: "Your gallery was deleted"
@@ -102,34 +102,34 @@ en:
 
   user_mailer:
     mail_greeting: "Hi %{name},"
-    
+
     subject_banned_user: "Your account has been suspended"
     message_banned_user: "We are very sorry that your account has been suspended because you have too many flagged images."
 
     subject_removed_user: "Your account has been removed from UPLO"
     message_removed_user: "We are very sorry that your account has been removed from UPLO by the administrator."
-    
+
     subject_reinstated_user: "Your account has been reactivated"
     message_reinstated_user: "Congratulation! Your account has been reactivated, you can access UPLO again. Welcome back!"
-    
+
     subject_flagged_image: "Your image has been flagged"
     message_flagged_image: "Your image \"%{image_name}\" has been reported as the reason of %{flag_reason}."
-    
+
     subject_removed_image: "Your image has been removed"
     message_removed_image: "Your image \"%{image_name}\" has been removed by the administrator."
-    
+
     subject_removed_images: "Your images has been removed"
     message_removed_images: "Some of your images have been removed by the administrator."
-    
+
     subject_reinstated_image: "Your image has been reinstated"
     message_reinstated_image: "Congratulation! Your image \"%{image_name}\" has been reactivated, you can see it here"
-    
+
     subject_reinstated_images: "All your flagged images has been reinstated"
     message_reinstated_images: "Congratulation! All your reported images have been reactivated."
-    
+
     sub_message: "Please contact the administrator if there is something wrong."
     mail_end: "Best regards."
-  
+
   order:
     transaction_canceled: "You've canceled the transaction"
     cart_empty: "Sorry, your shopping cart is empty. (Did you already submit your order? Check your email for receipts.)"
@@ -137,7 +137,7 @@ en:
     transaction_completed: "Your payment was completed successfully"
     email:
       transaction_finish_subject: "Your payment completed successfully."
-          
+
   date:
     formats:
       default: "%m/%d/%Y"

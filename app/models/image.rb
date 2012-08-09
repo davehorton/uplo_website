@@ -102,6 +102,7 @@ class Image < ActiveRecord::Base
 
       sphinx_search_options.merge!({
         :star => true,
+        :retry_stale => true,
         :page => paging_info.page_id,
         :per_page => paging_info.page_size,
         :order => paging_info.sort_string
@@ -116,7 +117,7 @@ class Image < ActiveRecord::Base
       params[:sphinx_search_options] = {:index => "public_images"}
       self.do_search(params)
     end
-    
+
     def get_browse_images params
       conditions = [
         "gals.permission = :gallery_permission
@@ -137,7 +138,7 @@ class Image < ActiveRecord::Base
         :per_page => paging_info.page_size,
         :order => paging_info.sort_string)
     end
-    
+
     def get_spotlight_images params
       conditions = [
         "gals.permission = :gallery_permission
@@ -166,9 +167,10 @@ class Image < ActiveRecord::Base
       paging_info = parse_paging_options params[:filtered_params], default_opt
       sphinx_search_options = params[:sphinx_search_options]
       sphinx_search_options = {} if sphinx_search_options.blank?
-      with_display = "*, IF(author_id = #{user_id} OR perm = '#{Gallery::PUBLIC_PERMISSION.to_crc32}', 1, 0) AS display"
+      with_display = "*, IF(author_id = #{user_id} OR permission = #{Gallery::PUBLIC_PERMISSION}, 1, 0) AS display"
       sphinx_search_options.merge!({
         :star => true,
+        :retry_stale => true,
         :page => paging_info.page_id,
         :per_page => paging_info.page_size,
         :order => paging_info.sort_string,
@@ -177,12 +179,12 @@ class Image < ActiveRecord::Base
           LEFT JOIN galleries AS gals ON gals.id = images.gallery_id
           LEFT JOIN image_flags ON images.id = image_flags.image_id
           LEFT JOIN users ON gals.user_id = users.id',
-        # :sphinx_select => with_display,
+        :sphinx_select => with_display,
         :with => {
           :banned_user => false,
           :removed_user => false,
-          :flagged_by => '' }
-          # :display => 1 }
+          :flagged_by => '',
+          :display => 1 }
       })
 
       Image.search(
@@ -204,8 +206,8 @@ class Image < ActiveRecord::Base
             :user_removed => false
           }
         ]
-        
-        
+
+
       else
         conditions = [
           "gals.permission = :gallery_permission
@@ -406,7 +408,7 @@ class Image < ActiveRecord::Base
               :images => {:id => self.id},
               :orders => {:status => Order::STATUS[:shopping]}
             ).readonly(false)
-            
+
             line_items.each do |line_item|
               line_item.update_attributes :quantity => 0
             end
@@ -721,13 +723,7 @@ class Image < ActiveRecord::Base
       indexes name, :sortable => true
       indexes description
       indexes keyword
-      indexes author(:username), :as => :author, :sortable => true
       indexes gallery(:name), :as => :album
-      # indexes created_at, :sortable => true
-      # indexes pageview, :sortable => true
-      # indexes promote_num, :sortable => true
-      indexes gallery(:permission), :as => :perma
-
 
       # attributes
       has gallery_id, created_at, pageview, promote_num
@@ -735,7 +731,7 @@ class Image < ActiveRecord::Base
       has author(:is_removed), :as => :removed_user
       has image_flags(:reported_by), :as => :flagged_by
       has author(:id), :as => :author_id
-      has "CAST(gallery(:permission) AS INT)", :type => :integer, :as => :perm
+      has gallery(:permission), :as => :permission
 
       # weight
       set_property :field_weights => {
@@ -757,28 +753,21 @@ class Image < ActiveRecord::Base
     define_index :public_images do
       # fields
       indexes name, :sortable => true
-      indexes description
       indexes keyword
       indexes author(:username), :as => :author, :sortable => true
-      indexes gallery(:name), :as => :album
-      indexes created_at
-      indexes pageview
-      indexes promote_num
 
       # attributes
-      has gallery_id
+      has gallery_id, created_at, pageview, promote_num
 
       # weight
       set_property :field_weights => {
-        :name => 15,
-        :keyword => 7,
-        :description => 3,
-        :author => 1,
-        :album => 1
+        :name => 7,
+        :keyword => 3,
+        :author => 1
       }
 
       where("images.id IN (SELECT id FROM (#{Image.public_images.to_sql}) public_images)")
-      
+
       if Rails.env.production?
         set_property :delta => FlyingSphinx::DelayedDelta
       else

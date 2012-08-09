@@ -13,9 +13,9 @@ class Api::GalleriesController < Api::BaseController
 
   def create_gallery
     if params[:gallery]['permission']=='0'
-      params[:gallery]['permission'] = 'protected'
+      params[:gallery]['permission'] = Gallery::PRIVATE_PERMISSION
     else
-      params[:gallery]['permission'] = 'public'
+      params[:gallery]['permission'] = Gallery::PUBLIC_PERMISSION
     end
     gal = Gallery.new(params[:gallery])
     gal.user = @user
@@ -48,9 +48,9 @@ class Api::GalleriesController < Api::BaseController
     end
     # update gallery
     if params[:gallery]['permission']=='0'
-      params[:gallery]['permission'] = 'protected'
+      params[:gallery]['permission'] = Gallery::PRIVATE_PERMISSION
     else
-      params[:gallery]['permission'] = 'public'
+      params[:gallery]['permission'] = Gallery::PUBLIC_PERMISSION
     end
     if gallery.update_attributes(params[:gallery])
       @result[:success] = true

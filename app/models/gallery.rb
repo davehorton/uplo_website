@@ -4,8 +4,8 @@ class Gallery < ActiveRecord::Base
   include ::SharedMethods::SerializationConfig
   include ::SharedMethods::Converter
 
-  PUBLIC_PERMISSION = "public"
-  PRIVATE_PERMISSION = 'protected'
+  PUBLIC_PERMISSION = 1
+  PRIVATE_PERMISSION = 0
 
   # ASSOCIATIONS
   belongs_to :user
@@ -27,6 +27,7 @@ class Gallery < ActiveRecord::Base
       self.search(
         SharedMethods::Converter::SearchStringConverter.process_special_chars(params[:query]),
         :star => true,
+        :retry_stale => true,
         :page => paging_info.page_id,
         :per_page => paging_info.page_size )
     end

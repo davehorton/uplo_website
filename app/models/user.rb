@@ -158,6 +158,7 @@ class User < ActiveRecord::Base
 
       sphinx_search_options.merge!({
         :star => true,
+        :retry_stale => true,
         :page => paging_info.page_id,
         :per_page => paging_info.page_size,
         :order => paging_info.sort_string,
@@ -629,7 +630,7 @@ class User < ActiveRecord::Base
     indexes confirmed_at
 
     where sanitize_sql(["confirmed_at IS NOT NULL AND is_removed = ?", false])
-    
+
     if Rails.env.production?
       set_property :delta => FlyingSphinx::DelayedDelta
     else
