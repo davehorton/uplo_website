@@ -118,7 +118,7 @@ requestUpdateAvatar = (node) ->
 
 $ ->
   $('.not-implement').click -> helper.alert_not_implement()
-  $('#container .edit-pane').click ->
+  $('#container .title').click ->
     counter_id = $(@).closest('.container').attr('id').replace('-section', '-counter')
     $('#counters .counter.current').removeClass('current')
     $("##{counter_id}").addClass('current')
