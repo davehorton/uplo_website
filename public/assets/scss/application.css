@@ -70,7 +70,7 @@ a {
 p, ul {
   text-align: justify; }
 
-input[type=text], textarea {
+input[type=text], input[type=password], textarea {
   border: 1px solid #cdcdcd;
   padding-left: 5px;
   margin: 0;
@@ -687,6 +687,30 @@ textarea {
 .simplemodal-overlay {
   background-color: #b3b3b3; }
 
+.user-container {
+  width: 312px;
+  height: 67px;
+  background-color: #EAEAEA;
+  margin: 6px;
+  float: left;
+  position: relative; }
+  .user-container .profile-link {
+    display: inline-block;
+    width: 67px; }
+  .user-container .user-info {
+    padding-left: 15px;
+    padding-top: 20px; }
+  .user-container .username {
+    font-size: 15pt;
+    padding-bottom: 5px; }
+  .user-container .numbers {
+    color: #4D4D4D;
+    font-size: 11.5px; }
+    .user-container .numbers span.separator {
+      margin: 0 2px; }
+  .user-container a {
+    font-weight: normal; }
+
 /* select menu: modify of jquery.ui.theme.css */
 .ui-widget {
   font-family: Arial; }
@@ -773,6 +797,8 @@ textarea {
       height: 14px; }
   #top .data-header {
     margin-top: 10px; }
+    #top .data-header .result-number {
+      color: #898989; }
   #top .top-nav {
     margin-top: 4px; }
     #top .top-nav .actions-panel .separator {
@@ -1323,13 +1349,13 @@ textarea {
 
 #filtering-search-box {
   margin-top: 6px; }
-  #filtering-search-box #query_text {
+  #filtering-search-box #query {
     width: 230px;
     height: 18px;
     font-size: 12px; }
-  #filtering-search-box #query_filtered_by-button {
+  #filtering-search-box #filtered_by-button {
     margin: 0 6px; }
-  #filtering-search-box #query_sort_by-button {
+  #filtering-search-box #sort_by-button {
     margin-left: 6px; }
   #filtering-search-box .button.search {
     margin-right: 10px; }
@@ -1351,7 +1377,9 @@ textarea {
       margin: 0 0 5px 0;
       line-height: 10px; }
     #non-login-container #session-container input[type=text], #non-login-container #session-container input[type=password] {
-      width: 238px; }
+      width: 238px;
+      border-radius: 0;
+      border-width: 1px solid #cccccc; }
     #non-login-container #session-container .header {
       font-size: 31px;
       line-height: 35px; }
@@ -1374,7 +1402,9 @@ textarea {
     #non-login-container #session-container #signin-area {
       background-color: rgba(0, 0, 0, 0.5); }
       #non-login-container #session-container #signin-area #btn-login {
-        margin-right: 20px; }
+        height: 27px;
+        margin-right: 20px;
+        border: none; }
       #non-login-container #session-container #signin-area a {
         margin-top: 8px;
         text-decoration: underline; }

@@ -17,7 +17,7 @@
       .user-container{:id => "user-container-#{user.id}", :class => user_css}
         - author_profile = profile_path(:user_id => user.id)
         %a.profile-link.left{:href => author_profile}
-          = image_tag user.avatar_url(:large, true), :class => 'avatar large left'
+          = image_tag user.avatar_url(:large), :class => 'avatar large left'
         .user-info.left
           .username
             %a{:href => author_profile}= user.username
