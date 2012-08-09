@@ -204,7 +204,7 @@ app/popup.js: app/popup-3d37daf582062d5f270aa53d3da682bd.js
 app/sales.js: app/sales-03318d5b60f42b484cc55e4f12ca5fcc.js
 app/shopping_cart.js: app/shopping_cart-a9973b50b06bf23a343fa7b7e94f5601.js
 app/user.js: app/user-7856a14fe2fceeb1f0ad1b74126f9e28.js
-application.js: application-5b2d31f2c502eb2cbf57326ae3dd11ed.js
+application.js: application-8a8b8037bdc824c35008317088b7de12.js
 file_upload/README.md: file_upload/README-3ed47c4044fe560bd4addcb841e853cd.md
 file_upload/application.js: file_upload/application-67b136875f9a46d79de669edd697518e.js
 file_upload/jquery.fileupload-ui.js: file_upload/jquery.fileupload-ui-cdc5a526ee432a3ba0224d966f622f9e.js
@@ -296,8 +296,8 @@ jquery-ui.custom.css: jquery-ui.custom-bb782aff6a70a3531739cdd09fe60b50.css
 jquery.contextMenu.css: jquery.contextMenu-5e13ffab2ad4f1c83de146893d8f0b86.css
 jquery.ui.selectmenu.css: jquery.ui.selectmenu-126b46b0f5616450a0711aea25ce56ec.css
 jquery.ui.theme.css: jquery.ui.theme-bc9f9116ef9708ca6340560832e3b72e.css
-scss/admin.css: scss/admin-dd7221b8a05c553d9eb5ac0c00118daa.css
-scss/application.css: scss/application-6b8c27324fbafaffcc3aea022d0ab9e9.css
+scss/admin.css: scss/admin-0914697b845ab5d21b146359add651e7.css
+scss/application.css: scss/application-da3909ba29d9c24f61c911fc28bc4305.css
 scss/application.mobile.css: scss/application.mobile-ca2184ad6ac977edd387b6813c34f574.css
 scss/banner.css: scss/banner-331c4e35597b1b905f46e6226aa74178.css
 scss/cart.css: scss/cart-a00c819367f1c26885c93fd320e87746.css

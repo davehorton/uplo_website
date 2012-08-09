@@ -84,32 +84,6 @@
     width: 20px; }
   .admin .title-bar #search-box-admin .container #wrapSearchjqiho {
     margin: 0px; }
-.admin .content .user-container {
-  width: 312px;
-  height: 67px;
-  background-color: #EAEAEA;
-  margin-right: 10px;
-  margin-bottom: 10px;
-  float: left;
-  position: relative; }
-  .admin .content .user-container .profile-link {
-    display: inline-block;
-    width: 67px; }
-  .admin .content .user-container .user-info {
-    padding-left: 15px;
-    padding-top: 15px; }
-  .admin .content .user-container .username {
-    font-size: 18pt;
-    padding-bottom: 5px; }
-  .admin .content .user-container .numbers {
-    color: #4D4D4D;
-    font-size: 11.5px; }
-    .admin .content .user-container .numbers span.separator {
-      margin: 0 2px; }
-  .admin .content .user-container a {
-    font-weight: normal; }
-.admin .content .user-container.no-margin-right {
-  margin-right: 0; }
 .admin .content .image-container {
   width: 155px;
   height: 276px;
@@ -183,8 +157,8 @@
 /* MEMBER PROFILE */
 .members .user-container .action-container {
   position: absolute;
-  right: 5px;
-  top: 10px; }
+  right: 2px;
+  top: 5px; }
 
 /* FLAGGED IMAGES */
 .header {
