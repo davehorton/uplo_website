@@ -689,10 +689,20 @@ textarea { padding-top:5px; }
     width: 57px;
     height: 23px;
   }
+  &.follow-small {
+    background: url('/assets/btn-follow-small.png') no-repeat;
+    width: 50px;
+    height: 21px;
+  }
   &.unfollow {
     background: url('/assets/btn-unfollow.png') no-repeat;
     width: 68px;
     height: 23px;
+  }
+  &.unfollow-small {
+    background: url('/assets/btn-unfollow-small.png') no-repeat;
+    width: 59px;
+    height: 21px;
   }
   &.cancel {
     background: url('/assets/btn-cancel-57x23.png') no-repeat;
@@ -713,6 +723,11 @@ textarea { padding-top:5px; }
     background: url('/assets/btn-ok.png') no-repeat;
     width: 39px;
     height: 23px;
+  }
+  &.dislike-small {
+    background: url('/assets/btn-dislike-small.png') no-repeat;
+    width: 47px;
+    height: 21px;
   }
   &.dismiss {
     background: url('/assets/btn-close-photo.png') no-repeat;
@@ -1139,9 +1154,16 @@ textarea { padding-top:5px; }
           background-color: $color-fuzzier-gray;
           a { font-weight: normal; cursor: pointer; }
           a:hover { font-weight: bold; }
-          .name { margin-bottom: 9px;
-            a:hover { font-weight: normal; }}
-      }}}
+          .name {
+            margin: -2px 0 11px;
+            a:hover { font-weight: normal; }
+          }
+          .button.dislike-small, .button.follow-small, .button.unfollow-small {
+            margin-top: -4px;
+          }
+        }
+      }
+    }
     .container {
       margin-top: 15px;
       a.title { cursor: pointer;}

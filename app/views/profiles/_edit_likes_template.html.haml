@@ -11,5 +11,4 @@
       .name.text.black.font18.line12= image.name.truncate(20)
       .text.gray.font12.left= "by&nbsp;".html_safe
       %a.text.black.font12.line12.left{ :href => "#{ url_for(:controller => 'profiles', :action => 'show', :user_id => author.id) }" }= author.username.truncate(18)
-      %a.like.text.black.font12.line12.right{ :data => { :id => "#{ image.id }" }}
-        Unlike
+      .button.dislike-small.right{ :data => { :id => "#{ image.id }" }}

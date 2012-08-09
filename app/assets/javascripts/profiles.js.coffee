@@ -57,7 +57,9 @@ requestFollow = (node) ->
         $.modal.close()
       else if(is_unfollow=='false')
         target.attr('data-following', 'true')
-        target.text('Unfollow')
+        target.removeClass('follow-small')
+        target.addClass('unfollow-small')
+        # target.text('Unfollow')
         counter = $('.counter.current')
         url = counter.find('.info').attr('data-url')
         load(url, counter.attr('id'))
@@ -65,7 +67,9 @@ requestFollow = (node) ->
           $('#following-counter .number').text response.followings
       else
         target.attr('data-following', 'false')
-        target.text('Follow')
+        target.removeClass('unfollow-small')
+        target.addClass('follow-small')
+        # target.text('Follow')
         counter = $('.counter.current')
         url = counter.find('.info').attr('data-url')
         load(url, counter.attr('id'))
@@ -159,8 +163,10 @@ $ ->
   $('body').delegate '#edit-profile-photo-popup .held-photos .delete', 'click', (e) -> requestDeleteProfilePhoto(e.target)
   $('body').delegate '#edit-profile-photo-popup .held-photos img', 'click', (e) -> requestUpdateAvatar(e.target)
 
-  $('#container').delegate '.follow', 'click', (e) -> requestFollow(e.target)
-  $('#container').delegate '.like', 'click', (e) -> requestDislike(e.target)
+  $('#container').delegate '.user-section .button', 'click', (e) ->
+    requestFollow(e.target)
+  $('#container').delegate '.image-section .button', 'click', (e) ->
+    requestDislike(e.target)
   $('#counters .counter .info').click ->
     url = $(@).attr('data-url')
     counter = $(@).closest('.counter')

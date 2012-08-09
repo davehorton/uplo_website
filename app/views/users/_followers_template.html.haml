@@ -4,7 +4,7 @@
   - is_current_user = is_current_user(user.id)
   - images_number = is_current_user ? user.images.length : user.public_images.length
   - is_following = user.has_follower?(current_user.id)
-  - follow_label = is_following ? 'Unfollow' : 'Follow'
+  - follow_class = is_following ? 'unfollow-small' : 'follow-small'
   - additional_class = line_item_additional_class(idx, users_per_line)
 
   .user-section.left{ :class => "#{ additional_class } #{type}"}
@@ -17,4 +17,5 @@
       .text.gray.font12.line12.left= "#{ pluralize(images_number, 'item')} | view&nbsp".html_safe
       %a.text.black.font12.line12.left{ :href => "#{ url }", :data => { 'user-id' => "#{ user.id }" } } profile
       - unless is_current_user
-        %a.follow.text.black.font12.line12.right{ :data => { 'author-id' => "#{ user.id }", 'following' => "#{ is_following }"} }= follow_label
+        .button.right{ :class => "#{ follow_class }", :data => { 'author-id' => "#{ user.id }", 'following' => "#{ is_following }"} }
+        / %a.follow.text.black.font12.line12.right{ :data => { 'author-id' => "#{ user.id }", 'following' => "#{ is_following }"} }= follow_label
