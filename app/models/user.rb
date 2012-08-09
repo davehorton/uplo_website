@@ -151,8 +151,7 @@ class User < ActiveRecord::Base
     end
 
     def do_search(params = {})
-      default_opt = { :sort_criteria => params[:filtered_params].delete(:sort_criteria)} if !params[:filtered_params][:sort_criteria].blank?
-      paging_info = parse_paging_options params[:filtered_params], default_opt
+      paging_info = parse_paging_options params[:filtered_params]
 
       sphinx_search_options = params[:sphinx_search_options]
       sphinx_search_options = {} if sphinx_search_options.nil?
@@ -227,7 +226,7 @@ class User < ActiveRecord::Base
     def parse_paging_options(options, default_opts = {})
       if default_opts.blank?
         default_opts = {
-          :sort_criteria => "users.updated_at DESC"
+          :sort_criteria => "username DESC"
         }
       end
       paging_options(options, default_opts)
@@ -625,7 +624,7 @@ class User < ActiveRecord::Base
   define_index :confirmed_users do
     indexes first_name
     indexes last_name
-    indexes username
+    indexes username, :sortable => true
     indexes email
     indexes confirmed_at
 
