@@ -754,35 +754,35 @@ class Image < ActiveRecord::Base
     end
 
     # Index for public images
-    # define_index :public_images do
-    #   # fields
-    #   indexes name
-    #   indexes description
-    #   indexes keyword
-    #   indexes author(:username), :as => :author, :sortable => true
-    #   indexes gallery(:name), :as => :album
-    #   indexes created_at, :sortable => true
-    #   indexes pageview, :sortable => true
-    #   indexes promote_num, :sortable => true
+    define_index :public_images do
+      # fields
+      indexes name
+      indexes description
+      indexes keyword
+      indexes author(:username), :as => :author, :sortable => true
+      indexes gallery(:name), :as => :album
+      indexes created_at
+      indexes pageview
+      indexes promote_num
 
-    #   # attributes
-    #   has gallery_id
+      # attributes
+      has gallery_id
 
-    #   # weight
-    #   set_property :field_weights => {
-    #     :name => 15,
-    #     :keyword => 7,
-    #     :description => 3,
-    #     :author => 1,
-    #     :album => 1
-    #   }
+      # weight
+      set_property :field_weights => {
+        :name => 15,
+        :keyword => 7,
+        :description => 3,
+        :author => 1,
+        :album => 1
+      }
 
-    #   where("images.id IN (SELECT id FROM (#{Image.public_images.to_sql}) public_images)")
-
-    #   if Rails.env.production?
-    #     set_property :delta => FlyingSphinx::DelayedDelta
-    #   else
-    #     set_property :delta => true
-    #   end
-    # end
+      where("images.id IN (SELECT id FROM (#{Image.public_images.to_sql}) public_images)")
+      
+      if Rails.env.production?
+        set_property :delta => FlyingSphinx::DelayedDelta
+      else
+        set_property :delta => true
+      end
+    end
 end
