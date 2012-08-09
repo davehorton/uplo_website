@@ -73,11 +73,13 @@
     border: 1px solid #a1a1a1;
     float: none;
     line-height: 490px; }
-  .image-container .promote-button {
-    background: url("/assets/promote-spotlight-light.png") no-repeat;
+  .image-container.promote-container {
     position: absolute;
     right: 10px;
     top: 10px;
+    z-index: 5; }
+  .image-container .promote-button {
+    background: url("/assets/promote-spotlight-light.png") no-repeat;
     width: 133px;
     height: 26px; }
     .image-container .promote-button.disabled {
