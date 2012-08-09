@@ -622,10 +622,18 @@ textarea {
     background: url("/assets/btn-follow.png") no-repeat;
     width: 57px;
     height: 23px; }
+  .button.follow-small {
+    background: url("/assets/btn-follow-small.png") no-repeat;
+    width: 50px;
+    height: 21px; }
   .button.unfollow {
     background: url("/assets/btn-unfollow.png") no-repeat;
     width: 68px;
     height: 23px; }
+  .button.unfollow-small {
+    background: url("/assets/btn-unfollow-small.png") no-repeat;
+    width: 59px;
+    height: 21px; }
   .button.cancel {
     background: url("/assets/btn-cancel-57x23.png") no-repeat;
     width: 57px;
@@ -642,6 +650,10 @@ textarea {
     background: url("/assets/btn-ok.png") no-repeat;
     width: 39px;
     height: 23px; }
+  .button.dislike-small {
+    background: url("/assets/btn-dislike-small.png") no-repeat;
+    width: 47px;
+    height: 21px; }
   .button.dismiss {
     background: url("/assets/btn-close-photo.png") no-repeat;
     width: 52px;
@@ -799,6 +811,8 @@ textarea {
     margin-top: 10px; }
     #top .data-header .result-number {
       color: #898989; }
+    #top .data-header #current {
+      text-transform: capitalize; }
   #top .top-nav {
     margin-top: 4px; }
     #top .top-nav .actions-panel .separator {
@@ -1007,11 +1021,15 @@ textarea {
         #center .profile-wrapper #container .followers-container .user-section .info-panel a:hover, #center .profile-wrapper #container .followings-container .user-section .info-panel a:hover, #center .profile-wrapper #container .likes-container .image-section .info-panel a:hover {
           font-weight: bold; }
         #center .profile-wrapper #container .followers-container .user-section .info-panel .name, #center .profile-wrapper #container .followings-container .user-section .info-panel .name, #center .profile-wrapper #container .likes-container .image-section .info-panel .name {
-          margin-bottom: 9px; }
+          margin: -2px 0 11px; }
           #center .profile-wrapper #container .followers-container .user-section .info-panel .name a:hover, #center .profile-wrapper #container .followings-container .user-section .info-panel .name a:hover, #center .profile-wrapper #container .likes-container .image-section .info-panel .name a:hover {
             font-weight: normal; }
+        #center .profile-wrapper #container .followers-container .user-section .info-panel .button.dislike-small, #center .profile-wrapper #container .followers-container .user-section .info-panel .button.follow-small, #center .profile-wrapper #container .followers-container .user-section .info-panel .button.unfollow-small, #center .profile-wrapper #container .followings-container .user-section .info-panel .button.dislike-small, #center .profile-wrapper #container .followings-container .user-section .info-panel .button.follow-small, #center .profile-wrapper #container .followings-container .user-section .info-panel .button.unfollow-small, #center .profile-wrapper #container .likes-container .image-section .info-panel .button.dislike-small, #center .profile-wrapper #container .likes-container .image-section .info-panel .button.follow-small, #center .profile-wrapper #container .likes-container .image-section .info-panel .button.unfollow-small {
+          margin-top: -4px; }
   #center .profile-wrapper .container {
     margin-top: 15px; }
+    #center .profile-wrapper .container a.title {
+      cursor: pointer; }
     #center .profile-wrapper .container a.edit-pane {
       font-weight: normal; }
     #center .profile-wrapper .container .edit-pane {

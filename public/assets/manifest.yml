@@ -46,11 +46,13 @@ btn-choose-photo.png: btn-choose-photo-24993ba6dcc909002602d858232256a1.png
 btn-close-photo.png: btn-close-photo-71b4951ee1d286cebb6e9beb65c91a51.png
 btn-comment.jpg: btn-comment-0a73efa9af8378462e4d4bad7317d5fb.jpg
 btn-delete-photo.png: btn-delete-photo-558c2a2d4b48c0aea7c376724bf705bf.png
+btn-dislike-small.png: btn-dislike-small-991edf61bda3b0b6da49a73083c5b5cf.png
 btn-dislike.png: btn-dislike-f0bb0bd46a62435d0b9700c1526bef8c.png
 btn-done.png: btn-done-352ad89527c928bddf38e2e866f81648.png
 btn-dowload-app.png: btn-dowload-app-2e9fc66a9ec53cf550430ad32ddc2fba.png
 btn-edit.png: btn-edit-c63376d30973b9e15e52837fa90208d2.png
 btn-flag-photo.png: btn-flag-photo-be681709622bcbdd34a80492c8752d99.png
+btn-follow-small.png: btn-follow-small-30b219ba48bc7c48a8fcd961f74c8e86.png
 btn-follow.png: btn-follow-ce4dd860ca4ed5faa085c1409ab5fd8a.png
 btn-leave-changes.png: btn-leave-changes-83aa1080273533e7debf4b99509ef53c.png
 btn-like.jpg: btn-like-6f20784a44e6d51ea7da01afea8f9dee.jpg
@@ -71,6 +73,7 @@ btn-send-invite.png: btn-send-invite-cfc6468c1dd8de5cb42a69bdc47f2b14.png
 btn-send.png: btn-send-ff6d3239a55ddfae94196aad81f6bffb.png
 btn-share.png: btn-share-40644dc10f0910f48bbbd6ddf49fa370.png
 btn-submit-photo.png: btn-submit-photo-6c66a8a3836da440f10ca4e4a8f864dc.png
+btn-unfollow-small.png: btn-unfollow-small-bae71ff0b0620c5714e0ed0e07e30bf4.png
 btn-unfollow.png: btn-unfollow-9da24de1d8ae6551902e63b25a080bef.png
 btn-update-profile.png: btn-update-profile-d399912bc504c2d583854dd4f488c0bb.png
 cancel-uploadify.gif: cancel-uploadify-c195bd1e99bbcdc1a1e4649e945a00c8.gif
@@ -283,7 +286,7 @@ lib/jquery.ui.widget.js: lib/jquery.ui.widget-0d68580b40839753efc5ace9498dba90.j
 lib/jquery.url.js: lib/jquery.url-54bab1cba764049f9199d478427a17df.js
 lib/superfish.min.js: lib/superfish.min-ffabcd0209faaae3216c63369a26facf.js
 lib/supersubs.min.js: lib/supersubs.min-51d2091adc4247f2751775293b4697b7.js
-profiles.js: profiles-493daf098251d2beeb7aea23e1576fc0.js
+profiles.js: profiles-a8a1db816077633607fc08104b7aaefc.js
 rails.js: rails-68b47f0ba7401778dadbcdeafc621db8.js
 application.css: application-b5ccf7188c153412298770ca08fa3746.css
 bootstrap-image-gallery.css: bootstrap-image-gallery-d5c0778ddff99fb1e8dbd314793ba0d8.css
@@ -297,7 +300,7 @@ jquery.contextMenu.css: jquery.contextMenu-5e13ffab2ad4f1c83de146893d8f0b86.css
 jquery.ui.selectmenu.css: jquery.ui.selectmenu-126b46b0f5616450a0711aea25ce56ec.css
 jquery.ui.theme.css: jquery.ui.theme-bc9f9116ef9708ca6340560832e3b72e.css
 scss/admin.css: scss/admin-0914697b845ab5d21b146359add651e7.css
-scss/application.css: scss/application-da3909ba29d9c24f61c911fc28bc4305.css
+scss/application.css: scss/application-b3068f1b1f79341f2fb3b13eaf97a39d.css
 scss/application.mobile.css: scss/application.mobile-ca2184ad6ac977edd387b6813c34f574.css
 scss/banner.css: scss/banner-331c4e35597b1b905f46e6226aa74178.css
 scss/cart.css: scss/cart-a00c819367f1c26885c93fd320e87746.css
