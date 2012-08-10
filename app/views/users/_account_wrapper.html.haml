@@ -1,0 +1,15 @@
+/locals header, last
+- last = false if last.nil?
+.account_wrapper{:class => last ? "last_wrapper" : ""}
+  .wrapper_header.left.font16.bold.text= header
+  .edit_button.right
+    .edit_icon.left
+    .text.font11.left Edit
+  .clear
+  .line-separator
+  .info_area
+    %br
+    = yield
+    
+  .clear
+  .separation_space

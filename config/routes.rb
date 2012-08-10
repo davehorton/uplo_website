@@ -84,6 +84,8 @@ Uplo::Application.routes.draw do
     :confirmations => "users/confirmations", :passwords => "users/passwords" }
 
   devise_scope :user do
+    resources :users do
+    end
     get "signin", :to => "users/sessions#new"
     post "signin", :to => "users/sessions#new"
     get "register", :to => "users/registrations#new"

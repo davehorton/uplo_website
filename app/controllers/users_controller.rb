@@ -1,6 +1,7 @@
 class UsersController < ApplicationController
   before_filter :authenticate_user!, :except => [:request_invitation]
-
+  layout 'main'
+  
   def request_invitation
     if params[:user].nil? || !params[:user].has_key?('email') || params[:user][:email].blank?
       flash[:error] = "Please input an email first"
@@ -29,11 +30,54 @@ class UsersController < ApplicationController
 
   def update
     @user = current_user
+    type_update = params[:user][:type_update]
+    params[:user].delete(:type_update)
+    if (type_update == "payment_info")
+      card_required_info = ['name_on_card', 'card_type', 'card_number', 'expiration(1i)', 'expiration(2i)', 'cvv']
+
+      card_required_info.each { |val|
+        if !params[:user].has_key?(val) || params[:user][val].blank?
+          error = 'Please fill all required fields first!'
+          return render :json => [error], :status => :unprocessable_entity
+        end
+      }
+
+      expires_on = Date.civil(params[:user]["expiration(1i)"].to_i,
+                         params[:user]["expiration(2i)"].to_i, 1)
+      params[:user][:expiration] = expires_on.strftime("%m-%Y")
+      params[:user].delete("expiration(1i)")
+      params[:user].delete("expiration(2i)")
+      params[:user].delete("expiration(3i)")
+    end
+
     respond_to do |format|
       if @user.update_profile(params[:user])
-        format.html { redirect_to("/my_account", :notice => I18n.t('user.update_done')) }
+        puts params
+        sign_in @user, :bypass => true
+        format.html do
+          if request.xhr?
+            case type_update
+            when "basic_info"
+              render :partial => "/users/sections/my_information", :locals => {:user => @user}, :layout => false
+            when "password_change"
+              render :partial => "/users/sections/password", :locals => {:user => @user}, :layout => false
+            when "payment_info"
+              render :partial => "/users/sections/payment_info", :locals => {:user => @user}, :layout => false
+            when "paypal_email_change"
+              render :partial => "/users/sections/paypal_email", :locals => {:user => @user}, :layout => false
+            end
+          else
+            redirect_to("/my_account", :notice => I18n.t('user.update_done'))
+          end
+        end
       else
-        format.html { render :action => "edit", :notice => @user.errors}
+        format.html do
+          if request.xhr?
+            render :json => @user.errors.full_messages, :status => :unprocessable_entity
+          else
+            redirect_to("/my_account", :notice => @user.errors)
+          end
+        end
       end
     end
   end

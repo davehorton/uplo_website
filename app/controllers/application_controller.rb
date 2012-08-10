@@ -37,6 +37,10 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  def after_sign_in_path_for(resource)
+    "/spotlight" # <- Path you want to redirect the user to.
+  end
+
   protected
     def set_current_tab
       "please override this method in your sub class"

@@ -112,7 +112,7 @@
 
           .info
             = f.label :cvv, "CVV <span style='color:red;'>*</span> <span id='cvv-explanation'>What's This?</span>".html_safe
-            = f.input :cvv, :autofocus => true, :required => true, :label => false
+            = f.input :cvv, :autofocus => true, :required => true, :label => false, :maxlength => 4
           = hidden_field_tag :order_id, @order.id
 
     #order-summary.order_summary.no-padding-right.left{:style => "height:auto;min-height: 100px;"}

@@ -1,0 +1,20 @@
+/locals user
+= render :layout => "account_wrapper", :locals => {:header => "My Paypal Information", :last => true} do
+  .yield_info
+    .line_info
+      - if (user.paypal_email)
+        = user.paypal_email
+      - else
+        There is no Paypal email
+  .yield_edit.hide
+    = simple_form_for @user, :remote => true do |user|
+      .form_wrapper.left
+        .line Paypal Email
+        .line Email Confirm
+      .form_wrapper.left{:style => "width:180px; margin-left:10px"}
+        .line= user.input_field :paypal_email
+        .line= user.input_field :paypal_email_confirmation, :value => ""
+        .line= hidden_field :user, :type_update, :value => :paypal_email_change
+        %br
+        .update_button.left
+        .button.cancel.left

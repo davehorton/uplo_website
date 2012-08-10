@@ -1,39 +1,106 @@
+- content_for :head do
+  = stylesheet_link_tag('scss/user.css')
 .account
-  .action-container.clearfix
-    .header
-      %h1= "My Profile"
-    %a.float-right#edit-profile{:href => "/my_account/edit", :class => "ui-button-container icon-link"}
-      %span= "Edit Profile"
+  .header.font16.bold.text My Account
+  .line-separator
+  %br
+  .line_wrapper
+    .partial_wrapper
+      = render :partial => "/users/sections/my_information", :locals => {:user => @user}
 
-  .clearfix
+    .partial_wrapper
+      = render :partial => "/users/sections/billing_address", :locals => {:address => @user.billing_address}
 
-  .account-info-container.clearfix
-    .info-container
-      %span
-        %h2= "Full name:"
-      %span= @user.fullname
+    .partial_wrapper
+      = render :partial => "/users/sections/shipping_address", :locals => {:address => @user.shipping_address}
 
-    .info-container
-      %span
-        %h2= "Gender:"
-      %span= @user.gender_string
+    .clear
 
-    .info-container
-      %h2= "Social Networks:"
-      .info-content
-        .info-item
-          %label.social= "Twitter:"
-          %span= @user.twitter
+    .partial_wrapper
+      = render :partial => "/users/sections/password", :locals => {:user => @user}
 
-        .info-item
-          %label.social= "Facebook:"
-          %span= @user.facebook
+    .partial_wrapper
+      = render :partial => "/users/sections/payment_info", :locals => {:user => @user}
 
-    .info-container
-      %span
-        %h2= "Security:"
-      %span
-        %a#change-password{:href => "/change_password"}= "Change Password"
+    .partial_wrapper
+      = render :partial => "/users/sections/paypal_email", :locals => {:user => @user}
+    .clear
+  .line_wrapper
+    = render :layout => "account_wrapper", :locals => {:header => "Social Networks"} do
+      .line_info
+        Facebook:
+      .line_info
+        Twitter:
+= render :partial => '/orders/cvv_form', :layout => 'layouts/bubble', :locals => { :id => 'cvv-form' }
 
-    .info-container
-      %h2= "Payment & Shipping Options:"
+- content_for :js do
+  = javascript_include_tag 'app/my_account.js'
+  = javascript_tag do
+    :erb
+      function reloadEvent(){
+        $('.edit_button').click(function(){
+          $(this).hide();
+          $(this).parent().find('.yield_info').hide(100);
+          $(this).parent().find('.yield_edit').show(100);
+        });
+
+        $('.cancel').bind('click', function(){
+          $(this).closest('.account_wrapper').find('.edit_button').show(100);
+          $(this).closest('.account_wrapper').find('.yield_edit').hide(100);
+          $(this).closest('.account_wrapper').find('.yield_info').show(100);
+        });
+   
+        $('.update_button').bind('click', function(){
+          $(this).closest('form').submit();
+        });
+
+        $('.simple_form')
+          .bind("ajax:beforeSend", function(evt, xhr, settings){
+            $('#mask').modal();
+          })
+          .bind("ajax:success", function(evt, data, status, xhr){
+            $.modal.close();
+            var $form = $(this);
+
+            // Reset fields and any validation errors, so form can be used again, but leave hidden_field values intact.
+            $form.closest('.partial_wrapper').html(xhr.responseText);
+            reloadEvent();
+            helper.show_notification("Update successfully");
+          })
+          .bind('ajax:complete', function(evt, xhr, status){
+            $.modal.close();
+          })
+          .bind("ajax:error", function(evt, xhr, status, error){
+            $.modal.close();
+            var $form = $(this),
+                errors,
+                errorText;
+
+            try {
+              // Populate errorText with the comment errors
+              errors = $.parseJSON(xhr.responseText);
+            } catch(err) {
+              // If the responseText is not valid JSON (like if a 500 exception was thrown), populate errors with a generic error message.
+              errors = {message: "Please reload the page and try again"};
+            }
+
+            // Build an unordered list from the list of errors
+            errorText = "<ul>";
+
+            for (var i = 0; i < errors.length; i++ ) {
+              errorText +=  "<li>" + errors[i] + "</li> ";
+            }
+
+            errorText += "</ul>";
+
+            // Insert error list into form
+            helper.show_notification(errorText);
+          });
+
+        $('select[id!=my_links]').selectmenu({style:'dropdown'});
+      }
+      $(document).ready(function(){
+        reloadEvent();
+
+        
+      });

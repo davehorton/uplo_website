@@ -29,12 +29,13 @@ class User < ActiveRecord::Base
   # Setup accessible (or protected) attributes for your model
   attr_accessible :id, :email, :password, :password_confirmation, :remember_me,
                   :first_name, :last_name, :username, :login, :nationality,
-                  :birthday, :gender, :avatar, :twitter, :facebook
+                  :birthday, :gender, :avatar, :twitter, :facebook, :website, :biography, :name_on_card, 
+                  :card_type, :card_number, :expiration, :cvv, :paypal_email, :paypal_email_confirmation
 
   attr_accessible :id, :email, :password, :password_confirmation, :remember_me,
                   :first_name, :last_name, :username, :login, :nationality,
-                  :birthday, :gender, :avatar, :twitter, :facebook, :is_admin,
-                  :as => :admin
+                  :birthday, :gender, :avatar, :twitter, :facebook, :website, :biography, :name_on_card, 
+                  :card_type, :card_number, :expiration, :cvv, :paypal_email, :paypal_email_confirmation, :is_admin, :as => :admin
 
   # ASSOCIATIONS
   has_many :profile_images, :dependent => :destroy, :order => 'last_used DESC'
@@ -54,21 +55,26 @@ class User < ActiveRecord::Base
   has_many :friends_images, :through => :followed_users, :source => :images
   has_many :devices, :class_name => 'UserDevice'
 
+  belongs_to :billing_address, :class_name => "Address"
+  belongs_to :shipping_address, :class_name => "Address"
+
   # VALIDATION
   validates_presence_of :first_name, :last_name, :email, :username, :message => 'cannot be blank'
   validates :password, :presence => true, :confirmation => true, :unless => :force_submit
-  validates_format_of :email, :on => :create, :message => 'is invalid',
+  validates_format_of :email, :message => 'is invalid',
           :with => /^([0-9a-zA-Z]([-.\w]*[0-9a-zA-Z])*@(([0-9a-zA-Z])+([-\w]*[0-9a-zA-Z])*\.)+[a-zA-Z]{2,9})$/i
   validates_format_of :website, :allow_blank => true,
           :with => /(^$)|(^((http|https):\/\/){0,1}[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(([0-9]{1,5})?\/.*)?$)/i
   validates_uniqueness_of :email, :message => 'must be unique'
   validates_uniqueness_of :username, :message => 'must be unique'
   validates_length_of :first_name, :last_name, :in => 2..30, :message => 'must be 2 - 30 characters in length'
-
+  validates_confirmation_of :paypal_email, :message => "should match confirmation"
+  validates_presence_of :paypal_email_confirmation, :if => :paypal_email_changed?
+  validates_format_of :paypal_email, :message => 'is invalid',
+          :with => /^([0-9a-zA-Z]([-.\w]*[0-9a-zA-Z])*@(([0-9a-zA-Z])+([-\w]*[0-9a-zA-Z])*\.)+[a-zA-Z]{2,9})$/i
   # SCOPE
   scope :active_users, where(:is_removed => false, :is_banned => false)
   scope :removed_users, where(:is_removed => true)
-
   scope :flagged_users, lambda {
     self.joins(self.sanitize_sql([
       "JOIN (
@@ -88,7 +94,6 @@ class User < ActiveRecord::Base
   }
 
   scope :reinstate_ready_users, flagged_users.where("flagged_images_count < ?", MIN_FLAGGED_IMAGES)
-
   scope :confirmed_users, where("confirmed_at IS NOT NULL AND is_removed = ?", false)
 
   # CLASS METHODS
@@ -297,7 +302,7 @@ class User < ActiveRecord::Base
     result = nil
     params ||= {}
     params.to_options!
-    [:username, :email].each do |key|
+    [:username].each do |key|
       # Remove sensitive parameter.
       params.delete(key)
     end
@@ -317,6 +322,7 @@ class User < ActiveRecord::Base
       # TODO: inspect why this method does not work?
       #result = self.update_without_password(params)
       self.force_submit = true
+      puts params
       result = self.update_attributes(params)
     end
 

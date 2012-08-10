@@ -1,0 +1,47 @@
+/locals address
+- country = {"USA" => "usa"}
+= render :layout => "account_wrapper", :locals => {:header => "My Shipping Address", :last => true} do
+  - if address.nil?
+    .yield_info
+      There is no shipping address information
+    - address = Address.new
+  - else
+    .yield_info
+      .line_info
+        = [address.first_name, address.last_name].join(' ')
+      .line_info
+        = address.address
+      .line_info
+        = [address.city, address.state].join(',')
+      .line_info
+        = address.zip_code
+      .line_info
+        = address.country
+      .line_info
+        Phone: 
+        = address.phone_number
+
+  .yield_edit.hide
+    = simple_form_for address, :url => users_path, :remote => true do |add|
+      .form_wrapper.left
+        .line First Name
+        .line Last Name
+        .line Street
+        .line City
+        .line State
+        .line Zip Code
+        .line Country
+        .line Phone Number
+      .form_wrapper.left{:style => "width:200px; margin-left:10px"}
+        .line= add.input_field :first_name
+        .line= add.input_field :last_name
+        .line= add.input_field :address
+        .line= add.input_field :city
+        .line= add.select :state, state_options, {:prompt => 'Select One'}
+        .line= add.input_field :zip_code
+        .line= add.select :country, options_for_select(country, address.country), {:prompt => 'Select One'}
+        .line= add.input_field :phone_number
+        .line= hidden_field :user, :type_update, :value => :billing_address
+        %br
+        .update_button.left
+        .button.cancel.left

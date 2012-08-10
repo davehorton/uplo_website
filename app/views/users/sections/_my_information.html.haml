@@ -1,0 +1,39 @@
+/locals user
+= render :layout => "account_wrapper", :locals => {:header => "My Information"} do
+  .yield_info
+    .line_info
+      Name:
+      = [@user.first_name, @user.last_name].join " "
+    .line_info
+      Email:
+      = @user.email
+    .line_info
+      Location:
+      = @user.location
+    .line_info
+      Job:
+      = @user.job
+    .line_info
+      Personal Site:
+      = @user.website
+    .line_info
+      Bio:
+      = @user.biography
+  .yield_edit.hide
+    = simple_form_for user, :remote => true do |u| 
+      .form_wrapper.left
+        .line First Name
+        .line Last Name
+        .line Email
+        .line Personal Site
+        .line Bio
+      .form_wrapper.left{:style => "width:210px; margin-left: 10px"}
+        .line= u.input_field :first_name
+        .line= u.input_field :last_name
+        .line= u.input_field :email
+        .line= u.input_field :website
+        .line= u.input_field :biography
+        .line= hidden_field :user, :type_update, :value => :basic_info
+        %br
+        .update_button.left
+        .button.cancel.left

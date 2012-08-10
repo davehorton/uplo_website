@@ -410,7 +410,7 @@ class Image < ActiveRecord::Base
             ).readonly(false)
 
             line_items.each do |line_item|
-              line_item.update_attributes :quantity => 0
+              line_item.update_attribute(:quantity, 0)
             end
 
             if self.author.will_be_banned?
