@@ -6,7 +6,7 @@ class UsersController < ApplicationController
       flash[:error] = "Please input an email first"
     elsif (User::EMAIL_REG_EXP =~ params[:user][:email]).nil?
       flash[:error] = 'The email is invalid'
-    elsif Invitation.exists?(:email => email) || User.exists?(:email => email)
+    elsif Invitation.exists?(:email => params[:user][:email]) || User.exists?(:email => params[:user][:email])
       flash[:error] = 'The email has been used'
     else
       req = Invitation.new_invitation(params[:user][:email])

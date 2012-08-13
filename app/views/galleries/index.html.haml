@@ -24,7 +24,7 @@
           .text.black.bold.name{:title => gallery.name}=raw gallery.name.truncate(25)
           .text.gray.photo-number= (gallery.images.un_flagged.length > 0 ? pluralize(gallery.images.un_flagged.length, "Image") : "No Image")
           .text.gray.update-time= "Last Updated: #{gallery.updated_at_string}"
-          .text.fuzzy-gray.permission= gallery.permission_string.titleize
+          .text.fuzzy-gray.permission= I18n.t("gallery.permission")[gallery.permission]
           %a.share-link.text.normal{ :id => "share-context-menu-#{gallery.id}", :href=>'#', :data => { :public_url => "#{gallery.public_link}", :cover_url => "#{gallery_cover_image_url(gallery)}", :email_url => "#{ url_for(:controller => 'galleries', :action => 'mail_shared_gallery', :gallery_id => gallery.id) }", :gallery_name => "#{gallery.name.truncate(20)}", :gallery_user => "#{gallery.user.username.truncate(15)}" } } Share
   = render_pagination(@galleries, {:controller => "galleries", :action => params[:action]})
 

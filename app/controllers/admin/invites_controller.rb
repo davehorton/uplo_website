@@ -19,6 +19,7 @@ class Admin::InvitesController < ApplicationController
           inv.update_attribute(:invited_at, Time.now())
           #send email
           InvitationMailer.send_invitation(inv.id).deliver
+          result[:success] = true
         end
       }
       if result[:success]
