@@ -2,7 +2,7 @@
 - card_type = {"American Express" => "USA_express", "Discover" => "discover", "Visa" => "visa", "JCB" => "jcb", "Diners Club/ Carte Blanche" => "dinners_club", "Master Card" => "master_card"}
 - card_type_reverse = Hash.new {|h,k| h[k] = ""}
 - card_type.each {|k,v| card_type_reverse[v] << k}
-- user.expiration = Date.strptime(user.expiration, "%m-%Y")
+- user.expiration = Date.strptime(user.expiration, "%m-%Y") if user.expiration
 = render :layout => "account_wrapper", :locals => {:header => "My Payment Information"} do
   .yield_info
     .line_info
