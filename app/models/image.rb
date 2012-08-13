@@ -82,8 +82,8 @@ class Image < ActiveRecord::Base
 
   validates_attachment :data, :presence => true,
     :size => { :in => 0..10.megabytes, :message => 'File size cannot exceed 10MB' },
-    :content_type => { :content_type => [ 'image/jpeg','image/jpg','image/png',"image/gif"],
-      :message => 'File type must be one of [.jpeg, .jpg, .png, .gif]' }
+    :content_type => { :content_type => [ 'image/jpeg','image/jpg'],
+      :message => 'File type must be one of [.jpeg, .jpg]' }
 
   # CALLBACK
   before_create :set_default_tier
