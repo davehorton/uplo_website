@@ -31,13 +31,13 @@ class User < ActiveRecord::Base
                   :first_name, :last_name, :username, :login, :nationality,
                   :birthday, :gender, :avatar, :twitter, :facebook, :website, :biography, :name_on_card, 
                   :card_type, :card_number, :expiration, :cvv, :paypal_email, :paypal_email_confirmation,
-                  :is_enable_facebook, :is_enable_twitter, :billing_address_id, :shipping_address_id
+                  :is_enable_facebook, :is_enable_twitter, :billing_address_id, :shipping_address_id, :job, :location
 
   attr_accessible :id, :email, :password, :password_confirmation, :remember_me,
                   :first_name, :last_name, :username, :login, :nationality,
                   :birthday, :gender, :avatar, :twitter, :facebook, :website, :biography, :name_on_card, 
                   :card_type, :card_number, :expiration, :cvv, :paypal_email, :paypal_email_confirmation,
-                  :is_enable_facebook, :is_enable_twitter, :billing_address_id, :shipping_address_id, :is_admin, :as => :admin
+                  :is_enable_facebook, :is_enable_twitter, :billing_address_id, :shipping_address_id, :job, :location, :is_admin, :as => :admin
 
   # ASSOCIATIONS
   has_many :profile_images, :dependent => :destroy, :order => 'last_used DESC'
@@ -192,11 +192,11 @@ class User < ActiveRecord::Base
     end
 
     def exposed_methods
-      [:avatar_url, :fullname, :joined_date, :biography]
+      [:avatar_url, :fullname, :joined_date]
     end
 
     def exposed_attributes
-      [:id, :email, :first_name, :last_name, :username, :nationality, :birthday, :gender, :twitter, :facebook]
+      [:id, :email, :first_name, :biography, :location, :website, :job, :last_name, :username, :nationality, :birthday, :gender, :twitter, :facebook]
     end
 
     def exposed_associations
