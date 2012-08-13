@@ -29,7 +29,7 @@ class Image < ActiveRecord::Base
   }
 
   # ASSOCIATIONS
-  belongs_to :gallery
+  belongs_to :gallery, :touch => true
   has_one :author, :through => :gallery, :source => :user
   has_many :image_flags, :dependent => :destroy
   has_many :image_tags, :dependent => :destroy
@@ -285,11 +285,11 @@ class Image < ActiveRecord::Base
 
     def exposed_methods
       [ :image_url, :image_thumb_url, :username, :creation_timestamp, :user_fullname,
-        :public_link, :user_id, :user_avatar, :comments_number]
+        :public_link, :user_id, :user_avatar, :comments_number, :gallery_name]
     end
 
     def exposed_attributes
-      [:id, :name, :description, :data_file_name, :gallery_id, :price, :likes, :keyword]
+      [:id, :name, :description, :data_file_name, :gallery_id, :price, :likes, :keyword, :is_owner_avatar, :is_gallery_cover]
     end
 
     def exposed_associations
@@ -645,6 +645,10 @@ class Image < ActiveRecord::Base
       end
     }
     return result
+  end
+
+  def gallery_name
+    return self.gallery.name
   end
 
   def set_album_cover

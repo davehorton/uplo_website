@@ -73,7 +73,8 @@ class User < ActiveRecord::Base
   validates_confirmation_of :paypal_email, :message => "should match confirmation"
   validates_presence_of :paypal_email_confirmation, :if => :paypal_email_changed?
   validates_format_of :paypal_email, :message => 'is invalid',
-          :with => /^([0-9a-zA-Z]([-.\w]*[0-9a-zA-Z])*@(([0-9a-zA-Z])+([-\w]*[0-9a-zA-Z])*\.)+[a-zA-Z]{2,9})$/i
+          :with => /^([0-9a-zA-Z]([-.\w]*[0-9a-zA-Z])*@(([0-9a-zA-Z])+([-\w]*[0-9a-zA-Z])*\.)+[a-zA-Z]{2,9})$/i,
+          :if => :paypal_email_changed?
   # SCOPE
   scope :active_users, where(:is_removed => false, :is_banned => false)
   scope :removed_users, where(:is_removed => true)

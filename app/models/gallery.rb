@@ -49,7 +49,7 @@ class Gallery < ActiveRecord::Base
     end
 
     def exposed_methods
-      [:cover_image, :total_images, :public_link]
+      [:cover_image, :total_images, :public_link, :last_update]
     end
 
     def exposed_attributes
@@ -127,6 +127,10 @@ class Gallery < ActiveRecord::Base
 
   def total_images
     self.images.un_flagged.length
+  end
+
+  def last_update
+      return self.updated_at.strftime('%B %Y')
   end
 
   # PROTECTED INSTANCE METHODS
