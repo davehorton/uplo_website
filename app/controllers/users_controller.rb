@@ -49,6 +49,27 @@ class UsersController < ApplicationController
       params[:user].delete("expiration(2i)")
       params[:user].delete("expiration(3i)")
     end
+    address = nil
+    if (type_update == "billing_address" || type_update == "shipping_address")
+      address = @user.billing_address ||= Address.new if (type_update == "billing_address")
+      address = @user.shipping_address ||= Address.new if (type_update == "shipping_address")
+      
+      if (address.update_attributes params[:address])
+        params[:user][:billing_address_id] = address.id if (type_update == "billing_address")
+        params[:user][:shipping_address_id] = address.id if (type_update == "shipping_address")
+      else
+        respond_to do |format|
+          format.html do
+            if request.xhr?
+              render :json => address.errors.full_messages, :status => :unprocessable_entity
+            else
+              redirect_to("/my_account", :notice => address.errors)
+            end
+          end
+        end
+        return
+      end
+    end
 
     respond_to do |format|
       if @user.update_profile(params[:user])
@@ -56,16 +77,7 @@ class UsersController < ApplicationController
         sign_in @user, :bypass => true
         format.html do
           if request.xhr?
-            case type_update
-            when "basic_info"
-              render :partial => "/users/sections/my_information", :locals => {:user => @user}, :layout => false
-            when "password_change"
-              render :partial => "/users/sections/password", :locals => {:user => @user}, :layout => false
-            when "payment_info"
-              render :partial => "/users/sections/payment_info", :locals => {:user => @user}, :layout => false
-            when "paypal_email_change"
-              render :partial => "/users/sections/paypal_email", :locals => {:user => @user}, :layout => false
-            end
+            render :partial => "/users/sections/#{type_update}", :locals => {:user => @user, :address => address}, :layout => false
           else
             redirect_to("/my_account", :notice => I18n.t('user.update_done'))
           end

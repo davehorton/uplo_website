@@ -10,8 +10,8 @@ class AddInformationToUsers < ActiveRecord::Migration
     add_column :users, :cvv, :string
     add_column :users, :shipping_address_id, :integer
     add_column :users, :billing_address_id, :integer
-    add_column :users, :is_enable_facebook, :boolean
-    add_column :users, :is_enable_twitter, :boolean
+    add_column :users, :is_enable_facebook, :boolean, :default => false
+    add_column :users, :is_enable_twitter, :boolean, :default => false
     change_column :users, :biography, :text
   end
 end

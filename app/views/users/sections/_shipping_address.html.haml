@@ -22,7 +22,7 @@
         = address.phone_number
 
   .yield_edit.hide
-    = simple_form_for address, :url => users_path, :remote => true do |add|
+    = simple_form_for address, :url => user_path(@user) , :remote => true, :method => :put do |add|
       .form_wrapper.left
         .line First Name
         .line Last Name
@@ -41,7 +41,7 @@
         .line= add.input_field :zip_code
         .line= add.select :country, options_for_select(country, address.country), {:prompt => 'Select One'}
         .line= add.input_field :phone_number
-        .line= hidden_field :user, :type_update, :value => :billing_address
+        .line= hidden_field :user, :type_update, :value => :shipping_address
         %br
         .update_button.left
         .button.cancel.left

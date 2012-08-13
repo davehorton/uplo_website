@@ -25,12 +25,9 @@
     .partial_wrapper
       = render :partial => "/users/sections/paypal_email", :locals => {:user => @user}
     .clear
-  .line_wrapper
-    = render :layout => "account_wrapper", :locals => {:header => "Social Networks"} do
-      .line_info
-        Facebook:
-      .line_info
-        Twitter:
+
+    .partial_wrapper
+      = render :partial => "/users/sections/social_setting", :locals => {:user => @user}
 = render :partial => '/orders/cvv_form', :layout => 'layouts/bubble', :locals => { :id => 'cvv-form' }
 
 - content_for :js do

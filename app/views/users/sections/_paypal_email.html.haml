@@ -14,7 +14,7 @@
       .form_wrapper.left{:style => "width:180px; margin-left:10px"}
         .line= user.input_field :paypal_email
         .line= user.input_field :paypal_email_confirmation, :value => ""
-        .line= hidden_field :user, :type_update, :value => :paypal_email_change
+        .line= hidden_field :user, :type_update, :value => :paypal_email
         %br
         .update_button.left
         .button.cancel.left

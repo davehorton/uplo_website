@@ -1,0 +1,29 @@
+/locals user
+= render :layout => "account_wrapper", :locals => {:header => "My Social Networks"} do
+  .yield_info
+    .line_info
+      Facebook:
+    .line_info
+      Twitter:
+  .yield_edit.hide
+    = simple_form_for user, :remote => true do |u|
+      .form_wrapper.left{:style => "width:70px; margin-left:10px"}
+        .line Facebook
+        .line Twitter
+      .form_wrapper.left{:style => "width:180px; margin-left:10px"}
+        .line
+          .remove_css_effect
+            = u.radio_button :is_enable_facebook, true, :checked => user.is_enable_facebook
+            = u.label "is_enable_facebook_true", "Enable"
+            = u.radio_button :is_enable_facebook, false, :checked => !user.is_enable_facebook
+            = u.label "is_enable_facebook_false", "Disable"
+        .line
+          .remove_css_effect
+            = u.radio_button :is_enable_twitter, true, :checked => user.is_enable_twitter
+            = u.label "is_enable_twitter_true", "Enable"
+            = u.radio_button :is_enable_twitter, false, :checked => !user.is_enable_twitter
+            = u.label "is_enable_twitter_false", "Disable"
+        .line= hidden_field :user, :type_update, :value => :social_setting
+        %br
+        .update_button.left
+        .button.cancel.left

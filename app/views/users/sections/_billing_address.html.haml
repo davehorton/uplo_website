@@ -1,5 +1,4 @@
 /locals address
-/locals address
 - country = {"USA" => "usa"}
 = render :layout => "account_wrapper", :locals => {:header => "My Billing Address"} do
   - if address.nil?
@@ -23,7 +22,7 @@
         = address.phone_number
 
   .yield_edit.hide
-    = simple_form_for address, :url => users_path, :remote => true do |add|
+    = simple_form_for address, :url => user_path(@user) , :remote => true, :method => :put do |add|
       .form_wrapper.left
         .line First Name
         .line Last Name
