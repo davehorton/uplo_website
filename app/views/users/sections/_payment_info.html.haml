@@ -5,22 +5,25 @@
 - user.expiration = Date.strptime(user.expiration, "%m-%Y") if user.expiration
 = render :layout => "account_wrapper", :locals => {:header => "My Payment Information"} do
   .yield_info
-    .line_info
-      Name on Card: 
-      = user.name_on_card
-    .line_info
-      Card Type: 
-      = card_type_reverse[user.card_type]
-    .line_info
-      Card Number: **** **** **** 
-      = user.card_number.last(4)
-    .line_info
-      Expiration: 
-      = user.expiration.strftime("%m/%y")
+    - if (user.name_on_card)
+      .line_info
+        Name on Card: 
+        = user.name_on_card
+      .line_info
+        Card Type: 
+        = card_type_reverse[user.card_type]
+      .line_info
+        Card Number: **** **** **** 
+        = user.card_number.last(4)
+      .line_info
+        Expiration: 
+        = user.expiration.strftime("%m/%y")
 
-    .line_info
-      CVV:
-      ***
+      .line_info
+        CVV:
+        ***
+    - else
+      There is no card information
   .yield_edit.hide
     = simple_form_for @user, :remote => true do |user|
       .form_wrapper.left
