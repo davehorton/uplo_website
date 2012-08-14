@@ -570,6 +570,10 @@ textarea {
 
 .button {
   cursor: pointer; }
+  .button.add-to-cart {
+    background: url("/assets/btn-add-to-cart.jpg") no-repeat scroll 0 0 transparent;
+    height: 27px;
+    width: 91px; }
   .button.accept {
     background: url("/assets/btn-accept.png") no-repeat;
     width: 59px;
@@ -1365,6 +1369,14 @@ textarea {
     padding-top: 4px;
     font-size: 11px; }
 
+#line_item_size-button, #line_item_size-menu, #line_item_moulding-button, #line_item_moulding-menu {
+  max-width: 125px;
+  min-width: 125px; }
+
+#line_item_size-button .ui-selectmenu-status, #line_item_moulding-button .ui-selectmenu-status {
+  padding-left: 4px; }
+
+/* end - select button */
 #filtering-search-box {
   margin-top: 6px; }
   #filtering-search-box #query {
