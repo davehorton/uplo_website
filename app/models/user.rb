@@ -478,12 +478,7 @@ class User < ActiveRecord::Base
   def total_sales(image_paging_params = {})
     result = {:total_entries => 0, :data => []}
     paging_info = Image.paging_options(image_paging_params, {:sort_criteria => "images.updated_at DESC"})
-    images = Image.paginate(
-      :page => paging_info.page_id,
-      :per_page => paging_info.page_size,
-      :joins => "LEFT JOIN galleries ON galleries.id = images.gallery_id",
-      :conditions => ["galleries.permission = ? and galleries.user_id = ?", Gallery::PUBLIC_PERMISSION, self.id],
-      :order => paging_info.sort_string) # need sort by order date
+    images = self.raw_sales(image_paging_params)
     array = []
     images.each { |img|
       info = img.serializable_hash(img.default_serializable_options)
@@ -492,7 +487,7 @@ class User < ActiveRecord::Base
       info[:no_longer_avai] = (img.is_flagged? || img.is_removed)
       array << {:image => info }
     }
-    result[:data] = (array.sort! { |a,b| b[:image][:total_sale] <=> a[:image][:total_sale] })
+    result[:data] = array
     result[:total_entries] = images.total_entries
     return result
   end

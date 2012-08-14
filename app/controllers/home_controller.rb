@@ -1,5 +1,5 @@
 class HomeController < ApplicationController
-  before_filter :authenticate_user!, :except => [:index]
+  before_filter :authenticate_user!, :except => [:index, :terms]
   layout 'main'
 
   def index
@@ -21,6 +21,9 @@ class HomeController < ApplicationController
     @images = Image.get_spotlight_images(@filtered_params)
     # @recent_images = Image.get_browse_images(@filtered_params)
     render :template => 'home/browse'
+  end
+
+  def terms
   end
 
   def friends_feed

@@ -13,8 +13,8 @@ class ProfileImage < ActiveRecord::Base
     :default_url => "/assets/avatar-default-:style.jpg"
   validates_attachment :data, :presence => true,
     :size => { :in => 0..10.megabytes, :message => 'File size cannot exceed 10MB' },
-    :content_type => { :content_type => [ 'image/jpeg','image/jpg','image/png',"image/gif"],
-      :message => 'File type must be one of [.jpeg, .jpg, .png, .gif]' }
+    :content_type => { :content_type => [ 'image/jpeg','image/jpg'],
+      :message => 'File type must be one of [.jpeg, .jpg]' }
 
   # CALLBACK
   after_create :update_last_used, :set_as_default
