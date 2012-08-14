@@ -407,7 +407,7 @@ class Image < ActiveRecord::Base
             # Remove all images in shopping carts
             line_items = LineItem.joins(:order).joins(:image).where(
               :images => {:id => self.id},
-              :orders => {:status => Order::STATUS[:shopping]}
+              :orders => {:status => Order::STATUS[:shopping] || Order::STATUS[:checkout]}
             ).readonly(false)
 
             line_items.each do |line_item|
