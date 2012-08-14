@@ -20,7 +20,9 @@
     margin-top: 50px; }
   .account .line_info {
     margin-bottom: 8px;
-    font-size: 11px; }
+    font-size: 11px;
+    text-align: left;
+    word-wrap: break-word; }
   .account .update_button {
     cursor: pointer;
     width: 60px;
