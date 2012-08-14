@@ -8,6 +8,7 @@
   = f.error_notification
   .inputs
     = f.input :email, :required => true, :autofocus => true, :input_html => {:value => @inv.email, :disabled => true }
+    = f.input :email, :as => :hidden, :input_html => { :value => @inv.email }
     = f.input :username, :required => true, :autofocus => true
     = f.input :first_name, :required => true, :autofocus => true
     = f.input :last_name, :required => true, :autofocus => true

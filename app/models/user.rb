@@ -99,6 +99,8 @@ class User < ActiveRecord::Base
   scope :reinstate_ready_users, flagged_users.where("flagged_images_count < ?", MIN_FLAGGED_IMAGES)
   scope :confirmed_users, where("confirmed_at IS NOT NULL AND is_removed = ?", false)
 
+  after_create :cleanup_invitation
+
   # CLASS METHODS
   class << self
     def load_users(params = {})
@@ -615,35 +617,40 @@ class User < ActiveRecord::Base
     (self.images.flagged.length < MIN_FLAGGED_IMAGES)
   end
 
-  # indexing with thinking sphinx
-  define_index do
-    indexes first_name
-    indexes last_name
-    indexes username, :sortable => true
-    indexes email
-
-    has confirmed_at, :as => :date_joined
-
-    if Rails.env.production?
-      set_property :delta => FlyingSphinx::DelayedDelta
-    else
-      set_property :delta => true
+  protected
+    def cleanup_invitation
+      Invitation.destroy_all(:email => self.email)
     end
-  end
 
-  define_index :confirmed_users do
-    indexes first_name
-    indexes last_name
-    indexes username, :sortable => true
-    indexes email
-    indexes confirmed_at
+    # indexing with thinking sphinx
+    define_index do
+      indexes first_name
+      indexes last_name
+      indexes username, :sortable => true
+      indexes email
 
-    where sanitize_sql(["confirmed_at IS NOT NULL AND is_removed = ?", false])
+      has confirmed_at, :as => :date_joined
 
-    if Rails.env.production?
-      set_property :delta => FlyingSphinx::DelayedDelta
-    else
-      set_property :delta => true
+      if Rails.env.production?
+        set_property :delta => FlyingSphinx::DelayedDelta
+      else
+        set_property :delta => true
+      end
     end
-  end
+
+    define_index :confirmed_users do
+      indexes first_name
+      indexes last_name
+      indexes username, :sortable => true
+      indexes email
+      indexes confirmed_at
+
+      where sanitize_sql(["confirmed_at IS NOT NULL AND is_removed = ?", false])
+
+      if Rails.env.production?
+        set_property :delta => FlyingSphinx::DelayedDelta
+      else
+        set_property :delta => true
+      end
+    end
 end
