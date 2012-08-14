@@ -31,7 +31,7 @@ class ShoppingCartController < ApplicationController
       line_item = LineItem.new do |item|
         item.image = image
         item.attributes = params[:line_item]
-        item.price = image.get_price(image.tier, params[:line_item]['size'])
+        item.price = image.get_price(image.tier, params[:line_item]['size'], params[:line_item]['moulding'])
         item.tax = item.price * PER_TAX
         @cart.order.line_items << item
         @cart.save
@@ -50,7 +50,10 @@ class ShoppingCartController < ApplicationController
       flash[:warning] = "Please fill all options first."
       redirect_to :controller => :images, :action => :order, :id => image.id, :line_item => line_item.id and return
     else
+      image = line_item.image
       line_item.attributes = params[:line_item]
+      line_item.price = image.get_price(image.tier, params[:line_item]['size'], params[:line_item]['moulding'])
+      line_item.tax = line_item.price * PER_TAX
       line_item.save
       @order = @cart.order.reload
     end
@@ -142,7 +145,7 @@ class ShoppingCartController < ApplicationController
     end
 
     def valid_item?(hash)
-      required_fields = ["plexi_mount", "size", "moulding", "quantity"]
+      required_fields = ["size", "moulding", "quantity"]
       required_fields.each { |k| return false if hash.has_key?(k)==false }
       if hash["quantity"] =~ /^\d*$/
         return false if hash["quantity"].to_i<=0

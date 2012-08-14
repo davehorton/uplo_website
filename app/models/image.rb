@@ -27,6 +27,24 @@ class Image < ActiveRecord::Base
     TIERS[:tier_2] => TIER_2_PRICES,
     TIERS[:tier_3] => TIER_3_PRICES
   }
+  MOULDING = {
+    :print => 1,
+    :canvas => 2,
+    :plexi => 3,
+    :black => 4,
+    :white => 5,
+    :light_wood => 6,
+    :rustic_wood => 7
+  }
+  MOULDING_DISCOUNT = {
+    MOULDING[:print] => IMAGE_MOULDING_DISCOUNT,
+    MOULDING[:canvas] => IMAGE_MOULDING_DISCOUNT,
+    MOULDING[:plexi] => IMAGE_MOULDING_DISCOUNT,
+    MOULDING[:black] => 0,
+    MOULDING[:white] => 0,
+    MOULDING[:light_wood] => 0,
+    MOULDING[:rustic_wood] => 0
+  }
 
   # ASSOCIATIONS
   belongs_to :gallery, :touch => true
@@ -289,7 +307,7 @@ class Image < ActiveRecord::Base
     end
 
     def exposed_attributes
-      [:id, :name, :description, :data_file_name, :gallery_id, :price, :likes, :keyword, 
+      [:id, :name, :description, :data_file_name, :gallery_id, :price, :likes, :keyword,
         :is_owner_avatar, :is_gallery_cover, :tier]
     end
 
@@ -310,8 +328,9 @@ class Image < ActiveRecord::Base
   end
 
   # INSTANCE METHODS
-  def get_price(tier, size)
-    TIERS_PRICES[tier][size]
+  def get_price(tier, size, moulding=nil)
+    discount = moulding.nil? ? 0 : MOULDING_DISCOUNT[moulding.to_i]
+    TIERS_PRICES[tier][size] * (1 - discount)
   end
 
   def square?

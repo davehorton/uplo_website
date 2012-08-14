@@ -3,7 +3,7 @@
 - content_for :head do
   = stylesheet_link_tag('scss/new_image.css', 'scss/sale.css')
   = javascript_include_tag('app/image_util.js')
-    
+
   - if can_promote
     = javascript_include_tag("app/admin/spotlights.js")
     = javascript_include_tag('lib/jquery.url.js')
@@ -72,13 +72,13 @@
 
 .sections
   - if can_promote
-    .image-container.promote-container.clearfix    
+    .image-container.promote-container.clearfix
       - promote_link = url_for(:controller => "admin/spotlights", :action => "promote", :id => "#{@image.id}")
       .promote-button.button
         %form{:action => promote_link, :class => "promote-photo-form",
                   :id => "promote-photo-form-#{@image.id}", :method=>'post'}
           = hidden_field_tag(:authenticity_token, form_authenticity_token)
-            
+
   .image-container-wrapper.clearfix
     .image-container.medium.clearfix
       = image_tag(@image.data.url(:medium), :class => 'image medium',
@@ -138,21 +138,15 @@
           spotlights.setup_promote_popup();
         <% end %>
 
-        $(".not-implement").click(function(e){
-          e.preventDefault();
-          helper.alert_not_implement();
-          return false;
-        });
-
         //Flag implementation
         $("#flag_form .cancel").click(function(e){
           $.modal.close();
-        });      
+        });
 
         $('#email-sharing-popup .close').click(function(){
           $.modal.close();
         });
-        
+
         $('#btn-follow').click(function(){
           var author_id = $(this).attr('data-author-id');
           var is_unfollow = $(this).attr('data-following');
@@ -176,11 +170,11 @@
             }
           });
         });
-        
+
         $('#btn-cancel').click(function(){
           $.modal.close();
         });
-        
+
         $('#btn-send').click(function(){
           var emails = $('#email_emails').val().split(',');
           var reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
@@ -192,7 +186,7 @@
           }
           $('#email-details').submit();
         });
-        
+
         $('#social-sharing .close .right').click(function(){
           $('#social-sharing').addClass('hide');
         });
@@ -204,14 +198,14 @@
         });
 
         $('.image-container-wrapper .image-container.medium img.image.medium').each(function(){
-          image_util.resize_frame($(this), {auto: true});        
+          image_util.resize_frame($(this), {auto: true});
           // Auto-resize the image frame
           $(this).load(function(){
             image_util.resize_frame($(this));
           });
         });
       });
-      
+
       function submit_flag(desc, type){
         var image_id = $('#btn-like').attr('data-id');
         $.modal.close();
@@ -247,7 +241,7 @@
         $('.button.share').remove();
         show_thank_form();
       }
-      
+
       function showEmailPopup(){
         $('#social-sharing').addClass('hide');
         $("#email-sharing-popup").modal();
@@ -273,6 +267,7 @@
       function update_liked(){
         var image_id = $('#btn-like').attr('data-id');
         var is_dislike = $('#btn-like').attr('data-dislike');
+        $('#mask').modal();
         $.ajax({
           url: '/images/switch_like',
           type: "GET",
@@ -286,12 +281,17 @@
                 $("#btn-like").attr('data-dislike', 'false');
                 $('#btn-like').removeClass('dislike');
                 $('#btn-like').addClass('like');
+                $.modal.close();
               }else{
                 $("#btn-like").attr('data-dislike', 'true');
                 $('#btn-like').removeClass('like');
                 $('#btn-like').addClass('dislike');
+                $.modal.close();
               }
-            }else{ helper.show_notification(response.msg); }
+            }else{
+              $.modal.close();
+              helper.show_notification(response.msg);
+            }
           },
           fail: function(){}
         });

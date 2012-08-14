@@ -6,62 +6,42 @@
   .text.black.bold.font16{ :style => 'margin-bottom:8px;' }= @image.name
 
 - content_for :right_content do
-  - action_url = @line_item.nil? ? url_for(:controller => "shopping_cart", :action => "add_to_cart", :image_id => @image.id) : url_for(:controller => "shopping_cart", :action => "update_cart", :line_item_id => @line_item.id)
+  - if @line_item.nil?
+    - size = nil
+    - moulding = nil
+    - quantity = 1
+    - action_url = url_for(:controller => "shopping_cart", :action => "add_to_cart", :image_id => @image.id)
+  - else
+    - size = @line_item.size
+    - quantity = @line_item.quantity
+    - moulding = @line_item.moulding
+    - action_url = url_for(:controller => "shopping_cart", :action => "update_cart", :line_item_id => @line_item.id)
   .right
     .text.black.bold.font18 Build Your Order
     .line-separator
     = simple_form_for(:line_item, :url => action_url, :method => 'post', :html => { :id => 'order-details', :class => 'left' }) do |f|
-      .round-box.option.left
-        .header.text.black.bold.font14= "Plexi Mount"
-        .line-separator.no-padding
-        .item.left
-          = f.radio_button(:plexi_mount, true, :checked => true)
-          = f.label(:plexi_mount_true, "Yes", :class => 'text gray font12')
-        .item.left
-          = f.radio_button(:plexi_mount, false)
-          = f.label(:plexi_mount_false, "No", :class => 'text gray font12')
-
       .round-box.option.left.print-sizes-container
         .header.text.black.bold.font14= "Print Size"
-        - (0...@image.printed_sizes.count).each do |idx|
-          - if idx % 2 == 0
-            .line-separator.no-padding.left
-          .item.left
-            - size = @image.printed_sizes[idx]
-            = f.radio_button(:size, size, :checked => true, :class => 'print-size')
-            = f.label("size_#{size}", "#{size}\"", :class => 'text gray font12')
-      .round-box.option.left
-        .header.text.black.bold.font14= "Moulding Choice"
-        .line-separator.no-padding.left
         .item.left
-          = f.radio_button(:moulding, "White", :checked => true)
-          = f.label(:moulding_white, "White", :class => 'text gray font12')
-        .item.left
-          = f.radio_button(:moulding, "Black")
-          = f.label(:moulding_black, "Black", :class => 'text gray font12')
-        .line-separator.no-padding.left
-        .item.left
-          = f.radio_button(:moulding, "Wood")
-          = f.label(:moulding_wood, "Wood", :class => 'text gray font12')
-        .item.left
-          = f.radio_button(:moulding, "Silver")
-          = f.label(:moulding_silver, "Silver", :class => 'text gray font12')
-
+          = f.select :size, printed_sizes_options(@image, size)
       .round-box.option.left{:style => 'width:138px;'}
-        - price = @line_item.nil? ? @image.price : @line_item.price
-        .header.text.black.bold.font14= "Price Per Item"
-        .line-separator.no-padding
-        #image-price.item.left
-          = number_to_currency(price, {:precision => 2})
-
+        .header.text.black.bold.font14= "Moulding Choice"
+        .item.left
+          = f.select :moulding, mounding_options(moulding)
       .round-box.option.right{:style => 'width:138px;'}
-        - quantity = @line_item.nil? ? 1 : @line_item.quantity
         .header.text.black.bold.font14= "Quantity"
-        .line-separator.no-padding
         .item.left
           = f.text_field(:quantity, :value => quantity, :size => '5', :title => 'Limit from 1 to 99999')
-    .clear
-      .button.add-to-cart.right
+      .line-separator.left
+      .summary.left
+        #discount.right
+          .text.black.left Discount:
+          .number.text.black.left= "- #{number_to_currency 0, {:precision => 2}}"
+        #total.right
+          .text.black.bold.left Subtotal:
+          .number.text.black.bold.left= number_to_currency 0, {:precision => 2}
+      .line-separator.left
+      .button.add-to-cart.clear.right
 
 .sections.clearfix
   .image-container-wrapper.clearfix
@@ -75,18 +55,8 @@
   = javascript_tag do
     :erb
       var image_id = '<%= params[:id] %>';
-      $(".add-to-cart").bind("click", function(){
-        $("#order-details").submit();
-      });
-      $('#line_item_quantity').bind('keypress', function(e){
-        var reg = /^\d{1,5}$/;
-        if(e.charCode != 0){
-          var val = e.currentTarget.value + String.fromCharCode(e.charCode);
-          if(!reg.test(val)){
-            return false;
-          }
-        }
-      });
+      var pricing = <%= Image::TIERS_PRICES[@image.tier].to_json %>;
+      var moulding_discount = <%= Image::MOULDING_DISCOUNT.to_json %>;
 
       // Scale and change the frame based on the print-size.
       $('.print-sizes-container .print-size').change(function(){

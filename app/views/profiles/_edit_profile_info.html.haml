@@ -14,6 +14,12 @@
     .label.text.black.bold.font12.left= "Email <span style='color:red;'>*</span>".html_safe
     = f.text_field :email, :class => 'right', :value => user.email
   .info-line.left
+    .label.text.black.bold.font12.left Location
+    = f.text_field :location, :class => 'right', :value => user.location
+  .info-line.left
+    .label.text.black.bold.font12.left Job
+    = f.text_field :job, :class => 'right', :value => user.job
+  .info-line.left
     .label.text.black.bold.font12.left Personal Website
     = f.text_field :website, :class => 'right', :value => user.website
   .info-line.left.no-padding-bottom

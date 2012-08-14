@@ -362,17 +362,6 @@ class ImagesController < ApplicationController
     render :json => result
   end
 
-  def get_price
-    image = Image.un_flagged.find_by_id params[:image_id]
-    if (image.nil? || ((image.author.is_banned? || image.author.is_removed) && !current_user.is_admin))
-      result = { :success => false, :msg => 'This image does not exist anymore' }
-    else
-      price = self.class.helpers.number_to_currency image.get_price(image.tier, params[:size]), {:precision => 2}
-      result = { :success => true, :price => price }
-    end
-    render :json => result
-  end
-
   protected
     def default_page_size
       actions = ['index']
