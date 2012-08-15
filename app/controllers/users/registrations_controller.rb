@@ -1,4 +1,6 @@
 class Users::RegistrationsController < Devise::RegistrationsController
+  layout 'main'
+
   def new
     if Invitation.exists?({:token => params[:token]})
       @inv  = Invitation.find_by_token params[:token]

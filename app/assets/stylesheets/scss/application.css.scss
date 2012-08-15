@@ -650,6 +650,10 @@ textarea { padding-top:5px; }
     background: url('/assets/btn-send-invite.png') no-repeat;
     width: 81px;
     height: 21px; }
+  &.signup {
+    background: url('/assets/btn-signup.png') no-repeat;
+    width: 79px;
+    height: 28px; }
   &.login {
     background: url('/assets/btn-login.png') no-repeat;
     width: 56px;
@@ -1543,12 +1547,7 @@ textarea { padding-top:5px; }
 }
 #non-login-container {
   position: relative;
-  #session-container {
-    position: absolute;
-    top: 0;
-    left: 161px;
-    width: 638px;
-    z-index: 1001;
+  #register-panel, #session-container {
     label {
       text-transform: uppercase;
       color: $color-white;
@@ -1560,18 +1559,35 @@ textarea { padding-top:5px; }
       width: 238px;
       border-radius: 0;
       border-width: 1px solid $color-line-separator;
+      height: 22px;
     }
     .header { font-size: 31px; line-height:35px; }
+    .title { color: #898989; margin-top: 14px; }
+    .line { margin-top: 20px; display: inline-block; width:100%;}
+  }
+  #register-panel {
+    background-color: #000000;
+    margin: 30px auto 50px auto;
+    padding: 40px;
+    width: 510px;
+    .half { width: 245px; }
+    .term-of-use { color: #969696; }
+    #btn-signup { height: 28px; border: none; }
+    #register-form { margin-top: 20px;}
+  }
+  #session-container {
+    position: absolute;
+    top: 0;
+    left: 161px;
+    width: 638px;
+    z-index: 1001;
     #signup-area, #signin-area {
       width: 319px;
       height: 316px;
       .main { margin: 45px 36px 0 38px; }
-      .line { margin-top: 20px;}
-      input { height: 22px; }
     }
     #signup-area {
       background-color: #000000;
-      .title { color: #898989; margin-top: 14px; }
       #frm-request { margin-top: 13px;}
     }
     #signin-area {
