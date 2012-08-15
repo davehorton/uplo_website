@@ -28,7 +28,11 @@
       - follow_class = is_author_following ? 'unfollow' : 'follow'
       #btn-follow.button.right{ :class => "#{ follow_class }", :data => { 'author-id' => "#{ @author.id }", 'following' => "#{ is_author_following }"} }
   .line-separator.left
-  .text.black.font12.left= "Uploaded on #{@image.created_at.strftime('%B %d, %Y')}"
+  .frame-fit.text.line10.left
+    .text.black.font12.left{:style => 'margin-top:7px;'}= "Uploaded on #{@image.created_at.strftime('%m/%d/%Y')}"
+    .right
+      %span.text.black.font12 from
+      %span.text.black.bold.font20= number_to_currency @image.get_price(@image.tier, @image.printed_sizes.first), {:precision => 2}
   .line-separator.left
   .text.gray.font12.line16.left
     Lorem ipsum dolor sit amet consectetur adipisicing elit sed do eiusmod tempor incididunt ut labone et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco.

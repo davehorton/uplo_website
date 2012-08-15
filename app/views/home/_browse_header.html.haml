@@ -1,0 +1,19 @@
+/ locals: num_of_records, current_views
+- result_type = (params[:filtered_by]==User::SEARCH_TYPE) ? 'User' : 'Photo'
+
+- if params[:query].blank?
+  - if result_type == 'User'
+    - current_views ||= 'Best Match'
+    - header_text = 'Users >'
+  - else
+    - header_text = 'Browse >'
+    - current_views ||= 'Recent Images'
+  .data-header.text.bold.font16.line12.left
+    %span.text.black= header_text
+    %span#current.text.gray= current_views
+- else
+  .data-header.text.font16.line12.left
+    %span.text.black.bold Search >
+    %span.result-number= "#{ pluralize num_of_records, result_type } found"
+
+= render :partial => "shared/filter_search_box", :locals => {:action => "search"}

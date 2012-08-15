@@ -2,6 +2,16 @@ class HomeController < ApplicationController
   before_filter :authenticate_user!, :except => [:index, :terms, :privacy]
   layout 'main'
 
+  IMAGE_SORT_VIEW = {
+    Image::SORT_OPTIONS[:view] => 'Most Views',
+    Image::SORT_OPTIONS[:recent] => 'Recent Images',
+    Image::SORT_OPTIONS[:spotlight] => 'Spotlight Images'
+  }
+  USER_SORT_VIEW = {
+    User::SORT_OPTIONS[:name] => 'Best Match',
+    User::SORT_OPTIONS[:date_joined] => 'Date Joined'
+  }
+
   def index
     session[:back_url] = url_for(:controller => 'home', :action => "browse") if session[:back_url].nil?
     @images = Image.get_spotlight_images(@filtered_params)
@@ -13,13 +23,13 @@ class HomeController < ApplicationController
   end
 
   def browse
-    @images = Image.get_browse_images(@filtered_params)
+    @current_views = IMAGE_SORT_VIEW[Image::SORT_OPTIONS[:recent]]
+    @data = Image.get_browse_images(@filtered_params)
   end
 
   def spotlight
-    @current_views = 'spotlight images'
-    @images = Image.get_spotlight_images(@filtered_params)
-    # @recent_images = Image.get_browse_images(@filtered_params)
+    @current_views = IMAGE_SORT_VIEW[Image::SORT_OPTIONS[:spotlight]]
+    @data = Image.get_spotlight_images(@filtered_params)
     render :template => 'home/browse'
   end
 
@@ -39,16 +49,19 @@ class HomeController < ApplicationController
   def search
     process_search_params
     if params[:filtered_by] == Image::SEARCH_TYPE
+      @current_views = IMAGE_SORT_VIEW[params[:sort_by]]
       @filtered_params[:sort_criteria] = Image::SORT_CRITERIA[params[:sort_by]]
       @data = Image.do_search_accessible_images( current_user.id,
         { :query => URI.unescape(params[:query]),
           :filtered_params => @filtered_params })
     else #filtered by user
+      @current_views = USER_SORT_VIEW[params[:sort_by]]
       @filtered_params[:sort_criteria] = User::SORT_CRITERIA[params[:sort_by]]
       @data = User.active_users.do_search({
         :query => URI.unescape(params[:query]),
         :filtered_params => @filtered_params })
     end
+    render :template => 'home/browse'
   end
 
   protected
@@ -65,9 +78,9 @@ class HomeController < ApplicationController
     def process_search_params
       params[:filtered_by] = Image::SEARCH_TYPE if params[:filtered_by].blank?
       if params[:filtered_by] == Image::SEARCH_TYPE
-        params[:sort_by] = Image::SORT_OPTIONS[:recent] if params[:sort_by].blank?
+        params[:sort_by] = Image::SORT_OPTIONS[:recent] if params[:sort_by].blank? || !Image::SORT_OPTIONS.has_value?(params[:sort_by])
       else #filtered by user
-        params[:sort_by] = User::SORT_OPTIONS[:name] if params[:sort_by].blank?
+        params[:sort_by] = User::SORT_OPTIONS[:name] if params[:sort_by].blank?|| !User::SORT_OPTIONS.has_value?(params[:sort_by])
       end
     end
 end

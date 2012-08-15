@@ -90,9 +90,8 @@ class Image < ActiveRecord::Base
 
   # Paperclip
   has_attached_file :data,
-    :styles => { :smallest => '66x66#', :smaller => '67x67#', :small => '68x68#', :spotlight_small => '74x74#',
-      :thumb => '155x155#', :spotlight_thumb => '174x154#', :profile_thumb => '101x101#',
-      :medium => '640x640>', :large => '1000x1000>' },
+    :styles => { :smallest => '66x66#', :smaller => '67x67#', :small => '68x68#', :spotlight_small => '74x74#', :thumb => '155x155#', :spotlight_thumb => '174x154#', :profile_thumb => '101x101#', :medium => '640x640>', :large => '1000x1000>' },
+    # :path => "image/:id/:style.:extension"
     :storage => :s3,
     :s3_credentials => "#{Rails.root}/config/amazon_s3.yml",
     :path => "image/:id/:style.:extension",
@@ -181,7 +180,11 @@ class Image < ActiveRecord::Base
 
     # Search within public images & private of user
     def do_search_accessible_images(user_id, params = {})
-      default_opt = { :sort_criteria => params[:filtered_params].delete(:sort_criteria)} if params[:filtered_params].has_key?(:sort_criteria)
+      if params[:filtered_params].has_key?(:sort_criteria)
+        default_opt = { :sort_criteria => params[:filtered_params].delete(:sort_criteria)}
+      else
+        default_opt = { :sort_criteria => SORT_CRITERIA[SORT_OPTIONS[:view]]}
+      end
       paging_info = parse_paging_options params[:filtered_params], default_opt
       sphinx_search_options = params[:sphinx_search_options]
       sphinx_search_options = {} if sphinx_search_options.blank?
@@ -342,7 +345,10 @@ class Image < ActiveRecord::Base
     result = []
     edge = [self.width, self.height].min
     max_size = edge / PRINTER_RESOLUTION
-    PRINTED_SIZES[:square].each { |size| result << size if size.slice(0).to_i <= max_size }
+    PRINTED_SIZES[:square].each { |size|
+      edges = size.split('x')
+      result << size if edges[0].strip!.to_i <= max_size
+    }
 
     # need check image size, temporarily
     result << PRINTED_SIZES[:square][0] if result.count==0
@@ -358,7 +364,7 @@ class Image < ActiveRecord::Base
 
     PRINTED_SIZES[:rectangular].each { |size|
       edges = size.split('x')
-      result << size if edges[0].to_i <= max_short_edge && edges[1].to_i <= max_long_edge
+      result << size if edges[0].strip!.to_i <= max_short_edge && edges[1].strip!.to_i <= max_long_edge
     }
 
     # need check image size, temporarily
