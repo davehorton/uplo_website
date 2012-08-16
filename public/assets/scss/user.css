@@ -40,11 +40,14 @@
     .account .form_wrapper .line textarea {
       width: 99.5%; }
   .account .form_wrapper .remove_css_effect input {
-    width: auto; }
+    width: auto;
+    margin: 0;
+    margin-right: 5px; }
   .account .form_wrapper .remove_css_effect label {
     float: none;
     width: auto;
-    font-weight: normal; }
+    font-weight: normal;
+    vertical-align: middle; }
 
 #cvv-explanation {
   font-size: 9px;
@@ -57,7 +60,7 @@
   width: 472px; }
 
 /* select buttons */
-.ui-selectmenu, .ui-selectmenu-menu-popup {
+.ui-selectmenu, .ui-selectmenu-menu-dropdown {
   min-width: 200px;
   max-width: 200px; }
 

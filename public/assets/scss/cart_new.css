@@ -77,14 +77,14 @@
   width: 472px; }
 
 /* select buttons */
-.ui-selectmenu, .ui-selectmenu-menu-popup {
+.ui-selectmenu, .ui-selectmenu-menu-dropdown {
   min-width: 194px;
   max-width: 194px; }
 
-#card_expires_on_1i-button {
+#order_expiration_1i-button {
   margin-left: 3px; }
 
-#card_expires_on_1i-button, #card_expires_on_1i-menu, #card_expires_on_2i-menu, #card_expires_on_2i-button {
+#order_expiration_1i-button, #order_expiration_1i-menu, #order_expiration_2i-menu, #order_expiration_2i-button {
   min-width: 92px;
   max-width: 92px; }
 
