@@ -364,8 +364,10 @@ class User < ActiveRecord::Base
     end
 
     if (!self.cart.order.billing_address)
-      self.cart.order.billing_address = self.billing_address.dup
-      self.cart.order.shipping_address = self.shipping_address.dup
+      @order.billing_address = Address.new !@order.billing_address
+      @order.shipping_address = Address.new if !@order.shipping_address
+      self.cart.order.billing_address = self.billing_address.dup if self.billing_address.billing_address
+      self.cart.order.shipping_address = self.shipping_address.dup if self.billing_address.shipping_address
       self.cart.order.billing_address.save
       self.cart.order.shipping_address.save
       self.cart.order.name_on_card = self.name_on_card
