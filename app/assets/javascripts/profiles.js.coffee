@@ -121,6 +121,14 @@ requestUpdateAvatar = (node) ->
   })
 
 $ ->
+  # Setup default Ajax options.
+  $.ajaxSetup({
+    error: (xhr) ->
+      if(xhr.status == 401 || xhr.status == 403)
+        # Refresh page to show error when user was banned or removed.
+        window.location.reload()
+  })
+
   $('.not-implement').click -> helper.alert_not_implement()
   $('#container .title').click ->
     counter_id = $(@).closest('.container').attr('id').replace('-section', '-counter')
