@@ -9,6 +9,8 @@ user = User.new({
   :confirmation_token => nil,
   :confirmed_at => Time.now.advance(:hours => -1), #bypass email confirmation
   :confirmation_sent_at => Time.now.advance(:days => - 1, :hours => -1), #bypass email confirmation
+  :cvv => "123",
+  :card_number => "123"
 })
 user.skip_confirmation!
 user.save!
@@ -24,7 +26,9 @@ user.save!
       :password_confirmation => "123456",
       :confirmation_token => nil,
       :confirmed_at => Time.now, #bypass email confirmation
-      :confirmation_sent_at => Time.now, #bypass email confirmation
+      :confirmation_sent_at => Time.now, #bypass email confirmation,
+      :cvv => "123",
+      :card_number => "123"
     })
     user.skip_confirmation!
     user.save!
