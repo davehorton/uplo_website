@@ -57,7 +57,7 @@ class HomeController < ApplicationController
     else #filtered by user
       @current_views = USER_SORT_VIEW[params[:sort_by]]
       @filtered_params[:sort_criteria] = User::SORT_CRITERIA[params[:sort_by]]
-      @data = User.active_users.do_search({
+      @data = User.do_search_confirmed_users({
         :query => URI.unescape(params[:query]),
         :filtered_params => @filtered_params })
     end
