@@ -75,7 +75,7 @@ class ShoppingCartController < ApplicationController
     if @order.save
       redirect_to :controller => "orders", :action => "index"
     else
-      redirect_to :action => "show"
+      redirect_to :action => "show", :flash => @order.erros.full_messages.to_sentence
     end
   end
 

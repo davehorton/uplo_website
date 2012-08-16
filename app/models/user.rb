@@ -80,8 +80,8 @@ class User < ActiveRecord::Base
   validates_uniqueness_of :username, :message => 'must be unique'
   validates_length_of :first_name, :last_name, :in => 2..30, :message => 'must be 2 - 30 characters in length'
   validates_confirmation_of :paypal_email, :message => "should match confirmation"
-  validates_length_of :cvv, :is => 3
-  validates_numericality_of :cvv, :card_number, :only_integer => true
+  validates_length_of :cvv, :is => 3, :allow_nil => true
+  validates_numericality_of :cvv, :card_number, :only_integer => true, :allow_nil => true
   validates_presence_of :paypal_email_confirmation, :if => :paypal_email_changed?
   validates :paypal_email, :email => true, :if => :paypal_email_changed?
   # SCOPE
