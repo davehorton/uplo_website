@@ -51,9 +51,15 @@ class User < ActiveRecord::Base
   has_many :orders
   has_one :cart, :dependent => :destroy
   has_many :user_followers, :foreign_key => :user_id, :class_name => 'UserFollow'
-  has_many :followers, :through => :user_followers
+  
+  has_many :followers,  :through => :user_followers, 
+                        :conditions => ['users.is_removed = :blocked AND users.is_banned = :blocked', 
+                                        {:blocked => false}]
   has_many :user_followings, :foreign_key => :followed_by, :class_name => 'UserFollow'
-  has_many :followed_users, :through => :user_followings
+  has_many :followed_users, :through => :user_followings, 
+                            :conditions => ['users.is_removed = :blocked AND users.is_banned = :blocked', 
+                                            {:blocked => false}]
+                                            
   has_many :friends_images, :through => :followed_users, :source => :images
   has_many :devices, :class_name => 'UserDevice'
 

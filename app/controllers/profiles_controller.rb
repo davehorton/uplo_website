@@ -3,6 +3,12 @@ class ProfilesController < ApplicationController
   layout 'main'
 
   def show
+    if @user.blank?
+      # Redirect to the current user's profile and show the warning message.
+      flash[:warning] = I18n.t("user.user_was_banned_or_removed")
+      return redirect_to(:action => 'show')
+    end
+    
     if @user.id == current_user.id
       @galleries = @user.galleries.load_galleries(@filtered_params)
       @images = @user.images.un_flagged.load_images(@filtered_params)
@@ -10,6 +16,7 @@ class ProfilesController < ApplicationController
       @galleries = @user.galleries.load_popular_galleries(@filtered_params)
       @images = @user.images.un_flagged.load_popular_images(@filtered_params)
     end
+    
     @liked_images = @user.liked_images.belongs_to_avai_user.un_flagged.load_images(@filtered_params)
     @followers = @user.followers.load_users(@filtered_params)
     @followed_users = @user.followed_users.load_users(@filtered_params)
@@ -157,7 +164,7 @@ class ProfilesController < ApplicationController
     if params[:user_id].nil?
       @user = current_user
     else
-      @user = User.find params[:user_id]
+      @user = User.active_users.find_by_id params[:user_id]
     end
   end
 end

@@ -99,7 +99,8 @@ en:
   user:
     update_done: "Your profile was updated successfully"
     update_password_done: "Your password was changed successfully"
-
+    user_was_banned_or_removed: "Sorry, the user was banned or removed from UPLO"
+    
   user_mailer:
     mail_greeting: "Hi %{name},"
 
