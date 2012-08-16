@@ -351,7 +351,7 @@ class Image < ActiveRecord::Base
     max_size = edge / PRINT_RESOLUTION
     PRINTED_SIZES[:square].each { |size|
       edges = size.split('x')
-      result << size if edges[0].strip!.to_i <= max_size
+      result << size if edges[0].strip.to_i <= max_size
     }
 
     # need check image size, temporarily
