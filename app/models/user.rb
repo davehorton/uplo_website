@@ -199,11 +199,11 @@ class User < ActiveRecord::Base
     end
 
     def exposed_attributes
-      [:id, :email, :first_name, :biography, :location, :website, :job, :last_name, :username, :nationality, :birthday, :gender, :twitter, :facebook]
+      [:id, :email, :first_name, :biography, :is_enable_facebook, :is_enable_twitter, :location, :paypal_email, :website, :job, :last_name, :username, :nationality, :birthday, :gender, :twitter, :facebook]
     end
 
     def exposed_associations
-      []
+      [:billing_address, :shipping_address]
     end
 
     def remove_flagged_users

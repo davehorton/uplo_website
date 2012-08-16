@@ -57,13 +57,13 @@ class Api::ImagesController < Api::BaseController
       return render :json => @result
     end
     img_info = params[:image]
-    effect_id = nil
-    if img_info.has_key?(:effect_id) and !img_info[:effect_id].nil? and img_info[:effect_id]!=""
-      effect_id = img_info[:effect_id] if img_info[:effect_id].to_i > 0
-      img_info.delete :effect_id
-    end
-
     image = gallery.images.un_flagged.create(img_info)
+    image.set_as_album_cover if img_info[:is_gallery_cover]
+    if img_info[:is_owner_avatar]
+      image.set_as_owner_avatar
+    elsif image.is_owner_avatar
+      current_user.rollback_avatar
+    end
     if !image.save
       @result[:msg] = image.errors
       @result[:success] = false
@@ -109,7 +109,17 @@ class Api::ImagesController < Api::BaseController
       return render :json => @result
     end
     # update image
-    if image.update_attributes(params[:image])
+    img_info = params[:image]
+    img_info[:is_gallery_cover] = SharedMethods::Converter::Boolean(img_info[:is_gallery_cover])
+    img_info[:is_owner_avatar] = SharedMethods::Converter::Boolean(img_info[:is_owner_avatar])
+    image.set_as_album_cover if img_info[:is_gallery_cover]
+    if img_info[:is_owner_avatar]
+      image.set_as_owner_avatar
+    elsif image.is_owner_avatar
+      current_user.rollback_avatar
+    end
+    
+    if image.update_attributes(img_info)
       @result[:success] = true
       @result[:image] = image.serializable_hash(image.default_serializable_options)
     end
