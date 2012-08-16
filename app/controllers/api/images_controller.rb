@@ -64,9 +64,7 @@ class Api::ImagesController < Api::BaseController
     elsif image.is_owner_avatar
       current_user.rollback_avatar
     end
-
-    file_path = "#{Rails.root}/tmp/#{image.name}"
-    image.data = File.open(file_path)
+    
     if image.save
       @result[:image] = image.serializable_hash(image.default_serializable_options)
       @result[:success] = true
