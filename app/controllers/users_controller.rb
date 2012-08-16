@@ -192,9 +192,13 @@ class UsersController < ApplicationController
   # user_id: <current user will follow this user>
   def set_follow
     result = {}
-    user = User.find_by_id params[:user_id]
+    user = User.active_users.find_by_id params[:user_id]    
     follower = current_user
-    if user.id == follower.id
+    
+    if user.blank?
+      result[:msg] = I18n.t("user.user_was_banned_or_removed")
+      result[:success] = false
+    elsif user.id == follower.id
       result[:msg] = 'You cannot follow yourself'
       result[:success] = false
     elsif SharedMethods::Converter.Boolean(params[:unfollow])
@@ -205,12 +209,12 @@ class UsersController < ApplicationController
         result[:followee_followers] = user.followers.length
         result[:success] = true
       else
-        result[:msg] = 'You have already unfollowed this user.'
+        result[:msg] = I18n.t("user.error_already_unfollowed")
         result[:success] = false
       end
     else
       if UserFollow.exists?({ :user_id => user.id, :followed_by => follower.id })
-        result[:msg] = 'You have already followed this user.'
+        result[:msg] = I18n.t("user.error_already_followed")
         result[:success] = false
       else
         UserFollow.create({ :user_id => user.id, :followed_by => follower.id })

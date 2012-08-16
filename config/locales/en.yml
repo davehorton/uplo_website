@@ -100,6 +100,8 @@ en:
     update_done: "Your profile was updated successfully"
     update_password_done: "Your password was changed successfully"
     user_was_banned_or_removed: "Sorry, the user was banned or removed from UPLO"
+    error_already_unfollowed: "You have already unfollowed this user"
+    error_already_followed: "You have already followed this user"
     
   user_mailer:
     mail_greeting: "Hi %{name},"

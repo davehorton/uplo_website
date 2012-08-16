@@ -614,6 +614,10 @@ class User < ActiveRecord::Base
     (self.images.flagged.length < MIN_FLAGGED_IMAGES)
   end
 
+  def is_blocked?
+    (self.is_removed || self.is_banned?)
+  end
+  
   protected
     def cleanup_invitation
       Invitation.destroy_all(:email => self.email)

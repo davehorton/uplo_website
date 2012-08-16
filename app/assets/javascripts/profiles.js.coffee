@@ -55,6 +55,7 @@ requestFollow = (node) ->
       if(response.success==false)
         helper.show_notification(response.msg)
         $.modal.close()
+        
       else if(is_unfollow=='false')
         target.attr('data-following', 'true')
         target.removeClass('follow-small')
@@ -191,6 +192,8 @@ $ ->
       success: (response) ->
         if(response.success==false)
           helper.show_notification(response.msg)
+          $.modal.close()
+          
         else if(is_unfollow=='false')
           $('#btn-follow').attr('data-following', 'true')
           $('#btn-follow').removeClass('follow')
