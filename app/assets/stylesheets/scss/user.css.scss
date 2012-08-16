@@ -67,11 +67,14 @@
 		.remove_css_effect{
 			input{
 				width:auto;
+				margin: 0;
+				margin-right: 5px;
 			}
 			label{
 				float:none;
 				width:auto;
 				font-weight:normal;
+				vertical-align: middle;
 			}
 		}
 	}
@@ -90,7 +93,7 @@
 }
 
 /* select buttons */
-.ui-selectmenu, .ui-selectmenu-menu-popup { min-width: 200px; max-width: 200px; }
+.ui-selectmenu, .ui-selectmenu-menu-dropdown { min-width: 200px; max-width: 200px; }
 #user_card_type-button, #user_card_type-menu {
   min-width: 200px;
   max-width: 200px;

@@ -64,8 +64,12 @@
 
       #bottom.panel
         .line-separator
-        .text.light-gray.font11.line18 Copyright &copy; 2012 UPLO. All rights reserved
-        #build-version{:style => "text-align: center; font-size: 12px"}= "Build 8: 2012-03-27"
+        .text.light-gray.font11.line18
+          Copyright &copy; 2012 UPLO. All rights reserved
+        .text.black.font11.line18.center
+          = link_to "Privacy Policy", "/privacy", :style => "font-weight:normal"
+          = "/" 
+          = link_to "Terms of Use", "/terms", :style => "font-weight:normal"
         #mask.hide
           = image_tag('loading.gif')
 

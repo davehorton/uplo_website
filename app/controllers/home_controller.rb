@@ -1,5 +1,5 @@
 class HomeController < ApplicationController
-  before_filter :authenticate_user!, :except => [:index, :terms]
+  before_filter :authenticate_user!, :except => [:index, :terms, :privacy]
   layout 'main'
 
   def index
@@ -24,6 +24,9 @@ class HomeController < ApplicationController
   end
 
   def terms
+  end
+
+  def privacy
   end
 
   def friends_feed

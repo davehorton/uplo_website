@@ -7,7 +7,7 @@
   .line-separator.left
 
 .wrapper
-  = simple_form_for(:card, :url => "/payments/checkout?type=an", :html => {:class => "card_form left", :id => 'order-shippings'}) do |f|
+  = simple_form_for(@order, :url => "/payments/checkout?type=an", :html => {:class => "card_form left", :id => 'order-shippings'}) do |f|
     #billing-address.order_summary.left
       .header
         %span.text.black.bold.font16.left Billing Address
@@ -15,38 +15,34 @@
           %span{:style=>'color:red;'} &nbsp;&nbsp;&nbsp;*
           Required Fields
       .line-separator.left
-      .inputs.left
-        .info
-          = label_tag :billing_first_name, "First Name <span style='color:red;'>*</span>".html_safe
-          = text_field :billing, :first_name, :autofocus => true, :required => true
-        .info
-          = label_tag :billing_last_name, "Last Name <span style='color:red;'>*</span>".html_safe
-          = text_field :billing, :last_name, :required => true
-        .info
-          = label_tag :billing_company, "Company"
-          = text_field :billing, :company, :required => false
-        .info
-          = label_tag :billing_street_address, "Street Address <span style='color:red;'>*</span>".html_safe
-          = text_field :billing, :street_address, :required => true
-        .info
-          = label_tag :billing_city, "City <span style='color:red;'>*</span>".html_safe
-          = text_field :billing, :city, :required => true
-        .info
-          = label_tag :billing_zip, "Postal/Zip Code <span style='color:red;'>*</span>".html_safe
-          = text_field :billing, :zip, :required => true
-        .info
-          = label_tag :billing_state, "State <span style='color:red;'>*</span>".html_safe
-          = select :billing, :state, state_options, {:required => true,  :prompt => '- Please Select --'}
-        .info
-          = label_tag :billing_phone, "Phone Number <span style='color:red;'>*</span>".html_safe
-          = text_field :billing, :phone, :as => :string, :required => false
-        .info
-          = label_tag :billing_fax, "Fax Number"
-          = text_field :billing, :fax
-        .info
-          / = hidden_field_tag 'billing[ship_to_billing]', 0
-          %input{ :type => 'checkbox', :name => 'billing[ship_to_billing]', :value => '1', :id => 'billing_ship_to_billing', :class => 'left', :checked => 'checked' }
-          = label_tag :billing_ship_to_billing, 'Ship Items to the Above Billing Address', :style => 'width:auto;', :class => 'left'
+      = f.fields_for :billing_address do |billing_f|
+        .inputs.left
+          .info
+            = billing_f.label :first_name, "First Name <span style='color:red;'>*</span>".html_safe
+            = billing_f.input_field :first_name, :autofocus => true, :required => true
+          .info
+            = billing_f.label :last_name, "Last Name <span style='color:red;'>*</span>".html_safe
+            = billing_f.input_field :last_name, :required => true
+          .info
+            = billing_f.label :street_address, "Street Address <span style='color:red;'>*</span>".html_safe
+            = billing_f.input_field :street_address, :required => true
+          .info
+            = label_tag :optional_street_address, ""
+            = billing_f.input_field :optional_street_address
+          .info
+            = billing_f.label :city, "City <span style='color:red;'>*</span>".html_safe
+            = billing_f.input_field :city, :required => true
+          .info
+            = billing_f.label :state, "State <span style='color:red;'>*</span>".html_safe
+            = billing_f.select :state, state_options, {:required => true,  :prompt => '- Please Select --'}
+          .info
+            = billing_f.label :zip, "Postal/Zip Code <span style='color:red;'>*</span>".html_safe
+            = billing_f.input_field :zip, :required => true
+          
+          .info
+            / = hidden_field_tag 'billing[ship_to_billing]', 0
+            %input{ :type => 'checkbox', :name => 'billing[ship_to_billing]', :value => '1', :id => 'billing_ship_to_billing', :class => 'left', :checked => 'checked' }
+            = label_tag :billing_ship_to_billing, 'Ship Items to the Above Billing Address', :style => 'width:auto;', :class => 'left'
 
     .left
       #shipping-address.order_summary.left
@@ -60,33 +56,29 @@
           %span Item(s) will be shipped to your billing address
           %a.right{:href => '#'} Edit
         .inputs.clear.hide
-          .info
-            = label_tag :shipping_first_name, "First Name <span style='color:red;'>*</span>".html_safe
-            = text_field :shipping, :first_name, :autofocus => true, :required => true
-          .info
-            = label_tag :shipping_last_name, "Last Name <span style='color:red;'>*</span>".html_safe
-            = text_field :shipping, :last_name, :required => true
-          .info
-            = label_tag :shipping_company, "Company"
-            = text_field :shipping, :company, :required => false
-          .info
-            = label_tag :shipping_street_address, "Street Address <span style='color:red;'>*</span>".html_safe
-            = text_field :shipping, :street_address, :required => true
-          .info
-            = label_tag :shipping_city, "City <span style='color:red;'>*</span>".html_safe
-            = text_field :shipping, :city, :required => true
-          .info
-            = label_tag :shipping_zip, "Postal/Zip Code <span style='color:red;'>*</span>".html_safe
-            = text_field :shipping, :zip, :required => true
-          .info
-            = label_tag :shipping_state, "State <span style='color:red;'>*</span>".html_safe
-            = select :shipping, :state, state_options, {:required => true,  :prompt => '- Please Select --'}
-          .info
-            = label_tag :shipping_phone, "Phone Number <span style='color:red;'>*</span>".html_safe
-            = text_field :shipping, :phone, :as => :string, :required => false
-          .info
-            = label_tag :shipping_fax, "Fax Number"
-            = text_field :shipping, :fax
+          = f.fields_for :shipping_address do |shipping_f|
+            .info
+              = shipping_f.label :first_name, "First Name <span style='color:red;'>*</span>".html_safe
+              = shipping_f.input_field :first_name, :autofocus => true, :required => true
+            .info
+              = shipping_f.label :last_name, "Last Name <span style='color:red;'>*</span>".html_safe
+              = shipping_f.input_field :last_name, :required => true
+            .info
+              = shipping_f.label :street_address, "Street Address <span style='color:red;'>*</span>".html_safe
+              = shipping_f.input_field :street_address, :required => true
+            .info
+              = label_tag :optional_street_address, ""
+              = shipping_f.input_field :optional_street_address
+            .info
+              = shipping_f.label :city, "City <span style='color:red;'>*</span>".html_safe
+              = shipping_f.input_field :city, :required => true
+            .info
+              = shipping_f.label :state, "State <span style='color:red;'>*</span>".html_safe
+              = shipping_f.select :state, state_options, {:required => true,  :prompt => '- Please Select --'}
+            .info
+              = shipping_f.label :zip, "Postal/Zip Code <span style='color:red;'>*</span>".html_safe
+              = shipping_f.input_field :zip, :required => true
+          
 
       .order_summary.clear{:style => "padding-top:35px;"}
         .header
@@ -107,8 +99,8 @@
             = f.input :card_number, :autofocus => true, :required => true, :label => false
           .info.expiration-date
             - today = Date.today
-            = f.label :expires_on, "Expiration Date <span style='color:red;'>*</span>".html_safe
-            = f.date_select :expires_on, :discard_day => true, :start_year => Date.today.year, :end_year => (Date.today.year+10), :add_month_numbers => false, :order => [:month, :year], :required => true, :label => false, :default => { :day => '1', :mon => '12' }, :prompt => { :month => 'Month', :year => 'Year' }
+            = f.label :expiration, "Expiration Date <span style='color:red;'>*</span>".html_safe
+            = f.date_select :expiration, :discard_day => true, :start_year => Date.today.year, :end_year => (Date.today.year+10), :add_month_numbers => false, :order => [:month, :year], :required => true, :label => false, :default => { :day => '1', :mon => '12' }, :prompt => { :month => 'Month', :year => 'Year' }
 
           .info
             = f.label :cvv, "CVV <span style='color:red;'>*</span> <span id='cvv-explanation'>What's This?</span>".html_safe

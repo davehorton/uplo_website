@@ -35,7 +35,6 @@ class PaymentsController < ApplicationController
               :zip_code => params[:address_zip],
               :city => params[:address_city],
               :state => params[:address_state],
-              :country => params[:address_country],
               :country_code => params[:address_country_code],
               :payer_email => params[:payer_email],
               :payment_type => params[:payment_type],
@@ -81,37 +80,39 @@ class PaymentsController < ApplicationController
         end
         redirect_to pp_gateway.redirect_url_for(setup_response.token)
       when "an"
-        address_required_info = ['first_name', 'last_name', 'street_address', 'city', 'zip', 'state', 'phone']
-        card_required_info = ['name_on_card', 'card_type', 'card_number', 'expires_on(1i)', 'expires_on(2i)', 'cvv']
+        address_required_info = ['first_name', 'last_name', 'street_address', 'city', 'zip', 'state']
+        card_required_info = ['name_on_card', 'card_type', 'card_number', 'expiration(1i)', 'expiration(2i)', 'cvv']
 
         card_required_info.each { |val|
-          if !params[:card].has_key?(val) || params[:card][val].blank?
+          if !params["order"].has_key?(val) || params["order"][val].blank?
             flash[:error] = 'Please fill all required fields first!'
-            return redirect_to :controller => 'orders', :action => 'index'
+            redirect_to :controller => 'orders', :action => 'index' and return
           end
         }
         address_required_info.each { |val|
-          if !params[:billing].has_key?(val) || params[:billing][val].blank?
+          if !params[:order][:billing_address].has_key?(val) || params[:order][:billing_address][val].blank?
             flash[:error] = 'Please fill all required fields first!'
-            return redirect_to :controller => 'orders', :action => 'index'
+            redirect_to :controller => 'orders', :action => 'index' and return
           end
         }
         if params[:billing]['ship_to_billing'].blank? || !SharedMethods::Converter::Boolean(params[:billing]['ship_to_billing'])
           address_required_info.each { |val|
-            if !params[:shipping].has_key?(val) || params[:shipping][val].blank?
+            if !params[:order][:shipping_address].has_key?(val) || params[:order][:shipping_address][val].blank?
               flash[:error] = 'Please fill all required fields first!'
-              return redirect_to :controller => 'orders', :action => 'index'
+              redirect_to :controller => 'orders', :action => 'index' and return
             end
           }
         end
 
-        expires_on = Date.civil(params[:card]["expires_on(1i)"].to_i,
-                         params[:card]["expires_on(2i)"].to_i, 1)
+        # UPDATE PAYMENT INFO TO ORDER
+
+        expires_on = Date.civil(params[:order]["expiration(1i)"].to_i,
+                         params[:order]["expiration(2i)"].to_i, 1)
         expires_on = expires_on.strftime("%m%y")
-        card_string = params[:card]["card_number"]
+        card_string = params[:order]["card_number"]
 
         order = Order.find_by_id params[:order_id]
-        an_value = Payment.create_authorizenet_test(card_string, expires_on, {:shipping => params[:shipping], :address => params[:address]})
+        an_value = Payment.create_authorizenet_test(card_string, expires_on, {:shipping => params[:order][:shipping_address], :address => params[:address]})
         response = an_value[:transaction].purchase(order.order_total, an_value[:credit_card])
 
         success = !response.nil? and response.success?

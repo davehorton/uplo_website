@@ -14,8 +14,7 @@ class Payment
       :city => "Austin",
       :state => "TX",
       :zip => "78759",
-      :country => "USA",
-      :phone => "5120070070"
+      :country => "USA"
     }
     payment.user = OpenStruct.new(user_info)
     payment.amount = 0.01

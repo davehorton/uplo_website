@@ -88,6 +88,10 @@
               errorText +=  "<li>" + errors[i] + "</li> ";
             }
 
+            if (errors.length == 0){
+              errorText +=  "<li>Something went wrong, please try later</li>";
+            }
+
             errorText += "</ul>";
 
             // Insert error list into form
