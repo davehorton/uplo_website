@@ -60,7 +60,10 @@ class Image < ActiveRecord::Base
 
   # SCOPE
   scope :removed_images, where(:is_removed => true)
-  scope :avai_images, where(:is_removed => false)
+  scope :avai_images, joins(self.sanitize_sql([
+      "JOIN galleries AS g ON g.id = images.gallery_id
+      JOIN users as u ON g.user_id = u.id AND u.is_removed = ?", false
+    ])).where("images.is_removed = ?", false)
 
   scope :flagged, avai_images.joins(
       "LEFT JOIN image_flags ON images.id = image_flags.image_id"
