@@ -1279,6 +1279,8 @@ textarea {
     width: 286px; }
     #save-confirm-popup .main-panel .button.save-my-changes {
       margin-right: 10px; }
+    #save-confirm-popup .main-panel .button.leave-not-saving {
+      margin: 0; }
 
 #pricing-form {
   width: 262px; }
