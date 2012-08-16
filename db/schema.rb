@@ -11,12 +11,12 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120802094623) do
+ActiveRecord::Schema.define(:version => 20120815102610) do
 
   create_table "addresses", :force => true do |t|
     t.string   "first_name"
     t.string   "last_name"
-    t.string   "company"
+    t.string   "optional_address"
     t.string   "address"
     t.string   "city"
     t.string   "zip_code"
@@ -25,6 +25,7 @@ ActiveRecord::Schema.define(:version => 20120802094623) do
     t.string   "fax_number"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "country"
   end
 
   create_table "carts", :force => true do |t|
@@ -46,11 +47,11 @@ ActiveRecord::Schema.define(:version => 20120802094623) do
     t.integer  "user_id",                       :null => false
     t.string   "name",                          :null => false
     t.text     "description"
-    t.string   "permission"
     t.boolean  "delta",       :default => true, :null => false
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "keyword"
+    t.integer  "permission",  :default => 1
   end
 
   create_table "image_flags", :force => true do |t|
@@ -96,8 +97,8 @@ ActiveRecord::Schema.define(:version => 20120802094623) do
     t.boolean  "is_owner_avatar"
     t.string   "tier"
     t.boolean  "is_removed",        :default => false
-    t.integer  "promote_num",       :default => 0
     t.integer  "pageview",          :default => 0
+    t.integer  "promote_num",       :default => 0
   end
 
   create_table "invitations", :force => true do |t|
@@ -153,6 +154,7 @@ ActiveRecord::Schema.define(:version => 20120802094623) do
     t.string   "expiration"
     t.string   "cvv"
     t.float    "shipping_fee",                                       :default => 0.0
+    t.string   "name_on_card"
   end
 
   create_table "profile_images", :force => true do |t|
@@ -224,11 +226,23 @@ ActiveRecord::Schema.define(:version => 20120802094623) do
     t.datetime "avatar_updated_at"
     t.string   "twitter"
     t.string   "facebook"
-    t.string   "biography"
+    t.text     "biography"
     t.string   "website"
     t.boolean  "is_admin",                              :default => false
     t.boolean  "is_removed",                            :default => false
     t.boolean  "is_banned",                             :default => false
+    t.string   "paypal_email"
+    t.string   "location"
+    t.string   "job"
+    t.string   "name_on_card"
+    t.string   "card_type"
+    t.string   "card_number"
+    t.string   "expiration"
+    t.string   "cvv"
+    t.integer  "shipping_address_id"
+    t.integer  "billing_address_id"
+    t.boolean  "is_enable_facebook",                    :default => false
+    t.boolean  "is_enable_twitter",                     :default => false
   end
 
   add_index "users", ["email"], :name => "index_users_on_email", :unique => true

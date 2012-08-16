@@ -90,8 +90,9 @@ class User < ActiveRecord::Base
         GROUP BY galleries.user_id
       ) galleries_data
       ON galleries_data.user_id = users.id
+      AND users.is_removed = ?
       AND (users.is_banned = ? OR galleries_data.flagged_images_count >= ?)",
-      true, MIN_FLAGGED_IMAGES])
+      false, true, MIN_FLAGGED_IMAGES])
     ).select(
       "DISTINCT users.*, galleries_data.flagged_images_count")
   }
@@ -564,10 +565,6 @@ class User < ActiveRecord::Base
   end
 
   def remove
-    if !self.ready_for_reinstating?
-      raise NotReadyForReinstatingError
-    end
-
     self.class.transaction do
       if !self.is_removed?
         self.update_attribute(:is_removed, true)

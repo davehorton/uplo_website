@@ -120,6 +120,10 @@ $color-light-gray: #a1a1a1;
     z-index: 5;
   }
   
+  &.no-border{
+    border: none !important;
+  }
+  
   .promote-button{
     background: url('/assets/promote-spotlight-light.png') no-repeat;    
     width: 133px;

@@ -80,7 +80,7 @@
           = hidden_field_tag(:authenticity_token, form_authenticity_token)
 
   .image-container-wrapper.clearfix
-    .image-container.medium.clearfix
+    .image-container.medium.no-border.clearfix
       = image_tag(@image.data.url(:medium), :class => 'image medium',
                 'data-width' => @image.width,
                 'data-height' => @image.height, :alt => @image.name)
@@ -196,13 +196,22 @@
           _gaq.push(['_trackEvent', 'UPLO Web / Comment', 'post comment', 'status', 1]);
           return true;
         });
-
+        
         $('.image-container-wrapper .image-container.medium img.image.medium').each(function(){
-          image_util.resize_frame($(this), {auto: true});
+          var img = this;
+          
           // Auto-resize the image frame
-          $(this).load(function(){
-            image_util.resize_frame($(this));
+          $(img).load(function(){
+            $(img).parent().removeClass('no-border');
+            image_util.resize_frame($(img));
           });
+          
+          if($(img).prop('complete')){
+            $(img).load();
+          }
+          else{
+            image_util.resize_frame($(img), {auto: true});
+          }
         });
       });
 
