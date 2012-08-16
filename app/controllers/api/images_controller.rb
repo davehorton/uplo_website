@@ -64,25 +64,16 @@ class Api::ImagesController < Api::BaseController
     elsif image.is_owner_avatar
       current_user.rollback_avatar
     end
-    if !image.save
+
+    file_path = "#{Rails.root}/tmp/#{image.name}"
+    image.data = File.open(file_path)
+    if image.save
+      @result[:image] = image.serializable_hash(image.default_serializable_options)
+      @result[:success] = true
+    else
       @result[:msg] = image.errors
       @result[:success] = false
-    elsif !effect_id.nil?
-      file_path = "#{Rails.root}/tmp/#{image.name}"
-      FilterEffect::Effect.send("e#{effect_id}", image.url, file_path)
-      image.data = File.open(file_path)
-      if image.save
-        @result[:image] = image.serializable_hash(image.default_serializable_options)
-        @result[:success] = true
-      else
-        @result[:msg] = image.errors
-        @result[:success] = false
-      end
-    else
-      @result[:image] = image.serializable_hash(image.default_serializable_options)
-        @result[:success] = true
     end
-
     render :json => @result
   end
 
