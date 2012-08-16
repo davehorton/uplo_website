@@ -20,7 +20,7 @@
           = f.text_field :last_name, :required => true
       .line
         .half.left
-          = f.label :user_email, 'Email', :class => 'left'
+          = f.label :user_email, 'Email Address', :class => 'left'
           = f.text_field :email, :required => true, :autofocus => true, :value => @inv.email, :disabled => true
           = f.hidden_field :email, :as => :hidden, :value => @inv.email
         .half.right

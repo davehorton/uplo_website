@@ -3,10 +3,6 @@
 
 - result_type = (params[:filtered_by]==User::SEARCH_TYPE) ? 'User' : 'Photo'
 - content_for :top_content do
-  / .data-header.text.font16.line12.left
-  /   %span.text.black.bold Search >
-  /   %span.result-number= "#{ pluralize @data.total_entries, result_type } found"
-  / = render :partial => "shared/filter_search_box", :locals => {:action => "search"}
   = render :partial => 'browse_header', :locals => {:num_of_records => @data.total_entries, :current_views => @current_views}
 
 .wrapper.images-wrapper.left
@@ -23,7 +19,7 @@
           .username
             %a{:href => author_profile}= user.username
           .numbers
-            %span= "Joined #{user.created_at.strftime('%m/%d/%y')}"
+            %span= "Joined #{user.confirmed_at.strftime('%m/%d/%y')}"
             %span.separator= '|'
             %span= pluralize(user.images_count, 'item')
             %span.separator= '|'

@@ -3,7 +3,7 @@
 .main.right
   #photos-section.container.left
     .head
-      %a.title{:data => {:url => "#{ url_for(:controller => 'profiles', :action => 'show_photos', :user_id => @user.id) }"}}
+      %a.title{:href => "#{ url_for(:controller => 'profiles', :action => 'show_photos', :user_id => @user.id) }" }
         .text.black.bold.font20.left= "#{ user_possesive } #{ pluralize_without_count(@images.total_entries, 'Photo') }"
         .text.fuzzy-gray.font20.left= "&nbsp;(#{ @images.total_entries })".html_safe
       = render :partial => 'link_to_detail', :locals => { :empty => (@images.total_entries==0), :user_id => @user.id, :url => edit_photos_url }
@@ -12,7 +12,7 @@
 
   #galleries-section.container.left
     .head
-      %a.title{:data => {:url => "#{ url_for(:controller => 'profiles', :action => 'show_galleries', :user_id => @user.id) }" }}
+      %a.title{:href => "#{ url_for(:controller => 'profiles', :action => 'show_galleries', :user_id => @user.id) }" }
         .text.black.bold.font20.left= "#{ user_possesive } #{ pluralize_without_count(@galleries.total_entries, 'Gallery') }"
         .text.fuzzy-gray.font20.left= "&nbsp;(#{ @galleries.total_entries })".html_safe
       = render :partial => 'link_to_detail', :locals => { :empty => (@galleries.total_entries==0), :user_id => @user.id, :url => edit_photos_url }
@@ -26,7 +26,7 @@
   - url = url_for(:controller => 'profiles', :action => 'show_likes', :user_id => @user.id)
   #likes-section.container.left
     .head
-      %a.title{ :data => {:url => "#{ url }"}}
+      %a.title{ :href => "#{ url }" }
         .text.black.bold.font20.left= "#{user_possesive} #{ pluralize_without_count(@liked_images.total_entries, 'Like') }"
         .text.fuzzy-gray.font20.left= "&nbsp;(#{ @liked_images.total_entries })".html_safe
       = render :partial => 'link_to_detail', :locals => { :empty => (@liked_images.total_entries==0), :user_id => @user.id, :url => url }
@@ -36,11 +36,11 @@
   - url = url_for(:controller => 'profiles', :action => 'show_followers', :user_id => @user.id)
   #followers-section.container.left
     .head
-      %a.title{ :data => {:url => "#{ url }"}}
+      %a.title{ :href => "#{ url }" }
         .text.black.bold.font20.left= "#{ user_possesive } #{ pluralize_without_count(@followers.total_entries, 'Follower')}"
         .text.fuzzy-gray.font20.left= "&nbsp;(#{ @followers.total_entries })".html_safe
       .actions-panel.right
-        %a.list.text.black.bold.font10.right{ :data => { 'url' => "#{ url }"} } + VIEW ALL
+        %a.list.text.black.bold.font10.right{ :href => "#{ url }"} + VIEW ALL
     .line-separator.left
     .images-wrapper.left
       - (0...@followers.length). each do |idx|
@@ -58,7 +58,7 @@
   - url = url_for(:controller => 'profiles', :action => 'show_followed_users', :user_id => @user.id)
   #following-section.container.left{ :style => "#{ following_margin }" }
     .head
-      %a.title{ :data => {:url => "#{ url }"}}
+      %a.title{ :href => "#{ url }" }
         .text.black.bold.font20.left= following_header_label(@user.id)
         .text.fuzzy-gray.font20.left= "&nbsp;(#{ @followed_users.total_entries })".html_safe
       = render :partial => 'link_to_detail', :locals => { :empty => (@followed_users.total_entries==0), :user_id => @user.id, :url => "#{ url }" }
