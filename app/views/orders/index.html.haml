@@ -5,7 +5,10 @@
 - content_for :top_content do
   .text.black.bold.font16.left Checkout - Step 2 of 2
   .line-separator.left
-- @order.expiration = Date.strptime(@order.expiration, "%m-%Y") if @order.expiration
+- if @order.expiration
+  - @order.expiration = Date.strptime(@order.expiration, "%m-%Y") 
+- else
+  - @order.expiration = Date.today
 .wrapper
   = simple_form_for(@order, :url => "/payments/checkout?type=an", :html => {:class => "card_form left", :id => 'order-shippings'}) do |f|
     #billing-address.order_summary.left
