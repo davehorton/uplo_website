@@ -10,6 +10,10 @@ class Order < ActiveRecord::Base
   has_many :line_items, :dependent => :destroy
   has_many :images, :through => :line_items
 
+  # ACCEPT NESTED ATTRIBUTE
+  accepts_nested_attributes_for :billing_address
+  accepts_nested_attributes_for :shipping_address
+
   # CALLBACK
   after_save :push_notification
   before_create :init_transaction_date

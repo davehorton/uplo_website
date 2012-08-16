@@ -81,48 +81,56 @@ class PaymentsController < ApplicationController
         redirect_to pp_gateway.redirect_url_for(setup_response.token)
       when "an"
         address_required_info = ['first_name', 'last_name', 'street_address', 'city', 'zip', 'state']
-        card_required_info = ['name_on_card', 'card_type', 'card_number', 'expiration(1i)', 'expiration(2i)', 'cvv']
+        card_required_info = ['name_on_card', 'card_type', 'card_number', 'expiration(1i)', 'expiration(2i)']
 
         card_required_info.each { |val|
-          if !params["order"].has_key?(val) || params["order"][val].blank?
-            flash[:error] = 'Please fill all required fields first!'
+          if !params[:order].has_key?(val) || params[:order][val].blank?
+            flash[:error] = "Please fill all required fields first!"
             redirect_to :controller => 'orders', :action => 'index' and return
           end
         }
-        address_required_info.each { |val|
-          if !params[:order][:billing_address].has_key?(val) || params[:order][:billing_address][val].blank?
-            flash[:error] = 'Please fill all required fields first!'
-            redirect_to :controller => 'orders', :action => 'index' and return
-          end
-        }
+        remove_shipping_info = false
         if params[:billing]['ship_to_billing'].blank? || !SharedMethods::Converter::Boolean(params[:billing]['ship_to_billing'])
-          address_required_info.each { |val|
-            if !params[:order][:shipping_address].has_key?(val) || params[:order][:shipping_address][val].blank?
-              flash[:error] = 'Please fill all required fields first!'
-              redirect_to :controller => 'orders', :action => 'index' and return
-            end
-          }
+          
+        else
+          params[:order][:shipping_address_attributes] = params[:order][:billing_address_attributes]
+          remove_shipping_info = true
         end
-
+        params[:order][:shipping_address_attributes].delete 'id'
+        params[:order][:billing_address_attributes].delete 'id'
         # UPDATE PAYMENT INFO TO ORDER
 
         expires_on = Date.civil(params[:order]["expiration(1i)"].to_i,
                          params[:order]["expiration(2i)"].to_i, 1)
-        expires_on = expires_on.strftime("%m%y")
+        params[:order][:expiration] = expires_on.strftime("%m-%Y")
+        params[:order].delete "expiration(1i)"
+        params[:order].delete "expiration(2i)"
+        params[:order].delete "expiration(3i)"
         card_string = params[:order]["card_number"]
 
         order = Order.find_by_id params[:order_id]
-        an_value = Payment.create_authorizenet_test(card_string, expires_on, {:shipping => params[:order][:shipping_address], :address => params[:address]})
-        response = an_value[:transaction].purchase(order.order_total, an_value[:credit_card])
+        if order.update_attributes(params[:order])
+          params[:order].delete 'shipping_address_attributes' if remove_shipping_info
+          if current_user.update_profile(params[:order])
+            an_value = Payment.create_authorizenet_test(card_string, expires_on, {:shipping => params[:order][:shipping_address], :address => params[:address]})
+            response = an_value[:transaction].purchase(order.order_total, an_value[:credit_card])
 
-        success = !response.nil? and response.success?
-        if success
-          finalize_cart
-          msg = "Successfully made a purchase (authorization code: #{response.authorization_code})"
+            success = !response.nil? and response.success?
+            if success
+              finalize_cart
+              msg = "Successfully made a purchase (authorization code: #{response.authorization_code})"
+            else
+              msg = 'Fail:' + response.message.to_s
+            end
+            redirect_to :action => :checkout_result, :msg => msg, :success => success, :trans_id => response.transaction_id
+          else
+            flash[:error] = current_user.errors.full_messages.to_sentence
+            redirect_to :controller => 'orders', :action => 'index' and return
+          end
         else
-          msg = 'Fail:' + response.message.to_s
+          flash[:error] = order.errors.full_messages.to_sentence
+          redirect_to :controller => 'orders', :action => 'index' and return
         end
-        redirect_to :action => :checkout_result, :msg => msg, :success => success, :trans_id => response.transaction_id
     end
   end
 

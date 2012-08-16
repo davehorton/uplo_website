@@ -343,6 +343,9 @@ GEM
     urbanairship (2.1.0)
       json
     uuidtools (2.1.2)
+    valid_email (0.0.4)
+      activemodel
+      mail
     warden (1.1.1)
       rack (>= 1.0)
     will_paginate (3.0.3)
@@ -418,5 +421,6 @@ DEPENDENCIES
   twitter
   uglifier (>= 1.0.3)
   urbanairship
+  valid_email
   will_paginate (>= 3.0.pre4)
   yui-compressor (>= 0.9.6)

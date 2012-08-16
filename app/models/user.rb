@@ -1,3 +1,4 @@
+require 'valid_email'
 class User < ActiveRecord::Base
   class NotReadyForReinstatingError < StandardError
   end
@@ -31,13 +32,13 @@ class User < ActiveRecord::Base
                   :first_name, :last_name, :username, :login, :nationality,
                   :birthday, :gender, :avatar, :twitter, :facebook, :website, :biography, :name_on_card,
                   :card_type, :card_number, :expiration, :cvv, :paypal_email, :paypal_email_confirmation,
-                  :is_enable_facebook, :is_enable_twitter, :billing_address_id, :shipping_address_id, :job, :location
+                  :is_enable_facebook, :is_enable_twitter, :billing_address_id, :shipping_address_id, :job, :location, :shipping_address_attributes, :billing_address_attributes
 
   attr_accessible :id, :email, :password, :password_confirmation, :remember_me,
                   :first_name, :last_name, :username, :login, :nationality,
                   :birthday, :gender, :avatar, :twitter, :facebook, :website, :biography, :name_on_card,
                   :card_type, :card_number, :expiration, :cvv, :paypal_email, :paypal_email_confirmation,
-                  :is_enable_facebook, :is_enable_twitter, :billing_address_id, :shipping_address_id, :job, :location, :is_admin, :as => :admin
+                  :is_enable_facebook, :is_enable_twitter, :billing_address_id, :shipping_address_id, :job, :location, :shipping_address_attributes, :billing_address_attributes, :is_admin, :as => :admin
 
   # ASSOCIATIONS
   has_many :profile_images, :dependent => :destroy, :order => 'last_used DESC'
@@ -66,21 +67,21 @@ class User < ActiveRecord::Base
   belongs_to :billing_address, :class_name => "Address"
   belongs_to :shipping_address, :class_name => "Address"
 
+  # ACCEPT NESTED ATTRIBUTE
+  accepts_nested_attributes_for :billing_address
+  accepts_nested_attributes_for :shipping_address
+
   # VALIDATION
   validates_presence_of :first_name, :last_name, :email, :username, :message => 'cannot be blank'
   validates :password, :presence => true, :confirmation => true, :unless => :force_submit
-  validates_format_of :email, :message => 'is invalid',
-          :with => /^([0-9a-zA-Z]([-.\w]*[0-9a-zA-Z])*@(([0-9a-zA-Z])+([-\w]*[0-9a-zA-Z])*\.)+[a-zA-Z]{2,9})$/i
   validates_format_of :website, :allow_blank => true,
           :with => /(^$)|(^((http|https):\/\/){0,1}[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(([0-9]{1,5})?\/.*)?$)/i
-  validates_uniqueness_of :email, :message => 'must be unique'
+  validates :email, :presence => true, :email => true
   validates_uniqueness_of :username, :message => 'must be unique'
   validates_length_of :first_name, :last_name, :in => 2..30, :message => 'must be 2 - 30 characters in length'
   validates_confirmation_of :paypal_email, :message => "should match confirmation"
   validates_presence_of :paypal_email_confirmation, :if => :paypal_email_changed?
-  validates_format_of :paypal_email, :message => 'is invalid',
-          :with => /^([0-9a-zA-Z]([-.\w]*[0-9a-zA-Z])*@(([0-9a-zA-Z])+([-\w]*[0-9a-zA-Z])*\.)+[a-zA-Z]{2,9})$/i,
-          :if => :paypal_email_changed?
+  validates :paypal_email, :email => true, :if => :paypal_email_changed?
   # SCOPE
   scope :active_users, where(:is_removed => false, :is_banned => false)
   scope :removed_users, where(:is_removed => true)
@@ -366,17 +367,30 @@ class User < ActiveRecord::Base
     if empty_order.blank?
       empty_order = self.orders.create(:status => Order::STATUS[:shopping])
     end
-    empty_order
+    return empty_order
   end
 
   def init_cart
-    if self.cart.blank?
+    if self.cart.nil?
       new_order = self.recent_empty_order
       new_cart = self.create_cart(:order => new_order)
-    elsif self.cart.order.blank?
+    elsif self.cart.order.nil?
       self.cart.order = self.recent_empty_order
       self.cart.save
     end
+
+    if (!self.cart.order.billing_address)
+      self.cart.order.billing_address = self.billing_address.dup
+      self.cart.order.shipping_address = self.shipping_address.dup
+      self.cart.order.billing_address.save
+      self.cart.order.shipping_address.save
+      self.cart.order.name_on_card = self.name_on_card
+      self.cart.order.card_type = self.card_type
+      self.cart.order.card_number = self.card_number
+      self.cart.order.expiration = self.expiration
+    end
+
+
 
     return self.cart
   end

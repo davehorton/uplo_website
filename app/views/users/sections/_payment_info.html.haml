@@ -42,7 +42,7 @@
         - today = Date.today
         .line{:style => "width:200px"}
           = user.date_select :expiration, :discard_day => true, :start_year => Date.today.year, :end_year => (Date.today.year+10), :add_month_numbers => false, :order => [:month, :year], :required => true, :label => false, :default => { :day => '1', :mon => '12' }, :prompt => { :month => 'Month', :year => 'Year' }
-        .line= user.input_field :cvv, :maxlength => 4
+        .line= user.input_field :cvv, :maxlength => 4, :value => ""
         .line= hidden_field :user, :type_update, :value => :payment_info
         %br
         .update_button.left

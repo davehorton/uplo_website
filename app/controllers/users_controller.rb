@@ -33,7 +33,7 @@ class UsersController < ApplicationController
     type_update = params[:user][:type_update]
     params[:user].delete(:type_update)
     if (type_update == "payment_info")
-      card_required_info = ['name_on_card', 'card_type', 'card_number', 'expiration(1i)', 'expiration(2i)', 'cvv']
+      card_required_info = ['name_on_card', 'card_type', 'card_number', 'expiration(1i)', 'expiration(2i)']
 
       card_required_info.each { |val|
         if !params[:user].has_key?(val) || params[:user][val].blank?
@@ -44,10 +44,10 @@ class UsersController < ApplicationController
 
       expires_on = Date.civil(params[:user]["expiration(1i)"].to_i,
                          params[:user]["expiration(2i)"].to_i, 1)
-      params[:user][:expiration] = expires_on.strftime("%m-%Y")
-      params[:user].delete("expiration(1i)")
-      params[:user].delete("expiration(2i)")
-      params[:user].delete("expiration(3i)")
+      params[:expiration] = expires_on.strftime("%m-%Y")
+      params[:user].delete "expiration(1i)"
+      params[:user].delete "expiration(2i)"
+      params[:user].delete "expiration(3i)"
     end
     address = nil
     if (type_update == "billing_address" || type_update == "shipping_address")

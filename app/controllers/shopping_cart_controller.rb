@@ -111,37 +111,10 @@ class ShoppingCartController < ApplicationController
     # If the member is not logged in, get the cart from the session.
     # Otherwise, get it from the logged in member's member record.
     def get_cart
-      unless current_user.nil?
-        @cart = current_user.init_cart
-      else
-        @cart = init_cart
-      end
-    end
-
-    def init_cart
-      @cart = Cart.find_by_id(session[:cart]) if session[:cart]
-      if @cart.blank?
-        if current_user.cart.blank?
-          @cart = Cart.new({:user => current_user})
-        else
-          @cart = current_user.cart
-        end
-
-        if @cart.order.blank?
-          @cart.order = current_user.recent_empty_order
-        end
-
-        if @cart.changed?
-          @cart.save
-        end
-
-        session[:cart] = @cart.id
-      elsif @cart.order.blank?
-        @cart.order = current_user.recent_empty_order
-        @cart.save
-      end
-
-      return @cart
+      puts "==================="
+      @cart = current_user.init_cart
+      puts "==================="
+      puts @cart.inspect
     end
 
     def valid_item?(hash)

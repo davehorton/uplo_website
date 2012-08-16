@@ -87,8 +87,7 @@
             for (var i = 0; i < errors.length; i++ ) {
               errorText +=  "<li>" + errors[i] + "</li> ";
             }
-
-            if (errors.length == 0){
+            if (errors.length == 0 || errors.length == undefined){
               errorText +=  "<li>Something went wrong, please try later</li>";
             }
 
