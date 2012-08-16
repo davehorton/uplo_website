@@ -12,8 +12,6 @@
       = select :image, :gallery_id, gallery_options(current_user, image.gallery_id),
              { :class => 'left'}
     .info-line.left
-      / .label.text.black.bold.font12 Price
-      / = select :image, :price, gallery_price_options
       .label.text.black.bold.font12 Pricing
       .inline.left
         .text.gray.font11.line16.left= "Tier #{ image.tier }"

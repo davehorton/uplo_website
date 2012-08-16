@@ -57,46 +57,4 @@
       var image_id = '<%= params[:id] %>';
       var pricing = <%= Image::TIERS_PRICES[@image.tier].to_json %>;
       var moulding_discount = <%= Image::MOULDING_DISCOUNT.to_json %>;
-
-      // Scale and change the frame based on the print-size.
-      $('.print-sizes-container .print-size').change(function(){
-        if($(this).is(':checked')) {
-          var print_sizes = $.trim($(this).val()).split('x');
-          if(print_sizes.length >= 2){
-            var img = $('#order-preview img');
-            var parent = $(img).parents('.image-container');
-            var max_width = parseFloat($(parent).css('max-width'), 10);
-
-            var p_width = parseFloat(print_sizes[0]);
-            var p_height = parseFloat(print_sizes[1]);
-
-            var dpi = 72; //image_util.detect_dpi();
-            p_width = image_util.inch_to_px(p_width, dpi);
-            p_height = image_util.inch_to_px(p_height, dpi);
-
-            var origin_width = parseFloat($(img).attr('data-width'), 10);
-            var origin_height = parseFloat($(img).attr('data-height'), 10);
-            var origin_ratio = origin_width/origin_height;
-            var print_ratio = p_width/p_height;
-
-            if(origin_ratio > 1 && print_ratio < 1){
-              // Make smaller number always first.
-              // Swap the width-height of print size in case of landscape image.
-              var temp = p_width;
-              p_width = p_height;
-              p_height = temp;
-            }
-
-            //console.log('input:' + p_width + 'x' + p_height + '; origin ratio: ' +
-            //  origin_ratio + '; print ratio: ' + print_ratio);
-
-            image_util.resize_image(img, {width: p_width, height: p_height, ratio: origin_ratio});
-            image_util.resize_frame(img, {width: p_width, height: p_height});
-          }
-        }
-      });
-      // Force change of page-loading.
-      $('.print-sizes-container .print-size:first').attr('checked', 'true');
-      $('.print-sizes-container .print-size:checked').change();
-
   = javascript_include_tag 'app/order_image.js'

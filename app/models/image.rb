@@ -45,6 +45,7 @@ class Image < ActiveRecord::Base
     MOULDING[:light_wood] => 0,
     MOULDING[:rustic_wood] => 0
   }
+  DEFAULT_STYLES = { :smallest => '66x66#', :smaller => '67x67#', :small => '68x68#', :spotlight_small => '74x74#', :thumb => '155x155#', :spotlight_thumb => '174x154#', :profile_thumb => '101x101#', :medium => '640x640>' }
 
   # ASSOCIATIONS
   belongs_to :gallery, :touch => true
@@ -90,8 +91,7 @@ class Image < ActiveRecord::Base
 
   # Paperclip
   has_attached_file :data,
-    :styles => { :smallest => '66x66#', :smaller => '67x67#', :small => '68x68#', :spotlight_small => '74x74#', :thumb => '155x155#', :spotlight_thumb => '174x154#', :profile_thumb => '101x101#', :medium => '640x640>', :large => '1000x1000>' },
-    # :path => "image/:id/:style.:extension"
+    :styles => lambda { |attachment| attachment.instance.available_styles || {}},
     :storage => :s3,
     :s3_credentials => "#{Rails.root}/config/amazon_s3.yml",
     :path => "image/:id/:style.:extension",
@@ -103,8 +103,9 @@ class Image < ActiveRecord::Base
       :message => 'File type must be one of [.jpeg, .jpg]' }
 
   # CALLBACK
+  before_post_process :init_image_info
   before_create :set_default_tier
-  after_create :save_image_dimensions, :process_filename
+  # after_create :process_filename
   after_initialize :init_random_price, :init_tier
 
   # CLASS METHODS
@@ -344,7 +345,7 @@ class Image < ActiveRecord::Base
   def get_square_sizes
     result = []
     edge = [self.width, self.height].min
-    max_size = edge / PRINTER_RESOLUTION
+    max_size = edge / PRINT_RESOLUTION
     PRINTED_SIZES[:square].each { |size|
       edges = size.split('x')
       result << size if edges[0].strip!.to_i <= max_size
@@ -359,8 +360,8 @@ class Image < ActiveRecord::Base
     result = []
     short_edge = [self.width, self.height].min
     long_edge = [self.width, self.height].max
-    max_short_edge = short_edge / PRINTER_RESOLUTION
-    max_long_edge = long_edge / PRINTER_RESOLUTION
+    max_short_edge = short_edge / PRINT_RESOLUTION
+    max_long_edge = long_edge / PRINT_RESOLUTION
 
     PRINTED_SIZES[:rectangular].each { |size|
       edges = size.split('x')
@@ -710,7 +711,34 @@ class Image < ActiveRecord::Base
   end
   alias_method :is_promoted, :is_promoted?
 
+#==============================================================================
+# Description:
+# - get available styles
+# - including all DEFAULT_STYLES & printable size (for ordering)
+# Note:
+#
+#==============================================================================
+  def available_styles
+    result = DEFAULT_STYLES
+    self.printed_sizes.each do |size|
+      ratios = size.split('x')
+      ratios.collect! { |tmp| tmp.strip.to_i }
+      if self.square?
+        width = height = ratios[0] * PRINT_RESOLUTION
+      elsif self.width > self.height
+        width = ratios.max * PRINT_RESOLUTION
+        height = ratios.min * PRINT_RESOLUTION
+      else
+        width = ratios.min * PRINT_RESOLUTION
+        height = ratios.max * PRINT_RESOLUTION
+      end
+      result["scale#{size}".to_sym] = "#{width}x#{height}#"
+    end
+    result
+  end
+
   protected
+
     def set_default_tier
       self.tier = TIERS[:tier_1]
     end
@@ -721,15 +749,16 @@ class Image < ActiveRecord::Base
     end
 
     # Detect the image dimensions.
-    def save_image_dimensions
+    def init_image_info
       file = self.data.queued_for_write[:original]
       if file.blank?
         file = data.url(:original)
       end
 
       geo = Paperclip::Geometry.from_file(file)
-      self.update_attribute(:width, geo.width)
-      self.update_attribute(:height, geo.height)
+      self.width = geo.width
+      self.height = geo.height
+      self.name = file.original_filename.gsub(/(.jpeg|.jpg|.png|.gif)$/i, '') if file.original_filename =~ /(.jpeg|.jpg|.png|.gif)$/i
     end
 
 

@@ -458,12 +458,13 @@ class User < ActiveRecord::Base
     return images
   end
 
-#===============================================================================
+#==============================================================================
 # Description:
 # - get sales of all images over months
 # - report over nearest 12 months from report date
 # Note:
-#===============================================================================
+#
+#==============================================================================
   def monthly_sales(report_date=Time.now)
     result = []
     date = DateTime.parse report_date.to_s

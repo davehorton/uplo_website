@@ -27,3 +27,11 @@ $ ->
         return false;
 
   $('#line_item_quantity').keyup -> computePrice()
+
+  # Scale and change the frame based on the print-size.
+  $('#line_item_size').change ->
+    url = $(@).find("option[value=#{$(@).val()}]").attr('data-url')
+    $('#preview-frame img').attr('src', url)
+
+  # Force change of page-loading.
+  $('#line_item_size').change();

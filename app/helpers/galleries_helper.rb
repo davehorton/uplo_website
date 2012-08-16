@@ -34,7 +34,7 @@ module GalleriesHelper
   def printed_sizes_options(image, selected = nil)
     options = []
     image.printed_sizes.each do |size|
-      options << ["#{size} ($#{ image.get_price(image.tier, size)})", size]
+      options << ["#{size} ($#{ image.get_price(image.tier, size)})", size, {'data-url' => image.data.url("scale#{size}")}]
     end
     options_for_select(options, selected)
   end
