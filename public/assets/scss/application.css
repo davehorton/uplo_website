@@ -586,6 +586,10 @@ textarea {
     background: url("/assets/btn-send-invite.png") no-repeat;
     width: 81px;
     height: 21px; }
+  .button.signup {
+    background: url("/assets/btn-signup.png") no-repeat;
+    width: 79px;
+    height: 28px; }
   .button.login {
     background: url("/assets/btn-login.png") no-repeat;
     width: 56px;
@@ -1394,39 +1398,54 @@ textarea {
 
 #non-login-container {
   position: relative; }
+  #non-login-container #register-panel label, #non-login-container #session-container label {
+    text-transform: uppercase;
+    color: white;
+    font-weight: bold;
+    margin: 0 0 5px 0;
+    line-height: 10px; }
+  #non-login-container #register-panel input[type=text], #non-login-container #register-panel input[type=password], #non-login-container #session-container input[type=text], #non-login-container #session-container input[type=password] {
+    width: 238px;
+    border-radius: 0;
+    border-width: 1px solid #cccccc;
+    height: 22px; }
+  #non-login-container #register-panel .header, #non-login-container #session-container .header {
+    font-size: 31px;
+    line-height: 35px; }
+  #non-login-container #register-panel .title, #non-login-container #session-container .title {
+    color: #898989;
+    margin-top: 14px; }
+  #non-login-container #register-panel .line, #non-login-container #session-container .line {
+    margin-top: 20px;
+    display: inline-block;
+    width: 100%; }
+  #non-login-container #register-panel {
+    background-color: #000000;
+    margin: 30px auto 50px auto;
+    padding: 40px;
+    width: 510px; }
+    #non-login-container #register-panel .half {
+      width: 245px; }
+    #non-login-container #register-panel .term-of-use {
+      color: #969696; }
+    #non-login-container #register-panel #btn-signup {
+      height: 28px;
+      border: none; }
+    #non-login-container #register-panel #register-form {
+      margin-top: 20px; }
   #non-login-container #session-container {
     position: absolute;
     top: 0;
     left: 161px;
     width: 638px;
     z-index: 1001; }
-    #non-login-container #session-container label {
-      text-transform: uppercase;
-      color: white;
-      font-weight: bold;
-      margin: 0 0 5px 0;
-      line-height: 10px; }
-    #non-login-container #session-container input[type=text], #non-login-container #session-container input[type=password] {
-      width: 238px;
-      border-radius: 0;
-      border-width: 1px solid #cccccc; }
-    #non-login-container #session-container .header {
-      font-size: 31px;
-      line-height: 35px; }
     #non-login-container #session-container #signup-area, #non-login-container #session-container #signin-area {
       width: 319px;
       height: 316px; }
       #non-login-container #session-container #signup-area .main, #non-login-container #session-container #signin-area .main {
         margin: 45px 36px 0 38px; }
-      #non-login-container #session-container #signup-area .line, #non-login-container #session-container #signin-area .line {
-        margin-top: 20px; }
-      #non-login-container #session-container #signup-area input, #non-login-container #session-container #signin-area input {
-        height: 22px; }
     #non-login-container #session-container #signup-area {
       background-color: #000000; }
-      #non-login-container #session-container #signup-area .title {
-        color: #898989;
-        margin-top: 14px; }
       #non-login-container #session-container #signup-area #frm-request {
         margin-top: 13px; }
     #non-login-container #session-container #signin-area {

@@ -78,6 +78,8 @@
     right: 10px;
     top: 10px;
     z-index: 5; }
+  .image-container.no-border {
+    border: none !important; }
   .image-container .promote-button {
     background: url("/assets/promote-spotlight-light.png") no-repeat;
     width: 133px;
