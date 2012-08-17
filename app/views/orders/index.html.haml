@@ -96,7 +96,7 @@
             = f.input :name_on_card, :autofocus => true, :required => true, :label => false
           .info
             = f.label :card_type, "Card Type <span style='color:red;'>*</span>".html_safe
-            = f.select :card_type, options_for_select({"American Express" => "USA_express", "Discover" => "discover", "Visa" => "visa", "JCB" => "jcb", "Diners Club/ Carte Blanche" => "dinners_club", "Master Card" => "master_card"}), {:prompt => '- Please Select --'}
+            = f.select :card_type, options_for_select(User.card_types), {:prompt => '- Please Select --'}
           .info
             = f.label :card_number, "Card Number <span style='color:red;'>*</span>".html_safe
             = f.input :card_number, :autofocus => true, :required => true, :label => false

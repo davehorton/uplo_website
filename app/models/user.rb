@@ -76,11 +76,10 @@ class User < ActiveRecord::Base
   validates :password, :presence => true, :confirmation => true, :unless => :force_submit
   validates_format_of :website, :allow_blank => true,
           :with => /(^$)|(^((http|https):\/\/){0,1}[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(([0-9]{1,5})?\/.*)?$)/i
-  validates :email, :email => true
   validates_uniqueness_of :username, :message => 'must be unique'
   validates_length_of :first_name, :last_name, :in => 2..30, :message => 'must be 2 - 30 characters in length'
   validates_confirmation_of :paypal_email, :message => "should match confirmation"
-  validates_length_of :cvv, :is => 3, :allow_nil => true
+  validates_length_of :cvv, :in => 3..4, :allow_nil => true
   validates_numericality_of :cvv, :card_number, :only_integer => true, :allow_nil => true
   validates_presence_of :paypal_email_confirmation, :if => :paypal_email_changed?
   validates :paypal_email, :email => true, :if => :paypal_email_changed?
@@ -92,6 +91,31 @@ class User < ActiveRecord::Base
   scope :confirmed_users, where("confirmed_at IS NOT NULL AND is_removed = ?", false)
 
   after_create :cleanup_invitation
+  before_save :validate
+
+  # CARD VALIDATE
+  def validate
+    if (card_number)
+      unless number_valid? && number_matches_type?
+        errors.add(:card_number, "is not a #{readable_card_type} or is invalid") 
+        return false
+      end
+    end
+
+    return true
+  end
+
+  def readable_card_type
+    (@@card_types ||= self.class.card_types.invert)[card_type]
+  end
+
+  def digits
+    @digits ||= card_number.gsub(/\D/, '')
+  end
+
+  def last_digits
+    digits.sub(/^([0-9]+)([0-9]{4})$/) { '*' * $1.length + $2 }
+  end
 
   # CLASS METHODS
   class << self
@@ -118,6 +142,17 @@ class User < ActiveRecord::Base
           )
       end
     end
+
+    def card_types
+      {"American Express" => "USA_express",
+        "Discover" => "discover", 
+        "Visa" => "visa", 
+        "JCB" => "jcb", 
+        "Diners Club/ Carte Blanche" => "dinners_club", 
+        "Master Card" => "master_card"
+      }
+    end
+
 
     # Load users data with images_likes_count, images_count and images_pageview.
     def load_users_with_images_statistics(params = {})
@@ -638,6 +673,32 @@ class User < ActiveRecord::Base
   protected
     def cleanup_invitation
       Invitation.destroy_all(:email => self.email)
+    end
+
+    def number_valid?
+      odd = true
+      card_number.gsub(/\D/,'').reverse.split('').map(&:to_i).collect { |d|
+        d *= 2 if odd = !odd
+        d > 9 ? d - 9 : d
+      }.sum % 10 == 0
+    end
+
+    def ccTypeCheck(ccNumber)
+      ccNumber = ccNumber.gsub(/\D/, '')
+      case ccNumber
+        when /^3[47]\d{13}$/ then return "USA_express"
+        when /^4\d{12}(\d{3})?$/ then return "visa"
+        when /^5\d{15}|36\d{14}$/ then return "master_card"
+        when /^6011\d{12}|650\d{13}$/ then return "discover"
+        when /^3(0[0-5]|8[0-1])\d{11}$/ then return "dinners_club"
+        when /^(39\d{12})|(389\d{11})$/ then return "CB"
+        when /^3\d{15}|1800\d{11}|2131\d{11}$/ then return "jcb"
+        else return "NA"
+      end
+    end
+
+    def number_matches_type?
+      return card_type == ccTypeCheck(card_number)
     end
 
     # indexing with thinking sphinx

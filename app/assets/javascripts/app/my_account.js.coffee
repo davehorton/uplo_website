@@ -18,7 +18,7 @@ $ ->
       for validator in CARD_TYPE_VALIDATORS
         if validator.value == card_type
           if !validator.reg.test($(this).val())
-            helper.show_notification('Your card number does not match this card_type!')
+            helper.show_notification('Your card number does not match ' + $('#user_card_type option:selected').text() + '!')
           break
 
   $('#user_card_type').change ->
@@ -26,7 +26,7 @@ $ ->
     for validator in CARD_TYPE_VALIDATORS
       if validator.value == $(this).val()
         if card_num!='' && !validator.reg.test(card_num)
-          helper.show_notification('Your card number does not match this card_type!')
+          helper.show_notification('Your card number does not match ' + $('#user_card_type option:selected').text() + '!')
         break
 
   $('#cvv-explanation').click (e) ->
