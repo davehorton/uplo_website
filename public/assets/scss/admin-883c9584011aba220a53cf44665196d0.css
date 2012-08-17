@@ -132,15 +132,13 @@
 .flagged-users .content .user-container {
   position: relative; }
   .flagged-users .content .user-container .user-info {
-    padding-top: 8px;
-    padding-left: 10px; }
+    margin: 10px 10px 10px 13px; }
   .flagged-users .content .user-container .username {
     font-size: 14pt; }
   .flagged-users .content .user-container .button, .flagged-users .content .user-container .action-container, .flagged-users .content .user-container .flagged-images {
     float: left; }
   .flagged-users .content .user-container .action-container {
-    margin-top: 10px;
-    margin-left: 5px; }
+    margin-top: 10px; }
   .flagged-users .content .user-container .contact-link {
     position: absolute;
     right: 15px;

@@ -718,8 +718,7 @@ textarea {
     display: inline-block;
     width: 67px; }
   .user-container .user-info {
-    padding-left: 15px;
-    padding-top: 20px; }
+    margin: 15px; }
   .user-container .username {
     font-size: 15pt;
     padding-bottom: 5px; }
