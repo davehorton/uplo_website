@@ -38,7 +38,7 @@ class ApplicationController < ActionController::Base
   end
 
   def after_sign_in_path_for(resource)
-    "/spotlight" # <- Path you want to redirect the user to.
+    "/" # <- Path you want to redirect the user to.
   end
 
   protected
@@ -50,7 +50,7 @@ class ApplicationController < ActionController::Base
     def set_current_user
       User.current_user = current_user
     end
-  
+
     # You can override this method in the sub class.
     def default_page_size
       PAGE_SIZE

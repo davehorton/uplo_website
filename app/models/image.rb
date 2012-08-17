@@ -368,7 +368,7 @@ class Image < ActiveRecord::Base
 
     PRINTED_SIZES[:rectangular].each { |size|
       edges = size.split('x')
-      result << size if edges[0].strip!.to_i <= max_short_edge && edges[1].strip!.to_i <= max_long_edge
+      result << size if edges[0].strip.to_i <= max_short_edge && edges[1].strip.to_i <= max_long_edge
     }
 
     # need check image size, temporarily
