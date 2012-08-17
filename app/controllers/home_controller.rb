@@ -28,6 +28,8 @@ class HomeController < ApplicationController
   end
 
   def spotlight
+    params[:sort_by] = Image::SORT_OPTIONS[:spotlight]
+    params[:filtered_by] = Image::SEARCH_TYPE
     @current_views = IMAGE_SORT_VIEW[Image::SORT_OPTIONS[:spotlight]]
     @data = Image.get_spotlight_images(@filtered_params)
     render :template => 'home/browse'

@@ -799,7 +799,7 @@ textarea { padding-top:5px; }
   background-color: $color-fuzzy-gray;
 }
 
-.user-container{
+.user-container {
   width: 312px;
   height: 67px;
   background-color: #EAEAEA;
@@ -808,7 +808,7 @@ textarea { padding-top:5px; }
   position: relative;
 
   .profile-link{display: inline-block; width: 67px;}
-  .user-info{padding-left: 15px; padding-top: 20px;}
+  .user-info { margin: 15px; }
   .username{font-size: 15pt; padding-bottom: 5px;}
   .numbers{
     color: #4D4D4D;
