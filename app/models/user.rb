@@ -52,15 +52,15 @@ class User < ActiveRecord::Base
   has_many :orders
   has_one :cart, :dependent => :destroy
   has_many :user_followers, :foreign_key => :user_id, :class_name => 'UserFollow'
-  
-  has_many :followers,  :through => :user_followers, 
-                        :conditions => ['users.is_removed = :blocked AND users.is_banned = :blocked', 
+
+  has_many :followers,  :through => :user_followers,
+                        :conditions => ['users.is_removed = :blocked AND users.is_banned = :blocked',
                                         {:blocked => false}]
   has_many :user_followings, :foreign_key => :followed_by, :class_name => 'UserFollow'
-  has_many :followed_users, :through => :user_followings, 
-                            :conditions => ['users.is_removed = :blocked AND users.is_banned = :blocked', 
+  has_many :followed_users, :through => :user_followings,
+                            :conditions => ['users.is_removed = :blocked AND users.is_banned = :blocked',
                                             {:blocked => false}]
-                                            
+
   has_many :friends_images, :through => :followed_users, :source => :images
   has_many :devices, :class_name => 'UserDevice'
 
@@ -152,30 +152,21 @@ class User < ActiveRecord::Base
       )
     end
 
+    # Search within public images & private of user
     def do_search(params = {})
-      paging_info = parse_paging_options params[:filtered_params]
-
-      sphinx_search_options = params[:sphinx_search_options]
-      sphinx_search_options = {} if sphinx_search_options.nil?
-
-      sphinx_search_options.merge!({
-        :star => true,
-        :retry_stale => true,
-        :page => paging_info.page_id,
-        :per_page => paging_info.page_size,
-        :order => paging_info.sort_string,
-        :sort_mode => :extended
-      })
-
-      self.search(
-        SharedMethods::Converter::SearchStringConverter.process_special_chars(params[:query]),
-        sphinx_search_options)
-    end
-
-    # Search within confirmed users only
-    def do_search_confirmed_users(params = {})
-      params[:sphinx_search_options] = {:index => "confirmed_users"}
-      self.do_search(params)
+      admin_mod = params[:admin_mod].nil? ? false : params[:admin_mod]
+      if admin_mod
+        params[:sphinx_search_options] = {
+          :with => { :is_removed => false },
+          :without => { :date_joined => 'null' }
+        }
+      else
+        params[:sphinx_search_options] = {
+          :with => { :is_removed => false, :is_banned => false },
+          :without => { :date_joined => 'null' }
+        }
+      end
+      self.search_users(params)
     end
 
     # Override Devise method so that User can log in with username or email.
@@ -225,15 +216,32 @@ class User < ActiveRecord::Base
     end
 
     protected
-
-    def parse_paging_options(options, default_opts = {})
-      if default_opts.blank?
-        default_opts = {
-          :sort_criteria => "username DESC"
-        }
+      def parse_paging_options(options, default_opts = {})
+        if default_opts.blank?
+          default_opts = {
+            :sort_criteria => "username DESC"
+          }
+        end
+        paging_options(options, default_opts)
       end
-      paging_options(options, default_opts)
-    end
+      def search_users(params = {})
+        paging_info = parse_paging_options params[:filtered_params]
+
+        sphinx_search_options = params[:sphinx_search_options]
+        sphinx_search_options = {} if sphinx_search_options.nil?
+
+        sphinx_search_options.merge!({
+          :star => true,
+          :retry_stale => true,
+          :page => paging_info.page_id,
+          :per_page => paging_info.page_size,
+          :order => paging_info.sort_string,
+          :sort_mode => :extended
+        })
+        self.search(
+          SharedMethods::Converter::SearchStringConverter.process_special_chars(params[:query]),
+          sphinx_search_options)
+      end
   end
 
   # PUBLIC INSTANCE METHODS
@@ -365,14 +373,14 @@ class User < ActiveRecord::Base
 
     if (!self.cart.order.billing_address)
       if self.billing_address
-        self.cart.order.billing_address = self.billing_address.dup 
+        self.cart.order.billing_address = self.billing_address.dup
         self.cart.order.billing_address.save
       end
       if self.shipping_address
-        self.cart.order.shipping_address = self.shipping_address.dup 
+        self.cart.order.shipping_address = self.shipping_address.dup
         self.cart.order.shipping_address.save
       end
-      
+
       self.cart.order.name_on_card = self.name_on_card
       self.cart.order.card_type = self.card_type
       self.cart.order.card_number = self.card_number
@@ -626,7 +634,7 @@ class User < ActiveRecord::Base
   def is_blocked?
     (self.is_removed || self.is_banned?)
   end
-  
+
   protected
     def cleanup_invitation
       Invitation.destroy_all(:email => self.email)
@@ -640,22 +648,8 @@ class User < ActiveRecord::Base
       indexes email
 
       has confirmed_at, :as => :date_joined
-
-      if Rails.env.production?
-        set_property :delta => FlyingSphinx::DelayedDelta
-      else
-        set_property :delta => true
-      end
-    end
-
-    define_index :confirmed_users do
-      indexes first_name
-      indexes last_name
-      indexes username, :sortable => true
-      indexes email
-      indexes confirmed_at
-
-      where sanitize_sql(["confirmed_at IS NOT NULL AND is_removed = ?", false])
+      has is_removed
+      has is_banned
 
       if Rails.env.production?
         set_property :delta => FlyingSphinx::DelayedDelta

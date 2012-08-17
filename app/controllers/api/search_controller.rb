@@ -62,8 +62,8 @@ class Api::SearchController < Api::BaseController
 
   def search_global(params)
     rs = {}
-    users = User.do_search params
-    images = Image.do_search params
+    users = User.do_search params.merge({:admin_mod => false})
+    images = Image.do_search_accessible_images params
     galleries = Gallery.do_search params
 
     users_info = {}
