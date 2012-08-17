@@ -562,7 +562,7 @@ class Image < ActiveRecord::Base
 
   def liked_by?(user_id)
     ImageLike.exists?({:image_id => self.id, :user_id => user_id})
-  endsale
+  end
 
   # THIS METHOD IS USED TO SHOW THE TOTAL SALE FOR USER.
   # The rule: User receives a half of total sale. Need to find something else for this. Reporting...
