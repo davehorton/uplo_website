@@ -90,7 +90,7 @@ class PaymentsController < ApplicationController
           end
         }
         remove_shipping_info = false
-        if params[:billing]['ship_to_billing'].blank? || !SharedMethods::Converter::Boolean(params[:billing]['ship_to_billing'])
+        if params[:order]['ship_to_billing'].blank? || !SharedMethods::Converter::Boolean(params[:order]['ship_to_billing'])
           
         else
           params[:order][:shipping_address_attributes] = params[:order][:billing_address_attributes]
@@ -108,8 +108,8 @@ class PaymentsController < ApplicationController
         params[:order].delete "expiration(3i)"
         card_string = params[:order]["card_number"]
 
-        order = Order.find_by_id params[:order_id]
-        if order.update_attributes(params[:order])
+        @order = Order.find_by_id params[:order_id]
+        if @order.update_attributes(params[:order])
           params[:order].delete 'shipping_address_attributes' if remove_shipping_info
           if current_user.update_profile(params[:order])
             an_value = Payment.create_authorizenet_test(card_string, expires_on, {:shipping => params[:order][:shipping_address], :address => params[:address]})
@@ -128,7 +128,7 @@ class PaymentsController < ApplicationController
             redirect_to :controller => 'orders', :action => 'index' and return
           end
         else
-          flash[:error] = order.errors.full_messages.to_sentence
+          flash[:error] = @order.errors.full_messages.to_sentence
           redirect_to :controller => 'orders', :action => 'index' and return
         end
     end
