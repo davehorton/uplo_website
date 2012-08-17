@@ -98,6 +98,7 @@ class PaymentsController < ApplicationController
         end
         params[:order][:shipping_address_attributes].delete 'id'
         params[:order][:billing_address_attributes].delete 'id'
+        params[:order].delete 'ship_to_billing'
         # UPDATE PAYMENT INFO TO ORDER
 
         expires_on = Date.civil(params[:order]["expiration(1i)"].to_i,
