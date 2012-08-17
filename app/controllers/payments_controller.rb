@@ -114,7 +114,7 @@ class PaymentsController < ApplicationController
           params[:order].delete 'shipping_address_attributes' if remove_shipping_info
           if current_user.update_profile(params[:order])
             an_value = Payment.create_authorizenet_test(card_string, expires_on, {:shipping => params[:order][:shipping_address], :address => params[:address]})
-            response = an_value[:transaction].purchase(order.order_total, an_value[:credit_card])
+            response = an_value[:transaction].purchase(@order.order_total, an_value[:credit_card])
 
             success = !response.nil? and response.success?
             if success
