@@ -562,6 +562,31 @@ class Image < ActiveRecord::Base
 
   def liked_by?(user_id)
     ImageLike.exists?({:image_id => self.id, :user_id => user_id})
+  endsale
+
+  # THIS METHOD IS USED TO SHOW THE TOTAL SALE FOR USER.
+  # The rule: User receives a half of total sale. Need to find something else for this. Reporting...
+  def user_total_sales(mon = nil)
+
+    total = 0
+
+    if mon.blank?
+      orders = self.orders.where({:transaction_status => Order::TRANSACTION_STATUS[:complete]})
+    else
+      start_date = DateTime.parse("01 #{mon}")
+      end_date = TimeCalculator.last_day_of_month(start_date.mon, start_date.year).end_of_day
+      end_date = end_date.strftime("%Y-%m-%d %T")
+      start_date = start_date.strftime("%Y-%m-%d %T")
+      orders = self.orders.where "transaction_status ='#{Order::TRANSACTION_STATUS[:complete]}'
+        and transaction_date > '#{start_date.to_s}' and transaction_date < '#{end_date.to_s}'"
+    end
+
+    orders_in = orders.collect &:id
+    saled_items = (orders.length==0) ? [] : self.line_items.where("order_id in (#{orders_in.join(',')})")
+    saled_items.each { |item| total += item.price *item.quantity }
+
+    return total/2
+
   end
 
   def total_sales(mon = nil) # mon with year, return saled $$

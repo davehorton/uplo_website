@@ -364,7 +364,7 @@ class User < ActiveRecord::Base
     end
 
     if (!self.cart.order.billing_address)
-      @order.billing_address = Address.new !@order.billing_address
+      @order.billing_address = Address.new if !@order.billing_address
       @order.shipping_address = Address.new if !@order.shipping_address
       self.cart.order.billing_address = self.billing_address.dup if self.billing_address.billing_address
       self.cart.order.shipping_address = self.shipping_address.dup if self.billing_address.shipping_address
@@ -490,7 +490,7 @@ class User < ActiveRecord::Base
     array = []
     images.each { |img|
       info = img.serializable_hash(img.default_serializable_options)
-      info[:total_sale] = img.total_sales
+      info[:total_sale] = img.user_total_sales
       info[:quantity_sale] = img.saled_quantity
       info[:no_longer_avai] = (img.is_flagged? || img.is_removed)
       array << {:image => info }
@@ -569,6 +569,10 @@ class User < ActiveRecord::Base
     else
       self.attributes['images_pageview'].to_i
     end
+  end
+
+  def get_account_balance
+
   end
 
   def remove
