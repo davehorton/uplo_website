@@ -176,6 +176,11 @@ $color-input-border: #cdcdcd;
     position: relative;
     .user-info{ margin: 10px 10px 10px 13px;}
     .username{font-size: 14pt;}
+    .flagged-images{
+      display: inline-block;
+      width: 99px;
+      height: 28px;
+    }
     .button, .action-container, .flagged-images{float: left;}
     .action-container { margin-top: 10px; }
 
