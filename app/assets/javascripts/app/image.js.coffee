@@ -19,6 +19,10 @@ window.image =
 $ ->
   $('form#frm-comment').inputHintOverlay(5, 8)
   $('#post-comment').click ->
+    if($('#comment_description').val().trim() == '')
+      helper.show_notification('Comment cannot be blank!')
+      return false
+
     data_form = $('#frm-comment')
     $.modal.close()
     window.setTimeout("$('#mask').modal()", 300)
@@ -36,8 +40,11 @@ $ ->
           $('form#frm-comment').inputHintOverlay(5, 8)
           $.modal.close()
         else
-          helper.show_notification('Something went wrong! Try to post your comment later!')
+          helper.show_notification(response.msg)
           $.modal.close()
+      error: ->
+        helper.show_notification('Something went wrong! Try to post your comment later!')
+        $.modal.close()
     });
 
   $('#comments-section').delegate '.pagination.comments a', 'click', (e) ->

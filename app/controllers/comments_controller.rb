@@ -20,9 +20,11 @@ class CommentsController < ApplicationController
 
     if image.nil?
       result = { :success => false, :msg => "This image does not exist anymore!" }
+    elsif comment[:description].strip.blank?
+      result = { :success => false, :msg => "Comment cannot be blank!" }
     else
       comment = Comment.new({:image_id => image.id, :user_id => current_user.id,
-        :description => comment[:description]})
+        :description => comment[:description].strip})
       if comment.save
         if current_user.id != image.author.id
           Notification.deliver_image_notification(image.id, current_user.id, Notification::TYPE[:comment])
