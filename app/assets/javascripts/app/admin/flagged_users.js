@@ -60,11 +60,14 @@ flagged_users = {
         type: 'POST',
         data: params,
         success: function(response){
+          var need_close_loading = true;
+          
           if(response.status == 'ok'){
             $(user).addClass('disabled');
             
             var redirect_url = $.trim(response.redirect_url);
             if(redirect_url && redirect_url != ''){
+              need_close_loading = false;
               window.location.href = redirect_url;
             }
           }
@@ -72,9 +75,10 @@ flagged_users = {
             if(jQuery.trim(response.message) != ''){
               helper.show_notification(response.message);
             }
-          }         
+          }
           
-          $.modal.close();
+          if(need_close_loading)
+            $.modal.close(); 
         }
       });
     });

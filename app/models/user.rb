@@ -73,7 +73,7 @@ class User < ActiveRecord::Base
 
   # VALIDATION
   validates_presence_of :first_name, :last_name, :username, :message => 'cannot be blank'
-  validates :password, :presence => true, :confirmation => true, :unless => :force_submit
+  validates :password, :presence => true, :confirmation => true, :if => :need_checking_password?
   validates_format_of :website, :allow_blank => true,
           :with => /(^$)|(^((http|https):\/\/){0,1}[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(([0-9]{1,5})?\/.*)?$)/i
   validates_uniqueness_of :username, :message => 'must be unique'
@@ -83,6 +83,8 @@ class User < ActiveRecord::Base
   validates_numericality_of :cvv, :card_number, :only_integer => true, :allow_nil => true
   validates_presence_of :paypal_email_confirmation, :if => :paypal_email_changed?
   validates :paypal_email, :email => true, :if => :paypal_email_changed?
+  validate :check_card_number
+  
   # SCOPE
   scope :active_users, where(:is_removed => false, :is_banned => false)
   scope :removed_users, where(:is_removed => true)
@@ -91,10 +93,9 @@ class User < ActiveRecord::Base
   scope :confirmed_users, where("confirmed_at IS NOT NULL AND is_removed = ?", false)
 
   after_create :cleanup_invitation
-  before_save :validate
 
   # CARD VALIDATE
-  def validate
+  def check_card_number
     if (card_number)
       unless number_valid? && number_matches_type?
         errors.add(:card_number, "is not a #{readable_card_type} or is invalid") 
@@ -358,12 +359,8 @@ class User < ActiveRecord::Base
         # Remove sensitive parameter.
         params.delete(key)
       end
-
-      # TODO: inspect why this method does not work?
-      #result = self.update_without_password(params)
-      self.force_submit = true
-      puts params
-      result = self.update_attributes(params)
+      
+      result = self.update_without_password(params)
     end
 
     result
@@ -671,6 +668,11 @@ class User < ActiveRecord::Base
   end
 
   protected
+  
+    def need_checking_password?
+      (!self.force_submit && self.password_required?)
+    end
+    
     def cleanup_invitation
       Invitation.destroy_all(:email => self.email)
     end
