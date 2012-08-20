@@ -147,7 +147,8 @@
     font-size: 10pt; }
 .flagged-users .flagged-image-thumb-container {
   display: inline-block;
-  margin-right: 5px; }
+  margin-right: 5px;
+  width: 28px; }
   .flagged-users .flagged-image-thumb-container .flagged-image-thumb {
     width: 28px;
     height: 28px; }
