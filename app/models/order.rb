@@ -30,6 +30,9 @@ class Order < ActiveRecord::Base
     :failed => "failed"
   }
 
+  # SCOPE
+  scope :completed_orders, where(:transaction_status => Order::TRANSACTION_STATUS[:complete])
+  
   # CLASS METHODS
   class << self
     def load_orders(params = {})

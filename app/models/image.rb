@@ -305,12 +305,15 @@ class Image < ActiveRecord::Base
     def load_images_with_orders_count(params = {})
       params[:sort_field] = "orders_count"
       paging_info = parse_paging_options(params)
-      self.includes(:gallery).joins(%Q{
-        LEFT JOIN (
-          SELECT image_id, COUNT(order_id) AS orders_count
-          FROM line_items GROUP BY image_id
-        ) orders_data ON images.id = orders_data.image_id
-      }).select("DISTINCT images.*, COALESCE(orders_data.orders_count, 0) AS orders_count").paginate(
+      self.includes(:gallery).joins(self.sanitize_sql([
+        "LEFT JOIN (
+          SELECT line_items.image_id, COUNT(line_items.order_id) AS orders_count
+          FROM line_items JOIN orders 
+          ON line_items.order_id = orders.id AND orders.transaction_status = ?
+          GROUP BY line_items.image_id
+        ) orders_data ON images.id = orders_data.image_id",
+        Order::TRANSACTION_STATUS[:complete]
+      ])).select("DISTINCT images.*, COALESCE(orders_data.orders_count, 0) AS orders_count").paginate(
         :page => paging_info.page_id,
         :per_page => paging_info.page_size,
         :order => paging_info.sort_string)
@@ -723,7 +726,7 @@ class Image < ActiveRecord::Base
 
   def orders_count
     if !self.attributes.has_key?('orders_count')
-      self.attributes['orders_count'] = self.orders.count
+      self.attributes['orders_count'] = self.orders.completed_orders.count
     else
       self.attributes['orders_count'].to_i
     end
