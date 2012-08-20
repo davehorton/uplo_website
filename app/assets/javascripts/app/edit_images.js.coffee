@@ -142,12 +142,12 @@ $ ->
     done: (e, data) ->
       response = $.parseJSON(data.result)
       if response.success
+        $('.empty-data').remove()
         $(data.context).replaceWith response.item
         $('.pagination-panel').each((idx, elem) -> $(elem).html response.pagination)
         $('#images-panel').children().last().remove() if $('.pagination-panel').find('.pagination').length > 0
         $('#gallery_selector_id').html response.gallery_options
-        $('.empty-data').remove()
-        $('select[id=gallery_permission]').selectmenu({ style: 'dropdown' })
+        $('select').selectmenu({ style: 'dropdown' })
       else
         $(data.context).find('.progress').replaceWith("<div class='error info-line text italic font12 left'>#{response.msg}</div>")
     progress: (e, data) ->
@@ -205,9 +205,9 @@ $ ->
     confirmChanges ->
       window.location = $(e.target).attr('href')
 
-  $('#my_links').selectmenu({ 
+  $('#my_links').selectmenu({
     style: 'dropdown',
-    select: (e, obj)-> 
+    select: (e, obj)->
       confirmChanges -> window.location = obj.value
   })
 

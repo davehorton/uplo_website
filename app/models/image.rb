@@ -108,7 +108,6 @@ class Image < ActiveRecord::Base
   # CALLBACK
   before_post_process :init_image_info
   before_create :set_default_tier
-  # after_create :process_filename
   after_initialize :init_random_price, :init_tier
 
   # CLASS METHODS
@@ -365,43 +364,29 @@ class Image < ActiveRecord::Base
     (1.0/RECTANGULAR_RATIO < ratio) && (ratio < RECTANGULAR_RATIO)
   end
 
-  def get_square_sizes
-    result = []
-    edge = [self.width, self.height].min
-    max_size = edge / PRINT_RESOLUTION
-    PRINTED_SIZES[:square].each { |size|
+  def valid_for_size?(size)
+    if self.square?
+      edge = [self.width, self.height].min
+      (edge / PRINT_RESOLUTION) >= size.split('x')[0].strip.to_i
+    else
       edges = size.split('x')
-      result << size if edges[0].strip.to_i <= max_size
-    }
-
-    # need check image size, temporarily
-    result << PRINTED_SIZES[:square][0] if result.count==0
-    return result
-  end
-
-  def get_rectangular_sizes
-    result = []
-    short_edge = [self.width, self.height].min
-    long_edge = [self.width, self.height].max
-    max_short_edge = short_edge / PRINT_RESOLUTION
-    max_long_edge = long_edge / PRINT_RESOLUTION
-
-    PRINTED_SIZES[:rectangular].each { |size|
-      edges = size.split('x')
-      result << size if edges[0].strip.to_i <= max_short_edge && edges[1].strip.to_i <= max_long_edge
-    }
-
-    # need check image size, temporarily
-    result << PRINTED_SIZES[:rectangular][0] if result.count==0
-    return result
+      short_edge = [self.width, self.height].min
+      long_edge = [self.width, self.height].max
+      (short_edge / PRINT_RESOLUTION) >= edges[0].strip.to_i && (long_edge / PRINT_RESOLUTION) >= edges[1].strip.to_i
+    end
   end
 
   def printed_sizes
+    result = []
     if self.square?
-      self.get_square_sizes
+      sizes = PRINTED_SIZES[:square]
     else
-      self.get_rectangular_sizes
+      sizes = PRINTED_SIZES[:rectangular]
     end
+    sizes.each { |size|
+      result << size if self.valid_for_size?(size)
+    }
+    return result
   end
 
   def comments_number
@@ -784,14 +769,8 @@ class Image < ActiveRecord::Base
   end
 
   protected
-
     def set_default_tier
       self.tier = TIERS[:tier_1]
-    end
-
-    def process_filename
-      reg = /(.jpeg|.jpg|.png|.gif)$/i
-      self.update_attribute(:name, self.name.gsub(reg, '')) if self.name =~ reg
     end
 
     # Detect the image dimensions.

@@ -80,9 +80,12 @@ class ImagesController < ApplicationController
       :data => data[0]
     }
     image = Image.new image_info
-    image.price = rand(50) #tmp for randomzise price
     image.set_album_cover
-    unless image.save
+
+    min_size = image.square? ? Image::PRINTED_SIZES[:square][0] : Image::PRINTED_SIZES[:rectangular][0]
+    if !image.valid_for_size?(min_size)
+      result = { :success => false, :msg => "Low quality of image! Please try again with higher quality images!"}
+    elsif !image.save
       msg = []
       key = ['data_file_size', 'data_content_type']
       image.errors.messages.each do |k, v|
@@ -98,8 +101,13 @@ class ImagesController < ApplicationController
       gallery = Gallery.find_by_id params[:gallery_id]
       images = gallery.images.un_flagged.load_images(@filtered_params)
       pagination = render_to_string :partial => 'shared/pagination',
-        :locals => {  :source => images, :params => { :controller => 'galleries',
-          :action => 'edit_images', :gallery_id => gallery.id }, :classes => 'text left' }
+        :locals => {
+          :source => images,
+          :params => {
+            :controller => 'galleries',
+            :action => 'edit_images',
+            :gallery_id => gallery.id },
+          :classes => 'text left' }
       item = render_to_string :partial => 'images/edit_photo_template',
                               :locals => { :image => image }
       gal_options = self.class.helpers.gallery_options(current_user.id, gallery.id, true)
