@@ -113,6 +113,26 @@ class Image < ActiveRecord::Base
 
   # CLASS METHODS
   class << self
+    def do_search(params = {})
+      params[:filtered_params][:sort_field] = 'name' unless params[:filtered_params].has_key?("sort_field")
+      default_opt = {}
+      paging_info = parse_paging_options(params[:filtered_params], {:sort_mode => :extended})
+
+      sphinx_search_options = params[:sphinx_search_options]
+      sphinx_search_options = {} if sphinx_search_options.blank?
+
+      sphinx_search_options.merge!({
+        :star => true,
+        :retry_stale => true,
+        :page => paging_info.page_id,
+        :per_page => paging_info.page_size,
+        :order => paging_info.sort_string
+      })
+
+      self.search(SharedMethods::Converter::SearchStringConverter.process_special_chars(params[:query]),
+        sphinx_search_options )
+    end
+
     # Search within public images only
     def do_search_public_images(params = {})
       params[:sphinx_search_options] = {:index => "public_images"}
@@ -180,6 +200,42 @@ class Image < ActiveRecord::Base
         :page => paging_info.page_id,
         :per_page => paging_info.page_size,
         :order => paging_info.sort_string)
+    end
+
+    # Search within public images & private of user
+    def do_search_accessible_images(user_id, params = {})
+      if params[:filtered_params].has_key?(:sort_criteria)
+        default_opt = { :sort_criteria => params[:filtered_params].delete(:sort_criteria)}
+      else
+        default_opt = { :sort_criteria => SORT_CRITERIA[SORT_OPTIONS[:view]]}
+      end
+      paging_info = parse_paging_options params[:filtered_params], default_opt
+      sphinx_search_options = params[:sphinx_search_options]
+      sphinx_search_options = {} if sphinx_search_options.blank?
+      with_display = "*, IF(author_id = #{user_id} OR permission = #{Gallery::PUBLIC_PERMISSION}, 1, 0) AS display"
+      sphinx_search_options.merge!({
+        :star => true,
+        :retry_stale => true,
+        :page => paging_info.page_id,
+        :per_page => paging_info.page_size,
+        :order => paging_info.sort_string,
+        :sort_mode => :extended,
+        :joins => '
+          LEFT JOIN galleries AS gals ON gals.id = images.gallery_id
+          LEFT JOIN image_flags ON images.id = image_flags.image_id
+          LEFT JOIN users ON gals.user_id = users.id',
+        :sphinx_select => with_display,
+        :with => {
+          :banned_user => false,
+          :removed_user => false,
+          :flagged_by => '',
+          :display => 1 }
+      })
+
+      Image.search(
+        SharedMethods::Converter::SearchStringConverter.process_special_chars(params[:query]),
+        sphinx_search_options)
+
     end
 
     def get_all_images_with_current_user(params, current_user = nil)
@@ -286,6 +342,8 @@ class Image < ActiveRecord::Base
       []
     end
 
+    # protected
+
     def parse_paging_options(options, default_opts = {})
       if default_opts.blank?
         default_opts = {
@@ -294,29 +352,6 @@ class Image < ActiveRecord::Base
       end
       paging_options(options, default_opts)
     end
-
-    protected
-      def do_search(params = {})
-        if params[:filtered_params].has_key?(:sort_criteria)
-          default_opt = { :sort_criteria => params[:filtered_params].delete(:sort_criteria)}
-        else
-          default_opt = { :sort_criteria => SORT_CRITERIA[SORT_OPTIONS[:view]]}
-        end
-        paging_info = parse_paging_options params[:filtered_params], default_opt
-
-        sphinx_search_options = params[:sphinx_search_options]
-        sphinx_search_options = {} if sphinx_search_options.blank?
-        sphinx_search_options.merge!({
-          :star => true,
-          :retry_stale => true,
-          :page => paging_info.page_id,
-          :per_page => paging_info.page_size,
-          :order => paging_info.sort_string
-        })
-
-        self.search(SharedMethods::Converter::SearchStringConverter.process_special_chars(params[:query]),
-          sphinx_search_options )
-      end
   end
 
   # INSTANCE METHODS
@@ -552,10 +587,8 @@ class Image < ActiveRecord::Base
   # THIS METHOD IS USED TO SHOW THE TOTAL SALE FOR USER.
   # The rule: User receives a half of total sale. Need to find something else for this. Reporting...
   def user_total_sales(mon = nil)
-
     total = 0
-
-    if mon.blank?
+    if mon == nil
       orders = self.orders.where({:transaction_status => Order::TRANSACTION_STATUS[:complete]})
     else
       start_date = DateTime.parse("01 #{mon}")
@@ -568,7 +601,7 @@ class Image < ActiveRecord::Base
 
     orders_in = orders.collect &:id
     saled_items = (orders.length==0) ? [] : self.line_items.where("order_id in (#{orders_in.join(',')})")
-    saled_items.each { |item| total += item.price *item.quantity }
+    saled_items.each { |item| total += (item.price * item.quantity) }
 
     return total/2
 
@@ -675,11 +708,11 @@ class Image < ActiveRecord::Base
     prior_months.each { |mon|
       short_mon = DateTime.parse(mon).strftime('%b')
       if options.nil?
-        result << { :month => short_mon, :sales => self.total_sales(mon) }
+        result << { :month => short_mon, :sales => self.user_total_sales(mon) }
       elsif options.has_key?(:report_by)
         result << {
           :month => short_mon,
-          :sales => (options[:report_by]==SALE_REPORT_TYPE[:price]) ? self.total_sales(mon) : self.saled_quantity(mon)
+          :sales => (options[:report_by]==SALE_REPORT_TYPE[:price]) ? self.user_total_sales(mon) : self.saled_quantity(mon)
         }
       end
     }

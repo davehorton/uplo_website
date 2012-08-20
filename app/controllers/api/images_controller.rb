@@ -223,7 +223,7 @@ class Api::ImagesController < Api::BaseController
       result = {
         :success => true,
         :image => image.serializable_hash(image.default_serializable_options),
-        :total => image.total_sales,
+        :total => image.user_total_sales,
         :sale_chart => url_for(:action => :sale_chart, :image_id => image.id, :only_path => false),
         :saled_quantity => image.saled_quantity,
         :purchased_info => image.get_purchased_info

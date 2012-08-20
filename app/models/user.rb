@@ -72,7 +72,7 @@ class User < ActiveRecord::Base
   accepts_nested_attributes_for :shipping_address
 
   # VALIDATION
-  validates_presence_of :first_name, :last_name, :email, :username, :message => 'cannot be blank'
+  validates_presence_of :first_name, :last_name, :username, :message => 'cannot be blank'
   validates :password, :presence => true, :confirmation => true, :unless => :force_submit
   validates_format_of :website, :allow_blank => true,
           :with => /(^$)|(^((http|https):\/\/){0,1}[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(([0-9]{1,5})?\/.*)?$)/i
@@ -523,7 +523,7 @@ class User < ActiveRecord::Base
     prior_months = SharedMethods::TimeCalculator.prior_year_period(date, {:format => '%b'})
     prior_months.each { |mon|
       total_sales = 0
-      self.images.un_flagged.each { |img| total_sales += img.total_sales(mon) }
+      self.images.un_flagged.each { |img| total_sales += img.user_total_sales(mon) }
       result << { :month => mon, :sales => total_sales }
     }
     return result

@@ -123,13 +123,23 @@ class PaymentsController < ApplicationController
             else
               msg = 'Fail:' + response.message.to_s
             end
-            redirect_to :action => :checkout_result, :msg => msg, :success => success, :trans_id => response.transaction_id
+            redirect_to :action => :checkout_result, :msg => msg, :success => success, :trans_id => response.transaction_id and return
           else
-            flash[:error] = current_user.errors.full_messages.to_sentence
+            error = '<ul>'
+            current_user.errors.full_messages.each do |message|
+              error << "<li>#{message}</li>"
+            end
+            error << '</ul>'
+            flash[:errors] = error.html_safe
             redirect_to :controller => 'orders', :action => 'index' and return
           end
         else
-          flash[:error] = @order.errors.full_messages.to_sentence
+          error = '<ul>'
+          @order.errors.full_messages.each do |message|
+            error << "<li>#{message}</li>"
+          end
+          error << '</ul>'
+          flash[:errors] = error.html_safe
           redirect_to :controller => 'orders', :action => 'index' and return
         end
     end
