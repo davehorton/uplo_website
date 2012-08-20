@@ -135,6 +135,10 @@
     margin: 10px 10px 10px 13px; }
   .flagged-users .content .user-container .username {
     font-size: 14pt; }
+  .flagged-users .content .user-container .flagged-images {
+    display: inline-block;
+    width: 99px;
+    height: 28px; }
   .flagged-users .content .user-container .button, .flagged-users .content .user-container .action-container, .flagged-users .content .user-container .flagged-images {
     float: left; }
   .flagged-users .content .user-container .action-container {
