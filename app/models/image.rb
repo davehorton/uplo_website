@@ -5,7 +5,7 @@ class Image < ActiveRecord::Base
   include ::SharedMethods::Converter
   include ::SharedMethods
 
-  SEARCH_TYPE = 'photos'
+  SEARCH_TYPE = 'images'
   SORT_OPTIONS = { :spotlight => 'spotlight', :view => 'views', :recent => 'recent'}
   SORT_CRITERIA = {
     SORT_OPTIONS[:view] => 'pageview DESC',
@@ -120,7 +120,8 @@ class Image < ActiveRecord::Base
     end
 
     # Search within public images & private of user
-    def do_search_accessible_images(user_id, params = {})
+    def do_search_accessible_images(user_id, params)
+      params ||= {}
       with_display = "*, IF(author_id = #{user_id} OR permission = #{Gallery::PUBLIC_PERMISSION}, 1, 0) AS display"
       params[:sphinx_search_options] = {
         :joins => '
