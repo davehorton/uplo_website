@@ -204,7 +204,7 @@ app/edit_images.js: app/edit_images-391b01b801b00e1c66143cb45d889391.js
 app/gallery.js: app/gallery-56d1423ff8282cf24bfa0dc13979b30e.js
 app/image.js: app/image-c1d90a26b65f48969f85f15d24c56c88.js
 app/image_util.js: app/image_util-e58342d34805f84c8607728b6f93d540.js
-app/my_account.js: app/my_account-e76bf9d99956d1a78de434ffa552286a.js
+app/my_account.js: app/my_account-908ddd5090f394e2d0fa27ebc468480e.js
 app/order.js: app/order-99e7629319e9ff03b049022277e3255c.js
 app/order_image.js: app/order_image-3e7e04f111def143d0d47276889d80be.js
 app/popup.js: app/popup-3d37daf582062d5f270aa53d3da682bd.js
