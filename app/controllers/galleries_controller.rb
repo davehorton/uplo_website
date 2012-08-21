@@ -2,6 +2,7 @@ class GalleriesController < ApplicationController
   has_mobile_fu
   before_filter :detect_device
   before_filter :authenticate_user!, :except => [:public]
+  before_filter :check_paypal_email
   skip_authorize_resource :only => [:public]
   layout 'main'
 
@@ -184,6 +185,13 @@ class GalleriesController < ApplicationController
         return render :template => 'shared/device_request', :layout => nil
       else
         request.formats.unshift Mime::HTML
+      end
+    end
+
+    def check_paypal_email
+      if (current_user.paypal_email.blank?)
+        flash[:warning] = "You have to update your Paypal email"
+        redirect_to :controller => :users, :action => :profile
       end
     end
 end
