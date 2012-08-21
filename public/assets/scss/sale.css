@@ -1,5 +1,6 @@
 .sale-chart {
-  margin: 30px 0; }
+  margin: 30px 0;
+  width: 780px; }
   .sale-chart #total-amount {
     width: 100%;
     color: #080808;
@@ -9,7 +10,8 @@
     font-weight: bold;
     font-family: Arial;
     color: #080808;
-    fill: #080808; }
+    fill: #080808;
+    width: 100%; }
 
 .sales-wrapper {
   margin-top: 10px;
