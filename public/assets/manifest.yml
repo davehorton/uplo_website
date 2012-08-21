@@ -290,7 +290,7 @@ lib/jquery.ui.widget.js: lib/jquery.ui.widget-0d68580b40839753efc5ace9498dba90.j
 lib/jquery.url.js: lib/jquery.url-54bab1cba764049f9199d478427a17df.js
 lib/superfish.min.js: lib/superfish.min-ffabcd0209faaae3216c63369a26facf.js
 lib/supersubs.min.js: lib/supersubs.min-51d2091adc4247f2751775293b4697b7.js
-profiles.js: profiles-8337150064f0f1277ba0288129a14bb5.js
+profiles.js: profiles-88b29c0ace66dad8e9fd875426ddf229.js
 rails.js: rails-68b47f0ba7401778dadbcdeafc621db8.js
 application.css: application-b5ccf7188c153412298770ca08fa3746.css
 bootstrap-image-gallery.css: bootstrap-image-gallery-d5c0778ddff99fb1e8dbd314793ba0d8.css
