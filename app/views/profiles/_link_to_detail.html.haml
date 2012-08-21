@@ -1,9 +1,8 @@
 / local values: user_id, url, data_empty
-- if !is_current_user(user_id)
-  .actions-panel.right
-    %a.list.text.black.bold.font10.right{ :href => "#{ url }" } + VIEW ALL
-- elsif !empty
+- if !empty && is_current_user(user_id)
   %a.edit-pane.right{ :href => "#{ url }" }
     .icon.edit.left
     .text.black.font12.left Edit
-
+- elsif !empty
+  .actions-panel.right
+    %a.list.text.black.bold.font10.right{ :href => "#{ url }" } + VIEW ALL

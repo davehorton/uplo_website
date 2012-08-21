@@ -129,13 +129,13 @@ $ ->
         # Refresh page to show error when user was banned or removed.
         window.location.reload()
   })
-  loading_elems = ['#likes-section .edit-pane', '#following-section .edit-pane', '#container .title', '#followers-section .list']
+  loading_elems = ['#likes-section .edit-pane', '#following-section .edit-pane', '#container .title', '.list']
   $.each loading_elems, (idx, val) ->
     $(val).click (e)->
-      counter_id = $(val).closest('.container').attr('id').replace('-section', '-counter')
+      counter_id = $(@).closest('.container').attr('id').replace('-section', '-counter')
       $('#counters .counter.current').removeClass('current')
       $("##{counter_id}").addClass('current')
-      url = $(val).attr('href')
+      url = $(@).attr('href')
       load(url, counter_id)
       return false
 

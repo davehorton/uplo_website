@@ -58,13 +58,20 @@ class Api::ImagesController < Api::BaseController
     end
     img_info = params[:image]
     image = gallery.images.un_flagged.create(img_info)
+    min_size = image.square? ? Image::PRINTED_SIZES[:square][0] : Image::PRINTED_SIZES[:rectangular][0]
+    if !image.valid_for_size?(min_size)
+      image.destroy
+      @result = { :success => false, :msg => "Low quality of image! Please try again with higher quality images!"}
+      render :json => @result and return
+    end
+
     image.set_as_album_cover if img_info[:is_gallery_cover]
     if img_info[:is_owner_avatar]
       image.set_as_owner_avatar
     elsif image.is_owner_avatar
       current_user.rollback_avatar
     end
-    
+
     if image.save
       @result[:image] = image.serializable_hash(image.default_serializable_options)
       @result[:success] = true
@@ -107,7 +114,7 @@ class Api::ImagesController < Api::BaseController
     elsif image.is_owner_avatar
       current_user.rollback_avatar
     end
-    
+
     if image.update_attributes(img_info)
       @result[:success] = true
       @result[:image] = image.serializable_hash(image.default_serializable_options)
