@@ -278,6 +278,11 @@ class ImagesController < ApplicationController
   end
 
   def update_images
+    if !Gallery.exists?({:id => params[:gallery_id].to_i, :user_id => current_user.id})
+      flash[:error] = 'You cannot edit gallery of other!'
+      redirect_to :controller => :galleries, :actions => :index
+    end
+
     data = JSON.parse params[:images]
     data.each do |img|
       id = img.delete 'id'

@@ -83,6 +83,9 @@ class GalleriesController < ApplicationController
   def edit_images
     if params[:gallery_id].nil?
       @gallery = current_user.galleries.first
+    elsif !Gallery.exists?({:id => params[:gallery_id].to_i, :user_id => current_user.id})
+      flash[:error] = 'You cannot edit gallery of other!'
+      redirect_to :controller => :galleries, :actions => :index
     else
       @gallery = Gallery.find_by_id params[:gallery_id]
     end
