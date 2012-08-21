@@ -670,9 +670,9 @@ class User < ActiveRecord::Base
   # USER PAYMENT PROCESSING
   def total_earn
     result = 0
-    items = self.paid_items(nil)
-    items.each {|item| result += item.quantity * item.price }
-    return result * PAY_RATIO
+    items = self.images
+    items.each {|item| result += item.user_total_sales }
+    return result
   end
 
   def owned_amount
@@ -688,8 +688,8 @@ class User < ActiveRecord::Base
         errors.add(:base, "The owed amount is not enough")
         return false
       else
-        if (owned_amount <= 0)
-          errors.add(:base, "The owed amount not valid")
+        if (amount <= 0)
+          errors.add(:base, "Amount not valid")
           return false
         else
           # PAYPAL WITHDRAW HERE

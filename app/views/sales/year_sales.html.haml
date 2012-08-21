@@ -29,8 +29,9 @@
         .header.text.black.bold.font12= "Amount owed"
         .content.text.bold.font14
           = number_to_currency @user.owned_amount, {:precision => 2} 
-          .request_button
-            = link_to image_tag( 'btn-request-payout.png'), {:controller => :sales, :action => :withdraw}, :method => :post
+          -if (@user.owned_amount > 0)
+            .request_button
+              = link_to image_tag( 'btn-request-payout.png'), {:controller => :sales, :action => :withdraw}, :method => :post
     .line-separator.left.clear
     .sales-wrapper.left
       - (0...(@sales.length - 1)). each do |idx|
