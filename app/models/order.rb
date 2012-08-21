@@ -122,7 +122,7 @@ class Order < ActiveRecord::Base
   protected
     def init_transaction_date
       if self.transaction_date.blank?
-        self.transaction_date = Date.parse("01/07/2012")
+        self.transaction_date = Date.parse "01/11/2011"
       end
       return self.transaction_date
     end
