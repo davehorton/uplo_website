@@ -25,8 +25,6 @@ admin.assign_attributes({
   :confirmation_token => nil,
   :confirmed_at => Time.now.advance(:hours => -1), #bypass email confirmation
   :confirmation_sent_at => Time.now.advance(:days => - 1, :hours => -1), #bypass email confirmation,
-  :cvv => "123",
-  :card_number => "123",
   :is_admin => true
 }, :as => :admin)
 

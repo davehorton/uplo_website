@@ -11,21 +11,21 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120815102610) do
+ActiveRecord::Schema.define(:version => 20120820110654) do
 
   create_table "addresses", :force => true do |t|
     t.string   "first_name"
     t.string   "last_name"
     t.string   "optional_address"
-    t.string   "address"
+    t.string   "street_address"
     t.string   "city"
-    t.string   "zip_code"
+    t.string   "zip"
     t.string   "state"
-    t.string   "phone_number"
-    t.string   "fax_number"
+    t.string   "phone"
+    t.string   "fax"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "country"
+    t.string   "country",          :default => "usa"
   end
 
   create_table "carts", :force => true do |t|
@@ -243,6 +243,7 @@ ActiveRecord::Schema.define(:version => 20120815102610) do
     t.integer  "billing_address_id"
     t.boolean  "is_enable_facebook",                    :default => false
     t.boolean  "is_enable_twitter",                     :default => false
+    t.float    "withdrawn_amount",                      :default => 0.0
   end
 
   add_index "users", ["email"], :name => "index_users_on_email", :unique => true
