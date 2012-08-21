@@ -89,7 +89,22 @@ class User < ActiveRecord::Base
   scope :active_users, where(:is_removed => false, :is_banned => false)
   scope :removed_users, where(:is_removed => true)
   scope :flagged_users, where(:is_removed => false, :is_banned => true)
-  scope :reinstate_ready_users, flagged_users.where("flagged_images_count < ?", MIN_FLAGGED_IMAGES)
+  
+  scope :reinstate_ready_users, flagged_users.joins(self.sanitize_sql([
+    "LEFT JOIN (
+        SELECT galleries.user_id,
+        SUM(images_data.flagged_images_count) AS flagged_images_count
+        FROM galleries JOIN (
+          SELECT gallery_id, COUNT(flagged_images.id) AS flagged_images_count
+          FROM (#{Image.flagged.to_sql}) AS flagged_images GROUP BY gallery_id
+        ) images_data ON galleries.id = images_data.gallery_id
+        GROUP BY galleries.user_id
+      ) galleries_data
+      ON galleries_data.user_id = users.id
+      AND galleries_data.flagged_images_count < ?",
+      MIN_FLAGGED_IMAGES])
+    ).select("DISTINCT users.*, galleries_data.flagged_images_count")
+    
   scope :confirmed_users, where("confirmed_at IS NOT NULL AND is_removed = ?", false)
 
   after_create :cleanup_invitation
