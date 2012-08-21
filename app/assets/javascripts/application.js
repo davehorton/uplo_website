@@ -72,7 +72,7 @@ helper = {
             callback.call();
           }
         });
-      } else {
+      } else if($('#simplemodal-container').find('#mask').length > 0){
         $.modal.close();
       }
     });

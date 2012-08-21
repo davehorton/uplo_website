@@ -1,7 +1,7 @@
 helper.endless_load_more( ->
   if($(document).height() - 20  <= $(window).height())
     return $(window).scroll()
-  else
+  else if $('#simplemodal-container').find('#mask').length > 0
     return $.modal.close()
 )
 load = (url, counter)->
@@ -55,7 +55,7 @@ requestFollow = (node) ->
       if(response.success==false)
         helper.show_notification(response.msg)
         $.modal.close()
-        
+
       else if(is_unfollow=='false')
         target.attr('data-following', 'true')
         target.removeClass('follow-small')
@@ -193,7 +193,7 @@ $ ->
         if(response.success==false)
           helper.show_notification(response.msg)
           $.modal.close()
-          
+
         else if(is_unfollow=='false')
           $('#btn-follow').attr('data-following', 'true')
           $('#btn-follow').removeClass('follow')
