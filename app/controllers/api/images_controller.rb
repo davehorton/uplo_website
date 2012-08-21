@@ -34,9 +34,13 @@ class Api::ImagesController < Api::BaseController
   # params: image[data], gallery_id, image[name], image[description]
   def upload_image
     @result[:success] = false
-
     if !user_signed_in?
       @result[:msg] = "You must login first."
+      return render :json => @result
+    end
+
+    if (current_user.paypal_email.blank?)
+      @result[:msg] = "You have to update your Paypal email"
       return render :json => @result
     end
     img_size = File.new(params[:image][:data].tempfile).size
