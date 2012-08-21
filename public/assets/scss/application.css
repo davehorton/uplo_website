@@ -986,11 +986,14 @@ textarea {
   margin: 13px 0px; }
 #center #order-preview {
   margin-bottom: 30px;
-  overflow: hidden; }
+  overflow: hidden;
+  line-height: 300px;
+  border: none; }
   #center #order-preview #preview-frame {
     width: 100%;
     height: 100%;
-    overflow: hidden; }
+    overflow: hidden;
+    position: relative; }
 #center .wrapper.the-app {
   margin-top: -10px; }
 #center .container {
