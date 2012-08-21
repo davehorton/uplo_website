@@ -11,10 +11,27 @@
   - else
     .sale-chart.left
       = render :partial => 'chart', :locals => {:total_sales => @year_sales, :sales => @monthly_sales}
-    .payment-info.left
+    %br
+    %br
+    %br
+    %br
+    %br
+    %br
+    %br
+    %br
+    .payment-info.right
+      .round-box.option.right
+        .header.text.black.bold.font12= "Total amount earned"
+        .content.text.bold.font14
+          = number_to_currency @user.total_earn, {:precision => 2} 
+      %br
+      .round-box.option.right
+        .header.text.black.bold.font12= "Amount owed"
+        .content.text.bold.font14
+          = number_to_currency @user.owned_amount, {:precision => 2} 
+          .request_button
+            = link_to image_tag( 'btn-request-payout.png'), {:controller => :sales, :action => :withdraw}, :method => :post
     .line-separator.left.clear
-      .header
-        Test
     .sales-wrapper.left
       - (0...(@sales.length - 1)). each do |idx|
         - image = @sales[idx]
@@ -30,7 +47,7 @@
             .price
               %span.text.fuzzy-gray.bold.font18= number_to_currency image_sales, {:precision => 2}
               %span.text.fuzzy-gray.font14 Cumulative
-            %a{ :href => "#{ url }"}
+            %a.left{ :href => "#{ url }"}
               .btn-detail
           .line-separator.left
 
@@ -47,7 +64,7 @@
           .text.fuzzy-gray.price
             %span.text.bold.fuzzy-gray.font18= number_to_currency image_sales, {:precision => 2}
             %span.text.font14 Cumulative
-          %a{ :href => "#{ url }"}
+          %a.left{ :href => "#{ url }"}
             .btn-detail
 
   .clear= render_pagination(@sales, {:controller => "sales", :action => params[:action]})

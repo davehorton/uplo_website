@@ -688,9 +688,14 @@ class User < ActiveRecord::Base
         errors.add(:base, "The owed amount is not enough")
         return false
       else
-        # PAYPAL WITHDRAW HERE
-        self.increment!(:withdrawn_amount, amount)
-        return true
+        if (owned_amount <= 0)
+          errors.add(:base, "The owed amount not valid")
+          return false
+        else
+          # PAYPAL WITHDRAW HERE
+          self.increment!(:withdrawn_amount, amount)
+          return true
+        end
       end
     end
   end

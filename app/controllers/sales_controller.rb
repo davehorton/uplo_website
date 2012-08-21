@@ -17,6 +17,22 @@ class SalesController < ApplicationController
     @sales = current_user.raw_sales(@filtered_params)
     @monthly_sales = current_user.monthly_sales(Time.now)
     @year_sales = total_sales(@monthly_sales)
+    @user = current_user
+  end
+
+  def withdraw
+    if (current_user.withdraw_paypal(current_user.owned_amount))
+      flash[:notice] = "Withdraw successfully"
+    else
+      error = '<ul>'
+      current_user.errors.full_messages.each do |message|
+        error << "<li>#{message}</li>"
+      end
+      error << '</ul>'
+      flash[:errors] = error.html_safe
+    end
+
+    redirect_to :controller => 'sales', :action => 'year_sales'
   end
 
   protected

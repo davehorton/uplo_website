@@ -53,6 +53,7 @@ Uplo::Application.routes.draw do
   get "sales", :to => "sales#index"
   get "sales/year_sales", :to => "sales#year_sales"
   get "sales/image_sale_details", :to => "sales#image_sale_details"
+  post "sales/withdraw", :to => "sales#withdraw"
 
   match '/payments/paypal_notify' => 'payments#paypal_notify'
   match '/payments/paypal_result' => 'payments#paypal_result'

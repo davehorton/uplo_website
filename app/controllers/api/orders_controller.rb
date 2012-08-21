@@ -69,7 +69,7 @@ class Api::OrdersController < Api::BaseController
         image = Image.un_flagged.find_by_id item_info['image_id']
         unless image.nil?
           item.attributes = item_info
-          item.price = image.get_price(image.tier, item_info[:size], item_info[:moulding])
+          item.price = image.get_price(image.tier, item_info["size"], item_info["moulding"])
           result << item
         end
       end
