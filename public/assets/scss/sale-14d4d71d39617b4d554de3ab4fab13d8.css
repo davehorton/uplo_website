@@ -44,6 +44,25 @@
     .sale-item.detail .info .quantity {
       margin-top: 10px; }
 
+.round-box {
+  width: 147px; }
+
+.option {
+  margin-bottom: 15px; }
+  .option .header {
+    line-height: 31px;
+    padding-left: 10px;
+    background: url("/assets/option-header-bg.png") repeat-x scroll 0 0 transparent;
+    border-bottom: 1px solid #cccccc;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px; }
+  .option .content {
+    margin: 10px; }
+
+.request_button {
+  margin-top: 10px;
+  cursor: pointer; }
+
 .sale-info {
   width: 100%; }
   .sale-info .header {
