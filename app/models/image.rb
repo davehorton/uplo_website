@@ -591,7 +591,7 @@ class Image < ActiveRecord::Base
     saled_items = (orders.length==0) ? [] : self.line_items.where("order_id in (#{orders_in.join(',')})")
     saled_items.each { |item| total += (item.price * item.quantity) }
 
-    return total/2
+    return total * PAY_RATIO
 
   end
 
@@ -681,7 +681,7 @@ class Image < ActiveRecord::Base
           :user_id => user.id
         }
         result[:total_quantity] += item.quantity
-        result[:total_sale] += item.quantity * (item.tax + item.price)
+        result[:total_sale] += (item.quantity *  item.price)/2
       }
     end
 
@@ -786,7 +786,9 @@ class Image < ActiveRecord::Base
       geo = Paperclip::Geometry.from_file(file)
       self.width = geo.width
       self.height = geo.height
-      self.name = file.original_filename.gsub(/(.jpeg|.jpg|.png|.gif)$/i, '') if file.original_filename =~ /(.jpeg|.jpg|.png|.gif)$/i
+      if (self.name.blank?)
+        self.name = file.original_filename.gsub(/(.jpeg|.jpg)$/i, '') if file.original_filename =~ /(.jpeg|.jpg)$/i
+      end
     end
 
 

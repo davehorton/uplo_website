@@ -18,36 +18,43 @@ class Api::OrdersController < Api::BaseController
   # {order => {:images => "[{"image_id":1, "plexi_mount":"true", "size":"500x500", "moulding":"Wood", "quantity":"5"}]",
   #            :transaction_code => "*", :transaction_status => "*"}
   def create_order
+    card_required_info = ['name_on_card', 'card_type', 'card_number', 'expiration']
     order_info = params[:order]
+    order_info[:expiration] = (Date.parse order_info[:expiration]).strftime("%m-%Y")
     images = order_info.delete(:images)
     order_info[:user] = @user
+
+    # Checking requested information
+    card_required_info.each { |val|
+      if !params[:order].has_key?(val) || params[:order][val].blank?
+        @result[:msg] = "Please fill all required fields first!"
+        @result[:success] = false
+        render :json => @result and return
+      end
+    }
+
     order = Order.new(order_info)
     order_items = build_order_items(JSON.parse(images))
-    billing_address = Address.new params[:billing_address]
-    order.billing_address = billing_address
-    if params.has_key?(:ship_to_billing) && params[:ship_to_billing]!='' && SharedMethods::Converter.Boolean(params[:ship_to_billing])
-      order.shipping_address = billing_address
-    else
-      order.shipping_address = Address.new params[:shipping_address]
-    end
     order.transaction_date = Time.now
-
+    order.line_items << order_items
     done = false
-    if order.valid?
-      order.compute_totals
-      if order.transaction_completed? && order.finalize_transaction
-        @result[:order_id] = order.id
-        done = true
-      elsif order.save
-        order.line_items << order_items
-        @result[:order_id] = order.id
-        done = true
+    if current_user.update_profile(order_info)
+      if order.valid?
+        order.compute_totals
+        if order.finalize_transaction
+          @result[:order_id] = order.id
+          done = true
+        end
       end
+    else
+      @result[:success] = false
+      @result[:msg] = current_user.errors.full_messages
+      return render :json => @result
     end
 
     @result[:success] = done
     if !done
-      @result[:msg] = order.errors
+      @result[:msg] = order.errors.full_messages
     end
 
     return render :json => @result
@@ -62,7 +69,7 @@ class Api::OrdersController < Api::BaseController
         image = Image.un_flagged.find_by_id item_info['image_id']
         unless image.nil?
           item.attributes = item_info
-          item.price = (item.price.nil? ? '0' : image.price)
+          item.price = image.get_price(image.tier, item_info[:size], item_info[:moulding])
           result << item
         end
       end

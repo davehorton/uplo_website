@@ -10,13 +10,13 @@
       .line_info
         = [address.first_name, address.last_name].join(' ')
       .line_info
-        = address.address
+        = address.street_address
         %br
         = address.optional_address
       .line_info
         = [address.city, address.state].join(',')
       .line_info
-        = address.zip_code
+        = address.zip
 
   .yield_edit.hide
     = simple_form_for address, :url => user_path(@user) , :remote => true, :method => :put do |add|
@@ -31,11 +31,11 @@
       .form_wrapper.left{:style => "width:200px; margin-left:10px"}
         .line= add.input_field :first_name
         .line= add.input_field :last_name
-        .line= add.input_field :address
+        .line= add.input_field :street_address
         .line= add.input_field :optional_address
         .line= add.input_field :city
-        .line= add.select :state, state_options, {:prompt => 'Select One'}
-        .line= add.input_field :zip_code
+        .line= add.select :state, state_options(address.state), {:prompt => 'Select One'}
+        .line= add.input_field :zip
         .line= hidden_field :user, :type_update, :value => :billing_address
         %br
         .update_button.left

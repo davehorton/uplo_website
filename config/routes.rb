@@ -99,6 +99,7 @@ Uplo::Application.routes.draw do
     put 'update_profile_info', :to => 'users#update_profile_info'
     get 'unlike_image', :to => 'users#unlike_image'
     post 'request_invitation', :to => 'users#request_invitation'
+
   end
 
   # ADMIN SECTIONS
@@ -169,6 +170,10 @@ Uplo::Application.routes.draw do
       post 'get_notification_settings', :to => 'users#get_notification_settings'
       post 'update_notification_settings', :to => 'users#update_notification_settings'
       post "check_emails", :to => "users#check_emails"
+      get 'payment_info', :to => "users#get_user_payment_info"
+      post 'withdraw', :to => "users#withdraw"
+      post 'card_info', :to => "users#get_user_card_info"
+      get 'get_moulding', :to => 'users#get_moulding'
     end
 
     # Gallery

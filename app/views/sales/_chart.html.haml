@@ -62,8 +62,14 @@
                 },
                 plotOptions: {
                     column: {
+                        color: {
+                            linearGradient: [0, 0, 0, 290],
+                            stops: [
+                                [0, '#ee3c03'],
+                                [1, '#ac0d00']
+                            ]
+                        },
                         cursor: 'pointer',
-                        color:'#fc7700',
                         pointPadding: 0,
                         borderWidth: 0,
                         shadow: false

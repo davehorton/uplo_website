@@ -42,7 +42,7 @@ module ApplicationHelper
     options_for_select(options, active)
   end
 
-  def state_options
+  def state_options(state = nil)
     options_for_select({
       'Alaska' => 'AK', 'Alabama' => 'AL', 'Arkansas' => 'AR', 'American Samoa' => 'AS', 'Arizona' => 'AZ',
       'California' => 'CA', 'Colorado' => 'CO', 'Connecticut' => 'CT', 'D.C.' => 'DC', 'Delaware' => 'DE',
@@ -65,7 +65,7 @@ module ApplicationHelper
       'Virginia' => 'VA', 'Virgin Islands' => 'VI', 'Vermont' => 'VT',
       'Washington' => 'WA', 'Wisconsin' => 'WI', 'West Virginia' => 'WV', 'Wyoming' => 'WY',
       'Military Americas' => 'AA', 'Military Europe/ME/Canada' => 'AE', 'Military Pacific' =>  'AP'
-    })
+    }, state)
   end
 
   def popular_sort_options

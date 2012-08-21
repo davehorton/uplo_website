@@ -272,6 +272,49 @@ class Api::UsersController < Api::BaseController
     render :json => result
   end
 
+  # GET /api/payment_info
+  # Params
+  # 
+
+  def get_user_payment_info
+    result = { :success => true, :msg => "", :payment_info => {}}
+    result[:payment_info][:total_earn] = current_user.total_earn
+    result[:payment_info][:owned_amount] = current_user.owned_amount
+    render :json => result
+  end
+
+  def get_user_card_info
+    result = { :success => true, :msg => "", :card_info => {}}
+    result[:card_info][:name_on_card] = current_user.name_on_card
+    result[:card_info][:card_type] = current_user.card_type
+    result[:card_info][:card_number] = current_user.card_number
+    result[:card_info][:expiration] = Date.parse(current_user.expiration).strftime("%m/%Y")
+    render :json => result
+  end
+
+  def get_moulding
+    result = { :success => true, :msg => "", :moulding => Image::MOULDING, :discount => Image::MOULDING_DISCOUNT}
+    render :json => result
+  end
+
+  # POST /api/withdraw
+  # Params
+  # amount => float
+
+  def withdraw
+    result = { :success => false, :msg => "", :payment_info => {}}
+    amount = params[:amount].to_f
+
+    if (@user.withdraw_paypal amount)
+      result[:success] = true
+    else
+      result[:msg] = @user.errors.full_messages
+    end
+    result[:payment_info][:total_earn] = @user.total_earn
+    result[:payment_info][:owned_amount] = @user.owned_amount
+    render :json => result
+  end
+
   protected
   # Init a hash containing user's info
   def init_user_info(user)
@@ -316,4 +359,6 @@ class Api::UsersController < Api::BaseController
     }
     return result
   end
+
+
 end

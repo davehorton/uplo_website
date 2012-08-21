@@ -80,6 +80,7 @@ class PaymentsController < ApplicationController
         end
         redirect_to pp_gateway.redirect_url_for(setup_response.token)
       when "an"
+        order_info = params[:order]
         address_required_info = ['first_name', 'last_name', 'street_address', 'city', 'zip', 'state']
         card_required_info = ['name_on_card', 'card_type', 'card_number', 'expiration(1i)', 'expiration(2i)']
 
@@ -90,30 +91,30 @@ class PaymentsController < ApplicationController
           end
         }
         remove_shipping_info = false
-        if params[:order]['ship_to_billing'].blank? || !SharedMethods::Converter::Boolean(params[:order]['ship_to_billing'])
+        if order_info['ship_to_billing'].blank? || !SharedMethods::Converter::Boolean(order_info['ship_to_billing'])
           
         else
-          params[:order][:shipping_address_attributes] = params[:order][:billing_address_attributes]
+          order_info[:shipping_address_attributes] = order_info[:billing_address_attributes]
           remove_shipping_info = true
         end
-        params[:order][:shipping_address_attributes].delete 'id'
-        params[:order][:billing_address_attributes].delete 'id'
-        params[:order].delete 'ship_to_billing'
+        order_info[:shipping_address_attributes].delete 'id'
+        order_info[:billing_address_attributes].delete 'id'
+        order_info.delete 'ship_to_billing'
         # UPDATE PAYMENT INFO TO ORDER
 
-        expires_on = Date.civil(params[:order]["expiration(1i)"].to_i,
-                         params[:order]["expiration(2i)"].to_i, 1)
-        params[:order][:expiration] = expires_on.strftime("%m-%Y")
-        params[:order].delete "expiration(1i)"
-        params[:order].delete "expiration(2i)"
-        params[:order].delete "expiration(3i)"
-        card_string = params[:order]["card_number"]
+        expires_on = Date.civil(order_info["expiration(1i)"].to_i,
+                         order_info["expiration(2i)"].to_i, 1)
+        order_info[:expiration] = expires_on.strftime("%m-%Y")
+        order_info.delete "expiration(1i)"
+        order_info.delete "expiration(2i)"
+        order_info.delete "expiration(3i)"
+        card_string = order_info["card_number"]
 
         @order = Order.find_by_id params[:order_id]
         if @order.update_attributes(params[:order])
-          params[:order].delete 'shipping_address_attributes' if remove_shipping_info
-          if current_user.update_profile(params[:order])
-            an_value = Payment.create_authorizenet_test(card_string, expires_on, {:shipping => params[:order][:shipping_address], :address => params[:address]})
+          order_info.delete 'shipping_address_attributes' if remove_shipping_info
+          if current_user.update_profile(order_info)
+            an_value = Payment.create_authorizenet_test(card_string, expires_on, {:shipping => order_info[:shipping_address_attributes], :address => order_info[:billing_address_attributes]})
             response = an_value[:transaction].purchase(@order.order_total, an_value[:credit_card])
 
             success = !response.nil? and response.success?

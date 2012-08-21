@@ -667,6 +667,34 @@ class User < ActiveRecord::Base
     (self.is_removed || self.is_banned?)
   end
 
+  # USER PAYMENT PROCESSING
+  def total_earn
+    result = 0
+    items = self.paid_items(nil)
+    items.each {|item| result += item.quantity * item.price }
+    return result * PAY_RATIO
+  end
+
+  def owned_amount
+    self.total_earn - withdrawn_amount
+  end
+
+  def withdraw_paypal(amount)
+    if (self.paypal_email.blank?)
+      errors.add(:paypal_email, "must be exists")
+      return false
+    else
+      if (amount > owned_amount)
+        errors.add(:base, "The owed amount is not enough")
+        return false
+      else
+        # PAYPAL WITHDRAW HERE
+        self.increment!(:withdrawn_amount, amount)
+        return true
+      end
+    end
+  end
+
   protected
   
     def need_checking_password?

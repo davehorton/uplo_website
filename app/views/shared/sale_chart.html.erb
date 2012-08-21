@@ -76,7 +76,13 @@ $(function () {
                 column: {
                     pointPadding: 0,
                     borderWidth: 0,
-                    color:'#fc7700'
+                    color:{
+                            linearGradient: [0, 0, 0, 290],
+                            stops: [
+                                [0, '#ed3b03'],
+                                [1, '#aa0b00']
+                            ]
+                        },
                 }
             },
                 series: [ {
