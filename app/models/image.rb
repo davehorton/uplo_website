@@ -336,7 +336,7 @@ class Image < ActiveRecord::Base
     end
 
     def exposed_attributes
-      [:id, :name, :description, :data_file_name, :gallery_id, :price, :likes, :keyword,
+      [:id, :name, :description, :data_file_name, :name, :gallery_id, :price, :likes, :keyword,
         :is_owner_avatar, :is_gallery_cover, :tier]
     end
 
