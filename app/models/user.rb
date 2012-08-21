@@ -516,7 +516,7 @@ class User < ActiveRecord::Base
   def monthly_sales(report_date=Time.now)
     result = []
     date = DateTime.parse report_date.to_s
-    prior_months = TimeCalculator.prior_year_period(date, {:format => '%b %Y'})
+    prior_months = SharedMethods::TimeCalculator.prior_year_period(date, {:format => '%b %Y'})
     prior_months.each { |mon|
       total_sales = 0
       self.images.un_flagged.each { |img| total_sales += img.user_total_sales(mon) }
