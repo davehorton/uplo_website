@@ -518,9 +518,10 @@ class User < ActiveRecord::Base
     date = DateTime.parse report_date.to_s
     prior_months = SharedMethods::TimeCalculator.prior_year_period(date, {:format => '%b %Y'})
     prior_months.each { |mon|
+      short_mon = DateTime.parse(mon).strftime('%b')
       total_sales = 0
       self.images.un_flagged.each { |img| total_sales += img.user_total_sales(mon) }
-      result << { :month => mon, :sales => total_sales }
+      result << { :month => short_mon, :sales => total_sales }
     }
     return result
   end
