@@ -84,7 +84,7 @@ class User < ActiveRecord::Base
   validates_presence_of :paypal_email_confirmation, :if => :paypal_email_changed?
   validates :paypal_email, :email => true, :if => :paypal_email_changed?
   validate :check_card_number
-  
+
   # SCOPE
   scope :active_users, where(:is_removed => false, :is_banned => false)
   scope :removed_users, where(:is_removed => true)
@@ -98,7 +98,7 @@ class User < ActiveRecord::Base
   def check_card_number
     if (card_number)
       unless number_valid? && number_matches_type?
-        errors.add(:card_number, "is not a #{readable_card_type} or is invalid") 
+        errors.add(:card_number, "is not a #{readable_card_type} or is invalid")
         return false
       end
     end
@@ -146,10 +146,10 @@ class User < ActiveRecord::Base
 
     def card_types
       {"American Express" => "USA_express",
-        "Discover" => "discover", 
-        "Visa" => "visa", 
-        "JCB" => "jcb", 
-        "Diners Club/ Carte Blanche" => "dinners_club", 
+        "Discover" => "discover",
+        "Visa" => "visa",
+        "JCB" => "jcb",
+        "Diners Club/ Carte Blanche" => "dinners_club",
         "Master Card" => "master_card"
       }
     end
@@ -188,7 +188,7 @@ class User < ActiveRecord::Base
       )
     end
 
-    # Search within public images & private of user
+    # Search confirmed user, display banned user or not depend on admin_mod
     def do_search(params = {})
       admin_mod = params[:admin_mod].nil? ? false : params[:admin_mod]
       if admin_mod
@@ -274,9 +274,8 @@ class User < ActiveRecord::Base
           :order => paging_info.sort_string,
           :sort_mode => :extended
         })
-        self.search(
-          SharedMethods::Converter::SearchStringConverter.process_special_chars(params[:query]),
-          sphinx_search_options)
+        search_term = SharedMethods::Converter::SearchStringConverter.process_special_chars(params[:query])
+        User.search search_term, sphinx_search_options
       end
   end
 
@@ -359,7 +358,7 @@ class User < ActiveRecord::Base
         # Remove sensitive parameter.
         params.delete(key)
       end
-      
+
       result = self.update_without_password(params)
     end
 
@@ -701,11 +700,11 @@ class User < ActiveRecord::Base
   end
 
   protected
-  
+
     def need_checking_password?
       (!self.force_submit && self.password_required?)
     end
-    
+
     def cleanup_invitation
       Invitation.destroy_all(:email => self.email)
     end
