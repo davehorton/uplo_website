@@ -1,3 +1,5 @@
+#= require 'app/image_util.js'
+  
 computePrice = ->
   size = $('#line_item_size').val()
   moulding = $('#line_item_moulding').val()
@@ -26,12 +28,6 @@ $ ->
       if !reg.test(val)
         return false;
 
-  $('#line_item_quantity').keyup -> computePrice()
+  $('#line_item_quantity').keyup -> computePrice()  
 
-  # Scale and change the frame based on the print-size.
-  $('#line_item_size').change ->
-    url = $(@).find("option[value=#{$(@).val()}]").attr('data-url')
-    $('#preview-frame img').attr('src', url)
-
-  # Force change of page-loading.
-  $('#line_item_size').change();
+  order_preview.setup()
