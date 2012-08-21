@@ -183,7 +183,7 @@ module SharedMethods
     end
 
     class SearchStringConverter
-      SPECIAL_CHARS = ["@", "&", "^", "~", "$", "!", "+", "-", "|", "{", "}", "?", "/", "\\", "<", ">", ";", ":", "#", "%", "*", "(", ")", "=", "\"", ".", "\,", "'", "\"", "_"]
+      SPECIAL_CHARS = ["@", "&", "^", "~", "$", "!", "+", "-", "|", "{", "}", "?", "/", "\\", "<", ">", ";", ":", "#", "%", "*", "(", ")", "=", "\"", ".", "\,", "'", "\"", "_", "\#", "[", "]", "`"]
 
       def self.contain_special_character?(str)
         SPECIAL_CHARS.each{|c| return true if str.index(c)}
