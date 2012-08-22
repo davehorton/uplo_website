@@ -147,8 +147,9 @@ order_preview = {
       url_right: "<%= asset_path('img-frames/lightwood-right.png') %>",
       url_bottom: "<%= asset_path('img-frames/lightwood-bottom.png') %>",
       url_left: "<%= asset_path('img-frames/lightwood-left.png') %>",
-      margin_top: 100,
-      margin_left: 102
+      margin_top: 107,
+      margin_left: 101,
+      corner_width: 118
     },
     
     rustic_wood: {
@@ -157,8 +158,9 @@ order_preview = {
       url_right: "<%= asset_path('img-frames/rustic-right.png') %>",
       url_bottom: "<%= asset_path('img-frames/rustic-bottom.png') %>",
       url_left: "<%= asset_path('img-frames/rustic-left.png') %>",
-      margin_top: 125,
-      margin_left: 125 
+      margin_top: 122,
+      margin_left: 123,
+      corner_width: 350
     }
   },
   
@@ -346,6 +348,11 @@ order_preview = {
     frame_img.width(frame_info.margin_left);
     frame_img.height(frame_height - frame_info.margin_top*2);
     
+    // Detect the corner size.
+    var corner_width = frame_info.corner_width;
+    if(!corner_width || corner_width <= 0)
+      corner_width = frame_info.margin_left;
+      
     //====== conner: top-left =======
     var tmp_img = $('<img id="frame-top-left" src="' + url_top + '"/>');
     tmp_img.css({
@@ -362,7 +369,7 @@ order_preview = {
       overflow: 'hidden',
       left: 0,
       top: 0,
-      width: frame_info.margin_left,
+      width: corner_width,
       height: frame_info.margin_top,
       'z-index': 11
     });
@@ -383,7 +390,7 @@ order_preview = {
       overflow: 'hidden',
       right: 0,
       top: 0,
-      width: frame_info.margin_left,
+      width: corner_width,
       height: frame_info.margin_top,
       'z-index': 11
     });
@@ -404,7 +411,7 @@ order_preview = {
       overflow: 'hidden',
       left: 0,
       bottom: 0,
-      width: frame_info.margin_left,
+      width: corner_width,
       height: frame_info.margin_top,
       'z-index': 11
     });
@@ -425,7 +432,7 @@ order_preview = {
       overflow: 'hidden',
       right: 0,
       bottom: 0,
-      width: frame_info.margin_left,
+      width: corner_width,
       height: frame_info.margin_top,
       'z-index': 11
     });
