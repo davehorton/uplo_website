@@ -994,6 +994,8 @@ textarea {
     height: 100%;
     overflow: hidden;
     position: relative; }
+    #center #order-preview #preview-frame #preview-image {
+      border: 1px solid #A1A1A1; }
 #center .wrapper.the-app {
   margin-top: -10px; }
 #center .container {
