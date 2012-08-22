@@ -71,9 +71,9 @@ image_util = {
       var ratio = 1;
       
       if(!width){
-        width = parseFloat($(img).attr('data-width'), 10);
+        width = parseFloat($(img).attr('data-width'));
       }      
-      var parent_width = parseFloat($(parent).css('max-width'), 10);
+      var parent_width = parseFloat($(parent).css('max-width'));
       if(width > 0 && width <= parent_width){
         $(parent).width(width);
       }
@@ -88,6 +88,21 @@ image_util = {
       
       $(img).center();
     }
+  },
+  
+  // Calculate ratio from the size string:
+  // Ex: ratio_from_size('5x7') //=> 0.714
+  ratio_from_size: function(size_string){
+    var sizes = size_string.toLowerCase().split('x', 2);
+    var ratio = 0;
+    if(sizes.length == 2){
+      sizes[0] = parseFloat(sizes[0]);
+      sizes[1] = parseFloat(sizes[1]);
+      if(sizes[1] > 0)
+        ratio = sizes[0] / sizes[1];
+    }
+    
+    return ratio;
   }
 };
 
@@ -242,8 +257,8 @@ order_preview = {
     
     // Scale the image and frame to fit the preview canvas
     if(frame_info.scalable){
-      var img_width = parseFloat($(img).attr('data-original-width'), 10);
-      var img_height = parseFloat($(img).attr('data-original-height'), 10);
+      var img_width = parseFloat($(img).attr('data-original-width'));
+      var img_height = parseFloat($(img).attr('data-original-height'));
       
       // Store the original width and height of the image.      
       if(!img_width || !img_height){
@@ -266,9 +281,20 @@ order_preview = {
       if(frame_width >= order_preview.max_width){
         frame_width = order_preview.max_width;
         var new_img_width = frame_width - frame_info.margin_left * 2;   
-             
-        // Scale the image height with ratio.
-        var new_img_height = img_height * (new_img_width / img_width);
+        
+        // Scale the image height with the image's ratio.
+        var ratio = image_util.ratio_from_size($('#line_item_size').val());
+        var new_img_height = 0;
+        if(ratio > 0){
+          // Because our current ratio is always the result of min_number/max_number,
+          // we must detect the image is portrait or landscape to get the correct ratio.
+          if(img_width < img_height)
+            ratio = 1/ratio; // Inverse the ratio.
+            
+          new_img_height = new_img_width * ratio;
+        }
+        else
+          new_img_height = img_height * (new_img_width / img_width);
         
         frame_height = new_img_height + frame_info.margin_top * 2;
         

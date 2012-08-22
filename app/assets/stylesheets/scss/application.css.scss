@@ -1138,6 +1138,10 @@ textarea { padding-top:5px; }
       height: 100%;
       overflow: hidden;
       position: relative;
+      
+      #preview-image{
+        border: 1px solid #A1A1A1;
+      }
     }
   }
   .wrapper.the-app { margin-top: -10px; }
