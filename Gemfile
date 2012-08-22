@@ -54,7 +54,7 @@ group :assets do
 end
 
 gem 'jquery-rails'
-gem 'thinking-sphinx', '2.0.10'
+gem 'thinking-sphinx', '>= 2.0.10'
 gem 'flying-sphinx',   '>= 0.6.2'
 
 
@@ -79,7 +79,7 @@ group :development do
   gem "guard-sass"
   gem "guard-coffeescript"
   gem 'taps'
-  
+
   if RUBY_VERSION >= "1.9"
     gem "ruby-debug19"
   else
