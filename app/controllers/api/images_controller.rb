@@ -69,8 +69,8 @@ class Api::ImagesController < Api::BaseController
       render :json => @result and return
     end
 
-    image.set_as_album_cover if img_info[:is_gallery_cover]
-    if img_info[:is_owner_avatar]
+    image.set_as_album_cover if SharedMethods::Converter::Boolean(img_info['is_gallery_cover'])
+    if SharedMethods::Converter::Boolean(img_info['is_owner_avatar'])
       image.set_as_owner_avatar
     elsif image.is_owner_avatar
       current_user.rollback_avatar

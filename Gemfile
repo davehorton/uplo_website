@@ -44,6 +44,9 @@ gem 'country-select'
 # Validate Email
 gem 'valid_email'
 
+#AES Crypt
+gem 'aescrypt'
+
 # Gems used only for assets and not required
 # in production environments by default.
 group :assets do

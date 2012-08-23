@@ -4,6 +4,7 @@ class Api::BaseController < ActionController::Base
   before_filter :set_current_user
   before_filter :filter_params
   before_filter :set_global_variable
+  before_filter :decrypt_params
   
   PAGE_SIZE = 20
   MAX_PAGE_SIZE = 100
@@ -47,6 +48,18 @@ class Api::BaseController < ActionController::Base
   end
   
   protected
+  # Override render method for encrypting
+  def render(options = nil, deprecated_status = nil, &block)
+    key_for_decrypt = "a3317f627b92eef9b6126b7a50e196c3"
+    if (options.has_key? :json)
+      result_string = options[:json]
+      result = AESCrypt.encrypt(result_string.to_json.to_s, key_for_decrypt)
+      options.delete :json
+      options[:text] = result
+    end
+    # call the ActionController::Base render to show the page
+    super
+  end
   
   def setup_device_call
     request.format = :json
@@ -88,5 +101,32 @@ class Api::BaseController < ActionController::Base
   def set_global_variable
     @result = {:success => false}
     @user = current_user
+  end
+
+  def decrypt_params
+    return if request.get?
+    a = decrypt_recursive(params)
+    puts "========"
+    puts a
+  end
+
+  def decrypt_recursive(hash, parent = nil)
+    key_for_decrypt = "a3317f627b92eef9b6126b7a50e196c3"
+    hash.each do |key, value|
+      if (value.kind_of?(Hash))
+        decrypt_recursive(value, key) 
+      else
+        if (key != 'action' && key != 'controller' && key != 'format')
+          puts '=========='
+          puts key
+          if (!value.kind_of?(Array) && !value.kind_of?(Hash))
+            if !(value =~ /^-?[0-9]+$/)
+              value = AESCrypt.decrypt(value, key_for_decrypt) 
+            end
+          end
+        end
+      end
+      hash[key] = value
+    end
   end
 end
