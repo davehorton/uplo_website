@@ -554,19 +554,29 @@ order_preview = {
   // Execute the callback method when all images in the queue finished loading.
   on_images_finish_loading: function(images_queue, callback){
     var count = images_queue.length;
+    var exec_callback = function(){
+      count = count - 1; // May me not 'thread-safe' :D
+      if(count == 0){
+        // Run the callback
+        callback();
+      }
+    };
+    
     for(var i = 0; i < images_queue.length; ++i){
       var img = images_queue[i];
+      // On load correctly.
       $(img).load(function(){
-        count = count - 1; // May me not 'thread-safe' :D
-        if(count == 0){
-          // Run the callback
-          callback();
-        }
+        exec_callback();
       });
 
+      // On error
+      $(img).error(function(){
+        exec_callback();
+      });
+      
       // In case the image was cached.          
       if($(img).prop('complete')){
-        $(img).load();
+        exec_callback();
       }
     }
   },
