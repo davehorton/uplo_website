@@ -32,7 +32,7 @@ class Order < ActiveRecord::Base
 
   # SCOPE
   scope :completed_orders, where(:transaction_status => Order::TRANSACTION_STATUS[:complete])
-  
+
   # CLASS METHODS
   class << self
     def load_orders(params = {})
@@ -132,7 +132,7 @@ class Order < ActiveRecord::Base
         items = self.line_items.select('distinct image_id')
         items.each do |item|
           if self.user_id != item.image.author.id
-            Notification.deliver_image_notification(item.image.id, item.image.author.id, Notification::TYPE[:purchase])
+            Notification.deliver_image_notification(item.image.id, self.user_id, Notification::TYPE[:purchase])
           end
         end
       end
