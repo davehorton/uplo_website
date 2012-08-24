@@ -20,8 +20,7 @@
             :class => "button_#{image.id} button remove left")
           
   .image_name.info_line
-    %a.text.black.font11{ :href => url_for(:controller => '/images', 
-        :action => 'browse', :id => image.id) }
+    %a.text.black.font11.image_link{ :href => "#", :target => image.id }
       = truncate(image.name, :length => 20)
   
   .author.info_line

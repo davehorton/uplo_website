@@ -55,8 +55,11 @@
        $("#flag_type_form").submit();
       });
 
-      $(".image_frame").click(function(){
+      $(".image_frame, .flagged_image_container .image_name .image_link").click(function(e){
+       e.preventDefault();
+       
        $("#mask").modal();
+       
        $.ajax({
          url: '<%= url_for(:action => :get_image_popup)%>',
          type: "GET",
