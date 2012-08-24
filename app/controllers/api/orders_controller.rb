@@ -59,13 +59,13 @@ class Api::OrdersController < Api::BaseController
       end
     else
       @result[:success] = false
-      @result[:msg] = current_user.errors.full_messages
+      @result[:msg] = current_user.errors.full_messages.to_sentence
       return render :json => @result
     end
 
     @result[:success] = done
     if !done
-      @result[:msg] = order.errors.full_messages
+      @result[:msg] = order.errors.full_messages.to_sentence
     end
 
     return render :json => @result
