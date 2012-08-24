@@ -431,6 +431,7 @@ class User < ActiveRecord::Base
       self.cart.order.card_type = self.card_type
       self.cart.order.card_number = self.card_number
       self.cart.order.expiration = self.expiration
+      self.cart.order.cvv = self.cvv
     end
 
 

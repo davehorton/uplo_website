@@ -101,8 +101,7 @@ class PaymentsController < ApplicationController
         order_info[:billing_address_attributes].delete 'id'
         order_info.delete 'ship_to_billing'
         # UPDATE PAYMENT INFO TO ORDER
-        transaction = AuthorizeNet::AIM::Transaction.new(AN_CARD_NOT_PRESENT_LOGIN, AN_CARD_NOT_PRESENT_TRANS_KEY, :gateway => :sandbox, :transaction_type => :auth_and_capture, :verify_ssl => false)
-
+        
         
         expires_on = Date.civil(order_info["expiration(1i)"].to_i,
                          order_info["expiration(2i)"].to_i, 1)
