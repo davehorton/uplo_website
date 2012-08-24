@@ -12,7 +12,7 @@ class Image < ActiveRecord::Base
     SORT_OPTIONS[:recent] => 'created_at DESC',
     SORT_OPTIONS[:spotlight] => 'promote_num DESC'
   }
-  FILTER_OPTIONS = ['date_uploaded', 'num_of_views', 'num_of_orders', 'num_of_likes']
+  FILTER_OPTIONS = ['date_uploaded', 'num_of_views', 'num_of_sales', 'num_of_likes']
   SALE_REPORT_TYPE = {
     :quantity => "quantity",
     :price => "price"
@@ -236,8 +236,8 @@ class Image < ActiveRecord::Base
         when 'num_of_views' then
           params[:sort_field] = "images.pageview"
           default_filter_logic.call
-        when 'num_of_orders' then
-          self.load_images_with_orders_count(params)
+        when 'num_of_sales' then
+          self.load_images_with_sales_count(params)
         when 'num_of_likes' then
           params[:sort_field] = "images.likes"
           default_filter_logic.call
@@ -246,18 +246,18 @@ class Image < ActiveRecord::Base
         end
     end
 
-    def load_images_with_orders_count(params = {})
-      params[:sort_field] = "orders_count"
+    def load_images_with_sales_count(params = {})
+      params[:sort_field] = "sales_count"
       paging_info = parse_paging_options(params)
       self.includes(:gallery).joins(self.sanitize_sql([
         "LEFT JOIN (
-          SELECT line_items.image_id, COUNT(line_items.order_id) AS orders_count
+          SELECT line_items.image_id, SUM(line_items.quantity) AS sales_count
           FROM line_items JOIN orders
           ON line_items.order_id = orders.id AND orders.transaction_status = ?
           GROUP BY line_items.image_id
         ) orders_data ON images.id = orders_data.image_id",
         Order::TRANSACTION_STATUS[:complete]
-      ])).select("DISTINCT images.*, COALESCE(orders_data.orders_count, 0) AS orders_count").paginate(
+      ])).select("DISTINCT images.*, COALESCE(orders_data.sales_count, 0) AS sales_count").paginate(
         :page => paging_info.page_id,
         :per_page => paging_info.page_size,
         :order => paging_info.sort_string)
@@ -687,11 +687,13 @@ class Image < ActiveRecord::Base
     self.class.increment_counter(:pageview, self.id)
   end
 
-  def orders_count
-    if !self.attributes.has_key?('orders_count')
-      self.attributes['orders_count'] = self.orders.completed_orders.count
+  def sales_count
+    if !self.attributes.has_key?('sales_count')
+      self.attributes['sales_count'] = self.orders.completed_orders.joins(
+        :line_items
+      ).sum('line_items.quantity').to_i
     else
-      self.attributes['orders_count'].to_i
+      self.attributes['sales_count'].to_i
     end
   end
 
