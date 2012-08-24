@@ -89,7 +89,7 @@ class User < ActiveRecord::Base
   scope :active_users, where(:is_removed => false, :is_banned => false)
   scope :removed_users, where(:is_removed => true)
   scope :flagged_users, where(:is_removed => false, :is_banned => true)
-  
+
   scope :reinstate_ready_users, flagged_users.joins(self.sanitize_sql([
     "LEFT JOIN (
         SELECT galleries.user_id,
@@ -104,7 +104,7 @@ class User < ActiveRecord::Base
       AND galleries_data.flagged_images_count < ?",
       MIN_FLAGGED_IMAGES])
     ).select("DISTINCT users.*, galleries_data.flagged_images_count")
-    
+
   scope :confirmed_users, where("confirmed_at IS NOT NULL AND is_removed = ?", false)
 
   after_create :cleanup_invitation
@@ -698,19 +698,21 @@ class User < ActiveRecord::Base
     if (self.paypal_email.blank?)
       errors.add(:paypal_email, "must be exists")
       return false
+    elsif (amount > owned_amount)
+      errors.add(:base, "The owed amount is not enough")
+      return false
+    elsif (amount <= 0)
+      errors.add(:base, "Amount not valid")
+      return false
     else
-      if (amount > owned_amount)
-        errors.add(:base, "The owed amount is not enough")
-        return false
+      # PAYPAL WITHDRAW HERE
+      paypal_result = Payment.transfer_ballance_via_paypal amount, self.paypal_email
+      if paypal_result.success?
+        self.increment!(:withdrawn_amount, amount)
+        return true
       else
-        if (amount <= 0)
-          errors.add(:base, "Amount not valid")
-          return false
-        else
-          # PAYPAL WITHDRAW HERE
-          self.increment!(:withdrawn_amount, amount)
-          return true
-        end
+        errors.add(:base, 'Cannot payout right now! Please try again later!')
+        return false
       end
     end
   end

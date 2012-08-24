@@ -44,4 +44,15 @@ class Payment
 
     return {:transaction => transaction, :credit_card => credit_card}
   end
+
+  def self.transfer_ballance_via_paypal(amount, receiver)
+    ActiveMerchant::Billing::PaypalGateway.default_currency = 'USD'
+    gateway = ActiveMerchant::Billing::PaypalGateway.new({
+      :login => PP_API_USERNAME,
+      :password => PP_API_PASSWORD,
+      :signature => PP_API_SIGN
+    })
+
+    gateway.transfer(::Util.to_cents(amount), receiver, :subject => 'Payment from UPLO', :note => "UPLO has transfered $#{amount} for your request payout.")
+  end
 end
