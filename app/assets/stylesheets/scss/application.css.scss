@@ -1142,6 +1142,11 @@ textarea { padding-top:5px; }
       #preview-image{
         border: 1px solid #A1A1A1;
       }
+      
+      #preview-waiting{
+        position: relative;
+        z-index: 1000;
+      }
     }
   }
   .wrapper.the-app { margin-top: -10px; }
