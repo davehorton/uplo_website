@@ -1458,7 +1458,7 @@ textarea {
       #non-login-container #session-container #signup-area #frm-request {
         margin-top: 13px; }
     #non-login-container #session-container #signin-area {
-      background-color: rgba(0, 0, 0, 0.5); }
+      background: url("/assets/bg-login.png") repeat; }
       #non-login-container #session-container #signin-area #btn-login {
         height: 27px;
         margin-right: 20px;
@@ -1466,3 +1466,6 @@ textarea {
       #non-login-container #session-container #signin-area a {
         margin-top: 8px;
         text-decoration: underline; }
+
+#login-overlay.overlay {
+  background: url("/assets/bg-mask.png") repeat; }

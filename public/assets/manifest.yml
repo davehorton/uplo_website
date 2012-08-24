@@ -24,7 +24,9 @@ bg-banner-spotlight.png: bg-banner-spotlight-8e68e96bdf6f6e9ab5e87adc35036811.pn
 bg-banner-the-app.png: bg-banner-the-app-2f610573c9de94a0ab6041feb319d6fd.png
 bg-dropdown-selection.png: bg-dropdown-selection-b357d879a580df76d365b28ff8c01633.png
 bg-header.png: bg-header-b3c896053934b1754991a91dac321d97.png
+bg-login.png: bg-login-c71862eaf3e08eb5369c064d2c4f6778.png
 bg-main-search.png: bg-main-search-595dd5f3ef2c98b0adb6a7ce3a43d758.png
+bg-mask.png: bg-mask-c608b851ec1c0dfc16dbc45e48427240.png
 bg-popup-header.png: bg-popup-header-cf0fe9259335acfa4013b990e576f17d.png
 bg-public-ad.jpg: bg-public-ad-1cbbaa661fec3a44012995de5de889a6.jpg
 bg-reset-password.png: bg-reset-password-7eac670dc8dce5d5dd04ecc58eacf35b.png
@@ -323,7 +325,7 @@ jquery.contextMenu.css: jquery.contextMenu-5e13ffab2ad4f1c83de146893d8f0b86.css
 jquery.ui.selectmenu.css: jquery.ui.selectmenu-126b46b0f5616450a0711aea25ce56ec.css
 jquery.ui.theme.css: jquery.ui.theme-bc9f9116ef9708ca6340560832e3b72e.css
 scss/admin.css: scss/admin-3a07002d1e0102f5fc4338a9209b087a.css
-scss/application.css: scss/application-43632027eac24aba8b1e51cf0818fbd9.css
+scss/application.css: scss/application-4265570f75ac189116026952ee36656b.css
 scss/application.mobile.css: scss/application.mobile-ca2184ad6ac977edd387b6813c34f574.css
 scss/banner.css: scss/banner-331c4e35597b1b905f46e6226aa74178.css
 scss/cart.css: scss/cart-a00c819367f1c26885c93fd320e87746.css
