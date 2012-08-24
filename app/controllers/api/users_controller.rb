@@ -254,11 +254,11 @@ class Api::UsersController < Api::BaseController
     end
     render :json => result
   end
-  
+
   # POST /api/check_emails
   # Params
   # emails => JSON ARRAY
-  
+
   def check_emails
     result = { :success => false, :msg => "", :emails => []}
     if (params[:emails])
@@ -274,7 +274,7 @@ class Api::UsersController < Api::BaseController
 
   # GET /api/payment_info
   # Params
-  # 
+  #
 
   def get_user_payment_info
     result = { :success => true, :msg => "", :payment_info => {}}
@@ -309,7 +309,7 @@ class Api::UsersController < Api::BaseController
     if (@user.withdraw_paypal amount)
       result[:success] = true
     else
-      result[:msg] = @user.errors.full_messages
+      result[:msg] = @user.errors.full_messages.to_sentence
     end
     result[:payment_info][:total_earn] = @user.total_earn
     result[:payment_info][:owned_amount] = @user.owned_amount
@@ -330,7 +330,7 @@ class Api::UsersController < Api::BaseController
       info[:galleries_num] = user.public_galleries.size
       info[:images_num] = user.images.public_images.size
     end
-    
+
     info[:followers_num] = user.followers.size
     info[:following_num] = user.followed_users.size
     info[:tiers] = Image::TIERS_PRICES
