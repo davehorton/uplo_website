@@ -51,6 +51,8 @@ class UsersController < ApplicationController
     end
     address = nil
     if (type_update == "billing_address" || type_update == "shipping_address")
+      # Update Authorize Net Account
+      
       address = @user.billing_address ||= Address.new if (type_update == "billing_address")
       address = @user.shipping_address ||= Address.new if (type_update == "shipping_address")
       

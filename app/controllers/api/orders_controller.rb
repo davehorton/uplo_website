@@ -20,7 +20,8 @@ class Api::OrdersController < Api::BaseController
   def create_order
     card_required_info = ['name_on_card', 'card_type', 'card_number', 'expiration']
     order_info = params[:order]
-    order_info[:expiration] = (Date.parse order_info[:expiration]).strftime("%m-%Y")
+    expires_on = Date.parse order_info[:expiration]
+    order_info[:expiration] = expires_on.strftime("%m-%Y")
     images = order_info.delete(:images)
     order_info[:user] = @user
 
@@ -37,13 +38,23 @@ class Api::OrdersController < Api::BaseController
     order_items = build_order_items(JSON.parse(images))
     order.transaction_date = Time.now
     order.line_items << order_items
+    card_string = order_info["card_number"]
     done = false
     if current_user.update_profile(order_info)
       if order.valid?
         order.compute_totals
-        if order.finalize_transaction
-          @result[:order_id] = order.id
-          done = true
+        an_value = Payment.create_authorizenet_test(card_string, expires_on, {:shipping => order_info[:shipping_address_attributes], :address => order_info[:billing_address_attributes]})
+        response = an_value[:transaction].purchase(order.order_total, an_value[:credit_card])
+        success = !response.nil? && response.success?
+        if success
+          if order.finalize_transaction
+            @result[:order_id] = order.id
+            done = true
+          end
+        else
+          @result[:success] = false
+          @result[:msg] = 'Failed to make purchase.'
+          return render :json => @result
         end
       end
     else

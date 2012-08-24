@@ -289,6 +289,7 @@ class Api::UsersController < Api::BaseController
     result[:card_info][:card_type] = current_user.card_type
     result[:card_info][:card_number] = current_user.card_number
     result[:card_info][:expiration] = Date.parse(current_user.expiration).strftime("%m/%Y")
+    result[:card_info][:cvv] = current_user.cvv
     render :json => result
   end
 

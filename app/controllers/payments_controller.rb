@@ -101,7 +101,9 @@ class PaymentsController < ApplicationController
         order_info[:billing_address_attributes].delete 'id'
         order_info.delete 'ship_to_billing'
         # UPDATE PAYMENT INFO TO ORDER
+        transaction = AuthorizeNet::AIM::Transaction.new(AN_CARD_NOT_PRESENT_LOGIN, AN_CARD_NOT_PRESENT_TRANS_KEY, :gateway => :sandbox, :transaction_type => :auth_and_capture, :verify_ssl => false)
 
+        
         expires_on = Date.civil(order_info["expiration(1i)"].to_i,
                          order_info["expiration(2i)"].to_i, 1)
         order_info[:expiration] = expires_on.strftime("%m-%Y")
@@ -117,14 +119,17 @@ class PaymentsController < ApplicationController
             an_value = Payment.create_authorizenet_test(card_string, expires_on, {:shipping => order_info[:shipping_address_attributes], :address => order_info[:billing_address_attributes]})
             response = an_value[:transaction].purchase(@order.order_total, an_value[:credit_card])
 
-            success = !response.nil? and response.success?
+            success = !response.nil? && response.success?
             if success
               finalize_cart
-              msg = "Successfully made a purchase (authorization code: #{response.authorization_code})"
+              flash[:msg] = "Successfully made a purchase (authorization code: #{response.authorization_code})"
+              flash[:trace] = response
+              redirect_to :action => :checkout_result, :trans_id => response.transaction_id and return
             else
-              msg = 'Fail:' + response.message.to_s
+              flash[:error] = 'Failed to make purchase.'
+              redirect_to :controller => 'orders', :action => 'index' and return
             end
-            redirect_to :action => :checkout_result, :msg => msg, :success => success, :trans_id => response.transaction_id and return
+            
           else
             error = '<ul>'
             current_user.errors.full_messages.each do |message|

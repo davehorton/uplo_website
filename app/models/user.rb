@@ -717,6 +717,11 @@ class User < ActiveRecord::Base
     end
   end
 
+  # AUTHORIZE NET CIM
+  def update_user_info_on_authorize_net
+    
+  end
+
   protected
 
     def need_checking_password?

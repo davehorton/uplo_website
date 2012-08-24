@@ -117,10 +117,10 @@ class Api::BaseController < ActionController::Base
         decrypt_recursive(value, key) 
       else
         if (key != 'action' && key != 'controller' && key != 'format')
-          puts '=========='
-          puts key
-          if (!value.kind_of?(Array) && !value.kind_of?(Hash))
+          if (!value.kind_of?(Array) && !value.kind_of?(Hash) && !value.kind_of?(StringIO))
             if !(value =~ /^-?[0-9]+$/)
+              puts '=========='
+              puts key
               value = AESCrypt.decrypt(value, key_for_decrypt) 
             end
           end
