@@ -117,7 +117,7 @@ class Api::BaseController < ActionController::Base
         decrypt_recursive(value, key) 
       else
         if (key != 'action' && key != 'controller' && key != 'format')
-          if (!value.kind_of?(Array) && !value.kind_of?(Hash) && !value.kind_of?(UploadedFile))
+          if (!value.kind_of?(Array) && !value.kind_of?(Hash) && !value.kind_of?(ActionDispatch::Http::UploadedFile))
             if !(value =~ /^-?[0-9]+$/)
               puts '=========='
               puts value.class
