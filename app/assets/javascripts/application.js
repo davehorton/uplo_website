@@ -229,16 +229,10 @@ helper = {
     $('.button.search').click(function(){
       $('#filtering-search-box').submit();
     });
-    $('#filtered_by').selectmenu({
-      style:'dropdown',
-      change:function(e, obj){
-        $('#sort_by').val('');
-        $('#filtering-search-box').submit();
-      }
+    $('#filtered_by').change(function(){
+      $('#sort_by').val('');
+      $('#filtering-search-box').submit();
     });
-    $('#sort_by').selectmenu({
-      style:'dropdown',
-      change:function(e, obj){ $('#filtering-search-box').submit(); }
-    });
+    $('#sort_by').change(function(){ $('#filtering-search-box').submit(); })
   }
-};
+}
