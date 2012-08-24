@@ -29,8 +29,7 @@
         })();
       </script>
 
-  %body
-    = render :partial => "shared/notification_box"
+  %body    
     #header
       .wrapper
         %a#logo{:href => "/"}
@@ -49,10 +48,12 @@
     .clear
 
     .wrapper
-      #top.panel
+      #top.clearfix
         #main.clearfix
         = yield :top_content
-
+      
+      = render :partial => "shared/notification_box"
+      
       #left.panel.left
         = yield :left_content
 

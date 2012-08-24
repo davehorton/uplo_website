@@ -2,19 +2,26 @@
 - id = '' if id.nil?
 - title = '' if title.nil?
 - notification = '' if notification.nil?
-.fixed#flash{:style => (flash.count > 0 && @notification_visible) ? "" : "display:none"}
-  .container{:style => "margin: 0 auto; width: 960px; height: 0px"}
-    .notification.right
-      .header.left
-        .left
-        .title.text.black.bold.font12.left{:style => "font-size:12px"}UPLO Notification
-        #notification_close.right
-      .container.left
-        .main-panel.left.messages
-          - flash.each do |key, value|
-            .icon_notification.left
-            .left.message.wordwrap= value
+- if @notification_visible
+  .fixed#flash{:style => (flash.count > 0) ? "" : "display:none"}
+    .container{:style => "margin: 0 auto; width: 960px; height: 0px"}
+      .notification.right
+        .header.left
+          .left
+          .title.text.black.bold.font12.left{:style => "font-size:12px"}UPLO Notification
+          #notification_close.right
+        .container.left
+          .main-panel.left.messages
+            - flash.each do |key, value|
+              .icon_notification.left
+              .left.message.wordwrap= value
 
+- else
+  - flash_class = (flash.blank? ? "" : "content")
+  #flash{:class => flash_class}
+    - flash.each do |key, value|
+      .box{:class => "box-#{key}"}= value
+      
 - content_for :js do
   = javascript_tag do
     :erb
