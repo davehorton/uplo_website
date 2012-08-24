@@ -120,6 +120,7 @@ class Api::BaseController < ActionController::Base
           if (!value.kind_of?(Array) && !value.kind_of?(Hash) && !value.kind_of?(StringIO))
             if !(value =~ /^-?[0-9]+$/)
               puts '=========='
+              puts value.class
               puts key
               value = AESCrypt.decrypt(value, key_for_decrypt) 
             end
