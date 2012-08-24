@@ -996,6 +996,9 @@ textarea {
     position: relative; }
     #center #order-preview #preview-frame #preview-image {
       border: 1px solid #A1A1A1; }
+    #center #order-preview #preview-frame #preview-waiting {
+      position: relative;
+      z-index: 1000; }
 #center .wrapper.the-app {
   margin-top: -10px; }
 #center .container {
