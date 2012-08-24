@@ -164,7 +164,11 @@ class ProfilesController < ApplicationController
     if params[:user_id].nil?
       @user = current_user
     else
-      @user = User.active_users.find_by_id params[:user_id]
+      if current_user.is_admin?
+        @user = User.find_by_id params[:user_id]
+      else
+        @user = User.active_users.find_by_id params[:user_id]
+      end
     end
   end
 end
