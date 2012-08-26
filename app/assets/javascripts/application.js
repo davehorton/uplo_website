@@ -104,19 +104,18 @@ helper = {
   },
 
   auto_hide_flash_message: function(){
-	clearInterval(helper.timerID);
-	helper.timerID = setInterval(function() {
-    	$('#flash').stop(true, true).fadeOut('fast');
-	}, 5000);
+    clearInterval(helper.timerID);
+    helper.timerID = setInterval(function() {
+        $('#flash').stop(true, true).fadeOut('fast');
+    }, 5000);
   },
 
   show_notification: function(message){
-	$('#flash').stop(true, true).fadeIn('fast');
-	var string = "<div class='icon_notification left'></div><div class='left message wordwrap'>" + message + "</div>";
-	$("#flash").find('.messages').html(string);
-    helper.auto_hide_flash_message();
+    $('#flash').stop(true, true).fadeIn('fast');
+    var string = "<div class='icon_notification left'></div><div class='left message wordwrap'>" + message + "</div>";
+    $("#flash").find('.messages').html(string);
+      helper.auto_hide_flash_message();
   },
-
 
   // Validate IPv4 address format
   is_valid_ip4_address: function (ipaddr) {
