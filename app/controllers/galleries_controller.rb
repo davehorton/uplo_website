@@ -3,6 +3,7 @@ class GalleriesController < ApplicationController
   before_filter :detect_device
   before_filter :authenticate_user!, :except => [:public]
   before_filter :check_paypal_email
+  before_filter :show_notification
   skip_authorize_resource :only => [:public]
   layout 'main'
 

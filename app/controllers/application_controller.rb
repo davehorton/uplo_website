@@ -2,9 +2,7 @@ class ApplicationController < ActionController::Base
   protect_from_forgery
   before_filter :set_current_tab, :set_current_user, :check_banned_user
   before_filter :filter_params
-  
-  # Default hide all notification.
-  before_filter :hide_notification
+  layout 'main'
   
   PAGE_SIZE = 10
   MAX_PAGE_SIZE = 100
@@ -53,6 +51,10 @@ class ApplicationController < ActionController::Base
     
     def hide_notification
       toggle_notification(false)
+    end
+    
+    def show_notification
+      toggle_notification(true)
     end
     
     def set_current_tab

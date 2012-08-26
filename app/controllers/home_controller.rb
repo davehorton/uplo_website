@@ -19,6 +19,8 @@ class HomeController < ApplicationController
       @current_views = 'recent images'
       @recent_images = Image.get_browse_images(@filtered_params)
       render :template => 'home/spotlight'
+    else      
+      @devise_message = session.delete(:devise_message)
     end
   end
 
