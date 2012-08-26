@@ -324,7 +324,7 @@ textarea {
   width: 15px;
   margin-right: 3px; }
 .icon.loading-small {
-  background: url("/assets/loading-small.gif") no-repeat scroll 0 0 transparent;
+  background: url("/assets/loading-small.gif") no-repeat scroll center center rgba(255, 255, 255, 0.8);
   height: 32px;
   width: 32px; }
 
@@ -998,7 +998,10 @@ textarea {
       border: 1px solid #A1A1A1; }
     #center #order-preview #preview-frame #preview-waiting {
       position: relative;
-      z-index: 1000; }
+      z-index: 1000;
+      border-radius: 8px;
+      padding: 10px;
+      opacity: 0.8; }
 #center .wrapper.the-app {
   margin-top: -10px; }
 #center .container {
