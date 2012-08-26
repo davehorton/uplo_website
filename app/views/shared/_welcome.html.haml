@@ -1,3 +1,7 @@
+- devise_mapping ||= Devise.mappings[:user]
+- resource ||= User.new
+- resource_name ||= devise_mapping.name
+
 #session-container
   #signup-area.clearfix.left
     .main
@@ -18,10 +22,13 @@
 
   #signin-area.clearfix.right
     .main
-      .header.text.white.bold Member Sign In
-      = form_for(:user, :url => user_session_path, :html => {:id => 'frm-login'}) do |f|
+      .header.text.white.bold= "Member Sign In"
+      - message = resource.errors.full_messages.first || @devise_message
+      .message.text.highlight.bold{:class => message ? "" : "hidden"}=  message
+      
+      = form_for(resource, :as => resource_name, :url => session_path(resource_name), :html => {:id => 'frm-login'}) do |f|
         .line
-          = f.label :user_login, 'Email/Username', :class => 'left', :required => true
+          = f.label :user_login, 'Email / Username', :class => 'left', :required => true
           = f.text_field :login, :required => true
         .line
           = f.label :user_password, 'Password', :class => 'left'

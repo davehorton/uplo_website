@@ -2,6 +2,7 @@
 - id = '' if id.nil?
 - title = '' if title.nil?
 - notification = '' if notification.nil?
+
 - if @notification_visible
   .fixed#flash{:style => (flash.count > 0) ? "" : "display:none"}
     .container{:style => "margin: 0 auto; width: 960px; height: 0px"}
@@ -17,8 +18,13 @@
               .left.message.wordwrap= value
 
 - else
-  - flash_class = (flash.blank? ? "" : "content")
-  #flash{:class => flash_class}
+  - flash_class = "content"
+  - style = ""
+  - if flash.blank?
+    - flash_class = ""
+    - style = "display: none"
+    
+  #flash{:class => flash_class, :style => style}
     - flash.each do |key, value|
       .box{:class => "box-#{key}"}= value
       

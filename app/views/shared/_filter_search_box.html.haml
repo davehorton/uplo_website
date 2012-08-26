@@ -1,8 +1,11 @@
-/ locals: action, sort_by, filtered_by
+/ locals: controller, action, sort_by, filtered_by
 - sort_by ||= params[:sort_by]
 - filtered_by ||= params[:filtered_by]
+- action ||= params[:action]
+- controller ||= params[:controller] 
+
 .right
-  = form_tag({:action => action}, :method => 'get', :id => 'filtering-search-box') do
+  = form_tag({:controller => controller, :action => action}, :method => 'get', :id => 'filtering-search-box') do
     = text_field_tag :query, params[:query], :class => 'left'
     .left= select_tag :filtered_by, search_filter_options(filtered_by)
     .button.search.left

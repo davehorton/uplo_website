@@ -3,9 +3,10 @@
 
 - content_for :top_content do
   .data-header.text.bold.font16.line12.left
-    %span.text.black Browse >
-    %span.text.gray Recent Uploads
-  = render :partial => "shared/filter_search_box", :locals => {:action => "search"}
+    %span.text.black= "Browse >"
+    %span.text.gray= "Recent Uploads"
+  = render( :partial => "shared/filter_search_box", 
+            :locals => {:controller => "/home", :action => "search"})
 
 #non-login-container.wrapper.images-wrapper.left
   = render :partial => 'images/photos_template', :locals => { :images => @images, :photos_per_line => 6, :photo_size => 'thumb', :other_classes => '' }
