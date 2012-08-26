@@ -35,19 +35,19 @@
   = javascript_tag do
     :erb
       function reloadEvent(){
-        $('.edit_button').click(function(){
+        $('.edit_button').livequery('click', function(){
           $(this).hide();
           $(this).parent().find('.yield_info').hide(100);
           $(this).parent().find('.yield_edit').show(100);
         });
 
-        $('.cancel').bind('click', function(){
+        $('.cancel').livequery('click', function(){
           $(this).closest('.account_wrapper').find('.edit_button').show(100);
           $(this).closest('.account_wrapper').find('.yield_edit').hide(100);
           $(this).closest('.account_wrapper').find('.yield_info').show(100);
         });
    
-        $('.update_button').bind('click', function(){
+        $('.update_button').livequery('click', function(){
           $(this).closest('form').submit();
         });
 
@@ -61,7 +61,6 @@
 
             // Reset fields and any validation errors, so form can be used again, but leave hidden_field values intact.
             $form.closest('.partial_wrapper').html(xhr.responseText);
-            reloadEvent();
             helper.show_notification("Update successfully");
           })
           .bind('ajax:complete', function(evt, xhr, status){
@@ -99,8 +98,7 @@
 
         $('select[id!=my_links]').selectmenu({style:'dropdown'});
       }
+      
       $(document).ready(function(){
-        reloadEvent();
-
-        
+        reloadEvent();       
       });
