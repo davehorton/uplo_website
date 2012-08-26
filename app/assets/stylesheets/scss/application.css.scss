@@ -396,7 +396,7 @@ textarea { padding-top:5px; }
     margin-right: 3px;
   }
   &.loading-small {
-    background: url("/assets/loading-small.gif") no-repeat scroll 0 0 transparent;
+    background: url("/assets/loading-small.gif") no-repeat scroll center center rgba(255, 255, 255, 0.8);
     height: 32px;
     width: 32px;
   }
@@ -1146,6 +1146,9 @@ textarea { padding-top:5px; }
       #preview-waiting{
         position: relative;
         z-index: 1000;
+        border-radius: 8px;
+        padding: 10px;
+        opacity: 0.8;
       }
     }
   }
