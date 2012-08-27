@@ -106,7 +106,13 @@ input[type=text], input[type=password], textarea {
   margin: 0;
   resize: none;
 }
-input[type=checkbox] { border: none !important; padding-left: 0;}
+input[type=checkbox]{ opacity: 0; position: absolute; top: 0; left:0;}
+input[type=checkbox]:checked + label { background: url('/assets/icon-checkbox-selected.png') no-repeat; }
+input[type=checkbox] + label { background: url('/assets/icon-checkbox.png') no-repeat; padding-left: 18px; }
+input[type=radio]{ opacity: 0; position: absolute; top: 0; left:0;}
+input[type=radio]:checked + label { background: url('/assets/icon-radio-selected.png') no-repeat; }
+input[type=radio] + label { background: url('/assets/icon-radio.png') no-repeat; padding-left: 16px; }
+
 textarea { padding-top:5px; }
 
 /*==================================================================================*/
@@ -830,6 +836,7 @@ textarea { padding-top:5px; }
 .ui-corner-all, .ui-corner-bottom, .ui-corner-right, .ui-corner-br { border-bottom-right-radius: 3px; }
 .ui-selectmenu {
   height: 20px;
+  background: url("/assets/bg-dropbox.png") repeat;
   &:hover { text-decoration: none; }
 }
 .ui-selectmenu-menu { vertical-align: top; }
@@ -1108,7 +1115,7 @@ textarea { padding-top:5px; }
           margin: 2px 0px;
         }
         .inline { margin: 5px 0px; }
-        .half { width: 120px; }
+        .half { width: 122px; }
         &.progress, &.progress .uploading {
           height: 20px;
           -webkit-border-radius: 4px;
@@ -1510,7 +1517,7 @@ textarea { padding-top:5px; }
       width: 65px;
       text-align: left;
       input[type=radio] { padding: 0; margin: 0; vertical-align:middle; }
-      label { vertical-align:middle; }
+      label { vertical-align:middle; padding-top: 1px; padding-bottom: 1px;}
       &.header { text-align: center; }
     }
     &.last { border-right: none; }
