@@ -144,7 +144,8 @@ class PaymentsController < ApplicationController
           end
           error << '</ul>'
           flash[:errors] = error.html_safe
-          redirect_to :controller => 'orders', :action => 'index' and return
+          #redirect_to :controller => 'orders', :action => 'index' and return
+          render :template => "orders/index"
         end
     end
   end

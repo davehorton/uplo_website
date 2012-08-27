@@ -39,8 +39,10 @@
             = billing_f.label :state, "State <span style='color:red;'>*</span>".html_safe
             = billing_f.select :state, state_options(@order.billing_address.state), {:required => true,  :prompt => 'Select One'}
           .info
-            = billing_f.label :zip, "Postal/Zip Code <span style='color:red;'>*</span>".html_safe
-            = billing_f.input_field :zip, :required => true
+            = billing_f.label :zip, "Postal/Zip Code <span style='color:red;'>*</span>".html_safe            
+            - message = first_error_message_for(billing_f.object, :zip)
+            - css = message ? "error #{message}" : nil
+            = billing_f.input_field :zip, :required => true, :class => css
           
           .info
             / = hidden_field_tag 'billing[ship_to_billing]', 0
@@ -149,7 +151,7 @@
         .line-separator.left
         .submit.right
 
-= render :partial => 'cvv_form', :layout => 'layouts/bubble', :locals => { :id => 'cvv-form' }
+= render :partial => 'orders/cvv_form', :layout => 'layouts/bubble', :locals => { :id => 'cvv-form' }
 
 - content_for :js do
   = javascript_include_tag 'app/order.js'

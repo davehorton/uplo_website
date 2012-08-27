@@ -198,4 +198,31 @@ module ApplicationHelper
       }, selected)
     end
   end
+  
+  # Return the first full error message for the given attribute.
+  def first_error_message_for(resource, attribute)
+    return nil if resource.blank? || attribute.blank?
+    
+    message = resource.errors[attribute].first
+    unless message.blank?
+      if resource.errors.respond_to?(:full_message)
+        message = resource.errors.full_message(attribute, message)
+      else
+        message = full_error_message_for(resource, attribute, message)
+      end
+    end
+    return message
+  end
+  
+  # TODO: this method is implemented in Rails ActiveModel::Errors version >= 3.2
+  def full_error_message_for(resource, attribute, message)
+    return message if attribute == :base
+    attr_name = attribute.to_s.gsub('.', '_').humanize
+    attr_name = resource.class.human_attribute_name(attribute, :default => attr_name)
+    I18n.t(:"errors.format", {
+      :default   => "%{attribute} %{message}",
+      :attribute => attr_name,
+      :message   => message
+    })
+  end
 end
