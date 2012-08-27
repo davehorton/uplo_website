@@ -5,8 +5,20 @@ class Users::SessionsController < Devise::SessionsController
   # GET /resource/sign_in
   def new
     session[:devise_message] = flash.now[:alert]
-    # Cleanup the flash
+    # Clear the flash
     flash.now[:alert] = nil
     redirect_to "/"
+  end
+  
+  def create
+    super
+    # Clear the flash
+    flash.clear
+  end
+  
+  def destroy
+    super
+    # Clear the flash
+    flash.clear
   end
 end

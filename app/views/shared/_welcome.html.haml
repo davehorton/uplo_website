@@ -24,7 +24,7 @@
     .main
       .header.text.white.bold= "Member Sign In"
       - message = resource.errors.full_messages.first || @devise_message
-      .message.text.highlight.bold{:class => message ? "" : "hidden"}=  message
+      .message.text.highlight{:class => message ? "" : "hidden"}=  message
       
       = form_for(resource, :as => resource_name, :url => session_path(resource_name), :html => {:id => 'frm-login'}) do |f|
         .line
