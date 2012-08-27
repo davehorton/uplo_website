@@ -4,12 +4,13 @@
 - notification = '' if notification.nil?
 
 - if @notification_visible
-  .fixed#flash{:style => (flash.count > 0) ? "" : "display:none"}
-    .container{:style => "margin: 0 auto; width: 960px; height: 0px"}
+  #flash{:style => (flash.count > 0) ? "" : "display:none"}
+    .notification-container.fixed-right
       .notification.right
         .header.left
           .left
-          .title.text.black.bold.font12.left{:style => "font-size:12px"}UPLO Notification
+          .title.text.black.bold.font12.left{:style => "font-size:12px"}
+            UPLO Notification
           #notification_close.right
         .container.left
           .main-panel.left.messages
@@ -27,7 +28,18 @@
   #flash{:class => flash_class, :style => style}
     - flash.each do |key, value|
       .box{:class => "box-#{key}"}= value
-      
+    
+    / Show the box template
+    .notification-container.hidden.fixed-right
+      .notification.right
+        .header.left
+          .left
+          .title.text.black.bold.font12.left{:style => "font-size:12px"}
+            UPLO Notification
+          #notification_close.right
+        .container.left
+          .main-panel.left.messages
+          
 - content_for :js do
   = javascript_tag do
     :erb
