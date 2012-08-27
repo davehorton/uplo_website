@@ -779,7 +779,8 @@ textarea {
 /* ID */
 /*==================================================================================*/
 #flash {
-  margin-bottom: 10px; }
+  margin-bottom: 10px;
+  margin-top: 10px; }
 
 #header {
   height: 55px;
@@ -1424,6 +1425,8 @@ textarea {
   #non-login-container #register-panel .header, #non-login-container #session-container .header {
     font-size: 31px;
     line-height: 35px; }
+  #non-login-container #register-panel .message, #non-login-container #session-container .message {
+    margin-top: 10px; }
   #non-login-container #register-panel .title, #non-login-container #session-container .title {
     color: #898989;
     margin-top: 14px; }
