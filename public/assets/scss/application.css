@@ -781,6 +781,10 @@ textarea {
 #flash {
   margin-bottom: 10px;
   margin-top: 10px; }
+  #flash .notification-container {
+    margin: 0 auto;
+    width: 960px;
+    height: 0px; }
 
 #header {
   height: 55px;
