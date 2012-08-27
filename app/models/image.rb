@@ -247,17 +247,30 @@ class Image < ActiveRecord::Base
     end
 
     def load_images_with_sales_count(params = {})
-      params[:sort_field] = "sales_count"
-      paging_info = parse_paging_options(params)
+      params.delete(:sort_field)
+      sort_direction = params[:sort_direction] || 'ASC'
+      
+      paging_info = parse_paging_options(params, {
+        :sort_criteria => {
+          :sales_count => sort_direction,
+          :sales_value => sort_direction
+        }
+      })
+      
       self.includes(:gallery).joins(self.sanitize_sql([
         "LEFT JOIN (
-          SELECT line_items.image_id, SUM(line_items.quantity) AS sales_count
+          SELECT line_items.image_id, 
+            SUM(line_items.quantity) AS sales_count,
+            SUM(line_items.quantity * (line_items.tax + line_items.price)) AS sales_value
           FROM line_items JOIN orders
           ON line_items.order_id = orders.id AND orders.transaction_status = ?
           GROUP BY line_items.image_id
         ) orders_data ON images.id = orders_data.image_id",
         Order::TRANSACTION_STATUS[:complete]
-      ])).select("DISTINCT images.*, COALESCE(orders_data.sales_count, 0) AS sales_count").paginate(
+      ])).select("DISTINCT images.*, 
+        COALESCE(orders_data.sales_count, 0) AS sales_count,
+        COALESCE(orders_data.sales_value, 0) AS sales_value"
+      ).paginate(
         :page => paging_info.page_id,
         :per_page => paging_info.page_size,
         :order => paging_info.sort_string)
