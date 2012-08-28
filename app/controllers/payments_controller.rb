@@ -86,8 +86,8 @@ class PaymentsController < ApplicationController
 
         card_required_info.each { |val|
           if !params[:order].has_key?(val) || params[:order][val].blank?
-            flash[:error] = "Please fill all required fields first!"
-            redirect_to :controller => 'orders', :action => 'index' and return
+            flash.now[:error] = "Please fill all required fields first!"
+            render :template => "orders/index" and return
           end
         }
         remove_shipping_info = false
@@ -124,27 +124,14 @@ class PaymentsController < ApplicationController
               flash[:error] = "Successfully made a purchase (authorization code: #{response.authorization_code})"
               redirect_to :action => :checkout_result, :trans_id => response.transaction_id and return
             else
-              flash[:error] = 'Failed to make purchase.'
-              redirect_to :controller => 'orders', :action => 'index' and return
+              flash.now[:error] = 'Failed to make purchase.'
+              render :template => "orders/index" and return
             end
             
           else
-            error = '<ul>'
-            current_user.errors.full_messages.each do |message|
-              error << "<li>#{message}</li>"
-            end
-            error << '</ul>'
-            flash[:errors] = error.html_safe
-            redirect_to :controller => 'orders', :action => 'index' and return
+            render :template => "orders/index" and return
           end
         else
-          error = '<ul>'
-          @order.errors.full_messages.each do |message|
-            error << "<li>#{message}</li>"
-          end
-          error << '</ul>'
-          flash[:errors] = error.html_safe
-          #redirect_to :controller => 'orders', :action => 'index' and return
           render :template => "orders/index"
         end
     end

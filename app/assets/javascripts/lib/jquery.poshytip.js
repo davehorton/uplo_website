@@ -1,5 +1,5 @@
 /*
- * Poshy Tip jQuery plugin v1.1
+ * Poshy Tip jQuery plugin v1.1+
  * http://vadikom.com/tools/poshy-tip-jquery-plugin-for-stylish-tooltips/
  * Copyright 2010-2011, Vasil Dinkov, http://vadikom.com/
  */
@@ -108,8 +108,10 @@
 			this.reset();
 			this.update();
 			this.display();
-			if (this.opts.timeOnScreen)
-				setTimeout($.proxy(this.hide, this), this.opts.timeOnScreen);
+			if (this.opts.timeOnScreen) {
+				this.clearTimeouts();
+				this.hideTimeout = setTimeout($.proxy(this.hide, this), this.opts.timeOnScreen);
+			}
 		},
 		hide: function() {
 			if (this.disabled || !this.$tip.data('active'))
@@ -233,10 +235,10 @@
 				this.$arrow.css('visibility', 'inherit');
 			}
 
-			if (async) {
+			if (async && this.opts.refreshAniDuration) {
 				this.asyncAnimating = true;
 				var self = this;
-				this.$tip.css(currPos).animate({left: this.pos.l, top: this.pos.t}, 200, function() { self.asyncAnimating = false; });
+				this.$tip.css(currPos).animate({left: this.pos.l, top: this.pos.t}, this.opts.refreshAniDuration, function() { self.asyncAnimating = false; });
 			} else {
 				this.$tip.css({left: this.pos.l, top: this.pos.t});
 			}
@@ -464,7 +466,8 @@
 		slide: 			true,		// use slide animation
 		slideOffset: 		8,		// slide animation offset
 		showAniDuration: 	300,		// show animation duration - set to 0 if you don't want show animation
-		hideAniDuration: 	300		// hide animation duration - set to 0 if you don't want hide animation
+		hideAniDuration: 	300,		// hide animation duration - set to 0 if you don't want hide animation
+		refreshAniDuration:	200		// refresh animation duration - set to 0 if you don't want animation when updating the tooltip asynchronously
 	};
 
 })(jQuery);
