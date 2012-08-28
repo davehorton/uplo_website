@@ -86,8 +86,8 @@ class PaymentsController < ApplicationController
 
         card_required_info.each { |val|
           if !params[:order].has_key?(val) || params[:order][val].blank?
-            flash.now[:error] = "Please fill all required fields first!"
-            render :template => "orders/index" and return
+            flash[:error] = "Please fill all required fields first!"
+            redirect_to :controller => 'orders', :action => 'index' and return
           end
         }
         remove_shipping_info = false
