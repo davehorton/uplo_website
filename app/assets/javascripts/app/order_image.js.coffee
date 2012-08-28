@@ -22,10 +22,10 @@ $ ->
 
   $('.add-to-cart').click -> $("#order-details").submit();
   $('#line_item_quantity').keypress (e) ->
-    reg = /^\d{1,5}$/;
+    reg = /^\d{1,2}$/;
     if e.charCode != 0
       val = e.currentTarget.value + String.fromCharCode(e.charCode);
-      if !reg.test(val)
+      if !reg.test(val) || (parseInt(val) > 10)
         return false;
 
   $('#line_item_quantity').keyup -> computePrice()  

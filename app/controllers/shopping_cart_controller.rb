@@ -28,15 +28,18 @@ class ShoppingCartController < ApplicationController
       flash[:warning] = "Please fill all options first."
       redirect_to :controller => :images, :action => :order, :id => image.id and return
     else
-      line_item = LineItem.new do |item|
+      line_item = @cart.order.line_items.new do |item|
         item.image = image
         item.attributes = params[:line_item]
         item.price = image.get_price(image.tier, params[:line_item]['size'], params[:line_item]['moulding'])
         item.tax = item.price * PER_TAX
-        @cart.order.line_items << item
-        @cart.save
+        if item.save
+          @order = @cart.order.reload
+        else
+          flash[:warning] = item.errors.full_messages.to_sentence
+          redirect_to :controller => :images, :action => :order, :id => image.id and return
+        end
       end
-      @order = @cart.order.reload
     end
     redirect_to :action => :show
   end

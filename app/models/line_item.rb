@@ -6,6 +6,8 @@ class LineItem < ActiveRecord::Base
   after_save :update_oder
   after_destroy :update_oder
 
+  validates :quantity, :numericality => { :less_than_or_equal_to => 10 }
+
   def creation_timestamp
     ::Util.distance_of_time_in_words_to_now(self.created_at)
   end

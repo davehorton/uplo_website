@@ -22,10 +22,6 @@
 		margin-bottom:17px;
 	}
 
-	a{
-		color:#ee3c03;
-	}
-
 	.inputs{
 		margin-top: 5px;
 	}
@@ -55,9 +51,9 @@
 			%br.clear
 			.bottom_text.left.bold.font12.text{:style => "margin-right:30px; color:#898989;"} 
 				Already a member? 
-				%a
+				%a{:href => "/#member", :style => "color:#ee3c03;"}
 					Login
 			.bottom_text.left.bold.font12.text{:style => "color:#898989;"}
 				New to UPLO?
-				%a
+				%a{:href => "/", :style => "color:#ee3c03;"}
 					Request an Invite

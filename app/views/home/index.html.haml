@@ -18,3 +18,8 @@
   = javascript_tag do
     helper.show_overlay();
     helper.setup_login();
+    $(document).ready(function(){
+    if (window.location.hash == '#member') {
+    user_login.focus();
+    }
+    });
