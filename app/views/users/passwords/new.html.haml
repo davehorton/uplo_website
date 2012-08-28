@@ -1,8 +1,27 @@
-%h2 Forgot your password?
-= simple_form_for(resource, :as => resource_name, :url => password_path(resource_name), :html => { :method => :post , :class => "simple_form"}) do |f|
-  = f.error_notification
-  .inputs
-    = f.input :email, :required => true
-  .actions
-    = f.button :submit, "Send me reset password instructions"
-= render :partial => "users/shared/links"
+
+#non-login-container.wrapper.images-wrapper.left
+	#forgot_password_container{:style => "color:white; margin:0 auto; background:black; width:440px; height:278px"}
+		.wrapper_content{:style => "padding:35px"}
+			.header.left.text.bold.white{:style => "font-size:31px; margin-top:5px"}
+				Forgot your password?
+			%br
+			.notice.left.font16.bold.text{:style => "color:#898989; line-height:130%; margin-top:15px; margin-bottom:17px"}
+				Please enter your email address and we'll send you instructions on how to reset your password.
+			= simple_form_for(resource, :as => resource_name, :url => password_path(resource_name), :html => { :method => :post , :class => "simple_form left"}) do |f|
+				.inputs.bold.text.white.font12
+					= f.label :email, "EMAIL ADDRESS"
+				%br.clear
+				.inputs{:style => "margin-top: 5px"}
+					= f.input_field :email, :required => true, :style => "width:268px; margin-right:5px"
+					= f.button :submit, :type => :image, :src => "/assets/btn-submit.png"
+				.inputs{:style => "color:red;margin-top: 5px"}
+					= f.full_error :email
+			%br.clear
+			.left.bold.font12.text{:style => "margin-top:30px; margin-right:30px; color:#898989"} 
+				Already a member? 
+				%a{:style => "color:#ee3c03"}
+					Login
+			.left.bold.font12.text{:style => "margin-top:30px; color:#898989;"}
+				New to UPLO? 
+				%a{:style => "color:#ee3c03"}
+					Request an Invite
