@@ -22,11 +22,6 @@
 		margin-bottom:17px;
 	}
 
-	input[type='text']{
-		width:268px;
-		margin-right:5px;
-	}
-
 	a{
 		color:#ee3c03;
 	}
@@ -53,7 +48,7 @@
 					= f.label :email, "EMAIL ADDRESS"
 				%br.clear
 				.inputs
-					= f.input_field :email, :required => true
+					= f.input_field :email, :required => true, :style => "width:268px; margin-right:5px;"
 					= f.button :submit, :type => :image, :src => "/assets/btn-submit.png"
 				.inputs{:style => "color:red"}
 					= f.full_error :email
