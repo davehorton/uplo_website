@@ -43,12 +43,14 @@
   .account .form_wrapper .remove_css_effect input {
     width: auto;
     margin: 0;
-    margin-right: 3px; }
+    margin-right: 3px;
+    font-size: 12px; }
   .account .form_wrapper .remove_css_effect label {
     float: none;
     width: auto;
     font-weight: normal;
-    vertical-align: middle; }
+    vertical-align: middle;
+    font-size: 12px; }
 
 #cvv-explanation {
   font-size: 9px;

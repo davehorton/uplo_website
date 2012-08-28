@@ -1,12 +1,12 @@
 / locals: text
 #selection_container
   %div
-    =radio_button("post", "category", "rails", :target => "violation")
-    %span Terms of Use Violation
-    =radio_button("post", "category", "rails", :target => "copyright")
-    %span Copyright
-    =radio_button("post", "category", "rails", :target => "nudity")
-    %span{:style => "padding-right:0px"} Nudity
+    =radio_button("post", "category", "rails",:id => "rdbtn_violation")
+    =label_tag :rdbtn_violation, "Terms of Use Violation", :target => "violation"
+    =radio_button("post", "category", "rails",:id => "rdbtn_copyright")
+    =label_tag :rdbtn_copyright, "Copyright", :target => "copyright"
+    =radio_button("post", "category", "rails",:id => "rdbtn_nudity")
+    =label_tag :rdbtn_nudity, "Nudity",:style => "padding-right:0px", :target => "nudity"
   #violation.form_flag_element{:style => "display:none"}
     .line-separator.left
     Reason for reporting:
@@ -45,7 +45,7 @@
 - content_for :js do
   = javascript_tag do
     :erb
-      $("#selection_container input").click(function(){
+      $("#selection_container label").click(function(){
         $(".form_flag_element").hide();
         $("#" + $(this).attr('target')).show();
       });
