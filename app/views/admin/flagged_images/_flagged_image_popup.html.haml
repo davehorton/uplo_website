@@ -33,8 +33,7 @@
             = flag.reporter.username
         %p.flag_type
           = (flag.flag_type == 1 ? "Terms of Use Violation" : (flag.flag_type == 2 ? "Copyright" : "Nudity"))
-        %p.flag_description.wordwrap
-          = flag.description
+        %p.flag_description.wordwrap= flag.description
       %hr
       
       %br

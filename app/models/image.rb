@@ -421,9 +421,10 @@ class Image < ActiveRecord::Base
             line_items = LineItem.joins(:order).joins(:image).where(
               :images => {:id => self.id}
             ).where("status = '#{Order::STATUS[:shopping]}' OR status = '#{Order::STATUS[:checkout]}'").readonly(false)
-
-            line_items.each do |line_item|
-              line_item.update_attribute(:quantity, 0)
+            self.transaction do
+              line_items.each do |line_item|
+                line_item.update_attribute(:quantity, 0)
+              end
             end
 
             if self.author.will_be_banned?
