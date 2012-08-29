@@ -183,7 +183,7 @@ class Api::ImagesController < Api::BaseController
   end
 
   def popular_images
-    images = Image.get_all_images_with_current_user(@filtered_params, current_user)
+    images = Image.get_spotlight_images(@filtered_params)
     @result[:total] = images.total_entries
     @result[:data] = process_public_images(images)
     @result[:success] = true
@@ -259,7 +259,7 @@ class Api::ImagesController < Api::BaseController
         :msg => "This image is not yours!"
       }
     else
-      purchased_info = image.get_purchased_info(@filtered_params)
+      purchased_info = image.get_purchased_info
       result = {
         :success => true,
         :total_sale => purchased_info[:total_sale],

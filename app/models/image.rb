@@ -600,12 +600,14 @@ class Image < ActiveRecord::Base
       orders = self.orders.where({:transaction_status => Order::TRANSACTION_STATUS[:complete]})
     else
       start_date = DateTime.parse("01 #{mon}")
-      end_date = TimeCalculator.last_day_of_month(start_date.mon, start_date.year).strftime("%Y-%m-%d %T")
+      end_date = TimeCalculator.last_day_of_month(start_date.mon, start_date.year).end_of_day
+      end_date = end_date.strftime("%Y-%m-%d %T")
       start_date = start_date.strftime("%Y-%m-%d %T")
-      orders = self.orders.where "transaction_status ='#{Order::TRANSACTION_STATUS[:complete]}' and transaction_date > '#{start_date.to_s}' and transaction_date < '#{end_date.to_s}'"
+      orders = self.orders.where "transaction_status ='#{Order::TRANSACTION_STATUS[:complete]}'
+        and transaction_date > '#{start_date.to_s}' and transaction_date < '#{end_date.to_s}'"
     end
 
-    orders_in = orders.collect { |o| o.id }
+    orders_in = orders.collect &:id
     saled_items = (orders.length==0) ? [] : self.line_items.where("order_id in (#{orders_in.join(',')})")
     saled_items.each { |item| result += item.quantity }
     return result
@@ -632,7 +634,7 @@ class Image < ActiveRecord::Base
 
   def get_purchased_info(item_paging_params = {})
     result = {:data => [], :total_quantity => 0, :total_sale => 0}
-    orders = self.orders.where({:transaction_status => Order::TRANSACTION_STATUS[:complete]}).collect { |o| o.id }
+    orders = self.orders.where({:transaction_status => Order::TRANSACTION_STATUS[:complete]}).collect &:id
     if orders.length > 0
       paging_info = LineItem.paging_options(item_paging_params)
       saled_items = LineItem.paginate(
