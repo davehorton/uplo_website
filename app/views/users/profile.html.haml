@@ -62,6 +62,7 @@
             // Reset fields and any validation errors, so form can be used again, but leave hidden_field values intact.
             $form.closest('.partial_wrapper').html(xhr.responseText);
             helper.show_notification("Update successfully");
+            $('select[id!=my_links]').selectmenu({style:'dropdown'});
           })
           .bind('ajax:complete', function(evt, xhr, status){
             $.modal.close();
@@ -96,7 +97,7 @@
             helper.show_notification(errorText);
           });
 
-        $('select[id!=my_links]').selectmenu({style:'dropdown'});
+        
       }
       
       $(document).ready(function(){

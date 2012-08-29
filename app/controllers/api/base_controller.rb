@@ -50,6 +50,7 @@ class Api::BaseController < ActionController::Base
   protected
   # Override render method for encrypting
   def render(options = nil, deprecated_status = nil, &block)
+    # Don't use global variable for sceret key.
     key_for_decrypt = "a3317f627b92eef9b6126b7a50e196c3"
     if (options.has_key? :json)
       result_string = options[:json]
@@ -111,6 +112,7 @@ class Api::BaseController < ActionController::Base
   end
 
   def decrypt_recursive(hash, parent = nil)
+    # Don't use global variable for sceret key.
     key_for_decrypt = "a3317f627b92eef9b6126b7a50e196c3"
     hash.each do |key, value|
       if (value.kind_of?(Hash))
