@@ -1,12 +1,71 @@
-.account
-  %h2 Change your password
-  = simple_form_for(@user, :url => password_path(@user), :html => { :method => :put , :class => "simple_form"}) do |f|
-    = f.error_notification
-    = f.input :reset_password_token, :as => :hidden
-    = f.full_error :reset_password_token
-    .inputs
-      = f.input :password, :label => "New password", :required => true
-      = f.input :password_confirmation, :label => "Confirm your new password", :required => true
-    .actions
-      = f.button :submit, "Update"
-      %a.cancel{:href => "/my_account"}= "Cancel"
+:css
+  #edit_password_container {
+    color:white; 
+    margin:0 auto; 
+    background:black; 
+    width:440px; 
+    padding-bottom: 15px;
+  }
+  .wrapper_content{
+    padding:35px;
+  }
+
+  .header{
+    font-size:31px;
+    margin-top:5px;
+  }
+
+  .notice{
+    line-height:130%; 
+    margin-top:15px; 
+    margin-bottom:17px;
+  }
+
+  .inputs{
+    margin-top: 5px;
+  }
+
+  .bottom_text{
+    margin-top:30px; 
+    color:#898989;
+  }
+
+#non-login-container.wrapper.images-wrapper.left
+  #edit_password_container
+    .wrapper_content
+      .header.left.text.bold.white
+        Change your password
+      %br
+      .notice.left.font16.bold.text{:style => "color:#898989;"}
+        Please change your password
+      %br.clear
+      = simple_form_for(@user, :url => password_path(@user), :html => { :method => :put , :class => "simple_form"}) do |f|
+        = f.input :reset_password_token, :as => :hidden
+        .inputs{:style => "color:red"}
+          = f.full_error :reset_password_token
+        .inputs.bold.text.white.font12
+          = f.label :password, "New password", :style => "width:268px; margin-right:5px;"
+        %br.clear
+        .inputs
+          = f.input_field :password, :required => true, :style => "width:268px; margin-right:5px;"
+        .inputs{:style => "color:red"}
+          = f.full_error :password
+        .inputs.bold.text.white.font12
+          = f.label :password_confirmation, "Confirm your new password", :style => "width:268px; margin-right:5px;"
+        %br.clear
+        .inputs
+          = f.input_field :password_confirmation, :required => true, :style => "width:268px; margin-right:5px;"
+          = f.button :submit, :type => :image, :src => "/assets/btn-submit.png"
+        .inputs{:style => "color:red"}
+          = f.full_error :password_confirmation
+          
+      %br.clear
+      .bottom_text.left.bold.font12.text{:style => "margin-right:30px; color:#898989;"} 
+        Already a member? 
+        %a{:href => "/#member", :style => "color:#ee3c03;"}
+          Login
+      .bottom_text.left.bold.font12.text{:style => "color:#898989;"}
+        New to UPLO?
+        %a{:href => "/", :style => "color:#ee3c03;"}
+          Request an Invite
+    %br.clear
