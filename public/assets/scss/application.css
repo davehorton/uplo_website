@@ -1252,19 +1252,40 @@ textarea {
 
 #gallery-form-container {
   margin-bottom: 15px; }
+  #gallery-form-container .help-inline {
+    display: none; }
   #gallery-form-container #frm-edit-gallery .sections {
-    width: 429px; }
+    width: 470px; }
+  #gallery-form-container #frm-edit-gallery .sections.left label {
+    width: auto;
+    min-width: 80px; }
+  #gallery-form-container #frm-edit-gallery .sections.right {
+    padding-left: 10px; }
+    #gallery-form-container #frm-edit-gallery .sections.right label {
+      width: 67px;
+      margin-left: 20px; }
   #gallery-form-container #frm-edit-gallery .input {
-    margin: 5px 0; }
-    #gallery-form-container #frm-edit-gallery .input label {
-      width: 100px; }
+    margin: 5px 0;
+    width: 100%; }
     #gallery-form-container #frm-edit-gallery .input input, #gallery-form-container #frm-edit-gallery .input textarea {
-      width: 305px;
+      width: 360px;
       margin-top: 0; }
+    #gallery-form-container #frm-edit-gallery .input textarea {
+      height: 90px;
+      width: 358px; }
   #gallery-form-container #frm-edit-gallery .button.cancel {
     margin-right: 10px; }
   #gallery-form-container #frm-edit-gallery #button-container {
-    margin: 5px 0 5px 110px; }
+    margin: 5px 0 5px 110px;
+    width: 375px;
+    float: right; }
+  #gallery-form-container #frm-edit-gallery .select_control .controls {
+    line-height: 30px;
+    float: left; }
+  #gallery-form-container #frm-edit-gallery .select_control .require_text {
+    line-height: 35px; }
+  #gallery-form-container #frm-edit-gallery .controls {
+    float: right; }
 
 #comments-section .header {
   margin: 20px 0; }
