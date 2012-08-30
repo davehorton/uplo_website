@@ -927,7 +927,8 @@ textarea {
   #left .biography {
     margin: 10px 0; }
     #left .biography .span {
-      margin-bottom: 5px; }
+      margin-bottom: 5px;
+      width: 292px; }
   #left .follow-section {
     margin: 10px 0px; }
     #left .follow-section .note {
