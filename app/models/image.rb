@@ -314,7 +314,7 @@ class Image < ActiveRecord::Base
         params[:filtered_params][:sort_field] = 'name' unless params[:filtered_params].has_key?(:sort_field)
         puts params.inspect
         default_opt = {}
-        paging_info = parse_paging_options(params[:filtered_params], {:sort_mode => :extended})
+        paging_info = parse_paging_options(params[:filtered_params], {:sort_mode => :extended, :sort_direction => "DESC"})
 
         sphinx_search_options = params[:sphinx_search_options]
         sphinx_search_options = {} if sphinx_search_options.blank?
