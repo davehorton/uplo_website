@@ -82,6 +82,10 @@
       });
 
       $(function(){
+
+        <% if (@gallery.errors && @gallery.errors.count > 0) %>
+          $('#new-gallery').click();
+        <% end %>
         $.contextMenu({
           selector: '.share-link',
           trigger: 'left',

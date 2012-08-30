@@ -57,8 +57,8 @@
           
           .info
             / = hidden_field_tag 'billing[ship_to_billing]', 0
-            %input{ :type => 'checkbox', :name => 'order[ship_to_billing]', :value => '1', :id => 'billing_ship_to_billing', :class => 'left', :checked => 'checked' }
-            = label_tag :billing_ship_to_billing, 'Ship Items to the Above Billing Address', :style => 'width:auto;', :class => 'left'
+            %input{ :type => 'checkbox', :name => 'order[ship_to_billing]', :value => '1', :id => 'billing_ship_to_billing', :class => 'left', :checked =>  'checked' }
+            = label_tag :billing_ship_to_billing, 'Ship Items to the Above Billing Address', :style => 'line-height:15px; width:auto;', :class => 'left'
 
     .left
       #shipping-address.order_summary.left
@@ -120,7 +120,7 @@
             = f.label :name_on_card, "Name on Card <span style='color:red;'>*</span>".html_safe
             - message = first_error_message_for(f.object, :name_on_card)
             - css = message ? "error" : nil
-            = f.input :name_on_card, :autofocus => true, :required => true, :label => false, :class => css, :title => message
+            = f.input_field :name_on_card, :autofocus => true, :required => true, :label => false, :class => css, :title => message
           .info
             = f.label :card_type, "Card Type <span style='color:red;'>*</span>".html_safe
             - message = first_error_message_for(f.object, :card_type)
@@ -130,7 +130,7 @@
             = f.label :card_number, "Card Number <span style='color:red;'>*</span>".html_safe
             - message = first_error_message_for(f.object, :card_number)
             - css = message ? "error" : nil
-            = f.input :card_number, :autofocus => true, :required => true, :label => false, :class => css, :title => message
+            = f.input_field :card_number, :autofocus => true, :required => true, :label => false, :class => css, :title => message
           .info.expiration-date
             - today = Date.today
             = f.label :expiration, "Expiration Date <span style='color:red;'>*</span>".html_safe
@@ -140,7 +140,7 @@
             = f.label :cvv, "CVV <span style='color:red;'>*</span> <span id='cvv-explanation'>What's This?</span>".html_safe
             - message = first_error_message_for(f.object, :cvv)
             - css = message ? "error" : nil
-            = f.input :cvv, :required => true, :label => false, :maxlength => 4, :class => css, :title => message
+            = f.input_field :cvv, :required => true, :label => false, :maxlength => 4, :class => css, :title => message
           = hidden_field_tag :order_id, @order.id
 
     #order-summary.order_summary.no-padding-right.left{:style => "height:auto;min-height: 100px;"}
@@ -188,52 +188,7 @@
   = javascript_include_tag 'app/order.js', 'app/form_validation.js'
   = javascript_tag do
     :erb
-      $("#shipping_phone").keypress(function (event) {
-        if (!event.charCode) return true;
-        var reg = /^\d*$/;
-        var part1 = this.value.substring(0,this.selectionStart);
-        var part2 = this.value.substring(this.selectionEnd,this.value.length);
-        if (!reg.test(part1 + String.fromCharCode(event.charCode) + part2)){
-          return false;
-        }
-      });
-      $("#billing_phone").keypress(function (event) {
-        var reg = /^\d*$/;
-        if (!event.charCode) return true;
-        var part1 = this.value.substring(0,this.selectionStart);
-        var part2 = this.value.substring(this.selectionEnd,this.value.length);
-        if (!reg.test(part1 + String.fromCharCode(event.charCode) + part2)){
-          return false;
-        }
-      });
-      $("#shipping_fax").keypress(function (event) {
-        if (!event.charCode) return true;
-        var reg = /^\d*$/;
-        var part1 = this.value.substring(0,this.selectionStart);
-        var part2 = this.value.substring(this.selectionEnd,this.value.length);
-        if (!reg.test(part1 + String.fromCharCode(event.charCode) + part2)){
-          return false;
-        }
-      });
-      $("#billing_fax").keypress(function (event) {
-        var reg = /^\d*$/;
-        if (!event.charCode) return true;
-        var part1 = this.value.substring(0,this.selectionStart);
-        var part2 = this.value.substring(this.selectionEnd,this.value.length);
-        if (!reg.test(part1 + String.fromCharCode(event.charCode) + part2)){
-          return false;
-        }
-      });
-      $("#shipping_zip").keypress(function (event) {
-        var reg = /^\d{0,5}$/;
-        if (!event.charCode) return true;
-        var part1 = this.value.substring(0,this.selectionStart);
-        var part2 = this.value.substring(this.selectionEnd,this.value.length);
-        if (!reg.test(part1 + String.fromCharCode(event.charCode) + part2)){
-          return false;
-        }
-      });
-      $("#billing_zip").keypress(function (event) {
+      $(".zip_input").keypress(function (event) {
         var reg = /^\d{0,5}$/;
         if (!event.charCode) return true;
         var part1 = this.value.substring(0,this.selectionStart);
@@ -270,6 +225,11 @@
 
         $('#order-shippings').submit();
       });
+
+      <% if (@remove_shipping_info != nil && @remove_shipping_info == false) %>
+        $('#shipping-address .edit a').click();
+      <% end %>
+
 
 
       // Form inline error showing

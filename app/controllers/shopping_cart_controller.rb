@@ -51,14 +51,18 @@ class ShoppingCartController < ApplicationController
       flash[:warning] = "Your recent ordered image does not exist anymore."
     elsif not valid_item?(params[:line_item])
       flash[:warning] = "Please fill all options first."
-      redirect_to :controller => :images, :action => :order, :id => image.id, :line_item => line_item.id and return
+      redirect_to :controller => :images, :action => :order, :id => line_item.image.id, :line_item => line_item.id and return
     else
       image = line_item.image
       line_item.attributes = params[:line_item]
       line_item.price = image.get_price(image.tier, params[:line_item]['size'], params[:line_item]['moulding'])
       line_item.tax = line_item.price * PER_TAX
-      line_item.save
-      @order = @cart.order.reload
+      if line_item.save
+        @order = @cart.order.reload
+      else
+        flash[:warning] = line_item.errors.full_messages.to_sentence
+        redirect_to :controller => :images, :action => :order, :id => image.id, :line_item => line_item.id and return
+      end
     end
     redirect_to :action => :show
   end

@@ -33,6 +33,10 @@ class Order < ActiveRecord::Base
   # SCOPE
   scope :completed_orders, where(:transaction_status => Order::TRANSACTION_STATUS[:complete])
 
+  # VALIDATION
+  validates_length_of :cvv, :in => 3..4, :allow_nil => true
+  validates_numericality_of :cvv, :card_number, :only_integer => true, :allow_nil => true
+
   # CLASS METHODS
   class << self
     def load_orders(params = {})

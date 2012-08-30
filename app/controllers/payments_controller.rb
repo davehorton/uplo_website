@@ -90,12 +90,12 @@ class PaymentsController < ApplicationController
             redirect_to :controller => 'orders', :action => 'index' and return
           end
         }
-        remove_shipping_info = false
+        @remove_shipping_info = false
         if order_info['ship_to_billing'].blank? || !SharedMethods::Converter::Boolean(order_info['ship_to_billing'])
           
         else
           order_info[:shipping_address_attributes] = order_info[:billing_address_attributes]
-          remove_shipping_info = true
+          @remove_shipping_info = true
         end
         order_info[:shipping_address_attributes].delete 'id'
         order_info[:billing_address_attributes].delete 'id'
@@ -112,8 +112,9 @@ class PaymentsController < ApplicationController
         card_string = order_info["card_number"]
 
         @order = Order.find_by_id params[:order_id]
+
         if @order.update_attributes(params[:order])
-          order_info.delete 'shipping_address_attributes' if remove_shipping_info
+          order_info.delete 'shipping_address_attributes' if @remove_shipping_info
           if current_user.update_profile(order_info)
             an_value = Payment.create_authorizenet_test(card_string, expires_on, {:shipping => order_info[:shipping_address_attributes], :address => order_info[:billing_address_attributes]})
             response = an_value[:transaction].purchase(@order.order_total, an_value[:credit_card])
@@ -125,14 +126,14 @@ class PaymentsController < ApplicationController
               redirect_to :action => :checkout_result, :trans_id => response.transaction_id and return
             else
               flash.now[:error] = 'Failed to make purchase.'
-              render :template => "orders/index" and return
+              render :template => "orders/index", :params => params and return
             end
             
           else
-            render :template => "orders/index" and return
+            render :template => "orders/index", :params => params and return
           end
         else
-          render :template => "orders/index"
+          render :template => "orders/index", :params => params
         end
     end
   end

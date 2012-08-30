@@ -1407,19 +1407,37 @@ textarea { padding-top:5px; }
 
 #gallery-form-container {
   margin-bottom: 15px;
-
+  .help-inline {
+    display:none;
+  }
   #frm-edit-gallery {
     .sections {
-      width: 429px;
+      width: 470px;
     }
+    .sections.left{
+        label {
+          width: auto;
+          min-width:80px;
+        }
+      }
+    .sections.right{
+        padding-left:10px;
+        label {
+          width:67px;
+          margin-left:20px;
+        }
+      }
     .input {
       margin: 5px 0;
-      label {
-        width: 100px;
-      }
+      width:100%;
       input, textarea {
-        width: 305px;
+        width: 360px;
         margin-top: 0;
+      }
+
+      textarea {
+        height:90px;
+        width:358px;
       }
     }
     .button.cancel {
@@ -1427,6 +1445,22 @@ textarea { padding-top:5px; }
     }
     #button-container {
       margin: 5px 0 5px 110px;
+      width:375px;
+      float:right;
+    }
+
+    .select_control{
+      .controls{
+        line-height:30px;
+        float:left;
+      }
+      .require_text{
+        line-height:35px;
+      }
+    }
+
+    .controls{
+      float:right;
     }
   }
 }

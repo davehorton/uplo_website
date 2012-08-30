@@ -69,7 +69,10 @@ class GalleriesController < ApplicationController
       if @gallery.save
         format.html { redirect_to :action => 'edit_images', :gallery_id => @gallery.id }
       else
-        format.html { render :action => "new", :notice => @gallery.errors }
+        hide_notification
+        @galleries = current_user.galleries.load_galleries(@filtered_params)
+        flash[:error] = @gallery.errors.full_messages.to_sentence
+        format.html { render :action => :index}
       end
     end
   end
@@ -132,7 +135,8 @@ class GalleriesController < ApplicationController
           if @gallery.update_attributes(params[:gallery])
             format.html { redirect_to(gallery_images_path(@gallery), :notice => I18n.t('gallery.update_done')) }
           else
-            format.html { render :action => "edit", :notice => @gallery.errors}
+            @galleries = current_user.galleries.load_galleries(@filtered_params)
+            format.html { render :action => :index, :notice => @gallery.errors}
           end
         end
       end

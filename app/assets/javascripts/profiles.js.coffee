@@ -253,6 +253,11 @@ $ ->
             helper.show_notification(response.msg)
             $.modal.close()
             window.setTimeout("$('#edit-profile-info-popup').modal()", 300)
+        ,
+        error: -> 
+          helper.show_notification("Something went wrong, can not update your profile")
+          $.modal.close()
+          window.setTimeout("$('#edit-profile-info-popup').modal()", 300)
       });
 
   $("#user_first_name").keypress (event) -> helper.prevent_exceed_characters(@, event.charCode, 30)

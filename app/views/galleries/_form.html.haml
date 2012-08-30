@@ -8,10 +8,12 @@
       = f.input(:description, :as => 'text', :wrapper_class => "input left",
                 :input_html => {:class => "description"}, :required => false)
     .sections.right
-      = f.input(:keyword, :as => 'text', :wrapper_class => "input left",
+      = f.input(:keyword, :as => 'text', :label => 'Key Words', :wrapper_class => "input right",
                 :input_html => {:class => "description"}, :required => false)
-      = f.input :permission, :as => :select, :wrapper_class => "input left", :label => "Permission", :collection => gallery_permissions_options, :include_blank => false
-      %span.text.gray.italic.font11.left{ :style => 'margin-top:16px;' }= "&nbsp;<span style='color:red;'>*</span> Required Field".html_safe
+      .select_control
+        .input.right
+          = f.input :permission, :as => :select, :label => "Permission", :collection => gallery_permissions_options, :include_blank => false
+          %span.text.gray.italic.font11.left.require_text= "&nbsp;<span style='color:red;'>*</span> Required Field".html_safe
       .clear
       #button-container.left
         #btn-gallery-cancel.button.cancel.left
