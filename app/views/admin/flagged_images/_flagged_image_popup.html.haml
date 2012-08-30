@@ -27,6 +27,7 @@
       %hr
       .flag_user_wrapper
         .flag_info.font12
+          Flagged
           = flag.created_at.strftime("%m/%d/%y") 
           by
           %a.text.black.font12.normal{:href => "#{url_for(:controller => '/profiles', :action => 'show', :user_id => flag.reporter.username)}"}

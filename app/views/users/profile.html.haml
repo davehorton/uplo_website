@@ -63,9 +63,11 @@
             $form.closest('.partial_wrapper').html(xhr.responseText);
             helper.show_notification("Update successfully");
             $('select[id!=my_links]').selectmenu({style:'dropdown'});
+            reloadEvent();
           })
           .bind('ajax:complete', function(evt, xhr, status){
             $.modal.close();
+
           })
           .bind("ajax:error", function(evt, xhr, status, error){
             $.modal.close();
