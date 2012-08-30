@@ -118,10 +118,7 @@ class ShoppingCartController < ApplicationController
     # If the member is not logged in, get the cart from the session.
     # Otherwise, get it from the logged in member's member record.
     def get_cart
-      puts "==================="
       @cart = current_user.init_cart
-      puts "==================="
-      puts @cart.inspect
     end
 
     def valid_item?(hash)

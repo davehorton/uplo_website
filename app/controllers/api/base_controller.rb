@@ -107,8 +107,6 @@ class Api::BaseController < ActionController::Base
   def decrypt_params
     return if request.get?
     a = decrypt_recursive(params)
-    puts "========"
-    puts a
   end
 
   def decrypt_recursive(hash, parent = nil)
@@ -121,9 +119,6 @@ class Api::BaseController < ActionController::Base
         if (key != 'action' && key != 'controller' && key != 'format')
           if (!value.kind_of?(Array) && !value.kind_of?(Hash) && !value.kind_of?(ActionDispatch::Http::UploadedFile))
             if !(value =~ /^-?[0-9]+$/)
-              puts '=========='
-              puts value.class
-              puts key
               value = AESCrypt.decrypt(value, key_for_decrypt) 
             end
           end
