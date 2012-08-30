@@ -55,6 +55,16 @@ class HomeController < ApplicationController
     if params[:filtered_by] == Image::SEARCH_TYPE
       @current_views = IMAGE_SORT_VIEW[params[:sort_by]]
       @filtered_params[:sort_criteria] = Image::SORT_CRITERIA[params[:sort_by]]
+      @filtered_params[:sort_direction] = 'DESC'
+      case params[:sort_by]
+      when "recent"
+        @filtered_params[:sort_field] = "created_at"
+      when "views"
+        @filtered_params[:sort_field] = "pageview"
+      when "spotlight"
+        @filtered_params[:sort_field] = "promote_num"
+      end
+
       @data = Image.do_search_accessible_images( current_user.id,
         { :query => URI.unescape(params[:query]),
           :filtered_params => @filtered_params })
