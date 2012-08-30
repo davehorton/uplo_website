@@ -26,10 +26,10 @@
 
 .line-separator.left
 .biography.left
-  .text.black.bold.font14.span= user.location
-  .text.black.bold.font12.span= user.job
-  .text.black.bold.font12.span= user.website
-  .text.gray.font12.line16= user.biography
+  .text.wordwrap.black.bold.font14.span= user.location
+  .text.wordwrap.black.bold.font12.span= user.job
+  .text.wordwrap.black.bold.font12.span= user.website
+  .text.wordwrap.gray.font12.span= user.biography
 
 - if is_current_user
   = render :partial => 'edit_profile_photo', :layout => 'layouts/popup', :locals => { :title => 'Edit Your Profile Photo', :id => 'edit-profile-photo-popup', :user => user }

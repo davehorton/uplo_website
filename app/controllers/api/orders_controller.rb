@@ -44,7 +44,7 @@ class Api::OrdersController < Api::BaseController
       if order.valid?
         order.compute_totals
         an_value = Payment.create_authorizenet_test(card_string, expires_on, {:shipping => order_info[:shipping_address_attributes], :address => order_info[:billing_address_attributes]})
-        response = an_value[:transaction].purchase(@order.order_total, an_value[:credit_card])
+        response = an_value[:transaction].purchase(order.order_total, an_value[:credit_card])
         success = !response.nil? && response.success?
 
         if success
