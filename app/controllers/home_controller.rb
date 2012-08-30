@@ -58,7 +58,7 @@ class HomeController < ApplicationController
       @filtered_params[:sort_direction] = 'DESC'
       case params[:sort_by]
       when "recent"
-        @filtered_params[:sort_field] = "data_updated_at"
+        @filtered_params[:sort_field] = "updated_at"
       when "views"
         @filtered_params[:sort_field] = "pageview"
       when "spotlight"
