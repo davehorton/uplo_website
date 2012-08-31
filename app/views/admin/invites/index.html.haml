@@ -11,6 +11,7 @@
 #outgoing-invites.right
   .header
     .text.black.bold.font16.left Outgoing Invites
+    .text.left#email_invitation_warning{:style => "color:red; line-height:18px; margin-left:10px"}
   .line-separator.left
   = form_for :inv, :url => 'send_invitation', :html => {:id => 'frm-invite'} do |f|
     .line.left
