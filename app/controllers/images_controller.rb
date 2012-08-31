@@ -282,30 +282,37 @@ class ImagesController < ApplicationController
       flash[:error] = 'You cannot edit gallery of other!'
       redirect_to :controller => :galleries, :actions => :index
     end
-
+    error = ''
     data = JSON.parse params[:images]
-    data.each do |img|
-      id = img.delete 'id'
-      image = Image.un_flagged.find_by_id id.to_i
-      if (image.nil? || (image.author.is_banned? && !current_user.is_admin))
-        return render_not_found
-      else
-        img[:is_gallery_cover] = SharedMethods::Converter::Boolean(img.delete 'is_album_cover')
-        img[:is_owner_avatar] = SharedMethods::Converter::Boolean(img.delete 'is_avatar')
-        puts "=============="
-        puts img["gallery_id"].to_i
-        puts image.gallery_id
-        if (img["gallery_id"].to_i == image.gallery_id)
-          image.set_as_album_cover
+    Image.transaction do 
+      data.each do |img|
+        id = img.delete 'id'
+        image = Image.un_flagged.find_by_id id.to_i
+        if (image.nil? || (image.author.is_banned? && !current_user.is_admin))
+          return render_not_found
         else
-          img[:is_gallery_cover] = false
+          img[:is_gallery_cover] = SharedMethods::Converter::Boolean(img.delete 'is_album_cover')
+          img[:is_owner_avatar] = SharedMethods::Converter::Boolean(img.delete 'is_avatar')
+          puts "=============="
+          puts img["gallery_id"].to_i
+          puts image.gallery_id
+          if (img["gallery_id"].to_i == image.gallery_id)
+            if(img[:is_gallery_cover])
+              image.set_as_album_cover
+            end
+          else
+            img[:is_gallery_cover] = false
+          end
+
+          if img[:is_owner_avatar]
+            image.set_as_owner_avatar
+          elsif image.is_owner_avatar
+            current_user.rollback_avatar
+          end
+          if !(image.update_attributes img)
+            error << image.errors.full_messages.to_sentence
+          end
         end
-        if img[:is_owner_avatar]
-          image.set_as_owner_avatar
-        elsif image.is_owner_avatar
-          current_user.rollback_avatar
-        end
-        image.update_attributes img
       end
     end
 
@@ -318,7 +325,7 @@ class ImagesController < ApplicationController
                             :locals => { :images => images }
     gal_options = self.class.helpers.gallery_options(current_user.id, gallery.id, true)
     result = {
-      :items => items, :pagination => pagination, :gallery_options => gal_options
+      :items => items, :pagination => pagination, :gallery_options => gal_options, :error => error
     }
 
     render :json => result
