@@ -26,8 +26,10 @@ class HomeController < ApplicationController
 
   def browse
     @current_views = IMAGE_SORT_VIEW[Image::SORT_OPTIONS[:recent]]
-    @data = Image.get_browse_images(@filtered_params)
-  end
+    @filtered_params[:sort_direction] = 'DESC'
+    @filtered_params[:sort_field] = "created_at"
+    @data = Image.do_search_accessible_images( current_user.id,
+        {:filtered_params => @filtered_params })
 
   def spotlight
     params[:sort_by] = Image::SORT_OPTIONS[:spotlight]
