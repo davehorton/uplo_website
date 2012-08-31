@@ -29,7 +29,8 @@ class HomeController < ApplicationController
     @filtered_params[:sort_direction] = 'DESC'
     @filtered_params[:sort_field] = "created_at"
     @data = Image.do_search_accessible_images( current_user.id,
-        {:filtered_params => @filtered_params })
+        { :query => "",
+          :filtered_params => @filtered_params })
   end
 
   def spotlight
