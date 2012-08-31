@@ -30,6 +30,7 @@ class HomeController < ApplicationController
     @filtered_params[:sort_field] = "created_at"
     @data = Image.do_search_accessible_images( current_user.id,
         {:filtered_params => @filtered_params })
+  end
 
   def spotlight
     params[:sort_by] = Image::SORT_OPTIONS[:spotlight]
@@ -62,7 +63,6 @@ class HomeController < ApplicationController
         @filtered_params[:sort_field] = "created_at"
       when "views"
         @filtered_params[:sort_field] = "pageview"
-
       when "spotlight"
         @filtered_params[:sort_field] = "promote_num"
       end
