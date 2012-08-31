@@ -4,7 +4,7 @@ class HomeController < ApplicationController
 
   IMAGE_SORT_VIEW = {
     Image::SORT_OPTIONS[:view] => 'Most Views',
-    Image::SORT_OPTIONS[:recent] => 'Recent Images',
+    Image::SORT_OPTIONS[:recent] => 'Recent Uploads',
     Image::SORT_OPTIONS[:spotlight] => 'Spotlight Images'
   }
   USER_SORT_VIEW = {
@@ -54,13 +54,13 @@ class HomeController < ApplicationController
     process_search_params
     if params[:filtered_by] == Image::SEARCH_TYPE
       @current_views = IMAGE_SORT_VIEW[params[:sort_by]]
-      @filtered_params[:sort_criteria] = Image::SORT_CRITERIA[params[:sort_by]]
       @filtered_params[:sort_direction] = 'DESC'
       case params[:sort_by]
       when "recent"
-        @filtered_params[:sort_criteria] = "images.updated_at DESC"
+        @filtered_params[:sort_field] = "created_at"
       when "views"
         @filtered_params[:sort_field] = "pageview"
+
       when "spotlight"
         @filtered_params[:sort_field] = "promote_num"
       end
