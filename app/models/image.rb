@@ -327,8 +327,7 @@ class Image < ActiveRecord::Base
           :per_page => paging_info.page_size,
           :order => paging_info.sort_string
         })
-        puts "========="
-        puts sphinx_search_options
+        
         search_term = SharedMethods::Converter::SearchStringConverter.process_special_chars(params[:query])
         Image.search(search_term, sphinx_search_options)
       end

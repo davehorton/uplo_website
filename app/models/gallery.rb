@@ -91,7 +91,7 @@ class Gallery < ActiveRecord::Base
 
   def permission_string
     if !self.permission.blank?
-      I18n.t("gallery.permission.#{self.permission}")
+      I18n.t("gallery.permission")[self.permission.to_i]
     else
       ""
     end
