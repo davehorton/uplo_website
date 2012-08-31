@@ -70,7 +70,7 @@ class ProfilesController < ApplicationController
       if @user.id == current_user.id
         template = render_to_string :partial => 'edit_likes_template', :locals => { :images => images }
       else
-        emplate = render_to_string :partial => 'images/photos_template', :locals => { :images => images, :photos_per_line => 4, :photo_size => 'thumb' }
+        template = render_to_string :partial => 'images/photos_template', :locals => { :images => images, :photos_per_line => 4, :photo_size => 'thumb' }
       end
       pagination = render_to_string :partial => 'shared/hidden_pagination',
         :locals => { :data_source => images,
