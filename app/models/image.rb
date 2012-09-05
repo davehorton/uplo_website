@@ -248,17 +248,17 @@ class Image < ActiveRecord::Base
     def load_images_with_sales_count(params = {})
       params.delete(:sort_field)
       sort_direction = params[:sort_direction] || 'ASC'
-      
+
       paging_info = parse_paging_options(params, {
         :sort_criteria => {
           :sales_count => sort_direction,
           :sales_value => sort_direction
         }
       })
-      
+
       self.includes(:gallery).joins(self.sanitize_sql([
         "LEFT JOIN (
-          SELECT line_items.image_id, 
+          SELECT line_items.image_id,
             SUM(line_items.quantity) AS sales_count,
             SUM(line_items.quantity * (line_items.tax + line_items.price)) AS sales_value
           FROM line_items JOIN orders
@@ -266,7 +266,7 @@ class Image < ActiveRecord::Base
           GROUP BY line_items.image_id
         ) orders_data ON images.id = orders_data.image_id",
         Order::TRANSACTION_STATUS[:complete]
-      ])).select("DISTINCT images.*, 
+      ])).select("DISTINCT images.*,
         COALESCE(orders_data.sales_count, 0) AS sales_count,
         COALESCE(orders_data.sales_value, 0) AS sales_value"
       ).paginate(
@@ -312,7 +312,7 @@ class Image < ActiveRecord::Base
     protected
       def do_search(params = {})
         params[:filtered_params][:sort_field] = 'name' unless params[:filtered_params].has_key?(:sort_field)
-        
+
         puts params.inspect
         default_opt = {}
         paging_info = parse_paging_options(params[:filtered_params], {:sort_mode => :extended})
@@ -327,7 +327,7 @@ class Image < ActiveRecord::Base
           :per_page => paging_info.page_size,
           :order => paging_info.sort_string
         })
-        
+
         search_term = SharedMethods::Converter::SearchStringConverter.process_special_chars(params[:query])
         Image.search(search_term, sphinx_search_options)
       end
@@ -768,7 +768,7 @@ class Image < ActiveRecord::Base
       geo = Paperclip::Geometry.from_file(file)
       self.width = geo.width
       self.height = geo.height
-      if (self.name.blank?)
+      if !self.name.blank?
         self.name = file.original_filename.gsub(/(.jpeg|.jpg)$/i, '') if file.original_filename =~ /(.jpeg|.jpg)$/i
       end
     end
