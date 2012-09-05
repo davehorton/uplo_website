@@ -224,8 +224,9 @@ up.gif: up-7851ecffdfbb6ca3ba41bcebfa93cb35.gif
 uplo-logo.png: uplo-logo-1a1123ea4ae8aed84ec7486c1838b15e.png
 uplo_logo.png: uplo_logo-4e147b8807d73e64931db4bc3568f789.png
 uploader_file.png: uploader_file-3ab3c53af3d8adf6071f3776329ab009.png
+app/admin/flagged_images.js: app/admin/flagged_images-ae53d69b5474a2924c1304cdcd2079b1.js
 app/admin/flagged_users.js: app/admin/flagged_users-0f88974cf63c4832a97e61ae845306e0.js
-app/admin/invites.js: app/admin/invites-33fe9ece2642b7cf90e272611c9b88c8.js
+app/admin/invites.js: app/admin/invites-38f5832eddf3d823384b92b10c1bd1e2.js
 app/admin/spotlights.js: app/admin/spotlights-aa1a3c8720033e05efcc6ac66a6611c2.js
 app/edit_images.js: app/edit_images-ceafbbb3c586690e421d123379a18872.js
 app/form_validation.js: app/form_validation-26e4745504c81fb84e4310039ea7cbd8.js
