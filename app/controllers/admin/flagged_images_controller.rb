@@ -11,83 +11,139 @@ class Admin::FlaggedImagesController < Admin::AdminController
   # flag_type
   
   def reinstate_all
-    flagged_images = Image.flagged.where("flag_type = ?", params[:flag_type]).includes(:author)
-    users = []
-    flagged_images.each do |image|
-      if image.reinstate
-        users << image.author
+    result = {}
+    
+    begin
+      flagged_images = Image.flagged.where("flag_type = ?", params[:flag_type]).includes(:author)
+      users = []
+      flagged_images.each do |image|
+        if image.reinstate
+          users << image.author
+        end
       end
-    end
-    
-    # Make the users collection unique
-    users.uniq_by!(&:id)
-    
-    if !users.blank?
-      # Async. send notification email per users
-      Scheduler.delay do      
-        users.each do |user|
-          begin
-            UserMailer.flagged_image_is_reinstated(user).deliver
-          rescue Exception => exc
-            ::Util.log_error(exc, "UserMailer.flagged_image_is_reinstated")
+      
+      # Make the users collection unique
+      users.uniq_by!(&:id)
+      
+      if !users.blank?
+        # Async. send notification email per users
+        Scheduler.delay do      
+          users.each do |user|
+            begin
+              UserMailer.flagged_image_is_reinstated(user).deliver
+            rescue Exception => exc
+              ::Util.log_error(exc, "UserMailer.flagged_image_is_reinstated")
+            end
           end
         end
       end
+      
+      result[:status] = 'ok'
+      flash[:notice] = I18n.t("admin.notice_reinstate_images_succeeded")
+      result[:redirect_url] = admin_flagged_images_path(:flag_type => params[:flag_type])
+        
+    rescue Exception => exc
+      ::Util.log_error(exc, "Admin::FlaggedImagesController#reinstate_all")
+      result[:status] = 'error'
+      result[:message] = I18n.t("admin.error_reinstate_images_failed")
     end
     
-    redirect_to :action => :index, :flag_type => params[:flag_type]
+    render(:json => result)
   end
   
   # Params:
   # flag_type
   
   def remove_all
-    flagged_images = Image.flagged.where("flag_type = ?", params[:flag_type]).includes(:author)
+    result = {}
     
-    users = []
-    flagged_images.each do |image|
-      if image.update_attribute(:is_removed, true)
-        users << image.author
+    begin
+      flagged_images = Image.flagged.where("flag_type = ?", params[:flag_type]).includes(:author)
+      
+      users = []
+      flagged_images.each do |image|
+        if image.update_attribute(:is_removed, true)
+          users << image.author
+        end
       end
-    end
-    
-    # Make the users collection unique
-    users.uniq_by!(&:id)
-    
-    if !users.blank?
-      # Async. send notification email per users
-      Scheduler.delay do
-        users.each do |user|
-          begin
-            UserMailer.flagged_image_is_removed(user).deliver
-          rescue Exception => exc
-            ::Util.log_error(exc, "UserMailer.flagged_image_is_removed")
+      
+      # Make the users collection unique
+      users.uniq_by!(&:id)
+      
+      if !users.blank?
+        # Async. send notification email per users
+        Scheduler.delay do
+          users.each do |user|
+            begin
+              UserMailer.flagged_image_is_removed(user).deliver
+            rescue Exception => exc
+              ::Util.log_error(exc, "UserMailer.flagged_image_is_removed")
+            end
           end
         end
       end
+    
+      result[:status] = 'ok'
+      flash[:notice] = I18n.t("admin.notice_remove_images_succeeded")
+      result[:redirect_url] = admin_flagged_images_path(:flag_type => params[:flag_type])
+      
+    rescue Exception => exc
+      ::Util.log_error(exc, "Admin::FlaggedImagesController#remove_all")
+      result[:status] = 'error'
+      result[:message] = I18n.t("admin.error_remove_images_failed")
     end
     
-    redirect_to :action => :index, :flag_type => params[:flag_type]
+    render(:json => result)
   end
   
   # Params:
   # image_id
   def reinstate_image
-    image = Image.flagged.find_by_id(params[:image_id])
-    if image && image.reinstate
-      UserMailer.flagged_image_is_reinstated(image.author, image).deliver
+    result = {}
+    
+    begin
+      image = Image.flagged.find_by_id(params[:image_id])
+      if image && image.reinstate
+        UserMailer.flagged_image_is_reinstated(image.author, image).deliver
+        result[:status] = 'ok'
+        flash[:notice] = I18n.t("admin.notice_reinstate_image_succeeded")
+        result[:redirect_url] = admin_flagged_images_path(:flag_type => params[:flag_type])
+      else
+        result[:status] = 'error'
+        result[:message] = I18n.t("admin.error_reinstate_image_failed")
+      end
+    rescue Exception => exc
+      ::Util.log_error(exc, "Admin::FlaggedImagesController#remove_all")
+      result[:status] = 'error'
+      result[:message] = I18n.t("admin.error_reinstate_image_failed")
     end
-    redirect_to :action => :index, :flag_type => params[:flag_type]
+    
+    render(:json => result)
   end  
   
   # Params:
   # image_id
   def remove_image
-    image = Image.flagged.find_by_id(params[:image_id])
-    if image && image.update_attribute(:is_removed, true)
-      UserMailer.flagged_image_is_removed(image.author, image).deliver
+    result = {}
+    
+    begin
+      image = Image.flagged.find_by_id(params[:image_id])
+      if image && image.update_attribute(:is_removed, true)
+        UserMailer.flagged_image_is_removed(image.author, image).deliver
+        result[:status] = 'ok'
+        flash[:notice] = I18n.t("admin.notice_remove_image_succeeded")
+        result[:redirect_url] = admin_flagged_images_path(:flag_type => params[:flag_type])
+      else
+        result[:status] = 'error'
+        result[:message] = I18n.t("admin.error_remove_image_failed")
+      end
+    rescue Exception => exc
+      ::Util.log_error(exc, "Admin::FlaggedImagesController#remove_all")
+      result[:status] = 'error'
+      result[:message] = I18n.t("admin.error_remove_image_failed")
     end
-    redirect_to :action => :index, :flag_type => params[:flag_type]
+    
+    render(:json => result)
   end
   
   # Params:

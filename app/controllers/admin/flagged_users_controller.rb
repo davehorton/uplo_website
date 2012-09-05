@@ -10,7 +10,7 @@ class Admin::FlaggedUsersController < Admin::AdminController
     begin
       if User.reinstate_flagged_users
         result[:status] = 'ok'
-        result[:message] = I18n.t("admin.notice_reinstate_users_succeeded")
+        flash[:notice] = I18n.t("admin.notice_reinstate_users_succeeded")
         result[:redirect_url] = admin_flagged_users_path
       else
         result[:status] = 'error'
@@ -35,7 +35,7 @@ class Admin::FlaggedUsersController < Admin::AdminController
     begin
       if User.remove_flagged_users
         result[:status] = 'ok'
-        result[:message] = I18n.t("admin.notice_remove_users_succeeded")
+        flash[:notice] = I18n.t("admin.notice_remove_users_succeeded")
         result[:redirect_url] = admin_flagged_users_path
       else
         result[:status] = 'error'
@@ -63,7 +63,7 @@ class Admin::FlaggedUsersController < Admin::AdminController
       if user
         if user.reinstate
           result[:status] = 'ok'
-          result[:message] = I18n.t("admin.notice_reinstate_user_succeeded")
+          flash[:notice] = I18n.t("admin.notice_reinstate_user_succeeded")
           result[:redirect_url] = admin_flagged_users_path
         else
           result[:status] = 'error'

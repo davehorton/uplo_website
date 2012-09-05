@@ -113,7 +113,7 @@ Uplo::Application.routes.draw do
         post :reinstate_all
         post :remove_all
         post :reinstate_image
-        delete :remove_image
+        post :remove_image
       end
     end
 

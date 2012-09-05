@@ -1,26 +1,27 @@
 / locals image, flag, flag_type
 
 .flagged_image_container
-  .button.image_frame{:target => flag.image.id, 
-      :href => url_for(:controller => '/images', :action => 'browse', :id => image.id) }
-    = image_tag image.data.url(:thumb), {:width => "155px", :height=> "155px"}
+  - popup_url = url_for(:controller => 'admin/flagged_images', :action => 'get_image_popup', :image_id => image.id)
+  .button.image_frame{:target => flag.image.id, 'data-url' => popup_url}
+    = async_image_tag image.data.url(:thumb), {:width => "155px", :height=> "155px", :class => "image-thumb"}
   
-  .button_area.info_line
-    .button.reinstate.left{:id => "button-reinstate-#{image.id}"}
-      = link_to('#', {:action => :reinstate_image, :image_id => image.id}, 
-              :method => :post, 
-              :style => "display:none", 
-              :confirm => t('admin.reinstate_image_confirm'))
+  .button_area.info_line.action-container
+    .button.reinstate.left{:id => "button-reinstate-#{image.id}", 'data-confirm' => t('admin.reinstate_image_confirm')}
+      - reinstate_link = url_for( :controller => "admin/flagged_images", :action => "reinstate_image", 
+                                  :image_id => image.id, :flag_type => params[:flag_type])
+      %form{:action => reinstate_link, :class => "reinstate-form action-form",
+                :id => "reinstate-form-#{image.id}", :method =>'post'}
+        = hidden_field_tag(:authenticity_token, form_authenticity_token)
     
-    .button.remove.left{:id => "button-remove-#{image.id}"}
-      = link_to('#', {:action => :remove_image, :image_id => image.id}, 
-            :method => :delete, 
-            :style => "display:none", 
-            :confirm => t('admin.remove_image_confirm'), 
-            :class => "button_#{image.id} button remove left")
+    .button.remove.left{:id => "button-remove-#{image.id}", 'data-confirm' => t('admin.remove_image_confirm')}
+      - remove_link = url_for(  :controller => "admin/flagged_images", :action => "remove_image", 
+                                :image_id => image.id, :flag_type => params[:flag_type])
+      %form{:action => remove_link, :class => "remove-form action-form",
+                :id => "remove-form-#{image.id}", :method =>'post'}
+        = hidden_field_tag(:authenticity_token, form_authenticity_token)
           
   .image_name.info_line
-    %a.text.black.font11.image_link{ :href => "#", :target => image.id }
+    %a.text.black.font11.image_link{ :href => '#', 'data-url' => popup_url}
       = truncate(image.name, :length => 20)
   
   .author.info_line
