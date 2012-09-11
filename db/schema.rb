@@ -95,9 +95,9 @@ ActiveRecord::Schema.define(:version => 20120820110654) do
     t.integer  "height"
     t.string   "keyword"
     t.boolean  "is_owner_avatar"
+    t.boolean  "is_removed"
     t.string   "tier"
-    t.boolean  "is_removed",        :default => false
-    t.integer  "pageview",          :default => 0
+    t.integer  "pageview"
     t.integer  "promote_num",       :default => 0
   end
 
@@ -241,8 +241,8 @@ ActiveRecord::Schema.define(:version => 20120820110654) do
     t.string   "cvv"
     t.integer  "shipping_address_id"
     t.integer  "billing_address_id"
-    t.boolean  "is_enable_facebook",                    :default => false
-    t.boolean  "is_enable_twitter",                     :default => false
+    t.boolean  "is_enable_facebook"
+    t.boolean  "is_enable_twitter"
     t.float    "withdrawn_amount",                      :default => 0.0
   end
 

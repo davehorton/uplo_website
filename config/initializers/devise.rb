@@ -210,12 +210,12 @@ Devise.setup do |config|
     Warden::Strategies.add(:api) do
 
       def valid?
-        params[:username] || params[:password]
+        params[:login] || params[:password]
       end
 
       def authenticate!
-        user = User.find_by_username params[:username]
-        user = User.find_by_email params[:username] if user.nil?
+        user = User.find_by_username params[:login]
+        user = User.find_by_email params[:login] if user.nil?
         if user.nil?
           return fail!('User does not exist')
         elsif not user.confirmed?
