@@ -55,8 +55,8 @@ class Api::BaseController < ActionController::Base
     if (options.has_key? :json)
       result_string = options[:json]
       result = AESCrypt.encrypt(result_string.to_json.to_s, key_for_decrypt)
-      options.delete :json
-      options[:text] = result
+      #options.delete :json
+      #options[:text] = result
     end
     # call the ActionController::Base render to show the page
     super
@@ -105,8 +105,8 @@ class Api::BaseController < ActionController::Base
   end
 
   def decrypt_params
-    return if request.get?
-    a = decrypt_recursive(params)
+    #return if request.get?
+    #a = decrypt_recursive(params)
   end
 
   def decrypt_recursive(hash, parent = nil)

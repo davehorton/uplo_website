@@ -34,10 +34,14 @@ class HomeController < ApplicationController
   end
 
   def spotlight
+    @current_views = IMAGE_SORT_VIEW[Image::SORT_OPTIONS[:spotlight]]
     params[:sort_by] = Image::SORT_OPTIONS[:spotlight]
     params[:filtered_by] = Image::SEARCH_TYPE
-    @current_views = IMAGE_SORT_VIEW[Image::SORT_OPTIONS[:spotlight]]
-    @data = Image.get_spotlight_images(@filtered_params)
+    @filtered_params[:sort_direction] = 'DESC'
+    @filtered_params[:sort_field] = "created_at"
+    @data = Image.do_search_accessible_images( current_user.id,
+        { :query => "",
+          :filtered_params => @filtered_params })
     render :template => 'home/browse'
   end
 

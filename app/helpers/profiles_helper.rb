@@ -13,7 +13,7 @@ module ProfilesHelper
       'You Are Following'
     else
       user = User.find_by_id user_id
-      "#{user.try(:first_name)} Is Following"
+      "#{user.try(:username)} Is Following"
     end
   end
 end

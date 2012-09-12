@@ -397,7 +397,7 @@ class ImagesController < ApplicationController
       elsif actions.index(params[:action]) == nil
         size = 12
       else
-        size = 24
+        size = 30
       end
       return size
     end

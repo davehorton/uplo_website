@@ -123,13 +123,12 @@ class UsersController < ApplicationController
   end
 
   def update_profile_info
-    if request.xhr?
-      if current_user.update_profile(params[:user])
-        result = {:success => true, :fullname => current_user.fullname.truncate(18)}
-      else
-        result = {:success => false, :msg => current_user.errors.full_messages.join(' and ') }
-      end
-      render :json => result
+    if current_user.update_profile(params[:user])
+      flash[:notice] = 'Profile was successfully updated.'
+      redirect_to :controller => 'profiles', :action => 'show'
+    else
+      flash[:alert] = current_user.errors.full_messages.to_sentence
+      redirect_to  :controller => 'profiles', :action => 'show'
     end
   end
 

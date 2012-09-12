@@ -75,7 +75,7 @@ class User < ActiveRecord::Base
   validates_presence_of :first_name, :last_name, :username, :message => 'cannot be blank'
   validates :password, :presence => true, :confirmation => true, :if => :need_checking_password?
   validates_format_of :website, :allow_blank => true,
-          :with => /(^$)|(^((http|https):\/\/){0,1}[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(([0-9]{1,5})?\/.*)?$)/i
+          :with => /(^$)|(^((http|https):\/\/){1}[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(([0-9]{1,5})?\/.*)?$)/i
   validates_uniqueness_of :username, :message => 'must be unique'
   validates_length_of :first_name, :last_name, :in => 2..30, :message => 'must be 2 - 30 characters in length'
   validates_confirmation_of :paypal_email, :message => "should match confirmation"

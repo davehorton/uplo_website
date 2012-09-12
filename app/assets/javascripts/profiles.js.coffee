@@ -225,6 +225,8 @@ $ ->
     })
 
   $('#btn-update').click ->
+    $('#frm-edit-profile-info').submit()
+    return
     email_reg = /^([0-9a-zA-Z]([-.\w]*[0-9a-zA-Z])*@(([0-9a-zA-Z])+([-\w]*[0-9a-zA-Z])*\.)+[a-zA-Z]{2,9})$/i
     website_reg = /(^$)|(^((http|https):\/\/){0,1}[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(([0-9]{1,5})?\/.*)?$)/i
     if email_reg.test($('#user_email').val()) == false
