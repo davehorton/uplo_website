@@ -95,7 +95,7 @@
       .like.left
         .icon.left
         .times.text.fuzzy-gray.bold.font16.left= @image.likes
-        .label.text.fuzzy-gray.font16.left= pluralize_without_count(@image.likes, 'Like')
+        .label.text.fuzzy-gray.font16.left= ("#{@image.likes} Likes")
       .comment.text.fuzzy-gray.font16.left
         .icon.left
         .times.text.fuzzy-gray.bold.left= @image.comments.count
@@ -294,7 +294,7 @@
           success: function(response){
             if(response.success==true){
               $(".actions .like .times").html(response.likes);
-              $(".actions .like .label").html(helper.pluralize_without_count(response.likes, 'Like', 'Likes'));
+              $(".actions .like .label").html("#{response.likes} Likes"));
               if(is_dislike == 'true'){
                 $("#btn-like").attr('data-dislike', 'false');
                 $('#btn-like').removeClass('dislike');

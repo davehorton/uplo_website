@@ -301,7 +301,7 @@ class User < ActiveRecord::Base
         search_term = SharedMethods::Converter::SearchStringConverter.process_special_chars(params[:query])
         User.search search_term, sphinx_search_options
       end
-  end
+    end
 
   # PUBLIC INSTANCE METHODS
   def liked_images

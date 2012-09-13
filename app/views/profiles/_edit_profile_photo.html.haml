@@ -8,7 +8,7 @@
   #add-file.hidden-uploader.button.choose-photo
     = form_for :user, :url => "#{ url_for(:controller => 'users', :action => 'update_avatar') }", :method => 'post', :html => { :id => 'fileupload' } do |f|
       = f.file_field :avatar
-  .text.fuzzy-gray.font12 JPG, GIF, or PNG only please
+  .text.fuzzy-gray.font12 JPEG, JPG only please
 .line-separator.left
 .held-photos.left
   .text.black.bold.font12 Portrait Uploads
