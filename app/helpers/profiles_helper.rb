@@ -4,7 +4,7 @@ module ProfilesHelper
       'Your'
     else
       user = User.find_by_id user_id
-      "#{user.try(:first_name)}'s"
+      "#{user.try(:username)}'s"
     end
   end
 
