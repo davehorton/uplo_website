@@ -86,8 +86,12 @@ Uplo::Application.routes.draw do
     :confirmations => "users/confirmations", :passwords => "users/passwords" }
 
   devise_scope :user do
+    put "users/enable_social", :to => "users#enable_social"
+    put "users/disable_social", :to => "users#disable_social"
+
     resources :users do
     end
+
     get "signin", :to => "users/sessions#new"
     post "signin", :to => "users/sessions#new"
     get "register", :to => "users/registrations#new"
@@ -102,6 +106,10 @@ Uplo::Application.routes.draw do
     post 'request_invitation', :to => 'users#request_invitation'
 
   end
+
+  # SOCIAL NETWORK
+  get "socials/facebook_callback", :to => "socials#facebook_callback"
+
 
   # ADMIN SECTIONS
   get '/admin', :to => "admin/admin#index"

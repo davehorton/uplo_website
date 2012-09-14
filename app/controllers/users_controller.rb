@@ -1,4 +1,5 @@
 class UsersController < ApplicationController
+  include SocialModule
   before_filter :authenticate_user!, :except => [:request_invitation]
   before_filter :show_notification
   layout 'main'
@@ -239,6 +240,65 @@ class UsersController < ApplicationController
 
     render :json => result
   end
+
+  # SOCIAL NETWORK INTEGRATION
+  # params
+  # type_social
+  def enable_social
+    get_auth_info
+    if (params[:type_social] == "Facebook")
+      @api_key = @facebook_cfg["api_key"]
+      @secret = @facebook_cfg["secret"]
+      oauth_client = OAuth2::Client.new(@api_key, @secret, {
+        :authorize_url => 'https://www.facebook.com/dialog/oauth'
+      })
+
+      redirect_to oauth_client.authorize_url({
+          :client_id => @api_key,
+          :redirect_uri => url_for(:controller => :socials, :action => :facebook_callback)
+      }) and return
+    elsif (params[:type_social] == "Twitter")
+      @api_key = @twitter_cfg["api_key"]
+      @secret = @twitter_cfg["secret"]
+      oauth_client = OAuth2::Client.new(@api_key, @secret, {
+        :authorize_url => 'http://api.twitter.com/oauth'
+      })
+
+      redirect_to oauth_client.authorize_url({
+          :client_id => @api_key,
+          :redirect_uri => url_for(:controller => :socials, :action => :facebook_callback)
+      }) and return
+    elsif (params[:type_social] == "Pinterest")
+
+    elsif (params[:type_social] == "Tumblr")
+
+    elsif (params[:type_social] == "Flickr")
+
+    end
+
+    flash[:notice] = "Not found the social network integration"
+    redirect_to :action => :profile
+  end
+
+  # params
+  # type_social
+  def disable_social
+    if (params[:type_social] == "Facebook")
+      current_user.update_attribute(:facebook_token, "")  
+    elsif (params[:type_social] == "Twitter")
+      current_user.update_attribute(:twitter_token, "")
+    elsif (params[:type_social] == "Pinterest") 
+      current_user.update_attribute(:pinterest_token, "")
+    elsif (params[:type_social] == "Tumblr")
+      current_user.update_attribute(:tumblr_token, "")
+    elsif (params[:type_social] == "Flickr")
+      current_user.update_attribute(:flickr_token, "")
+    end
+    flash[:notice] = "Disabled #{params[:type_social]}"
+    redirect_to :action => :profile
+  end
+
+
 
   protected
   def default_page_size

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120820110654) do
+ActiveRecord::Schema.define(:version => 20120914073222) do
 
   create_table "addresses", :force => true do |t|
     t.string   "first_name"
@@ -244,6 +244,11 @@ ActiveRecord::Schema.define(:version => 20120820110654) do
     t.boolean  "is_enable_facebook"
     t.boolean  "is_enable_twitter"
     t.float    "withdrawn_amount",                      :default => 0.0
+    t.string   "facebook_token"
+    t.string   "twitter_token"
+    t.string   "flickr_token"
+    t.string   "tumblr_token"
+    t.string   "pinterest_token"
   end
 
   add_index "users", ["email"], :name => "index_users_on_email", :unique => true

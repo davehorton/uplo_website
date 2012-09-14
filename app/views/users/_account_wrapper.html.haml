@@ -1,10 +1,12 @@
-/locals header, last
+/locals header, last, hide_edit
+- hide_edit = false if hide_edit.nil?
 - last = false if last.nil?
 .account_wrapper{:class => last ? "last_wrapper" : ""}
   .wrapper_header.left.font16.bold.text= header
-  .edit_button.right
-    .edit_icon.left
-    .text.font11.left Edit
+  - if !(hide_edit)
+    .edit_button.right
+      .edit_icon.left
+      .text.font11.left Edit
   .clear
   .line-separator
   .info_area

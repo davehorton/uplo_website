@@ -41,10 +41,13 @@ gem "dalli" # For memcache
 gem "nokogiri"
 gem 'country-select'
 
+# Social Integration
+gem 'oauth2'
+
 # Validate Email
 gem 'valid_email'
 
-#AES Crypt
+# AES Crypt
 gem 'aescrypt'
 
 # Gems used only for assets and not required
