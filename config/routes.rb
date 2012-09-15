@@ -109,7 +109,12 @@ Uplo::Application.routes.draw do
 
   # SOCIAL NETWORK
   get "socials/facebook_callback", :to => "socials#facebook_callback"
+  get "socials/twitter_callback", :to => "socials#twitter_callback"
+  get "socials/tumblr_callback", :to => "socials#tumblr_callback"
 
+  get "socials/facebook_share", :to => "socials#facebook_share"
+  get "socials/twitter_share", :to => "socials#twitter_share"
+  get "socials/tumblr_share", :to => "socials#tumblr_share"
 
   # ADMIN SECTIONS
   get '/admin', :to => "admin/admin#index"

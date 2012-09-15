@@ -249,6 +249,7 @@ class UsersController < ApplicationController
     if (params[:type_social] == "Facebook")
       @api_key = @facebook_cfg["api_key"]
       @secret = @facebook_cfg["secret"]
+
       oauth_client = OAuth2::Client.new(@api_key, @secret, {
         :authorize_url => 'https://www.facebook.com/dialog/oauth'
       })
@@ -258,21 +259,49 @@ class UsersController < ApplicationController
           :redirect_uri => url_for(:controller => :socials, :action => :facebook_callback)
       }) and return
     elsif (params[:type_social] == "Twitter")
-      @api_key = @twitter_cfg["api_key"]
-      @secret = @twitter_cfg["secret"]
-      oauth_client = OAuth2::Client.new(@api_key, @secret, {
-        :authorize_url => 'http://api.twitter.com/oauth'
-      })
 
-      redirect_to oauth_client.authorize_url({
-          :client_id => @api_key,
-          :redirect_uri => url_for(:controller => :socials, :action => :facebook_callback)
-      }) and return
+      @consumer_key = @twitter_cfg["consumer_key"]
+      @consumer_secret = @twitter_cfg["consumer_secret"]
+      @options = {:site => "http://api.twitter.com", :request_endpoint => "http://api.twitter.com"}
+
+      consumer = OAuth::Consumer.new(@consumer_key, @consumer_secret, @options)
+      request_token = consumer.get_request_token(:oauth_callback => 'http://127.0.0.1:3000/socials/twitter_callback')#url_for(:controller => :socials, :action => :twitter_callback))
+
+      session[:token]= request_token.token
+      session[:secret]= request_token.secret
+      redirect_to request_token.authorize_url and return
     elsif (params[:type_social] == "Pinterest")
 
     elsif (params[:type_social] == "Tumblr")
 
+      @consumer_key = @tumblr_cfg["consumer_key"]
+      @consumer_secret = @tumblr_cfg["consumer_secret"]
+
+      consumer=OAuth::Consumer.new( @consumer_key, @consumer_secret, {
+        :site => "http://www.tumblr.com",
+        :scheme             => :header,
+        :http_method        => :post,
+        :request_token_path => "/oauth/request_token",
+        :access_token_path  => "/oauth/access_token",
+        :authorize_path     => "/oauth/authorize"
+      })
+
+      request_token=consumer.get_request_token
+      session[:request_token]=request_token 
+      redirect_to request_token.authorize_url and return
+
     elsif (params[:type_social] == "Flickr")
+      require 'flickraw'
+
+      @api_key = @flickr_cfg["api_key"]
+      @secret_key = @flickr_cfg["secret"]
+
+
+      FlickRaw.api_key=@api_key
+      FlickRaw.shared_secret=@secret_key
+
+      token = flickr.get_request_token
+      redirect_to flickr.get_authorize_url(token['oauth_token'], :perms => 'delete') and return
 
     end
 

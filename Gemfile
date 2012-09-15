@@ -7,9 +7,6 @@ gem 'rails', '>= 3.1.3'
 # gem 'iron_worker'
 # gem 'typhoeus'
 
-# Social network
-gem 'twitter'
-gem 'flickraw'
 gem 'urbanairship'
 
 #gem "unicorn" # HTTP Server
@@ -42,7 +39,12 @@ gem "nokogiri"
 gem 'country-select'
 
 # Social Integration
+gem 'oauth'
 gem 'oauth2'
+gem 'flickraw'
+gem 'fb_graph'
+gem 'twitter', :git => 'git://github.com/sferik/twitter.git'
+gem 'flickraw'
 
 # Validate Email
 gem 'valid_email'

@@ -188,10 +188,11 @@ class ImagesController < ApplicationController
   # GET images/:id/browse
   def browse
     push_redirect
+    @user = current_user
     @image = Image.un_flagged.find_by_id(params[:id])
-    if (@image.nil? || ((@image.author.is_banned? || @image.author.is_removed) && !current_user.is_admin))
+    if (@image.nil? || ((@image.author.is_banned? || @image.author.is_removed) && !@user.is_admin))
       return render_not_found
-    elsif @image.gallery && !@image.gallery.can_access?(current_user)
+    elsif @image.gallery && !@image.gallery.can_access?(@user)
       return render_unauthorized
     end
 
@@ -202,7 +203,7 @@ class ImagesController < ApplicationController
     # end
 
     # @images = @image.gallery.images.all(:order => 'name')
-    @is_owner = @image.has_owner(current_user.id)
+    @is_owner = @image.has_owner(@user.id)
     if (@is_owner)
       @images = @image.gallery.images.un_flagged.where("images.id not in (#{@image.id})").order('name')
     else
@@ -212,7 +213,7 @@ class ImagesController < ApplicationController
     @author = @image.gallery.user
     @dislike = false
     if user_signed_in?
-      @dislike = @image.liked_by? current_user.id
+      @dislike = @image.liked_by? @user.id
     end
 
     @filtered_params[:page_size] = 10

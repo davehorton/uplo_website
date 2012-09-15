@@ -2,3 +2,9 @@ facebook:
  api_key: '353162694772504'
  secret: '9de746294224316dc3fa7e21a260aff1'
  canvas_url: 'http://apps.facebook.com/ggomeze/'
+twitter:
+ consumer_key: "TZCogkmxHiQfoZmHImseg"
+ consumer_secret: "rAb7Qar26bD8Y5spNuNQDgmFfnWn2cBjf8GqwVgM"
+tumblr:
+ consumer_key: "CMVOTjXluWfMA8PyK7nvEPr7tst7AJrf7KM7tBlysNpZmViH9k"
+ consumer_secret: "L7TNwK5qLHFgLKpqlKRphk3K5j0BuyEUkgUtMlIemO1dIvITtS"

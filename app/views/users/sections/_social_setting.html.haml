@@ -6,8 +6,8 @@
         .line Facebook
         .line Twitter
         .line Tumblr
-        .line Flickr
-        .line Pinterest
+        -#.line Flickr
+        -#.line Pinterest
       .form_wrapper.left{:style => "width:180px; margin-left:10px"}
         .line
           .remove_css_effect
@@ -27,16 +27,16 @@
               = link_to "Enable", {:action => :enable_social, :type_social => "Tumblr"}, :method => :put
             - else
               = link_to "Disable", {:action => :disable_social, :type_social => "Tumblr"}, :method => :put
-        .line
-          .remove_css_effect
-            - if user.flickr_token.blank?
-              = link_to "Enable", {:action => :enable_social, :type_social => "Flickr"}, :method => :put
-            - else
-              = link_to "Disable", {:action => :disable_social, :type_social => "Flickr"}, :method => :put
-        .line
-          .remove_css_effect
-            - if user.pinterest_token.blank?
-              = link_to "Enable", {:action => :enable_social, :type_social => "Pinterest"}, :method => :put
-            - else
-              = link_to "Disable", {:action => :disable_social, :type_social => "Pinterest"}, :method => :put
+        / .line
+        /   .remove_css_effect
+        /     - if user.flickr_token.blank?
+        /       = link_to "Enable", {:action => :enable_social, :type_social => "Flickr"}, :method => :put
+        /     - else
+        /       = link_to "Disable", {:action => :disable_social, :type_social => "Flickr"}, :method => :put
+        / .line
+        /   .remove_css_effect
+        /     - if user.pinterest_token.blank?
+        /       = link_to "Enable", {:action => :enable_social, :type_social => "Pinterest"}, :method => :put
+        /     - else
+        /       = link_to "Disable", {:action => :disable_social, :type_social => "Pinterest"}, :method => :put
         .line= hidden_field :user, :type_update, :value => :social_setting
