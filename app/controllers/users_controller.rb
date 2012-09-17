@@ -265,7 +265,7 @@ class UsersController < ApplicationController
       @options = {:site => "http://api.twitter.com", :request_endpoint => "http://api.twitter.com"}
 
       consumer = OAuth::Consumer.new(@consumer_key, @consumer_secret, @options)
-      request_token = consumer.get_request_token(:oauth_callback => 'http://127.0.0.1:3000/socials/twitter_callback')#url_for(:controller => :socials, :action => :twitter_callback))
+      request_token = consumer.get_request_token(:oauth_callback => url_for(:controller => :socials, :action => :twitter_callback))
 
       session[:token]= request_token.token
       session[:secret]= request_token.secret

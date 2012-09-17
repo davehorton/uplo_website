@@ -109,6 +109,7 @@ class User < ActiveRecord::Base
 
   after_create :cleanup_invitation
   before_validation :decrypt_data
+  after_validation :encrypt_data
 
   def self.find_first_by_auth_conditions(warden_conditions)
     conditions = warden_conditions.dup
@@ -770,6 +771,9 @@ class User < ActiveRecord::Base
     end
 
     def decrypt_data
+    end
+
+    def encrypt_data
     end
 
     # indexing with thinking sphinx
