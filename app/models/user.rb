@@ -108,6 +108,7 @@ class User < ActiveRecord::Base
   scope :confirmed_users, where("confirmed_at IS NOT NULL AND is_removed = ?", false)
 
   after_create :cleanup_invitation
+  before_validation :decrypt_data
 
   def self.find_first_by_auth_conditions(warden_conditions)
     conditions = warden_conditions.dup
@@ -766,6 +767,9 @@ class User < ActiveRecord::Base
 
     def number_matches_type?
       return card_type == ccTypeCheck(card_number)
+    end
+
+    def decrypt_data
     end
 
     # indexing with thinking sphinx
