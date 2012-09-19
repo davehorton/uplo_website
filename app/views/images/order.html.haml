@@ -46,7 +46,7 @@
   .image-container-wrapper.clearfix
     #order-preview.image-container.medium.left
       #preview-frame.clearfix
-        = image_tag(@image.data.url(:medium), :id => "preview-image", :class => 'image medium',
+        = image_tag(@image.data.url(:medium), :id => "preview-image", :class => 'image medium', :style => "width:638px",
                   'data-width' => @image.width,
                   'data-height' => @image.height, :alt => @image.name)
         .image-frame

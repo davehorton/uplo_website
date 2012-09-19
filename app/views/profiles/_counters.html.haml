@@ -11,7 +11,7 @@
 #likes-counter.counter.left
   .info{ :data => { :url => "#{ url_for(:controller => 'profiles', :action => 'show_likes', :user_id => @user.id) }" } }
     .number.text.black.bold.center= likes
-    .label.text.gray.center.font14.line16= "#{likes} Likes"
+    .label.text.gray.center.font14.line16= "Likes"
   .tail
 #followers-counter.counter.left
   .info{ :data => { :url => "#{ url_for(:controller => 'profiles', :action => 'show_followers', :user_id => @user.id) }" } }
