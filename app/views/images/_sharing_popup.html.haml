@@ -4,7 +4,6 @@
       .right{:onclick => "$('#social-sharing').hasClass('hide'); return false;"} &times;
     .container.left
       .text.black.bold.font14.line12.left Share this via:
-      .text.black.font11.line12.right{ :style => 'padding-top:1px;'} Share Preferences
       .line-separator.left
       .buttons-container.right
         - public_url = url_for(:controller => 'images', :action => 'public', :id => params[:id], :only_path => false)

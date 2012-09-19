@@ -29,7 +29,7 @@
   #likes-section.container.left
     .head
       %a.title{ :href => "#{ url }" }
-        .text.black.bold.font20.left= "#{user_possesive} #{@liked_images.total_entries} 'Likes'"
+        .text.black.bold.font20.left= "#{user_possesive} Likes"
         .text.fuzzy-gray.font20.left= "&nbsp;(#{ @liked_images.total_entries })".html_safe
       = render :partial => 'link_to_detail', :locals => { :empty => (@liked_images.total_entries==0), :user_id => @user.id, :url => url }
     .images-wrapper.left

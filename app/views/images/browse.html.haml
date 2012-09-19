@@ -35,7 +35,7 @@
       %span.text.black.bold.font20= number_to_currency @image.get_price(@image.tier, @image.printed_sizes.first), {:precision => 2}
   .line-separator.left
   .text.gray.font12.line16.left
-    Lorem ipsum dolor sit amet consectetur adipisicing elit sed do eiusmod tempor incididunt ut labone et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco.
+    = @image.description
 
   .clear
   .text.black.font12{:style => 'margin-top:30px;'} Related images

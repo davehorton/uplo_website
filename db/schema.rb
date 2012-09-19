@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120914073222) do
+ActiveRecord::Schema.define(:version => 20120915102240) do
 
   create_table "addresses", :force => true do |t|
     t.string   "first_name"
@@ -95,9 +95,9 @@ ActiveRecord::Schema.define(:version => 20120914073222) do
     t.integer  "height"
     t.string   "keyword"
     t.boolean  "is_owner_avatar"
-    t.boolean  "is_removed"
     t.string   "tier"
-    t.integer  "pageview"
+    t.boolean  "is_removed",        :default => false
+    t.integer  "pageview",          :default => 0
     t.integer  "promote_num",       :default => 0
   end
 
@@ -241,14 +241,16 @@ ActiveRecord::Schema.define(:version => 20120914073222) do
     t.string   "cvv"
     t.integer  "shipping_address_id"
     t.integer  "billing_address_id"
-    t.boolean  "is_enable_facebook"
-    t.boolean  "is_enable_twitter"
+    t.boolean  "is_enable_facebook",                    :default => false
+    t.boolean  "is_enable_twitter",                     :default => false
     t.float    "withdrawn_amount",                      :default => 0.0
     t.string   "facebook_token"
     t.string   "twitter_token"
     t.string   "flickr_token"
     t.string   "tumblr_token"
     t.string   "pinterest_token"
+    t.string   "twitter_secret_token"
+    t.string   "tumblr_secret_token"
   end
 
   add_index "users", ["email"], :name => "index_users_on_email", :unique => true
