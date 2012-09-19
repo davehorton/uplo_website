@@ -256,7 +256,8 @@ class UsersController < ApplicationController
 
       redirect_to oauth_client.authorize_url({
           :client_id => @api_key,
-          :redirect_uri => url_for(:controller => :socials, :action => :facebook_callback)
+          :redirect_uri => url_for(:controller => :socials, :action => :facebook_callback),
+          :scope => "offline_access,publish_stream"
       }) and return
     elsif (params[:type_social] == "Twitter")
 
