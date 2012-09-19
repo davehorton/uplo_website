@@ -9,11 +9,11 @@
         - public_url = url_for(:controller => 'images', :action => 'public', :id => params[:id], :only_path => false)
         - flickr_request = url_for(:controller => 'images', :action => 'post_image_to_flickr', :id => params[:id], :only_path => false)
         - if !(@user.tumblr_token.blank?)
-          =link_to("", {:controller => :socials, :action => :tumblr_share, :image_id => params[:id]}, :class => "button tumblr right")
+          %a.tumblr.button.right{ :href => '#', :onclick => "showSocialPopup('tumblr');"}
         - if !(@user.twitter_token.blank?)
-          =link_to("", {:controller => :socials, :action => :twitter_share, :image_id => params[:id]}, :class => "button twitter right")
+          %a.twitter.button.right{ :href => '#', :onclick => "showSocialPopup('twitter');"}
         - if !(@user.facebook_token.blank?)
-          =link_to("", {:controller => :socials, :action => :facebook_share, :image_id => params[:id]}, :class => "button facebook right")
+          %a.facebook.button.right{ :href => '#', :onclick => "showSocialPopup('facebook');"}
         %a.email.button.right{ :href => '#', :onclick => 'showEmailPopup();' }
         /%a.flickr.button.left{ :href => "#{flickr_request}", :title => "Share on Flickr", :target => "_blank" }
         /%a.pinterest.button.left.no-padding-right{ :href => image_pinterest_share_url(@image, public_url), :target=>"_blank", :title => "Share on Pinterest" }

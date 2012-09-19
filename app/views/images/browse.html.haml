@@ -52,7 +52,7 @@
           %a{ :href => "#{url}" }
             = image_tag image.data(:small), :class => 'image small left'
 
-#email-sharing-popup.left.hide
+#email-sharing-popup.left.hide.sharing-popup
   .header.left
     .email-icon.left
     .text.bold.left Share Via Email
@@ -73,7 +73,27 @@
         #button-container.right
           #btn-send.button.send.left
           #btn-cancel.button.cancel.left
-
+#social-sharing-popup.left.hide.sharing-popup
+  .header.left
+    .left.buttons-container
+      
+    .text.bold.left Share Via Social Network
+    %a.close{:href=>'#', :onclick => "$('#social-sharing').hasClass('hide'); return false;"}
+      .right &times;
+  .main.right
+    #preview.left
+      .image-container.thumb
+        = image_tag @image.data.url(:thumb), :class => 'image thumb'
+      .text.bold.clear= @image.name.truncate(20)
+      .text.fuzzy.clear= "by #{ @image.username.truncate(15) }"
+    #info.right
+      - action_url = url_for(:controller => :socials, :action => :share, :image_id => @image.id)
+      = simple_form_for(:social, :url => action_url, :method => 'post', :class => 'left', :html => { :id => 'email-details' }) do |f|
+        = f.input :message, :as => :text, :label => false, :required => false
+        = f.input :type_social, :as => :hidden, :id => "type_social"
+        #button-container.right
+          = f.submit "", :class => "button send left", :style => "border:none"
+          #btn-cancel.button.cancel.left
 .sections
   - if can_promote
     .image-container.promote-container.clearfix
@@ -147,7 +167,11 @@
           $.modal.close();
         });
 
-        $('#email-sharing-popup .close').click(function(){
+        $('.sharing-popup .cancel').click(function(){
+          $.modal.close();
+        });
+
+        $('.sharing-popup .close').click(function(){
           $.modal.close();
         });
 
@@ -263,6 +287,13 @@
       function showEmailPopup(){
         $('#social-sharing').addClass('hide');
         $("#email-sharing-popup").modal();
+      };
+
+      function showSocialPopup(class_name){
+        $('#social-sharing').addClass('hide');
+        $("#social-sharing-popup").modal();
+        $("#social-sharing-popup .header .left").first().html("<div class='" + class_name + "-icon left'></div>");
+        $("#social_type_social").val(class_name);
       };
 
       function display_sharing_box() {

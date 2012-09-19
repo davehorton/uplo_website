@@ -1300,7 +1300,7 @@ textarea { padding-top:5px; }
         background-color: $color-fuzzy-gray; } }
   }
 }
-#email-sharing-popup {
+.sharing-popup {
   width: 490px;
   min-height: 100px;
   border: 1px solid transparent;
@@ -1312,9 +1312,24 @@ textarea { padding-top:5px; }
     padding: 10px;
     background: url("/assets/bg-popup-header.png") repeat-x;
     .email-icon {
-      background-image: url('/assets/icon-email-24x24.png');
-      width: 24px;
-      height: 24px;
+      background-image: url('/assets/icon-email.png');
+      width: 32px;
+      height: 32px;
+    }
+    .facebook-icon {
+      background-image: url('/assets/icon-facebook.png');
+      width: 32px;
+      height: 32px;
+    }
+    .twitter-icon {
+      background-image: url('/assets/icon-twitter.png');
+      width: 32px;
+      height: 32px;
+    }
+    .tumblr-icon {
+      background-image: url('/assets/icon-tumblr.png');
+      width: 32px;
+      height: 32px;
     }
     .text.bold {
       font-weight: bold;
