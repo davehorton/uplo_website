@@ -134,7 +134,7 @@ class SocialsController < ApplicationController
 					    flash[:notice] = "There is some problem with authetication, please re-enable your Facebook"
 							redirect_to :controller => :users, :action => :profile and return
 					  else
-					    flash[:notice] = "Cannot share the link at this moment"
+					    flash[:notice] = "Cannot share the link at this moment: #{e.to_s} #{e.message}"
 					  end
 					rescue Exception => e
 						flash[:notice] = "Cannot share the link at this moment: #{e.to_s} #{e.message}"
