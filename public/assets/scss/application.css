@@ -1169,52 +1169,64 @@ textarea {
         font-weight: bold;
         background-color: #b3b3b3; }
 
-#email-sharing-popup {
+.sharing-popup {
   width: 490px;
   min-height: 100px;
   border: 1px solid transparent;
   border-radius: 5px;
   box-shadow: 1px -1px 5px #a1a1a1;
   background-color: white; }
-  #email-sharing-popup .header {
+  .sharing-popup .header {
     width: 470px;
     padding: 10px;
     background: url("/assets/bg-popup-header.png") repeat-x; }
-    #email-sharing-popup .header .email-icon {
-      background-image: url("/assets/icon-email-24x24.png");
-      width: 24px;
-      height: 24px; }
-    #email-sharing-popup .header .text.bold {
+    .sharing-popup .header .email-icon {
+      background-image: url("/assets/icon-email.png");
+      width: 32px;
+      height: 32px; }
+    .sharing-popup .header .facebook-icon {
+      background-image: url("/assets/icon-facebook.png");
+      width: 32px;
+      height: 32px; }
+    .sharing-popup .header .twitter-icon {
+      background-image: url("/assets/icon-twitter.png");
+      width: 32px;
+      height: 32px; }
+    .sharing-popup .header .tumblr-icon {
+      background-image: url("/assets/icon-tumblr.png");
+      width: 32px;
+      height: 32px; }
+    .sharing-popup .header .text.bold {
       font-weight: bold;
       margin-left: 10px;
       line-height: 30px; }
-  #email-sharing-popup .main {
+  .sharing-popup .main {
     padding: 10px; }
-    #email-sharing-popup .main .image-container {
+    .sharing-popup .main .image-container {
       margin-top: 0;
       margin-left: 0; }
-    #email-sharing-popup .main #email-details input, #email-sharing-popup .main #email-details textarea {
+    .sharing-popup .main #email-details input, .sharing-popup .main #email-details textarea {
       width: 285px; }
-    #email-sharing-popup .main #email-details textarea {
+    .sharing-popup .main #email-details textarea {
       height: 100px; }
-    #email-sharing-popup .main #email-details #button-container {
+    .sharing-popup .main #email-details #button-container {
       margin-top: 10px; }
-    #email-sharing-popup .main #email-details .button {
+    .sharing-popup .main #email-details .button {
       height: 27px; }
-      #email-sharing-popup .main #email-details .button.cancel {
+      .sharing-popup .main #email-details .button.cancel {
         background: url("/assets/btn-cancel.png") no-repeat;
         width: 65px; }
-      #email-sharing-popup .main #email-details .button.send {
+      .sharing-popup .main #email-details .button.send {
         background: url("/assets/btn-send.png") no-repeat;
         width: 55px;
         margin-right: 10px; }
-    #email-sharing-popup .main #info {
+    .sharing-popup .main #info {
       width: 299px;
       margin-left: 10px; }
-  #email-sharing-popup .close {
+  .sharing-popup .close {
     color: #111111;
     width: 100%; }
-    #email-sharing-popup .close .right {
+    .sharing-popup .close .right {
       border: 1px solid #a1a1a1;
       line-height: 13px;
       text-align: center;
