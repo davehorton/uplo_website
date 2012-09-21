@@ -88,7 +88,7 @@
       .text.fuzzy.clear= "by #{ @image.username.truncate(15) }"
     #info.right
       - action_url = url_for(:controller => :socials, :action => :share, :image_id => @image.id)
-      = simple_form_for(:social, :url => action_url, :method => 'post', :class => 'left', :html => { :id => 'email-details' }) do |f|
+      = simple_form_for(:social, :url => action_url, :method => 'post', :class => 'left') do |f|
         = f.input :message, :as => :text, :label => false, :required => false
         = f.input :type_social, :as => :hidden, :id => "type_social"
         #button-container.right
@@ -115,7 +115,7 @@
       .like.left
         .icon.left
         .times.text.fuzzy-gray.bold.font16.left= @image.likes
-        .label.text.fuzzy-gray.font16.left= ("Likes")
+        .label.text.fuzzy-gray.font16.left= pluralize_without_count(@image.likes, "Like")
       .comment.text.fuzzy-gray.font16.left
         .icon.left
         .times.text.fuzzy-gray.bold.left= @image.comments.count

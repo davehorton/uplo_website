@@ -10,7 +10,11 @@ class ImagesController < ApplicationController
   def mail_shared_image
     emails = params[:email]['emails'].split(',')
     emails.map { |email| email.strip }
-    SharingMailer.share_image_email(params[:id], emails, current_user.id, params[:email]['message']).deliver
+    if SharingMailer.share_image_email(params[:id], emails, current_user.id, params[:email]['message']).deliver
+      flash[:notice] = "Email sent"
+    else
+      flash[:warning] = "Could not send the email. Please re-check your information (email, message)."
+    end
     redirect_to :action => 'browse', :id => params[:id]
   end
 

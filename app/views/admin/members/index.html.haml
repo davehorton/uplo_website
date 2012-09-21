@@ -33,7 +33,7 @@
           = image_tag user.avatar_url(:large), :class => 'avatar large left'
         .user-info.left
           .username
-            %a{:href => author_profile}= user.username
+            %a{:href => author_profile}= truncate(user.username, 12)
           .numbers
             %span= "Joined #{user.created_at.strftime('%m/%d/%y')}"
             %span.separator= '|'
