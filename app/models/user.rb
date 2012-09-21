@@ -661,7 +661,7 @@ class User < ActiveRecord::Base
 
   def reinstate
     if !self.ready_for_reinstating?
-      raise NotReadyForReinstatingError
+      return false#raise NotReadyForReinstatingError
     end
 
     self.class.transaction do

@@ -325,7 +325,10 @@
           success: function(response){
             if(response.success==true){
               $(".actions .like .times").html(response.likes);
-              $(".actions .like .label").html("Likes");
+              if (response.likes != 1)
+                $(".actions .like .label").html("Likes");
+              else
+                $(".actions .like .label").html("Like");
               if(is_dislike == 'true'){
                 $("#btn-like").attr('data-dislike', 'false');
                 $('#btn-like').removeClass('dislike');

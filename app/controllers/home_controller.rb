@@ -69,10 +69,7 @@ class HomeController < ApplicationController
       when "views"
         @filtered_params[:sort_field] = "pageview"
       when "spotlight"
-        @data = Image.get_spotlight_images(current_user.id, 
-          { :query => "",
-            :filtered_params => @filtered_params })
-        render :template => 'home/browse' and return
+        @filtered_params[:sort_field] = "promote_num"
       end
 
       @data = Image.do_search_accessible_images( current_user.id,
