@@ -14,7 +14,9 @@ class HomeController < ApplicationController
 
   def index
     session[:back_url] = url_for(:controller => 'home', :action => "browse") if session[:back_url].nil?
-    @images = Image.get_spotlight_images(@filtered_params)
+    @images = Image.get_spotlight_images(current_user.id, 
+        { :query => "",
+          :filtered_params => @filtered_params })
     if user_signed_in?
       @current_views = 'recent images'
       @recent_images = Image.get_browse_images(@filtered_params)

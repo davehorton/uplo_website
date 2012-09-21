@@ -5,7 +5,11 @@ class SharingMailer < ApplicationMailer
     @message = message
     @user = User.find_by_id user_id
     @image = Image.find_by_id image_id
-    mail(:to => emails, :subject => "Share from UPLO")
+    begin
+      mail(:to => emails, :subject => "Share from UPLO")
+    rescue
+      return false
+    end
   end
 
   def share_gallery_email(gallery_id, emails, user_id, message = nil)

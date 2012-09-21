@@ -8,8 +8,20 @@ class ImagesController < ApplicationController
   layout 'main'
 
   def mail_shared_image
-    emails = params[:email]['emails'].split(',')
-    emails.map { |email| email.strip }
+    begin
+      emails = params[:email]['emails'].split(',')
+      email_format = Regexp.new(/^([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})$/)
+      emails.map do |email| 
+        if(email_format.match(email))
+          email.strip 
+        else
+          raise "The email #{email} is invalid"
+        end
+      end
+    rescue Exception => e
+      flash[:warning] = e.message
+      redirect_to :action => 'browse', :id => params[:id] and return
+    end
     if SharingMailer.share_image_email(params[:id], emails, current_user.id, params[:email]['message']).deliver
       flash[:notice] = "Email sent"
     else
