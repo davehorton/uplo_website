@@ -35,7 +35,11 @@ class HomeController < ApplicationController
 
   def spotlight
     @current_views = IMAGE_SORT_VIEW[Image::SORT_OPTIONS[:spotlight]]
-    @data = Image.get_spotlight_images(current_user.id)
+    @filtered_params[:sort_direction] = 'DESC'
+    @filtered_params[:sort_field] = "created_at"
+    @data = Image.get_spotlight_images(current_user.id, 
+        { :query => "",
+          :filtered_params => @filtered_params })
     render :template => 'home/browse'
   end
 
@@ -63,7 +67,9 @@ class HomeController < ApplicationController
       when "views"
         @filtered_params[:sort_field] = "pageview"
       when "spotlight"
-        @data = Image.get_spotlight_images
+        @data = Image.get_spotlight_images(current_user.id, 
+          { :query => "",
+            :filtered_params => @filtered_params })
         render :template => 'home/browse' and return
       end
 

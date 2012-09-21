@@ -158,8 +158,8 @@ class Image < ActiveRecord::Base
         :order => paging_info.sort_string)
     end
 
-    def get_spotlight_images(user_id)
-      params = {}
+    def get_spotlight_images(user_id, params)
+      params ||= {}
       with_display = "*, IF(author_id = #{user_id} OR permission = #{Gallery::PUBLIC_PERMISSION}, 1, 0) AS display"
       params[:sphinx_search_options] = {
         :joins => '
