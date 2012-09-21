@@ -5,6 +5,7 @@ helper.endless_load_more( ->
     return $.modal.close()
 )
 load = (url, counter)->
+  helper.stopLoadmore = true
   $('#mask').modal()
   $.ajax({
     url: url,
@@ -20,6 +21,7 @@ load = (url, counter)->
       $('#container').html response.html
       $("##{counter}").find('.info .number').text response.counter
       $("##{counter}").find('.info .label').text count_label
+      helper.stopLoadmore = false
       $(window).scroll()
   })
 

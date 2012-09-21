@@ -20,7 +20,7 @@ $ ->
   $('form#frm-comment').inputHintOverlay(5, 8)
   $('#post-comment').click ->
     if($('#comment_description').val().trim() == '')
-      helper.show_notification('Comment cannot be blank!')
+      $("#post-comment-warning").html('Comment cannot be blank!')
       return false
 
     data_form = $('#frm-comment')
@@ -38,9 +38,10 @@ $ ->
           $('.comment .label').html helper.pluralize_without_count(response.comments_number, 'Comment', 'Comments')
           $('#comment_description').val('')
           $('form#frm-comment').inputHintOverlay(5, 8)
+          $("#post-comment-warning").html("")
           $.modal.close()
         else
-          helper.show_notification(response.msg)
+          $("#post-comment-warning").html(response.msg)
           $.modal.close()
       error: ->
         helper.show_notification('Something went wrong! Try to post your comment later!')

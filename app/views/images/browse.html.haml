@@ -141,7 +141,9 @@
         = form_for :comment, :url => '/comments', :method => 'post', :html => {:id =>'frm-comment'} do |f|
           = f.text_area :description, :class => 'text gray font12 left', :title => 'Add your comment here...'
           = f.hidden_field :image_id, :value => @image.id
-          #post-comment.button.post-comment.clear
+          #post-comment.button.post-comment.clear{:style => "width:150px"}
+            #post-comment-warning.right{:style => "float:right;line-height: 30px;color: red;"}
+
   .clear
 
 = render :partial => 'shared/flag_form', :layout => 'layouts/popup', :locals => { :title => 'Flag for Review', :id => "flag_form"}

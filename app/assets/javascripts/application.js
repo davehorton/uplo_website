@@ -20,6 +20,7 @@ global = {
  */
 helper = {
   timerID: null,
+  stopLoadmore: false,
   pluralize_without_count: function(number, single_form, plural_form) {
     if(parseInt(number) == 1) {
       return single_form;
@@ -65,6 +66,8 @@ helper = {
           type: 'GET',
           dataType: 'html',
           success: function(response) {
+            if (stopLoadmore)
+              return;
             var result;
             result = $.parseJSON(response);
             $('#endless-pages').append(result.items);
