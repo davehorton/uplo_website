@@ -158,26 +158,23 @@ class Image < ActiveRecord::Base
         :order => paging_info.sort_string)
     end
 
-    def get_spotlight_images params
-      conditions = [
-        "gals.permission = :gallery_permission
-        AND image_flags.reported_by IS NULL
-        AND users.is_banned = :user_banned
-        AND users.is_removed = :user_removed
-        AND images.promote_num > 0",
-        { :gallery_permission => Gallery::PUBLIC_PERMISSION,
-          :image_removed => false,
-          :user_banned => false,
-          :user_removed => false
-        }
-      ]
-      paging_info = parse_paging_options(params,
-        {:sort_criteria => "images.promote_num DESC, images.updated_at DESC"})
-
-      self.joined_images.joins("JOIN users ON gals.user_id = users.id").where(conditions).paginate(
-        :page => paging_info.page_id,
-        :per_page => paging_info.page_size,
-        :order => paging_info.sort_string)
+    def get_spotlight_images 
+      params = {}
+      with_display = "*, IF(author_id = #{user_id} OR permission = #{Gallery::PUBLIC_PERMISSION}, 1, 0) AS display"
+      params[:sphinx_search_options] = {
+        :joins => '
+          LEFT JOIN galleries AS gals ON gals.id = images.gallery_id
+          LEFT JOIN image_flags ON images.id = image_flags.image_id
+          LEFT JOIN users ON gals.user_id = users.id',
+        :sphinx_select => with_display,
+        :with => {
+          :banned_user => false,
+          :removed_user => false,
+          :flagged_by => '',
+          :display => 1,
+          :promote_num => 1 }
+      }
+      self.do_search(params)
     end
 
     def get_all_images_with_current_user(params, current_user = nil)
