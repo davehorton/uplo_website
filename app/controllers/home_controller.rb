@@ -35,7 +35,7 @@ class HomeController < ApplicationController
 
   def spotlight
     @current_views = IMAGE_SORT_VIEW[Image::SORT_OPTIONS[:spotlight]]
-    @data = Image.get_spotlight_images
+    @data = Image.get_spotlight_images(current_user.id)
     render :template => 'home/browse'
   end
 
