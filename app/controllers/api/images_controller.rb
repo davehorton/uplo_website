@@ -183,7 +183,9 @@ class Api::ImagesController < Api::BaseController
   end
 
   def popular_images
-    images = Image.get_spotlight_images(current_user.id, @filtered_params)
+    images = Image.get_spotlight_images(current_user.id,
+            { :query => "",
+              :filtered_params => @filtered_params })
     @result[:total] = images.total_entries
     @result[:data] = process_public_images(images)
     @result[:success] = true

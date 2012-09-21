@@ -18,14 +18,15 @@ class ImagesController < ApplicationController
           raise "The email #{email} is invalid"
         end
       end
+    
+      if SharingMailer.share_image_email(params[:id], emails, current_user.id, params[:email]['message']).deliver
+        flash[:notice] = "Email sent"
+      else
+        flash[:warning] = "Could not send the email. Please re-check your information (email, message)."
+      end
     rescue Exception => e
       flash[:warning] = e.message
       redirect_to :action => 'browse', :id => params[:id] and return
-    end
-    if SharingMailer.share_image_email(params[:id], emails, current_user.id, params[:email]['message']).deliver
-      flash[:notice] = "Email sent"
-    else
-      flash[:warning] = "Could not send the email. Please re-check your information (email, message)."
     end
     redirect_to :action => 'browse', :id => params[:id]
   end
