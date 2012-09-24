@@ -6,7 +6,7 @@ class Notification < ActiveRecord::Base
   }
   TYPE_ACTION = {
     TYPE[:like] => 'like',
-    TYPE[:comment] => 'commented',
+    TYPE[:comment] => 'commented on',
     TYPE[:purchase] => 'purchased'
   }
 
