@@ -36,6 +36,9 @@ class Image < ActiveRecord::Base
     :light_wood => 6,
     :rustic_wood => 7
   }
+  MOULDING_SIZES_CONSTRAIN = {
+    MOULDING[:rustic_wood] => [IMAGE_SQUARE_PRINTED_SIZES[0], IMAGE_PORTRAIT_PRINTED_SIZES[0]]
+  }
   MOULDING_DISCOUNT = {
     MOULDING[:print] => IMAGE_MOULDING_DISCOUNT,
     MOULDING[:canvas] => IMAGE_MOULDING_DISCOUNT,

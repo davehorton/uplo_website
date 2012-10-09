@@ -22,11 +22,11 @@
       .round-box.option.left.print-sizes-container
         .header.text.black.bold.font14= "Print Size"
         .item.left
-          = f.select :size, printed_sizes_options(@image, size)
+          = f.select :size, printed_sizes_options(@image, size), :prompt => '-- Select --'
       .round-box.option.left{:style => 'width:138px;'}
         .header.text.black.bold.font14= "Moulding Choice"
         .item.left
-          = f.select :moulding, mounding_options(moulding)
+          = f.select :moulding, mounding_options(moulding), :prompt => '-- Select --'
       .round-box.option.right{:style => 'width:138px;'}
         .header.text.black.bold.font14= "Quantity"
         .item.left
@@ -58,4 +58,5 @@
       var image_id = '<%= params[:id] %>';
       var pricing = <%= Image::TIERS_PRICES[@image.tier].to_json %>;
       var moulding_discount = <%= Image::MOULDING_DISCOUNT.to_json %>;
+      var moulding_constrain = <%= Image::MOULDING_SIZES_CONSTRAIN.to_json %>
   = javascript_include_tag 'app/order_image.js'

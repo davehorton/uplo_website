@@ -20,13 +20,18 @@ class ShoppingCartController < ApplicationController
   def add_to_cart
     image = Image.find_by_id params[:image_id]
     params[:line_item].delete(:image_id)
-
     if(image.nil? || image.image_flags.count > 0)
       flash[:warning] = "Your recent ordered image does not exist anymore."
       redirect_to :controller => :home, :action => :browse and return
     elsif not valid_item?(params[:line_item])
       flash[:warning] = "Please fill all options first."
       redirect_to :controller => :images, :action => :order, :id => image.id and return
+
+    #check moulding & size constrain
+    elsif Image::MOULDING_SIZES_CONSTRAIN.has_key?(params[:line_item]['moulding']) and Image::MOULDING_SIZES_CONSTRAIN[params[:line_item]['moulding']].index(params[:line_item]['size'])
+      flash[:error] = "The mould is not compatible with this size. Please change your options."
+      redirect_to :controller => :images, :action => :order, :id => image.id and return
+
     else
       line_item = @cart.order.line_items.new do |item|
         item.image = image
@@ -52,6 +57,12 @@ class ShoppingCartController < ApplicationController
     elsif not valid_item?(params[:line_item])
       flash[:warning] = "Please fill all options first."
       redirect_to :controller => :images, :action => :order, :id => line_item.image.id, :line_item => line_item.id and return
+
+    #check moulding & size constrain
+    elsif Image::MOULDING_SIZES_CONSTRAIN.has_key?(params[:line_item]['moulding']) and Image::MOULDING_SIZES_CONSTRAIN[params[:line_item]['moulding']].index(params[:line_item]['size'])
+      flash[:error] = "The mould is not compatible with this size. Please change your options."
+      redirect_to :controller => :images, :action => :order, :id => image.id and return
+
     else
       image = line_item.image
       line_item.attributes = params[:line_item]
@@ -123,7 +134,7 @@ class ShoppingCartController < ApplicationController
 
     def valid_item?(hash)
       required_fields = ["size", "moulding", "quantity"]
-      required_fields.each { |k| return false if hash.has_key?(k)==false }
+      required_fields.each { |k| return false if hash.has_key?(k)==false or hash[k].blank? }
       if hash["quantity"] =~ /^\d*$/
         return false if hash["quantity"].to_i<=0
       else
