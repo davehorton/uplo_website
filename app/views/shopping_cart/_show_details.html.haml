@@ -5,7 +5,7 @@
     .cell.left MOULDING
     .cell.left QTY
     .cell.left PRICE
-    .cell.left TAX
+    / .cell.left TAX
     .cell.left.subtotal SUBTOTAL
 
 
@@ -15,7 +15,7 @@
       - total_quantity += line_item.quantity.to_i
       - image = line_item.image
       - line_price = line_item.price * line_item.quantity.to_i
-      - line_tax = line_item.price * line_item.quantity.to_i * PER_TAX
+      / # - line_tax = line_item.price * line_item.quantity.to_i * PER_TAX
       .line.left
         .cell.left.preview
           .image-container.small.no-padding.left= image_tag image.url(:smallest), :class => 'image smallest'
@@ -37,21 +37,14 @@
           = line_item.quantity
         .cell.text.gray.font12.line18.left
           = number_to_currency(line_price, {:precision => 2})
-        .cell.text.gray.font12.line18.left
-          = number_to_currency(line_tax, {:precision => 2})
+        / .cell.text.gray.font12.line18.left
+        /   = number_to_currency(line_tax, {:precision => 2})
         .cell.text.gray.font12.line18.left.subtotal
-          = number_to_currency(line_price + line_tax, {:precision => 2})
+          = number_to_currency(line_price, {:precision => 2})
 
   .footer.text.black.line18.left
     .right.summary
-      .cell.text.bold.font14.left Subtotal:
-      #subtotal.cell.text.bold.font14.left= number_to_currency(@order.price_total, {:precision => 2})
-      .clear
-      .cell.text.font12.left Tax:
-      #tax-total.cell.text.font12.left= number_to_currency(@order.tax, {:precision => 2})
-    .line-separator.left
-    .right.summary
       .cell.text.bold.font14.left Cart Total:
-      #cart-total.cell.text.bold.font14.left= number_to_currency(@order.price_total + @order.tax, {:precision => 2})
+      #cart-total.cell.subtotal.text.bold.font14.left= number_to_currency(@order.price_total + @order.tax, {:precision => 2})
     .line-separator.left
 

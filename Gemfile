@@ -83,6 +83,7 @@ group :development do
   gem "heroku_san"
   #gem "capistrano"
   #gem "capistrano-ext", :require => "capistrano"
+  gem 'rb-inotify', '~> 0.8.8'
   gem "guard-sass", :require => false
   gem "guard-coffeescript"
   gem 'taps'

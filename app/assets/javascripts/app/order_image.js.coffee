@@ -14,11 +14,11 @@ refreshMouldingOptions = (size) ->
   moulding_selection = $('#line_item_moulding')
   options = moulding_selection.find 'option'
   $.each moulding_constrain, (key, val) ->
-    flag = true
+    is_limited_size = true
     $.each val, (i, v) ->
-      if size.toString() == v.toString()
-        flag = false
-    if flag
+      if size.toString() == '' || size.toString() == v.toString()
+        is_limited_size = false
+    if is_limited_size
       options = options.not "option[value!=#{key}]"
       has_constrain = true
   options.prop 'disabled', has_constrain

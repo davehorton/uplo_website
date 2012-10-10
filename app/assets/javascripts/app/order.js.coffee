@@ -9,7 +9,45 @@ window.CARD_TYPE_VALIDATORS = [
   { value: 'master_card', reg: /^5[1-5][0-9]{14}$/ }
 ]
 
+computeTax = (region) ->
+  has_tax = false
+  grand_total_elm = $('#grand-total')
+
+  $.each regions_tax, (key, val) ->
+    if region == val.state_code
+      has_tax = true
+      total_tax = 0
+      grand_total = 0
+      $.each $('#order-summary .price'), (idx, elm) ->
+        price_elm = $(elm)
+        price = parseFloat price_elm.text().replace(/[$]/g, '')
+        tax = price * val.tax
+        total_tax += tax
+        grand_total += (tax + price)
+        price_elm.closest('.block').find('.tax').text "$#{tax.toFixed(2)}"
+
+      $('#order-summary .summary .tax').text "$#{total_tax.toFixed(2)}"
+      grand_total_elm.text "$#{grand_total.toFixed(2)}"
+
+  unless has_tax
+    grand_total = 0
+    $.each $('#order-summary .price'), (idx, elm) ->
+      price_elm = $(elm)
+      price = parseFloat price_elm.text().replace(/[$]/g, '')
+      grand_total += price
+
+    $('#order-summary .tax').text '--'
+    grand_total_elm.text "$#{grand_total.toFixed(2)}"
+
+
 $ ->
+  $('.state').selectmenu
+    change: (e, obj) ->
+      if @.id == 'order_billing_address_attributes_state'
+        computeTax(obj.value) if $('#billing_ship_to_billing').is(':checked')
+      else
+        computeTax(obj.value)
+
   $('#card_card_number').change ->
     card_type = $('#card_card_type').val()
     if card_type == ''
@@ -35,3 +73,39 @@ $ ->
     top = e.clientY - cvv_form.height()
     $('#cvv-form').modal({ opacity:5, overlayClose:true, position:[top, left]})
   $('#cvv-form .close').click -> $.modal.close()
+
+  $(".zip_input").keypress (event) ->
+    reg = /^\d{0,5}$/
+    return true unless event.charCode
+    part1 = @.value.substring 0, @.selectionStart
+    part2 = @.value.substring @.selectionEnd, @.value.length
+    return reg.test(part1 + String.fromCharCode(event.charCode) + part2)
+
+  $('#shipping-address .edit a').click ->
+    $('#shipping-address .inputs').removeClass('hide').addClass('show')
+    $('#shipping-address .edit').removeClass('show').addClass('hide')
+    $('#billing_ship_to_billing').prop('checked', false)
+    $('#shipping-address .header .italic').removeClass('hide').addClass('show')
+
+  $('#billing_ship_to_billing').change ->
+    if $(@).is(':checked')
+      $('#shipping-address .inputs').removeClass('show').addClass('hide')
+      $('#shipping-address .header .italic').removeClass('show').addClass('hide')
+      $('#shipping-address .edit').removeClass('hide').addClass('show')
+      computeTax $('#order_billing_address_attributes_state').val()
+    else
+      $('#shipping-address .inputs').removeClass('hide').addClass('show')
+      $('#shipping-address .header .italic').removeClass('hide').addClass('show')
+      $('#shipping-address .edit').removeClass('show').addClass('hide')
+      computeTax $('#order_shipping_address_attributes_state').val()
+
+  $('.submit').click ->
+    if $('#shipping-address .edit.hide').length==0
+      $('#shipping-address .inputs').text("")
+
+    # Google Analytics
+    _gaq.push(['_trackEvent', 'UPLO Web / Check Out', 'Place Order', 'checkout', -1])
+    $('#order-shippings').submit()
+
+  # Form inline error showing
+  form_validation.setup($('form.simple_form .error'))

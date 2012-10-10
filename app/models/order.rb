@@ -17,17 +17,20 @@ class Order < ActiveRecord::Base
   # CALLBACK
   after_save :push_notification
   before_create :init_transaction_date
+
   STATUS = {
     :shopping => "shopping",
     :checkout => "checkout",
     :complete => "completed",
     :failed => "failed"
   }
-
   TRANSACTION_STATUS = {
     :processing => "processing",
     :complete => "completed",
     :failed => "failed"
+  }
+  REGION_TAX = {
+    :newyork => {:state_code => 'NY', :tax => 0.08875}
   }
 
   # SCOPE

@@ -92,7 +92,7 @@ class PaymentsController < ApplicationController
         }
         @remove_shipping_info = false
         if order_info['ship_to_billing'].blank? || !SharedMethods::Converter::Boolean(order_info['ship_to_billing'])
-          
+
         else
           order_info[:shipping_address_attributes] = order_info[:billing_address_attributes]
           @remove_shipping_info = true
@@ -101,8 +101,8 @@ class PaymentsController < ApplicationController
         order_info[:billing_address_attributes].delete 'id'
         order_info.delete 'ship_to_billing'
         # UPDATE PAYMENT INFO TO ORDER
-        
-        
+
+
         expires_on = Date.civil(order_info["expiration(1i)"].to_i,
                          order_info["expiration(2i)"].to_i, 1)
         order_info[:expiration] = expires_on.strftime("%m-%Y")
@@ -115,6 +115,26 @@ class PaymentsController < ApplicationController
 
         if @order.update_attributes(params[:order])
           order_info.delete 'shipping_address_attributes' if @remove_shipping_info
+
+          # update order tax follow shipping state
+          has_tax  = false
+          if @remove_shipping_info
+            # considering billing state, 'cause of shipping to billing
+            has_tax = true if @order.billing_address.state == Order::REGION_TAX[:newyork][:code]
+          else
+            # considering shipping state
+            has_tax = true if @order.shipping_address.state == Order::REGION_TAX[:newyork][:code]
+          end
+          if has_tax
+            @order.tax = @order.price_total * Order::REGION_TAX[:newyork][:tax]
+            @order.order_total = @order.price_total + @order.tax
+          else
+            @order.tax = 0
+            @order.order_total = @order.price_total
+          end
+          @order.save
+          #---
+
           if current_user.update_profile(order_info)
             an_value = Payment.create_authorizenet_test(card_string, expires_on, {:shipping => order_info[:shipping_address_attributes], :address => order_info[:billing_address_attributes]})
             response = an_value[:transaction].purchase(@order.order_total, an_value[:credit_card])
@@ -128,7 +148,7 @@ class PaymentsController < ApplicationController
               flash.now[:error] = 'Failed to make purchase.'
               render :template => "orders/index", :params => params and return
             end
-            
+
           else
             render :template => "orders/index", :params => params and return
           end
