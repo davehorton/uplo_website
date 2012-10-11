@@ -78,6 +78,26 @@ class Order < ActiveRecord::Base
   end
 
   # PUBLIC INSTANCE METHODS
+  def update_tax_by_state
+    has_tax  = false
+    # considering shipping state
+    if self.shipping_address
+      has_tax = true if self.shipping_address.state == Order::REGION_TAX[:newyork][:code]
+
+    # considering billing state, 'cause of shipping to billing
+    else
+      has_tax = true if self.billing_address.state == Order::REGION_TAX[:newyork][:code]
+    end
+
+    if has_tax
+      self.tax = self.price_total * Order::REGION_TAX[:newyork][:tax]
+      self.order_total = self.price_total + self.tax
+    else
+      self.tax = 0
+      self.order_total = self.price_total
+    end
+    self.save
+  end
 
   def compute_totals
     self.price_total = self.compute_image_total

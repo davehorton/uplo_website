@@ -115,25 +115,8 @@ class PaymentsController < ApplicationController
 
         if @order.update_attributes(params[:order])
           order_info.delete 'shipping_address_attributes' if @remove_shipping_info
-
-          # update order tax follow shipping state
-          has_tax  = false
-          if @remove_shipping_info
-            # considering billing state, 'cause of shipping to billing
-            has_tax = true if @order.billing_address.state == Order::REGION_TAX[:newyork][:code]
-          else
-            # considering shipping state
-            has_tax = true if @order.shipping_address.state == Order::REGION_TAX[:newyork][:code]
-          end
-          if has_tax
-            @order.tax = @order.price_total * Order::REGION_TAX[:newyork][:tax]
-            @order.order_total = @order.price_total + @order.tax
-          else
-            @order.tax = 0
-            @order.order_total = @order.price_total
-          end
-          @order.save
-          #---
+          # TODO: update tax + price follow shipping state
+          @order.update_tax_by_state
 
           if current_user.update_profile(order_info)
             an_value = Payment.create_authorizenet_test(card_string, expires_on, {:shipping => order_info[:shipping_address_attributes], :address => order_info[:billing_address_attributes]})
@@ -239,7 +222,6 @@ class PaymentsController < ApplicationController
         @order.status = Order::STATUS[:complete]
         @order.transaction_status = Order::TRANSACTION_STATUS[:complete]
         @order.save
-        session[:cart] = nil
         @cart.destroy if @cart
       end
     end

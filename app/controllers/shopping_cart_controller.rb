@@ -5,7 +5,6 @@ class ShoppingCartController < ApplicationController
 
   def clear
     @cart.clear
-    session[:cart] = nil unless current_user
     redirect_to :action => 'show'
   end
 

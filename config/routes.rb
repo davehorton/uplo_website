@@ -212,11 +212,16 @@ Uplo::Application.routes.draw do
     get 'list_comments', :to => 'images#get_comments'
     post 'post_comment', :to => 'images#post_comment'
     post 'flag_image', :to => 'images#flag_image'
+    get "like", :to => "images#like"
 
     # Order
     get "list_orders", :to => "orders#list_orders"
     post "create_order", :to => "orders#create_order"
-    get "like", :to => "images#like"
+    post "finalize_order", :to => "orders#finalize_order"
+    post 'update_ordered_item', :to => 'orders#update_ordered_item'
+    post 'add_ordered_item', :to => 'orders#add_ordered_item'
+    post 'delete_ordered_item', :to => 'orders#delete_ordered_item'
+    get 'show_cart', :to => 'orders#show_cart'
   end
 
   # The priority is based upon order of creation:

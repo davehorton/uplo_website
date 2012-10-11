@@ -8,6 +8,20 @@ class LineItem < ActiveRecord::Base
 
   validates :quantity, :numericality => { :less_than_or_equal_to => 10 }
 
+  class << self
+    def exposed_methods
+      []
+    end
+
+    def exposed_attributes
+      [:id, :moulding, :size, :quantity, :price]
+    end
+
+    def exposed_associations
+      []
+    end
+  end
+
   def creation_timestamp
     ::Util.distance_of_time_in_words_to_now(self.created_at)
   end
