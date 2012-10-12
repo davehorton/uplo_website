@@ -140,27 +140,6 @@ class Image < ActiveRecord::Base
       self.do_search(params)
     end
 
-    def get_browse_images params
-      conditions = [
-        "gals.permission = :gallery_permission
-        AND image_flags.reported_by IS NULL
-        AND users.is_banned = :user_banned
-        AND users.is_removed = :user_removed",
-        { :gallery_permission => Gallery::PUBLIC_PERMISSION,
-          :image_removed => false,
-          :user_banned => false,
-          :user_removed => false
-        }
-      ]
-      paging_info = parse_paging_options(params,
-        {:sort_criteria => "images.updated_at DESC"})
-
-      self.joined_images.joins("JOIN users ON gals.user_id = users.id").where(conditions).paginate(
-        :page => paging_info.page_id,
-        :per_page => paging_info.page_size,
-        :order => paging_info.sort_string)
-    end
-
     def get_spotlight_images(user_id, params)
       params ||= {}
       with_display = "*, IF(author_id = #{user_id} OR permission = #{Gallery::PUBLIC_PERMISSION}, 1, 0) AS display"
