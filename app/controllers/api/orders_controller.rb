@@ -45,7 +45,7 @@ class Api::OrdersController < Api::BaseController
     render :json => @result
   end
 
-  # params: id:2, order_id:1, image_id:299, moulding:4, size:8x8, quantity:1
+  # params: id:2, image_id:299, moulding:4, size:8x8, quantity:1
   def update_ordered_item
     item = LineItem.find_by_id params.delete(:id)
 
@@ -79,8 +79,19 @@ class Api::OrdersController < Api::BaseController
 
   # params: id:2
   def delete_ordered_item
-    LineItem.delete_all :id => params[:id]
-    render :json => {:success => true}
+    @result = {:success => true}
+    item = LineItem.find_by_id params[:id]
+    if item
+      @result[:success] = false
+      LineItem.transaction do
+        item.order.compute_totals
+        item.order.update_tax_by_state
+        item.destroy
+        @result[:success] = true
+      end
+      @result[:msg] = 'Cannot delete this item right now! Please try again later!' unless @result[:success]
+    end
+    render :json => @result
   end
 
   # POST: /api/create_order

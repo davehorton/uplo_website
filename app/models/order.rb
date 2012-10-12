@@ -85,7 +85,7 @@ class Order < ActiveRecord::Base
       has_tax = true if self.shipping_address.state == Order::REGION_TAX[:newyork][:code]
 
     # considering billing state, 'cause of shipping to billing
-    else
+    elsif self.billing_address
       has_tax = true if self.billing_address.state == Order::REGION_TAX[:newyork][:code]
     end
 
