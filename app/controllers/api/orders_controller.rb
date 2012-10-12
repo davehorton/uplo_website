@@ -1,5 +1,5 @@
 class Api::OrdersController < Api::BaseController
-  # before_filter :require_login!
+  before_filter :require_login!
 
   # GET: /api/list_orders
   # params:

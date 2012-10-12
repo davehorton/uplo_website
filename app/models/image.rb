@@ -298,6 +298,7 @@ class Image < ActiveRecord::Base
 
         sphinx_search_options = params[:sphinx_search_options]
         sphinx_search_options = {} if sphinx_search_options.blank?
+        sphinx_search_options[:index] = 'general_images' if sphinx_search_options[:index].blank?
 
         sphinx_search_options.merge!({
           :star => true,
@@ -767,7 +768,7 @@ class Image < ActiveRecord::Base
     end
 
     #indexing with thinking sphinx
-    define_index do
+    define_index :general_images do
       # fields
       indexes name, :sortable => true
       indexes description
@@ -775,7 +776,7 @@ class Image < ActiveRecord::Base
       indexes gallery(:name), :as => :album
 
       # attributes
-      has gallery_id, created_at, pageview, promote_num
+      has gallery_id, created_at, pageview, promote_num, updated_at
       has author(:is_banned), :as => :banned_user
       has author(:is_removed), :as => :removed_user
       has image_flags(:reported_by), :as => :flagged_by
