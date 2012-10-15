@@ -315,8 +315,10 @@ class Image < ActiveRecord::Base
 
   # INSTANCE METHODS
   def get_price(tier, size, moulding=nil)
-    discount = moulding.nil? ? 0 : MOULDING_DISCOUNT[moulding.to_i]
-    TIERS_PRICES[tier][size] * (1 - discount)
+    moulding = MOULDING[moulding.downcase.to_sym] if moulding.is_a? String
+    discount = moulding ? MOULDING_DISCOUNT[moulding.to_i] : 0
+
+    return TIERS_PRICES[tier][size] * (1 - discount)
   end
 
   def square?

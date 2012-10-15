@@ -15,23 +15,24 @@ class Api::OrdersController < Api::BaseController
 
   # params: order_id:1, image_id:299, moulding:4, size:8x8, quantity:1
   def add_ordered_item
-    image = Image.find_by_id params[:image_id]
+    item_info = params[:item]
+    image = Image.find_by_id item_info[:image_id]
     if image.nil? || image.image_flags.count > 0
       @result[:success] = false
       @result[:msg] = "Your recent ordered image does not exist anymore."
-    elsif not valid_item?(params)
+    elsif not valid_item?(item_info)
       @result[:success] = false
       @result[:msg] = "Please fill all options first."
 
     #check moulding & size constrain
-    elsif Image::MOULDING_SIZES_CONSTRAIN.has_key?(params[:moulding]) and Image::MOULDING_SIZES_CONSTRAIN[params[:moulding]].index(params[:size])
+    elsif Image::MOULDING_SIZES_CONSTRAIN.has_key?(item_info[:moulding]) and Image::MOULDING_SIZES_CONSTRAIN[item_info[:moulding]].index(item_info[:size])
       @result[:success] = false
       @result[:msg] = "The mould is not compatible with this size. Please change your options."
 
     else
       line_item = LineItem.new do |item|
-        item.attributes = params
-        item.price = image.get_price(image.tier, params[:size], params[:moulding])
+        item.attributes = item_info
+        item.price = image.get_price(image.tier, item_info[:size], item_info[:moulding])
         item.tax = item.price * PER_TAX
         if item.save
           @result[:success] = true
@@ -47,24 +48,25 @@ class Api::OrdersController < Api::BaseController
 
   # params: id:2, image_id:299, moulding:4, size:8x8, quantity:1
   def update_ordered_item
-    item = LineItem.find_by_id params.delete(:id)
+    item_info = params[:item]
+    item = LineItem.find_by_id item_info.delete(:id)
 
     if item.nil?
       @result[:success] = false
       @result[:msg] = "Your recent ordered image does not exist anymore."
-    elsif not valid_item?(params)
+    elsif not valid_item?(item_info)
       @result[:success] = false
       @result[:msg] = "Please fill all options first."
 
     #check moulding & size constrain
-    elsif Image::MOULDING_SIZES_CONSTRAIN.has_key?(params[:moulding]) and Image::MOULDING_SIZES_CONSTRAIN[params[:moulding]].index(params[:size])
+    elsif Image::MOULDING_SIZES_CONSTRAIN.has_key?(item_info[:moulding]) and Image::MOULDING_SIZES_CONSTRAIN[item_info[:moulding]].index(item_info[:size])
       @result[:success] = false
       @result[:msg] = "The mould is not compatible with this size. Please change your options."
 
     else
       image = item.image
-      item.attributes = params
-      item.price = image.get_price image.tier, params[:size], params[:moulding]
+      item.attributes = item_info
+      item.price = image.get_price image.tier, item_info[:size], item_info[:moulding]
       item.tax = item.price * PER_TAX
       if item.save
         @result[:success] = true
