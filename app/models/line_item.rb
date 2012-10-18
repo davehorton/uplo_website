@@ -3,8 +3,8 @@ class LineItem < ActiveRecord::Base
 
   belongs_to :order
   belongs_to :image
-  after_save :update_oder
-  after_destroy :update_oder
+  after_save :update_order
+  after_destroy :update_order
 
   validates :quantity, :numericality => { :less_than_or_equal_to => 10 }
 
@@ -26,7 +26,7 @@ class LineItem < ActiveRecord::Base
     ::Util.distance_of_time_in_words_to_now(self.created_at)
   end
 
-  def update_oder
+  def update_order
     self.order.compute_totals
   end
 end
