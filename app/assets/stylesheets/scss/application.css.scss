@@ -1331,6 +1331,11 @@ textarea { padding-top:5px; }
       width: 32px;
       height: 32px;
     }
+    .flickr-icon {
+      background-image: url('/assets/icon-flickr.png');
+      width: 32px;
+      height: 32px;
+    }
     .text.bold {
       font-weight: bold;
       margin-left: 10px;
@@ -1343,7 +1348,7 @@ textarea { padding-top:5px; }
       margin-top: 0;
       margin-left: 0;
     }
-    #email-details {
+    .sharing-form {
       input, textarea {
         width: 285px;
       }
