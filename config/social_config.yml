@@ -3,8 +3,11 @@ facebook:
  secret: '9de746294224316dc3fa7e21a260aff1'
  canvas_url: 'http://apps.facebook.com/ggomeze/'
 twitter:
- consumer_key: "TZCogkmxHiQfoZmHImseg"
- consumer_secret: "rAb7Qar26bD8Y5spNuNQDgmFfnWn2cBjf8GqwVgM"
+ consumer_key: "4dts1Xns2aNfN9oWUqA"
+ consumer_secret: "lfTflxhRkxVDHt2X8d1X7v543rS3wyUpvlFnOvmk6c"
 tumblr:
  consumer_key: "CMVOTjXluWfMA8PyK7nvEPr7tst7AJrf7KM7tBlysNpZmViH9k"
  consumer_secret: "L7TNwK5qLHFgLKpqlKRphk3K5j0BuyEUkgUtMlIemO1dIvITtS"
+flickr:
+ api_key: "2131965bccdb74989aa778afb4492413"
+ secret: "870764f2dc73d9d4"

@@ -84,6 +84,26 @@ class SocialsController < ApplicationController
 		redirect_to :controller => :users, :action => :profile
 	end
 
+	def flickr_callback
+		request_token = session[:request_token]
+		begin
+    	access_token = flickr.get_access_token(request_token['oauth_token'], request_token['oauth_token_secret'], params[:oauth_verifier])
+
+			@user = current_user
+			puts access_token.inspect
+			if @user.update_attributes({:flickr_token => access_token['oauth_token'], 
+	    												 :flickr_secret_token => access_token['oauth_token_secret']})
+				flash[:notice] = "Enabled Flickr"
+			else
+				flash[:notice] = @user.errors.full_messages.to_sentence
+			end
+		rescue Exception => e
+			flash[:notice] = "Cannot authorize Flickr #{e.message} #{access_token.inspect}"
+		end
+
+		redirect_to :controller => :users, :action => :profile
+	end
+	
 	# params 
 	# image_id
 	# social[:message]
@@ -100,6 +120,9 @@ class SocialsController < ApplicationController
 		end
 		if (social[:type_social] == 'tumblr')
 			tumblr_share
+		end
+		if (social[:type_social] == 'flickr')
+			flickr_share
 		end
 	end
 
@@ -224,7 +247,7 @@ class SocialsController < ApplicationController
 								if (status == 201)
 									flash[:notice] = "Post blog successful"
 								else
-									flash[:notice] = "/v2/blog/#{base_name}/post"#result["meta"]["msg"]
+									flash[:notice] = result["meta"]["msg"]
 								end
 							rescue Exception => e
 								flash[:notice] = "Unable to send to Tumblr: #{e.to_s}"
@@ -244,6 +267,58 @@ class SocialsController < ApplicationController
 			end
 			go_to_browser_image_url(img)
 			
+		end
+
+		def flickr_share
+			require 'tempfile'
+			if (current_user.flickr_token)
+				get_auth_info
+
+				img = Image.find_by_id params[:image_id]
+				if (img)
+
+					@api_key = @flickr_cfg["api_key"]
+		      @secret_key = @flickr_cfg["secret"]
+
+		      FlickRaw.api_key=@api_key
+		      FlickRaw.shared_secret=@secret_key
+
+		      flickr.access_token = current_user.flickr_token
+					flickr.access_secret = current_user.flickr_secret_token
+
+	 				begin
+	 					prefix = 'abc.jpg'
+	 					tempfile = Tempfile.open(prefix, Rails.root.join('tmp'))
+	 					file = File.open(tempfile.path, 'wb')
+	 					uri = URI.parse(img.data.url(:medium))
+	 					Net::HTTP.start(uri.host) do |http|
+						  begin
+						    http.request_get(uri.request_uri) do |response|
+						      response.read_body do |segment|
+						      	file.write(segment)
+						      end
+						    end
+						  ensure
+						  	file.close
+						  end
+						end
+
+						if flickr.upload_photo tempfile.path, :title => @message, :description => "from <a href='#{img.public_link}' rel='nofollow'>UPLO</a>"
+							flash[:notice] = "Send photo successful"
+						else
+							"Unable to send to Flickr"
+						end
+					rescue Exception => e
+						flash[:notice] = "Unable to send to Flickr: #{e.to_s}"
+					end
+				else
+					render_not_found
+				end
+			else
+				flash[:notice] = "You must enable Flickr sharing"
+				redirect_to :controller => :users, :action => :profile and return
+			end
+			go_to_browser_image_url(img)
 		end
 
 		def go_to_browser_image_url(img)

@@ -111,6 +111,7 @@ Uplo::Application.routes.draw do
   get "socials/facebook_callback", :to => "socials#facebook_callback"
   get "socials/twitter_callback", :to => "socials#twitter_callback"
   get "socials/tumblr_callback", :to => "socials#tumblr_callback"
+  get "socails/flickr_callback", :to => "socials#flickr_callback"
 
   post "socials/share", :to => "socials#share"
 

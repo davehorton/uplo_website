@@ -297,12 +297,12 @@ class UsersController < ApplicationController
       @api_key = @flickr_cfg["api_key"]
       @secret_key = @flickr_cfg["secret"]
 
-
       FlickRaw.api_key=@api_key
       FlickRaw.shared_secret=@secret_key
 
-      token = flickr.get_request_token
-      redirect_to flickr.get_authorize_url(token['oauth_token'], :perms => 'delete') and return
+      request_token = flickr.get_request_token :oauth_callback => url_for(:controller => :socials, :action => :flickr_callback)
+      session[:request_token]=request_token 
+      redirect_to flickr.get_authorize_url(request_token['oauth_token'], :perms => 'delete') and return
 
     end
 
