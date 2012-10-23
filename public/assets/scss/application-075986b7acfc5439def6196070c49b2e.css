@@ -1196,6 +1196,10 @@ textarea {
       background-image: url("/assets/icon-tumblr.png");
       width: 32px;
       height: 32px; }
+    .sharing-popup .header .flickr-icon {
+      background-image: url("/assets/icon-flickr.png");
+      width: 32px;
+      height: 32px; }
     .sharing-popup .header .text.bold {
       font-weight: bold;
       margin-left: 10px;
@@ -1205,18 +1209,18 @@ textarea {
     .sharing-popup .main .image-container {
       margin-top: 0;
       margin-left: 0; }
-    .sharing-popup .main #email-details input, .sharing-popup .main #email-details textarea {
+    .sharing-popup .main .sharing-form input, .sharing-popup .main .sharing-form textarea {
       width: 285px; }
-    .sharing-popup .main #email-details textarea {
+    .sharing-popup .main .sharing-form textarea {
       height: 100px; }
-    .sharing-popup .main #email-details #button-container {
+    .sharing-popup .main .sharing-form #button-container {
       margin-top: 10px; }
-    .sharing-popup .main #email-details .button {
+    .sharing-popup .main .sharing-form .button {
       height: 27px; }
-      .sharing-popup .main #email-details .button.cancel {
+      .sharing-popup .main .sharing-form .button.cancel {
         background: url("/assets/btn-cancel.png") no-repeat;
         width: 65px; }
-      .sharing-popup .main #email-details .button.send {
+      .sharing-popup .main .sharing-form .button.send {
         background: url("/assets/btn-send.png") no-repeat;
         width: 55px;
         margin-right: 10px; }
