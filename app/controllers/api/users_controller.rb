@@ -335,7 +335,7 @@ class Api::UsersController < Api::BaseController
       info[:following_num] = user.followed_users.size
       info[:tiers] = Image::TIERS_PRICES
 
-      if params[:controllers]=='login'
+      if params[:action] == 'login'
         info[:cart_items_num] = (user.cart.nil? || user.cart.order.nil?) ? 0 : user.cart.order.line_items.count
         info[:order_id] = user.cart.order.id
       end
