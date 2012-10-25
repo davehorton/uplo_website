@@ -1,5 +1,6 @@
 class LineItem < ActiveRecord::Base
   include ::SharedMethods::Paging
+  include ::SharedMethods::SerializationConfig
 
   belongs_to :order
   belongs_to :image
@@ -10,16 +11,24 @@ class LineItem < ActiveRecord::Base
 
   class << self
     def exposed_methods
-      []
+      [:image_thumb_url, :image_name]
     end
 
     def exposed_attributes
-      [:id, :moulding, :size, :quantity, :price]
+      [:id, :moulding, :size, :quantity, :price, :image_name]
     end
 
     def exposed_associations
       []
     end
+  end
+
+  def image_thumb_url
+    self.image.image_thumb_url
+  end
+
+  def image_name
+    self.image.name
   end
 
   def creation_timestamp
