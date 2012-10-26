@@ -81,6 +81,7 @@
       padding: 20px 34px; }
     #banner .sub .info {
       width: 273px;
-      margin: 20px 0px; }
+      margin: 20px 0px;
+      word-spacing: -1px; }
       #banner .sub .info .description {
         margin: 5px 0px 12px 0px; }

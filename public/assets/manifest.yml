@@ -164,9 +164,9 @@ img-frames/white-right.png: img-frames/white-right-32a71801b93891d3da8b7ebf6f53c
 img-frames/white-top.png: img-frames/white-top-ca24e0e0176717e23cb159eb4d3e3b47.png
 information.png: information-58d407d7af1fee74c22f8efcba7a5f8f.png
 intro-phone-app.jpg: intro-phone-app-4481a8904588e64bad6443cfd70a3ccd.jpg
-intro-phone-features.jpg: intro-phone-features-9b9dfb803aa1a180cfe9c748439f341a.jpg
-intro-phone-like-comment.jpg: intro-phone-like-comment-687940501d826fd341c6791fc6efb99b.jpg
-intro-phone-order.jpg: intro-phone-order-e0dbf6104cdc1f77510eac3bc864e615.jpg
+intro-phone-features.jpg: intro-phone-features-81a80f48872fc47c07a9ee412f2efd55.jpg
+intro-phone-like-comment.jpg: intro-phone-like-comment-f002c06dfce4e84b9d57e4af932520d4.jpg
+intro-phone-order.jpg: intro-phone-order-d30abdb099e87094c364569c2ccaf8e7.jpg
 intro-phone-sales.jpg: intro-phone-sales-761aaad194d891a8015a704c25149471.jpg
 intro-phone-take-pic.jpg: intro-phone-take-pic-986842eb802d9fac48dd12c9a9ca82ed.jpg
 ison-search.png: ison-search-d549fd22f342f7b7c3a11aa1a2e3a152.png
@@ -335,7 +335,7 @@ jquery.ui.theme.css: jquery.ui.theme-a4f4f9e031e2eb2a9aa6e841513324f6.css
 scss/admin.css: scss/admin-8c025148f656d0ec8527947d62961cd8.css
 scss/application.css: scss/application-075986b7acfc5439def6196070c49b2e.css
 scss/application.mobile.css: scss/application.mobile-8fbc5233f306558b8136c53163b21829.css
-scss/banner.css: scss/banner-5f3db8f29445df3b0cee68bb6ae5cbf0.css
+scss/banner.css: scss/banner-893a353ad303f62d87ba6eea28585bce.css
 scss/cart.css: scss/cart-3ace98302a5a9d5e1d9432c001c96739.css
 scss/cart_new.css: scss/cart_new-5075c660e08c9a407bd3b01d5ad8307e.css
 scss/dialog.css: scss/dialog-1ff87bcae5023fdbcf345a6e61332360.css
