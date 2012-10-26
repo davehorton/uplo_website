@@ -15,7 +15,7 @@ class LineItem < ActiveRecord::Base
     end
 
     def exposed_attributes
-      [:id, :moulding, :size, :quantity, :price, :image_name]
+      [:id, :moulding, :size, :quantity, :price, :image_name, :image_id]
     end
 
     def exposed_associations
