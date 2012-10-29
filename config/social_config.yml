@@ -1,7 +1,6 @@
 facebook:
- api_key: '353162694772504'
- secret: '9de746294224316dc3fa7e21a260aff1'
- canvas_url: 'http://apps.facebook.com/ggomeze/'
+ api_key: '255519651236653'
+ secret: '8ce707787d490ca4092fcec8ee7c1d9a'
 twitter:
  consumer_key: "4dts1Xns2aNfN9oWUqA"
  consumer_secret: "lfTflxhRkxVDHt2X8d1X7v543rS3wyUpvlFnOvmk6c"
