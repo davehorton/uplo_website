@@ -16,7 +16,7 @@ class Api::OrdersController < Api::BaseController
   # params: order_id:1, image_id:299, moulding:4, size:8x8, quantity:1
   def add_ordered_item
     item_info = params[:item]
-    item_info[:order_id] = current_user.cart.order_id
+    item_info[:order_id] = current_user.init_cart.order_id
     image = Image.find_by_id item_info[:image_id]
     if image.nil? || image.image_flags.count > 0
       @result[:success] = false
