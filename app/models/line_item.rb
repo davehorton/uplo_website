@@ -11,7 +11,7 @@ class LineItem < ActiveRecord::Base
 
   class << self
     def exposed_methods
-      [:image_thumb_url, :image_name]
+      [:image_thumb_url, :image_name, :image_url]
     end
 
     def exposed_attributes
@@ -25,6 +25,10 @@ class LineItem < ActiveRecord::Base
 
   def image_thumb_url
     self.image.image_thumb_url
+  end
+
+  def image_url
+    self.image.image_url
   end
 
   def image_name
