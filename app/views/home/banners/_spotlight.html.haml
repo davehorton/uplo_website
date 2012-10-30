@@ -7,10 +7,8 @@
         .info
           UPLO is a print and framing service both online and on the go that enables you to organize your personal photos and buy or sell your photography as printed art—anytime, anywhere.
         .buttons
-          %a{:href => "#", :alt => "Download"}
-            = image_tag("/assets/banner-button-download.png")
-          %a{:href => "#", :alt => "Learn more", :style => "padding-left: 20px;"}
-            = image_tag("/assets/banner-button-learn-more.png")
+          =link_to image_tag("/assets/banner-button-download.png"), "#"
+          =link_to image_tag("/assets/banner-button-learn-more.png"), "/intro", {:style => "padding-left: 20px;"}
       .right
 
 
@@ -29,7 +27,7 @@
       .text.black.bold.font24 Sell.
       .description.text.black.bold.font14 Upload photos and name your price.
       .text.gray.font12.line18
-        Simply create galleries of photos to sale and name your own price. You earn a commission for every print sold while building your fan base.
+        Simply create galleries of photos to sell and name your own price. You earn a commission for every print sold while building your fan base.
 
     .devider.left
       = image_tag("/assets/banner-divider.png")
