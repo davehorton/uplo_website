@@ -6,11 +6,10 @@
 /*==================================================================================*/
 .main .banner {
   color: #FFFFFF !important;
-  position: absolute;
+  position: relative;
   top: 0;
   left: 0;
-  width: 100%;
-  z-index: -100; }
+  width: 100%; }
   .main .banner .info {
     word-wrap: break-word;
     text-align: left;
@@ -20,12 +19,12 @@
   height: 475px; }
   .main.the-app .banner {
     background: url("/assets/bg-banner-the-app.png") repeat-x scroll center left transparent;
-    height: 530px; }
+    height: 462px; }
     .main.the-app .banner .wrapper {
       background: url("/assets/bg-banner-the-app.png") repeat-x scroll center left transparent; }
     .main.the-app .banner .left {
       width: 500px;
-      margin-top: 120px; }
+      margin-top: 50px; }
       .main.the-app .banner .left ul {
         margin-top: 7px; }
         .main.the-app .banner .left ul li {
@@ -41,17 +40,17 @@
       background: url("/assets/img-banner-devices-the-app.png") no-repeat scroll center left transparent;
       height: 418px;
       width: 431px;
-      margin-top: 90px; }
+      margin-top: 10px; }
 .main.spotlight {
   height: 386px; }
   .main.spotlight .banner {
     background: url("/assets/bg-banner-spotlight.png") repeat-x scroll center left transparent;
-    height: 441px; }
+    height: 389px; }
     .main.spotlight .banner .wrapper {
       background: url("/assets/bg-banner-spotlight.png") repeat-x scroll center left transparent; }
     .main.spotlight .banner .left {
       width: 435px;
-      margin-top: 115px; }
+      margin-top: 65px; }
       .main.spotlight .banner .left .info {
         margin: 20px 0; }
       .main.spotlight .banner .left .logo {
@@ -63,7 +62,7 @@
       background: url("/assets/img-banner-devices-spotlight.png") no-repeat scroll center left transparent;
       height: 316px;
       width: 525px;
-      margin-top: 104px; }
+      margin-top: 50px; }
 
 #right {
   width: 234px; }

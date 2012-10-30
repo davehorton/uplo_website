@@ -20,8 +20,8 @@ banner-check.png: banner-check-0466853bf2bb96963640337e5ed89f17.png
 banner-divider.png: banner-divider-eb5962b1b840cbe8944fde7abdefaba2.png
 banner-logo-broadcast.png: banner-logo-broadcast-f2158d903fb7e81d6beb1d0c83cb7b8e.png
 banner-lower-bg.png: banner-lower-bg-5fda92ba6158420987ede68fdc085ea3.png
-bg-banner-spotlight.png: bg-banner-spotlight-1335ed87189be64eefda69e876abfd68.png
-bg-banner-the-app.png: bg-banner-the-app-89519bc31b761e301a25466fd5d81f60.png
+bg-banner-spotlight.png: bg-banner-spotlight-5f689ba8bc05a94c25ef453898e64b77.png
+bg-banner-the-app.png: bg-banner-the-app-23b901b51ac6cba81cf13736576501f4.png
 bg-dropbox.png: bg-dropbox-74f6e83eed67fb6f672f27c00aad6f74.png
 bg-dropdown-selection.png: bg-dropdown-selection-71185fa3f280bba9e01ce6aaf7d3e6d1.png
 bg-header.png: bg-header-7f1aebe953b9a3cb7e4b27aae5eaf174.png
@@ -335,7 +335,7 @@ jquery.ui.theme.css: jquery.ui.theme-a4f4f9e031e2eb2a9aa6e841513324f6.css
 scss/admin.css: scss/admin-8c025148f656d0ec8527947d62961cd8.css
 scss/application.css: scss/application-075986b7acfc5439def6196070c49b2e.css
 scss/application.mobile.css: scss/application.mobile-8fbc5233f306558b8136c53163b21829.css
-scss/banner.css: scss/banner-893a353ad303f62d87ba6eea28585bce.css
+scss/banner.css: scss/banner-6606efbd6732531dc56bf1cafc09b393.css
 scss/cart.css: scss/cart-3ace98302a5a9d5e1d9432c001c96739.css
 scss/cart_new.css: scss/cart_new-5075c660e08c9a407bd3b01d5ad8307e.css
 scss/dialog.css: scss/dialog-1ff87bcae5023fdbcf345a6e61332360.css
