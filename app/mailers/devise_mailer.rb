@@ -3,7 +3,7 @@ class DeviseMailer < ApplicationMailer
     @user = user
     mail_params = {
       :to => @user[:email],
-      :subject => 'UPLO Invitation'
+      :subject => t('devise.mailer.confirmation_instructions.subject')
     }
 
     mail(mail_params)
