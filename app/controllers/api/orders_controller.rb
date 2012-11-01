@@ -223,7 +223,7 @@ class Api::OrdersController < Api::BaseController
   # GET /api/show_cart
   # PARAMS id
   def show_cart
-    order = Order.find_by_id current_user.cart.order_id
+    order = current_user.init_cart.order
     if order.nil?
       @result[:msg] = "This order does not exist anymore!"
       @result[:success] = false
