@@ -1,6 +1,9 @@
 class Api::OrdersController < Api::BaseController
   before_filter :require_login!
 
+  include ActiveMerchant::Billing::Integrations
+  include CartsHelper
+
   # GET: /api/list_orders
   # params:
   # result:
@@ -197,10 +200,9 @@ class Api::OrdersController < Api::BaseController
       success = !response.nil? && response.success?
 
       if success
-        if order.finalize_transaction
-          @result[:transaction_id] = response.transaction_id
-          done = true
-        end
+        finalize_cart
+        @result[:transaction_id] = response.transaction_id
+        done = true
       else
         @result[:success] = false
         @result[:msg] = 'Failed to make purchase.'
@@ -231,6 +233,16 @@ class Api::OrdersController < Api::BaseController
   end
 
   protected
+    def finalize_cart
+      if find_cart
+        @order = @cart.order
+        @order.status = Order::STATUS[:complete]
+        @order.transaction_status = Order::TRANSACTION_STATUS[:complete]
+        @order.save
+        @cart.destroy if @cart
+      end
+    end
+
     def valid_item?(hash)
       required_fields = ["size", "moulding", "quantity"]
       required_fields.each { |k| return false if hash.has_key?(k)==false or hash[k].blank? }
