@@ -227,8 +227,10 @@ module SharedMethods
       date = DateTime.parse String(date)
       current_month = date.month
       current_year = date.year
-      last_year = current_year - 1 + Integer((current_month + 1) / MONS_PER_YEAR)
-      start_month = (current_month + 1) % MONS_PER_YEAR
+
+      start_date = (date - MONS_PER_YEAR.months)
+      last_year = start_date.year
+      start_month = start_date.month
 
       if last_year < current_year
         (start_month..MONS_PER_YEAR).collect { |mon|
