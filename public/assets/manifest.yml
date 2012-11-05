@@ -148,12 +148,12 @@ img-frames/black-bottom.png: img-frames/black-bottom-b1cc95cd3517366e02ab453d03d
 img-frames/black-left.png: img-frames/black-left-ff83d65754be7197f76f5c8dc59b9998.png
 img-frames/black-right.png: img-frames/black-right-a90a3d7bc4fba8a8286077c8f781b442.png
 img-frames/black-top.png: img-frames/black-top-b1da0f1341475011a60a2caa869a74d8.png
-img-frames/canvas.png: img-frames/canvas-2c6924ca5d88ce5a38500cb5a1c95758.png
+img-frames/canvas.png: img-frames/canvas-e7d8bb203c24297f97c5e62f58758b77.png
 img-frames/lightwood-bottom.png: img-frames/lightwood-bottom-54301a5f5cdec95a776bb824251cc423.png
 img-frames/lightwood-left.png: img-frames/lightwood-left-ac4be1fe231af470a94bdcf0237a137b.png
 img-frames/lightwood-right.png: img-frames/lightwood-right-c9546ada8c811617e57f6c6fd927b07d.png
 img-frames/lightwood-top.png: img-frames/lightwood-top-657969c71cc65254b42796b38a2fdfc6.png
-img-frames/plexi.png: img-frames/plexi-7b21f0a85f16435cec658313626a6ea4.png
+img-frames/plexi.png: img-frames/plexi-7586b4716b9c011094ad74eed5149385.png
 img-frames/rustic-bottom.png: img-frames/rustic-bottom-11b572b2ffe47388e04e71be27b70b6a.png
 img-frames/rustic-left.png: img-frames/rustic-left-3e840925c43ae6d267ce7dc90ad5e6c3.png
 img-frames/rustic-right.png: img-frames/rustic-right-038a1a1e632ffac0e15ec3a07f8b022f.png
@@ -232,10 +232,10 @@ app/edit_images.js: app/edit_images-1b14d73ab6d7687b91970a57bd86e1e3.js
 app/form_validation.js: app/form_validation-c43ec726ef2b3b0f10f37e5ea74bc1bd.js
 app/gallery.js: app/gallery-a75a4d9b782fe1b29554b7e469f1d9c7.js
 app/image.js: app/image-4bb778c401e568c436ae30ed520d946d.js
-app/image_util.js: app/image_util-dfe41f92fb9fbf5298f87e115d137063.js
+app/image_util.js: app/image_util-edbb359e0fc98af17001b629c71ff9bc.js
 app/my_account.js: app/my_account-2092bfc270889d50934d6074bb1f7c0d.js
 app/order.js: app/order-4dc744ef35ceb1e21877ed95c8342350.js
-app/order_image.js: app/order_image-403f4450f1ec3957b0fb0e37f506dd0f.js
+app/order_image.js: app/order_image-5eb666eb50b9e600664dc9b9b0827534.js
 app/popup.js: app/popup-63df2c1856269c3e45f965bce26ab7da.js
 app/sales.js: app/sales-9cff0245ad3e146dfb19b0eb94bf6370.js
 app/shopping_cart.js: app/shopping_cart-fc8da9d51eb54947db1ebb930663ea46.js
