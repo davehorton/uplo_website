@@ -146,11 +146,9 @@
       .header.text.black.bold.font16 Order Summary
       .solid-block.left
         - subtotal = 0
-        - tax_total = 0
         - (0...@order.line_items.length).each do |idx|
           - line_item = @order.line_items[idx]
-          - subtotal += line_item.price * line_item.quantity
-          - tax_total += line_item.tax * line_item.quantity
+          - subtotal += line_item.price_with_discount * line_item.quantity
           .block.text.black.line22.left{:style => "#{'padding-top:0;' if idx==0}"}
             .name.line.text.bold.line12.left= line_item.image.name.truncate(36)
             .line.no-background.left
@@ -158,28 +156,26 @@
               .text.bold.font13.right= line_item.quantity
             .line.left
               .text.font10.left PRICE
-              .price.text.bold.font13.right= number_to_currency(line_item.price * line_item.quantity)
+              .price.text.bold.font13.right= number_to_currency(line_item.price_with_discount * line_item.quantity)
             .line.no-background.left
               .text.font10.left TAX
-              / .text.bold.font13.right= number_to_currency(line_item.tax * line_item.quantity)
-              .tax.text.bold.font13.right --
+              .tax.text.bold.font13.right= (line_item.tax > 0 ? number_to_currency(line_item.tax * line_item.quantity) : "--")
         .summary.text.black.font11.line18.right
           .text.bold.right
             .left Subtotal:
             .right= number_to_currency subtotal
           .text.right.clear
             .left Tax:
-            / .right= number_to_currency tax_total
-            .tax.right --
+            .tax.right= (@order.tax > 0 ? number_to_currency(@order.tax) : "--")
           .text.clear
             .left Shipping & Handling:
-            .right= number_to_currency SHIPPING_FEE
+            .right#shipping_fee= number_to_currency SHIPPING_FEE
 
         .line-separator.left
         .summary.right
           .grand-total.text.black.bold.font14.line18.right.clear
             .left Grand Total:
-            #grand-total.right= number_to_currency(tax_total + subtotal + SHIPPING_FEE)
+            #grand-total.right= number_to_currency(@order.tax + subtotal + SHIPPING_FEE)
         .line-separator.left
         .submit.right
 

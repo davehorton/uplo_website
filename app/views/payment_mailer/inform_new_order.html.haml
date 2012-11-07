@@ -1,0 +1,40 @@
+!!!
+%html
+  %head
+    %meta{:content => "text/html; charset=UTF-8", "http-equiv" => "Content-Type"}
+    = stylesheet_link_tag "application.css", "scss/dialog.css"
+  %body
+    %p
+      Hi,
+    %p
+      #{@user.username}'s payment was completed sucessfully. The order details below:
+    Order Summary
+    .solid-block.left
+      - subtotal = 0
+      - (0...@order.line_items.length).each do |idx|
+        - line_item = @order.line_items[idx]
+        - subtotal += line_item.price_with_discount * line_item.quantity
+        .block.text.black.line22.left{:style => "#{'padding-top:0;' if idx==0}"}
+          .title{:style => "font-weight:bold"}= line_item.image.name.truncate(36)
+          .line.no-background.left
+            .text.font10.left QTY #{line_item.quantity}
+          .line.left
+            PRICE: #{number_to_currency(line_item.price_with_discount * line_item.quantity)}
+          .line.no-background.left
+            TAX: #{(line_item.tax > 0 ? number_to_currency(line_item.tax * line_item.quantity) : "--")}
+        .summary.text.black.font11.line18.right
+          .text.bold.right
+            Subtotal: #{number_to_currency subtotal}
+          .text.right.clear
+            Tax: #{(@order.tax > 0 ? number_to_currency(@order.tax) : "--")}
+          .text.clear
+            Shipping & Handling: #{number_to_currency SHIPPING_FEE}
+
+        .line-separator.left
+        .summary.right
+          .grand-total.text.black.bold.font14.line18.right.clear
+            .left Grand Total: #{number_to_currency(@order.tax + subtotal + SHIPPING_FEE)}
+        .line-separator.left
+        .submit.right
+    %p
+      Thanks and best regards.

@@ -443,9 +443,8 @@ class User < ActiveRecord::Base
       self.cart.order.card_number = self.card_number
       self.cart.order.expiration = self.expiration
       self.cart.order.cvv = self.cvv
+      self.cart.order.save
     end
-
-
 
     return self.cart
   end

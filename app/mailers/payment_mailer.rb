@@ -9,4 +9,16 @@ class PaymentMailer < ApplicationMailer
     
     mail(mail_params)
   end
+
+  def inform_new_order(order)
+    subject = I18n.t("order.email.inform_new_order")
+    @user = order.user
+    @order = order
+    mail_params = {
+      :to => "uplo@digital2media.com",
+      :subject => subject
+    }
+    
+    mail(mail_params)
+  end
 end

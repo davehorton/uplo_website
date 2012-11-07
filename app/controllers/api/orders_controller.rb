@@ -129,7 +129,9 @@ class Api::OrdersController < Api::BaseController
     done = false
     if current_user.update_profile(order_info)
       if order.valid?
+        order.update_tax_by_state
         order.compute_totals
+
         an_value = Payment.create_authorizenet_test(card_string, expires_on, {:shipping => order_info[:shipping_address_attributes], :address => order_info[:billing_address_attributes]})
         response = an_value[:transaction].purchase(order.order_total, an_value[:credit_card])
         success = !response.nil? && response.success?
@@ -189,11 +191,13 @@ class Api::OrdersController < Api::BaseController
     order.transaction_date = Time.now
     card_string = order_info["card_number"]
     done = false
+    puts "*"*20
+    puts order_info
+    
     if current_user.update_profile(order_info)
-      order.compute_totals
-
       # TODO: update tax + price follow shipping state
       order.update_tax_by_state
+      order.compute_totals
 
       an_value = Payment.create_authorizenet_test(card_string, expires_on, {:shipping => order_info[:shipping_address_attributes], :address => order_info[:billing_address_attributes]})
       response = an_value[:transaction].purchase(order.order_total, an_value[:credit_card])
@@ -236,8 +240,7 @@ class Api::OrdersController < Api::BaseController
     def finalize_cart
       if find_cart
         @order = @cart.order
-        @order.status = Order::STATUS[:complete]
-        @order.transaction_status = Order::TRANSACTION_STATUS[:complete]
+        @order.finalize_transaction
         @order.save
         @cart.destroy if @cart
       end

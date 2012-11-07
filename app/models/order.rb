@@ -82,39 +82,48 @@ class Order < ActiveRecord::Base
     has_tax  = false
     # considering shipping state
     if self.shipping_address
-      has_tax = true if self.shipping_address.state == Order::REGION_TAX[:newyork][:code]
+      has_tax = true if self.shipping_address.state == Order::REGION_TAX[:newyork][:state_code]
 
     # considering billing state, 'cause of shipping to billing
     elsif self.billing_address
-      has_tax = true if self.billing_address.state == Order::REGION_TAX[:newyork][:code]
+      has_tax = true if self.billing_address.state == Order::REGION_TAX[:newyork][:state_code]
     end
 
     if has_tax
-      self.tax = self.price_total * Order::REGION_TAX[:newyork][:tax]
-      self.order_total = self.price_total + self.tax
+      self.tax = (self.compute_image_total - self.compute_discount_total)* Order::REGION_TAX[:newyork][:tax]
+      self.transaction do
+        self.line_items.each do |line_item|
+          line_item.tax = line_item.price_with_discount * Order::REGION_TAX[:newyork][:tax]
+          line_item.save
+        end
+      end
     else
+      puts "*"*20
       self.tax = 0
-      self.order_total = self.price_total
     end
     self.save
   end
 
   def compute_totals
     self.price_total = self.compute_image_total
-    self.tax = self.compute_tax_total
+    #self.tax = self.compute_tax_total
     self.shipping_fee = SHIPPING_FEE
-    self.order_total = self.price_total + self.tax + self.shipping_fee
+    self.order_total = self.price_total + (self.tax ||= 0) + self.shipping_fee - self.compute_discount_total
     self.save
+  end
+
+  def compute_discount_total
+    items_with_gifts = self.line_items.select{ |item| !item.price.nil? }
+    items_with_gifts.inject(0) do |sum, g| 
+      sum += g.discount_price * g.quantity.to_i
+    end
   end
 
   def compute_image_total
     items_with_gifts = self.line_items.select{ |item| !item.price.nil? }
-    items_with_gifts.inject(0) {|sum, g| sum += g.price * g.quantity.to_i }
-  end
-
-  def compute_tax_total
-    items_with_gifts = self.line_items.select{ |item| !item.price.nil? }
-    items_with_gifts.inject(0) {|sum, g| sum += g.tax * g.quantity.to_i }
+    items_with_gifts.inject(0) do |sum, g| 
+      sum += g.price * g.quantity.to_i 
+    end
   end
 
   # Finish a transaction
@@ -122,8 +131,8 @@ class Order < ActiveRecord::Base
     begin
       params.to_options!
       params.merge!({
-        :transaction_status => "completed",
-        :status => "completed"
+        :transaction_status => Order::TRANSACTION_STATUS[:complete],
+        :status => Order::STATUS[:complete]
       })
 
       # Update order attributes
@@ -133,6 +142,7 @@ class Order < ActiveRecord::Base
 
       # Send the notification email to the buyer.
       PaymentMailer.transaction_finish(self).deliver
+      PaymentMailer.inform_new_order(self).deliver
     rescue Exception => exc
       ::Util.log_error(exc, "Finalizing transaction failed")
       raise

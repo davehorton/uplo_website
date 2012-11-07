@@ -42,4 +42,16 @@ class LineItem < ActiveRecord::Base
   def update_order
     self.order.compute_totals
   end
+
+  def discount
+    Image::MOULDING_DISCOUNT[self.moulding.to_i]
+  end
+
+  def discount_price
+    self.discount * self.price
+  end
+
+  def price_with_discount
+    self.price - self.discount_price
+  end
 end

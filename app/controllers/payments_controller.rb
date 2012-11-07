@@ -117,6 +117,7 @@ class PaymentsController < ApplicationController
           order_info.delete 'shipping_address_attributes' if @remove_shipping_info
           # TODO: update tax + price follow shipping state
           @order.update_tax_by_state
+          @order.compute_totals
 
           if current_user.update_profile(order_info)
             an_value = Payment.create_authorizenet_test(card_string, expires_on, {:shipping => order_info[:shipping_address_attributes], :address => order_info[:billing_address_attributes]})
@@ -219,9 +220,7 @@ class PaymentsController < ApplicationController
     def finalize_cart
       if find_cart
         @order = @cart.order
-        @order.status = Order::STATUS[:complete]
-        @order.transaction_status = Order::TRANSACTION_STATUS[:complete]
-        @order.save
+        @order.finalize_transaction
         @cart.destroy if @cart
       end
     end

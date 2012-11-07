@@ -32,7 +32,10 @@
         .cell.text.gray.font12.line18.left
           = line_item.size
         .cell.text.gray.font12.line18.left
-          = GalleriesHelper::MOULDING_DISPLAY[line_item.moulding.to_i]
+          - if line_item.discount == 0
+            = GalleriesHelper::MOULDING_DISPLAY[line_item.moulding.to_i]
+          - else
+            = "#{GalleriesHelper::MOULDING_DISPLAY[line_item.moulding.to_i]} (#{line_item.discount * 100}% Off)"
         .cell.text.gray.font12.line18.left
           = line_item.quantity
         .cell.text.gray.font12.line18.left
@@ -44,7 +47,14 @@
 
   .footer.text.black.line18.left
     .right.summary
+      .cell.text.bold.font14.left Sub Total:
+      #cart-total.cell.subtotal.text.bold.font14.left= number_to_currency(@order.price_total, {:precision => 2})
+      %br
+      .cell.text.font14.italic.left Discount:
+      #cart-total.cell.subtotal.text.font14.italic.left= "-#{number_to_currency(@order.compute_discount_total, {:precision => 2})}"
+  .footer.text.black.line18.left
+    .right.summary
       .cell.text.bold.font14.left Cart Total:
-      #cart-total.cell.subtotal.text.bold.font14.left= number_to_currency(@order.price_total + @order.tax, {:precision => 2})
+      #cart-total.cell.subtotal.text.bold.font14.left= number_to_currency(@order.price_total - @order.compute_discount_total, {:precision => 2})
     .line-separator.left
 

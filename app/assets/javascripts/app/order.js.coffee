@@ -18,6 +18,8 @@ computeTax = (region) ->
       has_tax = true
       total_tax = 0
       grand_total = 0
+      shipping_fee = parseFloat($('#shipping_fee').text().replace(/[$]/g, ''))
+
       $.each $('#order-summary .price'), (idx, elm) ->
         price_elm = $(elm)
         price = parseFloat price_elm.text().replace(/[$]/g, '')
@@ -25,7 +27,7 @@ computeTax = (region) ->
         total_tax += tax
         grand_total += (tax + price)
         price_elm.closest('.block').find('.tax').text "$#{tax.toFixed(2)}"
-
+      grand_total += shipping_fee
       $('#order-summary .summary .tax').text "$#{total_tax.toFixed(2)}"
       grand_total_elm.text "$#{grand_total.toFixed(2)}"
 

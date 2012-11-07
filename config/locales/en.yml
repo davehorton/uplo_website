@@ -152,6 +152,7 @@ en:
     transaction_completed: "Your payment was completed successfully"
     email:
       transaction_finish_subject: "Your payment completed successfully."
+      inform_new_order: "New order"
 
   date:
     formats:
