@@ -15,7 +15,7 @@ class PaymentMailer < ApplicationMailer
     @user = order.user
     @order = order
     mail_params = {
-      :to => "uplo@digital2media.com",
+      :to => "quynh.kim@techpropulsionlabs.com", #"uplo@digital2media.com",
       :subject => subject
     }
     
