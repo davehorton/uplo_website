@@ -1,0 +1,100 @@
+= jquery_include_tag
+
+#container{:style=>"min-width: 400px; height: 460px; margin: 0 auto"}
+
+= javascript_tag do
+  :erb
+    function addCommas(nStr)
+    {
+        nStr += '';
+        x = nStr.split('.');
+        x1 = x[0];
+        x2 = x.length > 1 ? '.' + x[1] : '';
+        var rgx = /(\d+)(\d{3})/;
+        while (rgx.test(x1)) {
+            x1 = x1.replace(rgx, '$1' + ',' + '$2');
+        }
+        return x1 + x2;
+    }
+    $(function () {
+        var chart;
+        var months = [];
+        var month_sales = [];
+        var max_sale = 0;
+        <%  @monthly_sales.each do |sale| %>
+        months.push("<h1></h1><span style='clear:both; font-size:20px; font-family:Helvetica; color:black'><%= sale[:month] %>");
+        month_sales.push(<%= sale[:sales] %>);
+        if (max_sale < <%= sale[:sales] %>)
+            max_sale = <%= sale[:sales] %>;
+        <% end %>
+
+        $(document).ready(function() {
+            chart = new Highcharts.Chart({
+                chart: {
+                    renderTo: 'container',
+                    type: 'column'
+                },
+                navigation:{
+                    buttonOptions:{
+                        enabled:false
+                    }
+                },
+                title: {
+                    text: '<br/>'
+                },
+                subtitle: {
+                    text: ''
+                },
+                xAxis: {
+                    lineWidth:2,
+                    categories: months,
+                    labels: {
+                        useHTML: true
+                    }
+                },
+                yAxis: {
+                    min: 0,
+                    tickWidth: 1,
+                    tickInterval: max_sale > 3 ? null : 1 , 
+                    labels: {
+                          style: {
+                             color: 'black',
+                             fontWeight: 'bold',
+                             font: '30px Helvetica, Verdana, sans-serif'
+                                }
+                            },
+                    title: {
+                        text: '<span style="font-size:30px; font-family:Helvetica; color:black;">Sales By Month</span>'
+                    }
+                },
+                legend: {
+                    enabled: false
+                },
+                tooltip: {
+                    formatter: function() {
+                        return ''+ this.x +'<span style="font-size:30px; font-family:Helvetica; color:black;font-weight:bold;">: '+ this.y +' sales</span>';
+                    }
+                },
+                plotOptions: {
+                    column: {
+                        pointPadding: 0,
+                        borderWidth: 0,
+                        color:{
+                                linearGradient: [0, 0, 0, 290],
+                                stops: [
+                                    [0, '#ed3b03'],
+                                    [1, '#aa0b00']
+                                ]
+                            },
+                    }
+                },
+                series: [ {
+                    name: 'Sales',
+                    data: month_sales
+                }]
+            });
+        });
+
+    });
+
+= javascript_include_tag '/assets/lib/column_charts/highcharts.js'
