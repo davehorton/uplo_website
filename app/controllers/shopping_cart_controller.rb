@@ -32,16 +32,30 @@ class ShoppingCartController < ApplicationController
       redirect_to :controller => :images, :action => :order, :id => image.id and return
 
     else
-      line_item = @cart.order.line_items.new do |item|
-        item.image = image
-        item.attributes = params[:line_item]
-        item.price = image.get_price(image.tier, params[:line_item]['size'], params[:line_item]['moulding'])
-        item.tax = item.price * PER_TAX
-        if item.save
+      # Find line_item to reuse line item which has the same image, size and mounding
+      line_item = @cart.order.line_items.find(:first, :conditions => ["image_id = ? AND size = ? AND moulding = ?",params[:image_id], params[:line_item]['size'],  params[:line_item]['moulding']])
+      if (line_item)
+        line_item.quantity = line_item.quantity + params[:line_item]['quantity'].to_i
+        line_item.price = image.get_price(image.tier, params[:line_item]['size'], params[:line_item]['moulding'])
+        line_item.tax = line_item.price * PER_TAX
+        if line_item.save
           @order = @cart.order.reload
         else
-          flash[:warning] = item.errors.full_messages.to_sentence
+          flash[:warning] = line_item.errors.full_messages.to_sentence
           redirect_to :controller => :images, :action => :order, :id => image.id and return
+        end
+      else
+        line_item = @cart.order.line_items.new do |item|
+          item.image = image
+          item.attributes = params[:line_item]
+          item.price = image.get_price(image.tier, params[:line_item]['size'], params[:line_item]['moulding'])
+          item.tax = item.price * PER_TAX
+          if item.save
+            @order = @cart.order.reload
+          else
+            flash[:warning] = item.errors.full_messages.to_sentence
+            redirect_to :controller => :images, :action => :order, :id => image.id and return
+          end
         end
       end
     end
