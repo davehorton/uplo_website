@@ -34,7 +34,7 @@ class Api::OrdersController < Api::BaseController
       @result[:msg] = "The mould is not compatible with this size. Please change your options."
 
     else
-      line_item = @cart.order.line_items.find(:first, :conditions => ["image_id = ? AND size = ? AND moulding = ?",item_info[:image_id], item_info['size'],  item_info['moulding']])
+      line_item = current_user.init_cart.order.line_items.find(:first, :conditions => ["image_id = ? AND size = ? AND moulding = ?",item_info[:image_id], item_info['size'],  item_info['moulding']])
       if (line_item)
         line_item.quantity = line_item.quantity + item_info['quantity'].to_i
         line_item.price = image.get_price(image.tier, item_info['size'], item_info['moulding'])
