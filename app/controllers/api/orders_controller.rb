@@ -34,15 +34,28 @@ class Api::OrdersController < Api::BaseController
       @result[:msg] = "The mould is not compatible with this size. Please change your options."
 
     else
-      line_item = LineItem.new do |item|
-        item.attributes = item_info
-        item.price = image.get_price(image.tier, item_info[:size], item_info[:moulding])
-        item.tax = item.price * PER_TAX
-        if item.save
+      line_item = @cart.order.line_items.find(:first, :conditions => ["image_id = ? AND size = ? AND moulding = ?",item_info[:image_id], item_info['size'],  item_info['moulding']])
+      if (line_item)
+        line_item.quantity = line_item.quantity + item_info['quantity'].to_i
+        line_item.price = image.get_price(image.tier, item_info['size'], item_info['moulding'])
+        line_item.tax = line_item.price * PER_TAX
+        if line_item.save
           @result[:success] = true
         else
           @result[:success] = false
-          @result[:msg] = item.errors.full_messages.to_sentence
+          @result[:msg] = line_item.errors.full_messages.to_sentence
+        end
+      else
+        line_item = LineItem.new do |item|
+          item.attributes = item_info
+          item.price = image.get_price(image.tier, item_info[:size], item_info[:moulding])
+          item.tax = item.price * PER_TAX
+          if item.save
+            @result[:success] = true
+          else
+            @result[:success] = false
+            @result[:msg] = item.errors.full_messages.to_sentence
+          end
         end
       end
     end
