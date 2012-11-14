@@ -44,7 +44,7 @@ class LineItem < ActiveRecord::Base
   end
 
   def discount
-    Image::MOULDING_DISCOUNT[self.moulding.to_i]
+    Image::MOULDING_DISCOUNT[self.moulding.to_i] ||= 0
   end
 
   def discount_price
