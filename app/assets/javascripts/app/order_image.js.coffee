@@ -37,21 +37,31 @@ refreshSizeOptions = (mould) ->
   options.prop 'disabled', has_constrain
   sizes_selection.selectmenu()
 
+initMouldingOptions = ->
+  moulding_selection = $('#line_item_moulding')
+  options = moulding_selection.find 'option'
+  $.each options, (idx, val) ->
+    option = $(val)
+    option.prop 'disabled', moulding_pending[option.val()]
+  moulding_selection.selectmenu({
+    style: 'dropdown',
+    change: (e, obj) ->
+      computePrice()
+      # refreshSizeOptions obj.value
+  })
 
-$ ->
-  $('.add-to-cart').click -> $("#order-details").submit();
+initSizeOptions = ->
   $('#line_item_size').selectmenu({
     style: 'dropdown',
     change: (e, obj) ->
       computePrice()
-      refreshMouldingOptions obj.value
+      # refreshMouldingOptions obj.value
   })
-  $('#line_item_moulding').selectmenu({
-    style: 'dropdown',
-    change: (e, obj) ->
-      computePrice()
-      refreshSizeOptions obj.value
-  })
+
+$ ->
+  $('.add-to-cart').click -> $("#order-details").submit();
+  initSizeOptions()
+  initMouldingOptions()
   $('#line_item_quantity').keyup -> computePrice()
   $('#line_item_quantity').keypress (e) ->
     reg = /^\d{1,2}$/
@@ -62,5 +72,5 @@ $ ->
 
   order_preview.setup()
   computePrice()
-  refreshSizeOptions $('#line_item_moulding').val()
-  refreshMouldingOptions $('#line_item_size').val()
+  # refreshSizeOptions $('#line_item_moulding').val()
+  # refreshMouldingOptions $('#line_item_size').val()

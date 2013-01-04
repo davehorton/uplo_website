@@ -28,7 +28,8 @@ class Image < ActiveRecord::Base
     TIERS[:tier_3] => TIER_3_PRICES
   }
   MOULDING = {
-    :print => 1,
+    :print => 1, #print only (Gloss)
+    :print_luster => 8, #print only (Luster)
     :canvas => 2,
     :plexi => 3,
     :black => 4,
@@ -36,11 +37,22 @@ class Image < ActiveRecord::Base
     :light_wood => 6,
     :rustic_wood => 7
   }
+  PENDING_MOULDING = {
+    MOULDING[:print] => false,
+    MOULDING[:print_luster] => false,
+    MOULDING[:canvas] => false,
+    MOULDING[:plexi] => false,
+    MOULDING[:black] => true,
+    MOULDING[:white] => true,
+    MOULDING[:light_wood] => true,
+    MOULDING[:rustic_wood] => true
+  }
   MOULDING_SIZES_CONSTRAIN = {
     MOULDING[:rustic_wood] => [IMAGE_SQUARE_PRINTED_SIZES[0], IMAGE_PORTRAIT_PRINTED_SIZES[0]]
   }
   MOULDING_DISCOUNT = {
     MOULDING[:print] => IMAGE_MOULDING_DISCOUNT,
+    MOULDING[:print_luster] => 0,
     MOULDING[:canvas] => IMAGE_MOULDING_DISCOUNT,
     MOULDING[:plexi] => IMAGE_MOULDING_DISCOUNT,
     MOULDING[:black] => 0,

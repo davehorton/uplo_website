@@ -1,6 +1,7 @@
 module GalleriesHelper
   MOULDING_DISPLAY = {
-    Image::MOULDING[:print] => 'Print Only',
+    Image::MOULDING[:print] => 'Print Only (Gloss)',
+    Image::MOULDING[:print_luster] => 'Print Only (Luster)',
     Image::MOULDING[:canvas] => 'Canvas',
     Image::MOULDING[:plexi] => 'Plexi',
     Image::MOULDING[:black] => 'Black',
