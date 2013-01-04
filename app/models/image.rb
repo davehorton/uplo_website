@@ -21,7 +21,7 @@ class Image < ActiveRecord::Base
     :square => IMAGE_SQUARE_PRINTED_SIZES,
     :rectangular => IMAGE_PORTRAIT_PRINTED_SIZES
   }
-  TIERS = { :tier_1 => '1', :tier_2 => '2', :tier_3 => '3' }
+  TIERS = { :tier_1 => '1', :tier_2 => '2', :tier_3 => '3', :tier_4 => '4' }
   TIERS_PRICES = {
     TIERS[:tier_1] => TIER_1_PRICES,
     TIERS[:tier_2] => TIER_2_PRICES,
@@ -59,6 +59,16 @@ class Image < ActiveRecord::Base
     MOULDING[:white] => 0,
     MOULDING[:light_wood] => 0,
     MOULDING[:rustic_wood] => 0
+  }
+  MOULDING_PRICES = {
+    MOULDING[:print] => GlobalConstant::MOULDING_PRICES[MOULDING[:print]],
+    MOULDING[:print_luster] => GlobalConstant::MOULDING_PRICES[MOULDING[:print]],
+    MOULDING[:canvas] => GlobalConstant::MOULDING_PRICES[MOULDING[:canvas]],
+    MOULDING[:plexi] => GlobalConstant::MOULDING_PRICES[MOULDING[:canvas]],
+    MOULDING[:black] => nil,
+    MOULDING[:white] => nil,
+    MOULDING[:light_wood] => nil,
+    MOULDING[:rustic_wood] => nil
   }
   DEFAULT_STYLES = { :smallest => '66x66#', :smaller => '67x67#', :small => '68x68#', :spotlight_small => '74x74#', :thumb => '155x155#', :spotlight_thumb => '174x154#', :profile_thumb => '101x101#', :medium => '640x640>' }
 
