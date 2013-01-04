@@ -8,7 +8,6 @@ computePrice = ->
   discount = price * moulding_discount[moulding]
   if (isNaN(discount))
     discount = 0
-  $('#discount .number').text "- $#{discount.toFixed(2)}"
   $('#total .number').text "$#{(price - discount).toFixed(2)}"
 
 refreshMouldingOptions = (size) ->

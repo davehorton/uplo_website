@@ -32,10 +32,7 @@
         .item.left
           = f.text_field(:quantity, :value => quantity, :size => "2", :title => 'Limit from 1 to 10')
       .line-separator.left
-      .summary.left
-        #discount.right
-          .text.black.left Discount:
-          .number.text.black.left= "- #{number_to_currency 0, {:precision => 2}}"
+      .summary.right
         #total.right
           .text.black.bold.left Subtotal:
           .number.text.black.bold.left= number_to_currency 0, {:precision => 2}

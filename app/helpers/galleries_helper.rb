@@ -33,7 +33,7 @@ module GalleriesHelper
   def printed_sizes_options(image, selected = nil)
     options = []
     image.printed_sizes.each do |size|
-      options << ["#{size} ($#{ image.get_price(image.tier, size)})", size, {'data-url' => image.data.url("scale#{size}")}]
+      options << ["#{size}", size, {'data-url' => image.data.url("scale#{size}")}]
     end
     options_for_select(options, selected)
   end
@@ -41,12 +41,7 @@ module GalleriesHelper
   def mounding_options(selected = nil)
     options = []
     Image::MOULDING.each do |k, v|
-      discount = Image::MOULDING_DISCOUNT[v]
-      if discount == 0
-        options << [MOULDING_DISPLAY[v], v]
-      else
-        options << ["#{MOULDING_DISPLAY[v]} (#{discount * 100}% Off)", v]
-      end
+      options << [MOULDING_DISPLAY[v], v]
     end
     options_for_select(options, selected)
   end
