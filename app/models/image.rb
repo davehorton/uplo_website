@@ -28,14 +28,14 @@ class Image < ActiveRecord::Base
     TIERS[:tier_3] => TIER_3_PRICES
   }
   MOULDING = {
-    :print => 1, #print only (Gloss)
-    :print_luster => 8, #print only (Luster)
-    :canvas => 2,
-    :plexi => 3,
-    :black => 4,
-    :white => 5,
-    :light_wood => 6,
-    :rustic_wood => 7
+    :print => '1', #print only (Gloss)
+    :print_luster => '8', #print only (Luster)
+    :canvas => '2',
+    :plexi => '3',
+    :black => '4',
+    :white => '5',
+    :light_wood => '6',
+    :rustic_wood => '7'
   }
   PENDING_MOULDING = {
     MOULDING[:print] => false,

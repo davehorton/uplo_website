@@ -32,16 +32,11 @@
         .cell.text.gray.font12.line18.left
           = line_item.size
         .cell.text.gray.font12.line18.left
-          - if line_item.discount == 0
-            = GalleriesHelper::MOULDING_DISPLAY[line_item.moulding.to_i]
-          - else
-            = "#{GalleriesHelper::MOULDING_DISPLAY[line_item.moulding.to_i]} (#{line_item.discount * 100}% Off)"
+          = GalleriesHelper::MOULDING_DISPLAY[line_item.moulding]
         .cell.text.gray.font12.line18.left
           = line_item.quantity
         .cell.text.gray.font12.line18.left
           = number_to_currency(line_price, {:precision => 2})
-        / .cell.text.gray.font12.line18.left
-        /   = number_to_currency(line_tax, {:precision => 2})
         .cell.text.gray.font12.line18.left.subtotal
           = number_to_currency(line_price, {:precision => 2})
 

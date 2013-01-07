@@ -113,16 +113,14 @@ class Order < ActiveRecord::Base
   end
 
   def compute_discount_total
-    items_with_gifts = self.line_items.select{ |item| !item.price.nil? }
-    items_with_gifts.inject(0) do |sum, g| 
-      sum += g.discount_price * g.quantity.to_i
-    end
+    #new rule: base on price only, not discount rule anymore
+    0
   end
 
   def compute_image_total
     items_with_gifts = self.line_items.select{ |item| !item.price.nil? }
-    items_with_gifts.inject(0) do |sum, g| 
-      sum += g.price * g.quantity.to_i 
+    items_with_gifts.inject(0) do |sum, g|
+      sum += g.price * g.quantity.to_i
     end
   end
 

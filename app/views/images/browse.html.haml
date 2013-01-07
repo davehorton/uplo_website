@@ -32,7 +32,7 @@
     .text.black.font12.left{:style => 'margin-top:7px;'}= "Uploaded on #{@image.created_at.strftime('%m/%d/%Y')}"
     .right
       %span.text.black.font12 from
-      %span.text.black.bold.font20= number_to_currency @image.get_price(@image.tier, @image.printed_sizes.first), {:precision => 2}
+      %span.text.black.bold.font20= number_to_currency @image.get_price(Image::MOULDING[:print], @image.printed_sizes.first), {:precision => 2}
   .line-separator.left
   .text.gray.font12.line16.left
     = @image.description
@@ -76,7 +76,7 @@
 #social-sharing-popup.left.hide.sharing-popup
   .header.left
     .left.buttons-container
-      
+
     .text.bold.left Share Via Social Network
     %a.close{:href=>'#', :onclick => "$('#social-sharing').hasClass('hide'); return false;"}
       .right &times;
@@ -226,16 +226,16 @@
           _gaq.push(['_trackEvent', 'UPLO Web / Comment', 'post comment', 'status', 1]);
           return true;
         });
-        
+
         $('.image-container-wrapper .image-container.medium img.image.medium').each(function(){
           var img = this;
-          
+
           // Auto-resize the image frame
           $(img).load(function(){
             $(img).parent().removeClass('no-border');
             image_util.resize_frame($(img));
           });
-          
+
           if($(img).prop('complete')){
             $(img).load();
           }

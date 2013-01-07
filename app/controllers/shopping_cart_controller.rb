@@ -36,7 +36,7 @@ class ShoppingCartController < ApplicationController
       line_item = @cart.order.line_items.find(:first, :conditions => ["image_id = ? AND size = ? AND moulding = ?",params[:image_id], params[:line_item]['size'],  params[:line_item]['moulding']])
       if (line_item)
         line_item.quantity = line_item.quantity + params[:line_item]['quantity'].to_i
-        line_item.price = image.get_price(image.tier, params[:line_item]['size'], params[:line_item]['moulding'])
+        line_item.price = image.get_price(params[:line_item]['moulding'], params[:line_item]['size'])
         line_item.tax = line_item.price * PER_TAX
         if line_item.save
           @order = @cart.order.reload
@@ -48,7 +48,7 @@ class ShoppingCartController < ApplicationController
         line_item = @cart.order.line_items.new do |item|
           item.image = image
           item.attributes = params[:line_item]
-          item.price = image.get_price(image.tier, params[:line_item]['size'], params[:line_item]['moulding'])
+          item.price = image.get_price(params[:line_item]['moulding'], params[:line_item]['size'])
           item.tax = item.price * PER_TAX
           if item.save
             @order = @cart.order.reload
@@ -79,7 +79,7 @@ class ShoppingCartController < ApplicationController
     else
       image = line_item.image
       line_item.attributes = params[:line_item]
-      line_item.price = image.get_price(image.tier, params[:line_item]['size'], params[:line_item]['moulding'])
+      line_item.price = image.get_price(params[:line_item]['moulding'], params[:line_item]['size'])
       line_item.tax = line_item.price * PER_TAX
       if line_item.save
         @order = @cart.order.reload

@@ -37,7 +37,7 @@ class Api::OrdersController < Api::BaseController
       line_item = current_user.init_cart.order.line_items.find(:first, :conditions => ["image_id = ? AND size = ? AND moulding = ?",item_info[:image_id], item_info['size'],  item_info['moulding']])
       if (line_item)
         line_item.quantity = line_item.quantity + item_info['quantity'].to_i
-        line_item.price = image.get_price(image.tier, item_info['size'], item_info['moulding'])
+        line_item.price = image.get_price(item_info['moulding'], item_info['size'])
         line_item.tax = line_item.price * PER_TAX
         if line_item.save
           @result[:success] = true
@@ -48,7 +48,7 @@ class Api::OrdersController < Api::BaseController
       else
         line_item = LineItem.new do |item|
           item.attributes = item_info
-          item.price = image.get_price(image.tier, item_info[:size], item_info[:moulding])
+          item.price = image.get_price(item_info[:moulding], item_info[:size])
           item.tax = item.price * PER_TAX
           if item.save
             @result[:success] = true
@@ -83,7 +83,7 @@ class Api::OrdersController < Api::BaseController
     else
       image = item.image
       item.attributes = item_info
-      item.price = image.get_price image.tier, item_info[:size], item_info[:moulding]
+      item.price = image.get_price item_info[:moulding], item_info[:size]
       item.tax = item.price * PER_TAX
       if item.save
         @result[:success] = true
@@ -206,7 +206,7 @@ class Api::OrdersController < Api::BaseController
     done = false
     puts "*"*20
     puts order_info
-    
+
     if current_user.update_profile(order_info)
       # TODO: update tax + price follow shipping state
       order.update_tax_by_state
@@ -279,7 +279,7 @@ class Api::OrdersController < Api::BaseController
           image = Image.un_flagged.find_by_id item_info['image_id']
           unless image.nil?
             item.attributes = item_info
-            item.price = image.get_price(image.tier, item_info["size"], item_info["moulding"])
+            item.price = image.get_price(item_info["moulding"], item_info["size"])
             result << item
           end
         end
