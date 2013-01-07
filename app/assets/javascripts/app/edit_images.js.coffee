@@ -127,6 +127,20 @@ requestUpdateTier = (node) ->
         $('#pricing-form').modal()
   });
 
+initTabs = (tab) ->
+  $('.price-tab').hide()
+  $('.price-tab:first').show()
+  $('ul#tabs li:first a').addClass('active')
+  $('ul#tabs li').click ->
+    $('ul#tabs li a').removeClass('active')
+    tab = $(@).find('a')
+    tab.addClass('active')
+    currentTab = tab.attr('href')
+    $('.price-tab').hide()
+    $(currentTab).show()
+    return false
+
+
 $ ->
   window.is_grid_changed = false
   $("#fileupload").fileupload()
@@ -257,9 +271,10 @@ $ ->
                 if response.success
                   $('#price-tiers').html(response.price_table)
                   $('#pricing-form .button').fadeIn()
+                  $('#btn-done').click -> requestUpdateTier(node)
+                  initTabs()
                   top = e.clientY - form.height()
                   form.closest('.simplemodal-container').css('top', "#{top}px")
-                  $('#btn-done').click -> requestUpdateTier(node)
                 else
                   $('#price-tiers').html(response.msg)
                   $('#pricing-form .button.close').fadeIn()

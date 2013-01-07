@@ -83,4 +83,12 @@ module GlobalConstant
       }
     }
   }
+
+  MOULDING_PRICE_DISPLAY = {
+    Image::MOULDING[:print] => 'Print Only',
+    Image::MOULDING[:canvas] => 'Canvas',
+    Image::MOULDING[:plexi] => 'Plexi'
+  }
+  MOULDING_PRICES_AVAI = [
+    Image::MOULDING[:print], Image::MOULDING[:canvas], Image::MOULDING[:plexi]]
 end
