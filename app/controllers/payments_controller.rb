@@ -129,7 +129,7 @@ class PaymentsController < ApplicationController
               flash[:error] = "Successfully made a purchase (authorization code: #{response.authorization_code})"
               redirect_to :action => :checkout_result, :trans_id => response.transaction_id and return
             else
-              flash.now[:error] = 'Failed to make purchase.'
+              flash.now[:error] = "Failed to make purchase."
               render :template => "orders/index", :params => params and return
             end
 
@@ -220,8 +220,8 @@ class PaymentsController < ApplicationController
     def finalize_cart
       if find_cart
         @order = @cart.order
-        @order.finalize_transaction
         @cart.destroy if @cart
+        @order.finalize_transaction
       end
     end
 end
