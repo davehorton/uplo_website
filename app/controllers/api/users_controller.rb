@@ -1,7 +1,7 @@
 class Api::UsersController < Api::BaseController
   include Devise::Controllers::InternalHelpers
 
-  before_filter :require_login!, :except => [:login, :create_user, :reset_password]
+  before_filter :require_login!, :except => [:login, :create_user, :reset_password, :request_invitation]
 
   def get_user_info
     @result[:success] = false
