@@ -17,7 +17,12 @@ class GalleriesController < ApplicationController
   def mail_shared_gallery
     emails = params[:email]['emails'].split(',')
     emails.map { |email| email.strip }
-    SharingMailer.share_gallery_email(params[:gallery_id], emails, current_user.id, params[:email]['message']).deliver
+
+    if emails.length > 0 && SharingMailer.share_gallery_email(params[:gallery_id], emails, current_user.id, params[:email]['message']).deliver
+      flash[:notice] = "Email sent"
+    else
+      flash[:warning] = "Could not send the email. Please re-check your information (email, message)."
+    end
     redirect_to :action => :index
   end
 

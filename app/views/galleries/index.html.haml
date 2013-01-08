@@ -25,35 +25,45 @@
           .text.gray.photo-number= (gallery.images.un_flagged.length > 0 ? pluralize(gallery.images.un_flagged.length, "Image") : "No Image")
           .text.gray.update-time= "Last Updated: #{gallery.updated_at_string}"
           .text.fuzzy-gray.permission= I18n.t("gallery.permission")[gallery.permission]
-          %a.share-link.text.normal{ :id => "share-context-menu-#{gallery.id}", :href=>'#', :data => { :public_url => "#{gallery.public_link}", :cover_url => "#{gallery_cover_image_url(gallery)}", :email_url => "#{ url_for(:controller => 'galleries', :action => 'mail_shared_gallery', :gallery_id => gallery.id) }", :gallery_name => "#{gallery.name.truncate(20)}", :gallery_user => "#{gallery.user.username.truncate(15)}" } } Share
+          %a.share-link.text.normal{ :id => "share-context-menu-#{gallery.id}", :href=>'#', :data => { :public_url => "#{gallery.public_link}", :cover_url => "#{gallery_cover_image_url(gallery)}", :email_url => "#{ url_for(:controller => 'galleries', :action => 'mail_shared_gallery', :gallery_id => gallery.id) }",
+            :sharing_url =>  "#{ url_for(:controller => 'socials', :action => 'share', :gallery_id => gallery.id) }",
+           :gallery_name => "#{gallery.name.truncate(20)}", :gallery_user => "#{gallery.user.username.truncate(15)}" } } Share
   = render_pagination(@galleries, {:controller => "galleries", :action => params[:action]})
 
-#email-sharing-popup.left.hide
-  .header.left
-    .email-icon.left
-    .text.bold.left Share Via Email
-    %a.close{:href=>'#'}
-      .right{:onclick => "$('#social-sharing').hasClass('hide');"} &times;
-  .main.right
-    #preview.left
-      .image-container.thumb
-        / # = image_tag @image.data.url(:thumb), :class => 'image thumb'
-      #name.text.bold.clear
-        / = @image.name.truncate(20)
-      #username.text.fuzzy.clear
-        / = "by #{ @image.username.truncate(15) }"
-    #info.right
-      .text.bold{ :style => 'margin-top:-4px;' } Email Address
-      = simple_form_for(:email, :method => 'post', :class => 'left', :html => { :id => 'email-details' }) do |f|
-        = f.input :emails, :label => false, :required => true, :as => :string
-        = f.input :message, :as => :text, :label => false, :required => false
-        #button-container.right
-          #btn-send.button.send.left
-          #btn-cancel.button.cancel.left
+= render :partial => 'shared/sharing_box'
 
 - content_for :js do
   = javascript_tag do
     :erb
+
+      function showSocialPopup(class_name){
+        $('#social-sharing').addClass('hide');
+        $("#social-sharing-popup").modal();
+        $("#social-sharing-popup .header .left").first().html("<div class='" + class_name + "-icon left'></div>");
+        $("#social_type_social").val(class_name);
+
+        if(window.selected_gallery != null) {
+          var action_url = window.selected_gallery.attr('data-sharing_url');
+          var cover_image = window.selected_gallery.attr('data-cover_url');
+          var img = $('#photo_thumbnail_social_sharing');
+          $(img).attr('src', cover_image);
+          gallery_name = window.selected_gallery.attr('data-gallery_name');
+          gallery_username = 'by ' + window.selected_gallery.attr('data-gallery_user');
+          $('#sharing-details').attr('action', action_url);
+          $('#object_name').html(gallery_name);
+          $('#object_owner_name').html('by ' + gallery_username);
+        }
+
+      };
+
+      $('.sharing-popup .cancel').click(function(){
+        $.modal.close();
+      });
+
+      $('.sharing-popup .close').click(function(){
+        $.modal.close();
+      });
+
       gallery.setup();
 
       $('#email-sharing-popup .close').click(function(){
@@ -104,54 +114,58 @@
                     if(window.selected_gallery != null) {
                       var action_url = window.selected_gallery.attr('data-email_url');
                       var cover_image = window.selected_gallery.attr('data-cover_url');
-                      var img = document.createElement('img');
-                      img.classList.add('image');
-                      img.classList.add('thumb');
+                      var img = $('#photo_thumbnail_sharing');
                       $(img).attr('src', cover_image);
-                      $('#preview .image-container.thumb').append(img);
-                      $('#name')[0].innerHTML = window.selected_gallery.attr('data-gallery_name');
-                      $('#username')[0].innerHTML = 'by ' + window.selected_gallery.attr('data-gallery_user');
+                      gallery_name = window.selected_gallery.attr('data-gallery_name');
+                      gallery_username = 'by ' + window.selected_gallery.attr('data-gallery_user');
                       $('#email-details').attr('action', action_url);
+                      $('#object_name_email').html(gallery_name);
+                      $('#object_owner_name_email').html('by ' + gallery_username);
                     }
                   }
                 });
               }
             },
+            <% if !(current_user.facebook_token.blank?) %>
             "facebook": {
               name: "Share on Facebook",
               icon: "facebook",
               callback: function(key, opt, e){
-                url = 'http://www.facebook.com/sharer.php?u=' + $(this).attr('data-public_url');
-                window.open(url,'_blank');
+                window.selected_gallery = $(this);
+                showSocialPopup('facebook');
               }
             },
+            <% end %>
+            <% if !(current_user.twitter_token.blank?) %>
             "twitter": {
               name: "Share on Twitter",
               icon: "twitter",
               callback: function(key, opt, e){
-                public_url = encodeURIComponent($(this).attr('data-public_url'));
-                url = 'http://twitter.com/share?url=' + public_url + '&text=' + encodeURIComponent('from UPLO');
-                window.open(url,'_blank');
+                window.selected_gallery = $(this);
+                showSocialPopup('twitter');
               }
             },
+            <% end %>
+            <% if !(current_user.tumblr_token.blank?) %>
             "tumblr": {
               name: "Share on Tumblr",
               icon: "tumblr",
               callback: function(key, opt, e){
-                cover_url = encodeURIComponent($(this).attr('data-cover_url'));
-                public_url = encodeURIComponent($(this).attr('data-public_url'));
-                url = 'http://www.tumblr.com/share/photo?source=' + cover_url + '&caption=' + encodeURIComponent('from UPLO') + '&clickthru=' + public_url;
-                window.open(url,'_blank');
+                window.selected_gallery = $(this);
+                showSocialPopup('tumblr');
               }
             },
-            "pinterest": {
-              name: "Share on Pinterest",
-              icon: "pinterest",
+            <% end %>
+            <% if !(current_user.flickr_token.blank?) %>
+            "flickr": {
+              name: "Share on Flickr",
+              icon: "flickr",
               callback: function(key, opt, e){
-                url = $(this).attr('data-public_url');
-                helper.show_notification('This feature is coming soon.');
+                window.selected_gallery = $(this);
+                showSocialPopup('flickr');
               }
             }
+            <% end %>
           }
         });
       });

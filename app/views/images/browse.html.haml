@@ -51,49 +51,9 @@
         .image-container.small{:id => "image-container-#{image.id}", :title=>"#{image.name}", :class => "#{additional_class}"}
           %a{ :href => "#{url}" }
             = image_tag image.data(:small), :class => 'image small left'
+- if !@image.is_flagged?
+  = render :partial => 'shared/sharing_box'
 
-#email-sharing-popup.left.hide.sharing-popup
-  .header.left
-    .email-icon.left
-    .text.bold.left Share Via Email
-    %a.close{:href=>'#', :onclick => "$('#social-sharing').hasClass('hide'); return false;"}
-      .right &times;
-  .main.right
-    #preview.left
-      .image-container.thumb
-        = image_tag @image.data.url(:thumb), :class => 'image thumb'
-      .text.bold.clear= @image.name.truncate(20)
-      .text.fuzzy.clear= "by #{ @image.username.truncate(15) }"
-    #info.right
-      .text.bold{ :style => 'margin-top:-4px;' } Email Address
-      - action_url = url_for(:controller => 'images', :action => 'mail_shared_image', :id => @image.id)
-      = simple_form_for(:email, :url => action_url, :method => 'post', :html => { :id => 'email-details', :class => 'left sharing-form' }) do |f|
-        = f.input :emails, :label => false, :required => true, :as => :string
-        = f.input :message, :as => :text, :label => false, :required => false
-        #button-container.right
-          #btn-send.button.send.left
-          #btn-cancel.button.cancel.left
-#social-sharing-popup.left.hide.sharing-popup
-  .header.left
-    .left.buttons-container
-
-    .text.bold.left Share Via Social Network
-    %a.close{:href=>'#', :onclick => "$('#social-sharing').hasClass('hide'); return false;"}
-      .right &times;
-  .main.right
-    #preview.left
-      .image-container.thumb
-        = image_tag @image.data.url(:thumb), :class => 'image thumb'
-      .text.bold.clear= @image.name.truncate(20)
-      .text.fuzzy.clear= "by #{ @image.username.truncate(15) }"
-    #info.right
-      - action_url = url_for(:controller => :socials, :action => :share, :image_id => @image.id)
-      = simple_form_for(:social, :url => action_url, :method => 'post', :html =>{:class => 'left sharing-form'}) do |f|
-        = f.input :message, :as => :text, :label => false, :required => false
-        = f.input :type_social, :as => :hidden, :id => "type_social"
-        #button-container.right
-          = f.submit "", :class => "button send left", :style => "border:none"
-          #btn-cancel.button.cancel.left
 .sections
   - if can_promote
     .image-container.promote-container.clearfix

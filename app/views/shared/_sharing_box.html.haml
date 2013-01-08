@@ -1,0 +1,52 @@
+- name = ''
+- owner_name = ''
+- id = 0
+- url = ''
+- if @image
+  - name = @image.name.truncate(20)
+  - owner_name = @image.username.truncate(15)
+  - id = @image.id
+  - url = @image.data.url(:thumb)
+
+#email-sharing-popup.left.hide.sharing-popup
+  .header.left
+    .email-icon.left
+    .text.bold.left Share Via Email
+    %a.close{:href=>'#', :onclick => "$('#social-sharing').hasClass('hide'); return false;"}
+      .right &times;
+  .main.right
+    #preview.left
+      .image-container.thumb
+        = image_tag url, :class => 'image thumb', :id => "photo_thumbnail_sharing"
+      .text.bold.clear#object_name_email= name
+      .text.fuzzy.clear#object_owner_name_email= "by #{ owner_name }"
+    #info.right
+      .text.bold{ :style => 'margin-top:-4px;' } Email Address
+      - action_url = url_for(:controller => 'images', :action => 'mail_shared_image', :id => id)
+      = simple_form_for(:email, :url => action_url, :method => 'post', :html => { :id => 'email-details', :class => 'left sharing-form' }) do |f|
+        = f.input :emails, :label => false, :required => true, :as => :string
+        = f.input :message, :as => :text, :label => false, :required => false
+        #button-container.right
+          #btn-send.button.send.left
+          #btn-cancel.button.cancel.left
+#social-sharing-popup.left.hide.sharing-popup
+  .header.left
+    .left.buttons-container
+      
+    .text.bold.left Share Via Social Network
+    %a.close{:href=>'#', :onclick => "$('#social-sharing').hasClass('hide'); return false;"}
+      .right &times;
+  .main.right
+    #preview.left
+      .image-container.thumb
+        = image_tag url, :class => 'image thumb', :id => "photo_thumbnail_social_sharing"
+      .text.bold.clear#object_name= name
+      .text.fuzzy.clear#object_owner_name= "by #{ owner_name }"
+    #info.right
+      - action_url = url_for(:controller => :socials, :action => :share, :image_id => id)
+      = simple_form_for(:social, :url => action_url, :method => 'post', :html =>{ :id => 'sharing-details', :class => 'left sharing-form'}) do |f|
+        = f.input :message, :as => :text, :label => false, :required => false
+        = f.input :type_social, :as => :hidden, :id => "type_social"
+        #button-container.right
+          = f.submit "", :class => "button send left", :style => "border:none"
+          #btn-cancel.button.cancel.left
