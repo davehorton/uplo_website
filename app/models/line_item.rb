@@ -8,6 +8,7 @@ class LineItem < ActiveRecord::Base
   after_destroy :update_order
 
   validates :quantity, :numericality => { :less_than_or_equal_to => 10 }
+  validate :item_uniq, :on => :update
 
   class << self
     def exposed_methods
@@ -55,4 +56,12 @@ class LineItem < ActiveRecord::Base
   def price_with_discount
     self.price - self.discount_price
   end
+
+  protected
+    def item_uniq
+      if LineItem.exists?(:order_id => self.order_id, :image_id => self.image_id, :plexi_mount => self.plexi_mount, :moulding => self.moulding, :size => self.size)
+        errors[:base] = 'The size and moulding options have been ordered in another item. Please choose other options.'
+        return false
+      end
+    end
 end

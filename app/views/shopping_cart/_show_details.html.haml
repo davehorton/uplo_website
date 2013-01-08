@@ -44,10 +44,7 @@
     .right.summary
       .cell.text.bold.font14.left Sub Total:
       #cart-total.cell.subtotal.text.bold.font14.left= number_to_currency(@order.price_total, {:precision => 2})
-      %br
-      .cell.text.font14.italic.left Discount:
-      #cart-total.cell.subtotal.text.font14.italic.left= "-#{number_to_currency(@order.compute_discount_total, {:precision => 2})}"
-  .footer.text.black.line18.left
+    .clear
     .right.summary
       .cell.text.bold.font14.left Cart Total:
       #cart-total.cell.subtotal.text.bold.font14.left= number_to_currency(@order.price_total - @order.compute_discount_total, {:precision => 2})
