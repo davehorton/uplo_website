@@ -41,16 +41,17 @@ class Image < ActiveRecord::Base
   MOULDING_SIZES_CONSTRAIN = {
     MOULDING[:rustic_wood] => [IMAGE_SQUARE_PRINTED_SIZES[0], IMAGE_PORTRAIT_PRINTED_SIZES[0]]
   }
-  # MOULDING_DISCOUNT = {
-  #   MOULDING[:print] => IMAGE_MOULDING_DISCOUNT,
-  #   MOULDING[:print_luster] => 0,
-  #   MOULDING[:canvas] => IMAGE_MOULDING_DISCOUNT,
-  #   MOULDING[:plexi] => IMAGE_MOULDING_DISCOUNT,
-  #   MOULDING[:black] => 0,
-  #   MOULDING[:white] => 0,
-  #   MOULDING[:light_wood] => 0,
-  #   MOULDING[:rustic_wood] => 0
-  # }
+  # TODO: temp reset to 0, plz check with iOS & remove, also see: users api: get_moulding
+  MOULDING_DISCOUNT = {
+    MOULDING[:print] => 0,
+    MOULDING[:print_luster] => 0,
+    MOULDING[:canvas] => 0,
+    MOULDING[:plexi] => 0,
+    MOULDING[:black] => 0,
+    MOULDING[:white] => 0,
+    MOULDING[:light_wood] => 0,
+    MOULDING[:rustic_wood] => 0
+  }
   MOULDING_PRICES = {
     MOULDING[:print] => GlobalConstant::MOULDING_PRICES[MOULDING[:print]],
     MOULDING[:print_luster] => GlobalConstant::MOULDING_PRICES[MOULDING[:print]],
@@ -327,13 +328,6 @@ class Image < ActiveRecord::Base
   end
 
   # INSTANCE METHODS
-  # def get_price(tier, size, moulding=nil)
-    # moulding = MOULDING[moulding.downcase.to_sym] if moulding.is_a? String
-    # discount = moulding ? MOULDING_DISCOUNT[moulding.to_i] : 0
-
-    # return TIERS_PRICES[tier][size] * (1 - discount)
-  # end
-
   def get_price(moulding, size)
     return MOULDING_PRICES[moulding][self.tier][size]
   end

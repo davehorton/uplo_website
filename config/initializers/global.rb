@@ -1,6 +1,5 @@
 # Application Constants/Configuration
 PER_TAX = 0
-IMAGE_MOULDING_DISCOUNT = 0.05
 SHIPPING_FEE = 15
 RESOURCE_LIMIT = {:size => 250, :unit => "MB"}
 HELD_AVATARS_NUMBER = 5
