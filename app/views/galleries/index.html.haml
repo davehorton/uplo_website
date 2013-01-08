@@ -48,7 +48,7 @@
           var img = $('#photo_thumbnail_social_sharing');
           $(img).attr('src', cover_image);
           gallery_name = window.selected_gallery.attr('data-gallery_name');
-          gallery_username = 'by ' + window.selected_gallery.attr('data-gallery_user');
+          gallery_username = window.selected_gallery.attr('data-gallery_user');
           $('#sharing-details').attr('action', action_url);
           $('#object_name').html(gallery_name);
           $('#object_owner_name').html('by ' + gallery_username);
@@ -117,7 +117,7 @@
                       var img = $('#photo_thumbnail_sharing');
                       $(img).attr('src', cover_image);
                       gallery_name = window.selected_gallery.attr('data-gallery_name');
-                      gallery_username = 'by ' + window.selected_gallery.attr('data-gallery_user');
+                      gallery_username = window.selected_gallery.attr('data-gallery_user');
                       $('#email-details').attr('action', action_url);
                       $('#object_name_email').html(gallery_name);
                       $('#object_owner_name_email').html('by ' + gallery_username);
