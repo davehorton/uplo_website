@@ -1,11 +1,9 @@
-#= require 'app/image_util.js'
 
 computePrice = ->
   size = $('#line_item_size').val()
   moulding = $('#line_item_moulding').val()
   quantity = $('#line_item_quantity').val()
-  # if moulding_price[moulding]
-  price = moulding_price[moulding][tier][size]
+  price = moulding_price[moulding][tier][size] * quantity
   $('#total .number').text "$#{price.toFixed(2)}"
 
 refreshMouldingOptions = (size) ->
@@ -56,16 +54,25 @@ initSizeOptions = ->
   })
 
 $ ->
+  $('#preview-frame').on 'contextmenu', ->
+    alert('These photos are copyrighted by their respective owners. All rights reserved. Unauthorized use prohibited.')
+    return false
+
   $('.add-to-cart').click -> $("#order-details").submit();
+
   initSizeOptions()
   initMouldingOptions()
   $('#line_item_quantity').keyup -> computePrice()
-  $('#line_item_quantity').keypress (e) ->
+  $('#line_item_quantity').keypress (event) ->
     reg = /^\d{1,2}$/
-    if e.charCode != 0
-      val = e.currentTarget.value + String.fromCharCode(e.charCode)
-      if !reg.test(val) || (parseInt(val) > 10)
-        return false
+    return true unless event.charCode
+    part1 = @.value.substring 0, @.selectionStart
+    part2 = @.value.substring @.selectionEnd, @.value.length
+    val = part1 + String.fromCharCode(event.charCode) + part2
+    if reg.test(val)
+      return (parseInt(val) <= 10)
+    else
+      return false
 
   order_preview.setup()
   computePrice()
