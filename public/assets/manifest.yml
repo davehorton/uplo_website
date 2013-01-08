@@ -235,7 +235,7 @@ app/image.js: app/image-829e074869633a2930bd5428a7c30736.js
 app/image_util.js: app/image_util-edbb359e0fc98af17001b629c71ff9bc.js
 app/my_account.js: app/my_account-2092bfc270889d50934d6074bb1f7c0d.js
 app/order.js: app/order-c2b4f56262369164a8da5ee90993ce5f.js
-app/order_image.js: app/order_image-8d658eec88fa87743b7d810affbc31c2.js
+app/order_image.js: app/order_image-f764d834ec1509e3e5925b3a98c44b95.js
 app/popup.js: app/popup-63df2c1856269c3e45f965bce26ab7da.js
 app/sales.js: app/sales-9cff0245ad3e146dfb19b0eb94bf6370.js
 app/shopping_cart.js: app/shopping_cart-fc8da9d51eb54947db1ebb930663ea46.js
