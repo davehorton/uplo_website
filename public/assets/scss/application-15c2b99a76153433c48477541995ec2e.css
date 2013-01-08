@@ -1362,9 +1362,9 @@ textarea {
       margin: 0; }
 
 #pricing-form {
-  width: 262px; }
+  width: 362px; }
   #pricing-form .container {
-    width: 242px; }
+    width: 342px; }
   #pricing-form .icon.loading-small {
     margin: 0 auto; }
   #pricing-form .tail {
@@ -1375,8 +1375,16 @@ textarea {
     margin-bottom: 5px;
     margin-top: -5px; }
 
+#frm-pricing .tab {
+  width: auto;
+  height: 25px;
+  line-height: 25px;
+  text-decoration: none;
+  padding: 0 5px; }
+  #frm-pricing .tab.active {
+    background-color: #ebebeb; }
 #frm-pricing .cell {
-  width: 43px;
+  width: 65px;
   height: 25px;
   text-align: center;
   line-height: 25px;
@@ -1388,19 +1396,16 @@ textarea {
     margin: 0;
     background-color: #ebebeb;
     border-bottom: none; }
-  #frm-pricing .cell.type {
-    width: 65px;
-    text-align: left; }
-    #frm-pricing .cell.type input[type=radio] {
-      padding: 0;
-      margin: 0;
-      vertical-align: middle; }
-    #frm-pricing .cell.type label {
-      vertical-align: middle;
-      padding-top: 1px;
-      padding-bottom: 1px; }
-    #frm-pricing .cell.type.header {
-      text-align: center; }
+  #frm-pricing .cell.type input[type=radio] {
+    padding: 0;
+    margin: 0;
+    vertical-align: middle; }
+  #frm-pricing .cell.type label {
+    vertical-align: middle;
+    padding-top: 1px;
+    padding-bottom: 1px; }
+  #frm-pricing .cell.type.header {
+    text-align: center; }
   #frm-pricing .cell.last {
     border-right: none; }
 
