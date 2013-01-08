@@ -15,6 +15,27 @@ class Api::UsersController < Api::BaseController
     render :json => @result
   end
 
+  # params: email
+  def request_invitation
+    @result[:success] = false
+    if !params.has_key?('email') || params[:email].blank?
+      @result[:msg] = "Please input an email first"
+    elsif (User::EMAIL_REG_EXP =~ params[:email]).nil?
+      @result[:msg] = 'The email is invalid'
+    elsif Invitation.exists?(:email => params[:email]) || User.exists?(:email => params[:email])
+      @result[:msg] = 'The email has been used'
+    else
+      req = Invitation.new_invitation(params[:email])
+      if req.save
+        @result[:success] = true
+        @result[:msg] = "Your request has been sent"
+      else
+        @result[:msg] = req.errors.full_messages[0]
+      end
+    end
+    render :json => @result
+  end
+
   def create_user
     info = params[:user]
     profile_image_params = params[:profile_image]

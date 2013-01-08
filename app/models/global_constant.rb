@@ -1,27 +1,41 @@
 module GlobalConstant
 # IMAGE_SQUARE_PRINTED_SIZES = ['5x5',  '8x8', '12x12', '20x20']
 # IMAGE_PORTRAIT_PRINTED_SIZES = ['5x7', '8x10', '12x16', '20x24']
+
+  MOULDING = {
+    :print => '1', #print only (Gloss)
+    :print_luster => '8', #print only (Luster)
+    :canvas => '2',
+    :plexi => '3',
+    :black => '4',
+    :white => '5',
+    :light_wood => '6',
+    :rustic_wood => '7'
+  }
+
+  TIERS = { :tier_1 => '1', :tier_2 => '2', :tier_3 => '3', :tier_4 => '4' }
+
   MOULDING_PRICES = {
-    Image::MOULDING[:print] => {
-      Image::TIERS[:tier_1] => {
+    MOULDING[:print] => {
+      TIERS[:tier_1] => {
         IMAGE_SQUARE_PRINTED_SIZES[0] => 20, IMAGE_PORTRAIT_PRINTED_SIZES[0] => 20,
         IMAGE_SQUARE_PRINTED_SIZES[1] => 30, IMAGE_PORTRAIT_PRINTED_SIZES[1] => 30,
         IMAGE_SQUARE_PRINTED_SIZES[2] => 100, IMAGE_PORTRAIT_PRINTED_SIZES[2] => 100,
         IMAGE_SQUARE_PRINTED_SIZES[3] => 200, IMAGE_PORTRAIT_PRINTED_SIZES[3] => 200
       },
-      Image::TIERS[:tier_2] => {
+      TIERS[:tier_2] => {
         IMAGE_SQUARE_PRINTED_SIZES[0] => 40, IMAGE_PORTRAIT_PRINTED_SIZES[0] => 40,
         IMAGE_SQUARE_PRINTED_SIZES[1] => 60, IMAGE_PORTRAIT_PRINTED_SIZES[1] => 60,
         IMAGE_SQUARE_PRINTED_SIZES[2] => 200, IMAGE_PORTRAIT_PRINTED_SIZES[2] => 200,
         IMAGE_SQUARE_PRINTED_SIZES[3] => 400, IMAGE_PORTRAIT_PRINTED_SIZES[3] => 400
       },
-      Image::TIERS[:tier_3] => {
+      TIERS[:tier_3] => {
         IMAGE_SQUARE_PRINTED_SIZES[0] => 160, IMAGE_PORTRAIT_PRINTED_SIZES[0] => 160,
         IMAGE_SQUARE_PRINTED_SIZES[1] => 240, IMAGE_PORTRAIT_PRINTED_SIZES[1] => 240,
         IMAGE_SQUARE_PRINTED_SIZES[2] => 800, IMAGE_PORTRAIT_PRINTED_SIZES[2] => 800,
         IMAGE_SQUARE_PRINTED_SIZES[3] => 1600, IMAGE_PORTRAIT_PRINTED_SIZES[3] => 1600
       },
-      Image::TIERS[:tier_4] => {
+      TIERS[:tier_4] => {
         IMAGE_SQUARE_PRINTED_SIZES[0] => 480, IMAGE_PORTRAIT_PRINTED_SIZES[0] => 480,
         IMAGE_SQUARE_PRINTED_SIZES[1] => 720, IMAGE_PORTRAIT_PRINTED_SIZES[1] => 720,
         IMAGE_SQUARE_PRINTED_SIZES[2] => 2400, IMAGE_PORTRAIT_PRINTED_SIZES[2] => 2400,
@@ -29,26 +43,26 @@ module GlobalConstant
       }
     },
 
-    Image::MOULDING[:canvas] => {
-      Image::TIERS[:tier_1] => {
+    MOULDING[:canvas] => {
+      TIERS[:tier_1] => {
         IMAGE_SQUARE_PRINTED_SIZES[0] => 30, IMAGE_PORTRAIT_PRINTED_SIZES[0] => 30,
         IMAGE_SQUARE_PRINTED_SIZES[1] => 40, IMAGE_PORTRAIT_PRINTED_SIZES[1] => 40,
         IMAGE_SQUARE_PRINTED_SIZES[2] => 80, IMAGE_PORTRAIT_PRINTED_SIZES[2] => 80,
         IMAGE_SQUARE_PRINTED_SIZES[3] => 125, IMAGE_PORTRAIT_PRINTED_SIZES[3] => 125
       },
-      Image::TIERS[:tier_2] => {
+      TIERS[:tier_2] => {
         IMAGE_SQUARE_PRINTED_SIZES[0] => 60, IMAGE_PORTRAIT_PRINTED_SIZES[0] => 60,
         IMAGE_SQUARE_PRINTED_SIZES[1] => 80, IMAGE_PORTRAIT_PRINTED_SIZES[1] => 80,
         IMAGE_SQUARE_PRINTED_SIZES[2] => 160, IMAGE_PORTRAIT_PRINTED_SIZES[2] => 160,
         IMAGE_SQUARE_PRINTED_SIZES[3] => 250, IMAGE_PORTRAIT_PRINTED_SIZES[3] => 250
       },
-      Image::TIERS[:tier_3] => {
+      TIERS[:tier_3] => {
         IMAGE_SQUARE_PRINTED_SIZES[0] => 240, IMAGE_PORTRAIT_PRINTED_SIZES[0] => 240,
         IMAGE_SQUARE_PRINTED_SIZES[1] => 320, IMAGE_PORTRAIT_PRINTED_SIZES[1] => 320,
         IMAGE_SQUARE_PRINTED_SIZES[2] => 640, IMAGE_PORTRAIT_PRINTED_SIZES[2] => 640,
         IMAGE_SQUARE_PRINTED_SIZES[3] => 1000, IMAGE_PORTRAIT_PRINTED_SIZES[3] => 1000
       },
-      Image::TIERS[:tier_4] => {
+      TIERS[:tier_4] => {
         IMAGE_SQUARE_PRINTED_SIZES[0] => 720, IMAGE_PORTRAIT_PRINTED_SIZES[0] => 720,
         IMAGE_SQUARE_PRINTED_SIZES[1] => 960, IMAGE_PORTRAIT_PRINTED_SIZES[1] => 960,
         IMAGE_SQUARE_PRINTED_SIZES[2] => 1920, IMAGE_PORTRAIT_PRINTED_SIZES[2] => 1920,
@@ -56,26 +70,26 @@ module GlobalConstant
       }
     },
 
-    Image::MOULDING[:plexi] => {
-      Image::TIERS[:tier_1] => {
+    MOULDING[:plexi] => {
+      TIERS[:tier_1] => {
         IMAGE_SQUARE_PRINTED_SIZES[0] => 40, IMAGE_PORTRAIT_PRINTED_SIZES[0] => 40,
         IMAGE_SQUARE_PRINTED_SIZES[1] => 50, IMAGE_PORTRAIT_PRINTED_SIZES[1] => 50,
         IMAGE_SQUARE_PRINTED_SIZES[2] => 100, IMAGE_PORTRAIT_PRINTED_SIZES[2] => 100,
         IMAGE_SQUARE_PRINTED_SIZES[3] => 200, IMAGE_PORTRAIT_PRINTED_SIZES[3] => 200
       },
-      Image::TIERS[:tier_2] => {
+      TIERS[:tier_2] => {
         IMAGE_SQUARE_PRINTED_SIZES[0] => 80, IMAGE_PORTRAIT_PRINTED_SIZES[0] => 80,
         IMAGE_SQUARE_PRINTED_SIZES[1] => 100, IMAGE_PORTRAIT_PRINTED_SIZES[1] => 100,
         IMAGE_SQUARE_PRINTED_SIZES[2] => 200, IMAGE_PORTRAIT_PRINTED_SIZES[2] => 200,
         IMAGE_SQUARE_PRINTED_SIZES[3] => 400, IMAGE_PORTRAIT_PRINTED_SIZES[3] => 400
       },
-      Image::TIERS[:tier_3] => {
+      TIERS[:tier_3] => {
         IMAGE_SQUARE_PRINTED_SIZES[0] => 320, IMAGE_PORTRAIT_PRINTED_SIZES[0] => 320,
         IMAGE_SQUARE_PRINTED_SIZES[1] => 400, IMAGE_PORTRAIT_PRINTED_SIZES[1] => 400,
         IMAGE_SQUARE_PRINTED_SIZES[2] => 800, IMAGE_PORTRAIT_PRINTED_SIZES[2] => 800,
         IMAGE_SQUARE_PRINTED_SIZES[3] => 1600, IMAGE_PORTRAIT_PRINTED_SIZES[3] => 1600
       },
-      Image::TIERS[:tier_4] => {
+      TIERS[:tier_4] => {
         IMAGE_SQUARE_PRINTED_SIZES[0] => 960, IMAGE_PORTRAIT_PRINTED_SIZES[0] => 960,
         IMAGE_SQUARE_PRINTED_SIZES[1] => 1200, IMAGE_PORTRAIT_PRINTED_SIZES[1] => 1200,
         IMAGE_SQUARE_PRINTED_SIZES[2] => 2400, IMAGE_PORTRAIT_PRINTED_SIZES[2] => 2400,
@@ -85,10 +99,10 @@ module GlobalConstant
   }
 
   MOULDING_PRICE_DISPLAY = {
-    Image::MOULDING[:print] => 'Print Only',
-    Image::MOULDING[:canvas] => 'Canvas',
-    Image::MOULDING[:plexi] => 'Plexi'
+    MOULDING[:print] => 'Print Only',
+    MOULDING[:canvas] => 'Canvas',
+    MOULDING[:plexi] => 'Plexi'
   }
   MOULDING_PRICES_AVAI = [
-    Image::MOULDING[:print], Image::MOULDING[:canvas], Image::MOULDING[:plexi]]
+    MOULDING[:print], MOULDING[:canvas], MOULDING[:plexi]]
 end

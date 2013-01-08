@@ -21,22 +21,13 @@ class Image < ActiveRecord::Base
     :square => IMAGE_SQUARE_PRINTED_SIZES,
     :rectangular => IMAGE_PORTRAIT_PRINTED_SIZES
   }
-  TIERS = { :tier_1 => '1', :tier_2 => '2', :tier_3 => '3', :tier_4 => '4' }
+  TIERS = GlobalConstant::TIERS
   TIERS_PRICES = {
     TIERS[:tier_1] => TIER_1_PRICES,
     TIERS[:tier_2] => TIER_2_PRICES,
     TIERS[:tier_3] => TIER_3_PRICES
   }
-  MOULDING = {
-    :print => '1', #print only (Gloss)
-    :print_luster => '8', #print only (Luster)
-    :canvas => '2',
-    :plexi => '3',
-    :black => '4',
-    :white => '5',
-    :light_wood => '6',
-    :rustic_wood => '7'
-  }
+  MOULDING = GlobalConstant::MOULDING
   PENDING_MOULDING = {
     MOULDING[:print] => false,
     MOULDING[:print_luster] => false,

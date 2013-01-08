@@ -187,6 +187,7 @@ Uplo::Application.routes.draw do
       post 'withdraw', :to => "users#withdraw"
       post 'card_info', :to => "users#get_user_card_info"
       get 'get_moulding', :to => 'users#get_moulding'
+      post 'request_invitation', :to => 'users#request_invitation'
     end
 
     # Gallery
