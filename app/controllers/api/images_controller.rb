@@ -16,7 +16,7 @@ class Api::ImagesController < Api::BaseController
   before_filter :require_login!
   include ::SharedMethods::Converter
 
-  # POST /api/get_printed_sizes
+  # GET /api/get_printed_sizes
   # params: image_id
   def get_printed_sizes
     image = Image.un_flagged.find_by_id params[:image_id]
@@ -24,7 +24,11 @@ class Api::ImagesController < Api::BaseController
       result = { :success => false, :msg => 'This image does not exist' }
     else
       sizes = []
-      image.printed_sizes.each { |s| sizes << { :id => image.id, :size => s, :price => image.get_price(image.tier, s) }}
+      Image::MOULDING.each do |k, v|
+        if Image::MOULDING_PRICES[v]
+          image.printed_sizes.each { |s| sizes << { :id => image.id, :size => s, :mould => v, :price => image.get_price(v, s) }}
+        end
+      end
       result = { :success => true, :sizes => sizes}
     end
     render :json => result
