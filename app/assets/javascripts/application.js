@@ -66,7 +66,7 @@ helper = {
           type: 'GET',
           dataType: 'html',
           success: function(response) {
-            if (stopLoadmore)
+            if (helper.stopLoadmore)
               return;
             var result;
             result = $.parseJSON(response);
