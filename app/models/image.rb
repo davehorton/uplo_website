@@ -124,7 +124,7 @@ class Image < ActiveRecord::Base
 
   # CALLBACK
   before_post_process :init_image_info
-  before_create :set_default_tier
+  before_create :init_tier
   after_initialize :init_random_price, :init_tier
 
   # CLASS METHODS
@@ -747,10 +747,6 @@ class Image < ActiveRecord::Base
   end
 
   protected
-    def set_default_tier
-      self.tier = TIERS[:tier_1]
-    end
-
     # Detect the image dimensions.
     def init_image_info
       file = self.data.queued_for_write[:original]
@@ -776,7 +772,7 @@ class Image < ActiveRecord::Base
 
     def init_tier
       if self.tier.blank?
-        self.tier = TIERS[0]
+        self.tier = TIERS[:tier_1]
       end
     end
 
