@@ -1,4 +1,5 @@
 class Gallery < ActiveRecord::Base
+  load File.join(Rails.root, 'lib', 'tasks', 'search.rake')
   include Rails.application.routes.url_helpers
   include ::SharedMethods::Paging
   include ::SharedMethods::SerializationConfig
@@ -170,6 +171,7 @@ class Gallery < ActiveRecord::Base
   private
     def set_image_delta_flag
       if Rails.env.production?
+        Rake::Task['search:reindex'].reenable
         Rake::Task['search:reindex'].invoke
       else
         self.images.each { |img|

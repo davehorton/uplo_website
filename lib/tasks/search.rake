@@ -1,13 +1,19 @@
+require 'thinking_sphinx/tasks'
+require 'flying_sphinx/tasks'
+
 namespace :search do
   desc 'Rebuild Flying Sphinx index'
 
-  task :reindex => :environment do
+  task :reindex do
     if Rails.env.production?
-      Rails.logger.info("==== Begin fs:rebuild ====")
-      Rake::Task["fs:reindex"].invoke
-      Rails.logger.info("==== Finished fs:rebuild ====")
+      Rails.logger.info("==== Begin flying_sphinx: configure & index ====")
+      FlyingSphinx::CLI.new('setup').run
+      Rails.logger.info("==== Finished flying_sphinx: configure & index ====")
     else
-      Rake::Task["ts:reindex"].invoke
+      Rails.logger.info("==== Begin thinking_sphinx:index ====")
+      Rake::Task["thinking_sphinx:index"].reenable
+      Rake::Task["thinking_sphinx:index"].invoke
+      Rails.logger.info("==== Finished thinking_sphinx:index ====")
     end
   end
 end
