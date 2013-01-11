@@ -147,10 +147,11 @@ class Api::ImagesController < Api::BaseController
       result = {:success => false, :msg => 'This user does not exist.'}
     else
       if (user.id == current_user.id)
-        result[:data] = user.images.un_flagged.load_images(@filtered_params)
+        data = user.images.un_flagged.load_images(@filtered_params)
       else
-        result[:data] = user.images.public_images.load_images(@filtered_params)
+        data = user.images.public_images.load_images(@filtered_params)
       end
+      result[:data] = process_public_images(data)
     end
 
     render :json => result
