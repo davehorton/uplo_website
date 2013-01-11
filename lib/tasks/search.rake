@@ -1,10 +1,13 @@
 namespace :search do
   desc 'Rebuild Flying Sphinx index'
-  #task :reindex => ["fs:rebuild"]
-  
-  task :reindex => :environment do    
-    Rails.logger.info("==== Begin fs:rebuild ====")
-    Rake::Task["fs:rebuild"].invoke
-    Rails.logger.info("==== Finished fs:rebuild ====")
+
+  task :reindex => :environment do
+    if Rails.env.production?
+      Rails.logger.info("==== Begin fs:rebuild ====")
+      Rake::Task["fs:reindex"].invoke
+      Rails.logger.info("==== Finished fs:rebuild ====")
+    else
+      Rake::Task["ts:reindex"].invoke
+    end
   end
 end

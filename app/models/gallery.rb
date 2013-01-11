@@ -17,6 +17,8 @@ class Gallery < ActiveRecord::Base
 
   # CALL BACK
   after_initialize :init_permission
+  after_save :set_image_delta_flag
+  after_destroy :set_image_delta_flag
 
   # CLASS METHODS
   class << self
@@ -162,6 +164,18 @@ class Gallery < ActiveRecord::Base
         set_property :delta => FlyingSphinx::DelayedDelta
       else
         set_property :delta => true
+      end
+    end
+
+  private
+    def set_image_delta_flag
+      if Rails.env.production?
+        Rake::Task['search:reindex'].invoke
+      else
+        self.images.each { |img|
+          img.delta = true
+          img.save
+        }
       end
     end
 end
