@@ -135,7 +135,7 @@ class Api::ImagesController < Api::BaseController
   # params: [id1, id2]
   def get_images
     images = Image.un_flagged.find_all_by_id JSON.parse(URI.unescape(params[:ids]))
-    render :json => {:data => images}
+    render :json => {:data => process_public_images(images)}
   end
 
   # GET /api/user_images
