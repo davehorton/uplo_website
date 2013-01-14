@@ -100,7 +100,8 @@ input[type=radio]:checked + label {
 
 input[type=radio] + label {
   background: url("/assets/icon-radio.png") no-repeat;
-  padding-left: 16px; }
+  padding-left: 16px;
+  padding-top: 1px; }
 
 textarea {
   padding-top: 5px; }
