@@ -1,5 +1,5 @@
 class Gallery < ActiveRecord::Base
-  load File.join(Rails.root, 'lib', 'tasks', 'search.rake')
+  # load File.join(Rails.root, 'lib', 'tasks', 'search.rake')
   include Rails.application.routes.url_helpers
   include ::SharedMethods::Paging
   include ::SharedMethods::SerializationConfig
