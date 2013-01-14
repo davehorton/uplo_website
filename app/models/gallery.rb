@@ -171,8 +171,11 @@ class Gallery < ActiveRecord::Base
   private
     def set_image_delta_flag
       if Rails.env.production?
-        Rake::Task['search:reindex'].reenable
-        Rake::Task['search:reindex'].invoke
+        # Rake::Task['search:reindex'].reenable
+        # Rake::Task['search:reindex'].invoke
+        Rails.logger.info("==== Begin flying_sphinx: configure & index ====")
+        FlyingSphinx::CLI.new('setup').run
+        Rails.logger.info("==== Finished flying_sphinx: configure & index ====")
       else
         self.images.each { |img|
           img.delta = true

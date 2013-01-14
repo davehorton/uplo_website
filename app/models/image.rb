@@ -306,7 +306,6 @@ class Image < ActiveRecord::Base
       def do_search(params = {})
         params[:filtered_params][:sort_field] = 'name' unless params[:filtered_params].has_key?(:sort_field)
 
-        puts params.inspect
         default_opt = {}
         paging_info = parse_paging_options(params[:filtered_params], {:sort_mode => :extended})
 
