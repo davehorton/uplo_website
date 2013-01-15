@@ -121,6 +121,7 @@ class Image < ActiveRecord::Base
     :size => { :in => 0..10.megabytes, :message => 'File size cannot exceed 10MB' },
     :content_type => { :content_type => [ 'image/jpeg','image/jpg'],
       :message => 'File type must be one of [.jpeg, .jpg]' }
+  validate :validate_quality
 
   # CALLBACK
   before_post_process :init_image_info
@@ -746,6 +747,15 @@ class Image < ActiveRecord::Base
   end
 
   protected
+    def validate_quality
+      min_size = self.square? ? Image::PRINTED_SIZES[:square][0] : Image::PRINTED_SIZES[:rectangular][0]
+      if !self.valid_for_size?(min_size)
+        self.errors.add :base, "Low quality of image! Please try again with higher quality images!"
+        return false
+      end
+      return true
+    end
+
     # Detect the image dimensions.
     def init_image_info
       file = self.data.queued_for_write[:original]

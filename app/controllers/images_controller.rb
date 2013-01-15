@@ -11,14 +11,14 @@ class ImagesController < ApplicationController
     begin
       emails = params[:email]['emails'].split(',')
       email_format = Regexp.new(/^([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})$/)
-      emails.map do |email| 
+      emails.map do |email|
         if(email_format.match(email))
-          email.strip 
+          email.strip
         else
           raise "The email #{email} is invalid"
         end
       end
-    
+
       if emails.length > 0 && SharingMailer.share_image_email(params[:id], emails, current_user.id, params[:email]['message']).deliver
         flash[:notice] = "Email sent"
       else
@@ -99,12 +99,9 @@ class ImagesController < ApplicationController
     image = Image.new image_info
     image.set_album_cover
 
-    min_size = image.square? ? Image::PRINTED_SIZES[:square][0] : Image::PRINTED_SIZES[:rectangular][0]
-    if !image.valid_for_size?(min_size)
-      result = { :success => false, :msg => "Low quality of image! Please try again with higher quality images!"}
-    elsif !image.save
+    if !image.save
       msg = []
-      key = ['data_file_size', 'data_content_type']
+      key = ['data_file_size', 'data_content_type', 'base']
       image.errors.messages.each do |k, v|
         msg << v if key.index(k.to_s)
       end
@@ -302,7 +299,7 @@ class ImagesController < ApplicationController
     end
     error = ''
     data = JSON.parse params[:images]
-    Image.transaction do 
+    Image.transaction do
       data.each do |img|
         id = img.delete 'id'
         image = Image.un_flagged.find_by_id id.to_i
