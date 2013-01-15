@@ -216,6 +216,10 @@
 
 #flag_form {
   width: 340px; }
+  #flag_form .main-panel {
+    width: 300px; }
+  #flag_form .message {
+    margin-bottom: 15px; }
 
 #flag_form #selection_container input[type="radio"] {
   height: auto;
