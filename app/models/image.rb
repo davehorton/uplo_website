@@ -750,7 +750,7 @@ class Image < ActiveRecord::Base
     def validate_quality
       min_size = self.square? ? Image::PRINTED_SIZES[:square][0] : Image::PRINTED_SIZES[:rectangular][0]
       if !self.valid_for_size?(min_size)
-        self.errors.add :base, "Low quality of image! Please try again with higher quality images!"
+        self.errors.add :base, "Low quality of file! Please try again with higher quality images!"
         return false
       end
       return true

@@ -17,7 +17,7 @@
         %br
         .line.text.white
           = link_to "Privacy Policy", "/privacy", :style => "color:white; font-weight:normal"
-          = "/" 
+          = "/"
           = link_to "Terms of Use", "/terms", :style => "color:white; font-weight:normal"
 
   #signin-area.clearfix.right
@@ -25,14 +25,14 @@
       .header.text.white.bold= "Member Sign In"
       - message = resource.errors.full_messages.first || @devise_message
       .message.text.highlight{:class => message ? "" : "hidden"}=  message
-      
+
       = form_for(resource, :as => resource_name, :url => session_path(resource_name), :html => {:id => 'frm-login'}) do |f|
         .line
-          = f.label :user_login, 'Email / Username', :class => 'left', :required => true
-          = f.text_field :login, :required => true
+          = f.label :user_login, 'Email / Username', :class => 'left'
+          = f.text_field :login
         .line
           = f.label :user_password, 'Password', :class => 'left'
-          = f.password_field :password, :required => false
+          = f.password_field :password
         .line
           / #btn-login.button.login.left
           = f.submit '', :class => "button login left", :id => 'btn-login'
