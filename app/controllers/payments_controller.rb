@@ -126,7 +126,7 @@ class PaymentsController < ApplicationController
             success = !response.nil? && response.success?
             if success
               finalize_cart
-              flash[:error] = "Successfully made a purchase (authorization code: #{response.authorization_code})"
+              flash[:success] = "Successfully made a purchase (authorization code: #{response.authorization_code})"
               redirect_to :action => :checkout_result, :trans_id => response.transaction_id and return
             else
               flash.now[:error] = "Failed to make purchase."
