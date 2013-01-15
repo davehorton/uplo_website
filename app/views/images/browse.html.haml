@@ -106,7 +106,8 @@
 
   .clear
 
-= render :partial => 'shared/flag_form', :layout => 'layouts/popup', :locals => { :title => 'Flag for Review', :id => "flag_form"}
+- if !@is_owner
+  = render :partial => 'shared/flag_form', :layout => 'layouts/popup', :locals => { :title => 'Flag for Review', :id => "flag_form"}
 
 - if can_promote
   = render(:partial => 'shared/delete_confirm',
@@ -211,16 +212,17 @@
         setTimeout(show_mask,100);
         $.ajax({
           url: '/images/flag',
-          type: "GET",
+          type: "POST",
           data: {id:image_id , type: type, desc: desc },
           dataType: "json",
           success: function(data){
             $.modal.close();
-            if (data.success)
-            {
+            if (data.success) {
               setTimeout(finish_flagging,100);
             }else{
-              helper.show_notification(data.msg);
+              $('#flag_form').modal();
+              var error = '<div class="text highlight message">' + data.msg + '</div>';
+              $('#selection_container').before(error);
             }
           },
           error: function(){
@@ -235,7 +237,7 @@
       }
 
       function show_flag_form(){
-        $('#flag_form').modal();
+        $('#flag_form').modal({ persist:true });
         $('#selection_container').css('height', 'auto');
       }
 

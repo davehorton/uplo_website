@@ -118,13 +118,13 @@ $color-light-gray: #a1a1a1;
     top: 10px;
     z-index: 5;
   }
-  
+
   &.no-border{
     border: none !important;
   }
-  
+
   .promote-button{
-    background: url('/assets/promote-spotlight-light.png') no-repeat;    
+    background: url('/assets/promote-spotlight-light.png') no-repeat;
     width: 133px;
     height: 26px;
 
@@ -303,6 +303,8 @@ $color-light-gray: #a1a1a1;
 
 #flag_form{
 	width: 340px;
+  .main-panel { width: 300px; }
+  .message { margin-bottom: 15px; }
 }
 
 #flag_form #selection_container{

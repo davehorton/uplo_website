@@ -12,6 +12,7 @@ class ImageFlag < ActiveRecord::Base
 
   # Validations
   validates_presence_of :image_id, :reported_by, :flag_type, :message => 'cannot be blank'
+  validates :description, :length => {:maximum => 255, :message => 'cannot exceed 255 characters'}
 
   # CALL BACK
   after_save :set_image_delta_flag

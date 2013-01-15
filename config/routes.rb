@@ -46,7 +46,7 @@ Uplo::Application.routes.draw do
   get 'images/flickr_post', :to => 'images#post_image_to_flickr'
   post 'images/mail_shared_image', :to => 'images#mail_shared_image'
   post 'images/update_images', :to => 'images#update_images'
-  get "images/flag", :to => "images#flag"
+  post "images/flag", :to => "images#flag"
   get 'images/show_pricing', :to => 'images#show_pricing'
   post 'images/update_tier', :to => 'images#update_tier'
 
