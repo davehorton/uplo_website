@@ -233,7 +233,7 @@ helper = {
   setup_login: function(){
     $('#btn-login').click(function(){
       var email_exist = ($('#user_login').val().trim().length > 0);
-      var pass_exist = ($('#user_password').val().trim() > 0);
+      var pass_exist = ($('#user_password').val().trim().length > 0);
       helper.showErrorMessage(email_exist, '#user_login', "Can't be blank", 'text message highlight right');
       helper.showErrorMessage(pass_exist, '#user_password', "Can't be blank", 'text message highlight right');
       if(email_exist && pass_exist){
