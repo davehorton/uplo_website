@@ -27,7 +27,7 @@ gem 'rufus-scheduler'
 gem 'ruby_parser', '>= 2.3.1'
 gem "hpricot", ">= 0.8.5"
 gem "rails3-generators"
-gem "paperclip", "3.0.4"
+gem "paperclip", "3.3.0"
 gem "cancan", ">= 1.6.7"
 gem "faker"
 gem "rmagick"
@@ -63,7 +63,7 @@ end
 
 #gem 'jquery-rails'
 gem 'thinking-sphinx', '>= 2.0.10'
-gem 'flying-sphinx',   '>= 0.6.2'
+gem 'flying-sphinx',   '>= 0.8.5'
 
 # ECommerce
 gem 'activemerchant', '>= 1.20.1'
@@ -72,18 +72,19 @@ gem 'authorize-net', '>= 1.5.2'
 gem 'money'
 
 group :development do
-#  gem 'thin'
+  gem 'thin'
 #  gem 'typhoeus'
   gem 'execjs'
   gem 'therubyracer'
   gem 'sqlite3'
-  gem "mongrel", '1.2.0.pre2'
+  # gem "mongrel", '1.2.0.pre2'
   gem "bullet"
   gem "pry"
   gem "heroku_san"
   #gem "capistrano"
   #gem "capistrano-ext", :require => "capistrano"
-  gem "guard-sass"
+  gem 'rb-inotify', '~> 0.8.8'
+  gem "guard-sass", :require => false
   gem "guard-coffeescript"
   gem 'taps'
 

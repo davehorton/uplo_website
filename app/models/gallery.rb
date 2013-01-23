@@ -1,4 +1,5 @@
 class Gallery < ActiveRecord::Base
+  # load File.join(Rails.root, 'lib', 'tasks', 'search.rake')
   include Rails.application.routes.url_helpers
   include ::SharedMethods::Paging
   include ::SharedMethods::SerializationConfig
@@ -17,6 +18,8 @@ class Gallery < ActiveRecord::Base
 
   # CALL BACK
   after_initialize :init_permission
+  after_save :set_image_delta_flag
+  after_destroy :set_image_delta_flag
 
   # CLASS METHODS
   class << self
@@ -162,6 +165,22 @@ class Gallery < ActiveRecord::Base
         set_property :delta => FlyingSphinx::DelayedDelta
       else
         set_property :delta => true
+      end
+    end
+
+  private
+    def set_image_delta_flag
+      if Rails.env.production?
+        # Rake::Task['search:reindex'].reenable
+        # Rake::Task['search:reindex'].invoke
+        Rails.logger.info("==== Begin flying_sphinx: configure & index ====")
+        FlyingSphinx::CLI.new('setup').run
+        Rails.logger.info("==== Finished flying_sphinx: configure & index ====")
+      else
+        self.images.each { |img|
+          img.delta = true
+          img.save
+        }
       end
     end
 end

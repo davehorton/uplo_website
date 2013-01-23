@@ -1,7 +1,7 @@
 class Api::UsersController < Api::BaseController
   include Devise::Controllers::InternalHelpers
 
-  before_filter :require_login!, :except => [:login, :create_user, :reset_password]
+  before_filter :require_login!, :except => [:login, :create_user, :reset_password, :request_invitation]
 
   def get_user_info
     @result[:success] = false
@@ -11,6 +11,27 @@ class Api::UsersController < Api::BaseController
     else
       @result[:user_info] = init_user_info(user)
       @result[:success] = true
+    end
+    render :json => @result
+  end
+
+  # params: email
+  def request_invitation
+    @result[:success] = false
+    if !params.has_key?('email') || params[:email].blank?
+      @result[:msg] = "Please input an email first"
+    elsif (User::EMAIL_REG_EXP =~ params[:email]).nil?
+      @result[:msg] = 'The email is invalid'
+    elsif Invitation.exists?(:email => params[:email]) || User.exists?(:email => params[:email])
+      @result[:msg] = 'The email has been used'
+    else
+      req = Invitation.new_invitation(params[:email])
+      if req.save
+        @result[:success] = true
+        @result[:msg] = "Your request has been sent"
+      else
+        @result[:msg] = req.errors.full_messages[0]
+      end
     end
     render :json => @result
   end
@@ -317,49 +338,51 @@ class Api::UsersController < Api::BaseController
   end
 
   protected
-  # Init a hash containing user's info
-  def init_user_info(user)
-    user.confirmed_at = Time.now
-    info = user.serializable_hash(user.default_serializable_options)
-    # TODO: rename :avatar to :avatar_url and put it into User#exposed_methods
-    info[:avatar_url] = user.avatar_url(:thumb)
-    if user.id == current_user.id
-      info[:galleries_num] = user.galleries.size
-      info[:images_num] = user.images.un_flagged.size
-    else
-      info[:galleries_num] = user.public_galleries.size
-      info[:images_num] = user.images.public_images.size
+    # Init a hash containing user's info
+    def init_user_info(user)
+      user.confirmed_at = Time.now
+      info = user.serializable_hash(user.default_serializable_options)
+      # TODO: rename :avatar to :avatar_url and put it into User#exposed_methods
+      info[:avatar_url] = user.avatar_url(:thumb)
+      if user.id == current_user.id
+        info[:galleries_num] = user.galleries.size
+        info[:images_num] = user.images.un_flagged.size
+      else
+        info[:galleries_num] = user.public_galleries.size
+        info[:images_num] = user.images.public_images.size
+      end
+
+      info[:followers_num] = user.followers.size
+      info[:following_num] = user.followed_users.size
+      info[:tiers] = Image::TIERS_PRICES
+
+      if params[:action] == 'login'
+        info[:cart_items_num] = (user.cart.nil? || user.cart.order.nil?) ? 0 : user.cart.order.line_items.count
+      end
+
+      return info
     end
 
-    info[:followers_num] = user.followers.size
-    info[:following_num] = user.followed_users.size
-    info[:tiers] = Image::TIERS_PRICES
+    def process_followers_info(user_id, users)
+      result = []
+      user = User.find_by_id user_id
+      users.each { |u|
+        info = u.serializable_hash(u.default_serializable_options)
+        info[:is_following] = u.has_follower?(user.id)
+        info[:followed_by_current_user] = u.has_follower?(current_user.id)
+        result << {:user => info}
+      }
+      return result
+    end
 
-    return info
-  end
-
-  def process_followers_info(user_id, users)
-    result = []
-    user = User.find_by_id user_id
-    users.each { |u|
-      info = u.serializable_hash(u.default_serializable_options)
-      info[:is_following] = u.has_follower?(user.id)
-      info[:followed_by_current_user] = u.has_follower?(current_user.id)
-      result << {:user => info}
-    }
-    return result
-  end
-
-  def process_followed_users_info(user_id, users)
-    result = []
-    user = User.find_by_id user_id
-    users.each { |u|
-      info = u.serializable_hash(u.default_serializable_options)
-      info[:followed_by_current_user] = u.has_follower?(current_user.id)
-      result << {:user => info}
-    }
-    return result
-  end
-
-
+    def process_followed_users_info(user_id, users)
+      result = []
+      user = User.find_by_id user_id
+      users.each { |u|
+        info = u.serializable_hash(u.default_serializable_options)
+        info[:followed_by_current_user] = u.has_follower?(current_user.id)
+        result << {:user => info}
+      }
+      return result
+    end
 end

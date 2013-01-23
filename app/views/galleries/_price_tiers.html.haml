@@ -1,21 +1,23 @@
 / locals: image
 = form_for(:price, :url => '#', :method => 'post', :html => { :id => 'frm-pricing', :class => 'left' }) do |f|
-  .frame-fit.left
-    .type.cell.header.text.black.bold.font11.left Pricing
-    - printed_sizes = image.printed_sizes
-    - tmp = printed_sizes.count - 1
-    - (0...tmp).each do |idx|
-      - size = printed_sizes[idx]
-      .cell.header.text.black.bold.font11.left= size
-    .last.cell.header.text.black.bold.font11.left= printed_sizes[tmp]
 
-  - Image::TIERS.each do |k, v|
-    .frame-fit.left
-      .type.cell.text.black.bold.font11.left
+  .frame-fit.left
+    .cell.header.text.black.bold.font11.left
+    - Image::TIERS.each do |k, v|
+      .type.cell.header.text.black.bold.font11.left
         - checked = (image.tier.to_s == v.to_s)
         = f.radio_button(:tier, v, :checked => checked)
         = f.label("tier_#{v}", "Tier #{v}", :class => 'text gray font11')
-      - (0...tmp).each do |idx|
-        - size = printed_sizes[idx]
-        .cell.text.gray.font11.left= number_to_currency image.get_price(v, size), {:precision => 0}
-      .last.cell.text.gray.font11.left= number_to_currency image.get_price(v, printed_sizes[tmp]), {:precision => 0}
+
+  - GlobalConstant::MOULDING_PRICES_AVAI.each do |mould|
+    .price-tab{:id => "tab-#{mould}"}
+      - printed_sizes = image.printed_sizes
+      - printed_sizes.each do |size|
+        .frame-fit.left
+          .cell.text.black.bold.font11.left= size
+          - Image::TIERS.each do |k, v|
+            .cell.text.black.bold.font11.left= number_to_currency GlobalConstant::MOULDING_PRICES[mould][v][size], {:precision => 0}
+  %ul#tabs
+    - GlobalConstant::MOULDING_PRICES_AVAI.each do |mould|
+      %li
+        %a.tab.text.black.bold.font11.left{:href => "#tab-#{mould}"}= GlobalConstant::MOULDING_PRICE_DISPLAY[mould]

@@ -16,7 +16,7 @@ class Api::ImagesController < Api::BaseController
   before_filter :require_login!
   include ::SharedMethods::Converter
 
-  # POST /api/get_printed_sizes
+  # GET /api/get_printed_sizes
   # params: image_id
   def get_printed_sizes
     image = Image.un_flagged.find_by_id params[:image_id]
@@ -24,7 +24,11 @@ class Api::ImagesController < Api::BaseController
       result = { :success => false, :msg => 'This image does not exist' }
     else
       sizes = []
-      image.printed_sizes.each { |s| sizes << { :id => image.id, :size => s, :price => image.get_price(image.tier, s) }}
+      Image::MOULDING.each do |k, v|
+        if Image::MOULDING_PRICES[v]
+          image.printed_sizes.each { |s| sizes << { :id => image.id, :size => s, :mould => v, :price => image.get_price(v, s) }}
+        end
+      end
       result = { :success => true, :sizes => sizes}
     end
     render :json => result
@@ -62,12 +66,12 @@ class Api::ImagesController < Api::BaseController
     end
     img_info = params[:image]
     image = gallery.images.un_flagged.create(img_info)
-    min_size = image.square? ? Image::PRINTED_SIZES[:square][0] : Image::PRINTED_SIZES[:rectangular][0]
-    if !image.valid_for_size?(min_size)
-      image.destroy
-      @result = { :success => false, :msg => "Low quality of image! Please try again with higher quality images!"}
-      render :json => @result and return
-    end
+    # min_size = image.square? ? Image::PRINTED_SIZES[:square][0] : Image::PRINTED_SIZES[:rectangular][0]
+    # if !image.valid_for_size?(min_size)
+    #   image.destroy
+    #   @result = { :success => false, :msg => "Low quality of image! Please try again with higher quality images!"}
+    #   render :json => @result and return
+    # end
 
     image.set_as_album_cover if SharedMethods::Converter::Boolean(img_info['is_gallery_cover'])
     if SharedMethods::Converter::Boolean(img_info['is_owner_avatar'])
@@ -131,7 +135,7 @@ class Api::ImagesController < Api::BaseController
   # params: [id1, id2]
   def get_images
     images = Image.un_flagged.find_all_by_id JSON.parse(URI.unescape(params[:ids]))
-    render :json => {:data => images}
+    render :json => {:data => process_public_images(images)}
   end
 
   # GET /api/user_images
@@ -143,10 +147,11 @@ class Api::ImagesController < Api::BaseController
       result = {:success => false, :msg => 'This user does not exist.'}
     else
       if (user.id == current_user.id)
-        result[:data] = user.images.un_flagged.load_images(@filtered_params)
+        data = user.images.un_flagged.load_images(@filtered_params)
       else
-        result[:data] = user.images.public_images.load_images(@filtered_params)
+        data = user.images.public_images.load_images(@filtered_params)
       end
+      result[:data] = process_public_images(data)
     end
 
     render :json => result
@@ -285,7 +290,7 @@ class Api::ImagesController < Api::BaseController
       return render :template => "images/sale_chart.html.haml", :layout => "blank"
     else
       @monthly_sales = image.get_monthly_sales_over_year(Time.now, {:report_by => Image::SALE_REPORT_TYPE[:quantity]})
-      return render :file => "shared/sale_chart.html.erb", :layout => false
+      return render :file => "shared/sale_chart.html.haml", :layout => false
     end
   end
 

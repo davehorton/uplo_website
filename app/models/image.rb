@@ -21,29 +21,46 @@ class Image < ActiveRecord::Base
     :square => IMAGE_SQUARE_PRINTED_SIZES,
     :rectangular => IMAGE_PORTRAIT_PRINTED_SIZES
   }
-  TIERS = { :tier_1 => '1', :tier_2 => '2', :tier_3 => '3' }
+  TIERS = GlobalConstant::TIERS
   TIERS_PRICES = {
     TIERS[:tier_1] => TIER_1_PRICES,
     TIERS[:tier_2] => TIER_2_PRICES,
     TIERS[:tier_3] => TIER_3_PRICES
   }
-  MOULDING = {
-    :print => 1,
-    :canvas => 2,
-    :plexi => 3,
-    :black => 4,
-    :white => 5,
-    :light_wood => 6,
-    :rustic_wood => 7
+  MOULDING = GlobalConstant::MOULDING
+  PENDING_MOULDING = {
+    MOULDING[:print] => false,
+    MOULDING[:print_luster] => false,
+    MOULDING[:canvas] => false,
+    MOULDING[:plexi] => false,
+    MOULDING[:black] => true,
+    MOULDING[:white] => true,
+    MOULDING[:light_wood] => true,
+    MOULDING[:rustic_wood] => true
   }
+  MOULDING_SIZES_CONSTRAIN = {
+    MOULDING[:rustic_wood] => [IMAGE_SQUARE_PRINTED_SIZES[0], IMAGE_PORTRAIT_PRINTED_SIZES[0]]
+  }
+  # TODO: temp reset to 0, plz check with iOS & remove, also see: users api: get_moulding
   MOULDING_DISCOUNT = {
-    MOULDING[:print] => IMAGE_MOULDING_DISCOUNT,
-    MOULDING[:canvas] => IMAGE_MOULDING_DISCOUNT,
-    MOULDING[:plexi] => IMAGE_MOULDING_DISCOUNT,
+    MOULDING[:print] => 0,
+    MOULDING[:print_luster] => 0,
+    MOULDING[:canvas] => 0,
+    MOULDING[:plexi] => 0,
     MOULDING[:black] => 0,
     MOULDING[:white] => 0,
     MOULDING[:light_wood] => 0,
     MOULDING[:rustic_wood] => 0
+  }
+  MOULDING_PRICES = {
+    MOULDING[:print] => GlobalConstant::MOULDING_PRICES[MOULDING[:print]],
+    MOULDING[:print_luster] => GlobalConstant::MOULDING_PRICES[MOULDING[:print]],
+    MOULDING[:canvas] => GlobalConstant::MOULDING_PRICES[MOULDING[:canvas]],
+    MOULDING[:plexi] => GlobalConstant::MOULDING_PRICES[MOULDING[:plexi]],
+    MOULDING[:black] => nil,
+    MOULDING[:white] => nil,
+    MOULDING[:light_wood] => nil,
+    MOULDING[:rustic_wood] => nil
   }
   DEFAULT_STYLES = { :smallest => '66x66#', :smaller => '67x67#', :small => '68x68#', :spotlight_small => '74x74#', :thumb => '155x155#', :spotlight_thumb => '174x154#', :profile_thumb => '101x101#', :medium => '640x640>' }
 
@@ -104,10 +121,11 @@ class Image < ActiveRecord::Base
     :size => { :in => 0..10.megabytes, :message => 'File size cannot exceed 10MB' },
     :content_type => { :content_type => [ 'image/jpeg','image/jpg'],
       :message => 'File type must be one of [.jpeg, .jpg]' }
+  validate :validate_quality
 
   # CALLBACK
   before_post_process :init_image_info
-  before_create :set_default_tier
+  before_create :init_tier
   after_initialize :init_random_price, :init_tier
 
   # CLASS METHODS
@@ -135,27 +153,6 @@ class Image < ActiveRecord::Base
           :display => 1 }
       }
       self.do_search(params)
-    end
-
-    def get_browse_images params
-      conditions = [
-        "gals.permission = :gallery_permission
-        AND image_flags.reported_by IS NULL
-        AND users.is_banned = :user_banned
-        AND users.is_removed = :user_removed",
-        { :gallery_permission => Gallery::PUBLIC_PERMISSION,
-          :image_removed => false,
-          :user_banned => false,
-          :user_removed => false
-        }
-      ]
-      paging_info = parse_paging_options(params,
-        {:sort_criteria => "images.updated_at DESC"})
-
-      self.joined_images.joins("JOIN users ON gals.user_id = users.id").where(conditions).paginate(
-        :page => paging_info.page_id,
-        :per_page => paging_info.page_size,
-        :order => paging_info.sort_string)
     end
 
     def get_spotlight_images(user_id, params)
@@ -310,12 +307,12 @@ class Image < ActiveRecord::Base
       def do_search(params = {})
         params[:filtered_params][:sort_field] = 'name' unless params[:filtered_params].has_key?(:sort_field)
 
-        puts params.inspect
         default_opt = {}
         paging_info = parse_paging_options(params[:filtered_params], {:sort_mode => :extended})
 
         sphinx_search_options = params[:sphinx_search_options]
         sphinx_search_options = {} if sphinx_search_options.blank?
+        sphinx_search_options[:index] = 'general_images' if sphinx_search_options[:index].blank?
 
         sphinx_search_options.merge!({
           :star => true,
@@ -331,9 +328,8 @@ class Image < ActiveRecord::Base
   end
 
   # INSTANCE METHODS
-  def get_price(tier, size, moulding=nil)
-    discount = moulding.nil? ? 0 : MOULDING_DISCOUNT[moulding.to_i]
-    TIERS_PRICES[tier][size] * (1 - discount)
+  def get_price(moulding, size)
+    return MOULDING_PRICES[moulding][self.tier][size]
   end
 
   def square?
@@ -751,8 +747,13 @@ class Image < ActiveRecord::Base
   end
 
   protected
-    def set_default_tier
-      self.tier = TIERS[:tier_1]
+    def validate_quality
+      min_size = self.square? ? Image::PRINTED_SIZES[:square][0] : Image::PRINTED_SIZES[:rectangular][0]
+      if !self.valid_for_size?(min_size)
+        self.errors.add :base, "Low quality of file! Please try again with higher quality images!"
+        return false
+      end
+      return true
     end
 
     # Detect the image dimensions.
@@ -780,12 +781,12 @@ class Image < ActiveRecord::Base
 
     def init_tier
       if self.tier.blank?
-        self.tier = TIERS[0]
+        self.tier = TIERS[:tier_1]
       end
     end
 
     #indexing with thinking sphinx
-    define_index do
+    define_index :general_images do
       # fields
       indexes name, :sortable => true
       indexes description
@@ -793,7 +794,7 @@ class Image < ActiveRecord::Base
       indexes gallery(:name), :as => :album
 
       # attributes
-      has gallery_id, created_at, pageview, promote_num
+      has gallery_id, created_at, pageview, promote_num, updated_at
       has author(:is_banned), :as => :banned_user
       has author(:is_removed), :as => :removed_user
       has image_flags(:reported_by), :as => :flagged_by

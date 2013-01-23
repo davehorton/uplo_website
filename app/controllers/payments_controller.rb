@@ -92,7 +92,7 @@ class PaymentsController < ApplicationController
         }
         @remove_shipping_info = false
         if order_info['ship_to_billing'].blank? || !SharedMethods::Converter::Boolean(order_info['ship_to_billing'])
-          
+
         else
           order_info[:shipping_address_attributes] = order_info[:billing_address_attributes]
           @remove_shipping_info = true
@@ -101,8 +101,8 @@ class PaymentsController < ApplicationController
         order_info[:billing_address_attributes].delete 'id'
         order_info.delete 'ship_to_billing'
         # UPDATE PAYMENT INFO TO ORDER
-        
-        
+
+
         expires_on = Date.civil(order_info["expiration(1i)"].to_i,
                          order_info["expiration(2i)"].to_i, 1)
         order_info[:expiration] = expires_on.strftime("%m-%Y")
@@ -115,6 +115,10 @@ class PaymentsController < ApplicationController
 
         if @order.update_attributes(params[:order])
           order_info.delete 'shipping_address_attributes' if @remove_shipping_info
+          # TODO: update tax + price follow shipping state
+          @order.update_tax_by_state
+          @order.compute_totals
+
           if current_user.update_profile(order_info)
             an_value = Payment.create_authorizenet_test(card_string, expires_on, {:shipping => order_info[:shipping_address_attributes], :address => order_info[:billing_address_attributes]})
             response = an_value[:transaction].purchase(@order.order_total, an_value[:credit_card])
@@ -122,13 +126,13 @@ class PaymentsController < ApplicationController
             success = !response.nil? && response.success?
             if success
               finalize_cart
-              flash[:error] = "Successfully made a purchase (authorization code: #{response.authorization_code})"
+              flash[:success] = "Successfully made a purchase (authorization code: #{response.authorization_code})"
               redirect_to :action => :checkout_result, :trans_id => response.transaction_id and return
             else
-              flash.now[:error] = 'Failed to make purchase.'
+              flash.now[:error] = "Failed to make purchase."
               render :template => "orders/index", :params => params and return
             end
-            
+
           else
             render :template => "orders/index", :params => params and return
           end
@@ -216,11 +220,8 @@ class PaymentsController < ApplicationController
     def finalize_cart
       if find_cart
         @order = @cart.order
-        @order.status = Order::STATUS[:complete]
-        @order.transaction_status = Order::TRANSACTION_STATUS[:complete]
-        @order.save
-        session[:cart] = nil
         @cart.destroy if @cart
+        @order.finalize_transaction
       end
     end
 end

@@ -111,7 +111,7 @@ input[type=checkbox]:checked + label { background: url('/assets/icon-checkbox-se
 input[type=checkbox] + label { background: url('/assets/icon-checkbox.png') no-repeat; padding-left: 18px; }
 input[type=radio]{ opacity: 0; position: absolute; top: 0; left:0;}
 input[type=radio]:checked + label { background: url('/assets/icon-radio-selected.png') no-repeat; }
-input[type=radio] + label { background: url('/assets/icon-radio.png') no-repeat; padding-left: 16px; }
+input[type=radio] + label { background: url('/assets/icon-radio.png') no-repeat; padding-left: 16px; padding-top: 1px; }
 
 textarea { padding-top:5px; }
 
@@ -880,11 +880,11 @@ textarea { padding-top:5px; }
 /*==================================================================================*/
 /* ID */
 /*==================================================================================*/
-#flash{ 
-  margin-bottom: 10px;  margin-top: 10px; 
+#flash{
+  margin-bottom: 10px;  margin-top: 10px;
   .notification-container{
-    margin: 0 auto; 
-    width: 960px; 
+    margin: 0 auto;
+    width: 960px;
     height: 0px;
   }
 }
@@ -1331,6 +1331,11 @@ textarea { padding-top:5px; }
       width: 32px;
       height: 32px;
     }
+    .flickr-icon {
+      background-image: url('/assets/icon-flickr.png');
+      width: 32px;
+      height: 32px;
+    }
     .text.bold {
       font-weight: bold;
       margin-left: 10px;
@@ -1343,7 +1348,7 @@ textarea { padding-top:5px; }
       margin-top: 0;
       margin-left: 0;
     }
-    #email-details {
+    .sharing-form {
       input, textarea {
         width: 285px;
       }
@@ -1549,16 +1554,26 @@ textarea { padding-top:5px; }
 }
 
 #pricing-form {
-  width: 262px;
-  .container { width: 242px;}
+  width: 362px;
+  .container { width: 342px;}
   .icon.loading-small { margin: 0 auto; }
   .tail { margin-left: 50px; }
   #price-tiers { margin-bottom: 10px; }
   .header { margin-bottom: 5px; margin-top: -5px;}
 }
 #frm-pricing {
+  .tab {
+    width: auto;
+    height: 25px;
+    line-height: 25px;
+    text-decoration: none;
+    padding: 0 5px;
+    &.active {
+      background-color: $color-fuzzier-gray;
+    }
+  }
   .cell {
-    width: 43px;
+    width: 65px;
     height: 25px;
     text-align: center;
     line-height: 25px;
@@ -1572,8 +1587,6 @@ textarea { padding-top:5px; }
       border-bottom: none;
     }
     &.type {
-      width: 65px;
-      text-align: left;
       input[type=radio] { padding: 0; margin: 0; vertical-align:middle; }
       label { vertical-align:middle; padding-top: 1px; padding-bottom: 1px;}
       &.header { text-align: center; }

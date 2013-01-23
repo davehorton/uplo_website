@@ -28,7 +28,6 @@ $color-line-separator: #cccccc;
   .summary {
     margin: 10px;
     .number { width: 100px; text-align: right;}
-    #total {margin-top: 5px;}
   }
   .add-to-cart { margin-top: 10px; }
 }
@@ -113,7 +112,7 @@ $color-line-separator: #cccccc;
   font-size: 11.5px;
   line-height: 22px;
   .cell {
-    width: 100px;
+    width: 120px;
     text-align: center;
     &.preview {
       width: 360px;
@@ -155,16 +154,8 @@ $color-line-separator: #cccccc;
   .footer {
     margin-top: 10px;
     width: 100%;
-    .summary {
-      margin: 10px 0;
-      .cell {
-        text-align: right;
-        width: 140px;
-      }
-    }
-    .cell {
-      margin-top: 0;
-    }
+    .summary { margin: 10px 0; }
+    .cell { margin-top: 0; }
   }
 }
 

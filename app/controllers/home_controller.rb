@@ -14,14 +14,18 @@ class HomeController < ApplicationController
 
   def index
     session[:back_url] = url_for(:controller => 'home', :action => "browse") if session[:back_url].nil?
-    @images = Image.get_spotlight_images(current_user ? current_user.id : 0, 
+    @images = Image.get_spotlight_images(current_user ? current_user.id : 0,
         { :query => "",
           :filtered_params => @filtered_params })
     if user_signed_in?
       @current_views = 'recent images'
-      @recent_images = Image.get_browse_images(@filtered_params)
+      @filtered_params[:sort_direction] = 'DESC'
+      @filtered_params[:sort_field] = "updated_at"
+      @recent_images = Image.do_search_accessible_images( current_user.id,
+        { :query => "",
+          :filtered_params => @filtered_params })
       render :template => 'home/spotlight'
-    else      
+    else
       @devise_message = session.delete(:devise_message)
     end
   end
@@ -39,7 +43,7 @@ class HomeController < ApplicationController
     @current_views = IMAGE_SORT_VIEW[Image::SORT_OPTIONS[:spotlight]]
     @filtered_params[:sort_direction] = 'DESC'
     @filtered_params[:sort_field] = "created_at"
-    @data = Image.get_spotlight_images(current_user.id, 
+    @data = Image.get_spotlight_images(current_user.id,
         { :query => "",
           :filtered_params => @filtered_params })
     render :template => 'home/browse'

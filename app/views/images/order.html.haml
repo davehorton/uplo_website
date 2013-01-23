@@ -32,10 +32,7 @@
         .item.left
           = f.text_field(:quantity, :value => quantity, :size => "2", :title => 'Limit from 1 to 10')
       .line-separator.left
-      .summary.left
-        #discount.right
-          .text.black.left Discount:
-          .number.text.black.left= "- #{number_to_currency 0, {:precision => 2}}"
+      .summary.right
         #total.right
           .text.black.bold.left Subtotal:
           .number.text.black.bold.left= number_to_currency 0, {:precision => 2}
@@ -56,6 +53,8 @@
   = javascript_tag do
     :erb
       var image_id = '<%= params[:id] %>';
-      var pricing = <%= Image::TIERS_PRICES[@image.tier].to_json %>;
-      var moulding_discount = <%= Image::MOULDING_DISCOUNT.to_json %>;
+      var tier = <%= @image.tier %>;
+      var moulding_pending = <%= Image::PENDING_MOULDING.to_json %>;
+      var moulding_constrain = <%= Image::MOULDING_SIZES_CONSTRAIN.to_json %>;
+      var moulding_price = <%= Image::MOULDING_PRICES.to_json %>;
   = javascript_include_tag 'app/order_image.js'

@@ -28,13 +28,13 @@ class User < ActiveRecord::Base
          :recoverable, :rememberable, :trackable, :validatable, :confirmable, :authentication_keys => [:login]
 
   # Setup accessible (or protected) attributes for your model
-  attr_accessible :id, :email, :password, :password_confirmation, :remember_me, :twitter_token, :twitter_secret_token, :tumblr_token, :tumblr_secret_token,
+  attr_accessible :id, :email, :password, :password_confirmation, :remember_me, :twitter_token, :twitter_secret_token, :tumblr_token, :tumblr_secret_token, :flickr_token, :flickr_secret_token,
                   :first_name, :last_name, :username, :login, :nationality,
                   :birthday, :gender, :avatar, :twitter, :facebook, :website, :biography, :name_on_card,
                   :card_type, :card_number, :expiration, :cvv, :paypal_email, :paypal_email_confirmation,
                   :is_enable_facebook, :is_enable_twitter, :billing_address_id, :shipping_address_id, :job, :location, :shipping_address_attributes, :billing_address_attributes
 
-  attr_accessible :id, :email, :password, :password_confirmation, :remember_me, :twitter_token, :twitter_secret_token, :tumblr_token, :tumblr_secret_token,
+  attr_accessible :id, :email, :password, :password_confirmation, :remember_me, :twitter_token, :twitter_secret_token, :tumblr_token, :tumblr_secret_token, :flickr_token, :flickr_secret_token,
                   :first_name, :last_name, :username, :login, :nationality,
                   :birthday, :gender, :avatar, :twitter, :facebook, :website, :biography, :name_on_card,
                   :card_type, :card_number, :expiration, :cvv, :paypal_email, :paypal_email_confirmation,
@@ -443,9 +443,8 @@ class User < ActiveRecord::Base
       self.cart.order.card_number = self.card_number
       self.cart.order.expiration = self.expiration
       self.cart.order.cvv = self.cvv
+      self.cart.order.save
     end
-
-
 
     return self.cart
   end

@@ -65,3 +65,7 @@ $ ->
           helper.show_notification('Something went wrong!')
           $.modal.close()
     });
+
+  $('.image-container.medium').on 'contextmenu', ->
+    alert('These photos are copyrighted by their respective owners. All rights reserved. Unauthorized use prohibited.')
+    return false

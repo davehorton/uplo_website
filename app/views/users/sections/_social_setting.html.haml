@@ -6,6 +6,7 @@
         .line Facebook
         .line Twitter
         .line Tumblr
+        .line Flickr
         -#.line Flickr
         -#.line Pinterest
       .form_wrapper.left{:style => "width:180px; margin-left:10px"}
@@ -27,6 +28,12 @@
               = link_to "Enable", {:action => :enable_social, :type_social => "Tumblr"}, :method => :put
             - else
               = link_to "Disable", {:action => :disable_social, :type_social => "Tumblr"}, :method => :put
+        .line
+          .remove_css_effect
+            - if user.flickr_token.blank?
+              = link_to "Enable", {:action => :enable_social, :type_social => "Flickr"}, :method => :put
+            - else
+              = link_to "Disable", {:action => :disable_social, :type_social => "Flickr"}, :method => :put
         / .line
         /   .remove_css_effect
         /     - if user.flickr_token.blank?

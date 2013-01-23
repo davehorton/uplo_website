@@ -33,8 +33,10 @@
     #wrapper
       #header.blue-gradient-reverse
         #logo-wrapper
-          %a#logo{:href => "/"}
+          %a.left#logo{:href => "/"}
             = image_tag("uplo-logo.png", {:alt => "UPLO"})
+          .left.font12{:style => "color:#ed3b03;font-weight:bold;padding-left:5px"}
+          Beta
           #search-box-wrapper
             =# render(:partial => "shared/search_box")
           #user-box

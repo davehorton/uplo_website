@@ -1,6 +1,7 @@
 module GalleriesHelper
   MOULDING_DISPLAY = {
-    Image::MOULDING[:print] => 'Print Only',
+    Image::MOULDING[:print] => 'Print Only (Gloss)',
+    Image::MOULDING[:print_luster] => 'Print Only (Luster)',
     Image::MOULDING[:canvas] => 'Canvas',
     Image::MOULDING[:plexi] => 'Plexi',
     Image::MOULDING[:black] => 'Black',
@@ -22,8 +23,6 @@ module GalleriesHelper
     collection.map { |gal|
       if size_necessary
         gal.name = "#{gal.name.truncate(18)} (#{gal.images.un_flagged.size})"
-        # gal.name = "<div class='clearfix'><span class='left'>#{gal.name.truncate(18)}</span>
-        #   <span class='number text fuzzy-gray left'>(#{gal.images.size})</span></div>"
       else
         gal.name = gal.name.truncate(25)
       end
@@ -34,7 +33,7 @@ module GalleriesHelper
   def printed_sizes_options(image, selected = nil)
     options = []
     image.printed_sizes.each do |size|
-      options << ["#{size} ($#{ image.get_price(image.tier, size)})", size, {'data-url' => image.data.url("scale#{size}")}]
+      options << ["#{size}", size, {'data-url' => image.data.url("scale#{size}")}]
     end
     options_for_select(options, selected)
   end
@@ -42,18 +41,13 @@ module GalleriesHelper
   def mounding_options(selected = nil)
     options = []
     Image::MOULDING.each do |k, v|
-      discount = Image::MOULDING_DISCOUNT[v]
-      if discount == 0
-        options << [MOULDING_DISPLAY[v], v]
-      else
-        options << ["#{MOULDING_DISPLAY[v]} (#{discount * 100}% Off)", v]
-      end
+      options << [MOULDING_DISPLAY[v], v]
     end
     options_for_select(options, selected)
   end
 
   def gallery_cover_image_url(gallery)
-    img_url = "/assets/gallery-thumb-180.jpg" # Default image.
+    img_url = "#{root_url}/assets/gallery-thumb-180.jpg" # Default image.
     image = gallery.cover_image
     if image && !image.is_removed? && (!image.is_flagged?)
       img_url = image.url(:thumb)

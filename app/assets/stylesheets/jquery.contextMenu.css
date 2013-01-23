@@ -92,7 +92,7 @@
 .context-menu-item.icon-facebook { background-image: url('/assets/icon-facebook-16x16.png'); }
 .context-menu-item.icon-twitter { background-image: url('/assets/icon-twitter-16x16.png'); }
 .context-menu-item.icon-tumblr { background-image: url('/assets/icon-tumblr-16x16.png'); }
-.context-menu-item.icon-pinterest { background-image: url('/assets/icon-pinterest-16x16.png'); }
+.context-menu-item.icon-flickr { background-image: url('/assets/icon-flickr-16x16.png'); }
 
 /* vertically align inside labels */
 .context-menu-input > label > * { vertical-align: top; }

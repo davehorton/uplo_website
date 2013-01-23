@@ -3,38 +3,37 @@
     .wrapper
       .left
         .logo
-        .text.white.bold.font32 Broadcast Your Photos
+        .text.white.bold.font32 From Camera to Frame.
         .info
-          Lorem ipsum dolor sit amet consectetur adipisicing elit sed do eiusmod tempor incididunt ut labone et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco.
+          UPLO is a print and framing service both online and on the go that enables you to organize your personal photos and buy or sell your photography as printed art—anytime, anywhere.
         .buttons
-          %a{:href => "#", :alt => "Download"}
-            = image_tag("/assets/banner-button-download.png")
-          %a{:href => "#", :alt => "Learn more", :style => "padding-left: 20px;"}
-            = image_tag("/assets/banner-button-learn-more.png")
+          =link_to image_tag("/assets/banner-button-download.png"), "#"
+          =link_to image_tag("/assets/banner-button-learn-more.png"), "/intro", {:style => "padding-left: 20px;"}
       .right
+
 
 .sub
   .wrapper
     .info.left    
-      .text.black.bold.font24 Upload.
-      .description.text.black.bold.font14 More ways to get your photos online.
+      .text.black.bold.font24 Buy.
+      .description.text.black.bold.font14 Choose from millions of images.
       .text.gray.font12.line18
-        Multiple ways to upload your photos to UPLO - through the web, your mobile device, email or your favorite photo applications.
+        Order framed or unframed prints of your own photography, or choose from millions of other images to purchase.
 
     .devider.left
       = image_tag("/assets/banner-divider.png")
 
     .info.left
-      .text.black.bold.font24 Discover.
-      .description.text.black.bold.font14 See what's going on in your world.
+      .text.black.bold.font24 Sell.
+      .description.text.black.bold.font14 Upload photos and name your price.
       .text.gray.font12.line18
-        Keep up with your friends and share your stories with comments and notes. Add rich information like tags, locations, and people.
+        Simply create galleries of photos to sell and name your own price. You earn a commission for every print sold while building your fan base.
 
     .devider.left
       = image_tag("/assets/banner-divider.png")
-
+      
     .info.left
       .text.black.bold.font24 Share.
-      .description.text.black.bold.font14 Your photos are everywhere you are.
+      .description.text.black.bold.font14 Choose to share publicly or privately.
       .text.gray.font12.line18
-        Upload your photos once to UPLO, then easily and safely share them through Facebook, Twitter, email, blogs, and more.
+        Don’t want to share your photos with the world? No problem. Password-protect your galleries to keep images private or share them with a select few.

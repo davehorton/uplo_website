@@ -55,7 +55,7 @@ module ApplicationHelper
       'Massachusetts' => 'MA', 'Maryland' => 'MD', 'Maine' => 'ME', 'Marshall Islands' => 'MH', 'Michigan' => 'MI',
       'Minnesota' => 'MN', 'Missouri' => 'MO', 'Marianas' => 'MP', 'Mississippi' => 'MS', 'Montana' => 'MT',
       'North Carolina' => 'NC', 'North Dakota' => 'ND', 'Nebraska' => 'NE', 'New Hampshire' => 'NH',
-      'New Jersey' => 'NJ', 'New Mexico' => 'NM', 'Nevada' => 'NV', 'New York' => 'NY',
+      'New Jersey' => 'NJ', 'New Mexico' => 'NM', 'Nevada' => 'NV', 'New York' => Order::REGION_TAX[:newyork][:state_code],
       'Ohio' => 'OH', 'Oklahoma' => 'OK', 'Oregon' => 'OR',
       'Pennsylvania' => 'PA', 'Puerto Rico' => 'PR', 'Palau' => 'PW',
       'Rhode Island' => 'RI',
@@ -198,11 +198,11 @@ module ApplicationHelper
       }, selected)
     end
   end
-  
+
   # Return the first full error message for the given attribute.
   def first_error_message_for(resource, attribute)
     return nil if resource.blank? || attribute.blank?
-    
+
     message = resource.errors[attribute].first
     unless message.blank?
       if resource.errors.respond_to?(:full_message)
@@ -213,7 +213,7 @@ module ApplicationHelper
     end
     return message
   end
-  
+
   # TODO: this method is implemented in Rails ActiveModel::Errors version >= 3.2
   def full_error_message_for(resource, attribute, message)
     return message if attribute == :base

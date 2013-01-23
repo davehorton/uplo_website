@@ -46,7 +46,7 @@ Uplo::Application.routes.draw do
   get 'images/flickr_post', :to => 'images#post_image_to_flickr'
   post 'images/mail_shared_image', :to => 'images#mail_shared_image'
   post 'images/update_images', :to => 'images#update_images'
-  get "images/flag", :to => "images#flag"
+  post "images/flag", :to => "images#flag"
   get 'images/show_pricing', :to => 'images#show_pricing'
   post 'images/update_tier', :to => 'images#update_tier'
 
@@ -111,6 +111,7 @@ Uplo::Application.routes.draw do
   get "socials/facebook_callback", :to => "socials#facebook_callback"
   get "socials/twitter_callback", :to => "socials#twitter_callback"
   get "socials/tumblr_callback", :to => "socials#tumblr_callback"
+  get "socails/flickr_callback", :to => "socials#flickr_callback"
 
   post "socials/share", :to => "socials#share"
 
@@ -186,6 +187,7 @@ Uplo::Application.routes.draw do
       post 'withdraw', :to => "users#withdraw"
       post 'card_info', :to => "users#get_user_card_info"
       get 'get_moulding', :to => 'users#get_moulding'
+      post 'request_invitation', :to => 'users#request_invitation'
     end
 
     # Gallery
@@ -212,11 +214,16 @@ Uplo::Application.routes.draw do
     get 'list_comments', :to => 'images#get_comments'
     post 'post_comment', :to => 'images#post_comment'
     post 'flag_image', :to => 'images#flag_image'
+    get "like", :to => "images#like"
 
     # Order
     get "list_orders", :to => "orders#list_orders"
     post "create_order", :to => "orders#create_order"
-    get "like", :to => "images#like"
+    post "finalize_order", :to => "orders#finalize_order"
+    post 'update_ordered_item', :to => 'orders#update_ordered_item'
+    post 'add_ordered_item', :to => 'orders#add_ordered_item'
+    post 'delete_ordered_item', :to => 'orders#delete_ordered_item'
+    get 'show_cart', :to => 'orders#show_cart'
   end
 
   # The priority is based upon order of creation:

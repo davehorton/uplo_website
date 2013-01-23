@@ -32,7 +32,7 @@
     .text.black.font12.left{:style => 'margin-top:7px;'}= "Uploaded on #{@image.created_at.strftime('%m/%d/%Y')}"
     .right
       %span.text.black.font12 from
-      %span.text.black.bold.font20= number_to_currency @image.get_price(@image.tier, @image.printed_sizes.first), {:precision => 2}
+      %span.text.black.bold.font20= number_to_currency @image.get_price(Image::MOULDING[:print], @image.printed_sizes.first), {:precision => 2}
   .line-separator.left
   .text.gray.font12.line16.left
     = @image.description
@@ -51,49 +51,9 @@
         .image-container.small{:id => "image-container-#{image.id}", :title=>"#{image.name}", :class => "#{additional_class}"}
           %a{ :href => "#{url}" }
             = image_tag image.data(:small), :class => 'image small left'
+- if !@image.is_flagged?
+  = render :partial => 'shared/sharing_box'
 
-#email-sharing-popup.left.hide.sharing-popup
-  .header.left
-    .email-icon.left
-    .text.bold.left Share Via Email
-    %a.close{:href=>'#', :onclick => "$('#social-sharing').hasClass('hide'); return false;"}
-      .right &times;
-  .main.right
-    #preview.left
-      .image-container.thumb
-        = image_tag @image.data.url(:thumb), :class => 'image thumb'
-      .text.bold.clear= @image.name.truncate(20)
-      .text.fuzzy.clear= "by #{ @image.username.truncate(15) }"
-    #info.right
-      .text.bold{ :style => 'margin-top:-4px;' } Email Address
-      - action_url = url_for(:controller => 'images', :action => 'mail_shared_image', :id => @image.id)
-      = simple_form_for(:email, :url => action_url, :method => 'post', :class => 'left', :html => { :id => 'email-details' }) do |f|
-        = f.input :emails, :label => false, :required => true, :as => :string
-        = f.input :message, :as => :text, :label => false, :required => false
-        #button-container.right
-          #btn-send.button.send.left
-          #btn-cancel.button.cancel.left
-#social-sharing-popup.left.hide.sharing-popup
-  .header.left
-    .left.buttons-container
-      
-    .text.bold.left Share Via Social Network
-    %a.close{:href=>'#', :onclick => "$('#social-sharing').hasClass('hide'); return false;"}
-      .right &times;
-  .main.right
-    #preview.left
-      .image-container.thumb
-        = image_tag @image.data.url(:thumb), :class => 'image thumb'
-      .text.bold.clear= @image.name.truncate(20)
-      .text.fuzzy.clear= "by #{ @image.username.truncate(15) }"
-    #info.right
-      - action_url = url_for(:controller => :socials, :action => :share, :image_id => @image.id)
-      = simple_form_for(:social, :url => action_url, :method => 'post', :class => 'left') do |f|
-        = f.input :message, :as => :text, :label => false, :required => false
-        = f.input :type_social, :as => :hidden, :id => "type_social"
-        #button-container.right
-          = f.submit "", :class => "button send left", :style => "border:none"
-          #btn-cancel.button.cancel.left
 .sections
   - if can_promote
     .image-container.promote-container.clearfix
@@ -146,7 +106,8 @@
 
   .clear
 
-= render :partial => 'shared/flag_form', :layout => 'layouts/popup', :locals => { :title => 'Flag for Review', :id => "flag_form"}
+- if !@is_owner
+  = render :partial => 'shared/flag_form', :layout => 'layouts/popup', :locals => { :title => 'Flag for Review', :id => "flag_form"}
 
 - if can_promote
   = render(:partial => 'shared/delete_confirm',
@@ -226,16 +187,16 @@
           _gaq.push(['_trackEvent', 'UPLO Web / Comment', 'post comment', 'status', 1]);
           return true;
         });
-        
+
         $('.image-container-wrapper .image-container.medium img.image.medium').each(function(){
           var img = this;
-          
+
           // Auto-resize the image frame
           $(img).load(function(){
             $(img).parent().removeClass('no-border');
             image_util.resize_frame($(img));
           });
-          
+
           if($(img).prop('complete')){
             $(img).load();
           }
@@ -251,16 +212,17 @@
         setTimeout(show_mask,100);
         $.ajax({
           url: '/images/flag',
-          type: "GET",
+          type: "POST",
           data: {id:image_id , type: type, desc: desc },
           dataType: "json",
           success: function(data){
             $.modal.close();
-            if (data.success)
-            {
+            if (data.success) {
               setTimeout(finish_flagging,100);
             }else{
-              helper.show_notification(data.msg);
+              $('#flag_form').modal();
+              var error = '<div class="text highlight message">' + data.msg + '</div>';
+              $('#selection_container').before(error);
             }
           },
           error: function(){
@@ -275,7 +237,7 @@
       }
 
       function show_flag_form(){
-        $('#flag_form').modal();
+        $('#flag_form').modal({ persist:true });
         $('#selection_container').css('height', 'auto');
       }
 

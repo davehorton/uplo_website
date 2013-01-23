@@ -1,5 +1,4 @@
-class Admin::InvitesController < ApplicationController
-  layout 'main'
+class Admin::InvitesController < Admin::AdminController
 
   def index
     # @inv_requests = Invitation.load_invitations(@filtered_params)

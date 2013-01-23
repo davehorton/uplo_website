@@ -5,7 +5,6 @@ class ShoppingCartController < ApplicationController
 
   def clear
     @cart.clear
-    session[:cart] = nil unless current_user
     redirect_to :action => 'show'
   end
 
@@ -20,24 +19,43 @@ class ShoppingCartController < ApplicationController
   def add_to_cart
     image = Image.find_by_id params[:image_id]
     params[:line_item].delete(:image_id)
-
     if(image.nil? || image.image_flags.count > 0)
       flash[:warning] = "Your recent ordered image does not exist anymore."
       redirect_to :controller => :home, :action => :browse and return
     elsif not valid_item?(params[:line_item])
       flash[:warning] = "Please fill all options first."
       redirect_to :controller => :images, :action => :order, :id => image.id and return
+
+    #check moulding & size constrain
+    elsif Image::MOULDING_SIZES_CONSTRAIN.has_key?(params[:line_item]['moulding']) and Image::MOULDING_SIZES_CONSTRAIN[params[:line_item]['moulding']].index(params[:line_item]['size'])
+      flash[:error] = "The mould is not compatible with this size. Please change your options."
+      redirect_to :controller => :images, :action => :order, :id => image.id and return
+
     else
-      line_item = @cart.order.line_items.new do |item|
-        item.image = image
-        item.attributes = params[:line_item]
-        item.price = image.get_price(image.tier, params[:line_item]['size'], params[:line_item]['moulding'])
-        item.tax = item.price * PER_TAX
-        if item.save
+      # Find line_item to reuse line item which has the same image, size and mounding
+      line_item = @cart.order.line_items.find(:first, :conditions => ["image_id = ? AND size = ? AND moulding = ?",params[:image_id], params[:line_item]['size'],  params[:line_item]['moulding']])
+      if (line_item)
+        line_item.quantity = line_item.quantity + params[:line_item]['quantity'].to_i
+        line_item.price = image.get_price(params[:line_item]['moulding'], params[:line_item]['size'])
+        line_item.tax = line_item.price * PER_TAX
+        if line_item.save
           @order = @cart.order.reload
         else
-          flash[:warning] = item.errors.full_messages.to_sentence
+          flash[:warning] = line_item.errors.full_messages.to_sentence
           redirect_to :controller => :images, :action => :order, :id => image.id and return
+        end
+      else
+        line_item = @cart.order.line_items.new do |item|
+          item.image = image
+          item.attributes = params[:line_item]
+          item.price = image.get_price(params[:line_item]['moulding'], params[:line_item]['size'])
+          item.tax = item.price * PER_TAX
+          if item.save
+            @order = @cart.order.reload
+          else
+            flash[:warning] = item.errors.full_messages.to_sentence
+            redirect_to :controller => :images, :action => :order, :id => image.id and return
+          end
         end
       end
     end
@@ -52,10 +70,16 @@ class ShoppingCartController < ApplicationController
     elsif not valid_item?(params[:line_item])
       flash[:warning] = "Please fill all options first."
       redirect_to :controller => :images, :action => :order, :id => line_item.image.id, :line_item => line_item.id and return
+
+    #check moulding & size constrain
+    elsif Image::MOULDING_SIZES_CONSTRAIN.has_key?(params[:line_item]['moulding']) and Image::MOULDING_SIZES_CONSTRAIN[params[:line_item]['moulding']].index(params[:line_item]['size'])
+      flash[:error] = "The mould is not compatible with this size. Please change your options."
+      redirect_to :controller => :images, :action => :order, :id => image.id and return
+
     else
       image = line_item.image
       line_item.attributes = params[:line_item]
-      line_item.price = image.get_price(image.tier, params[:line_item]['size'], params[:line_item]['moulding'])
+      line_item.price = image.get_price(params[:line_item]['moulding'], params[:line_item]['size'])
       line_item.tax = line_item.price * PER_TAX
       if line_item.save
         @order = @cart.order.reload
@@ -76,6 +100,7 @@ class ShoppingCartController < ApplicationController
     @cart.order.status = Order::STATUS[:checkout]
     @cart.order.save
     @order = @cart.order
+    @order.update_tax_by_state
     @order.compute_totals
     @order.transaction_status = Order::TRANSACTION_STATUS[:processing]
 
@@ -123,7 +148,7 @@ class ShoppingCartController < ApplicationController
 
     def valid_item?(hash)
       required_fields = ["size", "moulding", "quantity"]
-      required_fields.each { |k| return false if hash.has_key?(k)==false }
+      required_fields.each { |k| return false if hash.has_key?(k)==false or hash[k].blank? }
       if hash["quantity"] =~ /^\d*$/
         return false if hash["quantity"].to_i<=0
       else

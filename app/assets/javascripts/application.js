@@ -21,6 +21,25 @@ global = {
 helper = {
   timerID: null,
   stopLoadmore: false,
+
+  showErrorMessage: function(condit_value, elem, msg_text, cl) {
+    var s;
+    if (cl == null) {
+      cl = '';
+    }
+    if (!condit_value) {
+      if ($(elem).siblings('.error').length === 0) {
+        s = "<span class='error " + cl + "'>" + msg_text + "</span>";
+        $(elem).after(s);
+      } else {
+        $(elem).siblings('.error').text("" + msg_text);
+      }
+      return false;
+    } else {
+      $(elem).siblings('.error').remove();
+      return true;
+    }
+  },
   pluralize_without_count: function(number, single_form, plural_form) {
     if(parseInt(number) == 1) {
       return single_form;
@@ -66,7 +85,7 @@ helper = {
           type: 'GET',
           dataType: 'html',
           success: function(response) {
-            if (stopLoadmore)
+            if (helper.stopLoadmore)
               return;
             var result;
             result = $.parseJSON(response);
@@ -213,7 +232,15 @@ helper = {
 
   setup_login: function(){
     $('#btn-login').click(function(){
-      $('#frm-login').submit();
+      var email_exist = ($('#user_login').val().trim().length > 0);
+      var pass_exist = ($('#user_password').val().trim().length > 0);
+      helper.showErrorMessage(email_exist, '#user_login', "Can't be blank", 'text message highlight right');
+      helper.showErrorMessage(pass_exist, '#user_password', "Can't be blank", 'text message highlight right');
+      if(email_exist && pass_exist){
+        $('#frm-login').submit();
+      }else {
+        return false;
+      }
     });
     $('#btn-request-inv').click(function(){
       $('#frm-request').submit();
