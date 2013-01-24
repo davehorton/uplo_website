@@ -61,6 +61,7 @@ deletePhoto = (node) ->
           helper.show_notification("Delete successfully!")
         else
           helper.show_notification(response.msg)
+      complete: ->
         $.modal.close()
     });
 
@@ -94,6 +95,8 @@ saveGridChanges = (callback) ->
       helper.show_notification("Update successfully!")
       callback.call() if callback
       window.is_grid_changed = false
+    error: -> 
+      helper.show_notification("Fail to update!")
     complete: ->
       $.modal.close()
   });
