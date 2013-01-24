@@ -129,7 +129,7 @@ helper = {
     clearInterval(helper.timerID);
     helper.timerID = setInterval(function() {
         $('#flash').stop(true, true).fadeOut('fast');
-    }, 5000);
+    }, 15000);
   },
 
   show_notification: function(message){

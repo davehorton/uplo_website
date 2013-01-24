@@ -645,13 +645,16 @@ class User < ActiveRecord::Base
   end
 
   def remove
-    self.class.transaction do
-      if !self.is_removed?
-        self.update_attribute(:is_removed, true)
-        # Send email.
-        UserMailer.user_is_removed(self).deliver
-      end
-    end
+    # TODO Need to change it in the future. Currently we just remove user out of the system
+    # self.class.transaction do
+    #   if !self.is_removed?
+    #     self.update_attribute(:is_removed, true)
+    #     # Send email.
+        
+    #   end
+    # end
+    self.destroy
+    UserMailer.user_is_removed(self).deliver
   end
 
   def remove_flagged_images

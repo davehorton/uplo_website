@@ -18,7 +18,6 @@ class Invitation < ActiveRecord::Base
 
   def self.load_invitations(params = {})
     paging_info = parse_paging_options(params)
-    # TODO: calculate the popularity of the images: base on how many times an image is "liked".
     self.paginate(
       :page => paging_info.page_id,
       :per_page => paging_info.page_size,
