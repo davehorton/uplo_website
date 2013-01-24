@@ -14,6 +14,7 @@ class UsersController < ApplicationController
     else
       req = Invitation.new_invitation(params[:user][:email])
       if req.save
+        flash[:auto_hide_notification] = false
         flash[:success] = "Your request has been sent. Please check your mailbox in the next hours to find your invitation. Please also check your spam folder to make sure it didn't end up there by accident. To make sure you will receive emails from us in the future, be sure to add us to your address book in your email settings."
       else
         flash[:error] = req.errors.full_messages[0]

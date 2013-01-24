@@ -1,11 +1,12 @@
 class ApplicationController < ActionController::Base
   protect_from_forgery
-  before_filter :set_current_tab, :set_current_user, :check_banned_user
+  before_filter :set_current_tab, :set_current_user, :check_banned_user, :set_auto_hide
   before_filter :filter_params
   layout 'main'
   
   PAGE_SIZE = 10
   MAX_PAGE_SIZE = 100
+  
 
   if (Rails.env.production? or Rails.env.staging?)
     rescue_from CanCan::AccessDenied, :with => :render_unauthorized
@@ -64,6 +65,11 @@ class ApplicationController < ActionController::Base
 
     def set_current_user
       User.current_user = current_user
+    end
+
+    def set_auto_hide
+      @auto_hide_notification = true
+      @auto_hide_notification = flash.delete(:auto_hide_notification) if flash[:auto_hide_notification]
     end
 
     # You can override this method in the sub class.

@@ -81,4 +81,5 @@
       $('body').delegate('.bubble .close', 'click', function(e){ $.modal.close() });
       $('select[id!=my_links]').selectmenu({style:'dropdown'});
       $('#my_links').selectmenu({ style: 'dropdown', select: function(e, obj){ window.location = obj.value; }});
-      helper.auto_hide_flash_message()
+      - if (@auto_hide_notification)
+        helper.auto_hide_flash_message();
