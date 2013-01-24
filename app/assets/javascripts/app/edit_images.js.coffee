@@ -94,6 +94,7 @@ saveGridChanges = (callback) ->
       helper.show_notification("Update successfully!")
       callback.call() if callback
       window.is_grid_changed = false
+    complete: ->
       $.modal.close()
   });
 

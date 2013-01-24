@@ -744,13 +744,13 @@ textarea {
     display: inline-block;
     width: 67px; }
   .user-container .user-info {
-    margin: 15px; }
+    margin: 15px 0px 15px 15px; }
   .user-container .username {
     font-size: 15pt;
     padding-bottom: 5px; }
   .user-container .numbers {
     color: #4D4D4D;
-    font-size: 11.5px; }
+    font-size: 11px; }
     .user-container .numbers span.separator {
       margin: 0 2px; }
   .user-container a {
