@@ -118,7 +118,7 @@ class Image < ActiveRecord::Base
     :default_url => "/assets/image-default-:style.jpg"
 
   validates_attachment :data, :presence => true,
-    :size => { :in => 0..10.megabytes, :message => 'File size cannot exceed 10MB' },
+    :size => { :in => 0..100.megabytes, :message => 'File size cannot exceed 10MB' },
     :content_type => { :content_type => [ 'image/jpeg','image/jpg'],
       :message => 'File type must be one of [.jpeg, .jpg]' }
   validate :validate_quality
