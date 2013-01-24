@@ -822,11 +822,11 @@ textarea { padding-top:5px; }
   position: relative;
 
   .profile-link{display: inline-block; width: 67px;}
-  .user-info { margin: 15px; }
+  .user-info { margin: 15px 0px 15px 15px; }
   .username{font-size: 15pt; padding-bottom: 5px;}
   .numbers{
     color: #4D4D4D;
-    font-size: 11.5px;
+    font-size: 11px;
     span.separator{margin: 0 2px}
   }
   a{font-weight: normal;}
