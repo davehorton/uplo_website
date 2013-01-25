@@ -69,7 +69,10 @@ class ApplicationController < ActionController::Base
 
     def set_auto_hide
       @auto_hide_notification = true
-      @auto_hide_notification = flash.delete(:auto_hide_notification) if flash[:auto_hide_notification]
+      if !flash[:auto_hide_notification].nil?
+        @auto_hide_notification = flash[:auto_hide_notification]
+        flash.delete(:auto_hide_notification) 
+      end
     end
 
     # You can override this method in the sub class.
