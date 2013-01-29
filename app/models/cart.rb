@@ -1,3 +1,14 @@
+# == Schema Information
+#
+# Table name: carts
+#
+#  id         :integer          not null, primary key
+#  user_id    :integer
+#  order_id   :integer
+#  created_at :datetime
+#  updated_at :datetime
+#
+
 class Cart < ActiveRecord::Base
   belongs_to :user
   belongs_to :order

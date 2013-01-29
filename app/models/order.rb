@@ -1,3 +1,42 @@
+# == Schema Information
+#
+# Table name: orders
+#
+#  id                  :integer          not null, primary key
+#  user_id             :integer
+#  tax                 :float
+#  price_total         :decimal(16, 2)
+#  order_total         :decimal(16, 2)
+#  transaction_code    :string(255)
+#  transaction_status  :string(255)
+#  transaction_date    :datetime
+#  status              :string(255)
+#  first_name          :string(255)
+#  address             :string(255)
+#  message             :string(255)
+#  shipping_address_id :integer
+#  billing_address_id  :integer
+#  created_at          :datetime
+#  updated_at          :datetime
+#  last_name           :string(255)
+#  city                :string(255)
+#  country             :string(255)
+#  country_code        :string(255)
+#  state               :string(255)
+#  payer_email         :string(255)
+#  payment_type        :string(255)
+#  payment_fee         :decimal(8, 2)
+#  currency            :string(255)
+#  transaction_subject :string(255)
+#  zip_code            :string(255)
+#  card_type           :string(255)
+#  card_number         :string(255)
+#  expiration          :string(255)
+#  cvv                 :string(255)
+#  shipping_fee        :float            default(0.0)
+#  name_on_card        :string(255)
+#
+
 class Order < ActiveRecord::Base
   include ::SharedMethods::Paging
   include ::SharedMethods::SerializationConfig
@@ -98,7 +137,6 @@ class Order < ActiveRecord::Base
         end
       end
     else
-      puts "*"*20
       self.tax = 0
     end
     self.save

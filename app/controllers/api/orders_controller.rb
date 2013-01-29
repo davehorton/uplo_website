@@ -204,8 +204,6 @@ class Api::OrdersController < Api::BaseController
     order.transaction_date = Time.now
     card_string = order_info["card_number"]
     done = false
-    puts "*"*20
-    puts order_info
 
     if current_user.update_profile(order_info)
       # TODO: update tax + price follow shipping state

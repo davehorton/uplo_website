@@ -74,10 +74,6 @@ class PaymentsController < ApplicationController
       when "pp"
         total_as_cents, setup_purchase_params = get_setup_purchase_params(request)
         setup_response = pp_gateway.setup_purchase(total_as_cents, setup_purchase_params)
-        if !setup_response.success?
-          puts "===== setup_response ==="
-          puts setup_response.params.inspect
-        end
         redirect_to pp_gateway.redirect_url_for(setup_response.token)
       when "an"
         order_info = params[:order]

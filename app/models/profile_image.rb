@@ -1,3 +1,20 @@
+# == Schema Information
+#
+# Table name: profile_images
+#
+#  id                :integer          not null, primary key
+#  user_id           :integer          not null
+#  default           :boolean          default(FALSE), not null
+#  link_to_image     :integer          default(0)
+#  last_used         :datetime         not null
+#  data_file_name    :string(255)      not null
+#  data_content_type :string(255)      not null
+#  data_file_size    :integer          not null
+#  data_updated_at   :datetime         not null
+#  created_at        :datetime
+#  updated_at        :datetime
+#
+
 class ProfileImage < ActiveRecord::Base
   # ASSOCIATIONS
   belongs_to :user

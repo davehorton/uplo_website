@@ -1,3 +1,20 @@
+# == Schema Information
+#
+# Table name: line_items
+#
+#  id          :integer          not null, primary key
+#  order_id    :integer
+#  image_id    :integer
+#  quantity    :integer          default(0)
+#  tax         :float            default(0.0)
+#  price       :decimal(16, 2)   default(0.0)
+#  plexi_mount :boolean          default(FALSE)
+#  moulding    :string(255)
+#  size        :string(255)
+#  created_at  :datetime
+#  updated_at  :datetime
+#
+
 class LineItem < ActiveRecord::Base
   include ::SharedMethods::Paging
   include ::SharedMethods::SerializationConfig

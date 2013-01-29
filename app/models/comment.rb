@@ -1,3 +1,15 @@
+# == Schema Information
+#
+# Table name: comments
+#
+#  id          :integer          not null, primary key
+#  user_id     :integer          not null
+#  image_id    :integer
+#  description :text
+#  created_at  :datetime
+#  updated_at  :datetime
+#
+
 class Comment < ActiveRecord::Base
   include ::SharedMethods::Paging
   include ::SharedMethods::SerializationConfig

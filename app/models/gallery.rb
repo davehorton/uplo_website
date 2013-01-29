@@ -1,3 +1,18 @@
+# == Schema Information
+#
+# Table name: galleries
+#
+#  id          :integer          not null, primary key
+#  user_id     :integer          not null
+#  name        :string(255)      not null
+#  description :text
+#  delta       :boolean          default(TRUE), not null
+#  created_at  :datetime
+#  updated_at  :datetime
+#  keyword     :string(255)
+#  permission  :integer          default(1)
+#
+
 class Gallery < ActiveRecord::Base
   # load File.join(Rails.root, 'lib', 'tasks', 'search.rake')
   include Rails.application.routes.url_helpers

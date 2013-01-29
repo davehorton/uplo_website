@@ -1,3 +1,16 @@
+# == Schema Information
+#
+# Table name: image_flags
+#
+#  id          :integer          not null, primary key
+#  image_id    :integer          not null
+#  reported_by :integer          not null
+#  flag_type   :integer          not null
+#  description :string(255)
+#  created_at  :datetime
+#  updated_at  :datetime
+#
+
 class ImageFlag < ActiveRecord::Base
   # CONSTANT
   FLAG_TYPE = {

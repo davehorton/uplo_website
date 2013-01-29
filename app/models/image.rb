@@ -1,3 +1,31 @@
+# == Schema Information
+#
+# Table name: images
+#
+#  id                :integer          not null, primary key
+#  name              :string(255)      not null
+#  description       :text
+#  gallery_id        :integer          not null
+#  is_gallery_cover  :boolean          default(FALSE)
+#  price             :float            default(0.0)
+#  delta             :boolean          default(TRUE), not null
+#  likes             :integer          default(0)
+#  created_at        :datetime
+#  updated_at        :datetime
+#  data_file_name    :string(255)
+#  data_content_type :string(255)
+#  data_file_size    :integer
+#  data_updated_at   :datetime
+#  width             :integer
+#  height            :integer
+#  keyword           :string(255)
+#  is_owner_avatar   :boolean
+#  tier              :string(255)
+#  is_removed        :boolean          default(FALSE)
+#  pageview          :integer          default(0)
+#  promote_num       :integer          default(0)
+#
+
 class Image < ActiveRecord::Base
   include Rails.application.routes.url_helpers
   include ::SharedMethods::Paging

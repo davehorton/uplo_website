@@ -1,3 +1,65 @@
+# == Schema Information
+#
+# Table name: users
+#
+#  id                     :integer          not null, primary key
+#  first_name             :string(255)      not null
+#  last_name              :string(255)      not null
+#  username               :string(255)
+#  birthday               :datetime
+#  nationality            :string(255)
+#  gender                 :string(255)
+#  email                  :string(255)      default(""), not null
+#  encrypted_password     :string(128)      default(""), not null
+#  reset_password_token   :string(255)
+#  reset_password_sent_at :datetime
+#  remember_created_at    :datetime
+#  sign_in_count          :integer          default(0)
+#  current_sign_in_at     :datetime
+#  last_sign_in_at        :datetime
+#  current_sign_in_ip     :string(255)
+#  last_sign_in_ip        :string(255)
+#  confirmation_token     :string(255)
+#  confirmed_at           :datetime
+#  confirmation_sent_at   :datetime
+#  authentication_token   :string(255)
+#  delta                  :boolean          default(TRUE), not null
+#  created_at             :datetime
+#  updated_at             :datetime
+#  avatar_file_name       :string(255)
+#  avatar_content_type    :string(255)
+#  avatar_file_size       :integer
+#  avatar_updated_at      :datetime
+#  twitter                :string(255)
+#  facebook               :string(255)
+#  biography              :text
+#  website                :string(255)
+#  is_admin               :boolean          default(FALSE)
+#  is_removed             :boolean          default(FALSE)
+#  is_banned              :boolean          default(FALSE)
+#  paypal_email           :string(255)
+#  location               :string(255)
+#  job                    :string(255)
+#  name_on_card           :string(255)
+#  card_type              :string(255)
+#  card_number            :string(255)
+#  expiration             :string(255)
+#  cvv                    :string(255)
+#  shipping_address_id    :integer
+#  billing_address_id     :integer
+#  is_enable_facebook     :boolean          default(FALSE)
+#  is_enable_twitter      :boolean          default(FALSE)
+#  withdrawn_amount       :float            default(0.0)
+#  facebook_token         :string(255)
+#  twitter_token          :string(255)
+#  flickr_token           :string(255)
+#  tumblr_token           :string(255)
+#  pinterest_token        :string(255)
+#  twitter_secret_token   :string(255)
+#  tumblr_secret_token    :string(255)
+#  flickr_secret_token    :string(255)
+#
+
 require 'valid_email'
 class User < ActiveRecord::Base
   class NotReadyForReinstatingError < StandardError
