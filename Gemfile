@@ -83,7 +83,11 @@ group :development do
   gem "heroku_san"
   #gem "capistrano"
   #gem "capistrano-ext", :require => "capistrano"
-  gem 'rb-inotify', '~> 0.8.8'
+  # For multiple platform development
+  gem 'rb-inotify', :require => false
+  gem 'rb-fsevent', :require => false
+  gem 'rb-fchange', :require => false
+
   gem "guard-sass", :require => false
   gem "guard-coffeescript"
   gem 'taps'
