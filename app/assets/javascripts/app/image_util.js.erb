@@ -139,17 +139,19 @@ order_preview = {
 
   // Alias from input values to meaningful values.
   frame_alias: {
-    '1': 'print_only',
+    '1': 'print_only_gloss',
     '2': 'canvas',
     '3': 'plexi',
     '4': 'black',
     '5': 'white',
     '6': 'light_wood',
-    '7': 'rustic_wood'
+    '7': 'rustic_wood',
+    '8': 'print_only_luster',
   },
   
   // Image frames info
   frames: {
+
     canvas: {
       scalable: false,
       url: "<%= asset_path('img-frames/canvas.png') %>"      
@@ -159,7 +161,7 @@ order_preview = {
       scalable: false,
       url: "<%= asset_path('img-frames/plexi.png') %>" 
     },
-    
+
     black: {
       scalable: true,
       url_top: "<%= asset_path('img-frames/black-top.png') %>",
@@ -255,6 +257,7 @@ order_preview = {
       // Restore the image's size
       $(img).width('638px');
       $(img).height('auto');
+      $('#preview-frame').height('auto');
       
       // Hide the loading image.
       order_preview.toggle_waiting(false);
@@ -592,12 +595,12 @@ order_preview = {
     
     // Change the image
     $('#line_item_size').change(function(){      
-      // var url = $(this).find("option[value=" + $(this).val() + "]").attr('data-url');
-      // if(url){
-      //   order_preview.toggle_waiting(true);
-      //   var img = $('#preview-frame > img.image');
-      //   $(img).attr('src', url);       
-      // }
+      var url = $(this).find("option[value=" + $(this).val() + "]").attr('data-url');
+      if(url){
+        order_preview.toggle_waiting(true);
+        var img = $('#preview-frame > img.image');
+        $(img).attr('src', url);       
+      }
     });
     
     // Force change the frame

@@ -90,7 +90,16 @@ class Image < ActiveRecord::Base
     MOULDING[:light_wood] => nil,
     MOULDING[:rustic_wood] => nil
   }
-  DEFAULT_STYLES = { :smallest => '66x66#', :smaller => '67x67#', :small => '68x68#', :spotlight_small => '74x74#', :thumb => '155x155#', :spotlight_thumb => '174x154#', :profile_thumb => '101x101#', :medium => '640x640>' }
+  DEFAULT_STYLES = { 
+                      :smallest => '66x66#', 
+                      :smaller => '67x67#', 
+                      :small => '68x68#', 
+                      :spotlight_small => '74x74#', 
+                      :thumb => '155x155#', 
+                      :spotlight_thumb => '174x154#', 
+                      :profile_thumb => '101x101#', 
+                      :medium => '640x640>' 
+                  }
 
   # ASSOCIATIONS
   belongs_to :gallery, :touch => true
@@ -776,6 +785,11 @@ class Image < ActiveRecord::Base
         height = ratios.max * PRINT_RESOLUTION
       end
       result["scale#{size}".to_sym] = "#{width}x#{height}#"
+      ratio = width/750
+      ratio = 1 if ratio < 1
+      preview_width = width / ratio
+      preview_height = height / ratio
+      result["scale_preview#{size}".to_sym] = "#{preview_width}x#{preview_height}#"
     end
     result
   end
