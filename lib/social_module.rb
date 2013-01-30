@@ -9,7 +9,7 @@ module SocialModule
   end
 
   def config_auth_file
-    config ||= YAML::load_file("#{Rails.root}/config/social_config.yml")
+    config ||= YAML::load_file("#{Rails.root}/config/social_config.yml")[RAILS_ENV]
   end
 
 end

@@ -1,12 +1,41 @@
-facebook:
- api_key: '255519651236653'
- secret: '8ce707787d490ca4092fcec8ee7c1d9a'
-twitter:
- consumer_key: "4dts1Xns2aNfN9oWUqA"
- consumer_secret: "lfTflxhRkxVDHt2X8d1X7v543rS3wyUpvlFnOvmk6c"
-tumblr:
- consumer_key: "CMVOTjXluWfMA8PyK7nvEPr7tst7AJrf7KM7tBlysNpZmViH9k"
- consumer_secret: "L7TNwK5qLHFgLKpqlKRphk3K5j0BuyEUkgUtMlIemO1dIvITtS"
-flickr:
- api_key: "2131965bccdb74989aa778afb4492413"
- secret: "870764f2dc73d9d4"
+development:
+	facebook:
+	 api_key: '1681267485345167'
+	 secret: 'baae7dac3520d70ba14edf6c1273c547'
+	twitter:
+	 consumer_key: "4dts1Xns2aNfN9oWUqA"
+	 consumer_secret: "lfTflxhRkxVDHt2X8d1X7v543rS3wyUpvlFnOvmk6c"
+	tumblr:
+	 consumer_key: "GJWrwpoDqLW3cVZtofYBuOlqMXDBZX5dB5ZLCBrQDfVX2CeDQh"
+	 consumer_secret: "ZzdTKenzNW70KP0Hew6SCuBMDEB7zhRmILi9ivaRTNBYRKTNZL"
+	flickr:
+	 api_key: "e543b1d3d5f8247068f54191918bc78c"
+	 secret: "0b3fdd798b301fcd"
+
+staging:
+	facebook:
+	 api_key: '1681267485345167'
+	 secret: 'baae7dac3520d70ba14edf6c1273c547'
+	twitter:
+	 consumer_key: "4dts1Xns2aNfN9oWUqA"
+	 consumer_secret: "lfTflxhRkxVDHt2X8d1X7v543rS3wyUpvlFnOvmk6c"
+	tumblr:
+	 consumer_key: "GJWrwpoDqLW3cVZtofYBuOlqMXDBZX5dB5ZLCBrQDfVX2CeDQh"
+	 consumer_secret: "ZzdTKenzNW70KP0Hew6SCuBMDEB7zhRmILi9ivaRTNBYRKTNZL"
+	flickr:
+	 api_key: "e543b1d3d5f8247068f54191918bc78c"
+	 secret: "0b3fdd798b301fcd"
+
+production:
+	facebook:
+	 api_key: '444720088951871'
+	 secret: '42a5722369378c2ae6e6938fae612ad6'
+	twitter:
+	 consumer_key: "4dts1Xns2aNfN9oWUqA"
+	 consumer_secret: "lfTflxhRkxVDHt2X8d1X7v543rS3wyUpvlFnOvmk6c"
+	tumblr:
+	 consumer_key: "nQKL9FFRghcjOHq0dKl1Lw7KfUDlJgAHiAFF3lFym2enWpOWnD"
+	 consumer_secret: "vL04E2l2VbX0fgRau92ipEsiFsDEYITU8Kqpviwj8qXoexjaPN"
+	flickr:
+	 api_key: "60d5036cfcda4b1261d8edfd60fcecfc"
+	 secret: "e37a8664d0a0b754"
