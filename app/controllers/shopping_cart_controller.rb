@@ -38,6 +38,7 @@ class ShoppingCartController < ApplicationController
         line_item.quantity = line_item.quantity + params[:line_item]['quantity'].to_i
         line_item.price = image.get_price(params[:line_item]['moulding'], params[:line_item]['size'])
         line_item.tax = line_item.price * PER_TAX
+        line_item.commission_percent = image.get_commission
         if line_item.save
           @order = @cart.order.reload
         else
@@ -50,6 +51,7 @@ class ShoppingCartController < ApplicationController
           item.attributes = params[:line_item]
           item.price = image.get_price(params[:line_item]['moulding'], params[:line_item]['size'])
           item.tax = item.price * PER_TAX
+          item.commission_percent = image.get_commission
           if item.save
             @order = @cart.order.reload
           else
@@ -81,6 +83,7 @@ class ShoppingCartController < ApplicationController
       line_item.attributes = params[:line_item]
       line_item.price = image.get_price(params[:line_item]['moulding'], params[:line_item]['size'])
       line_item.tax = line_item.price * PER_TAX
+      line_item.commission_percent = image.get_commission
       if line_item.save
         @order = @cart.order.reload
       else

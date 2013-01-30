@@ -360,6 +360,10 @@ class Image < ActiveRecord::Base
     return MOULDING_PRICES[moulding][self.tier][size]
   end
 
+  def get_commission
+    return GlobalConstant::IMAGE_COMMISSIONS[self.tier]
+  end
+
   def square?
     ratio = self.width*1.0 / self.height
     (1.0/RECTANGULAR_RATIO < ratio) && (ratio < RECTANGULAR_RATIO)
@@ -588,9 +592,11 @@ class Image < ActiveRecord::Base
 
     orders_in = orders.collect &:id
     saled_items = (orders.length==0) ? [] : self.line_items.where("order_id in (#{orders_in.join(',')})")
-    saled_items.each { |item| total += (item.price * item.quantity) }
+    saled_items.each do |item| 
+      total += ((item.price * item.quantity) * item.commission_percent)
+    end
 
-    return total * PAY_RATIO
+    return total
 
   end
 

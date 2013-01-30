@@ -15,6 +15,13 @@ module GlobalConstant
 
   TIERS = { :tier_1 => '1', :tier_2 => '2', :tier_3 => '3', :tier_4 => '4' }
 
+  IMAGE_COMMISSIONS = {
+    TIERS[:tier_1] => 0.3,
+    TIERS[:tier_2] => 0.35,
+    TIERS[:tier_3] => 0.4,
+    TIERS[:tier_4] => 0.5,
+  }
+
   MOULDING_PRICES = {
     MOULDING[:print] => {
       TIERS[:tier_1] => {
