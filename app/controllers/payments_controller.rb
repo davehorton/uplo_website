@@ -159,7 +159,7 @@ class PaymentsController < ApplicationController
     @an_gateway ||= ActiveMerchant::Billing::AuthorizeNetGateway.new(
     :login => AN_LOGIN_ID,
     :password => AN_TRANS_KEY,
-    :test => true)
+    :test => false)
   end
 
   def an_credit_card

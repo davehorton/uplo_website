@@ -28,7 +28,7 @@ class Payment
 
   def self.create_authorizenet_test(card_number, expiration, addresses)
     credit_card = AuthorizeNet::CreditCard.new(card_number, expiration)
-    transaction = AuthorizeNet::AIM::Transaction.new(AN_CARD_NOT_PRESENT_LOGIN, AN_CARD_NOT_PRESENT_TRANS_KEY, :gateway => :sandbox, :transaction_type => :auth_and_capture, :verify_ssl => false)
+    transaction = AuthorizeNet::AIM::Transaction.new(AN_LOGIN_ID, AN_TRANS_KEY, :gateway => :production, :transaction_type => :auth_and_capture, :verify_ssl => false)
 
     if addresses.has_key?(:address) and !addresses[:address].blank?
       addresses[:address][:customer_address_id] = "address"
