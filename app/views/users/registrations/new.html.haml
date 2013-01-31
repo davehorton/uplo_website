@@ -10,7 +10,10 @@
     .title.text.bold.font16.line18
       %span Already a member?
       %a.text.highlight{ :href => '/'} Login
+    - message = resource.errors.full_messages.first || @devise_message
+    .message.text.highlight{:class => message ? "" : "hidden"}=  message
     = form_for(:user, :url => registration_path(:user), :html => {:id => 'register-form', :class => 'left'}) do |f|
+      = hidden_field_tag :token, params[:token]
       .line
         .half.left
           = f.label :user_first_name, 'First name', :class => 'left'

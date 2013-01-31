@@ -170,6 +170,7 @@ class User < ActiveRecord::Base
   scope :confirmed_users, where("confirmed_at IS NOT NULL AND is_removed = ?", false)
 
   after_create :cleanup_invitation
+  after_create :subscribe
   before_validation :decrypt_data
   after_validation :encrypt_data
 
@@ -806,6 +807,10 @@ class User < ActiveRecord::Base
 
     def cleanup_invitation
       Invitation.destroy_all(:email => self.email)
+    end
+
+    def subscribe
+      Mailchimp.subscribe_user(self)
     end
 
     def number_valid?

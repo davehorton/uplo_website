@@ -12,7 +12,13 @@ class Users::RegistrationsController < Devise::RegistrationsController
   end
 
   def create
-    super
+    if Invitation.exists?({:token => params[:token]})
+      @inv  = Invitation.find_by_token params[:token]
+      super
+    else
+      flash[:info] = 'Missing invitation token!'
+      redirect_to '/'
+    end
   end
 
   def update
