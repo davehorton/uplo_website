@@ -785,7 +785,7 @@ class Image < ActiveRecord::Base
         height = ratios.max * PRINT_RESOLUTION
       end
       result["scale#{size}".to_sym] = "#{width}x#{height}#"
-      ratio = width/750
+      ratio = width/640
       ratio = 1 if ratio < 1
       preview_width = width / ratio
       preview_height = height / ratio
