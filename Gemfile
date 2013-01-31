@@ -52,14 +52,8 @@ gem 'valid_email'
 # AES Crypt
 gem 'aescrypt'
 
-# Gems used only for assets and not required
-# in production environments by default.
-group :assets do
-  gem 'sass-rails',   '~> 3.1.5'
-  gem 'coffee-rails', '~> 3.1.1'
-  gem 'uglifier', '>= 1.0.3'
-  gem 'yui-compressor', '>= 0.9.6'
-end
+# Mailchimp
+gem 'gibbon'
 
 #gem 'jquery-rails'
 gem 'thinking-sphinx', '>= 2.0.10'
@@ -70,6 +64,16 @@ gem 'activemerchant', '>= 1.20.1'
 gem 'active_utils'
 gem 'authorize-net', '>= 1.5.2'
 gem 'money'
+
+# Gems used only for assets and not required
+# in production environments by default.
+group :assets do
+  gem 'sass-rails',   '~> 3.1.5'
+  gem 'coffee-rails', '~> 3.1.1'
+  gem 'uglifier', '>= 1.0.3'
+  gem 'yui-compressor', '>= 0.9.6'
+end
+
 
 group :development do
   gem 'thin'
