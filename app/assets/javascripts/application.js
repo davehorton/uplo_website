@@ -128,7 +128,7 @@ helper = {
   auto_hide_flash_message: function(){
     clearInterval(helper.timerID);
     helper.timerID = setInterval(function() {
-        $('#flash').stop(true, true).fadeOut('fast');
+        $('.flash').stop(true, true).fadeOut('fast');
     }, 5000);
   },
 
