@@ -2,7 +2,7 @@
 - (0...users.length). each do |idx|
   - user = users[idx]
   - is_current_user = is_current_user(user.id)
-  - images_number = is_current_user ? user.avai_images.length : user.images.public_images.length
+  - images_number = is_current_user ? user.images.avai_images.length : user.images.public_images.length
   - is_following = user.has_follower?(current_user.id)
   - follow_class = is_following ? 'unfollow-small' : 'follow-small'
   - additional_class = line_item_additional_class(idx, users_per_line)

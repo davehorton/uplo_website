@@ -129,14 +129,14 @@ helper = {
     clearInterval(helper.timerID);
     helper.timerID = setInterval(function() {
         $('#flash').stop(true, true).fadeOut('fast');
-    }, 15000);
+    }, 5000);
   },
 
   show_notification: function(message){
-    $('#flash').stop(true, true).fadeIn('fast');
+    $('.flash').stop(true, true).fadeIn('fast');
     var string = "<div class='icon_notification left'></div><div class='left message wordwrap'>" + message + "</div>";
-    $("#flash").find(".notification-container").removeClass("hidden");
-    $("#flash").find('.messages').html(string);
+    $(".flash").find(".notification-container").removeClass("hidden");
+    $(".flash").find('.messages').html(string);
     helper.auto_hide_flash_message();
   },
 

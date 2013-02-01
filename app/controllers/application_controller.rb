@@ -1,7 +1,9 @@
 class ApplicationController < ActionController::Base
   protect_from_forgery
+  before_filter :show_processing
   before_filter :set_current_tab, :set_current_user, :check_banned_user, :set_auto_hide
   before_filter :filter_params
+  
   layout 'main'
   
   PAGE_SIZE = 10
@@ -56,6 +58,24 @@ class ApplicationController < ActionController::Base
     
     def show_notification
       toggle_notification(true)
+    end
+
+    # To let user know how many images is processing
+    def show_processing
+      flash.delete :processing_photo
+      if (current_user && current_user.photo_processing)
+        number = current_user.images.proccessing.count
+        if (number > 0)
+          flash[:processing_photo] = "We are processing your images. This can take up to 3 minutes. We will notice you when it's done."
+          flash[:auto_hide_notification] = false
+        end
+
+        if (number == 0)
+          current_user.update_attribute(:photo_processing , false)
+          flash[:processing_photo] = "Your images have been successfully processed!"
+          flash[:auto_hide_notification] = false
+        end
+      end
     end
     
     def set_current_tab

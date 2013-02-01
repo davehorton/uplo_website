@@ -101,7 +101,7 @@ class GalleriesController < ApplicationController
     end
 
     if !@gallery.nil?
-      @images = @gallery.images.un_flagged.load_images(@filtered_params)
+      @images = @gallery.images.un_flagged_processing.load_images(@filtered_params)
       if request.xhr?
         pagination = render_to_string :partial => 'shared/pagination',
           :locals => {  :source => @images, :params => { :controller => "galleries",

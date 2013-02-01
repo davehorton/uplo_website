@@ -16,6 +16,8 @@
       .inline.left
         .text.gray.font11.line16.left= "Tier #{ image.tier }"
         .price.text.black.underline.font11.line16.left change this
+        - if image.data_processing
+          .text.font11.line16.left{:style => "color:red"} Processing...
   .info-panel.left
     .info-line.left
       .label.text.black.bold.font12 Description

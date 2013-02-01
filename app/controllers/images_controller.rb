@@ -112,6 +112,7 @@ class ImagesController < ApplicationController
       end
       result = { :success => false, :msg => msg }
     else
+      current_user.update_attribute(:photo_processing , true)
       gallery = Gallery.find_by_id params[:gallery_id]
       images = gallery.images.un_flagged.load_images(@filtered_params)
       pagination = render_to_string :partial => 'shared/pagination',

@@ -38,6 +38,11 @@ gem "dalli" # For memcache
 gem "nokogiri"
 gem 'country-select'
 
+# Delay Paperclip
+gem "daemons"
+gem 'delayed_job_active_record'
+gem 'delayed_paperclip'
+
 # Social Integration
 gem 'oauth'
 gem 'oauth2'

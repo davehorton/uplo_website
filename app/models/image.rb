@@ -117,13 +117,27 @@ class Image < ActiveRecord::Base
   scope :avai_images, joins(self.sanitize_sql([
       "JOIN galleries AS g ON g.id = images.gallery_id
       JOIN users as u ON g.user_id = u.id AND u.is_removed = ?", false
+    ])).where("images.is_removed = ? AND data_processing = ?", false, false)
+
+  scope :avai_proccessing,  joins(self.sanitize_sql([
+      "JOIN galleries AS g ON g.id = images.gallery_id
+      JOIN users as u ON g.user_id = u.id AND u.is_removed = ?", false
     ])).where("images.is_removed = ?", false)
+
+  scope :proccessing,  joins(self.sanitize_sql([
+      "JOIN galleries AS g ON g.id = images.gallery_id
+      JOIN users as u ON g.user_id = u.id AND u.is_removed = ?", false
+    ])).where("images.is_removed = ? AND data_processing = ?", false, true)
 
   scope :flagged, avai_images.joins(
       "LEFT JOIN image_flags ON images.id = image_flags.image_id"
     ).where("image_flags.reported_by IS NOT NULL").readonly(false)
 
   scope :un_flagged, avai_images.joins(
+      "LEFT JOIN image_flags ON images.id = image_flags.image_id"
+    ).where("image_flags.reported_by IS NULL").readonly(false)
+
+  scope :un_flagged_processing, avai_proccessing.joins(
       "LEFT JOIN image_flags ON images.id = image_flags.image_id"
     ).where("image_flags.reported_by IS NULL").readonly(false)
 
@@ -141,6 +155,8 @@ class Image < ActiveRecord::Base
       :user_removed => false
     })
 
+
+
   scope :belongs_to_avai_user, joined_images.joins('LEFT JOIN users AS avai_users ON gals.user_id=avai_users.id'
     ).where('avai_users.is_banned = ?', false).readonly(false)
 
@@ -152,13 +168,16 @@ class Image < ActiveRecord::Base
     :storage => :s3,
     :s3_credentials => "#{Rails.root}/config/amazon_s3.yml",
     :path => "image/:id/:style.:extension",
-    :default_url => "/assets/image-default-:style.jpg"
+    #:default_url => "/assets/image-default-:style.jpg"
+    :default_url => "/assets/gallery-thumb.jpg"
 
   validates_attachment :data, :presence => true,
     :size => { :in => 0..100.megabytes, :message => 'File size cannot exceed 10MB' },
     :content_type => { :content_type => [ 'image/jpeg','image/jpg'],
       :message => 'File type must be one of [.jpeg, .jpg]' }
   validate :validate_quality
+
+  process_in_background :data
 
   # CALLBACK
   before_post_process :init_image_info
@@ -785,17 +804,18 @@ class Image < ActiveRecord::Base
         height = ratios.max * PRINT_RESOLUTION
       end
       result["scale#{size}".to_sym] = "#{width}x#{height}#"
-      ratio = width/640
+      ratio = width/640.to_f
       ratio = 1 if ratio < 1
       preview_width = width / ratio
       preview_height = height / ratio
-      result["scale_preview#{size}".to_sym] = "#{preview_width}x#{preview_height}#"
+      result["scale_preview#{size}".to_sym] = "#{preview_width.to_i}x#{preview_height.to_i}#"
     end
     result
   end
 
   protected
     def validate_quality
+      save_dimensions
       min_size = self.square? ? Image::PRINTED_SIZES[:square][0] : Image::PRINTED_SIZES[:rectangular][0]
       if !self.valid_for_size?(min_size)
         self.errors.add :base, "Low quality of file! Please try again with higher quality images!"
@@ -811,12 +831,22 @@ class Image < ActiveRecord::Base
         file = data.url(:original)
       end
 
-      geo = Paperclip::Geometry.from_file(file)
-      self.width = geo.width
-      self.height = geo.height
+      puts "===================="
+      puts self
       if !self.name.blank?
         self.name = file.original_filename.gsub(/(.jpeg|.jpg)$/i, '') if file.original_filename =~ /(.jpeg|.jpg)$/i
       end
+    end
+
+    def save_dimensions
+      file = self.data.queued_for_write[:original]
+      if file.blank?
+        file = data.url(:original)
+      end
+
+      geo = Paperclip::Geometry.from_file(file)
+      self.width = geo.width
+      self.height = geo.height
     end
 
 

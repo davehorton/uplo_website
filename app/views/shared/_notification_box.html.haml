@@ -3,8 +3,13 @@
 - title = '' if title.nil?
 - notification = '' if notification.nil?
 
+- if flash[:processing_photo]
+  .flash{:class => "content"}
+    .box{:class => "box-notice"}= flash[:processing_photo]
+    - flash.delete :processing_photo
+
 - if @notification_visible
-  #flash{:style => (flash.count > 0) ? "" : "display:none"}
+  .flash{:style => (flash.count > 0) ? "" : "display:none"}
     .notification-container.fixed-right
       .notification.right
         .header.left
@@ -25,7 +30,7 @@
     - flash_class = ""
     - style = "display: none"
     
-  #flash{:class => flash_class, :style => style}
+  .flash{:class => flash_class, :style => style}
     - flash.each do |key, value|
       .box{:class => "box-#{key}"}= value
     
