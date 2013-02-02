@@ -203,6 +203,7 @@ class Image < ActiveRecord::Base
           LEFT JOIN users ON gals.user_id = users.id',
         :sphinx_select => with_display,
         :with => {
+          :data_processing => false,
           :banned_user => false,
           :removed_user => false,
           :flagged_by => '',
@@ -221,6 +222,7 @@ class Image < ActiveRecord::Base
           LEFT JOIN users ON gals.user_id = users.id',
         :sphinx_select => with_display,
         :with => {
+          :data_processing => false,
           :banned_user => false,
           :removed_user => false,
           :flagged_by => '',
@@ -375,7 +377,7 @@ class Image < ActiveRecord::Base
           :retry_stale => true,
           :page => paging_info.page_id,
           :per_page => paging_info.page_size,
-          :order => paging_info.sort_string
+          :order => paging_info.sort_string,
         })
 
         search_term = SharedMethods::Converter::SearchStringConverter.process_special_chars(params[:query])
@@ -870,7 +872,7 @@ class Image < ActiveRecord::Base
       indexes gallery(:name), :as => :album
 
       # attributes
-      has gallery_id, created_at, pageview, promote_num, updated_at
+      has gallery_id, created_at, pageview, promote_num, updated_at, data_processing
       has author(:is_banned), :as => :banned_user
       has author(:is_removed), :as => :removed_user
       has image_flags(:reported_by), :as => :flagged_by
@@ -901,7 +903,7 @@ class Image < ActiveRecord::Base
       indexes author(:username), :as => :author, :sortable => true
 
       # attributes
-      has gallery_id, created_at, pageview, promote_num
+      has gallery_id, created_at, pageview, promote_num, data_processing
 
       # weight
       set_property :field_weights => {
