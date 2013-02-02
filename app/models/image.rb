@@ -172,10 +172,10 @@ class Image < ActiveRecord::Base
     :default_url => "/assets/gallery-thumb.jpg"
 
   validates_attachment :data, :presence => true,
-    :size => { :in => 0..100.megabytes, :message => 'File size cannot exceed 10MB' },
+    :size => { :in => 0..100.megabytes, :message => 'File size cannot exceed 100MB' },
     :content_type => { :content_type => [ 'image/jpeg','image/jpg'],
-      :message => 'File type must be one of [.jpeg, .jpg]' }
-  validate :validate_quality
+      :message => 'File type must be one of [.jpeg, .jpg]' }, :on => :create
+  validate :validate_quality, :on => :create
 
   process_in_background :data
 
@@ -830,9 +830,7 @@ class Image < ActiveRecord::Base
       if file.blank?
         file = data.url(:original)
       end
-
-      puts "===================="
-      puts self
+      
       if !self.name.blank?
         self.name = file.original_filename.gsub(/(.jpeg|.jpg)$/i, '') if file.original_filename =~ /(.jpeg|.jpg)$/i
       end

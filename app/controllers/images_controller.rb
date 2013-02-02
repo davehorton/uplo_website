@@ -303,9 +303,13 @@ class ImagesController < ApplicationController
     Image.transaction do
       data.each do |img|
         id = img.delete 'id'
-        image = Image.un_flagged.find_by_id id.to_i
+        image = Image.un_flagged_processing.find_by_id id.to_i
         if (image.nil? || (image.author.is_banned? && !current_user.is_admin))
-          return render_not_found
+          result = {
+            :error => "Not found photo"
+          }
+
+          render(:json => result) and return
         else
           img[:is_gallery_cover] = SharedMethods::Converter::Boolean(img.delete 'is_album_cover')
           img[:is_owner_avatar] = SharedMethods::Converter::Boolean(img.delete 'is_avatar')
@@ -330,7 +334,7 @@ class ImagesController < ApplicationController
     end
 
     gallery = Gallery.find_by_id params[:gallery_id].to_i
-    images = gallery.images.un_flagged.load_images(@filtered_params)
+    images = gallery.images.un_flagged_processing.load_images(@filtered_params)
     pagination = render_to_string :partial => 'shared/pagination',
       :locals => {  :source => images, :params => { :controller => 'galleries',
         :action => 'edit_images', :gallery_id => gallery.id }, :classes => 'text left' }

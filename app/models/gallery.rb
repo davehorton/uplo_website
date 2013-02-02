@@ -33,8 +33,8 @@ class Gallery < ActiveRecord::Base
 
   # CALL BACK
   after_initialize :init_permission
-  after_save :set_image_delta_flag
-  after_destroy :set_image_delta_flag
+  #after_save :set_image_delta_flag
+  #after_destroy :set_image_delta_flag
 
   # CLASS METHODS
   class << self
