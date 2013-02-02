@@ -52,7 +52,7 @@ class HomeController < ApplicationController
   def terms
   end
 
-  def privacy
+  def payment
   end
 
   def friends_feed
