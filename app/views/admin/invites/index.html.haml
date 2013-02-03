@@ -7,7 +7,7 @@
   .line-separator.left
   #emails-container
     = render :partial => 'emails_for_invite', :locals => { :emails => @inv_requests }
-
+    = render_pagination(@inv_requests)
 #outgoing-invites.right
   .header
     .text.black.bold.font16.left Outgoing Invites
