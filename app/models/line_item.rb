@@ -25,7 +25,7 @@ class LineItem < ActiveRecord::Base
   after_destroy :update_order
 
   validates :quantity, :numericality => { :less_than_or_equal_to => 10 }
-  validate :item_uniq, :on => :update
+  #validate :item_uniq, :on => :update
 
   class << self
     def exposed_methods
