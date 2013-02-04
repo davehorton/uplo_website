@@ -228,7 +228,7 @@ app/admin/flagged_images.js: app/admin/flagged_images-5981a19fe80bcdef30b0d8fa4c
 app/admin/flagged_users.js: app/admin/flagged_users-911f4d50069ba601a0d65d70831c056d.js
 app/admin/invites.js: app/admin/invites-e185d311a8b7731fe15edbf95b047f27.js
 app/admin/spotlights.js: app/admin/spotlights-28da074f4b5e0037046626b70c8c0aa3.js
-app/edit_images.js: app/edit_images-10b092ac36c4f6165e58b9eb88f5b7c7.js
+app/edit_images.js: app/edit_images-062d8fd7bf6bd0691abbe9c108da4d3e.js
 app/form_validation.js: app/form_validation-c43ec726ef2b3b0f10f37e5ea74bc1bd.js
 app/gallery.js: app/gallery-a75a4d9b782fe1b29554b7e469f1d9c7.js
 app/image.js: app/image-829e074869633a2930bd5428a7c30736.js
