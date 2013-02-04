@@ -168,7 +168,7 @@ class Image < ActiveRecord::Base
     :storage => :s3,
     :s3_credentials => "#{Rails.root}/config/amazon_s3.yml",
     :s3_permissions => :private,
-    :s3_headers => { 'Cache-Control' => 'max-age=315576000', 'Expires' => 30.days },
+    :s3_headers => { 'Cache-Control' => 'max-age=315576000', 'Expires' => 10.years.from_now.httpdate },
     :path => "image/:id/:style.:extension",
     #:default_url => "/assets/image-default-:style.jpg"
     :default_url => "/assets/gallery-thumb.jpg"
@@ -185,6 +185,21 @@ class Image < ActiveRecord::Base
   before_post_process :init_image_info
   before_create :init_tier
   after_initialize :init_random_price, :init_tier
+
+  # First mark processing
+  # then create
+  def enqueue_delayed_processing
+    puts "*" * 30
+    puts data_processing
+
+    mark_enqueue_delayed_processing
+    (@_enqued_for_processing || []).each do |name|
+      enqueue_post_processing_for(name)
+    end
+    @_enqued_for_processing_with_processing = []
+    @_enqued_for_processing = []
+    puts data_processing
+  end
 
   # CLASS METHODS
   class << self
@@ -562,6 +577,9 @@ class Image < ActiveRecord::Base
 
   # Shortcut to get image's URL
   def url(options = nil)
+    if (self.data_processing)
+      return "/assets/gallery-thumb.jpg"
+    end
     self.data.expiring_url(120, options)
   end
 

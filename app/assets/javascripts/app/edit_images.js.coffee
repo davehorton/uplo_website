@@ -171,7 +171,7 @@ $ ->
     progress: (e, data) ->
       progress = parseInt(data.loaded / data.total * 100, 10).toString() + '%'
       if data.context
-        setLoadingStatus =-> $(data.context).find('.progress .uploading').css('width','80%')
+        setLoadingStatus =-> $(data.context).find('.progress .uploading').css('width', progress)
         window.setTimeout(setLoadingStatus, 300);
     fail: (e, data) ->
       $(data.context).find('.progress').replaceWith("<div class='error info-line text italic font12 left'>Cannot upload this image right now! Please try again later!</div>")

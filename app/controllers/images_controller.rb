@@ -311,6 +311,7 @@ class ImagesController < ApplicationController
 
           render(:json => result) and return
         else
+          next if image.data_processing
           img[:is_gallery_cover] = SharedMethods::Converter::Boolean(img.delete 'is_album_cover')
           img[:is_owner_avatar] = SharedMethods::Converter::Boolean(img.delete 'is_avatar')
           if (img["gallery_id"].to_i == image.gallery_id)
