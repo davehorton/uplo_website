@@ -26,6 +26,8 @@ class ProfileImage < ActiveRecord::Base
       :medium => '48x48#', :small => '24x24#' },
     :storage => :s3,
     :s3_credentials => "#{Rails.root}/config/amazon_s3.yml",
+    :s3_permissions => :private,
+    :s3_headers => { 'Cache-Control' => 'max-age=315576000', 'Expires' => 10.years.from_now.httpdate },
     :path => "avatar/:id/:style.:extension",
     :default_url => "/assets/avatar-default-:style.jpg"
   validates_attachment :data, :presence => true,
@@ -59,6 +61,9 @@ class ProfileImage < ActiveRecord::Base
 
   def is_current_avatar?
     return self.default
+  end
+
+  def url
   end
 
   private
