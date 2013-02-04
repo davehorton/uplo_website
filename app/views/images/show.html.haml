@@ -53,9 +53,9 @@
               %a{:href => "#{url}"}
                 - if image.id == @selected_image.id
                   - selected_image_position = index
-                  = image_tag(image.data.url(:thumb), :size => "70x70", :style => "border: solid 2px orange")
+                  = image_tag(image.url(:thumb), :size => "70x70", :style => "border: solid 2px orange")
                 - else
-                  = image_tag(image.data.url(:thumb), :size => "75x75")
+                  = image_tag(image.url(:thumb), :size => "75x75")
 
 :erb
   <script type="text/javascript">

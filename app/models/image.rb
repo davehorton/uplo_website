@@ -167,6 +167,8 @@ class Image < ActiveRecord::Base
     :styles => lambda { |attachment| attachment.instance.available_styles || {}},
     :storage => :s3,
     :s3_credentials => "#{Rails.root}/config/amazon_s3.yml",
+    :s3_permissions => :private,
+    :s3_headers => { 'Cache-Control' => 'max-age=315576000', 'Expires' => 30.days },
     :path => "image/:id/:style.:extension",
     #:default_url => "/assets/image-default-:style.jpg"
     :default_url => "/assets/gallery-thumb.jpg"
@@ -174,7 +176,7 @@ class Image < ActiveRecord::Base
   validates_attachment :data, :presence => true,
     :size => { :in => 0..100.megabytes, :message => 'File size cannot exceed 100MB' },
     :content_type => { :content_type => [ 'image/jpeg','image/jpg'],
-      :message => 'File type must be one of [.jpeg, .jpg]' }, :on => :create
+    :message => 'File type must be one of [.jpeg, .jpg]' }, :on => :create
   validate :validate_quality, :on => :create
 
   process_in_background :data
@@ -440,7 +442,7 @@ class Image < ActiveRecord::Base
     if profile_img.nil?
       ProfileImage.create({ :user_id => self.author.id,
                             :link_to_image => self.id,
-                            :data => open(self.data.url(:thumb)),
+                            :data => open(self.url(:thumb)),
                             :last_used => Time.now })
     else
       profile_img.set_as_default
@@ -560,7 +562,7 @@ class Image < ActiveRecord::Base
 
   # Shortcut to get image's URL
   def url(options = nil)
-    self.data.url(options)
+    self.data.expiring_url(120, options)
   end
 
   def liked_by_user(user_id)

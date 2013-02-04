@@ -2,7 +2,7 @@
 
 .edit-template.container.left{ :data => {:id => "#{ image.id }"} }
   .image-container.thumb.no-padding{ :id => "image-container-#{image.id}", :title=>"#{image.name}" }
-    = image_tag(image.data.url(:thumb), :class => "image-thumb image thumb")
+    = image_tag(image.url(:thumb), :class => "image-thumb image thumb")
   .info-panel.left
     .info-line.left
       .label.text.black.bold.font12 Photo Name

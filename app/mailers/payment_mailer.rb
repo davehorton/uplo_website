@@ -5,7 +5,7 @@ class PaymentMailer < ApplicationMailer
 
     in_tmpdir do |tmpdir, path|
       @order.images.each do |image|
-        io = open(URI.parse(image.data.url(:original)))
+        io = open(URI.parse(image.url(:original)))
         def io.original_filename; base_uri.path.split('/').last; end
         io.original_filename.blank? ? nil : io
         attachments.inline["#{image.id}.jpg"] = File.read(io.path)

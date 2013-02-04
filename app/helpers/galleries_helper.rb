@@ -33,7 +33,7 @@ module GalleriesHelper
   def printed_sizes_options(image, selected = nil)
     options = []
     image.printed_sizes.each do |size|
-      options << ["#{size}", size, {'data-url' => image.data.url("scale_preview#{size}")}]
+      options << ["#{size}", size, {'data-url' => image.url("scale_preview#{size}")}]
     end
     options_for_select(options, selected)
   end

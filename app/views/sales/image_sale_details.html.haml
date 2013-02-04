@@ -13,7 +13,7 @@
       - image = @image
       .sale-item.detail.left
         .image-container.thumb.left.no-padding
-          = image_tag(@image.data.url(:thumb), :class => "image-thumb image thumb")
+          = image_tag(@image.url(:thumb), :class => "image-thumb image thumb")
         .info.left
           .text.black.bold.font24= @image.name
           - if (image.is_flagged? || image.is_removed)

@@ -128,8 +128,8 @@ class SocialsController < ApplicationController
 			img = Image.find_by_id params[:image_id]
 			if (img)
 				link = url_for(:controller => :images, :action => :public, :id => img.id, :only_path => false)
-				photo = img.data.url(:thumb)
-				medium_photo = img.data.url(:medium)
+				photo = img.url(:thumb)
+				medium_photo = img.url(:medium)
 				description = img.description
 			end
 		end

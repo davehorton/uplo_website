@@ -1,7 +1,7 @@
 - content_for :head do
   %meta{:property=>"og:title", :content=>"Shared from UPLO" }
   %meta{:property=>"og:description", :content=>"#{@image.description}" }
-  %meta{:property=>"og:image", :content=>"#{@image.data.url(:thumb)}" }
+  %meta{:property=>"og:image", :content=>"#{@image.url(:thumb)}" }
   = stylesheet_link_tag("scss/new_image.css", "scss/sale.css")
   = javascript_include_tag("//assets.pinterest.com/js/pinit.js")
    
@@ -27,7 +27,7 @@
 
 - content_for :center_content do
   .image-container.medium.clearfix
-    = image_tag @image.data.url(:medium), :class => 'image medium'
+    = image_tag @image.url(:medium), :class => 'image medium'
   .buttons-container.left
     - public_url = url_for(:only_path => false)
     %a.left{:target => '_blank', :href=>"https://twitter.com/share", :class=>"twitter-share-button", :data => {:lang => "en", :count => "horizontal", :text => "Shared from UPLO -"}}

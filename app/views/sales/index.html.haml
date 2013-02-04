@@ -17,7 +17,7 @@
           .image-container.thumb.left.no-padding
             %dl.entry
               %dt.preview
-                = image_tag(image.data.url(:thumb), :class => "image-thumb")
+                = image_tag(image.url(:thumb), :class => "image-thumb")
           .info.left
             .text.bold= image.name
             .text

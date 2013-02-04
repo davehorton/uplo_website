@@ -36,7 +36,7 @@
         - additional_class = (idx%4 == 0) ? "no-padding-left" : ((idx%4==3) ? "no-padding-right" : "")
         .image-container.thumb{:id => "image-container-#{image.id}", :title=>"#{image.name}", :class => "#{additional_class}"}
           %a{ :href => "#{url}" }
-            = async_image_tag(image.data.url(:thumb), :class => "image-thumb")
+            = async_image_tag(image.url(:thumb), :class => "image-thumb")
   .buttons-container.left
     %a.left{:target => '_blank', :href=>"https://twitter.com/share", :class=>"twitter-share-button", :data => {:lang => "en", :count => "horizontal", :text => "Shared from UPLO -"}}
     .fb-like.left{ 'data-href'=>"#{ url_for(:only_path => false) }", 'data-send'=>'false', 'data-layout'=>'button_count', 'data-show-faces'=>'false', 'data-font'=>'arial' }

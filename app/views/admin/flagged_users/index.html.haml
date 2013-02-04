@@ -41,7 +41,7 @@
           .flagged-images
             - user.images.flagged.take(3).each do |image|
               %span.flagged-image-thumb-container.left
-                = image_tag image.data.url(:smallest), :class => 'flagged-image-thumb'
+                = image_tag image.url(:smallest), :class => 'flagged-image-thumb'
 
           .action-container
             - if user.is_banned? && user.ready_for_reinstating?

@@ -259,7 +259,7 @@ class ImagesController < ApplicationController
     # if request.xhr?
     #   worker = FilterWorker.new
     #   worker.image_id = image.id
-    #   worker.image_url = image.data.url
+    #   worker.image_url = image.url 
     #   worker.effect = img_info[:filtered_effect]
     #   worker.queue #put task to iron worker
 
@@ -356,7 +356,7 @@ class ImagesController < ApplicationController
       img_info = params[:image].delete :filtered_effect
       image.attributes = img_info
       file_path = "#{ Rails.root }/tmp/#{ image.name }_#{ Time.now.strftime('%Y%m%d%H%M%S%9N') }.jpg"
-      img = Magick::Image.read(image.data.url).first
+      img = Magick::Image.read(image.url ).first
       img.write file_path
       image.data = File.open file_path
       success = image.save
@@ -438,7 +438,7 @@ class ImagesController < ApplicationController
 
     def push_to_uplo_photoset(image_id)
       image = Image.find_by_id image_id
-      image_data = Magick::Image.read(image.data.url(:medium)).first
+      image_data = Magick::Image.read(image.url(:medium)).first
       image_tmp_path = "#{Rails.root}/tmp/#{image.name}"
       image_data.write image_tmp_path
       photo_id = flickr.upload_photo image_tmp_path, :title => image.name, :description => "#{image.description} \ndetail at <a href='#{url_for(:controller => 'images', :action => 'browse', :id => image_id)}'>UPLO"

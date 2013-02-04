@@ -21,7 +21,7 @@
         - additional_class = (idx%3 == 0) ? "no-padding-left" : ((idx%3==2) ? "no-padding-right" : "")
         .image-container.small{ :id => "image-container-#{image.id}", :title=>"#{image.name}", :class => "#{additional_class}" }
           %a{ :href => "#{url}" }
-            = async_image_tag(image.data.url(:thumb), :class => "image-thumb image small")
+            = async_image_tag(image.url(:thumb), :class => "image-thumb image small")
 
 .text.black.bold.left
   .text.font16.line12.left Spotlight Images
@@ -37,7 +37,7 @@
       - additional_class = (idx%4 == 0) ? "no-padding-left" : ((idx%4==3) ? "no-padding-right" : "")
       .image-container.thumb{:id => "image-container-#{image.id}", :title=>"#{image.name}", :class => "#{additional_class}"}
         %a{ :href => "#{url}" }
-          = async_image_tag(image.data.url(:thumb), :class => "image-thumb image thumb")
+          = async_image_tag(image.url(:thumb), :class => "image-thumb image thumb")
 
 
 :erb

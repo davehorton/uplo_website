@@ -10,6 +10,6 @@
       %div{ :style => 'font-style:italic; margin:10px 20px; padding:10px; border:1px solid #EEEEEE;' }= @message
     %br
     %a{ :href => "#{ @image.public_link }", :style => 'clear:both;' }
-      = image_tag @image.data.url(:thumb)
+      = image_tag @image.url(:thumb)
     %br
     %a{ :href => "#{DOMAIN}" } Shared from UPLO

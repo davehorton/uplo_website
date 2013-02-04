@@ -65,7 +65,7 @@
 
   .image-container-wrapper.clearfix
     .image-container.medium.no-border.clearfix
-      = image_tag(@image.data.url(:medium), :class => 'image medium',
+      = image_tag(@image.url(:medium), :class => 'image medium',
                 'data-width' => @image.width,
                 'data-height' => @image.height, :alt => @image.name)
   - if !@image.is_flagged?
