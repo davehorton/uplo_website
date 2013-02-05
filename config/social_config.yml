@@ -3,8 +3,8 @@ development:
   api_key: '1681267485345167'
   secret: 'baae7dac3520d70ba14edf6c1273c547'
  twitter:
-  consumer_key: "4dts1Xns2aNfN9oWUqA"
-  consumer_secret: "lfTflxhRkxVDHt2X8d1X7v543rS3wyUpvlFnOvmk6c"
+  consumer_key: "CJoc3Hxu5ZvjU6UVXUpA"
+  consumer_secret: "6POCeNga1Do6apmiArT1GrlNjRjHOikPTlMXxfIM"
  tumblr:
   consumer_key: "GJWrwpoDqLW3cVZtofYBuOlqMXDBZX5dB5ZLCBrQDfVX2CeDQh"
   consumer_secret: "ZzdTKenzNW70KP0Hew6SCuBMDEB7zhRmILi9ivaRTNBYRKTNZL"
@@ -17,8 +17,8 @@ staging:
   api_key: '1681267485345167'
   secret: 'baae7dac3520d70ba14edf6c1273c547'
  twitter:
-  consumer_key: "4dts1Xns2aNfN9oWUqA"
-  consumer_secret: "lfTflxhRkxVDHt2X8d1X7v543rS3wyUpvlFnOvmk6c"
+  consumer_key: "CJoc3Hxu5ZvjU6UVXUpA"
+  consumer_secret: "6POCeNga1Do6apmiArT1GrlNjRjHOikPTlMXxfIM"
  tumblr:
   consumer_key: "GJWrwpoDqLW3cVZtofYBuOlqMXDBZX5dB5ZLCBrQDfVX2CeDQh"
   consumer_secret: "ZzdTKenzNW70KP0Hew6SCuBMDEB7zhRmILi9ivaRTNBYRKTNZL"
