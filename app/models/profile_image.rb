@@ -63,7 +63,8 @@ class ProfileImage < ActiveRecord::Base
     return self.default
   end
 
-  def url
+  def url(style = :thumb)
+    self.data.expiring_url(style)
   end
 
   private
