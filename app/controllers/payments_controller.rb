@@ -125,7 +125,7 @@ class PaymentsController < ApplicationController
               flash[:success] = "Successfully made a purchase (authorization code: #{response.authorization_code})"
               redirect_to :action => :checkout_result, :trans_id => response.transaction_id and return
             else
-              flash.now[:error] = "Failed to make purchase."
+              flash.now[:error] = "Failed to make purchase. #{response.response_reason_text}"
               render :template => "orders/index", :params => params and return
             end
 
