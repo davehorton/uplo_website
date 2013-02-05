@@ -546,11 +546,11 @@ class Image < ActiveRecord::Base
   end
 
   def image_url
-    data.expiring_url(:medium)
+    url(:medium)
   end
 
   def image_thumb_url
-    data.expiring_url(:thumb)
+    url(:thumb)
   end
 
   def creation_timestamp
@@ -567,7 +567,7 @@ class Image < ActiveRecord::Base
     if (self.data_processing)
       return "/assets/gallery-thumb.jpg"
     end
-    self.data.expiring_url(120, options)
+    self.data.expiring_url(s3_expire_time, options)
   end
 
   def liked_by_user(user_id)
@@ -836,6 +836,10 @@ class Image < ActiveRecord::Base
   end
 
   protected
+    def s3_expire_time
+      Time.zone.now.beginning_of_day.since 25.hours
+    end
+
     def validate_quality
       save_dimensions
       min_size = self.square? ? Image::PRINTED_SIZES[:square][0] : Image::PRINTED_SIZES[:rectangular][0]
@@ -902,11 +906,7 @@ class Image < ActiveRecord::Base
         :album => 1
       }
 
-      if Rails.env.production?
-        set_property :delta => FlyingSphinx::DelayedDelta
-      else
-        set_property :delta => true
-      end
+      set_property :delta => true
     end
 
     # Index for public images
@@ -928,10 +928,6 @@ class Image < ActiveRecord::Base
 
       where("images.id IN (SELECT id FROM (#{Image.public_images.to_sql}) public_images)")
 
-      if Rails.env.production?
-        set_property :delta => FlyingSphinx::DelayedDelta
-      else
-        set_property :delta => true
-      end
+      set_property :delta => true
     end
 end
