@@ -186,21 +186,6 @@ class Image < ActiveRecord::Base
   before_create :init_tier
   after_initialize :init_random_price, :init_tier
 
-  # First mark processing
-  # then create
-  def enqueue_delayed_processing
-    puts "*" * 30
-    puts data_processing
-
-    mark_enqueue_delayed_processing
-    (@_enqued_for_processing || []).each do |name|
-      enqueue_post_processing_for(name)
-    end
-    @_enqued_for_processing_with_processing = []
-    @_enqued_for_processing = []
-    puts data_processing
-  end
-
   # CLASS METHODS
   class << self
     # Search within public images only
@@ -415,7 +400,7 @@ class Image < ActiveRecord::Base
     ratio = self.width*1.0 / self.height
     threshold = (1 + (RECTANGULAR_RATIO - 1)/2)
     
-    (1.0/threshold < ratio) && (ratio < threshold)
+    (1.0/threshold < ratio)
   end
 
   def valid_for_size?(size)
@@ -561,11 +546,11 @@ class Image < ActiveRecord::Base
   end
 
   def image_url
-    data.url(:medium)
+    data.expiring_url(:medium)
   end
 
   def image_thumb_url
-    data.url(:thumb)
+    data.expiring_url(:thumb)
   end
 
   def creation_timestamp
@@ -818,23 +803,36 @@ class Image < ActiveRecord::Base
     self.printed_sizes.each do |size|
       ratios = size.split('x')
       ratios.collect! { |tmp| tmp.strip.to_i }
+      tmp_width = 0 
+      tmp_height = 0
       if self.square?
-        width = height = ratios[0] * PRINT_RESOLUTION
+        tmp_width = height = ratios[0] * PRINT_RESOLUTION
       elsif self.width > self.height
-        width = ratios.max * PRINT_RESOLUTION
-        height = ratios.min * PRINT_RESOLUTION
+        tmp_width = ratios.max * PRINT_RESOLUTION
+        tmp_height = ratios.min * PRINT_RESOLUTION
       else
-        width = ratios.min * PRINT_RESOLUTION
-        height = ratios.max * PRINT_RESOLUTION
+        tmp_width = ratios.min * PRINT_RESOLUTION
+        tmp_height = ratios.max * PRINT_RESOLUTION
       end
-      result["scale#{size}".to_sym] = "#{width}x#{height}#"
-      ratio = width/640.to_f
+      result["scale#{size}".to_sym] = "#{tmp_width}x#{tmp_height}#"
+      ratio = tmp_width/640.to_f
       ratio = 1 if ratio < 1
-      preview_width = width / ratio
-      preview_height = height / ratio
+      preview_width = tmp_width / ratio
+      preview_height = tmp_height / ratio
       result["scale_preview#{size}".to_sym] = "#{preview_width.to_i}x#{preview_height.to_i}#"
     end
     result
+  end
+
+  def save_dimensions
+    file = self.data.queued_for_write[:original]
+    if file.blank?
+      file = data.expiring_url(:original)
+    end
+
+    geo = Paperclip::Geometry.from_file(file)
+    self.width = geo.width
+    self.height = geo.height
   end
 
   protected
@@ -850,26 +848,20 @@ class Image < ActiveRecord::Base
 
     # Detect the image dimensions.
     def init_image_info
+      save_dimensions
       file = self.data.queued_for_write[:original]
       if file.blank?
-        file = data.url(:original)
+        file = data.expiring_url(:original)
       end
+
+
       
       if !self.name.blank?
         self.name = file.original_filename.gsub(/(.jpeg|.jpg)$/i, '') if file.original_filename =~ /(.jpeg|.jpg)$/i
       end
     end
 
-    def save_dimensions
-      file = self.data.queued_for_write[:original]
-      if file.blank?
-        file = data.url(:original)
-      end
-
-      geo = Paperclip::Geometry.from_file(file)
-      self.width = geo.width
-      self.height = geo.height
-    end
+    
 
 
     # TODO: this method is for test only. Please REMOVE this in production mode.
