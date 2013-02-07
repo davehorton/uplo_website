@@ -406,7 +406,7 @@ class User < ActiveRecord::Base
     if avatar.nil?
       url = "/assets/avatar-default-#{style.to_s}.jpg"
     else
-      url = avatar.expiring_url(120, style.to_sym)
+      url = avatar.url(style.to_sym)
     end
     return url
   end
