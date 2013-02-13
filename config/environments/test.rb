@@ -10,7 +10,7 @@ Uplo::Application.configure do
   # Configure static asset server for tests with Cache-Control for performance
   config.serve_static_assets = true
   config.static_cache_control = "public, max-age=3600"
-  
+
   # Log error messages when you accidentally call methods on nil.
   config.whiny_nils = true
 
@@ -36,6 +36,6 @@ Uplo::Application.configure do
 
   # Print deprecation notices to the stderr
   config.active_support.deprecation = :stderr
-  
+
   config.action_mailer.default_url_options = { :host => 'localhost:3000' }
 end
