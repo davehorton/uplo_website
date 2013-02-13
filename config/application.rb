@@ -8,20 +8,6 @@ Bundler.require(:default, Rails.env) if defined?(Bundler)
 
 module Uplo
   class Application < Rails::Application
-    config.generators do |g|
-      g.orm :active_record
-      g.stylesheets false
-      g.template_engine :haml
-      #g.test_framework  :shoulda, :fixture_replacement => :factory_girl
-      g.test_framework  :rspec, :fixture => true, :views => false
-      g.form_builder :simple_form
-      #g.fixture_replacement :factory_girl, :dir => "spec/factories"
-      g.fixture_replacement :machinist
-      g.fallbacks[:shoulda] = :rspec
-      g.integration_tool :test
-      g.helper false
-    end
-
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration should go into files in config/initializers
     # -- all .rb files in that directory are automatically loaded.
