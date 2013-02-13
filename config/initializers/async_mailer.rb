@@ -1,3 +1,5 @@
+#TODO: replace with sidekiq-based email process
+
 # Adds :async_smtp delivery methods to perform email deliveries asynchronously
 module AsyncMailer
   class AsyncSmtp < Mail::SMTP
