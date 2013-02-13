@@ -1,8 +1,0 @@
-/*!
- * jQuery TextChange Plugin
- * http://www.zurb.com/playground/jquery-text-change-custom-event
- *
- * Copyright 2010, ZURB
- * Released under the MIT License
- */
-(function(e){e.event.special.textchange={setup:function(){e(this).data("lastValue",this.contentEditable==="true"?e(this).html():e(this).val()),e(this).bind("keyup.textchange",e.event.special.textchange.handler),e(this).bind("cut.textchange paste.textchange input.textchange",e.event.special.textchange.delayedHandler)},teardown:function(){e(this).unbind(".textchange")},handler:function(){e.event.special.textchange.triggerIfChanged(e(this))},delayedHandler:function(){var t=e(this);setTimeout(function(){e.event.special.textchange.triggerIfChanged(t)},25)},triggerIfChanged:function(e){var t=e[0].contentEditable==="true"?e.html():e.val();t!==e.data("lastValue")&&(e.trigger("textchange",[e.data("lastValue")]),e.data("lastValue",t))}},e.event.special.hastext={setup:function(){e(this).bind("textchange",e.event.special.hastext.handler)},teardown:function(){e(this).unbind("textchange",e.event.special.hastext.handler)},handler:function(t,n){n===""&&n!==e(this).val()&&e(this).trigger("hastext")}},e.event.special.notext={setup:function(){e(this).bind("textchange",e.event.special.notext.handler)},teardown:function(){e(this).unbind("textchange",e.event.special.notext.handler)},handler:function(t,n){e(this).val()===""&&e(this).val()!==n&&e(this).trigger("notext")}}})(jQuery);
