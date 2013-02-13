@@ -85,6 +85,7 @@ GEM
       json (~> 1.4)
       nokogiri (>= 1.4.4)
       uuidtools (~> 2.1)
+    bartt-ssl_requirement (1.4.2)
     bcrypt-ruby (3.0.1)
     bourne (1.1.2)
       mocha (= 0.10.5)
@@ -394,6 +395,7 @@ DEPENDENCIES
   awesome_print
   aws-s3
   aws-sdk
+  bartt-ssl_requirement (~> 1.4.0)
   cancan (>= 1.6.7)
   capybara!
   coffee-rails
