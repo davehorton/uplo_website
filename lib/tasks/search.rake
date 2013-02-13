@@ -1,5 +1,5 @@
 require 'thinking_sphinx/tasks'
-require 'flying_sphinx/tasks'
+require 'flying_sphinx/tasks' if Rails.env.production?
 
 namespace :search do
   desc 'Rebuild Flying Sphinx index'
