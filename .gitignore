@@ -1,5 +1,6 @@
 .DS_Store
 .bundle
+bin/
 config/database.yml
 config/gae_cdn.yml
 log
