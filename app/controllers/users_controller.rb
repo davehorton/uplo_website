@@ -3,7 +3,7 @@ class UsersController < ApplicationController
   before_filter :authenticate_user!, :except => [:request_invitation]
   before_filter :show_notification
   layout 'main'
-  
+
   def request_invitation
     if params[:user].nil? || !params[:user].has_key?('email') || params[:user][:email].blank?
       flash[:error] = "Please input an email first"
@@ -55,10 +55,10 @@ class UsersController < ApplicationController
     address = nil
     if (type_update == "billing_address" || type_update == "shipping_address")
       # Update Authorize Net Account
-      
+
       address = @user.billing_address ||= Address.new if (type_update == "billing_address")
       address = @user.shipping_address ||= Address.new if (type_update == "shipping_address")
-      
+
       if (address.update_attributes params[:address])
         params[:user][:billing_address_id] = address.id if (type_update == "billing_address")
         params[:user][:shipping_address_id] = address.id if (type_update == "shipping_address")
@@ -196,9 +196,9 @@ class UsersController < ApplicationController
   # user_id: <current user will follow this user>
   def set_follow
     result = {}
-    user = User.active_users.find_by_id params[:user_id]    
+    user = User.active_users.find_by_id params[:user_id]
     follower = current_user
-    
+
     if user.blank?
       result[:msg] = I18n.t("user.user_was_banned_or_removed")
       result[:success] = false
@@ -246,10 +246,9 @@ class UsersController < ApplicationController
   # params
   # type_social
   def enable_social
-    get_auth_info
     if (params[:type_social] == "Facebook")
-      @api_key = @facebook_cfg["api_key"]
-      @secret = @facebook_cfg["secret"]
+      @api_key = FACEBOOK_CONFIG["api_key"]
+      @secret = FACEBOOK_CONFIG["secret"]
 
       oauth_client = OAuth2::Client.new(@api_key, @secret, {
         :authorize_url => 'https://www.facebook.com/dialog/oauth'
@@ -262,8 +261,8 @@ class UsersController < ApplicationController
       }) and return
     elsif (params[:type_social] == "Twitter")
 
-      @consumer_key = @twitter_cfg["consumer_key"]
-      @consumer_secret = @twitter_cfg["consumer_secret"]
+      @consumer_key = TWITTER_CONFIG["consumer_key"]
+      @consumer_secret = TWITTER_CONFIG["consumer_secret"]
       @options = {:site => "http://api.twitter.com", :request_endpoint => "http://api.twitter.com"}
 
       consumer = OAuth::Consumer.new(@consumer_key, @consumer_secret, @options)
@@ -276,8 +275,8 @@ class UsersController < ApplicationController
 
     elsif (params[:type_social] == "Tumblr")
 
-      @consumer_key = @tumblr_cfg["consumer_key"]
-      @consumer_secret = @tumblr_cfg["consumer_secret"]
+      @consumer_key = TUMBLR_CONFIG["consumer_key"]
+      @consumer_secret = TUMBLR_CONFIG["consumer_secret"]
 
       consumer=OAuth::Consumer.new( @consumer_key, @consumer_secret, {
         :site => "http://www.tumblr.com",
@@ -289,20 +288,20 @@ class UsersController < ApplicationController
       })
 
       request_token=consumer.get_request_token
-      session[:request_token]=request_token 
+      session[:request_token]=request_token
       redirect_to request_token.authorize_url and return
 
     elsif (params[:type_social] == "Flickr")
       require 'flickraw'
 
-      @api_key = @flickr_cfg["api_key"]
-      @secret_key = @flickr_cfg["secret"]
+      @api_key = FLICKR_CONFIG["api_key"]
+      @secret_key = FLICKR_CONFIG["secret"]
 
       FlickRaw.api_key=@api_key
       FlickRaw.shared_secret=@secret_key
 
       request_token = flickr.get_request_token :oauth_callback => url_for(:controller => :socials, :action => :flickr_callback)
-      session[:request_token]=request_token 
+      session[:request_token]=request_token
       redirect_to flickr.get_authorize_url(request_token['oauth_token'], :perms => 'delete') and return
 
     end
@@ -315,10 +314,10 @@ class UsersController < ApplicationController
   # type_social
   def disable_social
     if (params[:type_social] == "Facebook")
-      current_user.update_attribute(:facebook_token, "")  
+      current_user.update_attribute(:facebook_token, "")
     elsif (params[:type_social] == "Twitter")
       current_user.update_attribute(:twitter_token, "")
-    elsif (params[:type_social] == "Pinterest") 
+    elsif (params[:type_social] == "Pinterest")
       current_user.update_attribute(:pinterest_token, "")
     elsif (params[:type_social] == "Tumblr")
       current_user.update_attribute(:tumblr_token, "")

@@ -167,8 +167,8 @@ class ImagesController < ApplicationController
   end
 
   def get_flickr_authorize
-    FlickRaw.api_key = FLICKER_API_KEY
-    FlickRaw.shared_secret = FLICKER_SHARED_SECRET
+    FlickRaw.api_key = FLICKR_CONFIG["api_key"]
+    FlickRaw.shared_secret = FLICKR_CONFIG["secret"]
     flickr = FlickRaw::Flickr.new
     token = flickr.get_request_token(:oauth_callback => url_for(:controller => 'images', :action => 'flickr_response', :image_id => params[:image_id], :only_path => false))
 
@@ -259,7 +259,7 @@ class ImagesController < ApplicationController
     # if request.xhr?
     #   worker = FilterWorker.new
     #   worker.image_id = image.id
-    #   worker.image_url = image.url 
+    #   worker.image_url = image.url
     #   worker.effect = img_info[:filtered_effect]
     #   worker.queue #put task to iron worker
 

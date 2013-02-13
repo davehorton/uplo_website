@@ -1,3 +1,0 @@
-# Flicker account
-FLICKER_API_KEY = '1bdbdcdf669b60c3dddc921692dbb457'
-FLICKER_SHARED_SECRET = '76348c9414670ff3'

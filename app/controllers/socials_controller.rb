@@ -3,9 +3,8 @@ class SocialsController < ApplicationController
 	include SocialModule
 
 	def facebook_callback
-		get_auth_info
-		@api_key = @facebook_cfg["api_key"]
-		@secret = @facebook_cfg["secret"]
+		@api_key = FACEBOOK_CONFIG["api_key"]
+		@secret = FACEBOOK_CONFIG["secret"]
 		oauth_client = OAuth2::Client.new(@api_key, @secret, {
 		    :site => 'https://graph.facebook.com',
 		    :token_url => '/oauth/access_token'
@@ -41,18 +40,17 @@ class SocialsController < ApplicationController
 	end
 
 	def twitter_callback
-		get_auth_info
-		@consumer_key = @twitter_cfg["consumer_key"]
-    @consumer_secret = @twitter_cfg["consumer_secret"]
+		@consumer_key = TWITTER_CONFIG["consumer_key"]
+    @consumer_secret = TWITTER_CONFIG["consumer_secret"]
 		@options = {:site => "http://api.twitter.com", :request_endpoint => "http://api.twitter.com"}
-      
+
     begin
 	    consumer = OAuth::Consumer.new(@consumer_key, @consumer_secret, @options)
 	    access_token = OAuth::RequestToken.new(consumer, session[:token], session[:secret]).
 	                                         get_access_token(:oauth_verifier => params[:oauth_verifier])
 
 	    @user = current_user
-	    if @user.update_attributes({:twitter_token => access_token.token, 
+	    if @user.update_attributes({:twitter_token => access_token.token,
 	    												 :twitter_secret_token => access_token.secret})
 				flash[:notice] = "Enabled Twitter"
 			else
@@ -71,7 +69,7 @@ class SocialsController < ApplicationController
 			access_token = request_token.get_access_token({:oauth_verifier => params[:oauth_verifier]})
 			@user = current_user
 
-			if @user.update_attributes({:tumblr_token => access_token.token, 
+			if @user.update_attributes({:tumblr_token => access_token.token,
 	    												 :tumblr_secret_token => access_token.secret})
 				flash[:notice] = "Enabled Tumblr"
 			else
@@ -91,7 +89,7 @@ class SocialsController < ApplicationController
 
 			@user = current_user
 			puts access_token.inspect
-			if @user.update_attributes({:flickr_token => access_token['oauth_token'], 
+			if @user.update_attributes({:flickr_token => access_token['oauth_token'],
 	    												 :flickr_secret_token => access_token['oauth_token_secret']})
 				flash[:notice] = "Enabled Flickr"
 			else
@@ -103,8 +101,8 @@ class SocialsController < ApplicationController
 
 		redirect_to :controller => :users, :action => :profile
 	end
-	
-	# params 
+
+	# params
 	# image_id
 	# social[:message]
 	# social[:type_social]
@@ -163,14 +161,14 @@ class SocialsController < ApplicationController
 
 	protected
 
-		# params 
+		# params
 		# image_id
 		# message
 
 		def facebook_share(link, photo, description)
 			if (current_user.facebook_token)
 				user = FbGraph::User.me(current_user.facebook_token)
-				begin 
+				begin
 					user.feed!(
 					  :message => @message,
 					  :picture => photo,
@@ -204,9 +202,8 @@ class SocialsController < ApplicationController
 		# params message
 		def twitter_share(link)
 			if (current_user.twitter_token)
-				get_auth_info
-				@consumer_key = @twitter_cfg["consumer_key"]
-	   	 	@consumer_secret = @twitter_cfg["consumer_secret"]
+				@consumer_key = TWITTER_CONFIG["consumer_key"]
+	   	 	@consumer_secret = TWITTER_CONFIG["consumer_secret"]
 
 				Twitter.configure do |config|
 		      config.consumer_key = @consumer_key
@@ -235,9 +232,8 @@ class SocialsController < ApplicationController
 		# params image_id
 		def tumblr_share(link, medium_photo)
 			if (current_user.tumblr_token)
-				get_auth_info
-				@consumer_key = @tumblr_cfg["consumer_key"]
-	   	 	@consumer_secret = @tumblr_cfg["consumer_secret"]
+				@consumer_key = TUMBLR_CONFIG["consumer_key"]
+	   	 	@consumer_secret = TUMBLR_CONFIG["consumer_secret"]
 
 				consumer = OAuth::Consumer.new @consumer_key, @consumer_secret, :site => "http://api.tumblr.com"
 				token_hash = { :oauth_token => current_user.tumblr_token,
@@ -258,7 +254,7 @@ class SocialsController < ApplicationController
 						begin
 							message = (@message.to_s << "<p>Shared from <a href='http://uplo.heroku.com'>UPLO</a></p>")
 
-							response = access_token.request(:post, "/v2/blog/#{base_name}/post", 
+							response = access_token.request(:post, "/v2/blog/#{base_name}/post",
 																		{:type => "photo" ,:caption => message, :link => link, :source => medium_photo})
 							result = JSON.parse(response.body)
 							status = result["meta"]["status"]
@@ -280,16 +276,14 @@ class SocialsController < ApplicationController
 				flash[:notice] = "You must enable Tumblr sharing"
 				redirect_to :controller => :users, :action => :profile and return
 			end
-			
+
 		end
 
 		def flickr_share(link, photo)
 			require 'tempfile'
 			if (current_user.flickr_token)
-				get_auth_info
-
-				@api_key = @flickr_cfg["api_key"]
-	      @secret_key = @flickr_cfg["secret"]
+				@api_key = FLICKR_CONFIG["api_key"]
+	      @secret_key = FLICKR_CONFIG["secret"]
 
 	      FlickRaw.api_key=@api_key
 	      FlickRaw.shared_secret=@secret_key
