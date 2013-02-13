@@ -1,6 +1,4 @@
-require 'machinist/active_record'
-require 'sham'
-require 'faker'
+=begin
 
 # Make a user without confirmation.
 User.blueprint do
@@ -66,3 +64,5 @@ end
 UserDevice.blueprint do
   # Attributes here
 end
+
+=end
