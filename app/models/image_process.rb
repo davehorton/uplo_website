@@ -10,7 +10,7 @@ class ImageProcess < ActiveRecord::Base
     else
       size = height
     end
-    
+
     start_x = width/2 - size/2
     start_y = height/2 - size/2
     cropped_img = img.crop start_x, start_y, size, size
