@@ -4,4 +4,4 @@
 
 require File.expand_path('../config/application', __FILE__)
 
-CollectorRev::Application.load_tasks
+Uplo::Application.load_tasks
