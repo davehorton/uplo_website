@@ -1,7 +1,5 @@
 Uplo::Application.routes.draw do
 
-  get "invites/index"
-
   # WEB ROUTING
   root :to => "home#index"
   get "shopping_cart/show"
@@ -49,6 +47,8 @@ Uplo::Application.routes.draw do
   post "images/flag", :to => "images#flag"
   get 'images/show_pricing', :to => 'images#show_pricing'
   post 'images/update_tier', :to => 'images#update_tier'
+
+  get "invites/index"
 
   get "sales", :to => "sales#index"
   get "sales/year_sales", :to => "sales#year_sales"
@@ -225,61 +225,4 @@ Uplo::Application.routes.draw do
     post 'delete_ordered_item', :to => 'orders#delete_ordered_item'
     get 'show_cart', :to => 'orders#show_cart'
   end
-
-  # The priority is based upon order of creation:
-  # first created -> highest priority.
-
-  # Sample of regular route:
-  #   match 'products/:id' => 'catalog#view'
-  # Keep in mind you can assign values other than :controller and :action
-
-  # Sample of named route:
-  #   match 'products/:id/purchase' => 'catalog#purchase', :as => :purchase
-  # This route can be invoked with purchase_url(:id => product.id)
-
-  # Sample resource route (maps HTTP verbs to controller actions automatically):
-  #   resources :products
-
-  # Sample resource route with options:
-  #   resources :products do
-  #     member do
-  #       get 'short'
-  #       post 'toggle'
-  #     end
-  #
-  #     collection do
-  #       get 'sold'
-  #     end
-  #   end
-
-  # Sample resource route with sub-resources:
-  #   resources :products do
-  #     resources :comments, :sales
-  #     resource :seller
-  #   end
-
-  # Sample resource route with more complex sub-resources
-  #   resources :products do
-  #     resources :comments
-  #     resources :sales do
-  #       get 'recent', :on => :collection
-  #     end
-  #   end
-
-  # Sample resource route within a namespace:
-  #   namespace :admin do
-  #     # Directs /admin/products/* to Admin::ProductsController
-  #     # (app/controllers/admin/products_controller.rb)
-  #     resources :products
-  #   end
-
-  # You can have the root of your site routed with "root"
-  # just remember to delete public/index.html.
-  # root :to => "welcome#index"
-
-  # See how all your routes lay out with "rake routes"
-
-  # This is a legacy wild controller route that's not recommended for RESTful applications.
-  # Note: This route will make all actions in every controller accessible via GET requests.
-  # match ':controller(/:action(/:id(.:format)))'
 end
