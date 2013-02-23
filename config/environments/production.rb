@@ -20,6 +20,9 @@ Uplo::Application.configure do
   # If you have no front-end server that supports something like X-Sendfile,
   # just comment this out and Rails will serve the files
 
+  # Force all access to the app over SSL, use Strict-Transport-Security, and use secure cookies.
+  config.force_ssl = true
+
   # See everything in the log (default is :info)
   # config.log_level = :debug
 
@@ -69,35 +72,13 @@ Uplo::Application.configure do
   config.action_mailer.default_url_options = { :host => DOMAIN }
   config.action_mailer.delivery_method = :smtp
 
-  # Configure to compress responses.
-  if config.serve_static_assets
-    begin
-      config.middleware.insert_before(ActionDispatch::Static, Rack::Deflater)
-    rescue Exception => exc
-      puts "Error when insert middleware ActionDispatch::Static"
-    end
-  end
-
-  if !ENV['SENDGRID_USERNAME'].blank? && !ENV['SENDGRID_PASSWORD'].blank?
-    # SENDGRID
-    config.action_mailer.smtp_settings = {
-      :address        => 'smtp.sendgrid.net',
-      :port           => 587,
-      :authentication => :plain,
-      :user_name      => ENV['SENDGRID_USERNAME'],
-      :password       => ENV['SENDGRID_PASSWORD'],
-      :domain         => 'heroku.com'
-    }
-  else
-    # GMAIL
-    config.action_mailer.smtp_settings = {
-      :address              => "smtp.gmail.com",
-      :port                 => 587,
-      :domain               => 'gmail.com',
-      :user_name            => 'uplo.mailer',
-      :password             => 'uploTPL123456',
-      :authentication       => 'plain',
-      :enable_starttls_auto => true
-    }
-  end
+  # SENDGRID
+  config.action_mailer.smtp_settings = {
+    :address        => 'smtp.sendgrid.net',
+    :port           => 587,
+    :authentication => :plain,
+    :user_name      => ENV['SENDGRID_USERNAME'],
+    :password       => ENV['SENDGRID_PASSWORD'],
+    :domain         => 'heroku.com'
+  }
 end
