@@ -1,32 +1,9 @@
 GIT
-  remote: git://github.com/jnicklas/capybara.git
-  revision: 19a9171665a219e2f0d77149c2412e4d0b2f0ec4
+  remote: git://github.com/jrgifford/delayed_paperclip.git
+  revision: d22bf617296c7c48c1d95f257052b7d40c14b7dc
   specs:
-    capybara (2.0.2)
-      mime-types (>= 1.16)
-      nokogiri (>= 1.3.3)
-      rack (>= 1.0.0)
-      rack-test (>= 0.5.4)
-      selenium-webdriver (~> 2.0)
-      xpath (~> 1.0.0)
-
-GIT
-  remote: git://github.com/jonleighton/poltergeist.git
-  revision: 467c9b9ea0798e44518dab60c8ae45819daae637
-  specs:
-    poltergeist (1.0.2)
-      capybara (~> 2.0, >= 2.0.1)
-      faye-websocket (~> 0.4, >= 0.4.4)
-      http_parser.rb (~> 0.5.3)
-
-GIT
-  remote: git://github.com/sferik/twitter.git
-  revision: 8e123a38d5b766f253d4b541a77078a9321b9556
-  specs:
-    twitter (4.5.0)
-      faraday (~> 0.8, < 0.10)
-      multi_json (~> 1.0)
-      simple_oauth (~> 0.2)
+    delayed_paperclip (2.5.1.0)
+      paperclip (>= 3.3.0)
 
 GEM
   remote: http://rubygems.org/
@@ -47,7 +24,7 @@ GEM
     active_utils (1.0.5)
       activesupport (>= 2.3.11)
       i18n
-    activemerchant (1.29.3)
+    activemerchant (1.31.0)
       active_utils (>= 1.0.2)
       activesupport (>= 2.3.14)
       builder (>= 2.0.0)
@@ -69,32 +46,38 @@ GEM
     activesupport (3.2.12)
       i18n (~> 0.6)
       multi_json (~> 1.0)
-    addressable (2.3.2)
+    addressable (2.3.3)
     aescrypt (1.0.0)
-    archive-tar-minitar (0.5.2)
     arel (3.0.2)
     attr_required (0.0.5)
     authorize-net (1.5.2)
       nokogiri (~> 1.4)
-    awesome_print (1.1.0)
     aws-s3 (0.6.3)
       builder
       mime-types
       xml-simple
-    aws-sdk (1.8.1.3)
-      json (~> 1.4)
-      nokogiri (>= 1.4.4)
-      uuidtools (~> 2.1)
-    bartt-ssl_requirement (1.4.2)
     bcrypt-ruby (3.0.1)
     bourne (1.1.2)
       mocha (= 0.10.5)
     builder (3.0.4)
     cancan (1.6.9)
+    capybara (2.0.2)
+      mime-types (>= 1.16)
+      nokogiri (>= 1.3.3)
+      rack (>= 1.0.0)
+      rack-test (>= 0.5.4)
+      selenium-webdriver (~> 2.0)
+      xpath (~> 1.0.0)
+    celluloid (0.12.4)
+      facter (>= 1.6.12)
+      timers (>= 1.0.0)
     childprocess (0.3.8)
       ffi (~> 1.0, >= 1.0.11)
-    cocaine (0.4.2)
-    coderay (1.0.8)
+    climate_control (0.0.3)
+      activesupport (>= 3.0)
+    cocaine (0.5.1)
+      climate_control (>= 0.0.3, < 1.0)
+    coderay (1.0.9)
     coffee-rails (3.2.2)
       coffee-script (>= 2.2.0)
       railties (~> 3.2.0)
@@ -102,18 +85,10 @@ GEM
       coffee-script-source
       execjs
     coffee-script-source (1.4.0)
-    columnize (0.3.6)
+    connection_pool (1.0.0)
     country-select (1.1.1)
-    daemons (1.1.9)
     dalli (2.6.2)
     database_cleaner (0.9.1)
-    delayed_job (3.0.5)
-      activesupport (~> 3.0)
-    delayed_job_active_record (0.4.1)
-      activerecord (>= 2.1.0, < 4)
-      delayed_job (~> 3.0)
-    delayed_paperclip (2.5.1.0)
-      paperclip (>= 3.3.0)
     devise (1.5.4)
       bcrypt-ruby (~> 3.0)
       orm_adapter (~> 0.0.3)
@@ -126,6 +101,7 @@ GEM
     eventmachine (1.0.0)
     execjs (1.4.0)
       multi_json (~> 1.0)
+    facter (1.6.17)
     factory_girl (4.2.0)
       activesupport (>= 3.0.0)
     factory_girl_rails (4.2.1)
@@ -135,23 +111,17 @@ GEM
       i18n (~> 0.5)
     faraday (0.8.5)
       multipart-post (~> 1.1)
-    faraday_middleware (0.9.0)
-      faraday (>= 0.7.4, < 0.9)
-    faye-websocket (0.4.6)
+    faye-websocket (0.4.7)
       eventmachine (>= 0.12.0)
     fb_graph (2.6.4)
       httpclient (>= 2.2.0.2)
       multi_json (>= 1.3)
       rack-oauth2 (>= 0.14.4)
       tzinfo
-    ffi (1.3.1)
+    ffi (1.4.0)
     flickraw (0.9.6)
-    flying-sphinx (0.8.5)
-      faraday_middleware (~> 0.7)
-      multi_json (>= 1.0.1)
-      rash (~> 0.3.0)
-      riddle (>= 1.5.0)
-      thinking-sphinx
+    foreman (0.61.0)
+      thor (>= 0.13.6)
     gibbon (0.4.3)
       httparty
       multi_json
@@ -164,7 +134,7 @@ GEM
     guard-coffeescript (1.2.1)
       coffee-script (>= 2.2.0)
       guard (>= 1.1.0)
-    guard-sass (1.0.2)
+    guard-sass (1.0.3)
       guard (>= 1.1.0)
       sass (>= 3.1)
     guard-spork (1.4.2)
@@ -177,9 +147,10 @@ GEM
       activesupport (>= 3.1, < 4.1)
       haml (~> 3.1)
       railties (>= 3.1, < 4.1)
-    has_scope (0.5.1)
-    hashie (1.2.0)
     hike (1.2.1)
+    honeybadger (1.5.0)
+      activesupport
+      json
     hpricot (0.8.6)
     http_parser.rb (0.5.3)
     httparty (0.10.2)
@@ -188,10 +159,6 @@ GEM
     httpauth (0.2.0)
     httpclient (2.3.2)
     i18n (0.6.1)
-    inherited_resources (1.3.1)
-      has_scope (~> 0.5.0)
-      responders (~> 0.6)
-    innertube (1.0.2)
     journey (1.0.4)
     jquery-rails (2.2.1)
       railties (>= 3.0, < 5.0)
@@ -199,12 +166,11 @@ GEM
     json (1.7.7)
     jwt (0.1.5)
       multi_json (>= 1.0)
+    kgio (2.8.0)
     launchy (2.2.0)
       addressable (~> 2.3)
     letter_opener (1.1.0)
       launchy (~> 2.2.0)
-    linecache19 (0.5.12)
-      ruby_core_source (>= 0.1.4)
     listen (0.7.2)
     lumberjack (1.0.2)
     mail (2.4.4)
@@ -213,36 +179,40 @@ GEM
       treetop (~> 1.4.8)
     metaclass (0.0.1)
     method_source (0.8.1)
-    middleware (0.1.0)
     mime-types (1.21)
     mobile-fu (1.1.1)
       rack-mobile-detect
       rails
     mocha (0.10.5)
       metaclass (~> 0.0.1)
-    money (5.1.0)
+    money (5.1.1)
       i18n (~> 0.6.0)
-    multi_json (1.6.0)
+    multi_json (1.6.1)
     multi_xml (0.5.3)
     multipart-post (1.1.5)
     nested_form (0.3.1)
     nokogiri (1.5.6)
     oauth (0.4.7)
-    oauth2 (0.9.0)
+    oauth2 (0.9.1)
       faraday (~> 0.8)
       httpauth (~> 0.1)
       jwt (~> 0.1.4)
       multi_json (~> 1.0)
       multi_xml (~> 0.5)
       rack (~> 1.2)
+    oj (2.0.7)
     orm_adapter (0.0.7)
-    paperclip (3.3.0)
+    paperclip (3.4.1)
       activemodel (>= 3.0.0)
       activerecord (>= 3.0.0)
       activesupport (>= 3.0.0)
-      cocaine (~> 0.4.0)
+      cocaine (~> 0.5.0)
       mime-types
     pg (0.14.1)
+    poltergeist (1.1.0)
+      capybara (~> 2.0, >= 2.0.1)
+      faye-websocket (~> 0.4, >= 0.4.4)
+      http_parser.rb (~> 0.5.3)
     polyglot (0.3.3)
     pry (0.9.12)
       coderay (~> 1.0.5)
@@ -253,7 +223,7 @@ GEM
       rack (>= 0.4)
     rack-mobile-detect (0.4.0)
       rack
-    rack-oauth2 (1.0.1)
+    rack-oauth2 (1.0.3)
       activesupport (>= 2.3)
       attr_required (>= 0.0.5)
       httpclient (>= 2.2.0.2)
@@ -279,15 +249,14 @@ GEM
       rake (>= 0.8.7)
       rdoc (~> 3.4)
       thor (>= 0.14.6, < 2.0)
+    raindrops (0.10.0)
     rake (10.0.3)
-    rash (0.3.2)
-      hashie (~> 1.2.0)
     rb-fsevent (0.9.3)
     rdoc (3.12.1)
       json (~> 1.4)
-    responders (0.9.3)
-      railties (~> 3.1)
-    riddle (1.5.4)
+    redis (3.0.2)
+    redis-namespace (1.2.1)
+      redis (~> 3.0.0)
     rmagick (2.13.2)
     rspec (2.12.0)
       rspec-core (~> 2.12.0)
@@ -297,7 +266,7 @@ GEM
     rspec-expectations (2.12.1)
       diff-lcs (~> 1.1.3)
     rspec-mocks (2.12.2)
-    rspec-nc (0.0.4)
+    rspec-nc (0.0.5)
       rspec (~> 2.9)
       terminal-notifier (~> 1.4.2)
     rspec-rails (2.12.2)
@@ -307,35 +276,26 @@ GEM
       rspec-core (~> 2.12.0)
       rspec-expectations (~> 2.12.0)
       rspec-mocks (~> 2.12.0)
-    ruby-debug-base19 (0.11.25)
-      columnize (>= 0.3.1)
-      linecache19 (>= 0.5.11)
-      ruby_core_source (>= 0.1.4)
-    ruby-debug19 (0.11.6)
-      columnize (>= 0.3.1)
-      linecache19 (>= 0.5.11)
-      ruby-debug-base19 (>= 0.11.19)
-    ruby_core_source (0.1.5)
-      archive-tar-minitar (>= 0.5.2)
-    ruby_parser (3.1.1)
-      sexp_processor (~> 4.1)
     rubyzip (0.9.9)
-    rufus-scheduler (2.0.17)
-      tzinfo (>= 0.3.23)
-    sass (3.2.5)
+    sass (3.2.6)
     sass-rails (3.2.6)
       railties (~> 3.2.0)
       sass (>= 3.1.10)
       tilt (~> 1.3)
-    selenium-webdriver (2.29.0)
+    selenium-webdriver (2.30.0)
       childprocess (>= 0.2.5)
       multi_json (~> 1.0)
       rubyzip
       websocket (~> 1.0.4)
-    sexp_processor (4.1.4)
     shoulda-matchers (1.4.2)
       activesupport (>= 3.0.0)
       bourne (~> 1.1.2)
+    sidekiq (2.7.4)
+      celluloid (~> 0.12.0)
+      connection_pool (~> 1.0)
+      multi_json (~> 1)
+      redis (~> 3)
+      redis-namespace
     simple_form (2.0.4)
       actionpack (~> 3.0)
       activemodel (~> 3.0)
@@ -352,29 +312,27 @@ GEM
       tilt (~> 1.1, != 1.3.0)
     terminal-notifier (1.4.2)
     terminal-table (1.4.5)
-    thin (1.5.0)
-      daemons (>= 1.0.9)
-      eventmachine (>= 0.12.6)
-      rack (>= 1.0.0)
-    thinking-sphinx (3.0.1)
-      activerecord (>= 3.1.0)
-      builder (>= 2.1.2)
-      innertube (>= 1.0.2)
-      middleware (>= 0.1.0)
-      riddle (>= 1.5.4)
     thor (0.17.0)
     tilt (1.3.3)
     timecop (0.5.9.2)
+    timers (1.1.0)
     treetop (1.4.12)
       polyglot
       polyglot (>= 0.3.1)
+    twitter (4.5.0)
+      faraday (~> 0.8, < 0.10)
+      multi_json (~> 1.0)
+      simple_oauth (~> 0.2)
     tzinfo (0.3.35)
     uglifier (1.3.0)
       execjs (>= 0.3.0)
       multi_json (~> 1.0, >= 1.0.2)
-    urbanairship (2.2.3)
+    unicorn (4.6.1)
+      kgio (~> 2.6)
+      rack
+      raindrops (~> 0.7)
+    urbanairship (2.3.0)
       json
-    uuidtools (2.1.3)
     valid_email (0.0.4)
       activemodel
       mail
@@ -391,69 +349,59 @@ PLATFORMS
 
 DEPENDENCIES
   active_utils
-  activemerchant (>= 1.20.1)
+  activemerchant
   aescrypt
-  authorize-net (>= 1.5.2)
-  awesome_print
+  authorize-net
   aws-s3
-  aws-sdk
-  bartt-ssl_requirement (~> 1.4.0)
-  cancan (>= 1.6.7)
-  capybara!
+  cancan
+  capybara
   coffee-rails
   country-select
-  daemons
   dalli
   database_cleaner
-  delayed_job_active_record
-  delayed_paperclip
-  devise (~> 1.5.3)
+  delayed_paperclip!
+  devise (= 1.5.4)
   email_spec
   factory_girl_rails (~> 4.2)
   faker
   fb_graph
   flickraw
-  flying-sphinx (>= 0.8.5)
+  foreman
   gibbon
   guard
   guard-coffeescript
   guard-sass
   guard-spork
-  haml
-  haml-rails
-  hpricot (>= 0.8.5)
-  inherited_resources (>= 1.3.0)
+  haml-rails (= 0.3.5)
+  honeybadger
+  hpricot
   jquery-rails
-  json
   launchy
   letter_opener
-  mail
   mobile-fu
   money
   nested_form
   nokogiri
   oauth
   oauth2
-  paperclip (= 3.3.0)
+  oj
+  paperclip
   pg
-  poltergeist!
+  poltergeist
   rails (= 3.2.12)
   rb-fsevent
   rmagick
   rspec-nc
   rspec-rails (= 2.12.2)
-  ruby-debug19
-  ruby_parser (>= 2.3.1)
-  rufus-scheduler
   sass-rails (~> 3.2.3)
   shoulda-matchers
+  sidekiq
   simple_form
   spork-rails
-  thin
-  thinking-sphinx (>= 2.0.10)
   timecop
-  twitter!
+  twitter
   uglifier (>= 1.0.3)
+  unicorn
   urbanairship
   valid_email
   will_paginate (~> 3.0)
