@@ -713,7 +713,7 @@ class User < ActiveRecord::Base
     #   if !self.is_removed?
     #     self.update_attribute(:is_removed, true)
     #     # Send email.
-        
+
     #   end
     # end
     self.destroy
@@ -796,7 +796,7 @@ class User < ActiveRecord::Base
 
   # AUTHORIZE NET CIM
   def update_user_info_on_authorize_net
-    
+
   end
 
   protected
@@ -845,7 +845,7 @@ class User < ActiveRecord::Base
     def encrypt_data
     end
 
-    # indexing with thinking sphinx
+=begin
     define_index do
       indexes first_name
       indexes last_name
@@ -862,4 +862,5 @@ class User < ActiveRecord::Base
         set_property :delta => true
       end
     end
+=end
 end

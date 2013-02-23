@@ -90,15 +90,15 @@ class Image < ActiveRecord::Base
     MOULDING[:light_wood] => nil,
     MOULDING[:rustic_wood] => nil
   }
-  DEFAULT_STYLES = { 
-                      :smallest => '66x66#', 
-                      :smaller => '67x67#', 
-                      :small => '68x68#', 
-                      :spotlight_small => '74x74#', 
-                      :thumb => '155x155#', 
-                      :spotlight_thumb => '174x154#', 
-                      :profile_thumb => '101x101#', 
-                      :medium => '640x640>' 
+  DEFAULT_STYLES = {
+                      :smallest => '66x66#',
+                      :smaller => '67x67#',
+                      :small => '68x68#',
+                      :spotlight_small => '74x74#',
+                      :thumb => '155x155#',
+                      :spotlight_thumb => '174x154#',
+                      :profile_thumb => '101x101#',
+                      :medium => '640x640>'
                   }
 
   # ASSOCIATIONS
@@ -399,7 +399,7 @@ class Image < ActiveRecord::Base
   def square?
     ratio = self.width*1.0 / self.height
     threshold = (1 + (RECTANGULAR_RATIO - 1)/2)
-    
+
     (1.0/threshold < ratio)
   end
 
@@ -629,7 +629,7 @@ class Image < ActiveRecord::Base
 
     orders_in = orders.collect &:id
     saled_items = (orders.length==0) ? [] : self.line_items.where("order_id in (#{orders_in.join(',')})")
-    saled_items.each do |item| 
+    saled_items.each do |item|
       total += ((item.price * item.quantity) * item.commission_percent)
     end
 
@@ -803,7 +803,7 @@ class Image < ActiveRecord::Base
     self.printed_sizes.each do |size|
       ratios = size.split('x')
       ratios.collect! { |tmp| tmp.strip.to_i }
-      tmp_width = 0 
+      tmp_width = 0
       tmp_height = 0
       if self.square?
         tmp_width = height = ratios[0] * PRINT_RESOLUTION
@@ -859,14 +859,11 @@ class Image < ActiveRecord::Base
       end
 
 
-      
+
       if !self.name.blank?
         self.name = file.original_filename.gsub(/(.jpeg|.jpg)$/i, '') if file.original_filename =~ /(.jpeg|.jpg)$/i
       end
     end
-
-    
-
 
     # TODO: this method is for test only. Please REMOVE this in production mode.
     def init_random_price
@@ -881,6 +878,7 @@ class Image < ActiveRecord::Base
       end
     end
 
+=begin
     #indexing with thinking sphinx
     define_index :general_images do
       # fields
@@ -930,4 +928,5 @@ class Image < ActiveRecord::Base
 
       set_property :delta => true
     end
+=end
 end
