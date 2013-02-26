@@ -39,6 +39,8 @@ Uplo::Application.configure do
   config.active_support.deprecation = :stderr
 
   config.paperclip_defaults = {
-    :storage => :filesystem
+    :storage => :filesystem,
+    :path => ":rails_root/public/system/:attachment_singular/:id/:style/:filename",
+    :url => "/system/:attachment_singular/:id/:style/:filename"
   }
 end

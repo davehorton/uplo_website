@@ -89,18 +89,16 @@ class User < ActiveRecord::Base
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable, :confirmable, :authentication_keys => [:login]
 
-  # Setup accessible (or protected) attributes for your model
-  attr_accessible :id, :email, :password, :password_confirmation, :remember_me, :twitter_token, :twitter_secret_token, :tumblr_token, :tumblr_secret_token, :flickr_token, :flickr_secret_token,
-                  :first_name, :last_name, :username, :login, :nationality,
-                  :birthday, :gender, :avatar, :twitter, :facebook, :website, :biography, :name_on_card,
-                  :card_type, :card_number, :expiration, :cvv, :paypal_email, :paypal_email_confirmation,
-                  :is_enable_facebook, :is_enable_twitter, :billing_address_id, :shipping_address_id, :job, :location, :shipping_address_attributes, :billing_address_attributes
-
-  attr_accessible :id, :email, :password, :password_confirmation, :remember_me, :twitter_token, :twitter_secret_token, :tumblr_token, :tumblr_secret_token, :flickr_token, :flickr_secret_token,
-                  :first_name, :last_name, :username, :login, :nationality,
-                  :birthday, :gender, :avatar, :twitter, :facebook, :website, :biography, :name_on_card,
-                  :card_type, :card_number, :expiration, :cvv, :paypal_email, :paypal_email_confirmation,
-                  :is_enable_facebook, :is_enable_twitter, :billing_address_id, :shipping_address_id, :job, :location, :shipping_address_attributes, :billing_address_attributes, :is_admin, :as => :admin
+  attr_protected :is_admin,
+                 :is_removed,
+                 :is_banned,
+                 :current_sign_in_ip,
+                 :last_sign_in_ip,
+                 :current_sign_in_at,
+                 :last_sign_in_at,
+                 :sign_in_count,
+                 :confirmed_at,
+                 :created_at
 
   # ASSOCIATIONS
   has_many :profile_images, :dependent => :destroy, :order => 'last_used DESC'
@@ -384,7 +382,7 @@ class User < ActiveRecord::Base
       if img.source && (img.source.is_removed || (img.source.is_flagged?))
         return nil
       end
-      result = img.data
+      result = img.avatar
     end
     return result
   end

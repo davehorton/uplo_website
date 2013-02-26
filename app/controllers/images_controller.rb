@@ -94,7 +94,7 @@ class ImagesController < ApplicationController
     image_info = {
       :name => data[0].original_filename,
       :gallery_id => params[:gallery_id],
-      :data => data[0]
+      :image => data[0]
     }
     image = Image.new image_info
     image.set_album_cover
@@ -359,7 +359,7 @@ class ImagesController < ApplicationController
       file_path = "#{ Rails.root }/tmp/#{ image.name }_#{ Time.now.strftime('%Y%m%d%H%M%S%9N') }.jpg"
       img = Magick::Image.read(image.url ).first
       img.write file_path
-      image.data = File.open file_path
+      image.image = File.open file_path
       success = image.save
     end
 

@@ -100,7 +100,7 @@ class UsersController < ApplicationController
   end
 
   def update_avatar
-    avatar = current_user.profile_images.build({:data => params[:user][:avatar], :last_used => Time.now})
+    avatar = current_user.profile_images.build({:avatar => params[:user][:avatar], :last_used => Time.now})
     if avatar.save
       profile_photos = render_to_string :partial => 'profiles/profile_photos',
              :locals => {:profile_images => current_user.profile_images}

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130226005244) do
+ActiveRecord::Schema.define(:version => 20130226045024) do
 
   create_table "addresses", :force => true do |t|
     t.string   "first_name"
@@ -78,27 +78,27 @@ ActiveRecord::Schema.define(:version => 20130226005244) do
   end
 
   create_table "images", :force => true do |t|
-    t.string   "name",                                 :null => false
+    t.string   "name",                                  :null => false
     t.text     "description"
-    t.integer  "gallery_id",                           :null => false
-    t.boolean  "is_gallery_cover",  :default => false
-    t.float    "price",             :default => 0.0
-    t.boolean  "delta",             :default => true,  :null => false
-    t.integer  "likes",             :default => 0
-    t.datetime "created_at",                           :null => false
-    t.datetime "updated_at",                           :null => false
-    t.string   "data_file_name"
-    t.string   "data_content_type"
-    t.integer  "data_file_size"
-    t.datetime "data_updated_at"
+    t.integer  "gallery_id",                            :null => false
+    t.boolean  "is_gallery_cover",   :default => false
+    t.float    "price",              :default => 0.0
+    t.boolean  "delta",              :default => true,  :null => false
+    t.integer  "likes",              :default => 0
+    t.datetime "created_at",                            :null => false
+    t.datetime "updated_at",                            :null => false
+    t.string   "image_file_name"
+    t.string   "image_content_type"
+    t.integer  "image_file_size"
+    t.datetime "image_updated_at"
     t.integer  "width"
     t.integer  "height"
     t.string   "keyword"
     t.boolean  "is_owner_avatar"
     t.string   "tier"
-    t.boolean  "is_removed",        :default => false
-    t.integer  "pageview",          :default => 0
-    t.integer  "promote_num",       :default => 0
+    t.boolean  "is_removed",         :default => false
+    t.integer  "pageview",           :default => 0
+    t.integer  "promote_num",        :default => 0
     t.boolean  "data_processing"
   end
 
@@ -160,16 +160,16 @@ ActiveRecord::Schema.define(:version => 20130226005244) do
   end
 
   create_table "profile_images", :force => true do |t|
-    t.integer  "user_id",                              :null => false
-    t.boolean  "default",           :default => false, :null => false
-    t.integer  "link_to_image",     :default => 0
-    t.datetime "last_used",                            :null => false
-    t.string   "data_file_name",                       :null => false
-    t.string   "data_content_type",                    :null => false
-    t.integer  "data_file_size",                       :null => false
-    t.datetime "data_updated_at",                      :null => false
-    t.datetime "created_at",                           :null => false
-    t.datetime "updated_at",                           :null => false
+    t.integer  "user_id",                                :null => false
+    t.boolean  "default",             :default => false, :null => false
+    t.integer  "link_to_image",       :default => 0
+    t.datetime "last_used",                              :null => false
+    t.string   "avatar_file_name",                       :null => false
+    t.string   "avatar_content_type",                    :null => false
+    t.integer  "avatar_file_size",                       :null => false
+    t.datetime "avatar_updated_at",                      :null => false
+    t.datetime "created_at",                             :null => false
+    t.datetime "updated_at",                             :null => false
   end
 
   create_table "tags", :force => true do |t|

@@ -21,16 +21,15 @@ class ProfileImage < ActiveRecord::Base
   belongs_to :source, :foreign_key => :link_to_image, :class_name => 'Image'
 
   # Paperclip
-  has_attached_file :data,
+  has_attached_file :avatar,
     styles: { thumb:  '180x180#',
               extra:  '96x96#',
               large:  '67x67#',
               medium: '48x48#',
               small:  '24x24#' },
-    path: "avatar/:id/:style.:extension",
     default_url: "/assets/avatar-default-:style.jpg"
 
-  validates_attachment :data, :presence => true,
+  validates_attachment :avatar, :presence => true,
     :size => { :in => 0..10.megabytes, :message => 'File size cannot exceed 10MB' },
     :content_type => { :content_type => [ 'image/jpeg','image/jpg'],
       :message => 'File type must be one of [.jpeg, .jpg]' }
@@ -64,7 +63,7 @@ class ProfileImage < ActiveRecord::Base
   end
 
   def url(style = :thumb)
-    self.data.expiring_url(style)
+    self.avatar.expiring_url(style)
   end
 
   private
