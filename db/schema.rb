@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120915102240) do
+ActiveRecord::Schema.define(:version => 20130226005244) do
 
   create_table "addresses", :force => true do |t|
     t.string   "first_name"
@@ -23,24 +23,24 @@ ActiveRecord::Schema.define(:version => 20120915102240) do
     t.string   "state"
     t.string   "phone"
     t.string   "fax"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                          :null => false
+    t.datetime "updated_at",                          :null => false
     t.string   "country",          :default => "usa"
   end
 
   create_table "carts", :force => true do |t|
     t.integer  "user_id"
     t.integer  "order_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
   end
 
   create_table "comments", :force => true do |t|
     t.integer  "user_id",     :null => false
     t.integer  "image_id"
     t.text     "description"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
   end
 
   create_table "galleries", :force => true do |t|
@@ -48,8 +48,8 @@ ActiveRecord::Schema.define(:version => 20120915102240) do
     t.string   "name",                          :null => false
     t.text     "description"
     t.boolean  "delta",       :default => true, :null => false
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                    :null => false
+    t.datetime "updated_at",                    :null => false
     t.string   "keyword"
     t.integer  "permission",  :default => 1
   end
@@ -59,22 +59,22 @@ ActiveRecord::Schema.define(:version => 20120915102240) do
     t.integer  "reported_by", :null => false
     t.integer  "flag_type",   :null => false
     t.string   "description"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
   end
 
   create_table "image_likes", :force => true do |t|
     t.integer  "image_id",   :null => false
     t.integer  "user_id",    :null => false
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
   end
 
   create_table "image_tags", :force => true do |t|
     t.integer  "image_id",   :null => false
     t.integer  "tag_id",     :null => false
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
   end
 
   create_table "images", :force => true do |t|
@@ -85,8 +85,8 @@ ActiveRecord::Schema.define(:version => 20120915102240) do
     t.float    "price",             :default => 0.0
     t.boolean  "delta",             :default => true,  :null => false
     t.integer  "likes",             :default => 0
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                           :null => false
+    t.datetime "updated_at",                           :null => false
     t.string   "data_file_name"
     t.string   "data_content_type"
     t.integer  "data_file_size"
@@ -99,27 +99,29 @@ ActiveRecord::Schema.define(:version => 20120915102240) do
     t.boolean  "is_removed",        :default => false
     t.integer  "pageview",          :default => 0
     t.integer  "promote_num",       :default => 0
+    t.boolean  "data_processing"
   end
 
   create_table "invitations", :force => true do |t|
     t.string   "email",      :null => false
     t.string   "token",      :null => false
     t.datetime "invited_at"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
   end
 
   create_table "line_items", :force => true do |t|
     t.integer  "order_id"
     t.integer  "image_id"
-    t.integer  "quantity",                                   :default => 0
-    t.float    "tax",                                        :default => 0.0
-    t.decimal  "price",       :precision => 16, :scale => 2, :default => 0.0
-    t.boolean  "plexi_mount",                                :default => false
+    t.integer  "quantity",                                          :default => 0
+    t.float    "tax",                                               :default => 0.0
+    t.decimal  "price",              :precision => 16, :scale => 2, :default => 0.0
+    t.boolean  "plexi_mount",                                       :default => false
     t.string   "moulding"
     t.string   "size"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                                                           :null => false
+    t.datetime "updated_at",                                                           :null => false
+    t.float    "commission_percent"
   end
 
   create_table "orders", :force => true do |t|
@@ -136,8 +138,8 @@ ActiveRecord::Schema.define(:version => 20120915102240) do
     t.string   "message"
     t.integer  "shipping_address_id"
     t.integer  "billing_address_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                                                          :null => false
+    t.datetime "updated_at",                                                          :null => false
     t.string   "last_name"
     t.string   "city"
     t.string   "country"
@@ -166,14 +168,14 @@ ActiveRecord::Schema.define(:version => 20120915102240) do
     t.string   "data_content_type",                    :null => false
     t.integer  "data_file_size",                       :null => false
     t.datetime "data_updated_at",                      :null => false
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                           :null => false
+    t.datetime "updated_at",                           :null => false
   end
 
   create_table "tags", :force => true do |t|
     t.string   "name",       :null => false
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
   end
 
   add_index "tags", ["name"], :name => "index_tags_on_name", :unique => true
@@ -185,15 +187,15 @@ ActiveRecord::Schema.define(:version => 20120915102240) do
     t.boolean  "notify_likes",     :default => true
     t.boolean  "notify_purchases", :default => true
     t.datetime "last_notified",                      :null => false
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                         :null => false
+    t.datetime "updated_at",                         :null => false
   end
 
   create_table "user_follows", :force => true do |t|
     t.integer  "user_id",     :null => false
     t.integer  "followed_by", :null => false
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
   end
 
   create_table "users", :force => true do |t|
@@ -218,8 +220,8 @@ ActiveRecord::Schema.define(:version => 20120915102240) do
     t.datetime "confirmation_sent_at"
     t.string   "authentication_token"
     t.boolean  "delta",                                 :default => true,  :null => false
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                                               :null => false
+    t.datetime "updated_at",                                               :null => false
     t.string   "avatar_file_name"
     t.string   "avatar_content_type"
     t.integer  "avatar_file_size"
@@ -251,6 +253,8 @@ ActiveRecord::Schema.define(:version => 20120915102240) do
     t.string   "pinterest_token"
     t.string   "twitter_secret_token"
     t.string   "tumblr_secret_token"
+    t.string   "flickr_secret_token"
+    t.boolean  "photo_processing",                      :default => false
   end
 
   add_index "users", ["email"], :name => "index_users_on_email", :unique => true
