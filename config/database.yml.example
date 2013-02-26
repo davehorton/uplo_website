@@ -18,6 +18,3 @@ test:
   pool: 5
   username: postgres
   password:
-
-cucumber:
-  <<: *test
