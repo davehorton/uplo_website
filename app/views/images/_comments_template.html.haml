@@ -1,6 +1,6 @@
 / locals: comments
 .container.left
-  = render :partial => 'shared/pagination', :locals => { :source => comments, :params => { :controller => 'comments', :action => 'index' }, :classes => 'comments right' }
+  = render :partial => 'pagination', :locals => { :source => comments, :params => { :controller => 'comments', :action => 'index' }, :classes => 'comments right' }
 - comments.each do |comment|
   .user-section.left
     - commenter = comment.user

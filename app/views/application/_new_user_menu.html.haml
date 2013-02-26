@@ -9,7 +9,7 @@
     %li
       = select_tag "private_pages", private_links_options(current_section), :id => "my_links"
     %li.no-padding-right{:style => "margin-top: 2px"}
-      = render :partial => "/shared/search_box_new", :locals => {:action => '/search'}
+      = render :partial => "search_box_new", :locals => {:action => '/search'}
   - else
     %li
       = link_to 'Sign Up', '#'

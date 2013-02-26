@@ -46,7 +46,7 @@ class ProfilesController < ApplicationController
       template = render_to_string :partial => 'images/photos_template',
                     :locals => { :images => images,
                                 :photos_per_line => 4, :photo_size => 'thumb' }
-      pagination = render_to_string :partial => 'shared/hidden_pagination',
+      pagination = render_to_string :partial => 'hidden_pagination',
                     :locals => { :data_source => images,
                                 :params => { :controller => "profiles",
                                               :action => 'get_photos' } }
@@ -72,7 +72,7 @@ class ProfilesController < ApplicationController
       else
         template = render_to_string :partial => 'images/photos_template', :locals => { :images => images, :photos_per_line => 4, :photo_size => 'thumb' }
       end
-      pagination = render_to_string :partial => 'shared/hidden_pagination',
+      pagination = render_to_string :partial => 'hidden_pagination',
         :locals => { :data_source => images,
           :params => { :controller => "profiles", :action => 'get_likes' } }
       render :json => { :items => template, :pagination => pagination }
@@ -99,9 +99,9 @@ class ProfilesController < ApplicationController
       else
         galleries = @user.galleries.load_popular_galleries(@filtered_params)
       end
-      template = render_to_string :partial => 'shared/galleries_template',
+      template = render_to_string :partial => 'galleries_template',
                     :locals => { :galleries => galleries, :galleries_per_line => 4 }
-      pagination = render_to_string :partial => 'shared/hidden_pagination',
+      pagination = render_to_string :partial => 'hidden_pagination',
                     :locals => { :data_source => galleries,
                                 :params => { :controller => "profiles",
                                               :action => 'get_galleries' } }
@@ -123,7 +123,7 @@ class ProfilesController < ApplicationController
       followers = @user.followers.load_users(@filtered_params)
       template = render_to_string :partial => 'users/followers_template',
                     :locals => { :users => followers, :users_per_line => 2, :type => 'follower' }
-      pagination = render_to_string :partial => 'shared/hidden_pagination',
+      pagination = render_to_string :partial => 'hidden_pagination',
                     :locals => { :data_source => followers,
                                 :params => { :controller => "profiles",
                                               :action => 'get_followers' } }
@@ -145,7 +145,7 @@ class ProfilesController < ApplicationController
       followed_users = @user.followed_users.load_users(@filtered_params)
       template = render_to_string :partial => 'users/followers_template',
                     :locals => { :users => followed_users, :users_per_line => 2, :type => 'following' }
-      pagination = render_to_string :partial => 'shared/hidden_pagination',
+      pagination = render_to_string :partial => 'hidden_pagination',
                     :locals => { :data_source => followed_users,
                                 :params => { :controller => "profiles",
                                               :action => 'get_followed_users' } }

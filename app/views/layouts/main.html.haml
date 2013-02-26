@@ -29,7 +29,7 @@
         })();
       </script>
 
-  %body    
+  %body
     #header
       .wrapper
         %a.left#logo{:href => "/"}
@@ -37,13 +37,13 @@
         .left.font12{:style => "color:#ed3b03;font-weight:bold;padding-left:5px"}
           Beta
         #user-box.header-menu.text.line24.right
-          = render(:partial => "shared/new_user_menu")
+          = render(:partial => "new_user_menu")
 
         .devider.right
           = image_tag("/assets/divider.jpg")
 
         %nav#menu.header-menu.text.line24.right
-          = render(:partial => "shared/public_menu")
+          = render(:partial => "public_menu")
     #banner
       = yield :banner
     .clear
@@ -52,9 +52,9 @@
       #top.clearfix
         #main.clearfix
         = yield :top_content
-      
-      = render :partial => "shared/notification_box"
-      
+
+      = render :partial => "notification_box"
+
       #left.panel.left
         = yield :left_content
 
@@ -70,7 +70,7 @@
           Copyright &copy; 2012 UPLO. All rights reserved
         .text.black.font11.line18.center
           = link_to "Payment Policy", "/payment", :style => "font-weight:normal"
-          = "/" 
+          = "/"
           = link_to "Terms of Service", "/terms", :style => "font-weight:normal"
         #mask.hide
           = image_tag('loading.gif')

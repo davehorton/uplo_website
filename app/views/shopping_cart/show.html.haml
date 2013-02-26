@@ -25,7 +25,7 @@
         - unless @order.line_items.empty?
           %a.checkout.left{:href => "#{url_for(:controller => 'shopping_cart', :action => 'checkout')}"}
 
-= render :partial => 'shared/delete_confirm', :layout => 'layouts/popup', :locals => { :title => 'Delete Confirm', :id => 'delete-confirm-popup', :text => 'Are you sure you want to remove this item?' }
+= render :partial => 'delete_confirm', :layout => 'layouts/popup', :locals => { :title => 'Delete Confirm', :id => 'delete-confirm-popup', :text => 'Are you sure you want to remove this item?' }
 
 - content_for :js do
   = javascript_include_tag 'app/shopping_cart.js'

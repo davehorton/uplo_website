@@ -8,20 +8,20 @@
 .header
   .admin_title.left_area
     = "#{t('admin.flagged_images')} / #{t("admin.flagged_images_type.#{@flag_type_key}")}"
-  
+
   .right_area.action-container
     .left
       - index_link = url_for(:controller => "admin/flagged_images", :action => "index")
       %form{:action => index_link, :id => "flag_type_form", :method => 'get'}
-        Sort By:        
+        Sort By:
         = select_tag :flag_type, options_for_select(categories, params[:flag_type]), :id => "flagged_image_type"
-    
+
     .button.remove_all.left#remove_flagged_images{'data-confirm' => t('admin.remove_all_images_confirm')}
       - remove_link = url_for(:controller => "admin/flagged_images", :action => "remove_all", :flag_type => params[:flag_type])
       %form{:action => remove_link, :class => "remove-form action-form",
             :id => "remove-all-form", :method =>'post'}
         = hidden_field_tag(:authenticity_token, form_authenticity_token)
-        
+
     .button.reinstate_all.left#reinstate_flagged_images{'data-confirm' => t('admin.reinstate_all_images_confirm')}
       - remove_link = url_for(:controller => "admin/flagged_images", :action => "reinstate_all", :flag_type => params[:flag_type])
       %form{:action => remove_link, :class => "remove-form action-form",
@@ -34,9 +34,9 @@
     - i = i + 1
     - flag = image.image_flags.first
     - flag_type = flag.flag_type_string
-    
+
     - if (i % 6) == 0
-      .flagged_image_last_element 
+      .flagged_image_last_element
         = render :partial => "admin/flagged_images/flagged_image_cell", :locals => {:image => image, :flag => flag, :flag_type => flag_type}
     - else
       = render :partial => "admin/flagged_images/flagged_image_cell", :locals => {:image => image, :flag => flag, :flag_type => flag_type}
@@ -47,27 +47,27 @@
 - if (@flagged_images.count > 0)
   #flagged_image_popup{:style => "width:960px; display:none"}
 
-= render(:partial => 'shared/delete_confirm',
+= render(:partial => 'delete_confirm',
         :layout => 'layouts/popup',
         :locals => { :title => 'Confirm', :id => 'flagged-images-confirm-popup',
         :text => t('admin.reinstate_image_confirm')})
-        
+
 - content_for :js do
   = javascript_include_tag("lib/jail.min.js", "app/admin/flagged_images.js")
-  
+
   :erb
     <script type="text/javascript">
       $(document).ready(function(){
         helper.setup_async_image_tag("img.image-thumb");
         flagged_images.setup_forms();
-        
+
         $("#flagged_image_type").change(function(){
           $("#flag_type_form").submit();
         });
 
         $("#flagged_image_type-button").css("width", "160px").css("height", "20px");
         $("#flagged_image_type-menu").css("width", "160px");
-        $("#flagged_image_type-button .ui-selectmenu-status").css("padding-top", "4px");       
+        $("#flagged_image_type-button .ui-selectmenu-status").css("padding-top", "4px");
       });
 
     </script>

@@ -30,7 +30,7 @@
            :gallery_name => "#{gallery.name.truncate(20)}", :gallery_user => "#{gallery.user.username.truncate(15)}" } } Share
   = render_pagination(@galleries, {:controller => "galleries", :action => params[:action]})
 
-= render :partial => 'shared/sharing_box'
+= render :partial => 'sharing_box'
 
 - content_for :js do
   = javascript_tag do

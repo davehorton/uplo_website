@@ -50,7 +50,7 @@ class ImagesController < ApplicationController
       images = gallery.images.un_flagged.load_images(@filtered_params)
 
       image.destroy
-      pagination = render_to_string :partial => 'shared/pagination',
+      pagination = render_to_string :partial => 'pagination',
         :locals => {  :source => images, :params => { :controller => 'galleries',
           :action => 'edit_images', :gallery_id => gallery.id }, :classes => 'text left' }
       items = render_to_string :partial => 'galleries/edit_photos',
@@ -115,7 +115,7 @@ class ImagesController < ApplicationController
       current_user.update_attribute(:photo_processing , true)
       gallery = Gallery.find_by_id params[:gallery_id]
       images = gallery.images.un_flagged.load_images(@filtered_params)
-      pagination = render_to_string :partial => 'shared/pagination',
+      pagination = render_to_string :partial => 'pagination',
         :locals => {
           :source => images,
           :params => {
@@ -336,7 +336,7 @@ class ImagesController < ApplicationController
 
     gallery = Gallery.find_by_id params[:gallery_id].to_i
     images = gallery.images.un_flagged_processing.load_images(@filtered_params)
-    pagination = render_to_string :partial => 'shared/pagination',
+    pagination = render_to_string :partial => 'pagination',
       :locals => {  :source => images, :params => { :controller => 'galleries',
         :action => 'edit_images', :gallery_id => gallery.id }, :classes => 'text left' }
     items = render_to_string :partial => 'galleries/edit_photos',
@@ -459,7 +459,7 @@ class ImagesController < ApplicationController
       if is_mobile_device? && params[:action]=='public' && (params[:web_default].nil? || params[:web_default]==false)
         @type = 'image'
         @id = params[:id]
-        return render :template => 'shared/device_request', :layout => nil
+        return render :template => 'device_request', :layout => nil
       else
         request.formats.unshift Mime::HTML
       end

@@ -290,7 +290,7 @@ class Api::ImagesController < Api::BaseController
       return render :template => "images/sale_chart.html.haml", :layout => "blank"
     else
       @monthly_sales = image.get_monthly_sales_over_year(Time.now, {:report_by => Image::SALE_REPORT_TYPE[:quantity]})
-      return render :file => "shared/sale_chart.html.haml", :layout => false
+      return render :file => "sale_chart.html.haml", :layout => false
     end
   end
 

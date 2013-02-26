@@ -7,4 +7,4 @@
   #endless-pages.left
     = render :partial => 'users/followers_template', :locals => { :users => @followers, :users_per_line => 2, :type => 'follower' }
 
-= render :partial => 'shared/hidden_pagination', :locals => { :data_source => @followers, :params => { :controller => 'profiles', :action => 'get_followers' } }
+= render :partial => 'hidden_pagination', :locals => { :data_source => @followers, :params => { :controller => 'profiles', :action => 'get_followers' } }

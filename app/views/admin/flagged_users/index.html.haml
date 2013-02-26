@@ -69,7 +69,7 @@
 
     = render_pagination(@users)
 
-    = render(:partial => 'shared/delete_confirm',
+    = render(:partial => 'delete_confirm',
         :layout => 'layouts/popup',
         :locals => { :title => 'Confirm', :id => 'flagged-users-confirm-popup',
         :text => t('admin.reinstate_user_confirm')})

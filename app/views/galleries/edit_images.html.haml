@@ -20,7 +20,7 @@
 .wrapper.left
   .right
     .pagination-panel.left
-      = render :partial => 'shared/pagination', :locals => { :source => @images, :params => { :controller => 'galleries', :action => 'edit_images', :gallery_id => @gallery.id }, :classes => 'text left' }
+      = render :partial => 'pagination', :locals => { :source => @images, :params => { :controller => 'galleries', :action => 'edit_images', :gallery_id => @gallery.id }, :classes => 'text left' }
     .button.save-grid-changes.left
   .line-separator.left
   #images-panel.container.left
@@ -30,11 +30,11 @@
       = render :partial => 'edit_photos', :locals => { :images => @images }
   .right
     .pagination-panel.left
-      = render :partial => 'shared/pagination', :locals => { :source => @images, :params => { :controller => 'galleries', :action => 'edit_images', :gallery_id => @gallery.id }, :classes => 'text left' }
+      = render :partial => 'pagination', :locals => { :source => @images, :params => { :controller => 'galleries', :action => 'edit_images', :gallery_id => @gallery.id }, :classes => 'text left' }
     .button.save-grid-changes.left
 
 = render :partial => 'edit_gallery', :layout => 'layouts/popup', :locals => { :title => 'Edit Your Gallery Infomation', :id => 'edit-gallery-popup', :gallery => @gallery }
-= render :partial => 'shared/delete_confirm', :layout => 'layouts/popup', :locals => { :title => 'Delete Confirm', :id => 'delete-confirm-popup', :text => 'Are you sure you want to delete this photo?' }
+= render :partial => 'delete_confirm', :layout => 'layouts/popup', :locals => { :title => 'Delete Confirm', :id => 'delete-confirm-popup', :text => 'Are you sure you want to delete this photo?' }
 = render :partial => 'grid_changes_confirm', :layout => 'layouts/popup', :locals => { :title => 'Save Changes', :id => 'save-confirm-popup' }
 = render :partial => 'pricing', :layout => 'layouts/bubble', :locals => { :id => 'pricing-form' }
 

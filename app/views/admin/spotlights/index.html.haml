@@ -11,7 +11,7 @@
     - else
       %h1.left.title= "#{t('admin.spotlights')} / #{t("admin.search")}"
     .right
-      = render(:partial => "shared/admin_search_box", :locals => {:action => search_admin_spotlights_path})
+      = render(:partial => "admin_search_box", :locals => {:action => search_admin_spotlights_path})
       #search-options
         %span.sort-direction{'data-sort-direction' => 'asc', :class => current_sort_direction('asc', @sort_direction)}
           = "A-Z"
@@ -67,7 +67,7 @@
 
     #promote-confirm-popup-container{'data-promote-confirm' => t("admin.promote_confirm"),
       'data-demote-confirm' => t("admin.demote_confirm") }
-      = render(:partial => 'shared/delete_confirm',
+      = render(:partial => 'delete_confirm',
         :layout => 'layouts/popup',
         :locals => { :title => 'Confirm', :id => 'promote-confirm-popup',
         :text => t("admin.promote_confirm") })

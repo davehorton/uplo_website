@@ -52,7 +52,7 @@
           %a{ :href => "#{url}" }
             = image_tag image.url(:small), :class => 'image small left'
 - if !@image.is_flagged?
-  = render :partial => 'shared/sharing_box'
+  = render :partial => 'sharing_box'
 
 .sections
   - if can_promote
@@ -107,10 +107,10 @@
   .clear
 
 - if !@is_owner
-  = render :partial => 'shared/flag_form', :layout => 'layouts/popup', :locals => { :title => 'Flag for Review', :id => "flag_form"}
+  = render :partial => 'flag_form', :layout => 'layouts/popup', :locals => { :title => 'Flag for Review', :id => "flag_form"}
 
 - if can_promote
-  = render(:partial => 'shared/delete_confirm',
+  = render(:partial => 'delete_confirm',
       :layout => 'layouts/popup',
       :locals => { :title => 'Confirm', :id => 'promote-confirm-popup',
       :text => t("admin.promote_confirm") })

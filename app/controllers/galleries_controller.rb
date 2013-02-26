@@ -103,7 +103,7 @@ class GalleriesController < ApplicationController
     if !@gallery.nil?
       @images = @gallery.images.un_flagged_processing.load_images(@filtered_params)
       if request.xhr?
-        pagination = render_to_string :partial => 'shared/pagination',
+        pagination = render_to_string :partial => 'pagination',
           :locals => {  :source => @images, :params => { :controller => "galleries",
           :action => 'edit_images', :gallery_id => @gallery.id }, :classes => 'text left' }
         items = render_to_string :partial => 'galleries/edit_photos',
@@ -192,7 +192,7 @@ class GalleriesController < ApplicationController
       if is_mobile_device? && params[:action]=='public' && (params[:web_default].nil? || params[:web_default]==false)
         @type = 'gallery'
         @id = params[:gallery_id]
-        return render :template => 'shared/device_request', :layout => nil
+        return render :template => 'device_request', :layout => nil
       else
         request.formats.unshift Mime::HTML
       end
