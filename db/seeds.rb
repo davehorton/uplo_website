@@ -1,14 +1,16 @@
 # This file should contain all the record creation needed to seed the database with its default values.
 # The data can then be loaded with the rake db:seed (or created alongside the db with db:setup).
 
-admin = User.new
-admin.assign_attributes({
+puts "Creating seed data..."
+
+puts "Admin login: admin/secret"
+admin = User.new({
   :email => "admin@uplo.com",
   :username => "admin",
   :last_name => "Admin",
   :first_name => "Super",
-  :password => "123456",
-  :password_confirmation => "123456",
+  :password => "secret",
+  :password_confirmation => "secret",
   :confirmation_token => nil,
   :confirmed_at => Time.now.advance(:hours => -1), #bypass email confirmation
   :confirmation_sent_at => Time.now.advance(:days => - 1, :hours => -1), #bypass email confirmation,
@@ -18,44 +20,29 @@ admin.assign_attributes({
 admin.skip_confirmation!
 admin.save!
 
-# Users
-user = User.new({
-  :email => "user@uplo.com",
-  :username => "user",
-  :last_name => "User",
-  :first_name => "Sample",
-  :password => "123456",
-  :password_confirmation => "123456",
-  :confirmation_token => nil,
-  :confirmed_at => Time.now.advance(:hours => -1), #bypass email confirmation
-  :confirmation_sent_at => Time.now.advance(:days => - 1, :hours => -1) #bypass email confirmation
-})
-user.skip_confirmation!
-user.save!
-
-50.times do |counter|
-  begin
-    user = User.new({
-      :email => Faker::Internet.email,
-      :username => Faker::Internet.user_name,
-      :last_name =>  Faker::Name.last_name,
-      :first_name =>  Faker::Name.first_name,
-      :password => "123456",
-      :password_confirmation => "123456",
-      :confirmation_token => nil,
-      :confirmed_at => Time.now, #bypass email confirmation
-      :confirmation_sent_at => Time.now #bypass email confirmation,
-    })
-    user.skip_confirmation!
-    user.save!
-  rescue Exception
-  end
+puts 'Creating 10 users...'
+10.times do |counter|
+  user = User.new({
+    :email => Faker::Internet.email,
+    :username => Faker::Internet.user_name,
+    :last_name =>  Faker::Name.last_name,
+    :first_name =>  Faker::Name.first_name,
+    :password => "secret",
+    :password_confirmation => "secret",
+    :confirmation_token => nil,
+    :confirmed_at => Time.now, #bypass email confirmation
+    :confirmation_sent_at => Time.now #bypass email confirmation,
+  }, :as => :admin)
+  user.skip_confirmation!
+  user.save!
 end
 
-# Galleries
+user = User.where(is_admin: false).first
+puts "First non-admin user login: #{user.username}/secret"
+
+puts 'Creating galleries...'
 galleries = []
-user = User.first
-20.times do |counter|
+10.times do |counter|
   galleries << Gallery.create!({
     :name => Faker::Name.name,
     :user => user,
@@ -64,14 +51,11 @@ user = User.first
   })
 end
 
-# Images
-# Run: "rake db:seed with_sample_image=true" to run this step
-if ENV["with_sample_image"]
-  gallery = galleries.first
-  40.times do |counter|
-    img = gallery.images.create!({
-      :name => Faker::Lorem.words,
-      :data => File.open(Dir.glob(File.join(Rails.root, 'public/assets', 'gallery-thumb.jpg')).sample)
-    })
-  end
+puts 'Creating gallery images...'
+gallery = galleries.first
+10.times do |counter|
+  img = gallery.images.create!({
+    name: Faker::Lorem.words,
+    image: File.open("#{Rails.root}/spec/fixtures/assets/photo.jpg")
+  })
 end
