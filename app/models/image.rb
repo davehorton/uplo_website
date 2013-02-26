@@ -164,22 +164,15 @@ class Image < ActiveRecord::Base
 
   # Paperclip
   has_attached_file :data,
-    :styles => lambda { |attachment| attachment.instance.available_styles || {}},
-    :storage => :s3,
-    :s3_credentials => "#{Rails.root}/config/amazon_s3.yml",
-    :s3_permissions => :private,
-    :s3_headers => { 'Cache-Control' => 'max-age=315576000', 'Expires' => 10.years.from_now.httpdate },
-    :path => "image/:id/:style.:extension",
-    #:default_url => "/assets/image-default-:style.jpg"
-    :default_url => "/assets/gallery-thumb.jpg"
+    styles: lambda { |attachment| attachment.instance.available_styles || {}},
+    path: "image/:id/:style.:extension",
+    default_url: "/assets/gallery-thumb.jpg"
 
   validates_attachment :data, :presence => true,
     :size => { :in => 0..100.megabytes, :message => 'File size cannot exceed 100MB' },
     :content_type => { :content_type => [ 'image/jpeg','image/jpg'],
     :message => 'File type must be one of [.jpeg, .jpg]' }, :on => :create
   validate :validate_quality, :on => :create
-
-  process_in_background :data
 
   # CALLBACK
   before_post_process :init_image_info

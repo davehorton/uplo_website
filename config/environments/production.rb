@@ -79,4 +79,12 @@ Uplo::Application.configure do
     :password       => ENV['SENDGRID_PASSWORD'],
     :domain         => 'heroku.com'
   }
+
+  config.paperclip_defaults = {
+    :storage => :s3,
+    :s3_credentials => "#{Rails.root}/config/amazon_s3.yml",
+    :s3_permissions => :private,
+    :s3_headers => { 'Cache-Control' => 'max-age=315576000', 'Expires' => 10.years.from_now.httpdate },
+    :s3_protocol => ''
+  }
 end

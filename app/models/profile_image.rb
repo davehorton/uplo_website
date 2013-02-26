@@ -22,14 +22,14 @@ class ProfileImage < ActiveRecord::Base
 
   # Paperclip
   has_attached_file :data,
-    :styles => {:thumb => '180x180#', :extra => '96x96#', :large => '67x67#',
-      :medium => '48x48#', :small => '24x24#' },
-    :storage => :s3,
-    :s3_credentials => "#{Rails.root}/config/amazon_s3.yml",
-    :s3_permissions => :private,
-    :s3_headers => { 'Cache-Control' => 'max-age=315576000', 'Expires' => 10.years.from_now.httpdate },
-    :path => "avatar/:id/:style.:extension",
-    :default_url => "/assets/avatar-default-:style.jpg"
+    styles: { thumb:  '180x180#',
+              extra:  '96x96#',
+              large:  '67x67#',
+              medium: '48x48#',
+              small:  '24x24#' },
+    path: "avatar/:id/:style.:extension",
+    default_url: "/assets/avatar-default-:style.jpg"
+
   validates_attachment :data, :presence => true,
     :size => { :in => 0..10.megabytes, :message => 'File size cannot exceed 10MB' },
     :content_type => { :content_type => [ 'image/jpeg','image/jpg'],
