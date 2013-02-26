@@ -4,4 +4,4 @@
 # If you change this key, all old signed cookies will become invalid!
 # Make sure the secret is at least 30 characters and all random,
 # no regular words or you'll be exposed to dictionary attacks.
-Uplo::Application.config.secret_token = '8d9da781267a21684702f08d5f765240462b2a99c2649c80e0ad3bcf5aa579b4988def7cebd09fc9b3a04f0b6a8950de537621ac2de972229caf153d56efe374'
+Uplo::Application.config.secret_token = 'c667cc85f53eeb9355edee931997f68f59d626fa9413348169041c476935a336ce0c0c46a99ef2416d848f02052e605768aacf5481315630ae6e55230db9aa51'
