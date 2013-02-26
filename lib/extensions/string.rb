@@ -1,6 +1,6 @@
 # RemoveAccents version 1.0.3 (c) 2008-2009 Solutions Informatiques Techniconseils inc.
-# 
-# This module adds 2 methods to the string class. 
+#
+# This module adds 2 methods to the string class.
 # Up-to-date version and documentation available at:
 #
 # http://www.techniconseils.ca/en/scripts-remove-accents-ruby.php
@@ -23,7 +23,7 @@
 #
 
 class String
-  # The extended characters map used by removeaccents. The accented characters 
+  # The extended characters map used by removeaccents. The accented characters
   # are coded here using their numerical equivalent to sidestep encoding issues.
   # These correspond to ISO-8859-1 encoding.
   ACCENTS_MAPPING = {
@@ -48,21 +48,21 @@ class String
     'OE' => [188],
     'oe' => [189]
   }
-  
-  
+
+
   # Remove the accents from the string. Uses String::ACCENTS_MAPPING as the source map.
-  def removeaccents    
+  def removeaccents
     str = String.new(self)
     String::ACCENTS_MAPPING.each {|letter,accents|
       packed = accents.pack('U*')
       rxp = Regexp.new("[#{packed}]", nil, 'U')
       str.gsub!(rxp, letter)
     }
-    
+
     str
   end
-  
-  
+
+
   # Convert a string to a format suitable for a URL without ever using escaped characters.
   # It calls strip, removeaccents, downcase (optional) then removes the spaces (optional)
   # and finally removes any characters matching the default regexp (/[^-_A-Za-z0-9]/).
@@ -76,7 +76,7 @@ class String
     options[:downcase] ||= true
     options[:convert_spaces] ||= false
     options[:regexp] ||= /[^-_A-Za-z0-9]/
-    
+
     str = self.strip.removeaccents
     str.downcase! if options[:downcase]
     str.gsub!(/\ /,'_') if options[:convert_spaces]
