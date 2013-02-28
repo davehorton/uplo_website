@@ -1,7 +1,3 @@
-- content_for :head do
-  = stylesheet_link_tag("scss/search.css")
-
-
 - if @users.count == 0
   = "There is no result for Gallery owners with \"#{params[:query]}\""
 
@@ -22,6 +18,3 @@
 
   %div{:style=>"clear:both;"}
   .section= render_pagination(@users, {:controller => params[:controller], :action => params[:action]})
-    
-    
-= javascript_include_tag "lib/blueimp/tmpl.min.js"

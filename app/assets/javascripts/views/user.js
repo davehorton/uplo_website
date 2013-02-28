@@ -1,5 +1,10 @@
-user = {
+var user = {
   setup_datepicker: function(){
-    $(".datepicker").datepicker({altFormat: global.date_format, dateFormat: global.date_format});
+    var format = "mm/dd/yy";
+
+    $(".datepicker").datepicker({
+      altFormat: format,
+      dateFormat: format
+    });
   }
 }

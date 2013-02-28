@@ -7,7 +7,10 @@
     %meta{ :charset => "utf-8" }
     %meta{:name => "title", :content => title}
     %meta{:name => "viewport", :content => "width=device-width,user-scalable=false,initial-scale=1, maximum-scale=1"}
-    = stylesheet_link_tag 'scss/application.mobile.css'
+    = csrf_meta_tags
+    = stylesheet_link_tag 'mobile'
+    = javascript_include_tag 'application'
+
   %body{:style => "background:white"}
     #header
       .wrapper{:style => "width:100%; text-align:center"}

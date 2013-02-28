@@ -1,4 +1,4 @@
-gallery = {
+var gallery = {
   setup: function(){
     helper.setup_async_image_tag("img.image-thumb");
     helper.setup_async_image_tag("img.gallery-cover-image");

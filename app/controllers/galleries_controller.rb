@@ -192,7 +192,7 @@ class GalleriesController < ApplicationController
       if is_mobile_device? && params[:action]=='public' && (params[:web_default].nil? || params[:web_default]==false)
         @type = 'gallery'
         @id = params[:gallery_id]
-        return render :template => 'device_request', :layout => nil
+        return render :template => 'device_requests/show', :layout => nil
       else
         request.formats.unshift Mime::HTML
       end

@@ -1,8 +1,7 @@
-sales = {
+var sales = {
   chart: null,
   chart_data: null,
   setup: function(){
-    // See: http://www.highcharts.com/ref, http://www.highcharts.com/demo
     sales.chart_data = {
       categories: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
       series: [
@@ -13,7 +12,7 @@ sales = {
         {name: "Image 5", data: [130, 150, 140, 145, 160, 165]}
       ]
     };
-    
+
     sales.chart = new Highcharts.Chart({
       chart: {
         renderTo: 'daily-sales-chart-container',

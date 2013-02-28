@@ -1,12 +1,7 @@
 - can_promote = can_promote_image?(@image)
 
 - content_for :head do
-  = stylesheet_link_tag('scss/new_image.css', 'scss/sale.css')
-  = javascript_include_tag('app/image_util.js')
-
-  - if can_promote
-    = javascript_include_tag("app/admin/spotlights.js")
-    = javascript_include_tag('lib/jquery.url.js')
+  = javascript_include_tag("admin") if can_promote
 
 - content_for :right_content do
   .text.black.font18.bold= @image.name
@@ -116,7 +111,7 @@
       :text => t("admin.promote_confirm") })
 
 - content_for :js do
-  = javascript_include_tag('http://platform.tumblr.com/v1/share.js', 'lib/jquery.inputHintOverlay.js', 'app/image.js')
+  = javascript_include_tag('http://platform.tumblr.com/v1/share.js')
   = javascript_tag do
     :erb
       $(document).ready(function(){

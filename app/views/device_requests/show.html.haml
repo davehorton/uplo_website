@@ -1,0 +1,28 @@
+!!!
+
+%html
+  %head
+    - title = "UPLO #{yield(:title)} | #{I18n.t("common.site_title")}"
+    %title= title
+    %meta{ :charset => "utf-8" }
+    %meta{:name => "title", :content => title}
+
+    %link(href="#{path_to_image('/favicon.ico')}" type="image/x-icon" rel="shortcut icon")/
+    %link(href="#{path_to_image('/favicon.ico')}" type="image/x-icon" rel="icon")/
+
+    = stylesheet_link_tag 'mobile'
+    = javascript_include_tag 'application'
+    = csrf_meta_tags
+    = yield :head
+    = render(partial: "google/analytics")
+
+  %body
+    = image_tag 'intro-phone-app.jpg'
+    .notice Want to use the app from now on?
+    .clear
+    .btn-container
+      %a.button{:href=>"uplo://type=#{@type}&id=#{@id}"} Yes, use the app!
+      .clear
+      %a.button{:href=>"#{ url_for(:controller => params[:controller], :action => params[:action], :gallery_id => params[:gallery_id], :web_default => true) }"} I prefer the mobile site
+
+    = yield :js

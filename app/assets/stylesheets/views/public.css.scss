@@ -1,0 +1,73 @@
+/*==================================================================================*/
+/* CONSTANT */
+/*==================================================================================*/
+$color-black: #111111;
+$color-gray: #606060;
+$fuzzy-text: #CBCBCB;
+
+/*==================================================================================*/
+/* ID */
+/*==================================================================================*/
+#top {
+  margin-top: 85px;
+}
+#center {
+  width: 652px;
+  .images-wrapper {
+    margin: -3px 0;
+  }
+  .image-container.medium {
+    height: 482px;
+    line-height: 480px;
+    border: 1px solid $fuzzy-text;
+    img { height:482px; }
+  }
+}
+#right {
+  #image-section, #gallery-section {
+    margin: 10px 0;
+  }
+  #author-section {
+    width: 100%;
+    .info {
+      margin: 6px 0 6px 10px;
+    }
+  }
+  #author-biography {
+    margin-top: 10px;
+  }
+  #logo {
+    margin-bottom: 10px;
+  }
+  #app-advertise {
+    background: image-url('bg-public-ad.jpg') repeat-x;
+    height: 203px;
+    width: 100%;
+    margin-top: 30px;
+    #download-app {
+      margin: 9px auto 0;
+      background: image-url('btn-dowload-app.png') no-repeat;
+      height: 32px;
+      width: 222px;
+    }
+    .app-image {
+      margin: 4px auto 0;
+      background: image-url('advertise-devices.png') no-repeat;
+      width: 155px;
+      height: 150px;
+    }
+  }
+}
+#bottom {
+  margin: 0;
+}
+
+/*==================================================================================*/
+/* CLASS */
+/*==================================================================================*/
+.buttons-container {
+  margin-top: 10px;
+}
+.pagination {
+  padding-top: 10px;
+}

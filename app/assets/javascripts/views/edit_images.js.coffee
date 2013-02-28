@@ -85,7 +85,7 @@ saveGridChanges = (callback) ->
   $.ajax({
     url: '/images/update_images',
     type: 'POST',
-    data: { images: $.toJSON(data), gallery_id: $('#gallery_selector_id').val() },
+    data: { images: $.parseJSON(data), gallery_id: $('#gallery_selector_id').val() },
     dataType: 'json',
     success: (response) ->
       $('#images-panel').html response.items
@@ -95,7 +95,7 @@ saveGridChanges = (callback) ->
       helper.show_notification("Update successfully!")
       callback.call() if callback
       window.is_grid_changed = false
-    error: -> 
+    error: ->
       helper.show_notification("Fail to update!")
     complete: ->
       $.modal.close()
@@ -228,7 +228,6 @@ $ ->
     select: (e, obj)->
       confirmChanges -> window.location = obj.value
   })
-
 
   $('#gallery_selector_id').change ->
     confirmChanges ->

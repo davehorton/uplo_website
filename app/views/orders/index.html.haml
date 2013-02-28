@@ -1,8 +1,3 @@
-- content_for :head do
-  = stylesheet_link_tag("scss/cart_new.css")
-  = stylesheet_link_tag("tip-yellow/tip-yellow.css")
-
-
 - content_for :top_content do
   .text.black.bold.font16.left Checkout - Step 2 of 2
   .line-separator.left
@@ -188,4 +183,3 @@
         $('#shipping-address .edit a').click();
       <% end %>
       var regions_tax = <%= Order::REGION_TAX.to_json %>;
-  = javascript_include_tag 'app/order.js', 'app/form_validation.js'

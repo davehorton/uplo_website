@@ -1,6 +1,3 @@
-- content_for :head do
-  = stylesheet_link_tag("scss/cart.css")
-
 .solidBlock.round-box
   = simple_form_for(:card, :url => "/payments/checkout?type=an", :html => {:class => "card_form"}) do |f|
     .order_summary.round-box{:style => "height:120px;"}
@@ -13,7 +10,7 @@
         = f.label :expires_on, 'Expiration date'
         = f.date_select :expires_on, :discard_day => true, :start_year => Date.today.year, :end_year => (Date.today.year+10), :add_month_numbers => false, :order => [:month, :year], :required => true
         = hidden_field_tag :order_id, @order_id
-        
+
     .order_summary.round-box{:style => "height:388px;"}
       .header Please submit the shipping address
       .inputs
@@ -47,11 +44,11 @@
         .info
           = label_tag :shipping_fax, "Fax"
           = text_field :shipping, :fax
-          
+
     .submit.clearfix
       = f.submit "place order", :class => 'btnlarge btn', :style => 'float:right'
 
-:javascript  
+:javascript
   $("#shipping_phone").keypress(function (event) {
     if (!event.charCode) return true;
     var reg = /^\d*$/;

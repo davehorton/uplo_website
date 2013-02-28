@@ -1,5 +1,4 @@
 class Admin::InvitesController < Admin::AdminController
-
   def index
     # @inv_requests = Invitation.load_invitations(@filtered_params)
     @inv_requests = Invitation.where('invited_at is null').load_invitations(@filtered_params)

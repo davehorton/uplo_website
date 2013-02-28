@@ -7,13 +7,13 @@ class Admin::SpotlightsController < Admin::AdminController
       :sort_direction => @sort_direction
     ))
   end
-  
+
   def search
     search_params = {:query => URI.unescape(params[:admin_query]), :filtered_params => filtered_params}
     @images = Image.do_search_public_images(search_params)
     render 'admin/spotlights/index'
   end
-  
+
   # POST: /admin/spotlights/:id/promote
   # Ajax method.
   def promote
@@ -25,7 +25,7 @@ class Admin::SpotlightsController < Admin::AdminController
         # Unpromote this image
         method = :demote
       end
-      
+
       if image.send(method)
         result[:status] = 'ok'
         result[:message] = I18n.t("admin.notice_#{method}_succeeded")
@@ -37,16 +37,16 @@ class Admin::SpotlightsController < Admin::AdminController
       result[:status] = 'error'
       result[:message] = I18n.t("admin.error_image_not_found")
     end
-    
+
     render(:json => result)
   end
-  
+
   protected
-    
+
     def default_page_size
       return 12
     end
-    
+
     def set_current_tab
       @current_tab = "spotlights"
     end

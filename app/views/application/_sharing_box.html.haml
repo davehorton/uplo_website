@@ -1,7 +1,7 @@
 - name = ''
 - owner_name = ''
 - id = 0
-- url = "/assets/gallery-thumb-180.jpg"
+- url = "gallery-thumb-180.jpg"
 - if @image
   - name = @image.name.truncate(20)
   - owner_name = @image.username.truncate(15)
@@ -32,7 +32,7 @@
 #social-sharing-popup.left.hide.sharing-popup
   .header.left
     .left.buttons-container
-      
+
     .text.bold.left Share Via Social Network
     %a.close{:href=>'#', :onclick => "$('#social-sharing').hasClass('hide'); return false;"}
       .right &times;

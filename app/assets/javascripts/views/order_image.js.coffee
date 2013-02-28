@@ -1,5 +1,3 @@
-#= require 'app/image_util.js'
-
 computePrice = ->
   size = $('#line_item_size').val()
   moulding = $('#line_item_moulding').val()

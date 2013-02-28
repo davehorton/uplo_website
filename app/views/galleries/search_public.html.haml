@@ -1,6 +1,3 @@
-- content_for :head do
-  = stylesheet_link_tag("scss/search.css")
-
 - if @galleries.count == 0
   = "There is no result for Galleries with \"#{params[:query]}\""
 - else
@@ -21,6 +18,3 @@
 
   %div{:style=>"clear:both;"}
   .section= render_pagination(@galleries, {:controller => params[:controller], :action => params[:action]})
-  
-  
-= javascript_include_tag "lib/blueimp/tmpl.min.js"

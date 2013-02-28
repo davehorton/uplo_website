@@ -1,6 +1,3 @@
-- content_for :head do
-  = stylesheet_link_tag("scss/cart_new.css", "scss/new_image.css")
-
 - content_for :top_content do
   .text.black.bold.font16{ :style => 'margin-bottom:8px;' }= @image.name
 
@@ -57,4 +54,3 @@
       var moulding_pending = <%= Image::PENDING_MOULDING.to_json %>;
       var moulding_constrain = <%= Image::MOULDING_SIZES_CONSTRAIN.to_json %>;
       var moulding_price = <%= Image::MOULDING_PRICES.to_json %>;
-  = javascript_include_tag 'app/order_image.js'

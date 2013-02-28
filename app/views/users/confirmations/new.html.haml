@@ -1,10 +1,10 @@
 - flash[:error] = resource.errors.full_messages.to_sentence
 :css
 	#resend_email_container {
-		color:white; 
-		margin:0 auto; 
-		background:black; 
-		width:440px; 
+		color:white;
+		margin:0 auto;
+		background:black;
+		width:440px;
 		height:278px;
 	}
 	.wrapper_content{
@@ -17,8 +17,8 @@
 	}
 
 	.notice{
-		line-height:130%; 
-		margin-top:15px; 
+		line-height:130%;
+		margin-top:15px;
 		margin-bottom:17px;
 	}
 
@@ -27,7 +27,7 @@
 	}
 
 	.bottom_text{
-		margin-top:30px; 
+		margin-top:30px;
 		color:#898989;
 	}
 
@@ -45,12 +45,12 @@
 				%br.clear
 				.inputs
 					= f.input_field :email, :required => true, :style => "width:268px; margin-right:5px;"
-					= f.button :submit, :type => :image, :src => "/assets/btn-submit.png"
+					= f.button :submit, :type => :image, :src => "btn-submit.png"
 				.inputs{:style => "color:red"}
 					= f.full_error :email
 			%br.clear
-			.bottom_text.left.bold.font12.text{:style => "margin-right:30px; color:#898989;"} 
-				Already a member? 
+			.bottom_text.left.bold.font12.text{:style => "margin-right:30px; color:#898989;"}
+				Already a member?
 				%a{:href => "/#member", :style => "color:#ee3c03;"}
 					Login
 			.bottom_text.left.bold.font12.text{:style => "color:#898989;"}

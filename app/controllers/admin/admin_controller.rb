@@ -1,14 +1,13 @@
 class Admin::AdminController < ApplicationController
-  layout "main"
-  
   before_filter :authenticate_admin_user!
-  
+  layout "admin"
+
   def index
     redirect_to '/admin/flagged_images'
   end
-  
+
   protected
-  
+
   # TODO: should define authorization in Cancan Ability.
   def authenticate_admin_user!
     authenticate_user!
@@ -17,9 +16,9 @@ class Admin::AdminController < ApplicationController
       raise CanCan::AccessDenied
     end
   end
-  
+
   def set_current_tab
     @current_tab = "flagged_images"
   end
-  
+
 end

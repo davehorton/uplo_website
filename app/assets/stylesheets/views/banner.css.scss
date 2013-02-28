@@ -1,0 +1,117 @@
+/*==================================================================================*/
+/* CONSTANT */
+/*==================================================================================*/
+$fuzzy-text: #CBCBCB;
+$normal-text: #5A5A5A;
+$bold-text: #000000;
+
+/*==================================================================================*/
+/* CLASS */
+/*==================================================================================*/
+.main {
+  .banner {
+    color: #FFFFFF !important;
+    position: relative;
+    top: 0;
+    left: 0;
+    width: 100%;
+    .info {
+      word-wrap: break-word;
+      text-align: left;
+      line-height: 24.4px;
+      font-size: 16px;
+    }
+  }
+  &.the-app {
+    height: 475px;
+    .banner {
+      background: image-url("bg-banner-the-app.png") repeat-x scroll center left transparent;
+      height: 462px;
+      .wrapper {
+        background: image-url("bg-banner-the-app.png") repeat-x scroll center left transparent;
+      }
+      .left {
+        width: 500px;
+        margin-top: 50px;
+        ul {
+          margin-top: 7px;
+          li {
+            padding: 1px 0;
+          }
+        }
+        .check {
+          background: image-url("banner-check.png") no-repeat scroll center left transparent;
+          height: 20px;
+          padding-left: 18px;
+        }
+        .info {
+          height: 152px;
+          margin: 30px 0;
+        }
+      }
+      .right {
+        background: image-url("img-banner-devices-the-app.png") no-repeat scroll center left transparent;
+        height: 418px;
+        width: 431px;
+        margin-top: 10px;
+      }
+    }
+  }
+  &.spotlight {
+    height: 386px;
+    .banner {
+      background: image-url("bg-banner-spotlight.png") repeat-x scroll center left transparent;
+      height: 389px;
+      .wrapper {
+        background: image-url("bg-banner-spotlight.png") repeat-x scroll center left transparent;
+      }
+      .left {
+        width: 435px;
+        margin-top: 65px;
+        .info {
+          margin: 20px 0;
+        }
+        .logo {
+          background: image-url("logo-uplo-banner.png") no-repeat scroll center left transparent;
+          width: 157px;
+          height: 44px;
+          margin-bottom: 10px;
+        }
+      }
+      .right {
+        background: image-url("img-banner-devices-spotlight.png") no-repeat scroll center left transparent;
+        height: 316px;
+        width: 525px;
+        margin-top: 50px;
+      }
+    }
+  }
+}
+
+#right {
+  width: 234px;
+}
+
+#banner {
+  /*.wrapper {
+    height: 100%;
+  }*/
+  .sub {
+    background: image-url("bg-sub-banner.png") repeat-x scroll center left transparent;
+    height: 149px;
+    .wrapper {
+      background: image-url("bg-sub-banner.png") repeat-x scroll center left transparent;
+    }
+    .devider {
+      padding: 20px 34px;
+    }
+    .info {
+      width: 273px;
+      margin: 20px 0px;
+      word-spacing: -1px;
+      .description {
+        margin: 5px 0px 12px 0px;
+      }
+    }
+  }
+}

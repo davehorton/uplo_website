@@ -1,5 +1,3 @@
-- content_for :head do
-  = stylesheet_link_tag('scss/user.css')
 .account
   .header.font16.bold.text My Account
   .line-separator
@@ -31,7 +29,6 @@
 = render :partial => '/orders/cvv_form', :layout => 'layouts/bubble', :locals => { :id => 'cvv-form' }
 
 - content_for :js do
-  = javascript_include_tag 'app/my_account.js'
   = javascript_tag do
     :erb
       function reloadEvent(){
@@ -46,7 +43,7 @@
           $(this).closest('.account_wrapper').find('.yield_edit').hide(100);
           $(this).closest('.account_wrapper').find('.yield_info').show(100);
         });
-   
+
         $('.update_button').livequery('click', function(){
           $(this).closest('form').submit();
         });
@@ -99,9 +96,9 @@
             helper.show_notification(errorText);
           });
 
-        
+
       }
-      
+
       $(document).ready(function(){
-        reloadEvent();       
+        reloadEvent();
       });

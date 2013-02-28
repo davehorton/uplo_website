@@ -258,7 +258,7 @@ $ ->
             $.modal.close()
             window.setTimeout("$('#edit-profile-info-popup').modal()", 300)
         ,
-        error: -> 
+        error: ->
           helper.show_notification("Something went wrong, can not update your profile")
           $.modal.close()
           window.setTimeout("$('#edit-profile-info-popup').modal()", 300)

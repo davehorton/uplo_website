@@ -2,11 +2,11 @@ class Admin::FlaggedUsersController < Admin::AdminController
   def index
     @users = User.flagged_users.load_users(self.filtered_params)
   end
-  
+
   # TODO: optimize this method
   def reinstate_all
     result = {}
-    
+
     begin
       if User.reinstate_flagged_users
         result[:status] = 'ok'
@@ -24,14 +24,14 @@ class Admin::FlaggedUsersController < Admin::AdminController
       result[:status] = 'error'
       result[:message] = I18n.t("admin.error_reinstate_users_failed")
     end
-    
+
     render(:json => result)
   end
-  
+
   # TODO: optimize this method
   def remove_all
     result = {}
-    
+
     begin
       if User.remove_flagged_users
         result[:status] = 'ok'
@@ -40,7 +40,7 @@ class Admin::FlaggedUsersController < Admin::AdminController
       else
         result[:status] = 'error'
         result[:message] = I18n.t("admin.error_remove_users_failed")
-      end    
+      end
     rescue User::NotReadyForReinstatingError
       result[:status] = 'error'
       result[:message] = I18n.t("admin.error_not_ready_for_removing")
@@ -49,17 +49,17 @@ class Admin::FlaggedUsersController < Admin::AdminController
       result[:status] = 'error'
       result[:message] = I18n.t("admin.error_reinstate_users_failed")
     end
-    
+
     render(:json => result)
   end
-  
+
   # Reinstate all flagged images of a user.
   def reinstate_user
     result = {}
-    
+
     begin
       user = User.find_by_id(params[:id])
-      
+
       if user
         if user.reinstate
           result[:status] = 'ok'
@@ -72,7 +72,7 @@ class Admin::FlaggedUsersController < Admin::AdminController
       else
         result[:status] = 'error'
         result[:message] = I18n.t("admin.error_user_not_found")
-      end      
+      end
     rescue User::NotReadyForReinstatingError
       result[:status] = 'error'
       result[:message] = I18n.t("admin.error_not_ready_for_reinstating")
@@ -81,17 +81,17 @@ class Admin::FlaggedUsersController < Admin::AdminController
       result[:status] = 'error'
       result[:message] = I18n.t("admin.error_reinstate_users_failed")
     end
-    
+
     render(:json => result)
   end
-  
+
   # Remove all flagged images of a user.
   def remove_user
     result = {}
-    
+
     begin
       user = User.find_by_id(params[:id])
-      
+
       if user
         if user.id == current_user.id
           result[:status] = 'error'
@@ -109,7 +109,7 @@ class Admin::FlaggedUsersController < Admin::AdminController
         result[:status] = 'error'
         result[:message] = I18n.t("admin.error_user_not_found")
       end
-    
+
     rescue User::NotReadyForReinstatingError
       result[:status] = 'error'
       result[:message] = I18n.t("admin.error_not_ready_for_removing")
@@ -118,15 +118,15 @@ class Admin::FlaggedUsersController < Admin::AdminController
       result[:status] = 'error'
       result[:message] = I18n.t("admin.error_reinstate_users_failed")
     end
-    
+
     render(:json => result)
   end
-  
+
   protected
     def set_current_tab
       @current_tab = "flagged_users"
     end
-    
+
     def default_page_size
       return 24
     end

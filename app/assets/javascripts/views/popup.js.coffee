@@ -6,7 +6,7 @@ class window.Mask
 
   show: =>
     @htmlElement.classList.add("display")
-    
+
   hide: =>
     @htmlElement.classList.remove("display")
 
@@ -14,15 +14,15 @@ class window.Mask
 class window.Popup
   constructor: (options = {id: "", title:"", text:"", css:{}, buttons:{}}) ->
     @htmlElement = document.createElement("div")
-    @htmlElement.classList.add("popup")    
-    @htmlElement.classList.add("round-box")    
+    @htmlElement.classList.add("popup")
+    @htmlElement.classList.add("round-box")
     @htmlElement.classList.add("blue-gradient-reverse")
-    
+
     if options.id!=null and options.id!=undefined
       @htmlElement.id = options.id
-      
+
     title = document.createElement("div")
-    title.classList.add("title")    
+    title.classList.add("title")
     if options.title==null or options.title==undefined
       title.innerHTML = "&nbsp;"
       title.classList.add("non-text")
@@ -30,7 +30,7 @@ class window.Popup
       title.innerText = options.title
     else
       title.textContent = options.title
-    
+
     content = @initContent(options.text, options.css)
     buttons = @initButtons(options.buttons)
     @htmlElement.appendChild(title)
@@ -45,21 +45,21 @@ class window.Popup
       content.innerText = text
     else
       content.textContent = text
-      
+
     if css==null or css==undefined
       @setPosition()
     else
       @setPosition(css.top, css.left)
       delete(css.top)
       delete(css.left)
-        
+
       tmp = $(content)
       $.each(css, (key, val) ->
         tmp.css(key, val)
       )
-      
+
     return content
-  
+
   initButtons: (buttons) ->
     buttons_pane = document.createElement("div")
     buttons_pane.classList.add("buttons")
@@ -71,7 +71,7 @@ class window.Popup
       buttons_pane.appendChild(btn)
     )
     return buttons_pane
-    
+
   setPosition: (top, left) =>
     elm = $(@htmlElement)
     if top!=null and top!=undefined
@@ -80,24 +80,24 @@ class window.Popup
       top = $("body").height() - $(@htmlElement).height()
       top = top/2
       elm.css("top", top)
-      
+
     if left!=null and left!=undefined
       elm.css("left", left)
     else
       left = $("body").width() - $(@htmlElement).width()
       left = left/2
       elm.css("left", left)
-      
+
   show: =>
     @setPosition()
     @htmlElement.classList.add("display")
     window.mask = new Mask() unless window.mask
     window.mask.show()
-    
+
   hide: =>
     @htmlElement.classList.remove("display")
     window.mask.hide()
-    
+
   close: =>
     $(@htmlElement).remove()
     $(".mask").remove()

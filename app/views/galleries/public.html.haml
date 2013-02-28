@@ -2,8 +2,6 @@
   %meta{:property=>"og:title", :content=>"Shared from UPLO" }
   %meta{:property=>"og:description", :content=>"#{@gallery.description}" }
   %meta{:property=>"og:image", :content=>"#{gallery_cover_image_url(@gallery)}" }
-  = javascript_include_tag("lib/jail.min.js")
-  = javascript_include_tag("app/gallery.js")
 
 - content_for :right_content do
   #gallery-section.left

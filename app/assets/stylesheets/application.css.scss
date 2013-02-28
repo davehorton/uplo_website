@@ -1,0 +1,25 @@
+/*
+ * Global Styles:
+ * are managed in this file
+/*
+
+= require jquery.ui.theme
+= require jquery.ui.selectmenu
+= require jquery.contextMenu
+= require slideshow
+= require tip-yellowsimple
+= require_self
+
+/*
+ * SASS Variables and Mix-ins:
+ * These must be defined above the @import statement(s), or else they will not be available in the other stylesheets
+*/
+
+
+/*
+ * Stylesheet Imports:
+ * These include the styles for the basic site layout, as well as individual views/pages
+*/
+
+@import "layout";
+@import "views/**/*";
