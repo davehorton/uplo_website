@@ -2,6 +2,8 @@
 
 http://uplo.com
 
+Historical note: we inherited this project from another shop in February 2013. We are currently maintaining and trying to get things in reasonable shape.
+
 ## Key Components
 
 * Ruby 1.9.3
