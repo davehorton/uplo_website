@@ -14,21 +14,21 @@
           = image_tag flag.image.author.avatar_url, :width => "24px", :height => "24px"
         .user_info.left
           .first_line
-            By 
+            By
             %a.text.black.font12.normal{ :href => "#{url_for(:controller => '/profiles', :action => 'show', :user_id => flag.image.author.id)}"}
               = flag.image.author.username
-      
+
           %pr.second_line.font11.text
             = flag.image.author.fullname
             &nbsp;&nbsp;•&nbsp;&nbsp;
             = pluralize(flag.image.author.images.un_flagged.count, "item")
         .clear
-            
+
       %hr
       .flag_user_wrapper
         .flag_info.font12
           Flagged
-          = flag.created_at.strftime("%m/%d/%y") 
+          = flag.created_at.strftime("%m/%d/%y")
           by
           %a.text.black.font12.normal{:href => "#{url_for(:controller => '/profiles', :action => 'show', :user_id => flag.reporter.id)}"}
             = flag.reporter.username
@@ -36,7 +36,7 @@
           = (flag.flag_type == 1 ? "Terms of Use Violation" : (flag.flag_type == 2 ? "Copyright" : "Nudity"))
         %p.flag_description.wordwrap= flag.description
       %hr
-      
+
       %br
       .button_area
         = button_to '', {:action => :reinstate_image, :image_id => flag.image.id}, method: :post, :confirm => 'Are you sure you want to reinstate this image?', :class=> "button reinstate_large left"
