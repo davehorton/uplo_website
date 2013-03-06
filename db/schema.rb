@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130226045024) do
+ActiveRecord::Schema.define(:version => 20130306004206) do
 
   create_table "addresses", :force => true do |t|
     t.string   "first_name"
@@ -54,6 +54,8 @@ ActiveRecord::Schema.define(:version => 20130226045024) do
     t.integer  "permission",  :default => 1
   end
 
+  add_index "galleries", ["user_id"], :name => "index_galleries_on_user_id"
+
   create_table "image_flags", :force => true do |t|
     t.integer  "image_id",    :null => false
     t.integer  "reported_by", :null => false
@@ -63,6 +65,8 @@ ActiveRecord::Schema.define(:version => 20130226045024) do
     t.datetime "updated_at",  :null => false
   end
 
+  add_index "image_flags", ["image_id"], :name => "index_image_flags_on_image_id"
+
   create_table "image_likes", :force => true do |t|
     t.integer  "image_id",   :null => false
     t.integer  "user_id",    :null => false
@@ -70,12 +74,16 @@ ActiveRecord::Schema.define(:version => 20130226045024) do
     t.datetime "updated_at", :null => false
   end
 
+  add_index "image_likes", ["image_id"], :name => "index_image_likes_on_image_id"
+
   create_table "image_tags", :force => true do |t|
     t.integer  "image_id",   :null => false
     t.integer  "tag_id",     :null => false
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
   end
+
+  add_index "image_tags", ["image_id"], :name => "index_image_tags_on_image_id"
 
   create_table "images", :force => true do |t|
     t.string   "name",                                  :null => false
@@ -94,13 +102,17 @@ ActiveRecord::Schema.define(:version => 20130226045024) do
     t.integer  "width"
     t.integer  "height"
     t.string   "keyword"
-    t.boolean  "is_owner_avatar"
+    t.boolean  "is_owner_avatar",    :default => false
     t.string   "tier"
     t.boolean  "is_removed",         :default => false
     t.integer  "pageview",           :default => 0
     t.integer  "promote_num",        :default => 0
-    t.boolean  "data_processing"
+    t.boolean  "data_processing",    :default => false
   end
+
+  add_index "images", ["data_processing"], :name => "index_images_on_data_processing"
+  add_index "images", ["gallery_id"], :name => "index_images_on_gallery_id"
+  add_index "images", ["is_removed"], :name => "index_images_on_is_removed"
 
   create_table "invitations", :force => true do |t|
     t.string   "email",      :null => false
