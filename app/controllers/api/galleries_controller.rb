@@ -1,13 +1,3 @@
-=begin
-  create_table "galleries", :force => true do |t|
-    t.integer  "user_id",     :null => false
-    t.string   "name",        :null => false
-    t.text     "description"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-=end
-
 class Api::GalleriesController < Api::BaseController
   before_filter :require_login!, :except => [:list_popular, :list_images]
 
