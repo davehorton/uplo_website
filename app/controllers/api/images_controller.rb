@@ -19,7 +19,7 @@ class Api::ImagesController < Api::BaseController
   # GET /api/get_printed_sizes
   # params: image_id
   def get_printed_sizes
-    image = Image.un_flagged.find_by_id params[:image_id]
+    image = Image.unflagged.find_by_id params[:image_id]
     if(image.nil? || image.image_flags.count > 0)
       result = { :success => false, :msg => 'This image does not exist' }
     else
@@ -65,7 +65,7 @@ class Api::ImagesController < Api::BaseController
       return render :json => @result
     end
     img_info = params[:image]
-    image = gallery.images.un_flagged.create(img_info)
+    image = gallery.images.unflagged.create(img_info)
     # min_size = image.square? ? Image::PRINTED_SIZES[:square][0] : Image::PRINTED_SIZES[:rectangular][0]
     # if !image.valid_for_size?(min_size)
     #   image.destroy
@@ -102,7 +102,7 @@ class Api::ImagesController < Api::BaseController
 
     user = current_user
     # find image
-    image = Image.un_flagged.find_by_id(params[:image][:id])
+    image = Image.unflagged.find_by_id(params[:image][:id])
     if image.nil?
       @result[:msg] = "Could not find Image"
       return render :json => @result
@@ -134,7 +134,7 @@ class Api::ImagesController < Api::BaseController
   # GET /api/get_images
   # params: [id1, id2]
   def get_images
-    images = Image.un_flagged.find_all_by_id JSON.parse(URI.unescape(params[:ids]))
+    images = Image.unflagged.find_all_by_id JSON.parse(URI.unescape(params[:ids]))
     render :json => {:data => process_public_images(images)}
   end
 
@@ -147,9 +147,9 @@ class Api::ImagesController < Api::BaseController
       result = {:success => false, :msg => 'This user does not exist.'}
     else
       if (user.id == current_user.id)
-        data = user.images.un_flagged.load_images(@filtered_params)
+        data = user.images.unflagged.load_images(@filtered_params)
       else
-        data = user.images.public_images.load_images(@filtered_params)
+        data = user.images.visible_everyone.load_images(@filtered_params)
       end
       result[:data] = process_public_images(data)
     end
@@ -170,7 +170,7 @@ class Api::ImagesController < Api::BaseController
     #user = User.find_by_username :admin
 
     # find image
-    image = Image.un_flagged.find_by_id(params[:id])
+    image = Image.unflagged.find_by_id(params[:id])
     if image.nil?
       @result[:msg] = "Could not find Image"
       return render :json => @result
@@ -200,7 +200,7 @@ class Api::ImagesController < Api::BaseController
   # /api/friend_images
   # params: <filter params>
   def friend_images
-    images = current_user.friends_images.un_flagged.load_popular_images(@filtered_params)
+    images = current_user.friends_images.unflagged.load_popular_images(@filtered_params)
     @result[:total] = images.total_entries
     @result[:data] = process_public_images(images)
     @result[:success] = true
@@ -208,7 +208,7 @@ class Api::ImagesController < Api::BaseController
   end
 
   def like
-    image = Image.un_flagged.find_by_id(params[:id])
+    image = Image.unflagged.find_by_id(params[:id])
     dislike = SharedMethods::Converter.Boolean(params[:dislike])
     if image.nil?
       result = { :success => false, :msg => "This image does not exist anymore!" }
@@ -224,7 +224,7 @@ class Api::ImagesController < Api::BaseController
   end
 
   def total_sales
-    image = Image.un_flagged.find_by_id params[:image_id]
+    image = Image.unflagged.find_by_id params[:image_id]
     user = current_user
 
     if image.nil?
@@ -252,7 +252,7 @@ class Api::ImagesController < Api::BaseController
   end
 
   def get_purchasers
-    image = Image.un_flagged.find_by_id params[:image_id]
+    image = Image.unflagged.find_by_id params[:image_id]
     user = current_user
 
     if image.nil?
@@ -279,7 +279,7 @@ class Api::ImagesController < Api::BaseController
   end
 
   def sale_chart
-    image = Image.un_flagged.find_by_id params[:image_id]
+    image = Image.unflagged.find_by_id params[:image_id]
     user = current_user
 
     if image.nil?
@@ -295,7 +295,7 @@ class Api::ImagesController < Api::BaseController
   end
 
   def get_comments
-    image = Image.un_flagged.find_by_id params[:image_id]
+    image = Image.unflagged.find_by_id params[:image_id]
 
     if image.nil?
       result = { :success => false, :msg => "This image does not exist anymore!" }
@@ -312,7 +312,7 @@ class Api::ImagesController < Api::BaseController
   end
 
   def post_comment
-    image = Image.un_flagged.find_by_id params[:image_id]
+    image = Image.unflagged.find_by_id params[:image_id]
 
     if image.nil?
       result = { :success => false, :msg => "This image does not exist anymore!" }
@@ -343,7 +343,7 @@ class Api::ImagesController < Api::BaseController
         :status => :fail,
         :message => ""
       }
-    image = Image.un_flagged.find_by_id params[:image_id]
+    image = Image.unflagged.find_by_id params[:image_id]
     if (image)
       result = image.flag(current_user, params, result)
     else

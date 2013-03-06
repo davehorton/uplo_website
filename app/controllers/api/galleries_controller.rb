@@ -150,10 +150,10 @@ class Api::GalleriesController < Api::BaseController
         #return render :json => @result
     #end
 
-    @result[:total]  = gallery.images.un_flagged.count
-    images = gallery.images.un_flagged.load_images(@filtered_params)
+    @result[:total]  = gallery.images.unflagged.count
+    images = gallery.images.unflagged.load_images(@filtered_params)
     images.each do |image|
-      image[:image_url] = image.url 
+      image[:image_url] = image.url
       image[:image_thumb_url] = image.url(:thumb)
     end
     @result[:data] = images
@@ -169,7 +169,7 @@ class Api::GalleriesController < Api::BaseController
     galleries.each do |gallery|
       data = {}
       if (!gallery.is_owner?(current_user))
-        gallery.images = gallery.images.un_flagged
+        gallery.images = gallery.images.unflagged
       end
       data[:gallery] = gallery.serializable_hash({
         :except => gallery.except_attributes,

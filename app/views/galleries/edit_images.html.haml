@@ -38,7 +38,7 @@
 - content_for :js do
   :erb
     <script>
-      if(<%= !params[:gallery_id].blank? && @gallery.images.un_flagged.count == 0 %>){
+      if(<%= !params[:gallery_id].blank? && @gallery.images.unflagged.count == 0 %>){
         $('#image_data').click()
       }
     </script>

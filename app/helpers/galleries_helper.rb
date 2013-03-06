@@ -22,7 +22,7 @@ module GalleriesHelper
     end
     collection.map { |gal|
       if size_necessary
-        gal.name = "#{gal.name.truncate(18)} (#{gal.images.un_flagged.size})"
+        gal.name = "#{gal.name.truncate(18)} (#{gal.images.unflagged.size})"
       else
         gal.name = gal.name.truncate(25)
       end

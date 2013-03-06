@@ -10,7 +10,7 @@ class GalleriesController < ApplicationController
   def public
     @gallery = Gallery.find_by_id params[:gallery_id]
     @author = @gallery.user
-    @images = @gallery.images.un_flagged.load_popular_images(@filtered_params)
+    @images = @gallery.images.unflagged.load_popular_images(@filtered_params)
     render :layout => "public", :formats => 'html'
   end
 
@@ -101,7 +101,7 @@ class GalleriesController < ApplicationController
     end
 
     if !@gallery.nil?
-      @images = @gallery.images.un_flagged_processing.load_images(@filtered_params)
+      @images = @gallery.images.unflagged.load_images(@filtered_params)
       if request.xhr?
         pagination = render_to_string :partial => 'pagination',
           :locals => {  :source => @images, :params => { :controller => "galleries",

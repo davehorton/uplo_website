@@ -1,7 +1,7 @@
 class CommentsController < ApplicationController
   before_filter :authenticate_user!
   def index
-    image = Image.un_flagged.find_by_id params[:image_id]
+    image = Image.unflagged.find_by_id params[:image_id]
     if image.nil?
       result = { :success => false, :msg => "This image does not exist anymore!" }
     else
@@ -16,7 +16,7 @@ class CommentsController < ApplicationController
 
   def create
     comment = params[:comment]
-    image = Image.un_flagged.find_by_id comment[:image_id]
+    image = Image.unflagged.find_by_id comment[:image_id]
 
     if image.nil?
       result = { :success => false, :msg => "This image does not exist anymore!" }

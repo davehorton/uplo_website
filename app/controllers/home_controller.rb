@@ -56,7 +56,7 @@ class HomeController < ApplicationController
   end
 
   def friends_feed
-    @images = current_user.friends_images.un_flagged.load_popular_images(@filtered_params)
+    @images = current_user.friends_images.unflagged.load_popular_images(@filtered_params)
   end
 
   def intro

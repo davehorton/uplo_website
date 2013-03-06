@@ -1,166 +1,35 @@
-# == Schema Information
-#
-# Table name: images
-#
-#  id                :integer          not null, primary key
-#  name              :string(255)      not null
-#  description       :text
-#  gallery_id        :integer          not null
-#  is_gallery_cover  :boolean          default(FALSE)
-#  price             :float            default(0.0)
-#  delta             :boolean          default(TRUE), not null
-#  likes             :integer          default(0)
-#  created_at        :datetime
-#  updated_at        :datetime
-#  data_file_name    :string(255)
-#  data_content_type :string(255)
-#  data_file_size    :integer
-#  data_updated_at   :datetime
-#  width             :integer
-#  height            :integer
-#  keyword           :string(255)
-#  is_owner_avatar   :boolean
-#  tier              :string(255)
-#  is_removed        :boolean          default(FALSE)
-#  pageview          :integer          default(0)
-#  promote_num       :integer          default(0)
-#
-
 class Image < ActiveRecord::Base
   include Rails.application.routes.url_helpers
+
   include ::SharedMethods::Paging
   include ::SharedMethods::SerializationConfig
   include ::SharedMethods::Converter
   include ::SharedMethods
 
-  SEARCH_TYPE = 'images'
-  SORT_OPTIONS = { :spotlight => 'spotlight', :view => 'views', :recent => 'recent'}
-  SORT_CRITERIA = {
-    SORT_OPTIONS[:view] => 'pageview DESC',
-    SORT_OPTIONS[:recent] => 'created_at DESC',
-    SORT_OPTIONS[:spotlight] => 'promote_num DESC'
-  }
-  FILTER_OPTIONS = ['date_uploaded', 'num_of_views', 'num_of_sales', 'num_of_likes']
-  SALE_REPORT_TYPE = {
-    :quantity => "quantity",
-    :price => "price"
-  }
-  PRINTED_SIZES = {
-    :square => IMAGE_SQUARE_PRINTED_SIZES,
-    :rectangular => IMAGE_PORTRAIT_PRINTED_SIZES
-  }
-  TIERS = GlobalConstant::TIERS
-  TIERS_PRICES = {
-    TIERS[:tier_1] => TIER_1_PRICES,
-    TIERS[:tier_2] => TIER_2_PRICES,
-    TIERS[:tier_3] => TIER_3_PRICES
-  }
-  MOULDING = GlobalConstant::MOULDING
-  PENDING_MOULDING = {
-    MOULDING[:print] => false,
-    MOULDING[:print_luster] => false,
-    MOULDING[:canvas] => false,
-    MOULDING[:plexi] => false,
-    MOULDING[:black] => true,
-    MOULDING[:white] => true,
-    MOULDING[:light_wood] => true,
-    MOULDING[:rustic_wood] => true
-  }
-  MOULDING_SIZES_CONSTRAIN = {
-    MOULDING[:rustic_wood] => [IMAGE_SQUARE_PRINTED_SIZES[0], IMAGE_PORTRAIT_PRINTED_SIZES[0]]
-  }
-  # TODO: temp reset to 0, plz check with iOS & remove, also see: users api: get_moulding
-  MOULDING_DISCOUNT = {
-    MOULDING[:print] => 0,
-    MOULDING[:print_luster] => 0,
-    MOULDING[:canvas] => 0,
-    MOULDING[:plexi] => 0,
-    MOULDING[:black] => 0,
-    MOULDING[:white] => 0,
-    MOULDING[:light_wood] => 0,
-    MOULDING[:rustic_wood] => 0
-  }
-  MOULDING_PRICES = {
-    MOULDING[:print] => GlobalConstant::MOULDING_PRICES[MOULDING[:print]],
-    MOULDING[:print_luster] => GlobalConstant::MOULDING_PRICES[MOULDING[:print]],
-    MOULDING[:canvas] => GlobalConstant::MOULDING_PRICES[MOULDING[:canvas]],
-    MOULDING[:plexi] => GlobalConstant::MOULDING_PRICES[MOULDING[:plexi]],
-    MOULDING[:black] => nil,
-    MOULDING[:white] => nil,
-    MOULDING[:light_wood] => nil,
-    MOULDING[:rustic_wood] => nil
-  }
-  DEFAULT_STYLES = {
-                      :smallest => '66x66#',
-                      :smaller => '67x67#',
-                      :small => '68x68#',
-                      :spotlight_small => '74x74#',
-                      :thumb => '155x155#',
-                      :spotlight_thumb => '174x154#',
-                      :profile_thumb => '101x101#',
-                      :medium => '640x640>'
-                  }
+  include ImageConstants
 
   # ASSOCIATIONS
-  belongs_to :gallery, :touch => true
-  has_one :author, :through => :gallery, :source => :user
-  has_many :image_flags, :dependent => :destroy
-  has_many :image_tags, :dependent => :destroy
-  has_many :tags, :through => :image_tags
-  has_many :image_likes, :dependent => :destroy
-  has_many :comments, :dependent => :destroy
-  has_many :line_items, :dependent => :destroy
-  has_many :orders, :through => :line_items
+  belongs_to :gallery,     :touch => true
+  has_one  :author,        :through => :gallery, :source => :user
+  has_one  :active_author, :through => :gallery, :source => :user, conditions: { is_removed: false, is_banned: false }
+  has_many :comments,      :dependent => :destroy
+  has_many :image_flags,   :dependent => :destroy
+  has_many :image_likes,   :dependent => :destroy
+  has_many :image_tags,    :dependent => :destroy
+  has_many :line_items,    :dependent => :destroy
+  has_many :orders,        :through => :line_items
+  has_many :tags,          :through => :image_tags
 
-  # SCOPE
-  scope :removed_images, where(:is_removed => true)
-  scope :avai_images, joins(self.sanitize_sql([
-      "JOIN galleries AS g ON g.id = images.gallery_id
-      JOIN users as u ON g.user_id = u.id AND u.is_removed = ?", false
-    ])).where("images.is_removed = ? AND data_processing = ?", false, false)
+  # SCOPES
+  scope :removed,     where(is_removed: true)
+  scope :not_removed, where(is_removed: false)
 
-  scope :avai_proccessing,  joins(self.sanitize_sql([
-      "JOIN galleries AS g ON g.id = images.gallery_id
-      JOIN users as u ON g.user_id = u.id AND u.is_removed = ?", false
-    ])).where("images.is_removed = ?", false)
+  scope :flagged,    not_removed.joins(:image_flags)
+  scope :unflagged,  not_removed.includes(:image_flags).where(image_flags: { id: nil })
 
-  scope :proccessing,  joins(self.sanitize_sql([
-      "JOIN galleries AS g ON g.id = images.gallery_id
-      JOIN users as u ON g.user_id = u.id AND u.is_removed = ?", false
-    ])).where("images.is_removed = ? AND data_processing = ?", false, true)
-
-  scope :flagged, avai_images.joins(
-      "LEFT JOIN image_flags ON images.id = image_flags.image_id"
-    ).where("image_flags.reported_by IS NOT NULL").readonly(false)
-
-  scope :un_flagged, avai_images.joins(
-      "LEFT JOIN image_flags ON images.id = image_flags.image_id"
-    ).where("image_flags.reported_by IS NULL").readonly(false)
-
-  scope :un_flagged_processing, avai_proccessing.joins(
-      "LEFT JOIN image_flags ON images.id = image_flags.image_id"
-    ).where("image_flags.reported_by IS NULL").readonly(false)
-
-  scope :joined_images, avai_images.joins(
-      "JOIN galleries AS gals ON gals.id = images.gallery_id"
-    ).joins("LEFT JOIN image_flags ON images.id = image_flags.image_id").readonly(false)
-
-  scope :public_images, joined_images.joins("JOIN users ON gals.user_id = users.id").where(
-    "gals.permission = :gallery_permission
-    AND image_flags.reported_by IS NULL
-    AND users.is_banned = :user_banned
-    AND users.is_removed = :user_removed",
-    { :gallery_permission => Gallery::PUBLIC_PERMISSION,
-      :user_banned => false,
-      :user_removed => false
-    })
-
-
-
-  scope :belongs_to_avai_user, joined_images.joins('LEFT JOIN users AS avai_users ON gals.user_id=avai_users.id'
-    ).where('avai_users.is_banned = ?', false).readonly(false)
-
-  scope :promoted_images, where("promote_num > ?", 0)
+  scope :processing,       not_removed.joins(:active_author).where(data_processing: true)
+  scope :visible,          not_removed.joins(:active_author).where(data_processing: false)
+  scope :visible_everyone, visible.unflagged.joins(:gallery).where(galleries: { permission: Gallery::PUBLIC_PERMISSION })
 
   # Paperclip
   has_attached_file :image,
@@ -914,7 +783,7 @@ class Image < ActiveRecord::Base
         :author => 1
       }
 
-      where("images.id IN (SELECT id FROM (#{Image.public_images.to_sql}) public_images)")
+      where("images.id IN (SELECT id FROM (#{Image.visible_everyone.to_sql}) public_images)")
 
       set_property :delta => true
     end

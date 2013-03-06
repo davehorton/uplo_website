@@ -3,12 +3,12 @@ class ApplicationController < ActionController::Base
   before_filter :show_processing
   before_filter :set_current_tab, :set_current_user, :check_banned_user, :set_auto_hide
   before_filter :filter_params
-  
+
   layout 'main'
-  
+
   PAGE_SIZE = 10
   MAX_PAGE_SIZE = 100
-  
+
 
   if (Rails.env.production? or Rails.env.staging?)
     rescue_from CanCan::AccessDenied, :with => :render_unauthorized
@@ -46,16 +46,16 @@ class ApplicationController < ActionController::Base
   end
 
   protected
-    
+
     # To show notification popup or not.
     def toggle_notification(visible)
       @notification_visible = visible
     end
-    
+
     def hide_notification
       toggle_notification(false)
     end
-    
+
     def show_notification
       toggle_notification(true)
     end
@@ -64,7 +64,7 @@ class ApplicationController < ActionController::Base
     def show_processing
       flash.delete :processing_photo
       if (current_user && current_user.photo_processing)
-        number = current_user.images.proccessing.count
+        number = current_user.images.processing.count
         if (number > 0)
           flash[:processing_photo] = "We are processing your images. This can take up to 3 minutes. We will notice you when it's done."
           flash[:auto_hide_notification] = false
@@ -77,7 +77,7 @@ class ApplicationController < ActionController::Base
         end
       end
     end
-    
+
     def set_current_tab
       "please override this method in your sub class"
       # @current_tab = "home"
@@ -91,7 +91,7 @@ class ApplicationController < ActionController::Base
       @auto_hide_notification = true
       if !flash[:auto_hide_notification].nil?
         @auto_hide_notification = flash[:auto_hide_notification]
-        flash.delete(:auto_hide_notification) 
+        flash.delete(:auto_hide_notification)
       end
     end
 

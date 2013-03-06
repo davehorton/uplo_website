@@ -368,7 +368,7 @@ class User < ActiveRecord::Base
 
   # PUBLIC INSTANCE METHODS
   def liked_images
-    self.source_liked_images.un_flagged.joins('LEFT JOIN galleries ON galleries.id = images.gallery_id').where(
+    self.source_liked_images.unflagged.joins('LEFT JOIN galleries ON galleries.id = images.gallery_id').where(
       "galleries.permission = '#{Gallery::PUBLIC_PERMISSION}' OR
       (galleries.permission = '#{Gallery::PRIVATE_PERMISSION}' AND galleries.user_id = #{ self.id })"
     )
@@ -513,7 +513,7 @@ class User < ActiveRecord::Base
   def used_allocation
     total = 0
     self.galleries.each do |gal|
-      gal.images.un_flagged.each do |img|
+      gal.images.unflagged.each do |img|
         total += img.data_file_size
       end
     end
@@ -523,7 +523,7 @@ class User < ActiveRecord::Base
   def free_allocation
     remaining = ALLOCATION
     self.galleries.each do |gal|
-      gal.images.un_flagged.each do |img|
+      gal.images.unflagged.each do |img|
         remaining -= img.data_file_size
       end
     end
@@ -607,7 +607,7 @@ class User < ActiveRecord::Base
     prior_months.each { |mon|
       short_mon = DateTime.parse(mon).strftime('%b')
       total_sales = 0
-      self.images.un_flagged.each { |img| total_sales += img.user_total_sales(mon) }
+      self.images.unflagged.each { |img| total_sales += img.user_total_sales(mon) }
       result << { :month => short_mon, :sales => total_sales }
     }
     return result
@@ -679,7 +679,7 @@ class User < ActiveRecord::Base
 
   def images_count
     if !self.attributes.has_key?('images_count')
-      self.attributes['images_count'] = self.images.un_flagged.count
+      self.attributes['images_count'] = self.images.unflagged.count
     else
       self.attributes['images_count'].to_i
     end
@@ -687,7 +687,7 @@ class User < ActiveRecord::Base
 
   def images_likes_count
     if !self.attributes.has_key?('images_likes_count')
-      self.attributes['images_likes_count'] = self.images.un_flagged.sum(:likes)
+      self.attributes['images_likes_count'] = self.images.unflagged.sum(:likes)
     else
       self.attributes['images_likes_count'].to_i
     end
@@ -695,7 +695,7 @@ class User < ActiveRecord::Base
 
   def images_pageview
     if !self.attributes.has_key?('images_pageview')
-      self.attributes['images_pageview'] = self.images.un_flagged.sum(:pageview)
+      self.attributes['images_pageview'] = self.images.unflagged.sum(:pageview)
     else
       self.attributes['images_pageview'].to_i
     end

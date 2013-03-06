@@ -2,7 +2,7 @@ class Admin::SpotlightsController < Admin::AdminController
   def index
     @sort_field = params[:sort_field] || "date_uploaded"
     @sort_direction = params[:sort_direction] || "asc"
-    @images = Image.public_images.load_images(filtered_params.merge(
+    @images = Image.visible_everyone.load_images(filtered_params.merge(
       :sort_field => @sort_field,
       :sort_direction => @sort_direction
     ))
@@ -17,7 +17,7 @@ class Admin::SpotlightsController < Admin::AdminController
   # POST: /admin/spotlights/:id/promote
   # Ajax method.
   def promote
-    image = Image.un_flagged.find_by_id(params[:id])
+    image = Image.unflagged.find_by_id(params[:id])
     result = {}
     if image
       method = :promote

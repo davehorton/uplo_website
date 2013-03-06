@@ -1,18 +1,3 @@
-# == Schema Information
-#
-# Table name: galleries
-#
-#  id          :integer          not null, primary key
-#  user_id     :integer          not null
-#  name        :string(255)      not null
-#  description :text
-#  delta       :boolean          default(TRUE), not null
-#  created_at  :datetime
-#  updated_at  :datetime
-#  keyword     :string(255)
-#  permission  :integer          default(1)
-#
-
 class Gallery < ActiveRecord::Base
   include Rails.application.routes.url_helpers
   include ::SharedMethods::Paging
@@ -24,7 +9,7 @@ class Gallery < ActiveRecord::Base
 
   # ASSOCIATIONS
   belongs_to :user
-  has_many :images, :dependent => :destroy
+  has_many   :images, :dependent => :destroy
 
   # VALIDATIONS
   validates :name, :presence => true, :uniqueness => {:scope => :user_id, :case_sensitive => false}
@@ -90,14 +75,14 @@ class Gallery < ActiveRecord::Base
   # PUBLIC INSTANCE METHODS
   def load_popular_images(params)
     paging_info = Image.parse_paging_options(params)
-    self.images.un_flagged.paginate( :page => paging_info.page_id,
+    self.images.unflagged.paginate( :page => paging_info.page_id,
                           :per_page => paging_info.page_size,
                           :order => paging_info.sort_string )
   end
 
   def get_images_without(ids)
     ids = [] unless ids.instance_of? Array
-    self.images.un_flagged.where("images.id not in (#{ids.join(',')})").order('name')
+    self.images.unflagged.where("images.id not in (#{ids.join(',')})").order('name')
   end
 
   def updated_at_string
@@ -120,8 +105,8 @@ class Gallery < ActiveRecord::Base
   # Get the cover image for this album.
   def cover_image
     img = Image.find_by_gallery_id self.id, :conditions => { :is_gallery_cover => true }
-    if img.nil? && self.images.un_flagged.count > 0
-      result = self.images.un_flagged.first :order => 'images.created_at ASC'
+    if img.nil? && self.images.unflagged.count > 0
+      result = self.images.unflagged.first :order => 'images.created_at ASC'
     else
       result = img
     end
@@ -141,7 +126,7 @@ class Gallery < ActiveRecord::Base
   end
 
   def total_images
-    self.images.un_flagged.length
+    self.images.unflagged.length
   end
 
   def last_update
@@ -150,6 +135,7 @@ class Gallery < ActiveRecord::Base
 
   # PROTECTED INSTANCE METHODS
   protected
+
     def init_permission
       if self.new_record? && self.permission.blank?
         self.permission = PUBLIC_PERMISSION
