@@ -1,47 +1,7 @@
-# == Schema Information
-#
-# Table name: orders
-#
-#  id                  :integer          not null, primary key
-#  user_id             :integer
-#  tax                 :float
-#  price_total         :decimal(16, 2)
-#  order_total         :decimal(16, 2)
-#  transaction_code    :string(255)
-#  transaction_status  :string(255)
-#  transaction_date    :datetime
-#  status              :string(255)
-#  first_name          :string(255)
-#  address             :string(255)
-#  message             :string(255)
-#  shipping_address_id :integer
-#  billing_address_id  :integer
-#  created_at          :datetime
-#  updated_at          :datetime
-#  last_name           :string(255)
-#  city                :string(255)
-#  country             :string(255)
-#  country_code        :string(255)
-#  state               :string(255)
-#  payer_email         :string(255)
-#  payment_type        :string(255)
-#  payment_fee         :decimal(8, 2)
-#  currency            :string(255)
-#  transaction_subject :string(255)
-#  zip_code            :string(255)
-#  card_type           :string(255)
-#  card_number         :string(255)
-#  expiration          :string(255)
-#  cvv                 :string(255)
-#  shipping_fee        :float            default(0.0)
-#  name_on_card        :string(255)
-#
-
 class Order < ActiveRecord::Base
   include ::SharedMethods::Paging
   include ::SharedMethods::SerializationConfig
 
-  # ASSOCIATIONS
   belongs_to :user
   belongs_to :shipping_address, :class_name => 'Address', :foreign_key => :shipping_address_id
   belongs_to :billing_address, :class_name => 'Address', :foreign_key => :billing_address_id
@@ -49,11 +9,9 @@ class Order < ActiveRecord::Base
   has_many :line_items, :dependent => :destroy
   has_many :images, :through => :line_items
 
-  # ACCEPT NESTED ATTRIBUTE
   accepts_nested_attributes_for :billing_address
   accepts_nested_attributes_for :shipping_address
 
-  # CALLBACK
   after_save :push_notification
   before_create :init_transaction_date
 
@@ -72,14 +30,11 @@ class Order < ActiveRecord::Base
     :newyork => {:state_code => 'NY', :tax => 0.08875}
   }
 
-  # SCOPE
   scope :completed_orders, where(:transaction_status => Order::TRANSACTION_STATUS[:complete])
 
-  # VALIDATION
   validates_length_of :cvv, :in => 3..4, :allow_nil => true
   validates_numericality_of :cvv, :card_number, :only_integer => true, :allow_nil => true
 
-  # CLASS METHODS
   class << self
     def load_orders(params = {})
       paging_info = parse_paging_options(params)
@@ -116,7 +71,6 @@ class Order < ActiveRecord::Base
       end
   end
 
-  # PUBLIC INSTANCE METHODS
   def update_tax_by_state
     has_tax  = false
     # considering shipping state
@@ -191,8 +145,8 @@ class Order < ActiveRecord::Base
     return (self.transaction_status.to_s == TRANSACTION_STATUS[:complete])
   end
 
-  # PROTECTED METHODS
   protected
+
     def init_transaction_date
       if self.transaction_date.blank?
         self.transaction_date = Time.now

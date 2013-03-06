@@ -8,7 +8,6 @@ class Image < ActiveRecord::Base
 
   include ImageConstants
 
-  # ASSOCIATIONS
   belongs_to :gallery,     :touch => true
   has_one  :author,        :through => :gallery, :source => :user
   has_one  :active_author, :through => :gallery, :source => :user, conditions: { is_removed: false, is_banned: false }
@@ -20,7 +19,6 @@ class Image < ActiveRecord::Base
   has_many :orders,        :through => :line_items
   has_many :tags,          :through => :image_tags
 
-  # SCOPES
   scope :removed,     where(is_removed: true)
   scope :not_removed, where(is_removed: false)
 
@@ -31,7 +29,6 @@ class Image < ActiveRecord::Base
   scope :visible,          not_removed.joins(:active_author).where(data_processing: false)
   scope :visible_everyone, visible.unflagged.joins(:gallery).where(galleries: { permission: Gallery::PUBLIC_PERMISSION })
 
-  # Paperclip
   has_attached_file :image,
     styles: lambda { |attachment| attachment.instance.available_styles || {}},
     default_url: "/assets/gallery-thumb.jpg"
@@ -42,213 +39,205 @@ class Image < ActiveRecord::Base
     :message => 'File type must be one of [.jpeg, .jpg]' }, :on => :create
   validate :validate_quality, :on => :create
 
-  # CALLBACK
   before_post_process :init_image_info
   before_create :init_tier
   after_initialize :init_random_price, :init_tier
 
-  # CLASS METHODS
-  class << self
-    # Search within public images only
-    def do_search_public_images(params = {})
-      params[:sphinx_search_options] = {:index => "public_images"}
-      self.do_search(params)
+  def self.do_search_public_images(params = {})
+    params[:sphinx_search_options] = {:index => "public_images"}
+    self.do_search(params)
+  end
+
+  def self.do_search_accessible_images(user_id, params)
+    params ||= {}
+    with_display = "*, IF(author_id = #{user_id} OR permission = #{Gallery::PUBLIC_PERMISSION}, 1, 0) AS display"
+    params[:sphinx_search_options] = {
+      :joins => '
+        LEFT JOIN galleries AS gals ON gals.id = images.gallery_id
+        LEFT JOIN image_flags ON images.id = image_flags.image_id
+        LEFT JOIN users ON gals.user_id = users.id',
+      :sphinx_select => with_display,
+      :with => {
+        :data_processing => false,
+        :banned_user => false,
+        :removed_user => false,
+        :flagged_by => '',
+        :display => 1 }
+    }
+    self.do_search(params)
+  end
+
+  def self.get_spotlight_images(user_id, params)
+    params ||= {}
+    with_display = "*, IF(author_id = #{user_id} OR permission = #{Gallery::PUBLIC_PERMISSION}, 1, 0) AS display"
+    params[:sphinx_search_options] = {
+      :joins => '
+        LEFT JOIN galleries AS gals ON gals.id = images.gallery_id
+        LEFT JOIN image_flags ON images.id = image_flags.image_id
+        LEFT JOIN users ON gals.user_id = users.id',
+      :sphinx_select => with_display,
+      :with => {
+        :data_processing => false,
+        :banned_user => false,
+        :removed_user => false,
+        :flagged_by => '',
+        :display => 1,
+        :promote_num => 1 }
+    }
+    self.do_search(params)
+  end
+
+  def self.get_all_images_with_current_user(params, current_user = nil)
+    if current_user.blank?
+      conditions = [
+        "gals.permission = :gallery_permission
+        AND image_flags.reported_by IS NULL
+        AND users.is_banned = :user_banned
+        AND users.is_removed = :user_removed",
+        { :gallery_permission => Gallery::PUBLIC_PERMISSION,
+          :image_removed => false,
+          :user_banned => false,
+          :user_removed => false
+        }
+      ]
+
+
+    else
+      conditions = [
+        "gals.permission = :gallery_permission
+        AND (gals.user_id = :user_id OR image_flags.reported_by IS NULL)
+        AND users.is_banned = :user_banned
+        AND users.is_removed = :user_removed",
+        { :gallery_permission => Gallery::PUBLIC_PERMISSION,
+          :user_id => current_user.id,
+          :image_removed => false,
+          :user_banned => false,
+          :user_removed => false
+        }
+      ]
     end
 
-    # Search within public images & private of user
-    def do_search_accessible_images(user_id, params)
-      params ||= {}
-      with_display = "*, IF(author_id = #{user_id} OR permission = #{Gallery::PUBLIC_PERMISSION}, 1, 0) AS display"
-      params[:sphinx_search_options] = {
-        :joins => '
-          LEFT JOIN galleries AS gals ON gals.id = images.gallery_id
-          LEFT JOIN image_flags ON images.id = image_flags.image_id
-          LEFT JOIN users ON gals.user_id = users.id',
-        :sphinx_select => with_display,
-        :with => {
-          :data_processing => false,
-          :banned_user => false,
-          :removed_user => false,
-          :flagged_by => '',
-          :display => 1 }
-      }
-      self.do_search(params)
+    paging_info = parse_paging_options(params,
+      {:sort_criteria => "images.promote_num DESC, images.updated_at DESC, images.likes DESC"})
+
+    self.joined_images.joins("JOIN users ON gals.user_id = users.id").where(conditions).paginate(
+      :page => paging_info.page_id,
+      :per_page => paging_info.page_size,
+      :order => paging_info.sort_string)
+  end
+
+  def self.load_images(params = {})
+    default_filter_logic = lambda do
+      paging_info = parse_paging_options(params)
+      self.includes(:gallery).paginate(
+        :page => paging_info.page_id,
+        :per_page => paging_info.page_size,
+        :order => paging_info.sort_string)
     end
 
-    def get_spotlight_images(user_id, params)
-      params ||= {}
-      with_display = "*, IF(author_id = #{user_id} OR permission = #{Gallery::PUBLIC_PERMISSION}, 1, 0) AS display"
-      params[:sphinx_search_options] = {
-        :joins => '
-          LEFT JOIN galleries AS gals ON gals.id = images.gallery_id
-          LEFT JOIN image_flags ON images.id = image_flags.image_id
-          LEFT JOIN users ON gals.user_id = users.id',
-        :sphinx_select => with_display,
-        :with => {
-          :data_processing => false,
-          :banned_user => false,
-          :removed_user => false,
-          :flagged_by => '',
-          :display => 1,
-          :promote_num => 1 }
-      }
-      self.do_search(params)
-    end
-
-    def get_all_images_with_current_user(params, current_user = nil)
-      if current_user.blank?
-        conditions = [
-          "gals.permission = :gallery_permission
-          AND image_flags.reported_by IS NULL
-          AND users.is_banned = :user_banned
-          AND users.is_removed = :user_removed",
-          { :gallery_permission => Gallery::PUBLIC_PERMISSION,
-            :image_removed => false,
-            :user_banned => false,
-            :user_removed => false
-          }
-        ]
-
-
+    case params[:sort_field]
+      when 'date_uploaded' then
+        params[:sort_field] = "images.created_at"
+        default_filter_logic.call
+      when 'num_of_views' then
+        params[:sort_field] = "images.pageview"
+        default_filter_logic.call
+      when 'num_of_sales' then
+        self.load_images_with_sales_count(params)
+      when 'num_of_likes' then
+        params[:sort_field] = "images.likes"
+        default_filter_logic.call
       else
-        conditions = [
-          "gals.permission = :gallery_permission
-          AND (gals.user_id = :user_id OR image_flags.reported_by IS NULL)
-          AND users.is_banned = :user_banned
-          AND users.is_removed = :user_removed",
-          { :gallery_permission => Gallery::PUBLIC_PERMISSION,
-            :user_id => current_user.id,
-            :image_removed => false,
-            :user_banned => false,
-            :user_removed => false
-          }
-        ]
-      end
-
-      paging_info = parse_paging_options(params,
-        {:sort_criteria => "images.promote_num DESC, images.updated_at DESC, images.likes DESC"})
-
-      self.joined_images.joins("JOIN users ON gals.user_id = users.id").where(conditions).paginate(
-        :page => paging_info.page_id,
-        :per_page => paging_info.page_size,
-        :order => paging_info.sort_string)
-    end
-
-    def load_images(params = {})
-      default_filter_logic = lambda do
-        paging_info = parse_paging_options(params)
-        self.includes(:gallery).paginate(
-          :page => paging_info.page_id,
-          :per_page => paging_info.page_size,
-          :order => paging_info.sort_string)
-      end
-
-      case params[:sort_field]
-        when 'date_uploaded' then
-          params[:sort_field] = "images.created_at"
-          default_filter_logic.call
-        when 'num_of_views' then
-          params[:sort_field] = "images.pageview"
-          default_filter_logic.call
-        when 'num_of_sales' then
-          self.load_images_with_sales_count(params)
-        when 'num_of_likes' then
-          params[:sort_field] = "images.likes"
-          default_filter_logic.call
-        else
-          default_filter_logic.call
-        end
-    end
-
-    def load_images_with_sales_count(params = {})
-      params.delete(:sort_field)
-      sort_direction = params[:sort_direction] || 'ASC'
-
-      paging_info = parse_paging_options(params, {
-        :sort_criteria => {
-          :sales_count => sort_direction,
-          :sales_value => sort_direction
-        }
-      })
-
-      self.includes(:gallery).joins(self.sanitize_sql([
-        "LEFT JOIN (
-          SELECT line_items.image_id,
-            SUM(line_items.quantity) AS sales_count,
-            SUM(line_items.quantity * (line_items.tax + line_items.price)) AS sales_value
-          FROM line_items JOIN orders
-          ON line_items.order_id = orders.id AND orders.transaction_status = ?
-          GROUP BY line_items.image_id
-        ) orders_data ON images.id = orders_data.image_id",
-        Order::TRANSACTION_STATUS[:complete]
-      ])).select("DISTINCT images.*,
-        COALESCE(orders_data.sales_count, 0) AS sales_count,
-        COALESCE(orders_data.sales_value, 0) AS sales_value"
-      ).paginate(
-        :page => paging_info.page_id,
-        :per_page => paging_info.page_size,
-        :order => paging_info.sort_string)
-    end
-
-    def load_popular_images(params = {}, current_user = nil)
-      paging_info = parse_paging_options(params,
-        {:sort_criteria => "images.promote_num DESC, images.updated_at DESC, images.likes DESC"})
-      # TODO: calculate the popularity of the images: base on how many times an image is "liked".
-      self.includes(:gallery).joins([:gallery]).
-        where("galleries.permission = ?", Gallery::PUBLIC_PERMISSION).paginate(
-          :page => paging_info.page_id,
-          :per_page => paging_info.page_size,
-          :order => paging_info.sort_string)
-    end
-
-    def exposed_methods
-      [:image_url, :image_thumb_url, :username, :creation_timestamp, :user_fullname,
-        :public_link, :user_id, :user_avatar, :comments_number, :gallery_name]
-    end
-
-    def exposed_attributes
-      [:id, :name, :description, :data_file_name, :name, :gallery_id, :price, :likes, :keyword,
-        :is_owner_avatar, :is_gallery_cover, :tier]
-    end
-
-    def exposed_associations
-      []
-    end
-
-    def parse_paging_options(options, default_opts = {})
-      if default_opts.blank?
-        default_opts = {
-          :sort_criteria => "images.created_at DESC"
-        }
-      end
-      paging_options(options, default_opts)
-    end
-
-    protected
-      def do_search(params = {})
-        params[:filtered_params][:sort_field] = 'name' unless params[:filtered_params].has_key?(:sort_field)
-
-        default_opt = {}
-        paging_info = parse_paging_options(params[:filtered_params], {:sort_mode => :extended})
-
-        sphinx_search_options = params[:sphinx_search_options]
-        sphinx_search_options = {} if sphinx_search_options.blank?
-        sphinx_search_options[:index] = 'general_images' if sphinx_search_options[:index].blank?
-
-        sphinx_search_options.merge!({
-          :star => true,
-          :retry_stale => true,
-          :page => paging_info.page_id,
-          :per_page => paging_info.page_size,
-          :order => paging_info.sort_string,
-        })
-
-        search_term = SharedMethods::Converter::SearchStringConverter.process_special_chars(params[:query])
-        Image.search(search_term, sphinx_search_options)
+        default_filter_logic.call
       end
   end
 
-  # INSTANCE METHODS
+  def self.load_images_with_sales_count(params = {})
+    params.delete(:sort_field)
+    sort_direction = params[:sort_direction] || 'ASC'
+
+    paging_info = parse_paging_options(params, {
+      :sort_criteria => {
+        :sales_count => sort_direction,
+        :sales_value => sort_direction
+      }
+    })
+
+    self.includes(:gallery).joins(self.sanitize_sql([
+      "LEFT JOIN (
+        SELECT line_items.image_id,
+          SUM(line_items.quantity) AS sales_count,
+          SUM(line_items.quantity * (line_items.tax + line_items.price)) AS sales_value
+        FROM line_items JOIN orders
+        ON line_items.order_id = orders.id AND orders.transaction_status = ?
+        GROUP BY line_items.image_id
+      ) orders_data ON images.id = orders_data.image_id",
+      Order::TRANSACTION_STATUS[:complete]
+    ])).select("DISTINCT images.*,
+      COALESCE(orders_data.sales_count, 0) AS sales_count,
+      COALESCE(orders_data.sales_value, 0) AS sales_value"
+    ).paginate(
+      :page => paging_info.page_id,
+      :per_page => paging_info.page_size,
+      :order => paging_info.sort_string)
+  end
+
+  def self.load_popular_images(params = {}, current_user = nil)
+    paging_info = parse_paging_options(params,
+      {:sort_criteria => "images.promote_num DESC, images.updated_at DESC, images.likes DESC"})
+    # TODO: calculate the popularity of the images: base on how many times an image is "liked".
+    self.includes(:gallery).joins([:gallery]).
+      where("galleries.permission = ?", Gallery::PUBLIC_PERMISSION).paginate(
+        :page => paging_info.page_id,
+        :per_page => paging_info.page_size,
+        :order => paging_info.sort_string)
+  end
+
+  def self.exposed_methods
+    [:image_url, :image_thumb_url, :username, :creation_timestamp, :user_fullname,
+      :public_link, :user_id, :user_avatar, :comments_number, :gallery_name]
+  end
+
+  def self.exposed_attributes
+    [:id, :name, :description, :data_file_name, :name, :gallery_id, :price, :likes, :keyword,
+      :is_owner_avatar, :is_gallery_cover, :tier]
+  end
+
+  def self.exposed_associations
+    []
+  end
+
+  def self.parse_paging_options(options, default_opts = {})
+    if default_opts.blank?
+      default_opts = {
+        :sort_criteria => "images.created_at DESC"
+      }
+    end
+    paging_options(options, default_opts)
+  end
+
+  def self.do_search(params = {})
+    params[:filtered_params][:sort_field] = 'name' unless params[:filtered_params].has_key?(:sort_field)
+
+    default_opt = {}
+    paging_info = parse_paging_options(params[:filtered_params], {:sort_mode => :extended})
+
+    sphinx_search_options = params[:sphinx_search_options]
+    sphinx_search_options = {} if sphinx_search_options.blank?
+    sphinx_search_options[:index] = 'general_images' if sphinx_search_options[:index].blank?
+
+    sphinx_search_options.merge!({
+      :star => true,
+      :retry_stale => true,
+      :page => paging_info.page_id,
+      :per_page => paging_info.page_size,
+      :order => paging_info.sort_string,
+    })
+
+    search_term = SharedMethods::Converter::SearchStringConverter.process_special_chars(params[:query])
+    Image.search(search_term, sphinx_search_options)
+  end
+
   def get_price(moulding, size)
     return MOULDING_PRICES[moulding][self.tier][size]
   end
@@ -697,6 +686,7 @@ class Image < ActiveRecord::Base
   end
 
   protected
+
     def s3_expire_time
       Time.zone.now.beginning_of_day.since 25.hours
     end

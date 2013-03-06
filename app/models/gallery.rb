@@ -7,72 +7,63 @@ class Gallery < ActiveRecord::Base
   PUBLIC_PERMISSION = 1
   PRIVATE_PERMISSION = 0
 
-  # ASSOCIATIONS
   belongs_to :user
   has_many   :images, :dependent => :destroy
 
-  # VALIDATIONS
   validates :name, :presence => true, :uniqueness => {:scope => :user_id, :case_sensitive => false}
   validates :user, :presence => true
 
-  # CALL BACK
   after_initialize :init_permission
 
-  # CLASS METHODS
-  class << self
-    def do_search(params = {})
-      params[:filtered_params][:sort_field] = 'name' unless params[:filtered_params].has_key?("sort_field")
-      paging_info = parse_paging_options(params[:filtered_params], {:sort_mode => :extended})
+  def self.do_search(params = {})
+    params[:filtered_params][:sort_field] = 'name' unless params[:filtered_params].has_key?("sort_field")
+    paging_info = parse_paging_options(params[:filtered_params], {:sort_mode => :extended})
 
-      self.search(
-        SharedMethods::Converter::SearchStringConverter.process_special_chars(params[:query]),
-        :star => true,
-        :retry_stale => true,
-        :page => paging_info.page_id,
-        :per_page => paging_info.page_size )
-    end
-
-    def load_galleries(params = {})
-      paging_info = parse_paging_options(params)
-      self.includes(:images).paginate(
-        :page => paging_info.page_id,
-        :per_page => paging_info.page_size,
-        :order => paging_info.sort_string)
-    end
-
-    def load_popular_galleries(params)
-      paging_info = parse_paging_options(params)
-      self.includes(:images).where(:permission => PUBLIC_PERMISSION).paginate(
-        :page => paging_info.page_id,
-        :per_page => paging_info.page_size,
-        :order => paging_info.sort_string)
-    end
-
-    def exposed_methods
-      [:cover_image, :total_images, :public_link, :last_update]
-    end
-
-    def exposed_attributes
-      [:id, :name, :description, :permission, :keyword]
-    end
-
-    def exposed_associations
-      [:images]
-    end
-
-    protected
-
-    def parse_paging_options(options, default_opts = {})
-      if default_opts.blank?
-        default_opts = {
-          :sort_criteria => "galleries.name ASC"
-        }
-      end
-      paging_options(options, default_opts)
-    end
+    self.search(
+      SharedMethods::Converter::SearchStringConverter.process_special_chars(params[:query]),
+      :star => true,
+      :retry_stale => true,
+      :page => paging_info.page_id,
+      :per_page => paging_info.page_size )
   end
 
-  # PUBLIC INSTANCE METHODS
+  def self.load_galleries(params = {})
+    paging_info = parse_paging_options(params)
+    self.includes(:images).paginate(
+      :page => paging_info.page_id,
+      :per_page => paging_info.page_size,
+      :order => paging_info.sort_string)
+  end
+
+  def self.load_popular_galleries(params)
+    paging_info = parse_paging_options(params)
+    self.includes(:images).where(:permission => PUBLIC_PERMISSION).paginate(
+      :page => paging_info.page_id,
+      :per_page => paging_info.page_size,
+      :order => paging_info.sort_string)
+  end
+
+  def self.exposed_methods
+    [:cover_image, :total_images, :public_link, :last_update]
+  end
+
+  def self.exposed_attributes
+    [:id, :name, :description, :permission, :keyword]
+  end
+
+  def self.exposed_associations
+    [:images]
+  end
+
+  def self.parse_paging_options(options, default_opts = {})
+    if default_opts.blank?
+      default_opts = {
+        :sort_criteria => "galleries.name ASC"
+      }
+    end
+    paging_options(options, default_opts)
+  end
+
   def load_popular_images(params)
     paging_info = Image.parse_paging_options(params)
     self.images.unflagged.paginate( :page => paging_info.page_id,
@@ -133,7 +124,6 @@ class Gallery < ActiveRecord::Base
       return self.updated_at.strftime('%B %Y')
   end
 
-  # PROTECTED INSTANCE METHODS
   protected
 
     def init_permission

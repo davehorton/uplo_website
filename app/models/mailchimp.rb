@@ -10,6 +10,7 @@ class Mailchimp
 	end
 
 	protected
+
 		def self.gibbon
 			@gibbon = Gibbon.new if @gibbon.nil?
 			return @gibbon

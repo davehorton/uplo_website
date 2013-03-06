@@ -1,44 +1,25 @@
-# == Schema Information
-#
-# Table name: line_items
-#
-#  id          :integer          not null, primary key
-#  order_id    :integer
-#  image_id    :integer
-#  quantity    :integer          default(0)
-#  tax         :float            default(0.0)
-#  price       :decimal(16, 2)   default(0.0)
-#  plexi_mount :boolean          default(FALSE)
-#  moulding    :string(255)
-#  size        :string(255)
-#  created_at  :datetime
-#  updated_at  :datetime
-#
-
 class LineItem < ActiveRecord::Base
   include ::SharedMethods::Paging
   include ::SharedMethods::SerializationConfig
 
-  belongs_to :order
   belongs_to :image
+  belongs_to :order
   after_save :update_order
   after_destroy :update_order
 
   validates :quantity, :numericality => { :less_than_or_equal_to => 10 }
   #validate :item_uniq, :on => :update
 
-  class << self
-    def exposed_methods
-      [:image_thumb_url, :image_name, :image_url]
-    end
+  def self.exposed_methods
+    [:image_thumb_url, :image_name, :image_url]
+  end
 
-    def exposed_attributes
-      [:id, :moulding, :size, :quantity, :price, :image_name, :image_id]
-    end
+  def self.exposed_attributes
+    [:id, :moulding, :size, :quantity, :price, :image_name, :image_id]
+  end
 
-    def exposed_associations
-      []
-    end
+  def self.exposed_associations
+    []
   end
 
   def image_thumb_url
@@ -75,6 +56,7 @@ class LineItem < ActiveRecord::Base
   end
 
   protected
+
     def item_uniq
       if LineItem.exists?(:order_id => self.order_id, :image_id => self.image_id, :plexi_mount => self.plexi_mount, :moulding => self.moulding, :size => self.size)
         errors[:base] = 'The size and moulding options have been ordered in another item. Please choose other options.'

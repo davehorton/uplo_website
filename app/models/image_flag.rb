@@ -1,37 +1,19 @@
-# == Schema Information
-#
-# Table name: image_flags
-#
-#  id          :integer          not null, primary key
-#  image_id    :integer          not null
-#  reported_by :integer          not null
-#  flag_type   :integer          not null
-#  description :string(255)
-#  created_at  :datetime
-#  updated_at  :datetime
-#
-
 class ImageFlag < ActiveRecord::Base
-  # CONSTANT
   FLAG_TYPE = {
     'terms_of_use_violation' => 1,
     'copyright' => 2,
     'nudity' => 3
   }
 
-  # Associations
   belongs_to :image
   belongs_to :reporter, :class_name => 'User', :foreign_key => :reported_by
 
-  # Validations
   validates_presence_of :image_id, :reported_by, :flag_type, :message => 'cannot be blank'
   validates :description, :length => {:maximum => 255, :message => 'cannot exceed 255 characters'}
 
-  # CALL BACK
   after_save :set_image_delta_flag
   after_destroy :set_image_delta_flag
 
-  # Class methods
   def self.process_description(flag_type, description)
     if flag_type.to_i == ImageFlag::FLAG_TYPE['nudity']
       result = ''
@@ -78,6 +60,7 @@ class ImageFlag < ActiveRecord::Base
   end
 
   private
+
     def set_image_delta_flag
       if Rails.env.production?
         # Rake::Task['search:reindex'].reenable

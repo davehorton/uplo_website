@@ -1,20 +1,7 @@
-# == Schema Information
-#
-# Table name: invitations
-#
-#  id         :integer          not null, primary key
-#  email      :string(255)      not null
-#  token      :string(255)      not null
-#  invited_at :datetime
-#  created_at :datetime
-#  updated_at :datetime
-#
-
 class Invitation < ActiveRecord::Base
   include ::SharedMethods::Paging
   include ::SharedMethods::SerializationConfig
   include ::SharedMethods
-
 
   def self.exposed_methods
     []
@@ -45,6 +32,7 @@ class Invitation < ActiveRecord::Base
   end
 
   protected
+
     def self.parse_paging_options(options, default_opts = {})
       if default_opts.blank?
         default_opts = {

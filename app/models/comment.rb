@@ -2,7 +2,6 @@ class Comment < ActiveRecord::Base
   include ::SharedMethods::Paging
   include ::SharedMethods::SerializationConfig
 
-  # Associations
   belongs_to :image
   belongs_to :user
 

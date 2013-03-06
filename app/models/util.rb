@@ -1,4 +1,3 @@
-# Utility methods for model classes.
 module Util
   class << self
     include ActionView::Helpers::NumberHelper
