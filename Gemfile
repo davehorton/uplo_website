@@ -17,6 +17,7 @@ gem 'country-select'
 gem 'dalli'
 gem 'devise', '1.5.4'
 gem 'delayed_paperclip', git: 'git://github.com/jrgifford/delayed_paperclip.git' # with Sidekiq support
+gem 'draper'
 gem 'fb_graph'
 gem 'flickraw'
 gem 'gibbon'
