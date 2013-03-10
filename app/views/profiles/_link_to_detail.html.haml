@@ -1,5 +1,5 @@
 / local values: user_id, url, data_empty
-- if !empty && is_current_user(user_id)
+- if !empty && current_user?(user_id)
   %a.edit-pane.right{ :href => "#{ url }" }
     .icon.edit.left
     .text.black.font12.left Edit

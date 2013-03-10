@@ -125,7 +125,7 @@ var helper = {
   },
 
   // Validate IPv4 address format
-  is_valid_ip4_address: function (ipaddr) {
+  valid_ip4_address: function (ipaddr) {
    var re = /^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$/;
    if (re.test(ipaddr)) {
       var parts = ipaddr.split(".");
@@ -140,14 +140,14 @@ var helper = {
   },
 
   // Validate list of IPv4 addresses format.
-  is_valid_ip4_addresses: function (ipaddresses, separator) {
+  valid_ip4_addresses: function (ipaddresses, separator) {
     if(!separator || $.trim(separator) == ""){
       separator = ","; // set default separator.
     }
     var ips = ipaddresses.split(separator);
     for (var i = 0; i < ips.length; i++) {
       var ip = $.trim(ips[i]);
-      if(!helper.is_valid_ip4_address(ip)){
+      if(!helper.valid_ip4_address(ip)){
         return false;
       }
     }
@@ -170,7 +170,7 @@ var helper = {
     });
   },
 
-  is_equal_elements: function(elm1, elm2){
+  equal_elements: function(elm1, elm2){
     return (elm1 == elm2 || $.inArray(elm1, elm2) >= 0)
   },
 

@@ -5,7 +5,7 @@
     #counter.text.fuzzy-gray.font20.left= "(#{ @images.total_entries })".html_safe
   .line-separator.left
   #endless-pages.left
-    - if is_current_user(@user.id)
+    - if current_user?(@user.id)
       = render :partial => 'edit_likes_template', :locals => { :images => @images }
     - else
       = render :partial => 'images/photos_template', :locals => { :images => @images, :photos_per_line => 4, :photo_size => 'thumb' }

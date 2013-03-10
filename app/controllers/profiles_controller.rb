@@ -1,5 +1,6 @@
 class ProfilesController < ApplicationController
   before_filter :authenticate_user!, :find_user
+  around_filter :apply_user_scope
   layout 'main'
 
   def show
@@ -154,25 +155,27 @@ class ProfilesController < ApplicationController
   end
 
   protected
-  def default_page_size
-    actions = ['show']
-    if actions.index(params[:action])
-      size = 12
-    else
-      size = 4
-    end
-    return size
-  end
 
-  def find_user
-    if params[:user_id].nil?
-      @user = current_user
-    else
-      if current_user.is_admin?
-        @user = User.find_by_id params[:user_id]
+    def apply_user_scope
+      if current_user.try(:admin?)
+        User.unscoped { yield }
       else
-        @user = User.active_users.find_by_id params[:user_id]
+        yield
       end
     end
-  end
+
+    def default_page_size
+      actions = ['show']
+      if actions.index(params[:action])
+        size = 12
+      else
+        size = 4
+      end
+      return size
+    end
+
+    def find_user
+      user_id = params[:user_id]
+      @user = user_id.nil? ? current_user : User.find(user_id)
+    end
 end

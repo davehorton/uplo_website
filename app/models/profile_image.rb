@@ -33,12 +33,12 @@ class ProfileImage < ActiveRecord::Base
     ProfileImage.transaction do
       self.update_attribute('default', true)
       self.update_attribute('last_used', Time.now)
-      ProfileImage.update_all '"default"=false', "user_id = #{ self.user_id } and id <> #{ self.id }"
+      ProfileImage.update_all({ default: false }, "user_id = #{ self.user_id } and id <> #{ self.id }")
     end
   end
 
-  def is_current_avatar?
-    return self.default
+  def current_avatar?
+    self.default
   end
 
   def url(style = :thumb)
@@ -48,7 +48,7 @@ class ProfileImage < ActiveRecord::Base
   private
 
     def reset_avatar
-      self.user.rollback_avatar if self.is_current_avatar?
-      self.source.update_attribute('is_owner_avatar', false) if self.source
+      user.rollback_avatar if current_avatar?
+      source.update_attribute(:owner_avatar, false) if source
     end
 end

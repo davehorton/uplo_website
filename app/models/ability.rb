@@ -2,7 +2,7 @@ class Ability
   include CanCan::Ability
 
   def initialize(user)
-    if user && !user.is_banned? && !user.is_removed?
+    if user && !user.blocked?
       can :manage, :all
     end
   end

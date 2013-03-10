@@ -333,10 +333,10 @@ class SocialsController < ApplicationController
 		def gallery_cover_image_url(gallery, type = :thumb)
 	    img_url = "#{root_url}/assets/gallery-thumb-180.jpg" # Default image.
 	    image = gallery.cover_image
-	    if image && !image.is_removed? && (!image.is_flagged?)
+	    if image && !image.removed? && (!image.flagged?)
 	      img_url = image.url(type)
 	    end
 
-	    return img_url
+	    img_url
 	  end
 end

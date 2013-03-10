@@ -40,7 +40,7 @@ class Admin::FlaggedImagesController < Admin::AdminController
 
     begin
       Image.flagged.where(flag_type: params[:flag_type]).each do |image|
-        if image.update_attribute(:is_removed, true)
+        if image.update_attribute(:removed, true)
           users << image.author_id
         end
       end
@@ -66,7 +66,7 @@ class Admin::FlaggedImagesController < Admin::AdminController
     begin
       image = Image.flagged.find_by_id(params[:image_id])
       if image && image.reinstate
-        UserMailer.delay.flagged_image_is_reinstated(image.author_id, image)
+        UserMailer.delay.flagged_image_reinstated_email(image.author_id, image)
         result[:status] = 'ok'
         flash[:notice] = I18n.t("admin.notice_reinstate_image_succeeded")
         result[:redirect_url] = admin_flagged_images_path(:flag_type => params[:flag_type])
@@ -88,8 +88,8 @@ class Admin::FlaggedImagesController < Admin::AdminController
 
     begin
       image = Image.flagged.find_by_id(params[:image_id])
-      if image && image.update_attribute(:is_removed, true)
-        UserMailer.delay.flagged_image_is_removed(image.author_id, image)
+      if image && image.update_attribute(:removed, true)
+        UserMailer.delay.flagged_image_removed_email(image.author_id, image)
         result[:status] = 'ok'
         flash[:notice] = I18n.t("admin.notice_remove_image_succeeded")
         result[:redirect_url] = admin_flagged_images_path(:flag_type => params[:flag_type])

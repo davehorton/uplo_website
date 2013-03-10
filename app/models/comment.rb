@@ -4,10 +4,11 @@ class Comment < ActiveRecord::Base
 
   belongs_to :image
   belongs_to :user
+  belongs_to :active_user, :class_name => "User", :foreign_key => "user_id", conditions: { banned: false, removed: false }
 
   validates_presence_of :user_id, :image_id
 
-  scope :available, joins(:user).where('users.is_banned <> ? AND users.is_removed <> ?', true, true)
+  scope :available, joins(:active_user)
 
   def self.exposed_methods
     [ :duration, :commenter, :commenter_id, :commenter_avatar ]

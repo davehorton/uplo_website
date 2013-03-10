@@ -1,6 +1,4 @@
 class Image < ActiveRecord::Base
-  include Rails.application.routes.url_helpers
-
   include ::SharedMethods::Paging
   include ::SharedMethods::SerializationConfig
   include ::SharedMethods::Converter
@@ -9,8 +7,9 @@ class Image < ActiveRecord::Base
   include ImageConstants
 
   belongs_to :gallery,     :touch => true
+  belongs_to :public_gallery, class_name: 'Gallery', foreign_key: 'gallery_id', conditions: { permission: Permission::Public.new }
   has_one  :author,        :through => :gallery, :source => :user
-  has_one  :active_author, :through => :gallery, :source => :user, conditions: { is_removed: false, is_banned: false }
+  has_one  :active_author, :through => :gallery, :source => :user, conditions: { banned: false, removed: false }
   has_many :comments,      :dependent => :destroy
   has_many :image_flags,   :dependent => :destroy
   has_many :image_likes,   :dependent => :destroy
@@ -19,15 +18,15 @@ class Image < ActiveRecord::Base
   has_many :orders,        :through => :line_items
   has_many :tags,          :through => :image_tags
 
-  scope :removed,     where(is_removed: true)
-  scope :not_removed, where(is_removed: false)
+  scope :removed,     where(removed: true)
+  scope :not_removed, where(removed: false)
 
   scope :flagged,    not_removed.joins(:image_flags)
   scope :unflagged,  not_removed.includes(:image_flags).where(image_flags: { id: nil })
 
   scope :processing,       not_removed.joins(:active_author).where(data_processing: true)
   scope :visible,          not_removed.joins(:active_author).where(data_processing: false)
-  scope :visible_everyone, visible.unflagged.joins(:gallery).where(galleries: { permission: Gallery::PUBLIC_PERMISSION })
+  scope :visible_everyone, visible.unflagged.joins(:public_gallery)
 
   has_attached_file :image,
     styles: lambda { |attachment| attachment.instance.available_styles || {}},
@@ -50,7 +49,7 @@ class Image < ActiveRecord::Base
 
   def self.do_search_accessible_images(user_id, params)
     params ||= {}
-    with_display = "*, IF(author_id = #{user_id} OR permission = #{Gallery::PUBLIC_PERMISSION}, 1, 0) AS display"
+    with_display = "*, IF(author_id = #{user_id} OR permission = #{Permission::Public.new}, 1, 0) AS display"
     params[:sphinx_search_options] = {
       :joins => '
         LEFT JOIN galleries AS gals ON gals.id = images.gallery_id
@@ -69,7 +68,7 @@ class Image < ActiveRecord::Base
 
   def self.get_spotlight_images(user_id, params)
     params ||= {}
-    with_display = "*, IF(author_id = #{user_id} OR permission = #{Gallery::PUBLIC_PERMISSION}, 1, 0) AS display"
+    with_display = "*, IF(author_id = #{user_id} OR permission = #{Permission::Public.new}, 1, 0) AS display"
     params[:sphinx_search_options] = {
       :joins => '
         LEFT JOIN galleries AS gals ON gals.id = images.gallery_id
@@ -85,45 +84,6 @@ class Image < ActiveRecord::Base
         :promote_num => 1 }
     }
     self.do_search(params)
-  end
-
-  def self.get_all_images_with_current_user(params, current_user = nil)
-    if current_user.blank?
-      conditions = [
-        "gals.permission = :gallery_permission
-        AND image_flags.reported_by IS NULL
-        AND users.is_banned = :user_banned
-        AND users.is_removed = :user_removed",
-        { :gallery_permission => Gallery::PUBLIC_PERMISSION,
-          :image_removed => false,
-          :user_banned => false,
-          :user_removed => false
-        }
-      ]
-
-
-    else
-      conditions = [
-        "gals.permission = :gallery_permission
-        AND (gals.user_id = :user_id OR image_flags.reported_by IS NULL)
-        AND users.is_banned = :user_banned
-        AND users.is_removed = :user_removed",
-        { :gallery_permission => Gallery::PUBLIC_PERMISSION,
-          :user_id => current_user.id,
-          :image_removed => false,
-          :user_banned => false,
-          :user_removed => false
-        }
-      ]
-    end
-
-    paging_info = parse_paging_options(params,
-      {:sort_criteria => "images.promote_num DESC, images.updated_at DESC, images.likes DESC"})
-
-    self.joined_images.joins("JOIN users ON gals.user_id = users.id").where(conditions).paginate(
-      :page => paging_info.page_id,
-      :per_page => paging_info.page_size,
-      :order => paging_info.sort_string)
   end
 
   def self.load_images(params = {})
@@ -185,9 +145,8 @@ class Image < ActiveRecord::Base
   def self.load_popular_images(params = {}, current_user = nil)
     paging_info = parse_paging_options(params,
       {:sort_criteria => "images.promote_num DESC, images.updated_at DESC, images.likes DESC"})
-    # TODO: calculate the popularity of the images: base on how many times an image is "liked".
     self.includes(:gallery).joins([:gallery]).
-      where("galleries.permission = ?", Gallery::PUBLIC_PERMISSION).paginate(
+      where("galleries.permission = ?", Permission::Public.new).paginate(
         :page => paging_info.page_id,
         :per_page => paging_info.page_size,
         :order => paging_info.sort_string)
@@ -200,7 +159,7 @@ class Image < ActiveRecord::Base
 
   def self.exposed_attributes
     [:id, :name, :description, :data_file_name, :name, :gallery_id, :price, :likes, :keyword,
-      :is_owner_avatar, :is_gallery_cover, :tier]
+      :owner_avatar, :gallery_cover, :tier]
   end
 
   def self.exposed_associations
@@ -237,6 +196,10 @@ class Image < ActiveRecord::Base
     search_term = SharedMethods::Converter::SearchStringConverter.process_special_chars(params[:query])
     Image.search(search_term, sphinx_search_options)
   end
+
+  delegate :username, :to => :author, allow_nil: true
+  delegate :id, :fullname, :to => :author, allow_nil: true, prefix: true
+  delegate :name, :to => :gallery, prefix: true
 
   def get_price(moulding, size)
     return MOULDING_PRICES[moulding][self.tier][size]
@@ -275,7 +238,7 @@ class Image < ActiveRecord::Base
     sizes.each { |size|
       result << size if self.valid_for_size?(size)
     }
-    return result
+    result
   end
 
   def comments_number
@@ -283,13 +246,13 @@ class Image < ActiveRecord::Base
   end
 
   def set_as_album_cover
-    self.update_attribute('is_gallery_cover', true)
-    Image.update_all 'is_gallery_cover=false', "gallery_id = #{ self.gallery_id } and id <> #{ self.id }"
+    self.update_attribute('gallery_cover', true)
+    Image.update_all 'gallery_cover=false', "gallery_id = #{ self.gallery_id } and id <> #{ self.id }"
   end
 
   def set_as_owner_avatar
-    self.update_attribute('is_owner_avatar', true)
-    Image.update_all 'is_owner_avatar=false', "gallery_id in (#{ self.author.galleries.collect(&:id).join(',') }) and id <> #{ self.id }"
+    self.update_attribute('owner_avatar', true)
+    Image.update_all 'owner_avatar=false', "gallery_id in (#{ self.author.galleries.collect(&:id).join(',') }) and id <> #{ self.id }"
     profile_img = ProfileImage.first :conditions => {:user_id => self.author.id, :link_to_image => self.id}
     if profile_img.nil?
       ProfileImage.create({ :user_id => self.author.id,
@@ -301,12 +264,12 @@ class Image < ActiveRecord::Base
     end
   end
 
-  def is_flagged?
-    ImageFlag.exists?(:image_id => self.id)
+  def flagged?
+    image_flags.any?
   end
 
   def flag(user, params={}, result = {})
-    if (self.author.is_banned)
+    if self.author.banned?
       result = { :success => false, :msg => "The author is already banned." }
     else
       if (self.image_flags.count > 0)
@@ -339,12 +302,12 @@ class Image < ActiveRecord::Base
 
             if self.author.will_be_banned?
               # Ban the image's author.
-              self.author.update_attribute(:is_banned, true)
+              self.author.update_attribute(:banned, true)
               # Send email.
-              UserMailer.user_is_banned(self.author).deliver
+              UserMailer.banned_user_email(self.author).deliver
             else
               # Send email about the flagged image.
-              UserMailer.image_is_flagged(self.author, self).deliver
+              UserMailer.flagged_image_email(self.author, self).deliver
             end
 
             # Update result
@@ -360,38 +323,22 @@ class Image < ActiveRecord::Base
 
   def reinstate
     self.image_flags.destroy_all
-    self.update_attribute(:is_removed, false)
+    self.update_attribute(:removed, false)
   end
 
   def has_owner(id)
     self.gallery.user.id == id
   end
 
-  def username
-    user = author
-    if user
-      return user.username
-    end
+  def creation_timestamp
+    ::Util.distance_of_time_in_words_to_now(self.created_at)
   end
 
-  def user_avatar
-    user = author
-    if user
-      return user.avatar_url(:large)
-    end
-  end
-
-  def user_fullname
-    user = author
-    if user
-      return user.fullname
-    end
-  end
-
-  def user_id
-    user = author
-    if user
-      return user.id
+  def url(options = nil)
+    if data_processing
+      "/assets/gallery-thumb.jpg"
+    else
+      self.image.expiring_url(s3_expire_time, options)
     end
   end
 
@@ -403,21 +350,8 @@ class Image < ActiveRecord::Base
     url(:thumb)
   end
 
-  def creation_timestamp
-    ::Util.distance_of_time_in_words_to_now(self.created_at)
-  end
-
-  # public link on social network
-  def public_link
-    url_for :controller => 'images', :action => 'public', :id => self.id, :only_path => false, :host => DOMAIN
-  end
-
-  # Shortcut to get image's URL
-  def url(options = nil)
-    if (self.data_processing)
-      return "/assets/gallery-thumb.jpg"
-    end
-    self.image.expiring_url(s3_expire_time, options)
+  def user_avatar
+    author.try(:avatar_url, :large)
   end
 
   def liked_by_user(user_id)
@@ -484,7 +418,6 @@ class Image < ActiveRecord::Base
     end
 
     return total
-
   end
 
   def total_sales(mon = nil) # mon with year, return saled $$
@@ -601,16 +534,8 @@ class Image < ActiveRecord::Base
     return result
   end
 
-  def gallery_name
-    return self.gallery.name
-  end
-
   def set_album_cover
-    if Image.exists?({:gallery_id => self.gallery_id, :is_gallery_cover => true})
-      self.is_gallery_cover = false
-    else
-      self.is_gallery_cover = true
-    end
+    self.gallery_cover = !Image.exists?({:gallery_id => self.gallery_id, :gallery_cover => true})
   end
 
   # Increase the pageview counter
@@ -636,10 +561,10 @@ class Image < ActiveRecord::Base
     self.update_attribute(:promote_num, 0)
   end
 
-  def is_promoted?
+  def promoted?
     (self.promote_num.to_i > 0)
   end
-  alias_method :is_promoted, :is_promoted?
+  alias_method :promoted, :promoted?
 
 #==============================================================================
 # Description:

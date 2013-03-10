@@ -38,7 +38,7 @@
                 = image_tag image.url(:smallest), :class => 'flagged-image-thumb'
 
           .action-container
-            - if user.is_banned? && user.ready_for_reinstating?
+            - if user.banned? && user.ready_for_reinstating?
               .button.reinstate{'data-confirm' => t('admin.reinstate_user_confirm')}
                 - reinstate_link = url_for(:controller => "admin/flagged_users", :action => "reinstate_user", :id => user.id)
                 %form{:action => reinstate_link, :class => "reinstate-form action-form",
@@ -48,7 +48,7 @@
             - else
               .button.reinstate.disabled.tooltip{:title => t("admin.error_not_ready_for_reinstating")}
 
-            - if !user.is_removed?
+            - if !user.removed?
               .button.remove{'data-confirm' => t('admin.remove_user_confirm', :username => user.username)}
                 - remove_link = url_for(:controller => "admin/flagged_users", :action => "remove_user", :id => user.id)
                 %form{:action => remove_link, :class => "remove-form action-form",

@@ -157,7 +157,7 @@ class ImagesController < ApplicationController
     push_redirect if redirect_list.index(request.env["HTTP_REFERER"])
     # get selected Image
     @selected_image = Image.unflagged.find_by_id(params[:id])
-    if (@selected_image.nil? || @selected_image.is_flagged? || (@selected_image.author.is_banned? && !current_user.is_admin))
+    if (@selected_image.nil? || @selected_image.flagged? || (@selected_image.author.blocked? && !current_user.admin?))
       return render_not_found
     end
     # get Gallery
@@ -205,7 +205,7 @@ class ImagesController < ApplicationController
     push_redirect
     @user = current_user
     @image = Image.unflagged.find_by_id(params[:id])
-    if (@image.nil? || ((@image.author.is_banned? || @image.author.is_removed) && !@user.is_admin))
+    if @image.nil? || (@image.author.blocked? && !@user.admin?)
       return render_not_found
     elsif @image.gallery && !@image.gallery.can_access?(@user)
       return render_unauthorized
@@ -243,7 +243,7 @@ class ImagesController < ApplicationController
     #   return redirect_to :action => 'browse', :id => params[:id]
     # end
     @image = Image.unflagged.find_by_id(params[:id])
-    if (@image.nil? || ((@image.author.is_banned? || @image.author.is_removed) && !current_user.is_admin))
+    if @image.nil? || (@image.author.blocked? && !current_user.admin?)
       return render_not_found
     end
     @author = @image.author
@@ -282,7 +282,7 @@ class ImagesController < ApplicationController
       :msg => ""
     }
     image = Image.unflagged.find_by_id params[:id]
-    if (image.nil? || ((image.author.is_banned? || image.author.is_removed) && !current_user.is_admin))
+    if image.nil? || (image.author.blocked? && !current_user.admin?)
       result = {
         :success => false,
         :msg => "The image does not exist right now."
@@ -304,7 +304,7 @@ class ImagesController < ApplicationController
       data.each do |img|
         id = img.delete 'id'
         image = Image.unflagged.find_by_id id.to_i
-        if (image.nil? || (image.author.is_banned? && !current_user.is_admin))
+        if image.nil? || (image.author.blocked? && !current_user.admin?)
           result = {
             :error => "Not found photo"
           }
@@ -312,19 +312,19 @@ class ImagesController < ApplicationController
           render(:json => result) and return
         else
           next if image.data_processing
-          img[:is_gallery_cover] = SharedMethods::Converter::Boolean(img.delete 'is_album_cover')
-          img[:is_owner_avatar] = SharedMethods::Converter::Boolean(img.delete 'is_avatar')
+          img[:gallery_cover] = SharedMethods::Converter::Boolean(img.delete 'album_cover')
+          img[:owner_avatar] = SharedMethods::Converter::Boolean(img.delete 'avatar')
           if (img["gallery_id"].to_i == image.gallery_id)
-            if(img[:is_gallery_cover])
+            if(img[:gallery_cover])
               image.set_as_album_cover
             end
           else
-            img[:is_gallery_cover] = false
+            img[:gallery_cover] = false
           end
 
-          if img[:is_owner_avatar]
+          if img[:owner_avatar]
             image.set_as_owner_avatar
-          elsif image.is_owner_avatar
+          elsif image.owner_avatar?
             current_user.rollback_avatar
           end
           if !(image.update_attributes img)
@@ -371,7 +371,7 @@ class ImagesController < ApplicationController
 
   def order
     @image = Image.unflagged.find_by_id(params[:id])
-    if (@image.nil? || ((@image.author.is_banned? || @image.author.is_removed) && !current_user.is_admin))
+    if @image.nil? || (@image.author.blocked? && !current_user.admin?)
       return render_not_found
     end
     if params[:line_item].nil?
@@ -387,7 +387,7 @@ class ImagesController < ApplicationController
 
   def show_pricing
     image = Image.unflagged.find_by_id params[:id]
-    if (image.nil? || ((image.author.is_banned? || image.author.is_removed) && !current_user.is_admin))
+    if image.nil? || (image.author.blocked? && !current_user.admin?)
       result = { :success => false, :msg => 'This image does not exist anymore' }
     else
       table = render_to_string :partial => 'galleries/price_tiers', :locals => { :image => image }
@@ -398,7 +398,7 @@ class ImagesController < ApplicationController
 
   def update_tier
     image = Image.unflagged.find_by_id params[:id]
-    if (image.nil? || ((image.author.is_banned? || image.author.is_removed) && !current_user.is_admin))
+    if image.nil? || (image.author.blocked? && !current_user.admin?)
       result = { :success => false, :msg => 'This image does not exist anymore' }
     else
       image.update_attribute(:tier, params[:price]['tier'])
@@ -430,7 +430,7 @@ class ImagesController < ApplicationController
         render_not_found
         return false
       elsif !@gallery.can_access?(current_user) ||
-            (!@gallery.is_owner?(current_user) && %w(edit update destroy create list).include?(params[:action]))
+            (!@gallery.owner?(current_user) && %w(edit update destroy create list).include?(params[:action]))
         render_unauthorized
         return false
       end

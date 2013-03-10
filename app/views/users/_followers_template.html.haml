@@ -1,7 +1,7 @@
 / local values: users, users_per_line, type
 - (0...users.length). each do |idx|
   - user = users[idx]
-  - is_current_user = is_current_user(user.id)
+  - is_current_user = current_user?(user.id)
   - images_number = is_current_user ? user.images.visible.length : user.images.public_images.length
   - is_following = user.has_follower?(current_user.id)
   - follow_class = is_following ? 'unfollow-small' : 'follow-small'

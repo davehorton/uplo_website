@@ -11,9 +11,10 @@ module ImagesHelper
     "http://pinterest.com/pin/create/button/?url=#{CGI.escape(image_public_url)}&description=#{"Share from UPLO: " + image.name}&media=#{CGI.escape(image.url(:spotlight_thumb))}"
   end
 
+  # TODO: move to ability class
   def can_promote_image?(image, user = nil)
     user ||= current_user
-    (current_user.is_admin? && !image.is_promoted? && !image.is_removed? && !image.is_flagged?)
+    (current_user.admin? && !image.promoted? && !image.removed? && !image.flagged?)
   end
 
   # This is a helper to use with the JAIL (jQuery Asynchronous Image Loader plugin)

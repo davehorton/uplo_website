@@ -73,10 +73,10 @@ class Api::ImagesController < Api::BaseController
     #   render :json => @result and return
     # end
 
-    image.set_as_album_cover if SharedMethods::Converter::Boolean(img_info['is_gallery_cover'])
-    if SharedMethods::Converter::Boolean(img_info['is_owner_avatar'])
+    image.set_as_album_cover if SharedMethods::Converter::Boolean(img_info['gallery_cover'])
+    if SharedMethods::Converter::Boolean(img_info['owner_avatar'])
       image.set_as_owner_avatar
-    elsif image.is_owner_avatar
+    elsif image.owner_avatar?
       current_user.rollback_avatar
     end
 
@@ -114,12 +114,12 @@ class Api::ImagesController < Api::BaseController
     end
     # update image
     img_info = params[:image]
-    img_info[:is_gallery_cover] = SharedMethods::Converter::Boolean(img_info[:is_gallery_cover])
-    img_info[:is_owner_avatar] = SharedMethods::Converter::Boolean(img_info[:is_owner_avatar])
-    image.set_as_album_cover if img_info[:is_gallery_cover]
-    if img_info[:is_owner_avatar]
+    img_info[:gallery_cover] = SharedMethods::Converter::Boolean(img_info[:gallery_cover])
+    img_info[:owner_avatar] = SharedMethods::Converter::Boolean(img_info[:owner_avatar])
+    image.set_as_album_cover if img_info[:gallery_cover]
+    if img_info[:owner_avatar]
       image.set_as_owner_avatar
-    elsif image.is_owner_avatar
+    elsif image.owner_avatar?
       current_user.rollback_avatar
     end
 

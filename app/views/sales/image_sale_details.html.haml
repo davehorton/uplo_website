@@ -13,7 +13,7 @@
           = image_tag(@image.url(:thumb), :class => "image-thumb image thumb")
         .info.left
           .text.black.bold.font24= @image.name
-          - if (image.is_flagged? || image.is_removed)
+          - if (image.flagged? || image.removed?)
             .text.font20{:style => "color:red"} Unavailable
           .quantity.text.fuzzy-gray.font18= "#{@image.saled_quantity} Sales"
           .price.text.bold= number_to_currency @image.user_total_sales, {:precision => 2}

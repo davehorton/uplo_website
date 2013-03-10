@@ -19,7 +19,7 @@ module ApplicationHelper
     when 'galleries' then sections[:gallery]
     when 'sales' then sections[:sale]
     when 'profiles' then
-      if params[:action]=='show' && is_current_user(params[:user_id])
+      if params[:action]=='show' && current_user?(params[:user_id])
         sections[:default]
       else
         sections[:profile]
@@ -38,7 +38,7 @@ module ApplicationHelper
     options = [["My UPLO", sections[:default]], ['My Profile', sections[:profile]],
       ["My Account", sections[:account]], ["My Galleries", sections[:gallery]],
       ["My Sales", sections[:sale]]]
-    options << ["Admin", sections[:admin]] if current_user.is_admin?
+    options << ["Admin", sections[:admin]] if current_user.admin?
     options_for_select(options, active)
   end
 
@@ -118,7 +118,7 @@ module ApplicationHelper
     return additional_class.join(' ')
   end
 
-  def is_current_user(user_id)
+  def current_user?(user_id)
     user_id == current_user.id
   end
 

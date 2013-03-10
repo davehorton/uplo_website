@@ -7,8 +7,7 @@
   .text.black.font18.bold= @image.name
   .line-separator
   .user-section.left
-    - is_current_user = is_current_user(@author.id)
-    - images_count = is_current_user ? @author.images.count : @author.public_images.count
+    - images_count = current_user?(@author.id) ? @author.images.count : @author.public_images.count
     - author_profile = url_for(:controller => 'profiles', :action => 'show', :user_id => @author.id)
     %a{:href => "#{ author_profile }"}
       = image_tag @author.avatar_url(:small), :class => 'avatar small left'
@@ -16,7 +15,7 @@
       %span.text.gray.font12.line12 By
       %a.text.black.normal.font12.line12{:href => "#{ author_profile }"}= @author.username.truncate(20)
       .text.gray.font11= "#{@author.fullname} &bull; #{ pluralize(images_count, 'Item')}".html_safe
-    - if is_current_user
+    - if current_user?(@author.id)
       %a#btn-edit.button.edit.right{ :href => "#{ url_for(:controller => 'galleries', :action => 'edit_images', :gallery_id => @image.gallery_id) }" }
     - else
       - is_author_following = @author.has_follower?(current_user.id)
@@ -46,7 +45,7 @@
         .image-container.small{:id => "image-container-#{image.id}", :title=>"#{image.name}", :class => "#{additional_class}"}
           %a{ :href => "#{url}" }
             = image_tag image.url(:small), :class => 'image small left'
-- if !@image.is_flagged?
+- if !@image.flagged?
   = render :partial => 'sharing_box'
 
 .sections
@@ -63,7 +62,7 @@
       = image_tag(@image.url(:medium), :class => 'image medium',
                 'data-width' => @image.width,
                 'data-height' => @image.height, :alt => @image.name)
-  - if !@image.is_flagged?
+  - if !@image.flagged?
     = render :partial => 'sharing_popup'
   .actions.left
     .left
@@ -82,7 +81,7 @@
       - if !@is_owner
         .button.flag.left{:onclick => "show_flag_form();"}
       .button.order.left{:onclick => "window.location.href = '#{order_url}';", :data => {:url => "#{order_url}"}}
-      - if !@image.is_flagged?
+      - if !@image.flagged?
         .button.share.left{:onclick => "display_sharing_box();"}
   .line-separator.clear
   #comments-section{ :data => { :id => "#{@image.id}" }}
@@ -135,16 +134,16 @@
 
         $('#btn-follow').click(function(){
           var author_id = $(this).attr('data-author-id');
-          var is_unfollow = $(this).attr('data-following');
+          var unfollow = $(this).attr('data-following');
           $.ajax({
             url: '/users/follow',
             type: "GET",
-            data: { user_id:author_id, unfollow: is_unfollow },
+            data: { user_id:author_id, unfollow: unfollow },
             dataType: "json",
             success: function(response){
               if(response.success==false){
                 helper.show_notification(response.msg);
-              } else if(is_unfollow=='false') {
+              } else if(unfollow=='false') {
                 $('#btn-follow').attr('data-following', 'true');
                 $('#btn-follow').removeClass('follow');
                 $('#btn-follow').addClass('unfollow');
@@ -274,12 +273,12 @@
 
       function update_liked(){
         var image_id = $('#btn-like').attr('data-id');
-        var is_dislike = $('#btn-like').attr('data-dislike');
+        var dislike = $('#btn-like').attr('data-dislike');
         $('#mask').modal();
         $.ajax({
           url: '/images/switch_like',
           type: "GET",
-          data: { id:image_id, dislike:is_dislike },
+          data: { id:image_id, dislike:dislike },
           dataType: "json",
           success: function(response){
             if(response.success==true){
@@ -288,7 +287,7 @@
                 $(".actions .like .label").html("Likes");
               else
                 $(".actions .like .label").html("Like");
-              if(is_dislike == 'true'){
+              if(dislike == 'true'){
                 $("#btn-like").attr('data-dislike', 'false');
                 $('#btn-like').removeClass('dislike');
                 $('#btn-like').addClass('like');
@@ -308,7 +307,7 @@
         });
 
         // Google Analytics
-        if(is_dislike == 'false'){
+        if(dislike == 'false'){
           _gaq.push(['_trackEvent', 'UPLO Web / Like', 'like', 'status', 1]);
         }
         else{

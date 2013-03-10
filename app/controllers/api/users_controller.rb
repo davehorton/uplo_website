@@ -262,9 +262,9 @@ class Api::UsersController < Api::BaseController
         else
           disable_all = (!attrs[:notify_purchases] && !attrs[:notify_comments] && !attrs[:notify_likes])
           if device.update_attributes(attrs)
-            if device.is_active && disable_all
+            if device.active? && disable_all
               Urbanairship.unregister_device(params[:device_token].to_s)
-            elsif !device.is_active && !disable_all
+            elsif !device.active? && !disable_all
               Urbanairship.register_device(params[:device_token].to_s)
             end
             result = { :success => true }
@@ -285,7 +285,7 @@ class Api::UsersController < Api::BaseController
     if (params[:emails])
       parsed_json = ActiveSupport::JSON.decode(params[:emails])
       avai_emails = []
-      users = User.active_users.find_all_by_email(parsed_json)
+      users = User.find_all_by_email(parsed_json)
       result = { :success => true, :data => process_followers_info(current_user.id, users)}
     else
       result = { :success => false, :msg => "No email found", :emails => []}
@@ -368,7 +368,7 @@ class Api::UsersController < Api::BaseController
       user = User.find_by_id user_id
       users.each { |u|
         info = u.serializable_hash(u.default_serializable_options)
-        info[:is_following] = u.has_follower?(user.id)
+        info[:following] = u.has_follower?(user.id)
         info[:followed_by_current_user] = u.has_follower?(current_user.id)
         result << {:user => info}
       }

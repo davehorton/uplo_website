@@ -76,8 +76,8 @@ saveGridChanges = (callback) ->
       gallery_id: node.find('#image_gallery_id').val(),
       price: node.find('#image_price').val(),
       description: node.find('#image_description').val(),
-      is_album_cover: node.find('.album-cover').is(':checked'),
-      is_avatar: node.find('.user-avatar').is(':checked'),
+      album_cover: node.find('.album-cover').is(':checked'),
+      avatar: node.find('.user-avatar').is(':checked'),
       keyword: node.find('#image_key_words').val()
     }
   )
@@ -94,7 +94,7 @@ saveGridChanges = (callback) ->
       $('select').selectmenu({ style: 'dropdown' })
       helper.show_notification("Update successfully!")
       callback.call() if callback
-      window.is_grid_changed = false
+      window.grid_changed = false
     error: ->
       helper.show_notification("Fail to update!")
     complete: ->
@@ -102,7 +102,7 @@ saveGridChanges = (callback) ->
   });
 
 confirmChanges = (callback) ->
-  if window.is_grid_changed == true
+  if window.grid_changed == true
     $('#save-confirm-popup').modal()
     $('.button.save-my-changes').click ->
       saveGridChanges(callback)
@@ -146,7 +146,7 @@ initTabs = (tab) ->
 
 
 $ ->
-  window.is_grid_changed = false
+  window.grid_changed = false
   $("#fileupload").fileupload()
   $("#fileupload").fileupload "option",
     dataType: 'text'
@@ -207,11 +207,11 @@ $ ->
     });
 
   $('#images-panel').delegate '.edit-template input', 'change', (e) ->
-    window.is_grid_changed = true
+    window.grid_changed = true
   $('#images-panel').delegate '.edit-template textarea', 'change', (e) ->
-    window.is_grid_changed = true
+    window.grid_changed = true
   $('#images-panel').delegate '.edit-template select', 'change', (e) ->
-    window.is_grid_changed = true
+    window.grid_changed = true
 
   $('.pagination-panel').delegate 'a', 'click', (e) ->
     e.preventDefault()

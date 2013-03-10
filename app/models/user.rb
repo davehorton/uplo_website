@@ -28,9 +28,9 @@ class User < ActiveRecord::Base
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable, :confirmable, :authentication_keys => [:login]
 
-  attr_protected :is_admin,
-                 :is_removed,
-                 :is_banned,
+  attr_protected :admin,
+                 :removed,
+                 :banned,
                  :current_sign_in_ip,
                  :last_sign_in_ip,
                  :current_sign_in_at,
@@ -42,25 +42,19 @@ class User < ActiveRecord::Base
   has_many :profile_images, :dependent => :destroy, :order => 'last_used DESC'
   has_many :galleries, :dependent => :destroy
   has_many :images, :through => :galleries
-  has_many :public_galleries, :conditions => ["galleries.permission = '#{Gallery::PUBLIC_PERMISSION}'"], :class_name => 'Gallery'
+  has_many :public_galleries, class_name: 'Gallery', conditions: { permission: Permission::Public.new }
   has_many :public_images, :through => :public_galleries, :source => :images
   has_many :comments, :dependent => :destroy
   has_many :image_likes, :dependent => :destroy
   has_many :source_liked_images, :through => :image_likes, :source => :image
   has_many :orders
   has_one :cart, :dependent => :destroy
-  has_many :user_followers, :foreign_key => :user_id, :class_name => 'UserFollow'
-
-  has_many :followers,  :through => :user_followers,
-                        :conditions => ['users.is_removed = :blocked AND users.is_banned = :blocked',
-                                        {:blocked => false}]
-  has_many :user_followings, :foreign_key => :followed_by, :class_name => 'UserFollow'
-  has_many :followed_users, :through => :user_followings,
-                            :conditions => ['users.is_removed = :blocked AND users.is_banned = :blocked',
-                                            {:blocked => false}]
-
-  has_many :friends_images, :through => :followed_users, :source => :images
   has_many :devices, :class_name => 'UserDevice'
+  has_many :user_followers, :foreign_key => :user_id, :class_name => 'UserFollow'
+  has_many :followers, :through => :user_followers
+  has_many :user_followings, :foreign_key => :followed_by, :class_name => 'UserFollow'
+  has_many :followed_users, :through => :user_followings
+  has_many :friends_images, :through => :followed_users, :source => :images
 
   belongs_to :billing_address, :class_name => "Address"
   belongs_to :shipping_address, :class_name => "Address"
@@ -81,9 +75,15 @@ class User < ActiveRecord::Base
   validates :paypal_email, :email => true, :if => :paypal_email_changed?
   validate :check_card_number
 
-  scope :active_users, where(:is_removed => false, :is_banned => false)
-  scope :removed_users, where(:is_removed => true)
-  scope :flagged_users, where(:is_removed => false, :is_banned => true)
+  after_create :cleanup_invitation
+  after_create :subscribe
+  before_validation :decrypt_data
+  after_validation :encrypt_data
+
+  default_scope where(removed: false, banned: false)
+  scope :confirmed_users, where("confirmed_at IS NOT NULL")
+  scope :removed_users, where(removed: true)
+  scope :flagged_users, where(removed: false, banned: true)
 
   scope :reinstate_ready_users, flagged_users.joins(self.sanitize_sql([
     "LEFT JOIN (
@@ -99,13 +99,6 @@ class User < ActiveRecord::Base
       AND galleries_data.flagged_images_count < ?",
       MIN_FLAGGED_IMAGES])
     ).select("DISTINCT users.*, galleries_data.flagged_images_count")
-
-  scope :confirmed_users, where("confirmed_at IS NOT NULL AND is_removed = ?", false)
-
-  after_create :cleanup_invitation
-  after_create :subscribe
-  before_validation :decrypt_data
-  after_validation :encrypt_data
 
   def self.find_first_by_auth_conditions(warden_conditions)
     conditions = warden_conditions.dup
@@ -191,13 +184,13 @@ class User < ActiveRecord::Base
             SUM(likes) AS images_likes_count,
             SUM(pageview) AS images_pageview
             FROM images
-            WHERE images.is_removed = :is_removed
+            WHERE images.removed = :removed
             GROUP BY gallery_id
           ) images_data ON galleries.id = images_data.gallery_id
           GROUP BY galleries.user_id
         ) galleries_data
         ON galleries_data.user_id = users.id",
-        {:is_removed => false}])
+        {:removed => false}])
       ).select("DISTINCT users.*,
         COALESCE(galleries_data.images_count, 0) AS images_count,
         COALESCE(galleries_data.images_likes_count, 0) AS images_likes_count,
@@ -214,12 +207,12 @@ class User < ActiveRecord::Base
       admin_mod = params[:admin_mod].nil? ? false : params[:admin_mod]
       if admin_mod
         params[:sphinx_search_options] = {
-          :with => { :is_removed => false },
+          :with => { :removed => false },
           :without => { :date_joined => 'null' }
         }
       else
         params[:sphinx_search_options] = {
-          :with => { :is_removed => false, :is_banned => false },
+          :with => { :removed => false, :banned => false },
           :without => { :date_joined => 'null' }
         }
       end
@@ -239,7 +232,7 @@ class User < ActiveRecord::Base
     end
 
     def exposed_attributes
-      [:id, :email, :first_name, :biography, :is_enable_facebook, :is_enable_twitter, :location, :paypal_email, :website, :job, :last_name, :username, :nationality, :birthday, :gender, :twitter, :facebook]
+      [:id, :email, :first_name, :biography, :facebook_enabled, :twitter_enabled, :location, :paypal_email, :website, :job, :last_name, :username, :nationality, :birthday, :gender, :twitter, :facebook]
     end
 
     def exposed_associations
@@ -303,8 +296,8 @@ class User < ActiveRecord::Base
   # PUBLIC INSTANCE METHODS
   def liked_images
     self.source_liked_images.unflagged.joins('LEFT JOIN galleries ON galleries.id = images.gallery_id').where(
-      "galleries.permission = '#{Gallery::PUBLIC_PERMISSION}' OR
-      (galleries.permission = '#{Gallery::PRIVATE_PERMISSION}' AND galleries.user_id = #{ self.id })"
+      "galleries.permission = '#{Permission::Public.new}' OR
+      (galleries.permission = '#{Permission::Private.new}' AND galleries.user_id = #{ self.id })"
     )
   end
 
@@ -313,7 +306,7 @@ class User < ActiveRecord::Base
     if img.nil?
       result = nil
     else
-      if img.source && (img.source.is_removed || (img.source.is_flagged?))
+      if img.source && (img.source.removed? || (img.source.flagged?))
         return nil
       end
       result = img.avatar
@@ -386,24 +379,21 @@ class User < ActiveRecord::Base
     result
   end
 
-  def is_male?
-    (self.gender.to_s == GENDER_MALE)
+  def male?
+    gender.to_s == GENDER_MALE
   end
 
   def has_follower?(user_id)
-    return UserFollow.exists?({ :user_id => self.id, :followed_by => user_id })
+    UserFollow.exists?({ :user_id => self.id, :followed_by => user_id })
   end
 
   def has_profile_photo?(photo_id)
-    return ProfileImage.exists?({:user_id => self.id, :id => photo_id})
+    ProfileImage.exists?({:user_id => self.id, :id => photo_id})
   end
 
   def gender_string
-    key = "female"
-    if self.is_male?
-      key = "male"
-    end
-    return I18n.t("common.#{key}")
+    key = male? ? "male" : "female"
+    I18n.t("common.#{key}")
   end
 
   def recent_empty_order
@@ -411,7 +401,7 @@ class User < ActiveRecord::Base
     if empty_order.blank?
       empty_order = self.orders.create(:status => Order::STATUS[:shopping])
     end
-    return empty_order
+    empty_order
   end
 
   def init_cart
@@ -441,7 +431,7 @@ class User < ActiveRecord::Base
       self.cart.order.save
     end
 
-    return self.cart
+    self.cart
   end
 
   def used_allocation
@@ -556,7 +546,7 @@ class User < ActiveRecord::Base
       info = img.serializable_hash(img.default_serializable_options)
       info[:total_sale] = img.user_total_sales
       info[:quantity_sale] = img.saled_quantity
-      info[:no_longer_avai] = (img.is_flagged? || img.is_removed)
+      info[:no_longer_avai] = (img.flagged? || img.removed?)
       array << {:image => info }
     }
     result[:data] = array
@@ -642,18 +632,18 @@ class User < ActiveRecord::Base
   def remove
     # TODO Need to change it in the future. Currently we just remove user out of the system
     # self.class.transaction do
-    #   if !self.is_removed?
-    #     self.update_attribute(:is_removed, true)
+    #   if !self.removed?
+    #     self.update_attribute(:removed, true)
     #     # Send email.
 
     #   end
     # end
     self.destroy
-    UserMailer.user_is_removed(self).deliver
+    UserMailer.removed_user_email(self).deliver
   end
 
   def remove_flagged_images
-    self.images.flagged.update_all(:is_removed => true)
+    self.images.flagged.update_all(:removed => true)
   end
 
   def reinstate
@@ -662,10 +652,10 @@ class User < ActiveRecord::Base
     end
 
     self.class.transaction do
-      if self.is_banned?
-        self.update_attribute(:is_banned, false)
+      if self.banned?
+        self.update_attribute(:banned, false)
         # Send email.
-        UserMailer.user_is_reinstated(self).deliver
+        UserMailer.reinstated_user_email(self).deliver
       end
     end
   end
@@ -680,15 +670,15 @@ class User < ActiveRecord::Base
 
   # Detect if this user is ready for being flagged.
   def will_be_banned?
-    (!self.is_banned && !self.ready_for_reinstating?)
+    (!self.banned? && !self.ready_for_reinstating?)
   end
 
   def ready_for_reinstating?
     (self.images.flagged.length < MIN_FLAGGED_IMAGES)
   end
 
-  def is_blocked?
-    (self.is_removed || self.is_banned?)
+  def blocked?
+    banned? || removed?
   end
 
   # USER PAYMENT PROCESSING
@@ -785,8 +775,8 @@ class User < ActiveRecord::Base
       indexes email
 
       has confirmed_at, :as => :date_joined
-      has is_removed
-      has is_banned
+      has removed
+      has banned
 
       if Rails.env.production?
         set_property :delta => FlyingSphinx::DelayedDelta

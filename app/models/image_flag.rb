@@ -41,13 +41,13 @@ class ImageFlag < ActiveRecord::Base
 
   def self.send_image_removed_email(*user_ids)
     user_ids.each do |user_id|
-      UserMailer.delay.flagged_image_is_removed(user_id)
+      UserMailer.delay.flagged_image_removed_email(user_id)
     end
   end
 
   def self.send_reinstated_email(*user_ids)
     user_ids.each do |user_id|
-      UserMailer.delay.flagged_image_is_reinstated(user_id)
+      UserMailer.delay.flagged_image_reinstated_email(user_id)
     end
   end
 

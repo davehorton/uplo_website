@@ -30,10 +30,10 @@
       .info-line.left
         .label.text.black.bold.font12 Other Actions
         .inline.half.left
-          %input{ :id => "image_album_cover_#{image.id}", :type => 'checkbox', :name => 'image[is_album_cover]', :class => 'album-cover no-padding left', :checked => image.is_gallery_cover }
+          %input{ :id => "image_album_cover_#{image.id}", :type => 'checkbox', :name => 'image[album_cover]', :class => 'album-cover no-padding left', :checked => image.gallery_cover? }
           = label_tag "image_album_cover_#{image.id}", 'Use as album cover', :class => 'text gray font11 line16 left'
         .inline.half.right
-          %input{ :id => "user_avatar_#{image.id}", :type => 'checkbox', :name => 'image[is_avatar]', :class => 'user-avatar no-padding left', :checked => image.is_owner_avatar }
+          %input{ :id => "user_avatar_#{image.id}", :type => 'checkbox', :name => 'image[avatar]', :class => 'user-avatar no-padding left', :checked => image.owner_avatar }
           = label_tag "user_avatar_#{image.id}", 'Use as profile picture', :class => 'text gray font11 line16 left'
 
   .info-panel.left

@@ -2,13 +2,9 @@ class Api::GalleriesController < Api::BaseController
   before_filter :require_login!, :except => [:list_popular, :list_images]
 
   def create_gallery
-    if params[:gallery]['permission']=='0'
-      params[:gallery]['permission'] = Gallery::PRIVATE_PERMISSION
-    else
-      params[:gallery]['permission'] = Gallery::PUBLIC_PERMISSION
-    end
-    gal = Gallery.new(params[:gallery])
+    gal = GalleryDecorator.new(params[:gallery])
     gal.user = @user
+
     if gal.save
       @result[:gallery_id] = gal.id
       @result[:public_link] = gal.public_link
@@ -17,7 +13,7 @@ class Api::GalleriesController < Api::BaseController
       @result[:msg] = gal.errors.full_messages.to_sentence
     end
 
-    return render :json => @result
+    render :json => @result
   end
 
   # POST /api/edit_gallery
@@ -31,17 +27,13 @@ class Api::GalleriesController < Api::BaseController
       @result[:msg] = "Could not find Gallery"
       return render :json => @result
     end
+
     # make sure the gallery is user's
     if gallery.user_id != @user.id
       @result[:msg] = "This gallery is not belong to you"
       return render :json => @result
     end
-    # update gallery
-    if params[:gallery]['permission']=='0'
-      params[:gallery]['permission'] = Gallery::PRIVATE_PERMISSION
-    else
-      params[:gallery]['permission'] = Gallery::PUBLIC_PERMISSION
-    end
+
     if gallery.update_attributes(params[:gallery])
       @result[:success] = true
       @result[:gallery] = gallery.serializable_hash(gallery.default_serializable_options)
@@ -158,7 +150,7 @@ class Api::GalleriesController < Api::BaseController
 
     galleries.each do |gallery|
       data = {}
-      if (!gallery.is_owner?(current_user))
+      if (!gallery.owner?(current_user))
         gallery.images = gallery.images.unflagged
       end
       data[:gallery] = gallery.serializable_hash({

@@ -12,7 +12,7 @@
                 :input_html => {:class => "description"}, :required => false)
       .select_control
         .input.right
-          = f.input :permission, :as => :select, :label => "Permission", :collection => gallery_permissions_options, :include_blank => false
+          = f.input :permission, :as => :select, :label => "Permission", :collection => Permission.select_options, :include_blank => false
           %span.text.gray.italic.font11.left.require_text= "&nbsp;<span style='color:red;'>*</span> Required Fields".html_safe
       .clear
       #button-container.left

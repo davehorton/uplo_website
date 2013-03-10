@@ -40,7 +40,7 @@
             = image_tag(image.url(:thumb), :class => 'image-thumb image thumb')
           .info.left
             .name.text.black.bold= image.name
-            - if (image.is_flagged? || image.is_removed)
+            - if (image.flagged? || image.removed?)
               .text.font20{:style => "color:red"} Unavailable
             .price
               %span.text.fuzzy-gray.bold.font18= number_to_currency image_sales, {:precision => 2}
@@ -57,7 +57,7 @@
           = image_tag(image.url(:thumb), :class => 'image-thumb image thumb')
         .info.left
           .text.black.bold.font22= image.name
-          - if (image.is_flagged? || image.is_removed)
+          - if (image.flagged? || image.removed?)
             .text.red.font22 Unavailable
           .text.fuzzy-gray.price
             %span.text.bold.fuzzy-gray.font18= number_to_currency image_sales, {:precision => 2}

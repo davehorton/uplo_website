@@ -11,7 +11,7 @@
     = f.text_area :keyword, :class => 'left', :value => gallery.keyword
   .info-line.left.no-padding-bottom
     .label.text.black.bold.font12.left Permission
-    = f.select :permission, gallery_permissions_options, {:value => gallery.permission}, { :class => 'left' }
+    = f.select :permission, Permission.select_options, {:value => gallery.permission}, { :class => 'left' }
     %span.note.text.gray.italic.font11= "&nbsp;<span style='color:red;'>*</span> Required Field".html_safe
 .line-separator.left
 #button-container

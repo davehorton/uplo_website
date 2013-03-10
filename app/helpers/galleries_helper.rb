@@ -49,19 +49,11 @@ module GalleriesHelper
   def gallery_cover_image_url(gallery)
     img_url = "#{root_url}/assets/gallery-thumb-180.jpg" # Default image.
     image = gallery.cover_image
-    if image && !image.is_removed? && (!image.is_flagged?)
+    if image && !image.removed? && (!image.flagged?)
       img_url = image.url(:thumb)
     end
 
     return img_url
-  end
-
-  def gallery_permissions_options
-    result = []
-    [Gallery::PUBLIC_PERMISSION, Gallery::PRIVATE_PERMISSION].each do |permission|
-      result << [I18n.t("gallery.permission")[permission], permission]
-    end
-    result
   end
 
   def gallery_price_options
@@ -70,6 +62,6 @@ module GalleriesHelper
 
   def can_modify_gallery?(gallery, user = nil)
     user ||= current_user
-    return gallery.is_owner?(user)
+    return gallery.owner?(user)
   end
 end

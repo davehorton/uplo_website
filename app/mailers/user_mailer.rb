@@ -1,30 +1,30 @@
 class UserMailer < ApplicationMailer
-  def user_is_banned(user)
+  def banned_user_email(user)
     @user = user
     subject = I18n.t("user_mailer.subject_banned_user")
     mail(:to => @user.friendly_email, :subject => subject)
   end
 
-  def user_is_removed(user)
+  def removed_user_email(user)
     @user = user
     subject = I18n.t("user_mailer.subject_removed_user")
     mail(:to => @user.friendly_email, :subject => subject)
   end
 
-  def user_is_reinstated(user)
+  def reinstated_user_email(user)
     @user = user
     subject = I18n.t("user_mailer.subject_reinstated_user")
     mail(:to => @user.friendly_email, :subject => subject)
   end
 
-  def image_is_flagged(user, image)
+  def flagged_image_email(user, image)
     @user = user
     @image = image
     subject = I18n.t("user_mailer.subject_flagged_image")
     mail(:to => @user.friendly_email, :subject => subject)
   end
 
-  def flagged_image_is_removed(user_id, image = nil)
+  def flagged_image_removed_email(user_id, image = nil)
     @user = User.find(user_id)
 
     if image.blank?
@@ -37,7 +37,7 @@ class UserMailer < ApplicationMailer
     mail(:to => @user.friendly_email, :subject => subject)
   end
 
-  def flagged_image_is_reinstated(user_id, image = nil)
+  def flagged_image_reinstated_email(user_id, image = nil)
     @user = User.find(user_id)
 
     if image.blank?

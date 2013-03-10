@@ -46,19 +46,19 @@ requestDislike = (node) ->
 requestFollow = (node) ->
   target = $(node)
   author_id = target.attr('data-author-id')
-  is_unfollow = target.attr('data-following')
+  unfollow = target.attr('data-following')
   $('#mask').modal()
   $.ajax({
     url: '/users/follow',
     type: "GET",
-    data: { user_id:author_id, unfollow: is_unfollow },
+    data: { user_id:author_id, unfollow: unfollow },
     dataType: "json",
     success: (response) ->
       if(response.success==false)
         helper.show_notification(response.msg)
         $.modal.close()
 
-      else if(is_unfollow=='false')
+      else if(unfollow=='false')
         target.attr('data-following', 'true')
         target.removeClass('follow-small')
         target.addClass('unfollow-small')
@@ -184,19 +184,19 @@ $ ->
 
   $('#btn-follow').click ->
     author_id = $(@).attr('data-author-id')
-    is_unfollow = $(@).attr('data-following')
+    unfollow = $(@).attr('data-following')
     $('#mask').modal()
     $.ajax({
       url: '/users/follow',
       type: "GET",
-      data: { user_id:author_id, unfollow: is_unfollow },
+      data: { user_id:author_id, unfollow: unfollow },
       dataType: "json",
       success: (response) ->
         if(response.success==false)
           helper.show_notification(response.msg)
           $.modal.close()
 
-        else if(is_unfollow=='false')
+        else if(unfollow=='false')
           $('#btn-follow').attr('data-following', 'true')
           $('#btn-follow').removeClass('follow')
           $('#btn-follow').addClass('unfollow')

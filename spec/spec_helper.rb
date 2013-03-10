@@ -15,6 +15,7 @@ Spork.prefork do
   require 'capybara/rails'
   require 'capybara/poltergeist'
   require 'database_cleaner'
+  require 'draper/test/rspec_integration'
   require 'email_spec'
 
   # Requires supporting ruby files with custom matchers and macros, etc,

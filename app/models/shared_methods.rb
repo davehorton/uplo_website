@@ -17,16 +17,8 @@ module SharedMethods
         options ||= {}
         options.to_options!
 
-        if default_opts.blank?
-          default_opts = {
-            :sort_criteria => {:id => "DESC"},
-            :page_id => 1
-          }
-        end
-
-        default_opts[:page_id] = 1 if default_opts[:page_id].blank?
-        page_id = default_opts[:page_id]
-        #page_size = PAGE_SIZE
+        default_opts[:sort_criteria] ||= { id: "DESC" }
+        default_opts[:page_id] ||= 1
 
         if options[:page_id] && options[:page_id].to_i > 0
           info.page_id = options[:page_id]
@@ -53,7 +45,7 @@ module SharedMethods
           end
         end
 
-        return info
+        info
       end
 
       # Parse the input string with the format "sort_field1 sort_direction1, sort_field2 sort_direction2, ..." to a hash.

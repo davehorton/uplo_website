@@ -12,7 +12,7 @@ class Admin::AdminController < ApplicationController
   def authenticate_admin_user!
     authenticate_user!
     # Check Admin
-    if current_user.blank? || !current_user.is_admin?
+    if current_user.blank? || !current_user.admin?
       raise CanCan::AccessDenied
     end
   end

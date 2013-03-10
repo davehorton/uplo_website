@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130306005557) do
+ActiveRecord::Schema.define(:version => 20130310171636) do
 
   create_table "addresses", :force => true do |t|
     t.string   "first_name"
@@ -51,9 +51,10 @@ ActiveRecord::Schema.define(:version => 20130306005557) do
     t.datetime "created_at",                    :null => false
     t.datetime "updated_at",                    :null => false
     t.string   "keyword"
-    t.integer  "permission",  :default => 1
+    t.string   "permission",  :default => "1"
   end
 
+  add_index "galleries", ["permission"], :name => "index_galleries_on_permission"
   add_index "galleries", ["user_id"], :name => "index_galleries_on_user_id"
 
   create_table "image_flags", :force => true do |t|
@@ -89,7 +90,7 @@ ActiveRecord::Schema.define(:version => 20130306005557) do
     t.string   "name",                                  :null => false
     t.text     "description"
     t.integer  "gallery_id",                            :null => false
-    t.boolean  "is_gallery_cover",   :default => false
+    t.boolean  "gallery_cover",      :default => false
     t.float    "price",              :default => 0.0
     t.boolean  "delta",              :default => true,  :null => false
     t.integer  "likes",              :default => 0
@@ -102,17 +103,18 @@ ActiveRecord::Schema.define(:version => 20130306005557) do
     t.integer  "width"
     t.integer  "height"
     t.string   "keyword"
-    t.boolean  "is_owner_avatar",    :default => false
+    t.boolean  "owner_avatar",       :default => false
     t.string   "tier"
-    t.boolean  "is_removed",         :default => false
+    t.boolean  "removed",            :default => false
     t.integer  "pageview",           :default => 0
     t.integer  "promote_num",        :default => 0
     t.boolean  "data_processing",    :default => false
   end
 
   add_index "images", ["data_processing"], :name => "index_images_on_data_processing"
+  add_index "images", ["gallery_cover"], :name => "index_images_on_gallery_cover"
   add_index "images", ["gallery_id"], :name => "index_images_on_gallery_id"
-  add_index "images", ["is_removed"], :name => "index_images_on_is_removed"
+  add_index "images", ["removed"], :name => "index_images_on_removed"
 
   create_table "invitations", :force => true do |t|
     t.string   "email",      :null => false
@@ -242,9 +244,9 @@ ActiveRecord::Schema.define(:version => 20130306005557) do
     t.string   "facebook"
     t.text     "biography"
     t.string   "website"
-    t.boolean  "is_admin",                              :default => false
-    t.boolean  "is_removed",                            :default => false
-    t.boolean  "is_banned",                             :default => false
+    t.boolean  "admin",                                 :default => false
+    t.boolean  "removed",                               :default => false
+    t.boolean  "banned",                                :default => false
     t.string   "paypal_email"
     t.string   "location"
     t.string   "job"
@@ -255,8 +257,8 @@ ActiveRecord::Schema.define(:version => 20130306005557) do
     t.string   "cvv"
     t.integer  "shipping_address_id"
     t.integer  "billing_address_id"
-    t.boolean  "is_enable_facebook",                    :default => false
-    t.boolean  "is_enable_twitter",                     :default => false
+    t.boolean  "facebook_enabled",                      :default => false
+    t.boolean  "twitter_enabled",                       :default => false
     t.float    "withdrawn_amount",                      :default => 0.0
     t.string   "facebook_token"
     t.string   "twitter_token"
@@ -269,7 +271,9 @@ ActiveRecord::Schema.define(:version => 20130306005557) do
     t.boolean  "photo_processing",                      :default => false
   end
 
+  add_index "users", ["banned"], :name => "index_users_on_banned"
   add_index "users", ["email"], :name => "index_users_on_email", :unique => true
+  add_index "users", ["removed"], :name => "index_users_on_removed"
   add_index "users", ["reset_password_token"], :name => "index_users_on_reset_password_token", :unique => true
   add_index "users", ["username"], :name => "index_users_on_username", :unique => true
 

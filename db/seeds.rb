@@ -14,7 +14,7 @@ admin = User.new({
   :confirmation_token => nil,
   :confirmed_at => Time.now.advance(:hours => -1), #bypass email confirmation
   :confirmation_sent_at => Time.now.advance(:days => - 1, :hours => -1), #bypass email confirmation,
-  :is_admin => true
+  :admin => true
 }, :as => :admin)
 
 admin.skip_confirmation!
@@ -37,7 +37,7 @@ puts 'Creating 10 users...'
   user.save!
 end
 
-user = User.where(is_admin: false).first
+user = User.where(admin: false).first
 puts "First non-admin user login: #{user.username}/secret"
 
 puts 'Creating galleries...'
@@ -46,7 +46,6 @@ galleries = []
   galleries << Gallery.create!({
     :name => Faker::Name.name,
     :user => user,
-    :permission => "public",
     :description => Faker::Lorem.paragraph
   })
 end

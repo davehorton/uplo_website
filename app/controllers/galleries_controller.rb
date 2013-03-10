@@ -181,7 +181,7 @@ class GalleriesController < ApplicationController
         render_not_found
         return false
       elsif !@gallery.can_access?(current_user) ||
-            (!@gallery.is_owner?(current_user) && %w(edit update destroy).include?(params[:action]))
+            (!@gallery.owner?(current_user) && %w(edit update destroy).include?(params[:action]))
         render_unauthorized
         return false
       end

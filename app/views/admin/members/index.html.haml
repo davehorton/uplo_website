@@ -38,7 +38,7 @@
 
         .action-container
           - if user.id != current_user.id
-            - if !user.is_removed?
+            - if !user.removed?
               .button.remove{'data-confirm' => t('admin.remove_user_confirm', :username => user.username)}
                 - remove_link = url_for(:controller => "admin/flagged_users", :action => "remove_user", :id => user.id)
                 %form{:action => remove_link, :class => "remove-form action-form",

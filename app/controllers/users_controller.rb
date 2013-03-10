@@ -196,7 +196,7 @@ class UsersController < ApplicationController
   # user_id: <current user will follow this user>
   def set_follow
     result = {}
-    user = User.active_users.find_by_id params[:user_id]
+    user = User.find(params[:user_id])
     follower = current_user
 
     if user.blank?

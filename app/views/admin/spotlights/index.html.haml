@@ -22,7 +22,7 @@
   .content.clearfix
     - @images.each_with_index do |image, idx|
       - image_css = (((idx + 1) % 6) == 0 ? 'no-margin-right' : '')
-      - image_css << " promoted" if image.is_promoted?
+      - image_css << " promoted" if image.promoted?
 
       .image-container{:id => "image-container-#{image.id}", :class => image_css}
         - image_link = url_for(:controller => "/images", :action => "browse", :id => "#{image.id}")
@@ -30,7 +30,7 @@
           = async_image_tag(image.url(:thumb), :class => "image-thumb image small", :alt => image.name)
 
         .image-info
-          - if image.is_promoted?
+          - if image.promoted?
             - demote_link = url_for(:controller => "admin/spotlights",
                                     :action => "promote",
                                     :id => image.id,
@@ -56,8 +56,7 @@
 
           .upload-time= "Uploaded #{image.created_at.strftime('%m/%d/%y')}"
           .pageview= pluralize(image.pageview, 'View')
-          - permission = image.gallery.try(:permission)
-          .permission= permission.blank? ? '' : (I18n.t("gallery.permission")[permission])
+          .permission= image.gallery.permission.to_s
 
     = render_pagination(@images)
 

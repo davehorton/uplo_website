@@ -3,10 +3,10 @@ class SharingMailer < ApplicationMailer
 
   def share_image_email(image_id, emails, user_id, message = nil)
     @message = message
-    @user = User.find_by_id user_id
-    @image = Image.find_by_id image_id
+    @user = User.find(user_id)
+    @image = Image.find(image_id)
     begin
-      mail(:to => emails, :subject => "Share from UPLO")
+      mail(:to => emails, :subject => "Shared Photo from UPLO")
     rescue
       return false
     end
@@ -14,8 +14,8 @@ class SharingMailer < ApplicationMailer
 
   def share_gallery_email(gallery_id, emails, user_id, message = nil)
     @message = message
-    @user = User.find_by_id user_id
-    @gallery = Gallery.find_by_id gallery_id
-    mail(:to => emails, :subject => "Share from UPLO")
+    @user = User.find(user_id)
+    @gallery = GalleryDecorator.find(gallery_id)
+    mail(:to => emails, :subject => "Shared Gallery from UPLO")
   end
 end

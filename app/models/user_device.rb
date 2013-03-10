@@ -6,7 +6,7 @@ class UserDevice < ActiveRecord::Base
   # Associations
   belongs_to :user
 
-  def is_active
+  def active?
   	self.notify_purchases || self.notify_comments || self.notify_likes
   end
 

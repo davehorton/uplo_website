@@ -2,6 +2,11 @@
 # See https://github.com/svenfuchs/rails-i18n/tree/master/rails%2Flocale for starting points.
 
 en:
+  classy_enum:
+    permission:
+      private: 'Private'
+      public: 'Public'
+
   common:
     site_title: "Welcome to UPLO"
     invalid_params: "Invalid parameters"
@@ -92,9 +97,6 @@ en:
       num_of_sales: "Number of Orders"
 
   gallery:
-    permission:
-      1: "Public"
-      0: "Private"
     create_done: "Your new gallery was created successfully"
     update_done: "Your gallery was updated successfully"
     delete_done: "Your gallery was deleted"

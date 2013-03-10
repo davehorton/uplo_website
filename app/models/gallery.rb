@@ -1,11 +1,9 @@
 class Gallery < ActiveRecord::Base
-  include Rails.application.routes.url_helpers
   include ::SharedMethods::Paging
   include ::SharedMethods::SerializationConfig
   include ::SharedMethods::Converter
 
-  PUBLIC_PERMISSION = 1
-  PRIVATE_PERMISSION = 0
+  classy_enum_attr :permission, default: 'public'
 
   belongs_to :user
   has_many   :images, :dependent => :destroy
@@ -13,7 +11,7 @@ class Gallery < ActiveRecord::Base
   validates :name, :presence => true, :uniqueness => {:scope => :user_id, :case_sensitive => false}
   validates :user, :presence => true
 
-  after_initialize :init_permission
+  scope :public_gallery, where(permission: Permission::Public.new)
 
   def self.do_search(params = {})
     params[:filtered_params][:sort_field] = 'name' unless params[:filtered_params].has_key?("sort_field")
@@ -37,10 +35,12 @@ class Gallery < ActiveRecord::Base
 
   def self.load_popular_galleries(params)
     paging_info = parse_paging_options(params)
-    self.includes(:images).where(:permission => PUBLIC_PERMISSION).paginate(
-      :page => paging_info.page_id,
-      :per_page => paging_info.page_size,
-      :order => paging_info.sort_string)
+    self.public_gallery.includes(:images).
+      paginate(
+        page:     paging_info.page_id,
+        per_page: paging_info.page_size,
+        order:    paging_info.sort_string
+      )
   end
 
   def self.exposed_methods
@@ -64,6 +64,10 @@ class Gallery < ActiveRecord::Base
     paging_options(options, default_opts)
   end
 
+  def permission=(permission_string)
+    self[:permission] = permission_string.to_i
+  end
+
   def load_popular_images(params)
     paging_info = Image.parse_paging_options(params)
     self.images.unflagged.paginate( :page => paging_info.page_id,
@@ -80,57 +84,35 @@ class Gallery < ActiveRecord::Base
     self.updated_at.strftime("%m/%d/%y")
   end
 
-  def permission_string
-    if !self.permission.blank?
-      I18n.t("gallery.permission")[self.permission.to_i]
-    else
-      ""
-    end
-  end
-
-  def public_link
-    url_for :controller => 'galleries', :action => 'public', :gallery_id => self.id,
-            :only_path => false, :host => DOMAIN
-  end
-
   # Get the cover image for this album.
   def cover_image
-    img = Image.find_by_gallery_id self.id, :conditions => { :is_gallery_cover => true }
+    img = Image.find_by_gallery_id self.id, :conditions => { :gallery_cover => true }
     if img.nil? && self.images.unflagged.count > 0
       result = self.images.unflagged.first :order => 'images.created_at ASC'
     else
       result = img
     end
-    return result
+    result
   end
 
-  def is_public?
-    (self.permission == PUBLIC_PERMISSION)
-  end
-
+  # TODO: move into ability class
   def can_access?(user)
-    (self.is_owner?(user) || self.is_public?)
+    owner?(user) || permission.public?
   end
 
-  def is_owner?(user)
-    (user && self.user_id == user.id)
+  def owner?(user)
+    user && user_id == user.id
   end
 
   def total_images
-    self.images.unflagged.length
+    images.unflagged.length
   end
 
   def last_update
-      return self.updated_at.strftime('%B %Y')
+    updated_at.strftime('%B %Y')
   end
 
-  protected
-
-    def init_permission
-      if self.new_record? && self.permission.blank?
-        self.permission = PUBLIC_PERMISSION
-      end
-    end
+  private
 
 =begin
     define_index do
