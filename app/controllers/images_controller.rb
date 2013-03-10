@@ -44,7 +44,7 @@ class ImagesController < ApplicationController
     if request.xhr?
       image = current_user.images.find_by_id params[:id]
       gallery = image.gallery
-      if(!image.has_owner(current_user.id))
+      if(!current_user.owns_image?(image))
         return render :json => {:success => false, :msg => "The image do not belong to you"}
       end
       images = gallery.images.unflagged.load_images(@filtered_params)
@@ -136,7 +136,7 @@ class ImagesController < ApplicationController
   def switch_liked
     image = Image.find_by_id(params[:id])
     dislike = SharedMethods::Converter.Boolean(params[:dislike])
-    if (image.nil? || (image.image_flags.count > 0 && !image.has_owner(current_user.id)))
+    if image.nil? || (image.image_flags.count > 0 && !current_user.owns_image?(image))
       result = { :success => false, :msg => "This image does not exist anymore!" }
     elsif dislike
       result = image.disliked_by_user(current_user.id)
@@ -203,11 +203,10 @@ class ImagesController < ApplicationController
   # GET images/:id/browse
   def browse
     push_redirect
-    @user = current_user
     @image = Image.unflagged.find_by_id(params[:id])
-    if @image.nil? || (@image.author.blocked? && !@user.admin?)
+    if @image.nil? || (@image.author.blocked? && !current_user.admin?)
       return render_not_found
-    elsif @image.gallery && !@image.gallery.can_access?(@user)
+    elsif @image.gallery && !current_user.can_access?(@image.gallery)
       return render_unauthorized
     end
 
@@ -218,7 +217,8 @@ class ImagesController < ApplicationController
     # end
 
     # @images = @image.gallery.images.all(:order => 'name')
-    @is_owner = @image.has_owner(@user.id)
+    @is_owner = current_user.owns_image?(@image)
+
     if (@is_owner)
       @images = @image.gallery.images.unflagged.where("images.id not in (#{@image.id})").order('name')
     else
@@ -377,7 +377,7 @@ class ImagesController < ApplicationController
     if params[:line_item].nil?
       if @image.blank?
         return render_not_found
-      elsif @image.gallery && !@image.gallery.can_access?(current_user)
+      elsif @image.gallery && !current_user.can_access?(@image.gallery)
         return render_unauthorized
       end
     else
@@ -429,8 +429,8 @@ class ImagesController < ApplicationController
       if @gallery.blank?
         render_not_found
         return false
-      elsif !@gallery.can_access?(current_user) ||
-            (!@gallery.owner?(current_user) && %w(edit update destroy create list).include?(params[:action]))
+      elsif !current_user.can_access?(@gallery) ||
+            (!current_user.owns_gallery?(@gallery) && %w(edit update destroy create list).include?(params[:action]))
         render_unauthorized
         return false
       end

@@ -2,7 +2,7 @@
   .text.bold.font16.line12.left
     %span.text.black My Gallery /
     %span.text.gray= @gallery.name.truncate(40)
-    - if !@gallery.owner?(current_user)
+    - if !current_user.owns_gallery?(@gallery)
       %span.text.fuzzy-gray= "From "
       %span.text.fuzzy-gray
         %a{:href => "#"}= @gallery.user.fullname

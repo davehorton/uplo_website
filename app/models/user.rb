@@ -721,6 +721,19 @@ class User < ActiveRecord::Base
 
   end
 
+  def owns_image?(image)
+    image.author == self
+  end
+
+  def owns_gallery?(gallery)
+    gallery.user == self
+  end
+
+  # TODO: move into ability class
+  def can_access?(gallery)
+    owns_gallery?(gallery) || gallery.permission.public?
+  end
+
   protected
 
     def need_checking_password?

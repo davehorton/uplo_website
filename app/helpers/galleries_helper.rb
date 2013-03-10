@@ -62,6 +62,6 @@ module GalleriesHelper
 
   def can_modify_gallery?(gallery, user = nil)
     user ||= current_user
-    return gallery.owner?(user)
+    user.owns_gallery?(gallery)
   end
 end

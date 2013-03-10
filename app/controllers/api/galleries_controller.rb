@@ -150,7 +150,7 @@ class Api::GalleriesController < Api::BaseController
 
     galleries.each do |gallery|
       data = {}
-      if (!gallery.owner?(current_user))
+      if !current_user.owns_gallery?(gallery)
         gallery.images = gallery.images.unflagged
       end
       data[:gallery] = gallery.serializable_hash({

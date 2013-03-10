@@ -275,7 +275,7 @@ class Image < ActiveRecord::Base
       if (self.image_flags.count > 0)
         result = { :success => false, :msg => "The image is already flagged." }
       else
-        if (self.has_owner(user.id))
+        if user.owns_image?(self)
          return result = { :success => false, :msg => "You can not flag your own image" }
         end
         description = ImageFlag.process_description(params[:type].to_i, params[:desc])
@@ -324,10 +324,6 @@ class Image < ActiveRecord::Base
   def reinstate
     self.image_flags.destroy_all
     self.update_attribute(:removed, false)
-  end
-
-  def has_owner(id)
-    self.gallery.user.id == id
   end
 
   def creation_timestamp

@@ -4,7 +4,7 @@
       = render(:partial => "search_box", :locals => {:action => "/search"})
 
   .gallery-header
-    - is_owner = @gallery.owner?(current_user)
+    - is_owner = current_user.owns_gallery?(@gallery)
     %h2.gallery-name= @gallery.name
     %span= "("
     %span.gallery-permission

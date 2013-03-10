@@ -95,15 +95,6 @@ class Gallery < ActiveRecord::Base
     result
   end
 
-  # TODO: move into ability class
-  def can_access?(user)
-    owner?(user) || permission.public?
-  end
-
-  def owner?(user)
-    user && user_id == user.id
-  end
-
   def total_images
     images.unflagged.length
   end

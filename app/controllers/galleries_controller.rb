@@ -180,8 +180,8 @@ class GalleriesController < ApplicationController
       if @gallery.blank?
         render_not_found
         return false
-      elsif !@gallery.can_access?(current_user) ||
-            (!@gallery.owner?(current_user) && %w(edit update destroy).include?(params[:action]))
+      elsif !current_user.can_access?(@gallery) ||
+            (!current_user.owns_gallery?(@gallery) && %w(edit update destroy).include?(params[:action]))
         render_unauthorized
         return false
       end
