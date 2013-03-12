@@ -3,7 +3,7 @@ class Api::GalleriesController < Api::BaseController
 
   def create_gallery
     gal = GalleryDecorator.new(params[:gallery])
-    gal.user = @user
+    gal.user = current_user
 
     if gal.save
       @result[:gallery_id] = gal.id
@@ -29,7 +29,7 @@ class Api::GalleriesController < Api::BaseController
     end
 
     # make sure the gallery is user's
-    if gallery.user_id != @user.id
+    if gallery.user_id != current_user.id
       @result[:msg] = "This gallery is not belong to you"
       return render :json => @result
     end
@@ -48,12 +48,12 @@ class Api::GalleriesController < Api::BaseController
     # find gallery
     gallery = Gallery.find_by_id(params[:id])
     if gallery.nil?
-      @result[:msg] = "Could not find Gallery"
+      @result[:msg] = "Could not find gallery"
       return render :json => @result
     end
     # make sure the gallery is user's
-    if gallery.user_id != @user.id
-      @result[:msg] = "This gallery is not belong to you"
+    if gallery.user_id != current_user.id
+      @result[:msg] = "This gallery does not belong to you"
       return render :json => @result
     end
     # delete gallery
@@ -79,7 +79,7 @@ class Api::GalleriesController < Api::BaseController
         render :json => @result and return
       end
     else
-      author = @user
+      author = current_user
     end
 
     galleries = author.galleries.load_galleries(@filtered_params)
@@ -123,12 +123,12 @@ class Api::GalleriesController < Api::BaseController
   def list_images
     gallery = Gallery.find_by_id(params[:gallery_id])
     if gallery.nil?
-      @result[:msg] = "Could not find Gallery"
+      @result[:msg] = "Could not find gallery"
       return render :json => @result
     end
     # make sure the gallery is user's
-    #if gallery.user_id != @user.id
-       #@result[:msg] = "This gallery is not belong to you"
+    #if gallery.user_id != current_user.id
+       #@result[:msg] = "This gallery does not belong to you"
         #return render :json => @result
     #end
 

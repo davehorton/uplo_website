@@ -63,7 +63,7 @@
                 'data-width' => @image.width,
                 'data-height' => @image.height, :alt => @image.name)
   - if !@image.flagged?
-    = render :partial => 'sharing_popup'
+    = render 'sharing_popup'
   .actions.left
     .left
       .like.left
@@ -281,26 +281,21 @@
           data: { id:image_id, dislike:dislike },
           dataType: "json",
           success: function(response){
-            if(response.success==true){
-              $(".actions .like .times").html(response.likes);
-              if (response.likes != 1)
-                $(".actions .like .label").html("Likes");
-              else
-                $(".actions .like .label").html("Like");
-              if(dislike == 'true'){
-                $("#btn-like").attr('data-dislike', 'false');
-                $('#btn-like').removeClass('dislike');
-                $('#btn-like').addClass('like');
-                $.modal.close();
-              }else{
-                $("#btn-like").attr('data-dislike', 'true');
-                $('#btn-like').removeClass('like');
-                $('#btn-like').addClass('dislike');
-                $.modal.close();
-              }
-            }else{
+            $(".actions .like .times").html(response.likes_count);
+            if (response.likes_count != 1)
+              $(".actions .like .label").html("Likes");
+            else
+              $(".actions .like .label").html("Like");
+            if(dislike == 'true'){
+              $("#btn-like").attr('data-dislike', 'false');
+              $('#btn-like').removeClass('dislike');
+              $('#btn-like').addClass('like');
               $.modal.close();
-              helper.show_notification(response.msg);
+            }else{
+              $("#btn-like").attr('data-dislike', 'true');
+              $('#btn-like').removeClass('like');
+              $('#btn-like').addClass('dislike');
+              $.modal.close();
             }
           },
           fail: function(){}

@@ -158,7 +158,7 @@ class Order < ActiveRecord::Base
       if self.transaction_status == TRANSACTION_STATUS[:complete]
         items = self.line_items.select('distinct image_id')
         items.each do |item|
-          if self.user_id != item.image.author.id
+          if self.user_id != item.image.user_id
             Notification.deliver_image_notification(item.image.id, self.user_id, Notification::TYPE[:purchase])
           end
         end

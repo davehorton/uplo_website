@@ -15,7 +15,7 @@ class PaymentMailer < ApplicationMailer
         :to => @user.friendly_email,
         :subject => subject
       }
-      
+
       mail(mail_params)
     end
   end
@@ -28,7 +28,7 @@ class PaymentMailer < ApplicationMailer
       :to => ["quynh.kim@techpropulsionlabs.com", "uplo@digital2media.com"],
       :subject => subject
     }
-    
+
     mail(mail_params)
   end
 
@@ -37,10 +37,10 @@ class PaymentMailer < ApplicationMailer
       path = File.expand_path "#{Rails.root.join('tmp')}/#{Time.now.to_i}#{rand(1000)}/"
       FileUtils.mkdir_p( path )
 
-      begin 
+      begin
         # Create temp file to export
         yield(path) # Pass temp folder and the path of temp file
-       
+
       ensure
       end
 

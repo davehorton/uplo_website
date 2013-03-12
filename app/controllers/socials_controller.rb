@@ -23,8 +23,7 @@ class SocialsController < ApplicationController
 		  access_token.options[:mode] = :query
 		  access_token.options[:param_name] = :access_token
 		  facebook_user_info = access_token.get('/me', {:parse => :json}).parsed
-		  @user = current_user
-	    @user.update_attribute(:facebook_token, access_token.token)
+	    current_user.update_attribute(:facebook_token, access_token.token)
 	    flash[:notice] = "Enabled Facebook"
 		rescue Exception => e
 
@@ -49,12 +48,11 @@ class SocialsController < ApplicationController
 	    access_token = OAuth::RequestToken.new(consumer, session[:token], session[:secret]).
 	                                         get_access_token(:oauth_verifier => params[:oauth_verifier])
 
-	    @user = current_user
-	    if @user.update_attributes({:twitter_token => access_token.token,
+	    if current_user.update_attributes({:twitter_token => access_token.token,
 	    												 :twitter_secret_token => access_token.secret})
 				flash[:notice] = "Enabled Twitter"
 			else
-				flash[:notice] = @user.errors.full_messages.to_sentence
+				flash[:notice] = current_user.errors.full_messages.to_sentence
 			end
     rescue OAuth::Unauthorized
       flash[:notice] = "Invalid OAuth token, unable to connect to twitter"
@@ -67,13 +65,11 @@ class SocialsController < ApplicationController
 		request_token = session[:request_token]
 		begin
 			access_token = request_token.get_access_token({:oauth_verifier => params[:oauth_verifier]})
-			@user = current_user
-
-			if @user.update_attributes({:tumblr_token => access_token.token,
+			if current_user.update_attributes({:tumblr_token => access_token.token,
 	    												 :tumblr_secret_token => access_token.secret})
 				flash[:notice] = "Enabled Tumblr"
 			else
-				flash[:notice] = @user.errors.full_messages.to_sentence
+				flash[:notice] = current_user.errors.full_messages.to_sentence
 			end
 		rescue Exception => e
 			flash[:notice] = "Cannot authorize Tumblr"
@@ -87,13 +83,11 @@ class SocialsController < ApplicationController
 		begin
     	access_token = flickr.get_access_token(request_token['oauth_token'], request_token['oauth_token_secret'], params[:oauth_verifier])
 
-			@user = current_user
-			puts access_token.inspect
-			if @user.update_attributes({:flickr_token => access_token['oauth_token'],
+			if current_user.update_attributes({:flickr_token => access_token['oauth_token'],
 	    												 :flickr_secret_token => access_token['oauth_token_secret']})
 				flash[:notice] = "Enabled Flickr"
 			else
-				flash[:notice] = @user.errors.full_messages.to_sentence
+				flash[:notice] = current_user.errors.full_messages.to_sentence
 			end
 		rescue Exception => e
 			flash[:notice] = "Cannot authorize Flickr #{e.message} #{access_token.inspect}"

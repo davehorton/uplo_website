@@ -4,13 +4,7 @@ class ProfilesController < ApplicationController
   layout 'main'
 
   def show
-    if @user.blank?
-      # Redirect to the current user's profile and show the warning message.
-      flash[:warning] = I18n.t("user.user_was_banned_or_removed")
-      return redirect_to(:action => 'show')
-    end
-
-    if @user.id == current_user.id
+    if @user == current_user
       @galleries = @user.galleries.load_galleries(@filtered_params)
       @images = @user.images.unflagged.load_images(@filtered_params)
     else
@@ -25,7 +19,7 @@ class ProfilesController < ApplicationController
 
   def show_photos
     if request.xhr?
-      if @user.id == current_user.id
+      if @user == current_user
         @images = @user.images.unflagged.load_images(@filtered_params)
       else
         @images = @user.images.unflagged.load_popular_images(@filtered_params)
@@ -39,7 +33,7 @@ class ProfilesController < ApplicationController
 
   def get_photos
     if request.xhr?
-      if @user.id == current_user.id
+      if @user == current_user
         images = @user.images.unflagged.load_images(@filtered_params)
       else
         images = @user.images.unflagged.load_popular_images(@filtered_params)
@@ -68,7 +62,7 @@ class ProfilesController < ApplicationController
     if request.xhr?
       images = @user.liked_images.visible_everyone.load_images(@filtered_params)
 
-      if @user.id == current_user.id
+      if @user == current_user
         template = render_to_string :partial => 'edit_likes_template', :locals => { :images => images }
       else
         template = render_to_string :partial => 'images/photos_template', :locals => { :images => images, :photos_per_line => 4, :photo_size => 'thumb' }
@@ -82,7 +76,7 @@ class ProfilesController < ApplicationController
 
   def show_galleries
     if request.xhr?
-      if @user.id == current_user.id
+      if @user == current_user
         @galleries = @user.galleries.load_galleries(@filtered_params)
       else
         @galleries = @user.galleries.load_popular_galleries(@filtered_params)
@@ -95,7 +89,7 @@ class ProfilesController < ApplicationController
 
   def get_galleries
     if request.xhr?
-      if @user.id == current_user.id
+      if @user == current_user
         galleries = @user.galleries.load_galleries(@filtered_params)
       else
         galleries = @user.galleries.load_popular_galleries(@filtered_params)
@@ -177,5 +171,8 @@ class ProfilesController < ApplicationController
     def find_user
       user_id = params[:user_id]
       @user = user_id.nil? ? current_user : User.find(user_id)
+    rescue ActiveRecord::RecordNotFound
+      flash[:warning] = I18n.t("user.user_was_banned_or_removed")
+      return and redirect_to(profile_path)
     end
 end

@@ -39,7 +39,7 @@
       .notice.left.font16.bold.text{:style => "color:#898989;"}
         Please change your password
       %br.clear
-      = simple_form_for(@user, :url => password_path(@user), :html => { :method => :put , :class => "simple_form"}) do |f|
+      = simple_form_for(current_user, :url => password_path(current_user), :html => { :method => :put , :class => "simple_form"}) do |f|
         = f.input :reset_password_token, :as => :hidden
         .inputs{:style => "color:red"}
           = f.full_error :reset_password_token

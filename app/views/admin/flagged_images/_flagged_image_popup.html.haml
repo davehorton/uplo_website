@@ -11,17 +11,17 @@
       %hr
       .user_info_wrapper
         .user_photo.left
-          = image_tag flag.image.author.avatar_url, :width => "24px", :height => "24px"
+          = image_tag flag.image.user.avatar_url, :width => "24px", :height => "24px"
         .user_info.left
           .first_line
             By
-            %a.text.black.font12.normal{ :href => "#{url_for(:controller => '/profiles', :action => 'show', :user_id => flag.image.author.id)}"}
-              = flag.image.author.username
+            %a.text.black.font12.normal{ :href => "#{url_for(:controller => '/profiles', :action => 'show', :user_id => flag.image.user_id)}"}
+              = flag.image.username
 
           %pr.second_line.font11.text
-            = flag.image.author.fullname
+            = flag.image.fullname
             &nbsp;&nbsp;•&nbsp;&nbsp;
-            = pluralize(flag.image.author.images.unflagged.count, "item")
+            = pluralize(flag.image.user.images.unflagged.count, "item")
         .clear
 
       %hr

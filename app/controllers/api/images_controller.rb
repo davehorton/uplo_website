@@ -213,12 +213,10 @@ class Api::ImagesController < Api::BaseController
     if image.nil?
       result = { :success => false, :msg => "This image does not exist anymore!" }
     elsif dislike
-      result = image.disliked_by_user(current_user.id)
+      result = current_user.unlike_image(image)
     else
-      result = image.liked_by_user(current_user.id)
-      if current_user.id != image.author.id
-        Notification.deliver_image_notification(image.id, current_user.id, Notification::TYPE[:like])
-      end
+      result = current_user.like_image(image)
+      Notification.deliver_image_notification(image.id, current_user.id, Notification::TYPE[:like]) unless current_user.owns_image?(image)
     end
     render :json => result
   end
@@ -320,9 +318,7 @@ class Api::ImagesController < Api::BaseController
       comment = Comment.new({:image_id => image.id, :user_id => current_user.id,
         :description => params[:comment]})
       if comment.save
-        if current_user.id != image.author.id
-          Notification.deliver_image_notification(image.id, current_user.id, Notification::TYPE[:comment])
-        end
+        Notification.deliver_image_notification(image.id, current_user.id, Notification::TYPE[:comment]) unless current_user.owns_image?(image)
         result = { :success => true }
       else
         result = { :success => false, :msg => comment.errors.full_messages[0] }
@@ -358,7 +354,7 @@ class Api::ImagesController < Api::BaseController
     result = []
     images.map { |img|
       info = img.serializable_hash(img.default_serializable_options)
-      info[:liked] = current_user.nil? ? false : img.liked_by?(current_user.id)
+      info[:liked] = current_user.nil? ? false : img.liked_by?(current_user)
       result << {:image => info}
     }
     return result

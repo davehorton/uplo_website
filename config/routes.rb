@@ -38,7 +38,7 @@ Uplo::Application.routes.draw do
   get 'images/browse/:id', :to => 'images#browse'
   get 'images/public/:id', :to => 'images#public'
   get 'images/order/:id', :to => "images#order"
-  get 'images/switch_like', :to => 'images#switch_liked'
+  get 'images/switch_like', :to => 'images#switch_like'
   get 'images/flickr_authorize', :to => "images#get_flickr_authorize"
   get 'images/flickr_response' => 'images#flickr_response'
   get 'images/flickr_post', :to => 'images#post_image_to_flickr'

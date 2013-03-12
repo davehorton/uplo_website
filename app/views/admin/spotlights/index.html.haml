@@ -50,7 +50,7 @@
           .image-name
             %a{:href => image_link, :title => image.name}= truncate(image.name, :length => 20)
           .username
-            - author = image.author
+            - author = image.user
             - author_profile = (author ? profile_path(:user_id => author.id) : '#')
             %a{:href => author_profile}= author.try(:username)
 

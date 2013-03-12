@@ -26,8 +26,8 @@
 
   .author.info_line
     %a.text.black.font11.normal{ :href => url_for(:controller => '/profiles',
-        :action => 'show', :user_id => image.author.id) }
-      = image.author.username
+        :action => 'show', :user_id => image.user_id) }
+      = image.user.username
 
   .flagged_time.info_line
     Flagged

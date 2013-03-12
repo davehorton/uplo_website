@@ -7,7 +7,7 @@
       - else
         There is no Paypal email
   .yield_edit.hide
-    = simple_form_for @user, :remote => true do |user|
+    = simple_form_for current_user, :remote => true do |user|
       .form_wrapper.left
         .line Paypal Email
         .line Email Confirm

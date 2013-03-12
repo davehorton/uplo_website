@@ -26,7 +26,7 @@
                   = button_to_function I18n.t("slideshow.save"), "update_image()", :data => {:status_url => "#{status_url}"}, :class => "save"
 
           .edit-area.round-box.clearfix
-            = (@selected_image.author ? @selected_image.author.fullname : "")
+            = @selected_image.fullname
             %br.clearfix
             %ul
               %li

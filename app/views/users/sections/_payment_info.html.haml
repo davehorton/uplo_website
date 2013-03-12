@@ -10,16 +10,16 @@
   .yield_info
     - if (user.name_on_card)
       .line_info
-        Name on Card: 
+        Name on Card:
         = user.name_on_card
       .line_info
-        Card Type: 
+        Card Type:
         = card_type_reverse[user.card_type]
       .line_info
-        Card Number: **** **** **** 
+        Card Number: **** **** ****
         = user.card_number.last(4)
       .line_info
-        Expiration: 
+        Expiration:
         = user.expiration.strftime("%m/%y")
       .line_info
         CVV:
@@ -27,19 +27,19 @@
     - else
       There is no card information
   .yield_edit.hide
-    = simple_form_for @user, :remote => true do |user|
+    = simple_form_for current_user, :remote => true do |user|
       .form_wrapper.left
         .line Name on Card
         .line Card Type
         .line Card Number
         .line Expiration Date
-        .line 
-          CVV 
+        .line
+          CVV
           %span#cvv-explanation
             What's This?
       .form_wrapper.left{:style => "width:190px; margin-left:10px"}
         .line= user.input_field :name_on_card
-        .line= user.select :card_type, options_for_select(card_type, @user.card_type), {:prompt => 'Select One'}
+        .line= user.select :card_type, options_for_select(card_type, current_user.card_type), {:prompt => 'Select One'}
         .line= user.input_field :card_number
         - today = Date.today
         .line{:style => "width:200px"}

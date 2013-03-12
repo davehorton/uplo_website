@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130310171636) do
+ActiveRecord::Schema.define(:version => 20130311000852) do
 
   create_table "addresses", :force => true do |t|
     t.string   "first_name"
@@ -93,7 +93,7 @@ ActiveRecord::Schema.define(:version => 20130310171636) do
     t.boolean  "gallery_cover",      :default => false
     t.float    "price",              :default => 0.0
     t.boolean  "delta",              :default => true,  :null => false
-    t.integer  "likes",              :default => 0
+    t.integer  "image_likes_count",  :default => 0
     t.datetime "created_at",                            :null => false
     t.datetime "updated_at",                            :null => false
     t.string   "image_file_name"
@@ -109,12 +109,15 @@ ActiveRecord::Schema.define(:version => 20130310171636) do
     t.integer  "pageview",           :default => 0
     t.integer  "promote_num",        :default => 0
     t.boolean  "data_processing",    :default => false
+    t.integer  "user_id"
   end
 
   add_index "images", ["data_processing"], :name => "index_images_on_data_processing"
   add_index "images", ["gallery_cover"], :name => "index_images_on_gallery_cover"
   add_index "images", ["gallery_id"], :name => "index_images_on_gallery_id"
+  add_index "images", ["image_likes_count"], :name => "index_images_on_image_likes_count"
   add_index "images", ["removed"], :name => "index_images_on_removed"
+  add_index "images", ["user_id"], :name => "index_images_on_user_id"
 
   create_table "invitations", :force => true do |t|
     t.string   "email",      :null => false
@@ -269,10 +272,14 @@ ActiveRecord::Schema.define(:version => 20130310171636) do
     t.string   "tumblr_secret_token"
     t.string   "flickr_secret_token"
     t.boolean  "photo_processing",                      :default => false
+    t.integer  "image_likes_count",                     :default => 0
+    t.integer  "images_count",                          :default => 0
   end
 
   add_index "users", ["banned"], :name => "index_users_on_banned"
   add_index "users", ["email"], :name => "index_users_on_email", :unique => true
+  add_index "users", ["image_likes_count"], :name => "index_users_on_image_likes_count"
+  add_index "users", ["images_count"], :name => "index_users_on_images_count"
   add_index "users", ["removed"], :name => "index_users_on_removed"
   add_index "users", ["reset_password_token"], :name => "index_users_on_reset_password_token", :unique => true
   add_index "users", ["username"], :name => "index_users_on_username", :unique => true

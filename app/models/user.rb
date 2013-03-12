@@ -48,15 +48,15 @@ class User < ActiveRecord::Base
   has_many :image_likes, :dependent => :destroy
   has_many :source_liked_images, :through => :image_likes, :source => :image
   has_many :orders
-  has_one :cart, :dependent => :destroy
   has_many :devices, :class_name => 'UserDevice'
   has_many :user_followers, :foreign_key => :user_id, :class_name => 'UserFollow'
   has_many :followers, :through => :user_followers
   has_many :user_followings, :foreign_key => :followed_by, :class_name => 'UserFollow'
   has_many :followed_users, :through => :user_followings
   has_many :friends_images, :through => :followed_users, :source => :images
+  has_one  :cart, :dependent => :destroy
 
-  belongs_to :billing_address, :class_name => "Address"
+  belongs_to :billing_address,  :class_name => "Address"
   belongs_to :shipping_address, :class_name => "Address"
 
   accepts_nested_attributes_for :billing_address
@@ -77,10 +77,9 @@ class User < ActiveRecord::Base
 
   after_create :cleanup_invitation
   after_create :subscribe
-  before_validation :decrypt_data
-  after_validation :encrypt_data
 
   default_scope where(removed: false, banned: false)
+
   scope :confirmed_users, where("confirmed_at IS NOT NULL")
   scope :removed_users, where(removed: true)
   scope :flagged_users, where(removed: false, banned: true)
@@ -109,7 +108,164 @@ class User < ActiveRecord::Base
     end
   end
 
-  # CARD VALIDATE
+  def self.load_users(params = {})
+    case params[:sort_field]
+      when 'signup_date' then
+        params[:sort_field] = 'users.created_at'
+        self.load_users_with_images_statistics(params)
+      when 'username' then
+        params[:sort_field] = 'users.username'
+        self.load_users_with_images_statistics(params)
+      when 'num_of_likes' then
+        params[:sort_field] = 'users.image_likes_count'
+        self.load_users_with_images_statistics(params)
+      when 'num_of_uploads' then
+        params[:sort_field] = 'users.images_count'
+        self.load_users_with_images_statistics(params)
+      else
+        paging_info = parse_paging_options(params)
+        self.paginate(
+          :page => paging_info.page_id,
+          :per_page => paging_info.page_size,
+          :order => paging_info.sort_string
+        )
+    end
+  end
+
+  def self.card_types
+    {"American Express" => "USA_express",
+      "Discover" => "discover",
+      "Visa" => "visa",
+      "JCB" => "jcb",
+      "Diners Club/ Carte Blanche" => "dinners_club",
+      "Master Card" => "master_card"
+    }
+  end
+
+  # Load users data with image_likes_count, images_count and images_pageview.
+  def self.load_users_with_images_statistics(params = {})
+    paging_info = parse_paging_options(params)
+
+    self.joins(self.sanitize_sql([
+      "LEFT JOIN (
+        SELECT galleries.user_id,
+        SUM(images_data.images_count) AS images_count,
+        SUM(images_data.image_likes_count) AS image_likes_count,
+        SUM(images_data.images_pageview) AS images_pageview
+        FROM galleries LEFT JOIN (
+          SELECT gallery_id, COUNT(images.id) AS images_count,
+          SUM(likes) AS image_likes_count,
+          SUM(pageview) AS images_pageview
+          FROM images
+          WHERE images.removed = :removed
+          GROUP BY gallery_id
+        ) images_data ON galleries.id = images_data.gallery_id
+        GROUP BY galleries.user_id
+      ) galleries_data
+      ON galleries_data.user_id = users.id",
+      {:removed => false}])
+    ).select("DISTINCT users.*,
+      COALESCE(galleries_data.images_count, 0) AS images_count,
+      COALESCE(galleries_data.image_likes_count, 0) AS image_likes_count,
+      COALESCE(galleries_data.images_pageview, 0) AS images_pageview"
+    ).paginate(
+      :page => paging_info.page_id,
+      :per_page => paging_info.page_size,
+      :order => paging_info.sort_string
+    )
+  end
+
+  # Search confirmed user, display banned user or not depend on admin_mod
+  def self.do_search(params = {})
+    admin_mod = params[:admin_mod].nil? ? false : params[:admin_mod]
+    if admin_mod
+      params[:sphinx_search_options] = {
+        :with => { :removed => false },
+        :without => { :date_joined => 'null' }
+      }
+    else
+      params[:sphinx_search_options] = {
+        :with => { :removed => false, :banned => false },
+        :without => { :date_joined => 'null' }
+      }
+    end
+    self.search_users(params)
+  end
+
+  # Override Devise method so that User can log in with username or email.
+  def self.find_for_database_authentication(warden_conditions)
+    conditions = warden_conditions.dup
+    login = conditions.delete(:login)
+    where(conditions).where(["lower(username) = :value OR lower(email) = :value",
+                            { :value => login.strip.downcase }]).first
+  end
+
+  def self.exposed_methods
+    [:avatar_url, :fullname, :joined_date]
+  end
+
+  def self.exposed_attributes
+    [:id, :email, :first_name, :biography, :facebook_enabled, :twitter_enabled, :location, :paypal_email, :website, :job, :last_name, :username, :nationality, :birthday, :gender, :twitter, :facebook]
+  end
+
+  def self.exposed_associations
+    [:billing_address, :shipping_address]
+  end
+
+  def self.remove_flagged_users
+    self.transaction do
+      self.reinstate_ready_users.each do |user|
+        user.remove
+      end
+    end
+  end
+
+  def self.reinstate_flagged_users
+    self.transaction do
+      self.reinstate_ready_users.each do |user|
+        user.reinstate
+      end
+    end
+  end
+
+  # Get the current user.
+  def self.current_user
+    Thread.current[:current_user]
+  end
+
+  # Set the current user in this thread.
+  def self.current_user=(user)
+    Thread.current[:current_user] = user
+  end
+
+  def self.parse_paging_options(options, default_opts = {})
+    if default_opts.blank?
+      default_opts = {
+        :sort_criteria => "username DESC"
+      }
+    end
+    paging_options(options, default_opts)
+  end
+
+  def self.search_users(params = {})
+    paging_info = parse_paging_options params[:filtered_params]
+
+    sphinx_search_options = params[:sphinx_search_options]
+    sphinx_search_options = {} if sphinx_search_options.nil?
+
+    sphinx_search_options.merge!({
+      :star => true,
+      :retry_stale => true,
+      :page => paging_info.page_id,
+      :per_page => paging_info.page_size,
+      :order => paging_info.sort_string,
+      :sort_mode => :extended
+    })
+    search_term = SharedMethods::Converter::SearchStringConverter.process_special_chars(params[:query])
+    User.search search_term, sphinx_search_options
+  end
+
+  # PUBLIC INSTANCE METHODS
   def check_card_number
     if (card_number)
       unless number_valid? && number_matches_type?
@@ -133,167 +289,6 @@ class User < ActiveRecord::Base
     digits.sub(/^([0-9]+)([0-9]{4})$/) { '*' * $1.length + $2 }
   end
 
-  class << self
-    def load_users(params = {})
-      case params[:sort_field]
-        when 'signup_date' then
-          params[:sort_field] = "users.created_at"
-          self.load_users_with_images_statistics(params)
-        when 'username' then
-          params[:sort_field] = "users.username"
-          self.load_users_with_images_statistics(params)
-        when 'num_of_likes' then
-          params[:sort_field] = 'images_likes_count'
-          self.load_users_with_images_statistics(params)
-        when 'num_of_uploads' then
-          params[:sort_field] = 'images_count'
-          self.load_users_with_images_statistics(params)
-        else
-          paging_info = parse_paging_options(params)
-          self.paginate(
-            :page => paging_info.page_id,
-            :per_page => paging_info.page_size,
-            :order => paging_info.sort_string
-          )
-      end
-    end
-
-    def card_types
-      {"American Express" => "USA_express",
-        "Discover" => "discover",
-        "Visa" => "visa",
-        "JCB" => "jcb",
-        "Diners Club/ Carte Blanche" => "dinners_club",
-        "Master Card" => "master_card"
-      }
-    end
-
-
-    # Load users data with images_likes_count, images_count and images_pageview.
-    def load_users_with_images_statistics(params = {})
-      paging_info = parse_paging_options(params)
-
-      self.joins(self.sanitize_sql([
-        "LEFT JOIN (
-          SELECT galleries.user_id,
-          SUM(images_data.images_count) AS images_count,
-          SUM(images_data.images_likes_count) AS images_likes_count,
-          SUM(images_data.images_pageview) AS images_pageview
-          FROM galleries LEFT JOIN (
-            SELECT gallery_id, COUNT(images.id) AS images_count,
-            SUM(likes) AS images_likes_count,
-            SUM(pageview) AS images_pageview
-            FROM images
-            WHERE images.removed = :removed
-            GROUP BY gallery_id
-          ) images_data ON galleries.id = images_data.gallery_id
-          GROUP BY galleries.user_id
-        ) galleries_data
-        ON galleries_data.user_id = users.id",
-        {:removed => false}])
-      ).select("DISTINCT users.*,
-        COALESCE(galleries_data.images_count, 0) AS images_count,
-        COALESCE(galleries_data.images_likes_count, 0) AS images_likes_count,
-        COALESCE(galleries_data.images_pageview, 0) AS images_pageview"
-      ).paginate(
-        :page => paging_info.page_id,
-        :per_page => paging_info.page_size,
-        :order => paging_info.sort_string
-      )
-    end
-
-    # Search confirmed user, display banned user or not depend on admin_mod
-    def do_search(params = {})
-      admin_mod = params[:admin_mod].nil? ? false : params[:admin_mod]
-      if admin_mod
-        params[:sphinx_search_options] = {
-          :with => { :removed => false },
-          :without => { :date_joined => 'null' }
-        }
-      else
-        params[:sphinx_search_options] = {
-          :with => { :removed => false, :banned => false },
-          :without => { :date_joined => 'null' }
-        }
-      end
-      self.search_users(params)
-    end
-
-    # Override Devise method so that User can log in with username or email.
-    def find_for_database_authentication(warden_conditions)
-      conditions = warden_conditions.dup
-      login = conditions.delete(:login)
-      where(conditions).where(["lower(username) = :value OR lower(email) = :value",
-                              { :value => login.strip.downcase }]).first
-    end
-
-    def exposed_methods
-      [:avatar_url, :fullname, :joined_date]
-    end
-
-    def exposed_attributes
-      [:id, :email, :first_name, :biography, :facebook_enabled, :twitter_enabled, :location, :paypal_email, :website, :job, :last_name, :username, :nationality, :birthday, :gender, :twitter, :facebook]
-    end
-
-    def exposed_associations
-      [:billing_address, :shipping_address]
-    end
-
-    def remove_flagged_users
-      self.transaction do
-        self.reinstate_ready_users.each do |user|
-          user.remove
-        end
-      end
-    end
-
-    def reinstate_flagged_users
-      self.transaction do
-        self.reinstate_ready_users.each do |user|
-          user.reinstate
-        end
-      end
-    end
-
-    # Get the current user.
-    def current_user
-      Thread.current[:current_user]
-    end
-
-    # Set the current user in this thread.
-    def current_user=(user)
-      Thread.current[:current_user] = user
-    end
-
-    protected
-      def parse_paging_options(options, default_opts = {})
-        if default_opts.blank?
-          default_opts = {
-            :sort_criteria => "username DESC"
-          }
-        end
-        paging_options(options, default_opts)
-      end
-      def search_users(params = {})
-        paging_info = parse_paging_options params[:filtered_params]
-
-        sphinx_search_options = params[:sphinx_search_options]
-        sphinx_search_options = {} if sphinx_search_options.nil?
-
-        sphinx_search_options.merge!({
-          :star => true,
-          :retry_stale => true,
-          :page => paging_info.page_id,
-          :per_page => paging_info.page_size,
-          :order => paging_info.sort_string,
-          :sort_mode => :extended
-        })
-        search_term = SharedMethods::Converter::SearchStringConverter.process_special_chars(params[:query])
-        User.search search_term, sphinx_search_options
-      end
-    end
-
-  # PUBLIC INSTANCE METHODS
   def liked_images
     self.source_liked_images.unflagged.joins('LEFT JOIN galleries ON galleries.id = images.gallery_id').where(
       "galleries.permission = '#{Permission::Public.new}' OR
@@ -384,11 +379,11 @@ class User < ActiveRecord::Base
   end
 
   def has_follower?(user_id)
-    UserFollow.exists?({ :user_id => self.id, :followed_by => user_id })
+    UserFollow.exists?(user_id: self.id, followed_by: user_id)
   end
 
   def has_profile_photo?(photo_id)
-    ProfileImage.exists?({:user_id => self.id, :id => photo_id})
+    ProfileImage.exists?(user_id: self.id, id: photo_id)
   end
 
   def gender_string
@@ -441,7 +436,7 @@ class User < ActiveRecord::Base
         total += img.data_file_size
       end
     end
-    return total
+    total
   end
 
   def free_allocation
@@ -451,7 +446,7 @@ class User < ActiveRecord::Base
         remaining -= img.data_file_size
       end
     end
-    return remaining
+    remaining
   end
 
   def paid_items(image_id=nil)
@@ -460,36 +455,35 @@ class User < ActiveRecord::Base
     else
       from_condition = "(SELECT * FROM line_items WHERE line_items.image_id=#{image_id}) AS lis"
     end
-    items = LineItem.all :from => from_condition, :select => 'lis.*',
+    LineItem.all :from => from_condition, :select => 'lis.*',
       :joins => 'LEFT JOIN orders ON orders.id = lis.order_id',
       :conditions => ['orders.user_id=? and orders.transaction_status=?',
         self.id, Order::TRANSACTION_STATUS[:complete]]
-    return items
   end
 
   def paid_items_number(image_id=nil)
     result = 0
     items = self.paid_items(image_id)
     items.each {|item| result += item.quantity }
-    return result
+    result
   end
 
   def total_paid(image_id=nil)
     result = 0
     items = self.paid_items(image_id)
     items.each {|item| result += item.quantity * (item.tax + item.price) }
-    return result
+    result
   end
 
-#===============================================================================
-# Description:
-# - get saled ($) and saled quantity of each images
-# - sort by highest saled ($)
-# Note:
-#===============================================================================
+  #===============================================================================
+  # Description:
+  # - get saled ($) and saled quantity of each images
+  # - sort by highest saled ($)
+  # Note:
+  #===============================================================================
   def raw_sales(paging_params = {})
     paging_info = Image.parse_paging_options(paging_params)
-    images = Image.paginate(
+    Image.paginate(
       :page => paging_info.page_id,
       :per_page => paging_info.page_size,
       :select => ' img.*, purchased_items.saled AS sales,
@@ -514,16 +508,15 @@ class User < ActiveRecord::Base
       :order => "(CASE WHEN purchased_items.saled IS NULL THEN 0 ELSE 1 END) desc,
                  purchased_items.saled DESC, img.name ASC"
     )
-    return images
   end
 
-#==============================================================================
-# Description:
-# - get sales of all images over months
-# - report over nearest 12 months from report date
-# Note:
-#
-#==============================================================================
+  #==============================================================================
+  # Description:
+  # - get sales of all images over months
+  # - report over nearest 12 months from report date
+  # Note:
+  #
+  #==============================================================================
   def monthly_sales(report_date=Time.now)
     result = []
     date = DateTime.parse report_date.to_s
@@ -534,7 +527,7 @@ class User < ActiveRecord::Base
       self.images.unflagged.each { |img| total_sales += img.user_total_sales(mon) }
       result << { :month => short_mon, :sales => total_sales }
     }
-    return result
+    result
   end
 
   def total_sales(image_paging_params = {})
@@ -551,7 +544,7 @@ class User < ActiveRecord::Base
     }
     result[:data] = array
     result[:total_entries] = images.total_entries
-    return result
+    result
   end
 
   def oldest_profile_image
@@ -563,7 +556,7 @@ class User < ActiveRecord::Base
         result = img.id
       end
     end
-    return result
+    result
   end
 
   def recent_profile_image
@@ -575,7 +568,7 @@ class User < ActiveRecord::Base
         result = img.id
       end
     end
-    return result
+    result
   end
 
   def hold_profile_images
@@ -587,7 +580,7 @@ class User < ActiveRecord::Base
         result = false
       end
     end
-    return result
+    result
   end
 
   def rollback_avatar
@@ -598,23 +591,7 @@ class User < ActiveRecord::Base
       img = ProfileImage.find_by_id id
       img.update_attribute('default', true)
     end
-    return result
-  end
-
-  def images_count
-    if !self.attributes.has_key?('images_count')
-      self.attributes['images_count'] = self.images.unflagged.count
-    else
-      self.attributes['images_count'].to_i
-    end
-  end
-
-  def images_likes_count
-    if !self.attributes.has_key?('images_likes_count')
-      self.attributes['images_likes_count'] = self.images.unflagged.sum(:likes)
-    else
-      self.attributes['images_likes_count'].to_i
-    end
+    result
   end
 
   def images_pageview
@@ -623,10 +600,6 @@ class User < ActiveRecord::Base
     else
       self.attributes['images_pageview'].to_i
     end
-  end
-
-  def get_account_balance
-
   end
 
   def remove
@@ -668,7 +641,6 @@ class User < ActiveRecord::Base
     end
   end
 
-  # Detect if this user is ready for being flagged.
   def will_be_banned?
     (!self.banned? && !self.ready_for_reinstating?)
   end
@@ -681,12 +653,11 @@ class User < ActiveRecord::Base
     banned? || removed?
   end
 
-  # USER PAYMENT PROCESSING
   def total_earn
     result = 0
     items = self.images
     items.each {|item| result += item.user_total_sales }
-    return result
+    result
   end
 
   def owned_amount
@@ -716,13 +687,8 @@ class User < ActiveRecord::Base
     end
   end
 
-  # AUTHORIZE NET CIM
-  def update_user_info_on_authorize_net
-
-  end
-
   def owns_image?(image)
-    image.author == self
+    image.user == self
   end
 
   def owns_gallery?(gallery)
@@ -734,7 +700,17 @@ class User < ActiveRecord::Base
     owns_gallery?(gallery) || gallery.permission.public?
   end
 
-  protected
+  def like_image(image)
+    image_likes.create(image_id: image.id) unless image.liked_by?(self)
+    { likes_count: image.image_likes.size }
+  end
+
+  def unlike_image(image)
+    image_likes.where(image_id: image.id).destroy if image.liked_by?(self)
+    { likes_count: image.image_likes.size }
+  end
+
+  private
 
     def need_checking_password?
       (!self.force_submit && self.password_required?)
@@ -772,12 +748,6 @@ class User < ActiveRecord::Base
 
     def number_matches_type?
       return card_type == ccTypeCheck(card_number)
-    end
-
-    def decrypt_data
-    end
-
-    def encrypt_data
     end
 
 =begin

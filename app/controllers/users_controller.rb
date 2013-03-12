@@ -23,16 +23,7 @@ class UsersController < ApplicationController
     redirect_to :controller => 'home', :action => 'index'
   end
 
-  def profile
-    @user = current_user
-  end
-
-  def edit
-    @user = current_user
-  end
-
   def update
-    @user = current_user
     type_update = params[:user][:type_update]
     params[:user].delete(:type_update)
     if (type_update == "payment_info")
@@ -56,8 +47,8 @@ class UsersController < ApplicationController
     if (type_update == "billing_address" || type_update == "shipping_address")
       # Update Authorize Net Account
 
-      address = @user.billing_address ||= Address.new if (type_update == "billing_address")
-      address = @user.shipping_address ||= Address.new if (type_update == "shipping_address")
+      address = current_user.billing_address ||= Address.new if (type_update == "billing_address")
+      address = current_user.shipping_address ||= Address.new if (type_update == "shipping_address")
 
       if (address.update_attributes params[:address])
         params[:user][:billing_address_id] = address.id if (type_update == "billing_address")
@@ -77,12 +68,12 @@ class UsersController < ApplicationController
     end
 
     respond_to do |format|
-      if @user.update_profile(params[:user])
+      if current_user.update_profile(params[:user])
         puts params
-        sign_in @user, :bypass => true
+        sign_in current_user, :bypass => true
         format.html do
           if request.xhr?
-            render :partial => "/users/sections/#{type_update}", :locals => {:user => @user, :address => address}, :layout => false
+            render :partial => "/users/sections/#{type_update}", :locals => {:user => current_user, :address => address}, :layout => false
           else
             redirect_to("/my_account", :notice => I18n.t('user.update_done'))
           end
@@ -90,9 +81,9 @@ class UsersController < ApplicationController
       else
         format.html do
           if request.xhr?
-            render :json => @user.errors.full_messages, :status => :unprocessable_entity
+            render :json => current_user.errors.full_messages, :status => :unprocessable_entity
           else
-            redirect_to("/my_account", :notice => @user.errors)
+            redirect_to("/my_account", :notice => current_user.errors)
           end
         end
       end
@@ -236,7 +227,7 @@ class UsersController < ApplicationController
     if image.nil?
       result = { :success => false, :msg => "This image does not exist anymore!" }
     else
-      result = image.disliked_by_user(current_user.id)
+      result = current_user.unlike_image(image)
     end
 
     render :json => result

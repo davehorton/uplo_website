@@ -9,7 +9,7 @@ class Api::OrdersController < Api::BaseController
   # result:
   #
   def list_orders
-    orders = @user.orders.load_orders(@filtered_params)
+    orders = current_user.orders.load_orders(@filtered_params)
     @result[:total] = orders.total_entries
     @result[:data] = orders_to_json(orders)
     @result[:success] = true
@@ -123,7 +123,7 @@ class Api::OrdersController < Api::BaseController
     expires_on = Date.parse order_info[:expiration]
     order_info[:expiration] = expires_on.strftime("%m-%Y")
     images = order_info.delete(:images)
-    order_info[:user] = @user
+    order_info[:user] = current_user
 
     # Checking requested information
     card_required_info.each { |val|
@@ -190,7 +190,7 @@ class Api::OrdersController < Api::BaseController
     card_required_info = ['name_on_card', 'card_type', 'card_number', 'expiration']
     expires_on = Date.parse order_info[:expiration]
     order_info[:expiration] = expires_on.strftime("%m-%Y")
-    order_info[:user] = @user
+    order_info[:user] = current_user
 
     # Checking requested information
     card_required_info.each { |val|

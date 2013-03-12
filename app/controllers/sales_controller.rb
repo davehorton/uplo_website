@@ -17,7 +17,6 @@ class SalesController < ApplicationController
     @sales = current_user.raw_sales(@filtered_params)
     @monthly_sales = current_user.monthly_sales(Time.now)
     @year_sales = total_sales(@monthly_sales)
-    @user = current_user
   end
 
   def withdraw

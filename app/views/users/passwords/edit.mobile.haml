@@ -4,7 +4,7 @@
     Please enter your new password below.
   %br
   %br
-  = simple_form_for(@user, :url => password_path(@user), :html => { :method => :put , :class => "simple_form"}) do |f|
+  = simple_form_for(current_user, :url => password_path(current_user), :html => { :method => :put , :class => "simple_form"}) do |f|
     = f.input :reset_password_token, :as => :hidden
     = f.full_error :reset_password_token
     .inputs

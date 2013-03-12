@@ -26,9 +26,7 @@ class CommentsController < ApplicationController
       comment = Comment.new({:image_id => image.id, :user_id => current_user.id,
         :description => comment[:description].strip})
       if comment.save
-        if current_user.id != image.author.id
-          Notification.deliver_image_notification(image.id, current_user.id, Notification::TYPE[:comment])
-        end
+        Notification.deliver_image_notification(image.id, current_user.id, Notification::TYPE[:comment]) unless current_user.owns_image?(image)
         data = image.comments.load_comments(@filtered_params)
         comments = render_to_string :partial => 'images/comments_template', :locals => { :comments => data }
         result = { :success => true, :comments => comments, :comments_number => data.total_entries }

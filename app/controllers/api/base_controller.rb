@@ -101,7 +101,6 @@ class Api::BaseController < ActionController::Base
 
   def set_global_variable
     @result = {:success => false}
-    @user = current_user
   end
 
   def decrypt_params

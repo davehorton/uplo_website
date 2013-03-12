@@ -68,13 +68,13 @@ class Api::UsersController < Api::BaseController
     if params[:user].blank?
       @result[:success] = false
       @result[:msg] = I18n.t("common.invalid_params")
-    elsif @user.update_profile(params[:user])
+    elsif current_user.update_profile(params[:user])
       profile_image_params = params[:profile_image]
       if (!profile_image_params.nil?)
-        avatar = @user.profile_images.build({:data => params[:profile_image][:data], :last_used => Time.now})
+        avatar = current_user.profile_images.build({:data => params[:profile_image][:data], :last_used => Time.now})
         if avatar.save
            @result[:success] = true
-           @result[:user_info] = init_user_info(@user)
+           @result[:user_info] = init_user_info(current_user)
         else
           msg = []
           key = ['data_file_size', 'data_content_type']
@@ -90,11 +90,11 @@ class Api::UsersController < Api::BaseController
         end
       else
         @result[:success] = true
-        @result[:user_info] = init_user_info(@user)
+        @result[:user_info] = init_user_info(current_user)
       end
     else
       @result[:success] = false
-      messages = @user.errors.full_messages
+      messages = current_user.errors.full_messages
       if messages.is_a?(Array)
         @result[:msg] = messages.first
       else
@@ -327,13 +327,13 @@ class Api::UsersController < Api::BaseController
     result = { :success => false, :msg => "", :payment_info => {}}
     amount = params[:amount].to_f
 
-    if (@user.withdraw_paypal amount)
+    if (current_user.withdraw_paypal amount)
       result[:success] = true
     else
-      result[:msg] = @user.errors.full_messages.to_sentence
+      result[:msg] = current_user.errors.full_messages.to_sentence
     end
-    result[:payment_info][:total_earn] = @user.total_earn
-    result[:payment_info][:owned_amount] = @user.owned_amount
+    result[:payment_info][:total_earn] = current_user.total_earn
+    result[:payment_info][:owned_amount] = current_user.owned_amount
     render :json => result
   end
 

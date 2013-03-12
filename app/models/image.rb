@@ -6,10 +6,11 @@ class Image < ActiveRecord::Base
 
   include ImageConstants
 
+  belongs_to :active_user, class_name: 'User', foreign_key: 'user_id', conditions: { banned: false, removed: false }
+  belongs_to :user, counter_cache: true
   belongs_to :gallery,     :touch => true
   belongs_to :public_gallery, class_name: 'Gallery', foreign_key: 'gallery_id', conditions: { permission: Permission::Public.new }
-  has_one  :author,        :through => :gallery, :source => :user
-  has_one  :active_author, :through => :gallery, :source => :user, conditions: { banned: false, removed: false }
+
   has_many :comments,      :dependent => :destroy
   has_many :image_flags,   :dependent => :destroy
   has_many :image_likes,   :dependent => :destroy
@@ -24,8 +25,8 @@ class Image < ActiveRecord::Base
   scope :flagged,    not_removed.joins(:image_flags)
   scope :unflagged,  not_removed.includes(:image_flags).where(image_flags: { id: nil })
 
-  scope :processing,       not_removed.joins(:active_author).where(data_processing: true)
-  scope :visible,          not_removed.joins(:active_author).where(data_processing: false)
+  scope :processing,       not_removed.joins(:active_user).where(data_processing: true)
+  scope :visible,          not_removed.joins(:active_user).where(data_processing: false)
   scope :visible_everyone, visible.unflagged.joins(:public_gallery)
 
   has_attached_file :image,
@@ -105,7 +106,7 @@ class Image < ActiveRecord::Base
       when 'num_of_sales' then
         self.load_images_with_sales_count(params)
       when 'num_of_likes' then
-        params[:sort_field] = "images.likes"
+        params[:sort_field] = "images.image_likes_count"
         default_filter_logic.call
       else
         default_filter_logic.call
@@ -144,7 +145,7 @@ class Image < ActiveRecord::Base
 
   def self.load_popular_images(params = {}, current_user = nil)
     paging_info = parse_paging_options(params,
-      {:sort_criteria => "images.promote_num DESC, images.updated_at DESC, images.likes DESC"})
+      {:sort_criteria => "images.promote_num DESC, images.updated_at DESC, images.image_likes_count DESC"})
     self.includes(:gallery).joins([:gallery]).
       where("galleries.permission = ?", Permission::Public.new).paginate(
         :page => paging_info.page_id,
@@ -158,7 +159,7 @@ class Image < ActiveRecord::Base
   end
 
   def self.exposed_attributes
-    [:id, :name, :description, :data_file_name, :name, :gallery_id, :price, :likes, :keyword,
+    [:id, :name, :description, :data_file_name, :name, :gallery_id, :price, :image_likes_count, :keyword,
       :owner_avatar, :gallery_cover, :tier]
   end
 
@@ -197,8 +198,8 @@ class Image < ActiveRecord::Base
     Image.search(search_term, sphinx_search_options)
   end
 
-  delegate :username, :to => :author, allow_nil: true
-  delegate :id, :fullname, :to => :author, allow_nil: true, prefix: true
+  delegate :username, :to => :user, allow_nil: true
+  delegate :id, :fullname, :to => :user, allow_nil: true, prefix: true
   delegate :name, :to => :gallery, prefix: true
 
   def get_price(moulding, size)
@@ -252,10 +253,10 @@ class Image < ActiveRecord::Base
 
   def set_as_owner_avatar
     self.update_attribute('owner_avatar', true)
-    Image.update_all 'owner_avatar=false', "gallery_id in (#{ self.author.galleries.collect(&:id).join(',') }) and id <> #{ self.id }"
-    profile_img = ProfileImage.first :conditions => {:user_id => self.author.id, :link_to_image => self.id}
+    Image.update_all 'owner_avatar=false', "gallery_id in (#{ user.galleries.collect(&:id).join(',') }) and id <> #{ self.id }"
+    profile_img = ProfileImage.first :conditions => {:user_id => user_id, :link_to_image => self.id}
     if profile_img.nil?
-      ProfileImage.create({ :user_id => self.author.id,
+      ProfileImage.create({ :user_id => user_id,
                             :link_to_image => self.id,
                             :avatar => open(self.url(:thumb)),
                             :last_used => Time.now })
@@ -269,7 +270,7 @@ class Image < ActiveRecord::Base
   end
 
   def flag(user, params={}, result = {})
-    if self.author.banned?
+    if user.banned?
       result = { :success => false, :msg => "The author is already banned." }
     else
       if (self.image_flags.count > 0)
@@ -300,14 +301,14 @@ class Image < ActiveRecord::Base
               end
             end
 
-            if self.author.will_be_banned?
+            if user.will_be_banned?
               # Ban the image's author.
-              self.author.update_attribute(:banned, true)
+              user.update_attribute(:banned, true)
               # Send email.
-              UserMailer.banned_user_email(self.author).deliver
+              UserMailer.banned_user_email(user).deliver
             else
               # Send email about the flagged image.
-              UserMailer.flagged_image_email(self.author, self).deliver
+              UserMailer.flagged_image_email(user, self).deliver
             end
 
             # Update result
@@ -347,49 +348,11 @@ class Image < ActiveRecord::Base
   end
 
   def user_avatar
-    author.try(:avatar_url, :large)
+    user.try(:avatar_url, :large)
   end
 
-  def liked_by_user(user_id)
-    result = {:success => false}
-    Image.transaction do
-      if !User.exists? user_id
-        result[:msg] = "User does not exist anymore"
-      elsif ImageLike.exists?({:image_id => self.id, :user_id => user_id})
-        result[:msg] = "This image has been liked"
-      else
-        img_like = ImageLike.new({:image_id => self.id, :user_id => user_id})
-        self.image_likes << img_like
-        self.likes += 1
-        self.save
-        result[:likes] = self.likes
-        result[:success] = true
-      end
-    end
-    return result
-  end
-
-  def disliked_by_user(user_id)
-    result = {:success => false}
-    Image.transaction do
-      if !User.exists? user_id
-        result[:msg] = "User does not exist anymore"
-      elsif !ImageLike.exists?({:image_id => self.id, :user_id => user_id})
-        result[:msg] = "This image has been unliked"
-      else
-        img_like = ImageLike.find_by_image_id self.id, :conditions => {:user_id => user_id}
-        img_like.destroy
-        self.likes -= 1
-        self.save
-        result[:likes] = self.likes
-        result[:success] = true
-      end
-    end
-    return result
-  end
-
-  def liked_by?(user_id)
-    ImageLike.exists?({:image_id => self.id, :user_id => user_id})
+  def liked_by?(user)
+    ImageLike.exists?(image_id: id, user_id: user.id)
   end
 
   # THIS METHOD IS USED TO SHOW THE TOTAL SALE FOR USER.
@@ -659,10 +622,10 @@ class Image < ActiveRecord::Base
 
       # attributes
       has gallery_id, created_at, pageview, promote_num, updated_at, data_processing
-      has author(:is_banned), :as => :banned_user
-      has author(:is_removed), :as => :removed_user
+      has user(:is_banned), :as => :banned_user
+      has user(:is_removed), :as => :removed_user
       has image_flags(:reported_by), :as => :flagged_by
-      has author(:id), :as => :author_id
+      has user(:id), :as => :user_id
       has gallery(:permission), :as => :permission
 
       # weight
@@ -670,7 +633,7 @@ class Image < ActiveRecord::Base
         :name => 15,
         :keyword => 7,
         :description => 3,
-        :author => 1,
+        :user => 1,
         :album => 1
       }
 

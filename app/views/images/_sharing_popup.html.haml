@@ -8,18 +8,16 @@
       .buttons-container.right
         - public_url = url_for(:controller => 'images', :action => 'public', :id => params[:id], :only_path => false)
         - flickr_request = url_for(:controller => 'images', :action => 'post_image_to_flickr', :id => params[:id], :only_path => false)
-        - if !(@user.tumblr_token.blank?)
+        - if current_user.tumblr_token?
           %a.tumblr.button.right{ :href => '#', :onclick => "showSocialPopup('tumblr');"}
-        - if !(@user.flickr_token.blank?)
+        - if current_user.flickr_token?
           %a.flickr.button.right{ :href => '#', :onclick => "showSocialPopup('flickr');"}
-        - if !(@user.twitter_token.blank?)
+        - if current_user.twitter_token.?
           %a.twitter.button.right{ :href => '#', :onclick => "showSocialPopup('twitter');"}
-        - if !(@user.facebook_token.blank?)
+        - if current_user.facebook_token?
           %a.facebook.button.right{ :href => '#', :onclick => "showSocialPopup('facebook');"}
-          
+
         %a.email.button.right{ :href => '#', :onclick => 'showEmailPopup();' }
-        /%a.flickr.button.left{ :href => "#{flickr_request}", :title => "Share on Flickr", :target => "_blank" }
-        /%a.pinterest.button.left.no-padding-right{ :href => image_pinterest_share_url(@image, public_url), :target=>"_blank", :title => "Share on Pinterest" }
 
   .tail.left
     .icon.right
