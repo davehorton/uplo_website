@@ -48,9 +48,9 @@ gem 'will_paginate', '~> 3.0'
 # Gems used only for assets and not required
 # in production environments by default.
 group :assets do
-  gem 'coffee-rails'
-  gem 'sass-rails', '~> 3.2.3'
-  gem 'uglifier', '>= 1.0.3'
+  gem 'sass-rails',   '~> 3.2.3'
+  gem 'coffee-rails', '~> 3.2.1'
+  gem 'uglifier'
 end
 
 group :development, :test do
@@ -62,20 +62,19 @@ end
 group :development do
   gem 'foreman'
   gem 'letter_opener'
-  gem 'guard'
-  gem 'guard-spork'
-  gem 'guard-sass', :require => false
-  gem 'guard-coffeescript'
+  gem 'quiet_assets'
 end
 
 group :test do
   gem 'capybara'
   gem 'database_cleaner'
   gem 'email_spec'
+  gem 'guard'
+  gem 'guard-spork'
   gem 'launchy'
-  gem 'poltergeist'
   gem 'rb-fsevent'
   gem 'rspec-nc'
+  gem 'selenium-webdriver'
   gem 'spork-rails'
   gem 'shoulda-matchers'
   gem 'timecop'
