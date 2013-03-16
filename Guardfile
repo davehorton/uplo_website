@@ -24,6 +24,3 @@ guard 'spork', :rspec_env => { 'RAILS_ENV' => 'test' } do
   watch('spec/support/')
   watch(%r{^spec/support/.*\.rb$})
 end
-
-guard 'coffeescript', :input => 'app/assets/javascripts', :noop => true
-guard 'sass',         :input => 'app/assets/stylesheets', :noop => true
