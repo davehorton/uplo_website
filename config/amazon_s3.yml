@@ -1,19 +1,17 @@
-development:
+common: &common
   bucket: uplo-dev
   access_key_id: AKIAIOYCWZFROQJEEBYQ
   secret_access_key: 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
 
-staging:
-  bucket: uplo-dev
-  access_key_id: AKIAIOYCWZFROQJEEBYQ
-  secret_access_key: 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
+development:
+  <<: *common
 
 test:
-  bucket: uplo-dev
-  access_key_id: AKIAIOYCWZFROQJEEBYQ
-  secret_access_key: 0rUsMMg8UdwVvCBbSwnOo72qnXE5hkHSqSPp
+  <<: *common
+
+staging:
+  <<: *common
 
 production:
+  <<: *common
   bucket: uplo
-  access_key_id: AKIAIOYCWZFROQJEEBYQ
-  secret_access_key: 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
