@@ -29,8 +29,10 @@ Observers are disabled in specs (see spec_helper) but have their own specific te
 
 ## Operations
 
-### Heroku
+### Engine Yard
 
 * Staging and Production environments
 * Add-ons:
- * Redis to Go
+ * SendGrid
+* Custom Chef Recipes
+ * Sidekiq
