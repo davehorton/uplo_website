@@ -19,7 +19,13 @@ Historical note: we inherited this project from another shop in February 2013. W
 
 ## Testing
 
-See https://github.com/webficient/standards/tree/master/testing
+See https://github.com/webficient/standards/tree/master/testing for guidelines.
+
+Observers are disabled in specs (see spec_helper) but have their own specific tests.
+
+### Development Environment Gotchas
+
+* We're using the 'letter opener' gem to intercept emails and display them in a Web browser
 
 ## Operations
 
