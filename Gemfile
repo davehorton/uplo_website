@@ -37,7 +37,7 @@ gem 'oauth'
 gem 'oauth2'
 gem 'oj'
 gem 'paperclip'
-gem 'rmagick'
+gem 'rmagick', require: false
 gem 'sidekiq'
 gem 'simple_form'
 gem 'twitter'
