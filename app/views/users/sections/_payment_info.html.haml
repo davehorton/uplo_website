@@ -1,5 +1,5 @@
 /locals user
-- card_type = User.card_types
+- card_type = CreditCard.brands
 - card_type_reverse = Hash.new {|h,k| h[k] = ""}
 - card_type.each {|k,v| card_type_reverse[v] << k}
 - if user.expiration

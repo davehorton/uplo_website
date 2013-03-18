@@ -1,5 +1,4 @@
 class UsersController < ApplicationController
-  include SocialModule
   before_filter :authenticate_user!, :except => [:request_invitation]
   before_filter :show_notification
   layout 'main'
@@ -12,7 +11,7 @@ class UsersController < ApplicationController
     elsif Invitation.exists?(:email => params[:user][:email]) || User.exists?(:email => params[:user][:email])
       flash[:error] = 'The email has been used'
     else
-      req = Invitation.new_invitation(params[:user][:email])
+      req = Invitation.new(params[:user][:email])
       if req.save
         flash[:auto_hide_notification] = false
         flash[:success] = "Your request has been sent. Please check your mailbox in the next hours to find your invitation. Please also check your spam folder to make sure it didn't end up there by accident. To make sure you will receive emails from us in the future, be sure to add us to your address book in your email settings."
@@ -196,7 +195,7 @@ class UsersController < ApplicationController
     elsif user.id == follower.id
       result[:msg] = 'You cannot follow yourself'
       result[:success] = false
-    elsif SharedMethods::Converter.Boolean(params[:unfollow])
+    elsif params[:unfollow].to_bool
       if UserFollow.exists?({ :user_id => user.id, :followed_by => follower.id })
         UserFollow.destroy_all({ :user_id => user.id, :followed_by => follower.id })
         result[:followers] = current_user.followers.length

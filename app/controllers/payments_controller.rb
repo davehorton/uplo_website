@@ -87,9 +87,7 @@ class PaymentsController < ApplicationController
           end
         }
         @remove_shipping_info = false
-        if order_info['ship_to_billing'].blank? || !SharedMethods::Converter::Boolean(order_info['ship_to_billing'])
-
-        else
+        unless order_info['ship_to_billing'].blank? || !order_info['ship_to_billing']
           order_info[:shipping_address_attributes] = order_info[:billing_address_attributes]
           @remove_shipping_info = true
         end

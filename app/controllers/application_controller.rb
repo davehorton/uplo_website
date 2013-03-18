@@ -1,19 +1,16 @@
 class ApplicationController < ActionController::Base
+  PAGE_SIZE = 10
+  MAX_PAGE_SIZE = 100
+
   protect_from_forgery
   before_filter :show_processing
-  before_filter :set_current_tab, :set_current_user, :check_banned_user, :set_auto_hide
+  before_filter :set_current_tab, :check_banned_user, :set_auto_hide
   before_filter :filter_params
 
   layout 'main'
 
-  PAGE_SIZE = 10
-  MAX_PAGE_SIZE = 100
-
-
-  if (Rails.env.production? or Rails.env.staging?)
-    rescue_from CanCan::AccessDenied, :with => :render_unauthorized
-    rescue_from ActiveRecord::RecordNotFound, :with => :render_not_found
-  end
+  rescue_from CanCan::AccessDenied, :with => :render_unauthorized
+  rescue_from ActiveRecord::RecordNotFound, :with => :render_not_found
 
   def render_not_found
     render :file => "public/404.html", :status => 404, :layout => false
@@ -81,10 +78,6 @@ class ApplicationController < ActionController::Base
     def set_current_tab
       "please override this method in your sub class"
       # @current_tab = "home"
-    end
-
-    def set_current_user
-      User.current_user = current_user
     end
 
     def set_auto_hide

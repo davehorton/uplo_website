@@ -35,7 +35,7 @@
                 %span.text.black.bold{:style => 'font-weight:bold;'}= purchaser.username
                 %span.text.fuzzy-gray= "(#{line_item.creation_timestamp} ago)"
                 .text.gray.line22
-                  - plexi_mount = SharedMethods::Converter.Boolean(line_item.plexi_mount)
+                  - plexi_mount = line_item.plexi_mount
                   %span= plexi_mount ? 'Plexi Mount,&nbsp;'.html_safe : 'No Plexi Mount,&nbsp;'.html_safe
                   %span= "#{line_item.size},&nbsp;".html_safe
                   %span= "#{line_item.moulding} Mounding,&nbsp;".html_safe
@@ -48,7 +48,7 @@
               %span.text.black.bold{:style => 'font-weight:bold;'}= purchaser.username
               %span.text.fuzzy-gray= "(#{line_item.creation_timestamp} ago)"
               .text.gray.line22
-                - plexi_mount = SharedMethods::Converter.Boolean(line_item.plexi_mount)
+                - plexi_mount = line_item.plexi_mount
                 %span= plexi_mount ? 'Plexi Mount,&nbsp;'.html_safe : 'No Plexi Mount,&nbsp;'.html_safe
                 %span= "#{line_item.size},&nbsp;".html_safe
                 %span= "#{line_item.moulding} Mounding,&nbsp;".html_safe

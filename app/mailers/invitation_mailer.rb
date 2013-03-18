@@ -1,12 +1,10 @@
 class InvitationMailer < ApplicationMailer
-  def send_invitation(inv_id, msg = '')
-    @inv = Invitation.find_by_id inv_id
-    @msg = msg
-    mail_params = {
-      :to => @inv.email,
-      :subject => 'UPLO Invitation'
-    }
+  def send_invitation(invitation_id)
+    @inv = Invitation.find(invitation_id)
 
-    mail(mail_params)
+    mail(
+      to: @inv.email,
+      subject: 'UPLO Invitation'
+    )
   end
 end

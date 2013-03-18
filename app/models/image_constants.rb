@@ -9,7 +9,7 @@ module ImageConstants
     SORT_OPTIONS[:spotlight] => 'promote_num DESC'
   }
 
-  FILTER_OPTIONS = ['date_uploaded', 'num_of_views', 'num_of_sales', 'num_of_likes']
+  FILTER_OPTIONS = ['date_uploaded', 'num_of_views', 'num_of_likes']
 
   SALE_REPORT_TYPE = {
     :quantity => "quantity",

@@ -1,13 +1,11 @@
 class UserDevice < ActiveRecord::Base
-  # Validations
-  validates_presence_of :device_token, :user_id, :last_notified, :message => 'cannot be blank'
-  validates_uniqueness_of :device_token, :message => 'must be unique'
-
-  # Associations
   belongs_to :user
 
-  def active?
-  	self.notify_purchases || self.notify_comments || self.notify_likes
-  end
+  validates :device_token, presence: true, uniqueness: true
+  validates :user, presence: true
+  validates :last_notified, presence: true
 
+  def active?
+  	notify_purchases || notify_comments || notify_likes
+  end
 end

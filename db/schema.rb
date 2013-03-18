@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130311000852) do
+ActiveRecord::Schema.define(:version => 20130317052640) do
 
   create_table "addresses", :force => true do |t|
     t.string   "first_name"
@@ -43,6 +43,9 @@ ActiveRecord::Schema.define(:version => 20130311000852) do
     t.datetime "updated_at",  :null => false
   end
 
+  add_index "comments", ["image_id"], :name => "index_comments_on_image_id"
+  add_index "comments", ["user_id"], :name => "index_comments_on_user_id"
+
   create_table "galleries", :force => true do |t|
     t.integer  "user_id",                       :null => false
     t.string   "name",                          :null => false
@@ -51,9 +54,10 @@ ActiveRecord::Schema.define(:version => 20130311000852) do
     t.datetime "created_at",                    :null => false
     t.datetime "updated_at",                    :null => false
     t.string   "keyword"
-    t.string   "permission",  :default => "1"
+    t.string   "permission"
   end
 
+  add_index "galleries", ["name"], :name => "index_galleries_on_name"
   add_index "galleries", ["permission"], :name => "index_galleries_on_permission"
   add_index "galleries", ["user_id"], :name => "index_galleries_on_user_id"
 
@@ -125,6 +129,7 @@ ActiveRecord::Schema.define(:version => 20130311000852) do
     t.datetime "invited_at"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
+    t.string   "message"
   end
 
   create_table "line_items", :force => true do |t|

@@ -1,32 +1,25 @@
 class Admin::InvitesController < Admin::AdminController
   def index
-    # @inv_requests = Invitation.load_invitations(@filtered_params)
-    @inv_requests = Invitation.where('invited_at is null').load_invitations(@filtered_params)
+    @inv_requests = Invitation.requested.paginate_and_sort(@filtered_params)
   end
 
-  def confirm_invitation_request
-    result = { :success => false }
-    if params[:ids].blank?
-      result[:msg] = 'There is not any request left!'
-    else
-      params[:ids].each { |id|
-        inv = Invitation.find_by_id id
-        if inv.nil?
-          result = {:success => false, :msg => 'This request does not exist anymore.' }
-        else
-          inv.update_attribute(:invited_at, Time.now())
-          #send email
-          InvitationMailer.send_invitation(inv.id).deliver
-          result[:success] = true
-        end
-      }
-      if result[:success]
+  def confirm_request
+    params[:ids].each do |id|
+      invitation_request = Invitation.find_by_id(id)
+
+      if invitation_request.nil?
+        result = { msg: 'This request does not exist anymore.' }
+      else
+        invitation_request.invite!
+        result[:success] = true
+
         emails = render_to_string :partial => 'emails_for_invite',
-          :locals => { :emails => Invitation.where('invited_at is null').load_invitations(@filtered_params) }
+          :locals => { :emails => Invitation.requested.paginate_and_sort(@filtered_params) }
         result = { :success => true, :emails => emails }
       end
     end
-    render :json => result
+
+    render(json: result)
   end
 
   def send_invitation
@@ -38,31 +31,12 @@ class Admin::InvitesController < Admin::AdminController
       msg = ''
       Invitation.transaction do
         emails = params[:inv]['emails'].split(',')
-        emails.each { |email|
-          email.strip!
-          # check email format & unique
-          if (User::EMAIL_REG_EXP =~ email).nil?
-            msg = "#{email} is invalid email!"
-            raise ActiveRecord::Rollback
-          elsif Invitation.exists?(:email => email) || User.exists?(:email => email)
-            msg = "#{email} has been invited!"
-            raise ActiveRecord::Rollback
-          else
-            inv = Invitation.new_invitation email.strip
-            inv[:invited_at] = Time.now()
-            inv.save(:validation => false)
-            invs << inv.id
-            result = { :success => true, :msg => 'Invitations have been sent!' }
-          end
-        }
-      end
-
-      if result[:success]
-        invs.each { |id| InvitationMailer.send_invitation(id, params[:inv]['message']).deliver }
-      elsif msg.blank?
-        result[:msg] = 'Cannot invite any emails right now! Please try again later!'
-      else
-        result[:msg] = msg
+        emails.each do |email|
+          inv = Invitation.create(email: email, message: params[:inv][:message])
+          inv.invite!
+          invs << inv.id
+          result = { :success => true, :msg => 'Invitations have been sent!' }
+        end
       end
     end
 

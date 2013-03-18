@@ -1,6 +1,5 @@
 class SocialsController < ApplicationController
 	before_filter :authenticate_user!
-	include SocialModule
 
 	def facebook_callback
 		@api_key = FACEBOOK_CONFIG["api_key"]

@@ -160,43 +160,18 @@ Uplo::Application.routes.draw do
     resources :invites do
       collection do
         post :send_invitation
-        get :confirm_invitation_request
+        get :confirm_request
       end
     end
   end
 
   # API ROUTING
   namespace :api do
-    # User
-    devise_scope :user do
-      get "total_sales", :to => "users#get_total_sales"
-      post "login", :to => "users#login"
-      post "logout", :to => "users#logout"
-      get "user_info", :to => "users#get_user_info"
-      post "register", :to => "users#create_user"
-      get "reset_password", :to => "users#reset_password"
-      post "update_profile", :to => "users#update_profile"
-      get 'user_followings', :to => 'users#get_followed_users'
-      get 'user_followers', :to => 'users#get_followers'
-      get 'follow', :to => 'users#set_follow'
-      get 'check_following', :to => 'users#check_following'
-      post 'get_notification_settings', :to => 'users#get_notification_settings'
-      post 'update_notification_settings', :to => 'users#update_notification_settings'
-      post "check_emails", :to => "users#check_emails"
-      get 'payment_info', :to => "users#get_user_payment_info"
-      post 'withdraw', :to => "users#withdraw"
-      post 'card_info', :to => "users#get_user_card_info"
-      get 'get_moulding', :to => 'users#get_moulding'
-      post 'request_invitation', :to => 'users#request_invitation'
+    resources :galleries, except: [:show, :edit] do
+      get :popular, on: :collection
     end
 
-    # Gallery
-    post "create_gallery", :to => "galleries#create_gallery"
-    post "update_gallery", :to => "galleries#update_gallery"
-    post "delete_gallery", :to => "galleries#delete_gallery"
-    get "list_galleries", :to => "galleries#list_galleries"
-    get "list_images", :to => "galleries#list_images"
-    get "list_popular", :to => "galleries#list_popular"
+
     get "popular_images", :to => "images#popular_images"
     get 'friend_images', :to => 'images#friend_images'
     get "search", :to => "search#search"
@@ -224,5 +199,28 @@ Uplo::Application.routes.draw do
     post 'add_ordered_item', :to => 'orders#add_ordered_item'
     post 'delete_ordered_item', :to => 'orders#delete_ordered_item'
     get 'show_cart', :to => 'orders#show_cart'
+
+    # User
+    devise_scope :user do
+      get "total_sales", :to => "users#get_total_sales"
+      post "login", :to => "users#login"
+      post "logout", :to => "users#logout"
+      get "user_info", :to => "users#get_user_info"
+      post "register", :to => "users#create_user"
+      get "reset_password", :to => "users#reset_password"
+      post "update_profile", :to => "users#update_profile"
+      get 'user_followings', :to => 'users#get_followed_users'
+      get 'user_followers', :to => 'users#get_followers'
+      get 'follow', :to => 'users#set_follow'
+      get 'check_following', :to => 'users#check_following'
+      post 'get_notification_settings', :to => 'users#get_notification_settings'
+      post 'update_notification_settings', :to => 'users#update_notification_settings'
+      post "check_emails", :to => "users#check_emails"
+      get 'payment_info', :to => "users#get_user_payment_info"
+      post 'withdraw', :to => "users#withdraw"
+      post 'card_info', :to => "users#get_user_card_info"
+      get 'get_moulding', :to => 'users#get_moulding'
+      post 'request_invitation', :to => 'users#request_invitation'
+    end
   end
 end

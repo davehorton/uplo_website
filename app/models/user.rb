@@ -4,9 +4,7 @@ class User < ActiveRecord::Base
   class NotReadyForReinstatingError < StandardError
   end
 
-  include ::SharedMethods::Paging
-  include ::SharedMethods::Converter
-  include ::SharedMethods::SerializationConfig
+  include ::Shared::QueryMethods
 
   attr_accessor :force_submit, :login, :skip_state_changed_tracking
 
@@ -14,8 +12,8 @@ class User < ActiveRecord::Base
   GENDER_MALE = "0"
   MIN_FLAGGED_IMAGES = 3
   ALLOCATION_STRING = "#{RESOURCE_LIMIT[:size]} #{RESOURCE_LIMIT[:unit]}"
-  ALLOCATION = FileSizeConverter.convert RESOURCE_LIMIT[:size], RESOURCE_LIMIT[:unit], FileSizeConverter::UNITS[:byte]
-  FILTER_OPTIONS = ['signup_date', 'username', 'num_of_likes', 'num_of_uploads']
+  ALLOCATION = RESOURCE_LIMIT[:size].mb.to.b
+  FILTER_OPTIONS = ['signup_date', 'username', 'num_of_likes']
   SEARCH_TYPE = 'users'
   SORT_OPTIONS = { :name => 'name', :date_joined => 'date' }
   SORT_CRITERIA = {
@@ -69,16 +67,19 @@ class User < ActiveRecord::Base
   validates_uniqueness_of :username, :message => 'must be unique'
   validates_length_of :first_name, :last_name, :in => 2..30, :message => 'must be 2 - 30 characters in length'
   validates_confirmation_of :paypal_email, :message => "should match confirmation"
+
   validates_length_of :cvv, :in => 3..4, :allow_nil => true
   validates_numericality_of :cvv, :card_number, :only_integer => true, :allow_nil => true
+
   validates_presence_of :paypal_email_confirmation, :if => :paypal_email_changed?
   validates :paypal_email, :email => true, :if => :paypal_email_changed?
+
   validate :check_card_number
 
   after_create :cleanup_invitation
   after_create :subscribe
 
-  default_scope where(removed: false, banned: false)
+  default_scope where(removed: false, banned: false).order('username asc')
 
   scope :confirmed_users, where("confirmed_at IS NOT NULL")
   scope :removed_users, where(removed: true)
@@ -99,84 +100,28 @@ class User < ActiveRecord::Base
       MIN_FLAGGED_IMAGES])
     ).select("DISTINCT users.*, galleries_data.flagged_images_count")
 
-  def self.find_first_by_auth_conditions(warden_conditions)
-    conditions = warden_conditions.dup
-    if login = conditions.delete(:login)
-      where(conditions).where(["lower(username) = :value OR lower(email) = :value", { :value => login.downcase }]).first
-    else
-      where(conditions).first
+  # re-implements Shared::QueryMethods function
+  # by replacing search fields before caling super
+  def self.paginate_and_sort(params = {})
+    user_params = params
+
+    if sort_field = params[:sort_field]
+      user_params[:sort_field] = case sort_field
+        when 'signup_date' then
+          'created_at'
+        when 'username' then
+          'username'
+        when 'num_of_likes' then
+          'image_likes_count'
+        end
     end
+
+    super(user_params)
   end
 
-  def self.load_users(params = {})
-    case params[:sort_field]
-      when 'signup_date' then
-        params[:sort_field] = 'users.created_at'
-        self.load_users_with_images_statistics(params)
-      when 'username' then
-        params[:sort_field] = 'users.username'
-        self.load_users_with_images_statistics(params)
-      when 'num_of_likes' then
-        params[:sort_field] = 'users.image_likes_count'
-        self.load_users_with_images_statistics(params)
-      when 'num_of_uploads' then
-        params[:sort_field] = 'users.images_count'
-        self.load_users_with_images_statistics(params)
-      else
-        paging_info = parse_paging_options(params)
-        self.paginate(
-          :page => paging_info.page_id,
-          :per_page => paging_info.page_size,
-          :order => paging_info.sort_string
-        )
-    end
-  end
-
-  def self.card_types
-    {"American Express" => "USA_express",
-      "Discover" => "discover",
-      "Visa" => "visa",
-      "JCB" => "jcb",
-      "Diners Club/ Carte Blanche" => "dinners_club",
-      "Master Card" => "master_card"
-    }
-  end
-
-  # Load users data with image_likes_count, images_count and images_pageview.
-  def self.load_users_with_images_statistics(params = {})
-    paging_info = parse_paging_options(params)
-
-    self.joins(self.sanitize_sql([
-      "LEFT JOIN (
-        SELECT galleries.user_id,
-        SUM(images_data.images_count) AS images_count,
-        SUM(images_data.image_likes_count) AS image_likes_count,
-        SUM(images_data.images_pageview) AS images_pageview
-        FROM galleries LEFT JOIN (
-          SELECT gallery_id, COUNT(images.id) AS images_count,
-          SUM(likes) AS image_likes_count,
-          SUM(pageview) AS images_pageview
-          FROM images
-          WHERE images.removed = :removed
-          GROUP BY gallery_id
-        ) images_data ON galleries.id = images_data.gallery_id
-        GROUP BY galleries.user_id
-      ) galleries_data
-      ON galleries_data.user_id = users.id",
-      {:removed => false}])
-    ).select("DISTINCT users.*,
-      COALESCE(galleries_data.images_count, 0) AS images_count,
-      COALESCE(galleries_data.image_likes_count, 0) AS image_likes_count,
-      COALESCE(galleries_data.images_pageview, 0) AS images_pageview"
-    ).paginate(
-      :page => paging_info.page_id,
-      :per_page => paging_info.page_size,
-      :order => paging_info.sort_string
-    )
-  end
-
-  # Search confirmed user, display banned user or not depend on admin_mod
+  # TODO: replace with pg full text search
   def self.do_search(params = {})
+=begin
     admin_mod = params[:admin_mod].nil? ? false : params[:admin_mod]
     if admin_mod
       params[:sphinx_search_options] = {
@@ -190,26 +135,27 @@ class User < ActiveRecord::Base
       }
     end
     self.search_users(params)
+=end
+  end
+
+  # Override Devise method so that User can log in with username or email.
+  def self.find_first_by_auth_conditions(warden_conditions)
+    conditions = warden_conditions.dup
+    if login = conditions.delete(:login)
+      where(conditions).where(["lower(username) = :value OR lower(email) = :value", { :value => login.downcase }]).first
+    else
+      where(conditions).first
+    end
   end
 
   # Override Devise method so that User can log in with username or email.
   def self.find_for_database_authentication(warden_conditions)
     conditions = warden_conditions.dup
-    login = conditions.delete(:login)
-    where(conditions).where(["lower(username) = :value OR lower(email) = :value",
-                            { :value => login.strip.downcase }]).first
-  end
-
-  def self.exposed_methods
-    [:avatar_url, :fullname, :joined_date]
-  end
-
-  def self.exposed_attributes
-    [:id, :email, :first_name, :biography, :facebook_enabled, :twitter_enabled, :location, :paypal_email, :website, :job, :last_name, :username, :nationality, :birthday, :gender, :twitter, :facebook]
-  end
-
-  def self.exposed_associations
-    [:billing_address, :shipping_address]
+    if login = conditions.delete(:login).downcase
+      where(conditions).where('$or' => [ {:username => /^#{Regexp.escape(login)}$/i}, {:email => /^#{Regexp.escape(login)}$/i} ]).first
+    else
+      where(conditions).first
+    end
   end
 
   def self.remove_flagged_users
@@ -228,26 +174,9 @@ class User < ActiveRecord::Base
     end
   end
 
-  # Get the current user.
-  def self.current_user
-    Thread.current[:current_user]
-  end
-
-  # Set the current user in this thread.
-  def self.current_user=(user)
-    Thread.current[:current_user] = user
-  end
-
-  def self.parse_paging_options(options, default_opts = {})
-    if default_opts.blank?
-      default_opts = {
-        :sort_criteria => "username DESC"
-      }
-    end
-    paging_options(options, default_opts)
-  end
-
+  # TODO: replace with pg full text search
   def self.search_users(params = {})
+=begin
     paging_info = parse_paging_options params[:filtered_params]
 
     sphinx_search_options = params[:sphinx_search_options]
@@ -263,30 +192,11 @@ class User < ActiveRecord::Base
     })
     search_term = SharedMethods::Converter::SearchStringConverter.process_special_chars(params[:query])
     User.search search_term, sphinx_search_options
+=end
   end
 
-  # PUBLIC INSTANCE METHODS
   def check_card_number
-    if (card_number)
-      unless number_valid? && number_matches_type?
-        errors.add(:card_number, "is not a #{readable_card_type} or is invalid")
-        return false
-      end
-    end
-
-    return true
-  end
-
-  def readable_card_type
-    (@@card_types ||= self.class.card_types.invert)[card_type]
-  end
-
-  def digits
-    @digits ||= card_number.gsub(/\D/, '')
-  end
-
-  def last_digits
-    digits.sub(/^([0-9]+)([0-9]{4})$/) { '*' * $1.length + $2 }
+    errors.add(:card_number, "is not valid") unless CreditCard.valid_number?(card_number)
   end
 
   def liked_images
@@ -400,33 +310,34 @@ class User < ActiveRecord::Base
   end
 
   def init_cart
-    if self.cart.nil?
-      new_order = self.recent_empty_order
-      new_cart = self.create_cart(:order => new_order)
-    elsif self.cart.order.nil?
-      self.cart.order = self.recent_empty_order
-      self.cart.save
+    if cart.nil?
+      new_order = recent_empty_order
+      new_cart = create_cart(:order => new_order)
+    elsif cart.order.nil?
+      cart.order = recent_empty_order
+      cart.save
     end
 
-    if (!self.cart.order.billing_address)
-      if self.billing_address
-        self.cart.order.billing_address = self.billing_address.dup
-        self.cart.order.billing_address.save
-      end
-      if self.shipping_address
-        self.cart.order.shipping_address = self.shipping_address.dup
-        self.cart.order.shipping_address.save
+    if !cart.order.billing_address
+      if billing_address
+        cart.order.billing_address = billing_address.dup
+        cart.order.billing_address.save
       end
 
-      self.cart.order.name_on_card = self.name_on_card
-      self.cart.order.card_type = self.card_type
-      self.cart.order.card_number = self.card_number
-      self.cart.order.expiration = self.expiration
-      self.cart.order.cvv = self.cvv
-      self.cart.order.save
+      if shipping_address
+        cart.order.shipping_address = shipping_address.dup
+        cart.order.shipping_address.save
+      end
+
+      cart.order.name_on_card = name_on_card
+      cart.order.card_type = card_type
+      cart.order.card_number = card_number
+      cart.order.expiration = expiration
+      cart.order.cvv = cvv
+      cart.order.save
     end
 
-    self.cart
+    cart
   end
 
   def used_allocation
@@ -478,14 +389,13 @@ class User < ActiveRecord::Base
   #===============================================================================
   # Description:
   # - get saled ($) and saled quantity of each images
-  # - sort by highest saled ($)
+  # - sort by highest sold ($)
   # Note:
   #===============================================================================
   def raw_sales(paging_params = {})
-    paging_info = Image.parse_paging_options(paging_params)
     Image.paginate(
-      :page => paging_info.page_id,
-      :per_page => paging_info.page_size,
+      :page => (paging_params[:page] || 1),
+      :per_page => paging_params[:per_page],
       :select => ' img.*, purchased_items.saled AS sales,
                    purchased_items.saled_quantity AS quantity_sales',
       :from => "
@@ -520,7 +430,7 @@ class User < ActiveRecord::Base
   def monthly_sales(report_date=Time.now)
     result = []
     date = DateTime.parse report_date.to_s
-    prior_months = SharedMethods::TimeCalculator.prior_year_period(date, {:format => '%b %Y'})
+    prior_months = TimeCalculator.prior_year_period(date, {:format => '%b %Y'})
     prior_months.each { |mon|
       short_mon = DateTime.parse(mon).strftime('%b')
       total_sales = 0
@@ -532,11 +442,10 @@ class User < ActiveRecord::Base
 
   def total_sales(image_paging_params = {})
     result = {:total_entries => 0, :data => []}
-    paging_info = Image.paging_options(image_paging_params, {:sort_criteria => "images.updated_at DESC"})
-    images = self.raw_sales(image_paging_params)
+    images = raw_sales(image_paging_params)
     array = []
     images.each { |img|
-      info = img.serializable_hash(img.default_serializable_options)
+      info = img
       info[:total_sale] = img.user_total_sales
       info[:quantity_sale] = img.saled_quantity
       info[:no_longer_avai] = (img.flagged? || img.removed?)
@@ -722,32 +631,6 @@ class User < ActiveRecord::Base
 
     def subscribe
       Mailchimp.subscribe_user(self)
-    end
-
-    def number_valid?
-      odd = true
-      card_number.gsub(/\D/,'').reverse.split('').map(&:to_i).collect { |d|
-        d *= 2 if odd = !odd
-        d > 9 ? d - 9 : d
-      }.sum % 10 == 0
-    end
-
-    def ccTypeCheck(ccNumber)
-      ccNumber = ccNumber.gsub(/\D/, '')
-      case ccNumber
-        when /^3[47]\d{13}$/ then return "USA_express"
-        when /^4\d{12}(\d{3})?$/ then return "visa"
-        when /^5\d{15}|36\d{14}$/ then return "master_card"
-        when /^6011\d{12}|650\d{13}$/ then return "discover"
-        when /^3(0[0-5]|8[0-1])\d{11}$/ then return "dinners_club"
-        when /^(39\d{12})|(389\d{11})$/ then return "CB"
-        when /^3\d{15}|1800\d{11}|2131\d{11}$/ then return "jcb"
-        else return "NA"
-      end
-    end
-
-    def number_matches_type?
-      return card_type == ccTypeCheck(card_number)
     end
 
 =begin

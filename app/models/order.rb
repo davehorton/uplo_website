@@ -1,6 +1,5 @@
 class Order < ActiveRecord::Base
-  include ::SharedMethods::Paging
-  include ::SharedMethods::SerializationConfig
+  include ::Shared::QueryMethods
 
   belongs_to :user
   belongs_to :shipping_address, :class_name => 'Address', :foreign_key => :shipping_address_id
@@ -12,8 +11,8 @@ class Order < ActiveRecord::Base
   accepts_nested_attributes_for :billing_address
   accepts_nested_attributes_for :shipping_address
 
-  after_save :push_notification
   before_create :init_transaction_date
+  after_save    :push_notification
 
   STATUS = {
     :shopping => "shopping",
@@ -21,55 +20,22 @@ class Order < ActiveRecord::Base
     :complete => "completed",
     :failed => "failed"
   }
+
   TRANSACTION_STATUS = {
     :processing => "processing",
     :complete => "completed",
     :failed => "failed"
   }
+
   REGION_TAX = {
     :newyork => {:state_code => 'NY', :tax => 0.08875}
   }
 
-  scope :completed_orders, where(:transaction_status => Order::TRANSACTION_STATUS[:complete])
+  default_scope order('transaction_date desc')
+  scope :completed, where(transaction_status: Order::TRANSACTION_STATUS[:complete])
 
   validates_length_of :cvv, :in => 3..4, :allow_nil => true
   validates_numericality_of :cvv, :card_number, :only_integer => true, :allow_nil => true
-
-  class << self
-    def load_orders(params = {})
-      paging_info = parse_paging_options(params)
-      self.includes([{:line_items => :image}]).paginate(
-        :page => paging_info.page_id,
-        :per_page => paging_info.page_size,
-        :order => paging_info.sort_string)
-    end
-
-    def exposed_methods
-      []
-    end
-
-    def exposed_attributes
-      [ :id, :user_id, :tax, :price_total, :order_total,
-        :transaction_code, :transaction_date, :transaction_status,
-        :first_name, :last_name, :address, :message,
-        :city, :zip_code, :card_type, :card_number, :expiration, :cvv]
-    end
-
-     def exposed_associations
-      [:images]
-    end
-
-    protected
-
-      def parse_paging_options(options, default_opts = {})
-        if default_opts.blank?
-          default_opts = {
-            :sort_criteria => "orders.transaction_date DESC"
-          }
-        end
-        paging_options(options, default_opts)
-      end
-  end
 
   def update_tax_by_state
     has_tax  = false
@@ -83,10 +49,10 @@ class Order < ActiveRecord::Base
     end
 
     if has_tax
-      self.tax = (self.compute_image_total - self.compute_discount_total)* Order::REGION_TAX[:newyork][:tax]
+      self.tax = self.compute_image_total * Order::REGION_TAX[:newyork][:tax]
       self.transaction do
         self.line_items.each do |line_item|
-          line_item.tax = line_item.price_with_discount * Order::REGION_TAX[:newyork][:tax]
+          line_item.tax = line_item.price * Order::REGION_TAX[:newyork][:tax]
           line_item.save
         end
       end
@@ -100,13 +66,8 @@ class Order < ActiveRecord::Base
     self.price_total = self.compute_image_total
     #self.tax = self.compute_tax_total
     self.shipping_fee = SHIPPING_FEE
-    self.order_total = self.price_total + (self.tax ||= 0) + self.shipping_fee - self.compute_discount_total
+    self.order_total = self.price_total + (self.tax ||= 0) + self.shipping_fee
     self.save
-  end
-
-  def compute_discount_total
-    #new rule: base on price only, not discount rule anymore
-    0
   end
 
   def compute_image_total

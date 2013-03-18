@@ -1,19 +1,22 @@
 class Gallery < ActiveRecord::Base
-  include ::SharedMethods::Paging
-  include ::SharedMethods::SerializationConfig
-  include ::SharedMethods::Converter
+  include ::Shared::QueryMethods
 
   classy_enum_attr :permission, default: 'public'
 
   belongs_to :user
   has_many   :images, :dependent => :destroy
 
-  validates :name, :presence => true, :uniqueness => {:scope => :user_id, :case_sensitive => false}
-  validates :user, :presence => true
+  validates :name, presence: true, uniqueness: { scope: :user_id, case_sensitive: false }
+  validates :user, presence: true
 
-  scope :public_gallery, where(permission: Permission::Public.new)
+  default_scope order('name asc')
+  scope :closed, where(permission: Permission::Private.new)
+  scope :open,   where(permission: Permission::Public.new)
+  scope :with_images, includes(:images)
 
+  # TODO: replace with pg full text search implementation
   def self.do_search(params = {})
+=begin
     params[:filtered_params][:sort_field] = 'name' unless params[:filtered_params].has_key?("sort_field")
     paging_info = parse_paging_options(params[:filtered_params], {:sort_mode => :extended})
 
@@ -23,56 +26,7 @@ class Gallery < ActiveRecord::Base
       :retry_stale => true,
       :page => paging_info.page_id,
       :per_page => paging_info.page_size )
-  end
-
-  def self.load_galleries(params = {})
-    paging_info = parse_paging_options(params)
-    self.includes(:images).paginate(
-      :page => paging_info.page_id,
-      :per_page => paging_info.page_size,
-      :order => paging_info.sort_string)
-  end
-
-  def self.load_popular_galleries(params)
-    paging_info = parse_paging_options(params)
-    self.public_gallery.includes(:images).
-      paginate(
-        page:     paging_info.page_id,
-        per_page: paging_info.page_size,
-        order:    paging_info.sort_string
-      )
-  end
-
-  def self.exposed_methods
-    [:cover_image, :total_images, :public_link, :last_update]
-  end
-
-  def self.exposed_attributes
-    [:id, :name, :description, :permission, :keyword]
-  end
-
-  def self.exposed_associations
-    [:images]
-  end
-
-  def self.parse_paging_options(options, default_opts = {})
-    if default_opts.blank?
-      default_opts = {
-        :sort_criteria => "galleries.name ASC"
-      }
-    end
-    paging_options(options, default_opts)
-  end
-
-  def permission=(permission_string)
-    self[:permission] = permission_string.to_i
-  end
-
-  def load_popular_images(params)
-    paging_info = Image.parse_paging_options(params)
-    self.images.unflagged.paginate( :page => paging_info.page_id,
-                          :per_page => paging_info.page_size,
-                          :order => paging_info.sort_string )
+=end
   end
 
   def get_images_without(ids)

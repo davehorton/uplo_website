@@ -1,6 +1,11 @@
 require 'rubygems'
 require 'spork'
 
+if ENV['COVERAGE']
+  require 'simplecov'
+  SimpleCov.start
+end
+
 Spork.prefork do
 
   begin
@@ -13,26 +18,19 @@ Spork.prefork do
   require 'rspec/rails'
   require 'capybara/rspec'
   require 'capybara/rails'
-  require 'capybara/poltergeist'
   require 'database_cleaner'
-  require 'draper/test/rspec_integration'
-  require 'email_spec'
+  require 'sidekiq/testing/inline'
 
   # Requires supporting ruby files with custom matchers and macros, etc,
   # in spec/support/ and its subdirectories.
   Dir[Rails.root.join("spec/support/**/*.rb")].each {|f| require f}
 
-  Capybara.config do |config|
+  Capybara.configure do |config|
     config.default_selector  = :css
-    config.javascript_driver = :poltergeist
     config.default_wait_time = 1
   end
 
-  # uncomment if you need to debug Poltergeist
-  #Capybara.register_driver :poltergeist do |app|
-  #  Capybara::Poltergeist::Driver.new(app, { debug: true })
-  #end
-
+  # quieter logger
   Rails.logger.level = 4
 
   RSpec.configure do |config|
@@ -58,12 +56,12 @@ Spork.prefork do
     # rspec-rails.
     config.infer_base_class_for_anonymous_controllers = false
 
+    config.include Aliases
     config.include Capybara::DSL
-    config.include FactoryGirl::Syntax::Methods
     config.include Devise::TestHelpers, :type => :controller
+    config.include FactoryGirl::Syntax::Methods
+    config.include Warden::Test::Helpers
     config.include IntegrationHelpers
-    config.include EmailSpec::Helpers
-    config.include EmailSpec::Matchers
 
     config.before(:suite) do
       DatabaseCleaner.clean_with(:truncation)
@@ -79,15 +77,20 @@ Spork.prefork do
 
     config.before(:each) do
       DatabaseCleaner.start
+      Warden.test_mode!
     end
 
     config.after(:each) do
       DatabaseCleaner.clean
       Capybara.reset_sessions!
+      Warden.test_reset!
     end
   end
-
 end
 
 Spork.each_run do
+
+  # disable all observers
+  ActiveRecord::Base.observers.disable :all
+
 end

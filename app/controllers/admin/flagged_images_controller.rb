@@ -5,7 +5,7 @@ class Admin::FlaggedImagesController < Admin::AdminController
     if (params[:flag_type].nil?)
       params[:flag_type] = 1
     end
-    @flagged_images = Image.flagged.where("flag_type = ?", params[:flag_type]).load_images(filtered_params)
+    @flagged_images = Image.flagged.where("flag_type = ?", params[:flag_type]).with_gallery.paginate_and_sort(filtered_params)
   end
 
   def reinstate_all

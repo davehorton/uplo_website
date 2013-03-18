@@ -5,7 +5,7 @@
       .inputs
         .info{:style => "height: 20px;padding-top:1px;"}
           = f.label :card_type, "Card type"
-          = f.select :card_type, options_for_select(User.card_types, "visa")
+          = f.select :card_type, options_for_select(CreditCard.brands, "visa")
         = f.input :card_number, :autofocus => true, :required => true
         = f.label :expires_on, 'Expiration date'
         = f.date_select :expires_on, :discard_day => true, :start_year => Date.today.year, :end_year => (Date.today.year+10), :add_month_numbers => false, :order => [:month, :year], :required => true

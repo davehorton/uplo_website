@@ -132,7 +132,7 @@ class ShoppingCartController < ApplicationController
             :tax => self.class.helpers.number_to_currency(order.tax, {:precision => 2}),
             :cart_total => self.class.helpers.number_to_currency(order.order_total, {:precision => 2})} }
       else
-        result = { :success => false, :msg => 'This item is not belong to your oder!' }
+        result = { :success => false, :msg => 'Item is not part of your order.' }
       end
 
       render :json => result

@@ -5,7 +5,7 @@ class CommentsController < ApplicationController
     if image.nil?
       result = { :success => false, :msg => "This image does not exist anymore!" }
     else
-      data = image.comments.load_comments(@filtered_params)
+      data = image.comments.paginate_and_sort(@filtered_params)
       comments = render_to_string :partial => 'images/comments_template',
         :locals => { :comments => data }
       result = { :success => true, :comments => comments }
@@ -27,7 +27,7 @@ class CommentsController < ApplicationController
         :description => comment[:description].strip})
       if comment.save
         Notification.deliver_image_notification(image.id, current_user.id, Notification::TYPE[:comment]) unless current_user.owns_image?(image)
-        data = image.comments.load_comments(@filtered_params)
+        data = image.comments.paginate_and_sort(@filtered_params)
         comments = render_to_string :partial => 'images/comments_template', :locals => { :comments => data }
         result = { :success => true, :comments => comments, :comments_number => data.total_entries }
       else
@@ -39,8 +39,8 @@ class CommentsController < ApplicationController
   end
 
   protected
+
     def default_page_size
-      size = 10
-      return size
+      10
     end
 end

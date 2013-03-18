@@ -1,48 +1,29 @@
 class Invitation < ActiveRecord::Base
-  include ::SharedMethods::Paging
-  include ::SharedMethods::SerializationConfig
-  include ::SharedMethods
+  include ::Shared::QueryMethods
 
-  def self.exposed_methods
-    []
+  before_validation :strip_email
+  validates :email, presence: true, format: { with: Devise.email_regexp }, uniqueness: { case_sensitive: false }
+
+  before_create :set_token
+
+  default_scope order('created_at desc')
+  scope :requested, where(invited_at: nil)
+
+  def invite!
+    touch(:invited_at)
+    notify_observers(:after_invite)
   end
 
-  def self.exposed_attributes
-    []
-  end
+  private
 
-  def self.exposed_associations
-    []
-  end
-
-  def self.load_invitations(params = {})
-    paging_info = parse_paging_options(params)
-    self.paginate(
-      :page => paging_info.page_id,
-      :per_page => paging_info.page_size,
-      :order => paging_info.sort_string )
-  end
-
-  def self.new_invitation(email)
-    #check format, uniq (da check dc removed?)
-    begin
-      token = ActiveSupport::SecureRandom.hex(16)
-    end while self.check_uniq_token(token)
-    inv = Invitation.new({ :email => email, :token => token })
-  end
-
-  protected
-
-    def self.parse_paging_options(options, default_opts = {})
-      if default_opts.blank?
-        default_opts = {
-          :sort_criteria => "invitations.created_at DESC"
-        }
-      end
-      paging_options(options, default_opts)
+    def strip_email
+      self.email = self[:email].try(:strip)
     end
 
-    def self.check_uniq_token(token)
-      Invitation.exists?({:token => token.to_s})
+    def set_token
+      begin
+        self.token = SecureRandom.hex(16)
+      end until !Invitation.exists?(token: token)
     end
 end
+

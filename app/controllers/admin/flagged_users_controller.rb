@@ -1,6 +1,6 @@
 class Admin::FlaggedUsersController < Admin::AdminController
   def index
-    @users = User.flagged_users.load_users(self.filtered_params)
+    @users = User.flagged_users.paginate_and_sort(self.filtered_params)
   end
 
   # TODO: optimize this method

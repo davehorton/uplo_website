@@ -6,9 +6,8 @@ $ ->
     ids = []
     $.each $('#incoming-invites .button.accept'), (idx, val) ->
       ids.push $(val).attr('data-id')
-    console.log(ids)
     $.ajax({
-      url: 'invites/confirm_invitation_request',
+      url: 'invites/confirm_request',
       type: 'GET',
       dataType: 'json',
       data: { ids: ids }
@@ -28,7 +27,7 @@ $ ->
   $('#incoming-invites').delegate '.button.accept', 'click', ->
     $('#mask').modal()
     $.ajax({
-      url: 'invites/confirm_invitation_request',
+      url: 'invites/confirm_request',
       type: 'GET',
       dataType: 'json',
       data: { ids: [$(@).attr('data-id')] }

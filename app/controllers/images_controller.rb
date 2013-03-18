@@ -3,7 +3,6 @@ class ImagesController < ApplicationController
   before_filter :detect_device
   before_filter :authenticate_user!, :except => [:public]
   skip_authorize_resource :only => :public
-  include ::SharedMethods::Converter
   helper :galleries
   layout 'main'
 
@@ -33,7 +32,7 @@ class ImagesController < ApplicationController
 
   def index
     if find_gallery!
-      @images = @gallery.images.unflagged.load_images(@filtered_params)
+      @images = @gallery.images.unflagged.paginate_and_sort(@filtered_params)
     end
   end
 
@@ -45,9 +44,9 @@ class ImagesController < ApplicationController
       image = current_user.images.find_by_id params[:id]
       gallery = image.gallery
       if(!current_user.owns_image?(image))
-        return render :json => {:success => false, :msg => "The image do not belong to you"}
+        render :json => {:success => false, :msg => "The image do not belong to you"} and return
       end
-      images = gallery.images.unflagged.load_images(@filtered_params)
+      images = gallery.images.unflagged.paginate_and_sort(@filtered_params)
 
       image.destroy
       pagination = render_to_string :partial => 'pagination',
@@ -67,7 +66,7 @@ class ImagesController < ApplicationController
 
   def public_images
     if find_gallery!
-      @images = @gallery.images.load_popular_images(@filtered_params, current_user)
+      @images = @gallery.images.popular_with_pagination(@filtered_params, current_user)
     end
     render :layout => 'application'
   end
@@ -83,12 +82,11 @@ class ImagesController < ApplicationController
     data = params[:image][:data]
     img_size = File.new(data[0].tempfile).size
     if img_size > current_user.free_allocation
-      mb_unit = FileSizeConverter::UNITS[:megabyte]
-      mb_img_size = FileSizeConverter.convert img_size, FileSizeConverter::UNITS[:byte], mb_unit
-      free_allocation = [0, (FileSizeConverter.convert current_user.free_allocation, FileSizeConverter::UNITS[:byte], mb_unit)].max
+      mb_img_size = img_size.b.to.mb
+      free_allocation = [0, current_user.free_allocation.b.to.mb].max
       result = {:success => false, :msg => "UPLOAD FAILED! This image is #{mb_img_size} #{mb_unit.upcase}. You have only #{free_allocation} #{mb_unit.upcase} / #{User::ALLOCATION_STRING} free" }
       # raise exception
-      return render :text => result.to_json
+      render json: result
     end
 
     image = current_user.images.build(
@@ -113,7 +111,7 @@ class ImagesController < ApplicationController
     else
       current_user.update_attribute(:photo_processing , true)
       gallery = Gallery.find_by_id params[:gallery_id]
-      images = gallery.images.unflagged.load_images(@filtered_params)
+      images = gallery.images.unflagged.paginate_and_sort(@filtered_params)
       pagination = render_to_string :partial => 'pagination',
         :locals => {
           :source => images,
@@ -134,7 +132,7 @@ class ImagesController < ApplicationController
 
   def switch_like
     image = Image.find_by_id(params[:id])
-    dislike = SharedMethods::Converter.Boolean(params[:dislike])
+    dislike = params[:dislike].to_bool
     if image.nil? || (image.image_flags.count > 0 && !current_user.owns_image?(image))
       result = { :success => false, :msg => "This image does not exist anymore!" }
     elsif dislike
@@ -184,7 +182,7 @@ class ImagesController < ApplicationController
     session[:flickr_verify_key] = verify
     uplo_photoset = push_to_uplo_photoset(params[:image_id])
 
-    return redirect_to :action => :browse, :id => params[:image_id]#, :flickr_post => 'success'
+    redirect_to :action => :browse, :id => params[:image_id] and return
   end
 
   def post_image_to_flickr
@@ -229,7 +227,7 @@ class ImagesController < ApplicationController
     end
 
     @filtered_params[:page_size] = 10
-    @comments = @image.comments.available.load_comments(@filtered_params)
+    @comments = @image.comments.available.paginate_and_sort(@filtered_params)
 
     # Increase page view
     @image.increase_pageview
@@ -253,16 +251,6 @@ class ImagesController < ApplicationController
   def update
     image = current_user.images.unflagged.find_by_id params[:id]
     img_info = params[:image]
-    # if request.xhr?
-    #   worker = FilterWorker.new
-    #   worker.image_id = image.id
-    #   worker.image_url = image.url
-    #   worker.effect = img_info[:filtered_effect]
-    #   worker.queue #put task to iron worker
-
-    #   return render :json => {:task_id => worker.task_id}
-    # end
-
     img_info.delete :filtered_effect
     image.attributes = img_info
     image.save
@@ -309,14 +297,14 @@ class ImagesController < ApplicationController
           render(:json => result) and return
         else
           next if image.data_processing
-          img[:gallery_cover] = SharedMethods::Converter::Boolean(img.delete 'album_cover')
-          img[:owner_avatar] = SharedMethods::Converter::Boolean(img.delete 'avatar')
+          img[:gallery_cover] = img.delete('album_cover')
+          img[:owner_avatar] = img.delete('avatar')
           if (img["gallery_id"].to_i == image.gallery_id)
             if(img[:gallery_cover])
               image.set_as_album_cover
             end
           else
-            img[:gallery_cover] = false
+            img[:gallery_cover] = nil
           end
 
           if img[:owner_avatar]
@@ -332,7 +320,7 @@ class ImagesController < ApplicationController
     end
 
     gallery = Gallery.find_by_id params[:gallery_id].to_i
-    images = gallery.images.unflagged.load_images(@filtered_params)
+    images = gallery.images.unflagged.paginate_and_sort(@filtered_params)
     pagination = render_to_string :partial => 'pagination',
       :locals => {  :source => images, :params => { :controller => 'galleries',
         :action => 'edit_images', :gallery_id => gallery.id }, :classes => 'text left' }
@@ -456,7 +444,7 @@ class ImagesController < ApplicationController
       if is_mobile_device? && params[:action]=='public' && (params[:web_default].nil? || params[:web_default]==false)
         @type = 'image'
         @id = params[:id]
-        return render :template => 'device_requests/show', :layout => nil
+        render(:template => 'device_requests/show', :layout => nil) and return
       else
         request.formats.unshift Mime::HTML
       end

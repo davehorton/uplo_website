@@ -1,9 +1,5 @@
 class Image < ActiveRecord::Base
-  include ::SharedMethods::Paging
-  include ::SharedMethods::SerializationConfig
-  include ::SharedMethods::Converter
-  include ::SharedMethods
-
+  include ::Shared::QueryMethods
   include ImageConstants
 
   belongs_to :active_user, class_name: 'User', foreign_key: 'user_id', conditions: { banned: false, removed: false }
@@ -19,16 +15,6 @@ class Image < ActiveRecord::Base
   has_many :orders,        :through => :line_items
   has_many :tags,          :through => :image_tags
 
-  scope :removed,     where(removed: true)
-  scope :not_removed, where(removed: false)
-
-  scope :flagged,    not_removed.joins(:image_flags)
-  scope :unflagged,  not_removed.includes(:image_flags).where(image_flags: { id: nil })
-
-  scope :processing,       not_removed.joins(:active_user).where(data_processing: true)
-  scope :visible,          not_removed.joins(:active_user).where(data_processing: false)
-  scope :visible_everyone, visible.unflagged.joins(:public_gallery)
-
   has_attached_file :image,
     styles: lambda { |attachment| attachment.instance.available_styles || {}},
     default_url: "/assets/gallery-thumb.jpg"
@@ -39,16 +25,31 @@ class Image < ActiveRecord::Base
     :message => 'File type must be one of [.jpeg, .jpg]' }, :on => :create
   validate :validate_quality, :on => :create
 
-  before_post_process :init_image_info
   before_create :init_tier
-  after_initialize :init_random_price, :init_tier
+  before_post_process :init_image_info
 
+  default_scope order('created_at desc')
+  scope :removed,     where(removed: true)
+  scope :not_removed, where(removed: false)
+
+  scope :flagged,     not_removed.joins(:image_flags)
+  scope :unflagged,   not_removed.includes(:image_flags).where(image_flags: { id: nil })
+
+  scope :processing,  not_removed.joins(:active_user).where(data_processing: true)
+  scope :visible,     not_removed.joins(:active_user).where(data_processing: false)
+  scope :visible_everyone, visible.unflagged.joins(:public_gallery)
+
+  scope :with_gallery, includes(:gallery)
+
+  # TODO: replace with pg full text search implementation
   def self.do_search_public_images(params = {})
-    params[:sphinx_search_options] = {:index => "public_images"}
-    self.do_search(params)
+    #params[:sphinx_search_options] = {:index => "public_images"}
+    #self.do_search(params)
   end
 
+  # TODO: replace with pg full text search implementation
   def self.do_search_accessible_images(user_id, params)
+=begin
     params ||= {}
     with_display = "*, IF(author_id = #{user_id} OR permission = #{Permission::Public.new}, 1, 0) AS display"
     params[:sphinx_search_options] = {
@@ -65,9 +66,12 @@ class Image < ActiveRecord::Base
         :display => 1 }
     }
     self.do_search(params)
+=end
   end
 
+  # TODO: replace with pg full text search implementation
   def self.get_spotlight_images(user_id, params)
+=begin
     params ||= {}
     with_display = "*, IF(author_id = #{user_id} OR permission = #{Permission::Public.new}, 1, 0) AS display"
     params[:sphinx_search_options] = {
@@ -85,98 +89,37 @@ class Image < ActiveRecord::Base
         :promote_num => 1 }
     }
     self.do_search(params)
+=end
   end
 
-  def self.load_images(params = {})
-    default_filter_logic = lambda do
-      paging_info = parse_paging_options(params)
-      self.includes(:gallery).paginate(
-        :page => paging_info.page_id,
-        :per_page => paging_info.page_size,
-        :order => paging_info.sort_string)
+  # re-implements Shared::QueryMethods function
+  # by replacing search fields before caling super
+  def self.paginate_and_sort(params = {})
+    image_params = params
+
+    if sort_field = params[:sort_field]
+      image_params[:sort_field] = case sort_field
+        when 'date_uploaded' then
+          'created_at'
+        when 'num_of_views' then
+          'pageview'
+        when 'num_of_likes' then
+          'image_likes_count'
+        end
     end
 
-    case params[:sort_field]
-      when 'date_uploaded' then
-        params[:sort_field] = "images.created_at"
-        default_filter_logic.call
-      when 'num_of_views' then
-        params[:sort_field] = "images.pageview"
-        default_filter_logic.call
-      when 'num_of_sales' then
-        self.load_images_with_sales_count(params)
-      when 'num_of_likes' then
-        params[:sort_field] = "images.image_likes_count"
-        default_filter_logic.call
-      else
-        default_filter_logic.call
-      end
+    super(image_params)
   end
 
-  def self.load_images_with_sales_count(params = {})
-    params.delete(:sort_field)
-    sort_direction = params[:sort_direction] || 'ASC'
-
-    paging_info = parse_paging_options(params, {
-      :sort_criteria => {
-        :sales_count => sort_direction,
-        :sales_value => sort_direction
-      }
-    })
-
-    self.includes(:gallery).joins(self.sanitize_sql([
-      "LEFT JOIN (
-        SELECT line_items.image_id,
-          SUM(line_items.quantity) AS sales_count,
-          SUM(line_items.quantity * (line_items.tax + line_items.price)) AS sales_value
-        FROM line_items JOIN orders
-        ON line_items.order_id = orders.id AND orders.transaction_status = ?
-        GROUP BY line_items.image_id
-      ) orders_data ON images.id = orders_data.image_id",
-      Order::TRANSACTION_STATUS[:complete]
-    ])).select("DISTINCT images.*,
-      COALESCE(orders_data.sales_count, 0) AS sales_count,
-      COALESCE(orders_data.sales_value, 0) AS sales_value"
-    ).paginate(
-      :page => paging_info.page_id,
-      :per_page => paging_info.page_size,
-      :order => paging_info.sort_string)
+  def self.popular_with_pagination(params = {})
+    #  scope :popular, visible_everyone
+    params[:sort_expression] = "images.promote_num desc, images.updated_at desc, images.image_likes_count desc"
+    visible_everyone.paginate_and_sort(params)
   end
 
-  def self.load_popular_images(params = {}, current_user = nil)
-    paging_info = parse_paging_options(params,
-      {:sort_criteria => "images.promote_num DESC, images.updated_at DESC, images.image_likes_count DESC"})
-    self.includes(:gallery).joins([:gallery]).
-      where("galleries.permission = ?", Permission::Public.new).paginate(
-        :page => paging_info.page_id,
-        :per_page => paging_info.page_size,
-        :order => paging_info.sort_string)
-  end
-
-  def self.exposed_methods
-    [:image_url, :image_thumb_url, :username, :creation_timestamp, :user_fullname,
-      :public_link, :user_id, :user_avatar, :comments_number, :gallery_name]
-  end
-
-  def self.exposed_attributes
-    [:id, :name, :description, :data_file_name, :name, :gallery_id, :price, :image_likes_count, :keyword,
-      :owner_avatar, :gallery_cover, :tier]
-  end
-
-  def self.exposed_associations
-    []
-  end
-
-  def self.parse_paging_options(options, default_opts = {})
-    if default_opts.blank?
-      default_opts = {
-        :sort_criteria => "images.created_at DESC"
-      }
-    end
-    paging_options(options, default_opts)
-  end
-
+  # TODO: replace with pg full text search
   def self.do_search(params = {})
+=begin
     params[:filtered_params][:sort_field] = 'name' unless params[:filtered_params].has_key?(:sort_field)
 
     default_opt = {}
@@ -196,6 +139,7 @@ class Image < ActiveRecord::Base
 
     search_term = SharedMethods::Converter::SearchStringConverter.process_special_chars(params[:query])
     Image.search(search_term, sphinx_search_options)
+=end
   end
 
   delegate :username, :to => :user, allow_nil: true
@@ -422,56 +366,49 @@ class Image < ActiveRecord::Base
 
   def raw_purchased_info(item_paging_params = {})
     result = {:data => [], :total => 0}
-    orders = self.orders.where({:transaction_status => Order::TRANSACTION_STATUS[:complete]}).collect { |o| o.id }
-    saled_items = []
-    if orders.length > 0
-      paging_info = LineItem.paging_options(item_paging_params)
-      saled_items = LineItem.paginate(
-        :page => paging_info.page_id,
-        :per_page => paging_info.page_size,
-        :joins => "LEFT JOIN orders ON orders.id = line_items.order_id LEFT JOIN users ON users.id = orders.user_id",
-        :select => "line_items.*, users.id as purchaser_id, orders.transaction_date as purchased_date",
-        :order => "purchased_date DESC",
-        :conditions => ["image_id=? and order_id in (#{orders.join(',')})", self.id]
-      )
+    order_ids = orders.complete.map(&:id)
+
+    sold_items = []
+
+    if order_ids.any?
+      sold_items = LineItem.paginate_and_sort(item_paging_params.merge(sort_expression: 'purchased_date desc')).
+        joins("LEFT JOIN orders ON orders.id = line_items.order_id LEFT JOIN users ON users.id = orders.user_id").
+        select("line_items.*, users.id as purchaser_id, orders.transaction_date as purchased_date").
+        where(["image_id=? and order_id in (#{order_ids.join(',')})", id])
     end
 
-    return saled_items
+    sold_items
   end
 
   def get_purchased_info(item_paging_params = {})
     result = {:data => [], :total_quantity => 0, :total_sale => 0}
-    orders = self.orders.where({:transaction_status => Order::TRANSACTION_STATUS[:complete]}).collect &:id
-    if orders.length > 0
-      paging_info = LineItem.paging_options(item_paging_params)
-      saled_items = LineItem.paginate(
-        :page => paging_info.page_id,
-        :per_page => paging_info.page_size,
-        :joins => "LEFT JOIN orders ON orders.id = line_items.order_id LEFT JOIN users ON users.id = orders.user_id",
-        :select => "line_items.*, users.id as purchaser_id, orders.transaction_date as purchased_date",
-        :order => "purchased_date DESC",
-        :conditions => ["image_id=? and order_id in (#{orders.join(',')})", self.id]
-      )
+    order_ids = self.orders.complete.map(&:id)
 
-      saled_items.each { |item|
-        user = User.find_by_id item.purchaser_id
+    if order_ids.any?
+      sold_items = LineItem.paginate(item_paging_params.merge(sort_expression: 'purchased_date desc')).
+        joins("LEFT JOIN orders ON orders.id = line_items.order_id LEFT JOIN users ON users.id = orders.user_id").
+        select("line_items.*, users.id as purchaser_id, orders.transaction_date as purchased_date").
+        where(["image_id=? and order_id in (#{order_ids.join(',')})", id])
+
+      sold_items.each { |item|
+        user = User.find_by_id(item.purchaser_id)
         purchased_date = DateTime.parse(item.purchased_date).strftime "%B %d, %Y"
         result[:data] << {
-          :username => user.username,
+          :username => user.try(:username) || 'Deleted',
           :plexi_mount => item.plexi_mount ? 'Plexi Mount' : 'No Plexi Mount',
           :size => item.size,
           :quantity => item.quantity,
           :moulding => item.moulding,
           :date => purchased_date,
           :avatar_url => user.avatar_url,
-          :user_id => user.id
+          :user_id => user.try(:id)
         }
         result[:total_quantity] += item.quantity
         result[:total_sale] += (item.quantity *  item.price)/2
       }
     end
 
-    return result
+    result
   end
 
   # return saled quantity
@@ -504,9 +441,7 @@ class Image < ActiveRecord::Base
 
   def sales_count
     if !self.attributes.has_key?('sales_count')
-      self.attributes['sales_count'] = self.orders.completed_orders.joins(
-        :line_items
-      ).sum('line_items.quantity').to_i
+      self.attributes['sales_count'] = self.orders.completed.joins(:line_items).sum('line_items.quantity').to_i
     else
       self.attributes['sales_count'].to_i
     end
@@ -598,17 +533,8 @@ class Image < ActiveRecord::Base
       end
     end
 
-    # TODO: this method is for test only. Please REMOVE this in production mode.
-    def init_random_price
-      if self.price.blank?
-        self.price = rand(50)
-      end
-    end
-
     def init_tier
-      if self.tier.blank?
-        self.tier = TIERS[:tier_1]
-      end
+      self.tier = TIERS[:tier_1] if self.tier.blank?
     end
 
 =begin

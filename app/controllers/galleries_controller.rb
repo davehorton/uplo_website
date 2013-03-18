@@ -10,7 +10,7 @@ class GalleriesController < ApplicationController
   def public
     @gallery = Gallery.find_by_id params[:gallery_id]
     @author = @gallery.user
-    @images = @gallery.images.unflagged.load_popular_images(@filtered_params)
+    @images = @gallery.images.popular_with_pagination(@filtered_params)
     render :layout => "public", :formats => 'html'
   end
 
@@ -27,7 +27,7 @@ class GalleriesController < ApplicationController
   end
 
   def index
-    @galleries = current_user.galleries.load_galleries(@filtered_params)
+    @galleries = current_user.galleries.with_images.paginate_and_sort(@filtered_params)
     @gallery = Gallery.new
   end
 
@@ -36,7 +36,7 @@ class GalleriesController < ApplicationController
     if user.nil?
       flash[:error] = "The author does not exist anymore."
     else
-      @galleries = user.galleries.load_popular_galleries(@filtered_params)
+      @galleries = user.galleries.open.with_images.paginate_and_sort(@filtered_params)
     end
     render :action => :index
   end
@@ -75,7 +75,7 @@ class GalleriesController < ApplicationController
         format.html { redirect_to :action => 'edit_images', :gallery_id => @gallery.id }
       else
         hide_notification
-        @galleries = current_user.galleries.load_galleries(@filtered_params)
+        @galleries = current_user.galleries.with_images.paginate_and_sort(@filtered_params)
         flash[:error] = @gallery.errors.full_messages.to_sentence
         format.html { render :action => :index}
       end
@@ -101,7 +101,7 @@ class GalleriesController < ApplicationController
     end
 
     if !@gallery.nil?
-      @images = @gallery.images.unflagged.load_images(@filtered_params)
+      @images = @gallery.images.paginate_and_sort(@filtered_params)
       if request.xhr?
         pagination = render_to_string :partial => 'pagination',
           :locals => {  :source => @images, :params => { :controller => "galleries",
@@ -140,7 +140,7 @@ class GalleriesController < ApplicationController
           if @gallery.update_attributes(params[:gallery])
             format.html { redirect_to(gallery_images_path(@gallery), :notice => I18n.t('gallery.update_done')) }
           else
-            @galleries = current_user.galleries.load_galleries(@filtered_params)
+            @galleries = current_user.galleries.with_images.paginate_and_sort(@filtered_params)
             format.html { render :action => :index, :notice => @gallery.errors}
           end
         end

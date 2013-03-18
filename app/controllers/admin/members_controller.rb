@@ -2,7 +2,7 @@ class Admin::MembersController < Admin::AdminController
   def index
     @sort_field = params[:sort_field] || "signup_date"
     @sort_direction = params[:sort_direction] || "asc"
-    @users = User.confirmed_users.load_users(filtered_params.merge(
+    @users = User.confirmed_users.paginate_and_sort(filtered_params.merge(
       :sort_field => @sort_field,
       :sort_direction => @sort_direction
     ))

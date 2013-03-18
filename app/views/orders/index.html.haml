@@ -119,7 +119,7 @@
             = f.label :card_type, "Card Type <span style='color:red;'>*</span>".html_safe
             - message = first_error_message_for(f.object, :card_type)
             - css = message ? "error" : nil
-            = f.select :card_type, options_for_select(User.card_types, @order.card_type), {:prompt => 'Select One', :class => css, :title => message}
+            = f.select :card_type, options_for_select(CreditCard.brands, @order.card_type), {:prompt => 'Select One', :class => css, :title => message}
           .info
             = f.label :card_number, "Card Number <span style='color:red;'>*</span>".html_safe
             - message = first_error_message_for(f.object, :card_number)
@@ -143,7 +143,7 @@
         - subtotal = 0
         - (0...@order.line_items.length).each do |idx|
           - line_item = @order.line_items[idx]
-          - subtotal += line_item.price_with_discount * line_item.quantity
+          - subtotal += line_item.price * line_item.quantity
           .block.text.black.line22.left{:style => "#{'padding-top:0;' if idx==0}"}
             .name.line.text.bold.line12.left= line_item.image.name.truncate(36)
             .line.no-background.left
@@ -151,7 +151,7 @@
               .text.bold.font13.right= line_item.quantity
             .line.left
               .text.font10.left PRICE
-              .price.text.bold.font13.right= number_to_currency(line_item.price_with_discount * line_item.quantity)
+              .price.text.bold.font13.right= number_to_currency(line_item.price * line_item.quantity)
             .line.no-background.left
               .text.font10.left TAX
               .tax.text.bold.font13.right= (line_item.tax > 0 ? number_to_currency(line_item.tax * line_item.quantity) : "--")

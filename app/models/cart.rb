@@ -2,15 +2,11 @@ class Cart < ActiveRecord::Base
   belongs_to :order
   belongs_to :user
 
-  def clear
-    self.order.line_items.destroy_all
-  end
+  has_many :line_items, :through => :order
 
-  def empty?
-    if self.order and not self.order.line_items.empty?
-      false
-    else
-      true
-    end
+  delegate :empty?, to: :line_items
+
+  def clear
+    line_items.destroy_all
   end
 end

@@ -1,7 +1,7 @@
 / locals: comments
 .container.left
   = render :partial => 'pagination', :locals => { :source => comments, :params => { :controller => 'comments', :action => 'index' }, :classes => 'comments right' }
-- comments.each do |comment|
+- comments.decorate.each do |comment|
   .user-section.left
     - commenter = comment.user
     - url = url_for(:controller => 'profiles', :action => 'show', :user_id => commenter.id)
