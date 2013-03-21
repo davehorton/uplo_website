@@ -1,17 +1,28 @@
 class GalleriesController < ApplicationController
   has_mobile_fu
+  skip_before_filter :authenticate_user!, only: [:public]
+  skip_authorize_resource :only => [:public]
+
   before_filter :detect_device
-  before_filter :authenticate_user!, :except => [:public]
   before_filter :check_paypal_email
   before_filter :show_notification
-  skip_authorize_resource :only => [:public]
-  layout 'main'
+
+  def index
+    @galleries = current_user.galleries.with_images.paginate_and_sort(filtered_params)
+    @gallery = Gallery.new
+  end
 
   def public
-    @gallery = Gallery.find_by_id params[:gallery_id]
+    @gallery = Gallery.find(params[:gallery_id])
     @author = @gallery.user
-    @images = @gallery.images.popular_with_pagination(@filtered_params)
-    render :layout => "public", :formats => 'html'
+    @images = @gallery.images.popular_with_pagination(filtered_params)
+    render :layout => "public"
+  end
+
+  def show_public
+    user = User.find(params[:author])
+    @galleries = user.galleries.open.with_images.paginate_and_sort(filtered_params)
+    render :action => :index
   end
 
   def mail_shared_gallery
@@ -26,23 +37,8 @@ class GalleriesController < ApplicationController
     redirect_to :action => :index
   end
 
-  def index
-    @galleries = current_user.galleries.with_images.paginate_and_sort(@filtered_params)
-    @gallery = Gallery.new
-  end
-
-  def show_public
-    user = User.find_by_id params[:author]
-    if user.nil?
-      flash[:error] = "The author does not exist anymore."
-    else
-      @galleries = user.galleries.open.with_images.paginate_and_sort(@filtered_params)
-    end
-    render :action => :index
-  end
-
   def search
-    galleries = Gallery.search params[:query], :star => true, :with => {:user_id => current_user.id}, :page => params[:page_id], :per_page => default_page_size
+    galleries = Gallery.search params[:query], :star => true, :with => {:user_id => current_user.id}, :page => params[:page_id], :per_page => page_size
     galleries.each { |g| g.name = g.name.truncate(30) and g.name = g.excerpts.name}
     @galleries = galleries
     @gallery = Gallery.new
@@ -60,7 +56,7 @@ class GalleriesController < ApplicationController
     end
 
     @no_async_image_tag = true
-    @galleries = Gallery.search params[:query], :star => true, :page => params[:page_id], :per_page => default_page_size, :with => with_condition
+    @galleries = Gallery.search params[:query], :star => true, :page => params[:page_id], :per_page => page_size, :with => with_condition
     render :layout => 'application'
   end
 
@@ -75,7 +71,7 @@ class GalleriesController < ApplicationController
         format.html { redirect_to :action => 'edit_images', :gallery_id => @gallery.id }
       else
         hide_notification
-        @galleries = current_user.galleries.with_images.paginate_and_sort(@filtered_params)
+        @galleries = current_user.galleries.with_images.paginate_and_sort(filtered_params)
         flash[:error] = @gallery.errors.full_messages.to_sentence
         format.html { render :action => :index}
       end
@@ -83,7 +79,7 @@ class GalleriesController < ApplicationController
   end
 
   def edit
-    if find_gallery!
+    if find_gallery
       if request.xhr?
         render :layout => false
       end
@@ -101,7 +97,7 @@ class GalleriesController < ApplicationController
     end
 
     if !@gallery.nil?
-      @images = @gallery.images.paginate_and_sort(@filtered_params)
+      @images = @gallery.images.paginate_and_sort(filtered_params)
       if request.xhr?
         pagination = render_to_string :partial => 'pagination',
           :locals => {  :source => @images, :params => { :controller => "galleries",
@@ -121,7 +117,7 @@ class GalleriesController < ApplicationController
   end
 
   def update
-    if find_gallery!
+    if find_gallery
       if request.xhr?
         if @gallery.update_attributes(params[:gallery])
           edit_popup = render_to_string :partial => 'edit_gallery', :layout => 'layouts/popup',
@@ -140,7 +136,7 @@ class GalleriesController < ApplicationController
           if @gallery.update_attributes(params[:gallery])
             format.html { redirect_to(gallery_images_path(@gallery), :notice => I18n.t('gallery.update_done')) }
           else
-            @galleries = current_user.galleries.with_images.paginate_and_sort(@filtered_params)
+            @galleries = current_user.galleries.with_images.paginate_and_sort(filtered_params)
             format.html { render :action => :index, :notice => @gallery.errors}
           end
         end
@@ -149,7 +145,7 @@ class GalleriesController < ApplicationController
   end
 
   def destroy
-    if find_gallery!
+    if find_gallery
       respond_to do |format|
         if @gallery.destroy
           format.html { redirect_to(galleries_path, :notice => I18n.t("gallery.delete_done")) }
@@ -161,31 +157,11 @@ class GalleriesController < ApplicationController
   end
 
   protected
-    def default_page_size
-      actions = ['edit_images']
-      if actions.index(params[:action])
-        size = 10
-      else
-        size = 12
-      end
-      return size
-    end
 
     def find_gallery
-      @gallery = Gallery.find_by_id(params[:id])
-    end
-
-    def find_gallery!
-      self.find_gallery
-      if @gallery.blank?
-        render_not_found
-        return false
-      elsif !current_user.can_access?(@gallery) ||
+      @gallery = Gallery.find(params[:id])
+      render_unauthorized if !current_user.can_access?(@gallery) ||
             (!current_user.owns_gallery?(@gallery) && %w(edit update destroy).include?(params[:action]))
-        render_unauthorized
-        return false
-      end
-      @gallery
     end
 
     def detect_device

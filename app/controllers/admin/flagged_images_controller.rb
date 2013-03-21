@@ -1,4 +1,6 @@
 class Admin::FlaggedImagesController < Admin::AdminController
+  self.page_size = 12
+
   respond_to :json, only: [:reinstate_all, :remove_all, :reinstate_image, :remove_image, :get_image_popup]
 
   def index
@@ -129,13 +131,4 @@ class Admin::FlaggedImagesController < Admin::AdminController
     def set_current_tab
       @current_tab = "flagged_images"
     end
-
-    def default_page_size
-      if params[:action] == 'index'
-        12
-      else
-        24
-      end
-    end
-
 end

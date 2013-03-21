@@ -1,10 +1,10 @@
 class ImagesController < ApplicationController
+  self.page_size = 30
+
   has_mobile_fu
   before_filter :detect_device
-  before_filter :authenticate_user!, :except => [:public]
+  skip_before_filter :authenticate_user!, only: [:public]
   skip_authorize_resource :only => :public
-  helper :galleries
-  layout 'main'
 
   def mail_shared_image
     begin
@@ -31,9 +31,8 @@ class ImagesController < ApplicationController
   end
 
   def index
-    if find_gallery!
-      @images = @gallery.images.unflagged.paginate_and_sort(@filtered_params)
-    end
+    find_gallery
+    @images = @gallery.images.unflagged.paginate_and_sort(filtered_params)
   end
 
   def new
@@ -46,7 +45,7 @@ class ImagesController < ApplicationController
       if(!current_user.owns_image?(image))
         render :json => {:success => false, :msg => "The image do not belong to you"} and return
       end
-      images = gallery.images.unflagged.paginate_and_sort(@filtered_params)
+      images = gallery.images.unflagged.paginate_and_sort(filtered_params)
 
       image.destroy
       pagination = render_to_string :partial => 'pagination',
@@ -65,9 +64,8 @@ class ImagesController < ApplicationController
   end
 
   def public_images
-    if find_gallery!
-      @images = @gallery.images.popular_with_pagination(@filtered_params, current_user)
-    end
+    find_gallery
+    @images = @gallery.images.popular_with_pagination(filtered_params, current_user)
     render :layout => 'application'
   end
 
@@ -79,22 +77,7 @@ class ImagesController < ApplicationController
   end
 
   def create
-    data = params[:image][:data]
-    img_size = File.new(data[0].tempfile).size
-    if img_size > current_user.free_allocation
-      mb_img_size = img_size.b.to.mb
-      free_allocation = [0, current_user.free_allocation.b.to.mb].max
-      result = {:success => false, :msg => "UPLOAD FAILED! This image is #{mb_img_size} #{mb_unit.upcase}. You have only #{free_allocation} #{mb_unit.upcase} / #{User::ALLOCATION_STRING} free" }
-      # raise exception
-      render json: result
-    end
-
-    image = current_user.images.build(
-      name:       data[0].original_filename,
-      gallery_id: params[:gallery_id],
-      image:      data[0]
-    )
-    image.set_album_cover
+    image = current_user.images.build(params[:image])
 
     if !image.save
       msg = []
@@ -111,7 +94,7 @@ class ImagesController < ApplicationController
     else
       current_user.update_attribute(:photo_processing , true)
       gallery = Gallery.find_by_id params[:gallery_id]
-      images = gallery.images.unflagged.paginate_and_sort(@filtered_params)
+      images = gallery.images.unflagged.paginate_and_sort(filtered_params)
       pagination = render_to_string :partial => 'pagination',
         :locals => {
           :source => images,
@@ -139,7 +122,6 @@ class ImagesController < ApplicationController
       result = current_user.unlike_image(image)
     else
       result = current_user.like_image(image)
-      Notification.deliver_image_notification(image.id, current_user.id, Notification::TYPE[:like]) unless current_user.owns_image?(image)
     end
 
     render :json => result
@@ -153,7 +135,7 @@ class ImagesController < ApplicationController
     # get selected Image
     @selected_image = Image.unflagged.find_by_id(params[:id])
     if (@selected_image.nil? || @selected_image.flagged? || (@selected_image.user.blocked? && !current_user.admin?))
-      return render_not_found
+      render_not_found
     end
     # get Gallery
     @images = @selected_image.gallery.images.unflagged.all(:order => 'id')
@@ -200,9 +182,9 @@ class ImagesController < ApplicationController
     push_redirect
     @image = Image.unflagged.find_by_id(params[:id])
     if @image.nil? || (@image.user.blocked? && !current_user.admin?)
-      return render_not_found
+      render_not_found
     elsif @image.gallery && !current_user.can_access?(@image.gallery)
-      return render_unauthorized
+      render_unauthorized
     end
 
     # if params.has_key?(:flickr_post) && params[:flickr_post]=='success'
@@ -226,8 +208,8 @@ class ImagesController < ApplicationController
       @dislike = @image.liked_by?(current_user)
     end
 
-    @filtered_params[:page_size] = 10
-    @comments = @image.comments.available.paginate_and_sort(@filtered_params)
+    filtered_params[:page_size] = 10
+    @comments = @image.comments.available.paginate_and_sort(filtered_params)
 
     # Increase page view
     @image.increase_pageview
@@ -239,10 +221,10 @@ class ImagesController < ApplicationController
     # end
     @image = Image.unflagged.find_by_id(params[:id])
     if @image.nil? || (@image.user.blocked? && !current_user.admin?)
-      return render_not_found
+      render_not_found
     end
     @author = @image.user
-    @purchased_info = @image.raw_purchased_info(@filtered_params)
+    @purchased_info = @image.raw_purchased_info(filtered_params)
     render :layout => 'public', :formats => 'html'
   end
 
@@ -291,27 +273,12 @@ class ImagesController < ApplicationController
         image = Image.unflagged.find_by_id id.to_i
         if image.nil? || (image.user.blocked? && !current_user.admin?)
           result = {
-            :error => "Not found photo"
+            :error => "Couldn't find photo"
           }
 
           render(:json => result) and return
         else
           next if image.data_processing
-          img[:gallery_cover] = img.delete('album_cover')
-          img[:owner_avatar] = img.delete('avatar')
-          if (img["gallery_id"].to_i == image.gallery_id)
-            if(img[:gallery_cover])
-              image.set_as_album_cover
-            end
-          else
-            img[:gallery_cover] = nil
-          end
-
-          if img[:owner_avatar]
-            image.set_as_owner_avatar
-          elsif image.owner_avatar?
-            current_user.rollback_avatar
-          end
           if !(image.update_attributes img)
             error << image.errors.full_messages.to_sentence
           end
@@ -320,7 +287,7 @@ class ImagesController < ApplicationController
     end
 
     gallery = Gallery.find_by_id params[:gallery_id].to_i
-    images = gallery.images.unflagged.paginate_and_sort(@filtered_params)
+    images = gallery.images.unflagged.paginate_and_sort(filtered_params)
     pagination = render_to_string :partial => 'pagination',
       :locals => {  :source => images, :params => { :controller => 'galleries',
         :action => 'edit_images', :gallery_id => gallery.id }, :classes => 'text left' }
@@ -357,13 +324,13 @@ class ImagesController < ApplicationController
   def order
     @image = Image.unflagged.find_by_id(params[:id])
     if @image.nil? || (@image.user.blocked? && !current_user.admin?)
-      return render_not_found
+      render_not_found
     end
     if params[:line_item].nil?
       if @image.blank?
-        return render_not_found
+        render_not_found
       elsif @image.gallery && !current_user.can_access?(@image.gallery)
-        return render_unauthorized
+        render_unauthorized
       end
     else
       @line_item = LineItem.find_by_id params[:line_item]
@@ -393,33 +360,11 @@ class ImagesController < ApplicationController
   end
 
   protected
-    def default_page_size
-      actions = ['index']
-      if params[:action] == 'create'
-        size = 10
-      elsif actions.index(params[:action]) == nil
-        size = 12
-      else
-        size = 30
-      end
-      return size
-    end
 
     def find_gallery
-      @gallery = Gallery.find_by_id(params[:gallery_id])
-    end
-
-    def find_gallery!
-      self.find_gallery
-      if @gallery.blank?
-        render_not_found
-        return false
-      elsif !current_user.can_access?(@gallery) ||
-            (!current_user.owns_gallery?(@gallery) && %w(edit update destroy create list).include?(params[:action]))
-        render_unauthorized
-        return false
-      end
-      @gallery
+      @gallery = Gallery.find(params[:gallery_id])
+      render_unauthorized if !current_user.can_access?(@gallery) ||
+        (!current_user.owns_gallery?(@gallery) && %w(edit update destroy create list).include?(params[:action]))
     end
 
     def push_to_uplo_photoset(image_id)

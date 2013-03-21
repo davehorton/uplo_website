@@ -1,4 +1,6 @@
 class Admin::SpotlightsController < Admin::AdminController
+  self.page_size = 12
+
   def index
     @sort_field = params[:sort_field] || "date_uploaded"
     @sort_direction = params[:sort_direction] || "asc"
@@ -42,10 +44,6 @@ class Admin::SpotlightsController < Admin::AdminController
   end
 
   protected
-
-    def default_page_size
-      return 12
-    end
 
     def set_current_tab
       @current_tab = "spotlights"

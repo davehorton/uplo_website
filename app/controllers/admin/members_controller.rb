@@ -1,4 +1,6 @@
 class Admin::MembersController < Admin::AdminController
+  self.page_size = 24
+
   def index
     @sort_field = params[:sort_field] || "signup_date"
     @sort_direction = params[:sort_direction] || "asc"
@@ -15,10 +17,6 @@ class Admin::MembersController < Admin::AdminController
   end
 
   protected
-
-    def default_page_size
-      return 24
-    end
 
     def set_current_tab
       @current_tab = "member_profiles"

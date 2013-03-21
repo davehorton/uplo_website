@@ -18,7 +18,7 @@
           .info.left
             .text.bold= image.name
             .text
-              %span= number_to_currency image.user_total_sales, {:precision => 2}
+              %span= number_to_currency image.total_sales, {:precision => 2}
               %span.fuzzy Cumulative
             .details{:data => {:url => "#{url}"}}
         .line-separator.clear

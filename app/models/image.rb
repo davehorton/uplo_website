@@ -25,7 +25,7 @@ class Image < ActiveRecord::Base
     :message => 'File type must be one of [.jpeg, .jpg]' }, :on => :create
   validate :validate_quality, :on => :create
 
-  before_create :init_tier
+  before_create :init_tier, :set_as_cover_if_first_one
   before_post_process :init_image_info
 
   default_scope order('created_at desc')
@@ -70,7 +70,7 @@ class Image < ActiveRecord::Base
   end
 
   # TODO: replace with pg full text search implementation
-  def self.get_spotlight_images(user_id, params)
+  def self.find_spotlight(user_id, params)
 =begin
     params ||= {}
     with_display = "*, IF(author_id = #{user_id} OR permission = #{Permission::Public.new}, 1, 0) AS display"
@@ -146,6 +146,19 @@ class Image < ActiveRecord::Base
   delegate :id, :fullname, :to => :user, allow_nil: true, prefix: true
   delegate :name, :to => :gallery, prefix: true
 
+  def gallery_cover=(is_cover)
+    if is_cover
+      gallery.update_all(gallery_cover: false)
+      update_column(:gallery_cover, true)
+    end
+    super
+  end
+
+  def owner_avatar=(is_owner_avatar)
+    user.images.where(owner_avatar: true).update_all(owner_avatar: false) if is_owner_avatar
+    super
+  end
+
   def get_price(moulding, size)
     return MOULDING_PRICES[moulding][self.tier][size]
   end
@@ -190,25 +203,6 @@ class Image < ActiveRecord::Base
     self.comments.count
   end
 
-  def set_as_album_cover
-    self.update_attribute('gallery_cover', true)
-    Image.update_all 'gallery_cover=false', "gallery_id = #{ self.gallery_id } and id <> #{ self.id }"
-  end
-
-  def set_as_owner_avatar
-    self.update_attribute('owner_avatar', true)
-    Image.update_all 'owner_avatar=false', "gallery_id in (#{ user.galleries.collect(&:id).join(',') }) and id <> #{ self.id }"
-    profile_img = ProfileImage.first :conditions => {:user_id => user_id, :link_to_image => self.id}
-    if profile_img.nil?
-      ProfileImage.create({ :user_id => user_id,
-                            :link_to_image => self.id,
-                            :avatar => open(self.url(:thumb)),
-                            :last_used => Time.now })
-    else
-      profile_img.set_as_default
-    end
-  end
-
   def flagged?
     image_flags.any?
   end
@@ -221,14 +215,14 @@ class Image < ActiveRecord::Base
         result = { :success => false, :msg => "The image is already flagged." }
       else
         if user.owns_image?(self)
-         return result = { :success => false, :msg => "You can not flag your own image" }
+         return result = { :success => false, :msg => "You cannot flag your own image" }
         end
         description = ImageFlag.process_description(params[:type].to_i, params[:desc])
         if description.nil?
           if params[:type].to_i == ImageFlag::FLAG_TYPE['copyright']
-            msg = 'Copyright flag must have photo\'s owner information'
+            msg = "Copyright flag must have photo's owner information"
           else
-            msg = 'Terms of Use Violation flag must have reason reporting'
+            msg = "Terms of Use Violation flag must have reason reporting"
           end
           result = { :success => false, :msg => msg }
         else
@@ -299,55 +293,33 @@ class Image < ActiveRecord::Base
     ImageLike.exists?(image_id: id, user_id: user.id)
   end
 
-  # THIS METHOD IS USED TO SHOW THE TOTAL SALE FOR USER.
-  # The rule: User receives a half of total sale. Need to find something else for this. Reporting...
-  def user_total_sales(mon = nil)
+  def total_sales(month = nil)
     total = 0
-    if mon == nil
-      orders = self.orders.where({:transaction_status => Order::TRANSACTION_STATUS[:complete]})
-    else
+
+    orders = orders.completed
+
+    if month
       start_date = DateTime.parse("01 #{mon}")
       end_date = TimeCalculator.last_day_of_month(start_date.mon, start_date.year).end_of_day
       end_date = end_date.strftime("%Y-%m-%d %T")
       start_date = start_date.strftime("%Y-%m-%d %T")
-      orders = self.orders.where "transaction_status ='#{Order::TRANSACTION_STATUS[:complete]}'
-        and transaction_date > '#{start_date.to_s}' and transaction_date < '#{end_date.to_s}'"
+      orders = orders.where("transaction_date > ? and transaction_date < ?", start_date, end_date)
     end
 
-    orders_in = orders.collect &:id
-    saled_items = (orders.length==0) ? [] : self.line_items.where("order_id in (#{orders_in.join(',')})")
-    saled_items.each do |item|
+    order_ids = orders.collect(&:id)
+    sold_items = (orders.length == 0) ? [] : line_items.where("order_id in (#{order_ids.join(',')})")
+    sold_items.each do |item|
       total += ((item.price * item.quantity) * item.commission_percent)
     end
 
-    return total
+    total
   end
 
-  def total_sales(mon = nil) # mon with year, return saled $$
-    total = 0
-
-    if mon.blank?
-      orders = self.orders.where({:transaction_status => Order::TRANSACTION_STATUS[:complete]})
-    else
-      start_date = DateTime.parse("01 #{mon}")
-      end_date = TimeCalculator.last_day_of_month(start_date.mon, start_date.year).end_of_day
-      end_date = end_date.strftime("%Y-%m-%d %T")
-      start_date = start_date.strftime("%Y-%m-%d %T")
-      orders = self.orders.where "transaction_status ='#{Order::TRANSACTION_STATUS[:complete]}'
-        and transaction_date > '#{start_date.to_s}' and transaction_date < '#{end_date.to_s}'"
-    end
-
-    orders_in = orders.collect &:id
-    saled_items = (orders.length==0) ? [] : self.line_items.where("order_id in (#{orders_in.join(',')})")
-    saled_items.each { |item| total += (item.price + item.tax)*item.quantity }
-    return total
-  end
-
-  # mon with year, return saled quantity
-  def saled_quantity(mon = nil)
+  # mon with year, return sold quantity
+  def sold_quantity(month = nil)
     result = 0
 
-    if mon.nil?
+    if month.nil?
       orders = self.orders.where({:transaction_status => Order::TRANSACTION_STATUS[:complete]})
     else
       start_date = DateTime.parse("01 #{mon}")
@@ -419,19 +391,15 @@ class Image < ActiveRecord::Base
     prior_months.each { |mon|
       short_mon = DateTime.parse(mon).strftime('%b')
       if options.nil?
-        result << { :month => short_mon, :sales => self.user_total_sales(mon) }
+        result << { :month => short_mon, :sales => self.total_sales(mon) }
       elsif options.has_key?(:report_by)
         result << {
           :month => short_mon,
-          :sales => (options[:report_by]==SALE_REPORT_TYPE[:price]) ? self.user_total_sales(mon) : self.saled_quantity(mon)
+          :sales => (options[:report_by]==SALE_REPORT_TYPE[:price]) ? total_sales(mon) : sold_quantity(mon)
         }
       end
     }
     return result
-  end
-
-  def set_album_cover
-    self.gallery_cover = !Image.exists?({:gallery_id => self.gallery_id, :gallery_cover => true})
   end
 
   # Increase the pageview counter
@@ -535,6 +503,10 @@ class Image < ActiveRecord::Base
 
     def init_tier
       self.tier = TIERS[:tier_1] if self.tier.blank?
+    end
+
+    def set_as_cover_if_first_one
+      self.gallery_cover = true unless Image.exists?(gallery_id: gallery_id, gallery_cover: true)
     end
 
 =begin

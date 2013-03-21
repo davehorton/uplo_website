@@ -1,7 +1,7 @@
 class Api::UsersController < Api::BaseController
   include Devise::Controllers::InternalHelpers
 
-  before_filter :require_login!, :except => [:login, :create_user, :reset_password, :request_invitation]
+  skip_before_filter :require_login!, only: [:login, :create_user, :reset_password, :request_invitation]
 
   def get_user_info
     @result[:success] = false
@@ -9,7 +9,7 @@ class Api::UsersController < Api::BaseController
     if user.nil?
       @result[:msg] = "This user does not exist"
     else
-      @result[:user_info] = init_user_info(user)
+      @result[:user_info] = user
       @result[:success] = true
     end
     render :json => @result
@@ -25,7 +25,7 @@ class Api::UsersController < Api::BaseController
     elsif Invitation.exists?(:email => params[:email]) || User.exists?(:email => params[:email])
       @result[:msg] = 'The email has been used'
     else
-      req = Invitation.new_invitation(params[:email])
+      req = Invitation.new(params[:email])
       if req.save
         @result[:success] = true
         @result[:msg] = "Your request has been sent"
@@ -39,9 +39,6 @@ class Api::UsersController < Api::BaseController
   def create_user
     info = params[:user]
     profile_image_params = params[:profile_image]
-    if (!profile_image_params.nil?)
-      profile_image_params[:last_used] = Time.now
-    end
     user = User.new(info)
     @result = {
       :success => true,
@@ -49,7 +46,7 @@ class Api::UsersController < Api::BaseController
     }
     user.profile_images.build profile_image_params
     if user.save
-      #@result[:user_info] = init_user_info(user)
+      @result[:user_info] = user
     else
       messages = user.errors.full_messages
       if messages.is_a?(Array)
@@ -71,10 +68,10 @@ class Api::UsersController < Api::BaseController
     elsif current_user.update_profile(params[:user])
       profile_image_params = params[:profile_image]
       if (!profile_image_params.nil?)
-        avatar = current_user.profile_images.build({:data => params[:profile_image][:data], :last_used => Time.now})
+        avatar = current_user.profile_images.build(params[:profile_image])
         if avatar.save
            @result[:success] = true
-           @result[:user_info] = init_user_info(current_user)
+           @result[:user_info] = current_user
         else
           msg = []
           key = ['data_file_size', 'data_content_type']
@@ -90,7 +87,7 @@ class Api::UsersController < Api::BaseController
         end
       else
         @result[:success] = true
-        @result[:user_info] = init_user_info(current_user)
+        @result[:user_info] = current_user
       end
     else
       @result[:success] = false
@@ -126,7 +123,7 @@ class Api::UsersController < Api::BaseController
       end
     end
 
-    @result[:user_info] = init_user_info(user)
+    @result[:user_info] = user
     @result[:success] = true
     render :json => @result
   end
@@ -156,7 +153,7 @@ class Api::UsersController < Api::BaseController
 
   def get_total_sales
     user = current_user
-    user_sales = user.total_sales(@filtered_params)
+    user_sales = user.total_sales(filtered_params)
     result = {
       :success => true,
       :total => user_sales[:total_entries],
@@ -172,7 +169,7 @@ class Api::UsersController < Api::BaseController
     if user.nil?
       result = {:success => false, :msg => 'This user does not exist.'}
     else
-      followers = user.followers.load_users(@filtered_params)
+      followers = user.followers.paginate_and_sort(filtered_params)
       result = {
         :success => true,
         :data => process_followers_info(user.id, followers) }
@@ -187,7 +184,7 @@ class Api::UsersController < Api::BaseController
     if user.nil?
       result = {:success => false, :msg => 'This user does not exist.'}
     else
-      followed_users = user.followed_users.load_users(@filtered_params)
+      followed_users = user.followed_users.paginate_and_sort(filtered_params)
       result = {
         :success => true,
         :data => process_followed_users_info(user.id, followed_users) }
@@ -207,7 +204,7 @@ class Api::UsersController < Api::BaseController
     elsif user.id == follower.id
       result[:msg] = 'You cannot follow yourself'
       result[:success] = false
-    elsif !SharedMethods::Converter.Boolean(params[:follow])
+    elsif !params[:follow].to_bool
       UserFollow.destroy_all({ :user_id => user.id, :followed_by => follower.id })
       result[:success] = true
     elsif UserFollow.exists?({ :user_id => user.id, :followed_by => follower.id })
@@ -253,12 +250,12 @@ class Api::UsersController < Api::BaseController
     else
       begin
         attrs = {
-          :notify_purchases => SharedMethods::Converter.Boolean(params[:enable_purchases]),
-          :notify_likes => SharedMethods::Converter.Boolean(params[:enable_likes]),
-          :notify_comments => SharedMethods::Converter.Boolean(params[:enable_comments]),
+          :notify_purchases => params[:enable_purchases].to_bool,
+          :notify_likes => params[:enable_likes].to_bool,
+          :notify_comments => params[:enable_comments].to_bool,
           :last_notified => device.last_notified }
         rescue ArgumentError => e
-          result = { :success => false, :msg => 'Please make sure your setting values is Boolean (0/1, t/f, true/false, y/n, yes/no)!' }
+          result = { :success => false, :msg => 'Accepted values: 0/1, t/f, true/false, y/n, yes/no' }
         else
           disable_all = (!attrs[:notify_purchases] && !attrs[:notify_comments] && !attrs[:notify_likes])
           if device.update_attributes(attrs)
@@ -338,51 +335,25 @@ class Api::UsersController < Api::BaseController
   end
 
   protected
-    # Init a hash containing user's info
-    def init_user_info(user)
-      user.confirmed_at = Time.now
-      info = user.serializable_hash(user.default_serializable_options)
-      # TODO: rename :avatar to :avatar_url and put it into User#exposed_methods
-      info[:avatar_url] = user.avatar_url(:thumb)
-      if user.id == current_user.id
-        info[:galleries_num] = user.galleries.size
-        info[:images_num] = user.images.unflagged.size
-      else
-        info[:galleries_num] = user.public_galleries.size
-        info[:images_num] = user.images.visible_everyone.size
-      end
-
-      info[:followers_num] = user.followers.size
-      info[:following_num] = user.followed_users.size
-      info[:tiers] = Image::TIERS_PRICES
-
-      if params[:action] == 'login'
-        info[:cart_items_num] = (user.cart.nil? || user.cart.order.nil?) ? 0 : user.cart.order.line_items.count
-      end
-
-      return info
-    end
 
     def process_followers_info(user_id, users)
       result = []
-      user = User.find_by_id user_id
-      users.each { |u|
-        info = u.serializable_hash(u.default_serializable_options)
-        info[:following] = u.has_follower?(user.id)
+      users.each do |u|
+        info = u
+        info[:following] = u.has_follower?(user_id)
         info[:followed_by_current_user] = u.has_follower?(current_user.id)
         result << {:user => info}
-      }
-      return result
+      end
+      result
     end
 
     def process_followed_users_info(user_id, users)
       result = []
-      user = User.find_by_id user_id
-      users.each { |u|
-        info = u.serializable_hash(u.default_serializable_options)
+      users.each do |u|
+        info = u
         info[:followed_by_current_user] = u.has_follower?(current_user.id)
         result << {:user => info}
-      }
-      return result
+      end
+      result
     end
 end

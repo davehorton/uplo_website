@@ -2,20 +2,17 @@ require 'ostruct'
 require 'active_merchant'
 
 class PaymentsController < ApplicationController
-  before_filter :authenticate_user!, :except => [:paypal_notify]
-
   include ActiveMerchant::Billing::Integrations
   include CartsHelper
-  layout 'main'
+
+  skip_before_filter :authenticate_user!, only: [:paypal_notify]
 
   def index
     @pp_payment = Payment.create_paypal_test
     @an_payment = Payment.create_authorizenet_test
   end
 
-  # This is the call back for Paypal transaction.
-  # You cannot test this method from localhost.
-  # Deploy the app to a public server (e.g, Heroku) so that Paypal can access this method.
+  # This is the callback for Paypal transaction.
   def paypal_notify
     notify = Paypal::Notification.new(request.raw_post)
     Rails.logger.info "==== Paypal notify ==="

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130317052640) do
+ActiveRecord::Schema.define(:version => 20130319222954) do
 
   create_table "addresses", :force => true do |t|
     t.string   "first_name"
@@ -185,7 +185,6 @@ ActiveRecord::Schema.define(:version => 20130317052640) do
     t.integer  "user_id",                                :null => false
     t.boolean  "default",             :default => false, :null => false
     t.integer  "link_to_image",       :default => 0
-    t.datetime "last_used",                              :null => false
     t.string   "avatar_file_name",                       :null => false
     t.string   "avatar_content_type",                    :null => false
     t.integer  "avatar_file_size",                       :null => false

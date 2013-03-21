@@ -15,40 +15,21 @@ class ProfileImage < ActiveRecord::Base
     :content_type => { :content_type => [ 'image/jpeg','image/jpg'],
       :message => 'File type must be one of [.jpeg, .jpg]' }
 
-  after_create :update_last_used, :set_as_default
-  after_destroy :reset_avatar
-
-  def update_last_used
-    ProfileImage.transaction do
-      self.last_used = Time.now
-      if self.save
-        self.user.hold_profile_images
-      else
-        raise ActiveRecord::Rollback
-      end
-    end
-  end
+  after_create  :set_as_default
 
   def set_as_default
-    ProfileImage.transaction do
-      self.update_attribute('default', true)
-      self.update_attribute('last_used', Time.now)
-      ProfileImage.update_all({ default: false }, "user_id = #{ self.user_id } and id <> #{ self.id }")
+    transaction do
+      user.profile_images.update_all(default: false)
+      self.default = true
+      save!
     end
   end
 
   def current_avatar?
-    self.default
+    default
   end
 
   def url(style = :thumb)
-    self.avatar.expiring_url(style)
+    avatar.expiring_url(style)
   end
-
-  private
-
-    def reset_avatar
-      user.rollback_avatar if current_avatar?
-      source.update_attribute(:owner_avatar, false) if source
-    end
 end

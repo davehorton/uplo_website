@@ -107,7 +107,6 @@ module ApplicationHelper
   end
 
   def line_item_additional_class(index, max_item_per_line)
-    # page_size = @filtered_params[:page_size]
     last_column_index = max_item_per_line - 1
     additional_class = []
     additional_class << 'no-padding-left' if (index % max_item_per_line == 0)

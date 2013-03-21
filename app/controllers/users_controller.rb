@@ -1,7 +1,9 @@
 class UsersController < ApplicationController
-  before_filter :authenticate_user!, :except => [:request_invitation]
+  self.page_size = 12
+
+  skip_before_filter :authenticate_user!, except: [:request_invitation]
   before_filter :show_notification
-  layout 'main'
+  respond_to :json
 
   def request_invitation
     if params[:user].nil? || !params[:user].has_key?('email') || params[:user][:email].blank?
@@ -90,7 +92,7 @@ class UsersController < ApplicationController
   end
 
   def update_avatar
-    avatar = current_user.profile_images.build({:avatar => params[:user][:avatar], :last_used => Time.now})
+    avatar = current_user.profile_images.build(:avatar => params[:user][:avatar])
     if avatar.save
       profile_photos = render_to_string :partial => 'profiles/profile_photos',
              :locals => {:profile_images => current_user.profile_images}
@@ -151,25 +153,21 @@ class UsersController < ApplicationController
   end
 
   def set_avatar
-    if request.xhr?
-      if current_user.has_profile_photo?(params[:id])
-        begin
-          ProfileImage.find_by_id(params[:id]).set_as_default
-          result = { :success => true, :extra_avatar_url => current_user.avatar_url(:extra),
-            :large_avatar_url => current_user.avatar_url(:large) }
-        rescue
-          result = {:success => false, :msg => 'Something went wrong!'}
-        end
-      else
-        result = {:success => false, :msg => 'This is not your profile photo!'}
-      end
-      render :json => result
-    end
+    profile_image = current_user.profile_images.find(params[:id])
+    profile_image.set_as_default
+    render json: {
+      success: true,
+      extra_avatar_url: current_user.avatar_url(:extra),
+      large_avatar_url: current_user.avatar_url(:large)
+    }
+  rescue Exception => ex
+    ExternalLogger.new.log_error(ex, "Problem setting avatar", params)
+    render json: { success: false, msg: "Something went wrong" }
   end
 
   def search
     @no_async_image_tag = true
-    @users = User.search params[:query], :star => true, :page => params[:page_id], :per_page => default_page_size
+    @users = User.search params[:query], :star => true, :page => params[:page_id], :per_page => page_size
   end
 
   def set_current_tab
@@ -316,12 +314,5 @@ class UsersController < ApplicationController
     end
     flash[:notice] = "Disabled #{params[:type_social]}"
     redirect_to :action => :profile
-  end
-
-
-
-  protected
-  def default_page_size
-    return 12
   end
 end

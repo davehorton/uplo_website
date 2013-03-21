@@ -104,6 +104,9 @@ en:
     delete_confirm: "Are you sure you want to delete this gallery?"
     not_found: "Gallery not found"
 
+  image:
+    not_found: "Image not found"
+
   slideshow:
     picture_name: "Picture Name"
     description: "Description"

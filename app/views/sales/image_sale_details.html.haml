@@ -15,12 +15,12 @@
           .text.black.bold.font24= @image.name
           - if (image.flagged? || image.removed?)
             .text.font20{:style => "color:red"} Unavailable
-          .quantity.text.fuzzy-gray.font18= "#{@image.saled_quantity} Sales"
-          .price.text.bold= number_to_currency @image.user_total_sales, {:precision => 2}
+          .quantity.text.fuzzy-gray.font18= "#{@image.sold_quantity} Sales"
+          .price.text.bold= number_to_currency @image.total_sales, {:precision => 2}
       .line-separator.left
       .clear
       .sale-chart.clear
-        = render :partial => 'chart', :locals => {:total_sales => @image.user_total_sales, :sales => @sales}
+        = render :partial => 'chart', :locals => {:total_sales => @image.total_sales, :sales => @sales}
       .line-separator.clear
 
       .sale-info.left

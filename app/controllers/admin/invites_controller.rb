@@ -1,6 +1,6 @@
 class Admin::InvitesController < Admin::AdminController
   def index
-    @inv_requests = Invitation.requested.paginate_and_sort(@filtered_params)
+    @inv_requests = Invitation.requested.paginate_and_sort(filtered_params)
   end
 
   def confirm_request
@@ -14,7 +14,7 @@ class Admin::InvitesController < Admin::AdminController
         result[:success] = true
 
         emails = render_to_string :partial => 'emails_for_invite',
-          :locals => { :emails => Invitation.requested.paginate_and_sort(@filtered_params) }
+          :locals => { :emails => Invitation.requested.paginate_and_sort(filtered_params) }
         result = { :success => true, :emails => emails }
       end
     end
@@ -44,11 +44,8 @@ class Admin::InvitesController < Admin::AdminController
   end
 
   protected
+
     def set_current_tab
       @current_tab = 'invites'
-    end
-
-    def default_page_size
-      return 10
     end
 end

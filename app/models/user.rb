@@ -11,8 +11,6 @@ class User < ActiveRecord::Base
   EMAIL_REG_EXP = /^([0-9a-zA-Z]([-.\w]*[0-9a-zA-Z])*@(([0-9a-zA-Z])+([-\w]*[0-9a-zA-Z])*\.)+[a-zA-Z]{2,9})$/i
   GENDER_MALE = "0"
   MIN_FLAGGED_IMAGES = 3
-  ALLOCATION_STRING = "#{RESOURCE_LIMIT[:size]} #{RESOURCE_LIMIT[:unit]}"
-  ALLOCATION = RESOURCE_LIMIT[:size].mb.to.b
   FILTER_OPTIONS = ['signup_date', 'username', 'num_of_likes']
   SEARCH_TYPE = 'users'
   SORT_OPTIONS = { :name => 'name', :date_joined => 'date' }
@@ -340,26 +338,6 @@ class User < ActiveRecord::Base
     cart
   end
 
-  def used_allocation
-    total = 0
-    self.galleries.each do |gal|
-      gal.images.unflagged.each do |img|
-        total += img.data_file_size
-      end
-    end
-    total
-  end
-
-  def free_allocation
-    remaining = ALLOCATION
-    self.galleries.each do |gal|
-      gal.images.unflagged.each do |img|
-        remaining -= img.data_file_size
-      end
-    end
-    remaining
-  end
-
   def paid_items(image_id=nil)
     if image_id.blank?
       from_condition = '(SELECT * FROM line_items) AS lis'
@@ -434,7 +412,7 @@ class User < ActiveRecord::Base
     prior_months.each { |mon|
       short_mon = DateTime.parse(mon).strftime('%b')
       total_sales = 0
-      self.images.unflagged.each { |img| total_sales += img.user_total_sales(mon) }
+      self.images.unflagged.each { |img| total_sales += img.total_sales(mon) }
       result << { :month => short_mon, :sales => total_sales }
     }
     result
@@ -446,60 +424,13 @@ class User < ActiveRecord::Base
     array = []
     images.each { |img|
       info = img
-      info[:total_sale] = img.user_total_sales
-      info[:quantity_sale] = img.saled_quantity
+      info[:total_sale] = img.total_sales
+      info[:quantity_sale] = img.sold_quantity
       info[:no_longer_avai] = (img.flagged? || img.removed?)
       array << {:image => info }
     }
     result[:data] = array
     result[:total_entries] = images.total_entries
-    result
-  end
-
-  def oldest_profile_image
-    result = nil
-    last_time = Time.now
-    self.profile_images.each do |img|
-      if img.last_used < last_time
-        last_time = img.last_used
-        result = img.id
-      end
-    end
-    result
-  end
-
-  def recent_profile_image
-    result = nil
-    recent_time = Time.parse '0000-1-1'
-    self.profile_images.each do |img|
-      if img.last_used > recent_time
-        recent_time = img.last_used
-        result = img.id
-      end
-    end
-    result
-  end
-
-  def hold_profile_images
-    result = true
-    if ProfileImage.count(:conditions => {:user_id => self.id}) > HELD_AVATARS_NUMBER
-      begin
-        ProfileImage.destroy self.oldest_profile_image
-      rescue
-        result = false
-      end
-    end
-    result
-  end
-
-  def rollback_avatar
-    id = self.recent_profile_image
-    if id.nil?
-      result = true
-    else
-      img = ProfileImage.find_by_id id
-      img.update_attribute('default', true)
-    end
     result
   end
 
@@ -512,16 +443,10 @@ class User < ActiveRecord::Base
   end
 
   def remove
-    # TODO Need to change it in the future. Currently we just remove user out of the system
-    # self.class.transaction do
-    #   if !self.removed?
-    #     self.update_attribute(:removed, true)
-    #     # Send email.
-
-    #   end
-    # end
-    self.destroy
-    UserMailer.removed_user_email(self).deliver
+    unless removed?
+      update_attribute(:removed, true)
+      UserMailer.removed_user_email(self).deliver
+    end
   end
 
   def remove_flagged_images
@@ -565,7 +490,7 @@ class User < ActiveRecord::Base
   def total_earn
     result = 0
     items = self.images
-    items.each {|item| result += item.user_total_sales }
+    items.each {|item| result += item.total_sales }
     result
   end
 

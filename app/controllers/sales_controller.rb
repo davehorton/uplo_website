@@ -1,7 +1,4 @@
 class SalesController < ApplicationController
-  before_filter :authenticate_user!
-  layout 'main'
-
   def index
     return redirect_to :action => :year_sales
   end
@@ -9,11 +6,11 @@ class SalesController < ApplicationController
   def image_sale_details
     @image = Image.find_by_id params[:id]
     @sales = @image.get_monthly_sales_over_year(Time.now, {:report_by => Image::SALE_REPORT_TYPE[:price]}).decorate
-    @purchased_info = @image.raw_purchased_info(@filtered_params)
+    @purchased_info = @image.raw_purchased_info(filtered_params)
   end
 
   def year_sales
-    @sales = current_user.raw_sales(@filtered_params)
+    @sales = current_user.raw_sales(filtered_params)
     @monthly_sales = current_user.monthly_sales(Time.now)
     @year_sales = total_sales(@monthly_sales)
   end
@@ -34,6 +31,7 @@ class SalesController < ApplicationController
   end
 
   protected
+
     def total_sales(sales)
       rs = 0
       sales.each { |sale| rs += sale[:sales] }

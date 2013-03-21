@@ -1,4 +1,6 @@
 class Admin::FlaggedUsersController < Admin::AdminController
+  self.page_size = 24
+
   def index
     @users = User.flagged_users.paginate_and_sort(self.filtered_params)
   end
@@ -123,11 +125,8 @@ class Admin::FlaggedUsersController < Admin::AdminController
   end
 
   protected
+
     def set_current_tab
       @current_tab = "flagged_users"
-    end
-
-    def default_page_size
-      return 24
     end
 end

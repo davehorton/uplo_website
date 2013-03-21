@@ -171,25 +171,27 @@ Uplo::Application.routes.draw do
       get :popular, on: :collection
     end
 
+    resources :images do
+      collection do
+        get :by_friends
+        get :liked
+        get :popular
+        get :search
+      end
 
-    get "popular_images", :to => "images#popular_images"
-    get 'friend_images', :to => 'images#friend_images'
+      member do
+        post :like
+        get  :printed_sizes
+        get  :purchases
+        get  :sale_chart
+        get  :total_sales
+        put  :unlike
+      end
+
+      resources :comments, only: [:index, :create]
+    end
+
     get "search", :to => "search#search"
-
-    # Image
-    post "upload_image", :to => "images#upload_image"
-    post "update_image", :to => "images#update_image"
-    post "delete_image", :to => "images#delete_image"
-    get "image_total_sales", :to => "images#total_sales"
-    get "sale_chart", :to => "images#sale_chart"
-    get "image_purchasers", :to => "images#get_purchasers"
-    get "get_images", :to => "images#get_images"
-    get 'get_printed_sizes', :to => 'images#get_printed_sizes'
-    get 'user_images', :to => 'images#get_user_images'
-    get 'list_comments', :to => 'images#get_comments'
-    post 'post_comment', :to => 'images#post_comment'
-    post 'flag_image', :to => 'images#flag_image'
-    get "like", :to => "images#like"
 
     # Order
     get "list_orders", :to => "orders#list_orders"

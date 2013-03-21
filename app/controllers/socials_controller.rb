@@ -1,6 +1,4 @@
 class SocialsController < ApplicationController
-	before_filter :authenticate_user!
-
 	def facebook_callback
 		@api_key = FACEBOOK_CONFIG["api_key"]
 		@secret = FACEBOOK_CONFIG["secret"]
@@ -10,7 +8,6 @@ class SocialsController < ApplicationController
 		})
 
 		begin
-
 		  access_token = oauth_client.get_token({
 		      :client_id => @api_key,
 		      :client_secret => @secret,
