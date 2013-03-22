@@ -212,11 +212,9 @@ class User < ActiveRecord::Base
   def birthday=(date)
     if date.is_a?(String)
       date = DateTime.strptime(String, I18n.t("date.formats.default"))
-      if date
-        date = date.to_date
-      end
+      date = date.to_date if date
     end
-    self.send(:write_attribute, :birthday, date)
+    self[:birthday] = date
   end
 
   def update_profile(params)

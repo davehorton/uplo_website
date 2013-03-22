@@ -84,10 +84,7 @@ class Image < ActiveRecord::Base
   delegate :name, :to => :gallery, prefix: true
 
   def gallery_cover=(is_cover)
-    if is_cover
-      gallery.update_all(gallery_cover: false)
-      update_column(:gallery_cover, true)
-    end
+    gallery.images.update_all(gallery_cover: false) if is_cover
     super
   end
 
