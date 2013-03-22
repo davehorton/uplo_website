@@ -2,7 +2,7 @@
 - sort_by ||= params[:sort_by]
 - filtered_by ||= params[:filtered_by]
 - action ||= params[:action]
-- controller ||= params[:controller] 
+- controller ||= params[:controller]
 
 .right
   = form_tag({:controller => controller, :action => action}, :method => 'get', :id => 'filtering-search-box') do
@@ -14,4 +14,3 @@
 
 = javascript_tag do
   helper.setup_filtering_search()
-
