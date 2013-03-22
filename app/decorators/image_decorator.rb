@@ -8,4 +8,8 @@ class ImageDecorator < Draper::Decorator
               only_path:  false,
               host:       DOMAIN
   end
+
+  def creation_timestamp
+    h.distance_of_time_in_words_to_now(source.created_at)
+  end
 end

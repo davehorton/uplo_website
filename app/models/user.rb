@@ -237,7 +237,7 @@ class User < ActiveRecord::Base
   # Override attribute setter.
   def birthday=(date)
     if date.is_a?(String)
-      date = ::Util.format_date(date)
+      date = DateTime.strptime(String, I18n.t("date.formats.default"))
       if date
         date = date.to_date
       end

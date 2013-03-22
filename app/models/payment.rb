@@ -53,6 +53,6 @@ class Payment
       :signature => PP_API_SIGN
     })
 
-    gateway.transfer(::Util.to_cents(amount), receiver, :subject => 'Payment from UPLO', :note => "UPLO has transfered $#{amount} for your request payout.")
+    gateway.transfer(Converter.decimal_to_cents(amount), receiver, :subject => 'Payment from UPLO', :note => "UPLO has transfered $#{amount} for your request payout.")
   end
 end

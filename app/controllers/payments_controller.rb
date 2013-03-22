@@ -183,8 +183,8 @@ class PaymentsController < ApplicationController
       :return_url => url_for(:only_path => false, :controller => 'payments', :action => 'paypal_result'),
       :cancel_return_url => url_for(:only_path => false, :controller => 'payments', :action => 'paypal_cancel'),
       :notify_url => url_for(:only_path => false, :controller => 'payments', :action => 'paypal_notify'),
-      #:subtotal => ::Util.to_cents(subtotal),
-      #:shipping => ::Util.to_cents(shipping),
+      #:subtotal => Converter.decimal_to_cents(subtotal),
+      #:shipping => Converter.decimal_to_cents(shipping),
       :amount => image_price,
       :handling => 0,
       :tax => 0,
@@ -194,13 +194,9 @@ class PaymentsController < ApplicationController
       :items => [{
         :name => "Test Image",
         :quantity => 1,
-        :amount => ::Util.to_cents(image_price)
+        :amount => Converter.decimal_to_cents(image_price)
       }]
     }
-  end
-
-  def to_cents(money)
-    (money*100).round
   end
 
   def auth_order

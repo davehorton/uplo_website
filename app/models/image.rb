@@ -202,10 +202,6 @@ class Image < ActiveRecord::Base
     self.update_attribute(:removed, false)
   end
 
-  def creation_timestamp
-    ::Util.distance_of_time_in_words_to_now(self.created_at)
-  end
-
   def url(options = nil)
     if data_processing
       "/assets/gallery-thumb.jpg"

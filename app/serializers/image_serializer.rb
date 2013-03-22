@@ -7,4 +7,8 @@ class ImageSerializer < ActiveModel::Serializer
   def public_link
     object.decorate.public_link
   end
+
+  def creation_timestamp
+    object.decorate.creation_timestamp
+  end
 end
