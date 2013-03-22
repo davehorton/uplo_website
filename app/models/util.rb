@@ -75,12 +75,6 @@ module Util
       self.compare_decimals(num1, num2) == 0
     end
 
-    def log_error(exc, description = "")
-      Rails.logger.error "===== ERROR: #{description} ====="
-      Rails.logger.error exc.inspect
-      Rails.logger.error exc.backtrace.join("\n")
-    end
-
     def merge_options(default_options, options)
       options ||= {}
       default_options.merge(options)

@@ -28,7 +28,7 @@ class Admin::FlaggedImagesController < Admin::AdminController
       result[:redirect_url] = admin_flagged_images_path(:flag_type => params[:flag_type])
 
     rescue Exception => exc
-      ::Util.log_error(exc, "Admin::FlaggedImagesController#reinstate_all")
+      ExternalLogger.new.log_error(exc, "Admin::FlaggedImagesController#reinstate_all", params)
       result[:status] = 'error'
       result[:message] = I18n.t("admin.error_reinstate_images_failed")
     end
@@ -54,7 +54,7 @@ class Admin::FlaggedImagesController < Admin::AdminController
       result[:redirect_url] = admin_flagged_images_path(:flag_type => params[:flag_type])
 
     rescue Exception => exc
-      ::Util.log_error(exc, "Admin::FlaggedImagesController#remove_all")
+      ExternalLogger.new.log_error(exc, "Admin::FlaggedImagesController#remove_all", params)
       result[:status] = 'error'
       result[:message] = I18n.t("admin.error_remove_images_failed")
     end
@@ -68,7 +68,7 @@ class Admin::FlaggedImagesController < Admin::AdminController
     begin
       image = Image.flagged.find_by_id(params[:image_id])
       if image && image.reinstate
-        UserMailer.delay.flagged_image_reinstated_email(image.author_id, image)
+        UserMailer.delay.flagged_image_reinstated_email(image.author_id, image.id)
         result[:status] = 'ok'
         flash[:notice] = I18n.t("admin.notice_reinstate_image_succeeded")
         result[:redirect_url] = admin_flagged_images_path(:flag_type => params[:flag_type])
@@ -77,7 +77,7 @@ class Admin::FlaggedImagesController < Admin::AdminController
         result[:message] = I18n.t("admin.error_reinstate_image_failed")
       end
     rescue Exception => exc
-      ::Util.log_error(exc, "Admin::FlaggedImagesController#remove_all")
+      ExternalLogger.new.log_error(exc, "Admin::FlaggedImagesController#reinstate_image", params)
       result[:status] = 'error'
       result[:message] = I18n.t("admin.error_reinstate_image_failed")
     end
@@ -91,7 +91,7 @@ class Admin::FlaggedImagesController < Admin::AdminController
     begin
       image = Image.flagged.find_by_id(params[:image_id])
       if image && image.update_attribute(:removed, true)
-        UserMailer.delay.flagged_image_removed_email(image.author_id, image)
+        UserMailer.delay.flagged_image_removed_email(image.author_id, image.id)
         result[:status] = 'ok'
         flash[:notice] = I18n.t("admin.notice_remove_image_succeeded")
         result[:redirect_url] = admin_flagged_images_path(:flag_type => params[:flag_type])
@@ -100,7 +100,7 @@ class Admin::FlaggedImagesController < Admin::AdminController
         result[:message] = I18n.t("admin.error_remove_image_failed")
       end
     rescue Exception => exc
-      ::Util.log_error(exc, "Admin::FlaggedImagesController#remove_all")
+      ExternalLogger.new.log_error(exc, "Admin::FlaggedImagesController#remove_image", params)
       result[:status] = 'error'
       result[:message] = I18n.t("admin.error_remove_image_failed")
     end

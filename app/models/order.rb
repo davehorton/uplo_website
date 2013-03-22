@@ -90,12 +90,15 @@ class Order < ActiveRecord::Base
       self.update_attributes(params)
 
       # Start shipping product
+      # TODO: the above was left in here by the previous developer;
+      # assuming this was the intended call to the fulfillment API?
 
       # Send the notification email to the buyer.
-      PaymentMailer.transaction_finish(self).deliver
-      PaymentMailer.inform_new_order(self).deliver
+      PaymentMailer.delay.transaction_finish(id)
+      PaymentMailer.delay.inform_new_order(id)
+
     rescue Exception => exc
-      ::Util.log_error(exc, "Finalizing transaction failed")
+      ExternalLogger.log_error(exc, "Finalizing transaction failed")
       raise
     end
 

@@ -22,7 +22,7 @@ class Admin::FlaggedUsersController < Admin::AdminController
       result[:status] = 'error'
       result[:message] = I18n.t("admin.error_not_ready_for_reinstating")
     rescue Exception => exc
-      ::Util.log_error(exc, "Admin::FlaggedUsersController#reinstate_all")
+      ExternalLogger.new.log_error(exc, "Admin::FlaggedUsersController#reinstate_all", params)
       result[:status] = 'error'
       result[:message] = I18n.t("admin.error_reinstate_users_failed")
     end
@@ -47,7 +47,7 @@ class Admin::FlaggedUsersController < Admin::AdminController
       result[:status] = 'error'
       result[:message] = I18n.t("admin.error_not_ready_for_removing")
     rescue Exception => exc
-      ::Util.log_error(exc, "Admin::FlaggedUsersController#remove_all")
+      ExternalLogger.new.log_error(exc, "Admin::FlaggedUsersController#remove_all", params)
       result[:status] = 'error'
       result[:message] = I18n.t("admin.error_reinstate_users_failed")
     end
@@ -79,7 +79,7 @@ class Admin::FlaggedUsersController < Admin::AdminController
       result[:status] = 'error'
       result[:message] = I18n.t("admin.error_not_ready_for_reinstating")
     rescue Exception => exc
-      ::Util.log_error(exc, "Admin::FlaggedUsersController#reinstate_user")
+      ExternalLogger.new.log_error(exc, "Admin::FlaggedUsersController#reinstate_user", params)
       result[:status] = 'error'
       result[:message] = I18n.t("admin.error_reinstate_users_failed")
     end
@@ -116,7 +116,7 @@ class Admin::FlaggedUsersController < Admin::AdminController
       result[:status] = 'error'
       result[:message] = I18n.t("admin.error_not_ready_for_removing")
     rescue Exception => exc
-      ::Util.log_error(exc, "Admin::FlaggedUsersController#remove_user")
+      ExternalLogger.new.log_error(exc, "Admin::FlaggedUsersController#remove_user", params)
       result[:status] = 'error'
       result[:message] = I18n.t("admin.error_reinstate_users_failed")
     end
