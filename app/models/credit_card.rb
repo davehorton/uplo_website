@@ -4,7 +4,7 @@ class CreditCard
   def self.brands
     {
       "American Express" => "american_express",
-      "Master Card"      => "master"
+      "Master Card"      => "master",
       "Visa"             => "visa",
       "Discover"         => "discover",
       "JCB"              => "jcb",
