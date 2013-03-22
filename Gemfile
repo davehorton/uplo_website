@@ -41,10 +41,15 @@ gem 'paperclip'
 gem 'rmagick', require: false
 gem 'sidekiq'
 gem 'simple_form'
+gem 'textacular', '~> 3.0', require: 'textacular/rails'
 gem 'twitter'
 gem 'urbanairship'
 gem 'valid_email'
 gem 'will_paginate', '~> 3.0'
+
+# for sidekiq admin
+gem 'sinatra', require: false
+gem 'slim'
 
 # Gems used only for assets and not required
 # in production environments by default.

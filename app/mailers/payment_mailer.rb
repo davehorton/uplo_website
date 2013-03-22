@@ -1,6 +1,6 @@
 class PaymentMailer < ApplicationMailer
-  def transaction_finish(order)
-    @order = order
+  def transaction_finish(order_id)
+    @order = Order.unscoped.find(order_id)
     @user = order.user
 
     in_tmpdir do |tmpdir, path|
@@ -10,29 +10,26 @@ class PaymentMailer < ApplicationMailer
         io.original_filename.blank? ? nil : io
         attachments.inline["#{image.id}.jpg"] = File.read(io.path)
       end
-      subject = I18n.t("order.email.transaction_finish_subject")
-      mail_params = {
-        :to => @user.friendly_email,
-        :subject => subject
-      }
 
-      mail(mail_params)
+      mail(
+        to: @user.friendly_email,
+        subject: I18n.t("order.email.transaction_finish_subject")
+      )
     end
   end
 
-  def inform_new_order(order)
-    subject = I18n.t("order.email.inform_new_order")
+  def inform_new_order(order_id)
+    @order = Order.unscoped.find(order_id)
     @user = order.user
-    @order = order
-    mail_params = {
-      :to => ["quynh.kim@techpropulsionlabs.com", "uplo@digital2media.com"],
-      :subject => subject
-    }
 
-    mail(mail_params)
+    mail(
+      to: ["patrick@uplo.com", "uplo@digital2media.com"],
+      subject: I18n.t("order.email.inform_new_order")
+    )
   end
 
   protected
+
     def in_tmpdir
       path = File.expand_path "#{Rails.root.join('tmp')}/#{Time.now.to_i}#{rand(1000)}/"
       FileUtils.mkdir_p( path )
@@ -40,7 +37,6 @@ class PaymentMailer < ApplicationMailer
       begin
         # Create temp file to export
         yield(path) # Pass temp folder and the path of temp file
-
       ensure
       end
 

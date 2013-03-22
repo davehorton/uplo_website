@@ -18,7 +18,7 @@ class ImagesController < ApplicationController
         end
       end
 
-      if emails.length > 0 && SharingMailer.share_image_email(params[:id], emails, current_user.id, params[:email]['message']).deliver
+      if emails.length > 0 && SharingMailer.delay.share_image_email(params[:id], emails, current_user.id, params[:email]['message'])
         flash[:notice] = "Email sent"
       else
         flash[:warning] = "Could not send the email. Please re-check your information (email, message)."
