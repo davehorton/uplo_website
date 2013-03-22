@@ -59,7 +59,7 @@ class User < ActiveRecord::Base
   accepts_nested_attributes_for :shipping_address
 
   validates_presence_of :first_name, :last_name, :username, :message => 'cannot be blank'
-  validates :password, :presence => true, :confirmation => true, :if => :need_checking_password?
+  validates :password, :presence => true, :confirmation => true, :if => :check_password?
   validates_format_of :website, :allow_blank => true,
           :with => /(^$)|(^((http|https):\/\/){1}[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(([0-9]{1,5})?\/.*)?$)/i
   validates_uniqueness_of :username, :message => 'must be unique'
@@ -68,11 +68,10 @@ class User < ActiveRecord::Base
 
   validates_length_of :cvv, :in => 3..4, :allow_nil => true
   validates_numericality_of :cvv, :card_number, :only_integer => true, :allow_nil => true
+  validate :check_card_number, :if => :card_number_changed?
 
   validates_presence_of :paypal_email_confirmation, :if => :paypal_email_changed?
   validates :paypal_email, :email => true, :if => :paypal_email_changed?
-
-  validate :check_card_number
 
   after_create :cleanup_invitation
   after_create :subscribe
@@ -160,31 +159,6 @@ class User < ActiveRecord::Base
         user.reinstate
       end
     end
-  end
-
-  # TODO: replace with pg full text search
-  def self.search_users(params = {})
-=begin
-    paging_info = parse_paging_options params[:filtered_params]
-
-    sphinx_search_options = params[:sphinx_search_options]
-    sphinx_search_options = {} if sphinx_search_options.nil?
-
-    sphinx_search_options.merge!({
-      :star => true,
-      :retry_stale => true,
-      :page => paging_info.page_id,
-      :per_page => paging_info.page_size,
-      :order => paging_info.sort_string,
-      :sort_mode => :extended
-    })
-    search_term = SharedMethods::Converter::SearchStringConverter.process_special_chars(params[:query])
-    User.search search_term, sphinx_search_options
-=end
-  end
-
-  def check_card_number
-    errors.add(:card_number, "is not valid") unless CreditCard.valid_number?(card_number)
   end
 
   def liked_images
@@ -535,7 +509,11 @@ class User < ActiveRecord::Base
 
   private
 
-    def need_checking_password?
+    def check_card_number
+      errors.add(:card_number, "is not valid") unless CreditCard.valid_number?(card_number)
+    end
+
+    def check_password?
       (!self.force_submit && self.password_required?)
     end
 
