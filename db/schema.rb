@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130319222954) do
+ActiveRecord::Schema.define(:version => 20130322035612) do
 
   create_table "addresses", :force => true do |t|
     t.string   "first_name"
@@ -111,9 +111,9 @@ ActiveRecord::Schema.define(:version => 20130319222954) do
     t.string   "tier"
     t.boolean  "removed",            :default => false
     t.integer  "pageview",           :default => 0
-    t.integer  "promote_num",        :default => 0
     t.boolean  "data_processing",    :default => false
     t.integer  "user_id"
+    t.boolean  "promote",            :default => false
   end
 
   add_index "images", ["data_processing"], :name => "index_images_on_data_processing"
