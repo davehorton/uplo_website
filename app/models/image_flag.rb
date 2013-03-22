@@ -11,9 +11,6 @@ class ImageFlag < ActiveRecord::Base
   validates_presence_of :image_id, :reported_by, :flag_type, :message => 'cannot be blank'
   validates :description, :length => {:maximum => 255, :message => 'cannot exceed 255 characters'}
 
-  after_save :set_image_delta_flag
-  after_destroy :set_image_delta_flag
-
   def self.process_description(flag_type, description)
     if flag_type.to_i == ImageFlag::FLAG_TYPE['nudity']
       result = ''
@@ -58,19 +55,4 @@ class ImageFlag < ActiveRecord::Base
   def flag_type_string
     self.class.flag_type_string(self.flag_type)
   end
-
-  private
-
-    def set_image_delta_flag
-      if Rails.env.production?
-        # Rake::Task['search:reindex'].reenable
-        # Rake::Task['search:reindex'].invoke
-        Rails.logger.info("==== Begin flying_sphinx: configure & index ====")
-        FlyingSphinx::CLI.new('setup').run
-        Rails.logger.info("==== Finished flying_sphinx: configure & index ====")
-      else
-        self.image.delta = true
-        self.image.save
-      end
-    end
 end
