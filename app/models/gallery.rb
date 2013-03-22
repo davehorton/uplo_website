@@ -14,19 +14,13 @@ class Gallery < ActiveRecord::Base
   scope :open,   where(permission: Permission::Public.new)
   scope :with_images, includes(:images)
 
-  # TODO: replace with pg full text search implementation
-  def self.do_search(params = {})
-=begin
-    params[:filtered_params][:sort_field] = 'name' unless params[:filtered_params].has_key?("sort_field")
-    paging_info = parse_paging_options(params[:filtered_params], {:sort_mode => :extended})
-
-    self.search(
-      SharedMethods::Converter::SearchStringConverter.process_special_chars(params[:query]),
-      :star => true,
-      :retry_stale => true,
-      :page => paging_info.page_id,
-      :per_page => paging_info.page_size )
-=end
+  def self.search_scope(query)
+    galleries = Gallery.scoped
+    if query.present?
+      query = query.gsub(/[[:punct:]]/, ' ').squish
+      galleries = images.advanced_search_by_name_or_description_or_keyword(query, query, query)
+    end
+    galleries
   end
 
   def get_images_without(ids)
@@ -56,31 +50,4 @@ class Gallery < ActiveRecord::Base
   def last_update
     updated_at.strftime('%B %Y')
   end
-
-  private
-
-=begin
-    define_index do
-      # fields
-      indexes name
-      indexes description
-      indexes keyword
-
-      # attributes
-      has user_id
-
-      # weight
-      set_property :field_weights => {
-        :name => 7,
-        :keyword => 3,
-        :description => 1
-      }
-
-      if Rails.env.production?
-        set_property :delta => FlyingSphinx::DelayedDelta
-      else
-        set_property :delta => true
-      end
-    end
-=end
 end

@@ -1,28 +1,9 @@
 class UsersController < ApplicationController
   self.page_size = 12
 
-  skip_before_filter :authenticate_user!, except: [:request_invitation]
+  skip_before_filter :authenticate_user!
   before_filter :show_notification
   respond_to :json
-
-  def request_invitation
-    if params[:user].nil? || !params[:user].has_key?('email') || params[:user][:email].blank?
-      flash[:error] = "Please input an email first"
-    elsif (User::EMAIL_REG_EXP =~ params[:user][:email]).nil?
-      flash[:error] = 'The email is invalid'
-    elsif Invitation.exists?(:email => params[:user][:email]) || User.exists?(:email => params[:user][:email])
-      flash[:error] = 'The email has been used'
-    else
-      req = Invitation.new(params[:user][:email])
-      if req.save
-        flash[:auto_hide_notification] = false
-        flash[:success] = "Your request has been sent. Please check your mailbox in the next hours to find your invitation. Please also check your spam folder to make sure it didn't end up there by accident. To make sure you will receive emails from us in the future, be sure to add us to your address book in your email settings."
-      else
-        flash[:error] = req.errors.full_messages[0]
-      end
-    end
-    redirect_to :controller => 'home', :action => 'index'
-  end
 
   def update
     type_update = params[:user][:type_update]

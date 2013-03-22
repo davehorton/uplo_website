@@ -98,6 +98,15 @@ class User < ActiveRecord::Base
       MIN_FLAGGED_IMAGES])
     ).select("DISTINCT users.*, galleries_data.flagged_images_count")
 
+  def self.search_scope(query)
+    users = User.scoped
+    if query.present?
+      query = query.gsub(/[[:punct:]]/, ' ').squish
+      users = images.advanced_search_by_first_name_or_last_name_or_username_or_email(query, query, query, query)
+    end
+    users
+  end
+
   # re-implements Shared::QueryMethods function
   # by replacing search fields before caling super
   def self.paginate_and_sort(params = {})
@@ -115,25 +124,6 @@ class User < ActiveRecord::Base
     end
 
     super(user_params)
-  end
-
-  # TODO: replace with pg full text search
-  def self.do_search(params = {})
-=begin
-    admin_mod = params[:admin_mod].nil? ? false : params[:admin_mod]
-    if admin_mod
-      params[:sphinx_search_options] = {
-        :with => { :removed => false },
-        :without => { :date_joined => 'null' }
-      }
-    else
-      params[:sphinx_search_options] = {
-        :with => { :removed => false, :banned => false },
-        :without => { :date_joined => 'null' }
-      }
-    end
-    self.search_users(params)
-=end
   end
 
   # Override Devise method so that User can log in with username or email.
@@ -445,7 +435,7 @@ class User < ActiveRecord::Base
   def remove
     unless removed?
       update_attribute(:removed, true)
-      UserMailer.removed_user_email(self).deliver
+      UserMailer.delay.removed_user_email(id)
     end
   end
 
@@ -461,8 +451,7 @@ class User < ActiveRecord::Base
     self.class.transaction do
       if self.banned?
         self.update_attribute(:banned, false)
-        # Send email.
-        UserMailer.reinstated_user_email(self).deliver
+        UserMailer.delay.reinstated_user_email(id)
       end
     end
   end
@@ -557,23 +546,4 @@ class User < ActiveRecord::Base
     def subscribe
       Mailchimp.subscribe_user(self)
     end
-
-=begin
-    define_index do
-      indexes first_name
-      indexes last_name
-      indexes username, :sortable => true
-      indexes email
-
-      has confirmed_at, :as => :date_joined
-      has removed
-      has banned
-
-      if Rails.env.production?
-        set_property :delta => FlyingSphinx::DelayedDelta
-      else
-        set_property :delta => true
-      end
-    end
-=end
 end

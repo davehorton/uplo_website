@@ -39,57 +39,20 @@ class Image < ActiveRecord::Base
   scope :visible,     not_removed.joins(:active_user).where(data_processing: false)
   scope :visible_everyone, visible.unflagged.joins(:public_gallery)
 
+  scope :spotlight, where(promote: true)
   scope :with_gallery, includes(:gallery)
 
-  # TODO: replace with pg full text search implementation
-  def self.do_search_public_images(params = {})
-    #params[:sphinx_search_options] = {:index => "public_images"}
-    #self.do_search(params)
+  def self.search_scope(query)
+    images = Image.scoped
+    if query.present?
+      query = query.gsub(/[[:punct:]]/, ' ').squish
+      images = images.advanced_search_by_name_or_description_or_keyword(query, query, query)
+    end
+    images
   end
 
-  # TODO: replace with pg full text search implementation
-  def self.do_search_accessible_images(user_id, params)
-=begin
-    params ||= {}
-    with_display = "*, IF(author_id = #{user_id} OR permission = #{Permission::Public.new}, 1, 0) AS display"
-    params[:sphinx_search_options] = {
-      :joins => '
-        LEFT JOIN galleries AS gals ON gals.id = images.gallery_id
-        LEFT JOIN image_flags ON images.id = image_flags.image_id
-        LEFT JOIN users ON gals.user_id = users.id',
-      :sphinx_select => with_display,
-      :with => {
-        :data_processing => false,
-        :banned_user => false,
-        :removed_user => false,
-        :flagged_by => '',
-        :display => 1 }
-    }
-    self.do_search(params)
-=end
-  end
-
-  # TODO: replace with pg full text search implementation
-  def self.find_spotlight(user_id, params)
-=begin
-    params ||= {}
-    with_display = "*, IF(author_id = #{user_id} OR permission = #{Permission::Public.new}, 1, 0) AS display"
-    params[:sphinx_search_options] = {
-      :joins => '
-        LEFT JOIN galleries AS gals ON gals.id = images.gallery_id
-        LEFT JOIN image_flags ON images.id = image_flags.image_id
-        LEFT JOIN users ON gals.user_id = users.id',
-      :sphinx_select => with_display,
-      :with => {
-        :data_processing => false,
-        :banned_user => false,
-        :removed_user => false,
-        :flagged_by => '',
-        :display => 1,
-        :promote_num => 1 }
-    }
-    self.do_search(params)
-=end
+  def self.public_or_owner(user)
+    where("images.user_id = ? or permission = #{Permission::Public.new}", user)
   end
 
   # re-implements Shared::QueryMethods function
@@ -112,34 +75,8 @@ class Image < ActiveRecord::Base
   end
 
   def self.popular_with_pagination(params = {})
-    #  scope :popular, visible_everyone
-    params[:sort_expression] = "images.promote_num desc, images.updated_at desc, images.image_likes_count desc"
+    params[:sort_expression] = "images.promote desc, images.updated_at desc, images.image_likes_count desc"
     visible_everyone.paginate_and_sort(params)
-  end
-
-  # TODO: replace with pg full text search
-  def self.do_search(params = {})
-=begin
-    params[:filtered_params][:sort_field] = 'name' unless params[:filtered_params].has_key?(:sort_field)
-
-    default_opt = {}
-    paging_info = parse_paging_options(params[:filtered_params], {:sort_mode => :extended})
-
-    sphinx_search_options = params[:sphinx_search_options]
-    sphinx_search_options = {} if sphinx_search_options.blank?
-    sphinx_search_options[:index] = 'general_images' if sphinx_search_options[:index].blank?
-
-    sphinx_search_options.merge!({
-      :star => true,
-      :retry_stale => true,
-      :page => paging_info.page_id,
-      :per_page => paging_info.page_size,
-      :order => paging_info.sort_string,
-    })
-
-    search_term = SharedMethods::Converter::SearchStringConverter.process_special_chars(params[:query])
-    Image.search(search_term, sphinx_search_options)
-=end
   end
 
   delegate :username, :to => :user, allow_nil: true
@@ -243,10 +180,10 @@ class Image < ActiveRecord::Base
               # Ban the image's author.
               user.update_attribute(:banned, true)
               # Send email.
-              UserMailer.banned_user_email(user).deliver
+              UserMailer.delay.banned_user_email(user.id)
             else
               # Send email about the flagged image.
-              UserMailer.flagged_image_email(user, self).deliver
+              UserMailer.delay.flagged_image_email(user.id, id)
             end
 
             # Update result
@@ -415,18 +352,13 @@ class Image < ActiveRecord::Base
     end
   end
 
-  def promote
-    self.update_attribute(:promote_num, 1)
+  def promote!
+    self.update_attribute(:promote, true)
   end
 
-  def demote
-    self.update_attribute(:promote_num, 0)
+  def demote!
+    self.update_attribute(:promote, false)
   end
-
-  def promoted?
-    (self.promote_num.to_i > 0)
-  end
-  alias_method :promoted, :promoted?
 
 #==============================================================================
 # Description:
@@ -508,56 +440,4 @@ class Image < ActiveRecord::Base
     def set_as_cover_if_first_one
       self.gallery_cover = true unless Image.exists?(gallery_id: gallery_id, gallery_cover: true)
     end
-
-=begin
-    #indexing with thinking sphinx
-    define_index :general_images do
-      # fields
-      indexes name, :sortable => true
-      indexes description
-      indexes keyword
-      indexes gallery(:name), :as => :album
-
-      # attributes
-      has gallery_id, created_at, pageview, promote_num, updated_at, data_processing
-      has user(:is_banned), :as => :banned_user
-      has user(:is_removed), :as => :removed_user
-      has image_flags(:reported_by), :as => :flagged_by
-      has user(:id), :as => :user_id
-      has gallery(:permission), :as => :permission
-
-      # weight
-      set_property :field_weights => {
-        :name => 15,
-        :keyword => 7,
-        :description => 3,
-        :user => 1,
-        :album => 1
-      }
-
-      set_property :delta => true
-    end
-
-    # Index for public images
-    define_index :public_images do
-      # fields
-      indexes name, :sortable => true
-      indexes keyword
-      indexes author(:username), :as => :author, :sortable => true
-
-      # attributes
-      has gallery_id, created_at, pageview, promote_num, data_processing
-
-      # weight
-      set_property :field_weights => {
-        :name => 7,
-        :keyword => 3,
-        :author => 1
-      }
-
-      where("images.id IN (SELECT id FROM (#{Image.visible_everyone.to_sql}) public_images)")
-
-      set_property :delta => true
-    end
-=end
 end

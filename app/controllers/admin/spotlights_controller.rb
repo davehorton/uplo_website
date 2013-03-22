@@ -12,7 +12,7 @@ class Admin::SpotlightsController < Admin::AdminController
 
   def search
     search_params = {:query => URI.unescape(params[:admin_query]), :filtered_params => filtered_params}
-    @images = Image.do_search_public_images(search_params)
+    @images = Image.search_scope(search_params).visible_everyone
     render 'admin/spotlights/index'
   end
 
@@ -22,10 +22,10 @@ class Admin::SpotlightsController < Admin::AdminController
     image = Image.unflagged.find_by_id(params[:id])
     result = {}
     if image
-      method = :promote
       if params[:demote]
-        # Unpromote this image
-        method = :demote
+        method = :demote!
+      else
+        method = :promote!
       end
 
       if image.send(method)

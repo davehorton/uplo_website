@@ -16,14 +16,12 @@ class HomeController < ApplicationController
 
   def index
     session[:back_url] = url_for(:controller => 'home', :action => "browse") if session[:back_url].nil?
-    @images = Image.find_spotlight(current_user).paginate_and_sort(filtered_params)
+    @images = Image.search_scope(current_user).spotlight.paginate_and_sort(filtered_params)
     if user_signed_in?
       @current_views = 'recent images'
       filtered_params[:sort_direction] = 'DESC'
       filtered_params[:sort_field] = "updated_at"
-      @recent_images = Image.do_search_accessible_images( current_user.id,
-        { :query => "",
-          :filtered_params => filtered_params })
+      @recent_images = Image.visible_everyone.paginate_and_sort(filtered_params)
       render :template => 'home/spotlight'
     else
       @devise_message = session.delete(:devise_message)
@@ -34,16 +32,14 @@ class HomeController < ApplicationController
     @current_views = IMAGE_SORT_VIEW[Image::SORT_OPTIONS[:recent]]
     filtered_params[:sort_direction] = 'DESC'
     filtered_params[:sort_field] = "created_at"
-    @data = Image.do_search_accessible_images( current_user.id,
-        { :query => "",
-          :filtered_params => filtered_params })
+    @data = Image.visible_everyone.paginate_and_sort(filtered_params)
   end
 
   def spotlight
     @current_views = IMAGE_SORT_VIEW[Image::SORT_OPTIONS[:spotlight]]
     filtered_params[:sort_direction] = 'DESC'
     filtered_params[:sort_field] = "created_at"
-    @data = Image.find_spotlight(current_user).paginate_and_sort(filtered_params)
+    @data = Image.search_scope(current_user).spotlight.paginate_and_sort(filtered_params)
     render :template => 'home/browse'
   end
 
@@ -71,19 +67,17 @@ class HomeController < ApplicationController
       when "views"
         filtered_params[:sort_field] = "pageview"
       when "spotlight"
-        filtered_params[:sort_field] = "promote_num"
+        filtered_params[:sort_field] = "promote"
       end
 
-      @data = Image.do_search_accessible_images( current_user.id,
-        { :query => URI.unescape(params[:query]),
-          :filtered_params => filtered_params })
+      @data = Image.search_scope(params[:query]).
+                public_or_owner(current_user).
+                paginate_and_sort(filtered_params)
+
     else #filtered by user
       @current_views = USER_SORT_VIEW[params[:sort_by]]
       filtered_params[:sort_criteria] = User::SORT_CRITERIA[params[:sort_by]]
-      @data = User.do_search({
-        :admin_mod => false,
-        :query => URI.unescape(params[:query]),
-        :filtered_params => filtered_params })
+      @data = User.search_scope(params[:query]).paginate_and_sort(filtered_params)
     end
     render :template => 'home/browse'
   end
