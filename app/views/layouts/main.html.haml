@@ -15,7 +15,7 @@
     = javascript_include_tag 'application'
 
     = yield :head
-    = render(partial: "google/analytics")
+    = render(partial: "google/analytics") if Rails.env.production?
 
   %body
     #header

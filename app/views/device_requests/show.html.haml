@@ -14,7 +14,7 @@
     = javascript_include_tag 'application'
     = csrf_meta_tags
     = yield :head
-    = render(partial: "google/analytics")
+    = render(partial: "google/analytics") if Rails.env.production?
 
   %body
     = image_tag 'intro-phone-app.jpg'
