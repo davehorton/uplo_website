@@ -4,7 +4,7 @@ class Admin::SpotlightsController < Admin::AdminController
   def index
     @sort_field = params[:sort_field] || "date_uploaded"
     @sort_direction = params[:sort_direction] || "asc"
-    @images = Image.visible_everyone.with_gallery.paginate_and_sort(filtered_params.merge(
+    @images = Image.public_access.with_gallery.paginate_and_sort(filtered_params.merge(
       :sort_field => @sort_field,
       :sort_direction => @sort_direction
     ))
@@ -12,7 +12,7 @@ class Admin::SpotlightsController < Admin::AdminController
 
   def search
     search_params = {:query => URI.unescape(params[:admin_query]), :filtered_params => filtered_params}
-    @images = Image.search_scope(search_params).visible_everyone
+    @images = Image.search_scope(search_params).public_access
     render 'admin/spotlights/index'
   end
 

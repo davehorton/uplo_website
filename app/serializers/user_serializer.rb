@@ -16,7 +16,7 @@ class UserSerializer < ActiveModel::Serializer
     if object == current_user
       object.images.unflagged.size
     else
-      object.images.visible_everyone.size
+      object.images.public_access.size
     end
   end
 

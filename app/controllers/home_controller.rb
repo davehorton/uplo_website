@@ -21,7 +21,7 @@ class HomeController < ApplicationController
       @current_views = 'recent images'
       filtered_params[:sort_direction] = 'desc'
       filtered_params[:sort_field] = "images.updated_at"
-      @recent_images = Image.visible_everyone.paginate_and_sort(filtered_params)
+      @recent_images = Image.public_access.paginate_and_sort(filtered_params)
       render :template => 'home/spotlight'
     else
       @devise_message = session.delete(:devise_message)
@@ -32,7 +32,7 @@ class HomeController < ApplicationController
     @current_views = IMAGE_SORT_VIEW[Image::SORT_OPTIONS[:recent]]
     filtered_params[:sort_direction] = 'desc'
     filtered_params[:sort_field] = "images.created_at"
-    @data = Image.visible_everyone.paginate_and_sort(filtered_params)
+    @data = Image.public_access.paginate_and_sort(filtered_params)
   end
 
   def spotlight

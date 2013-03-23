@@ -20,7 +20,7 @@ class Api::ImagesController < Api::BaseController
       if user_id == current_user.id
         images = current_user.images.unflagged.with_gallery.paginate_and_sort(filtered_params)
       else
-        images = current_user.images.visible_everyone.with_gallery.paginate_and_sort(filtered_params)
+        images = current_user.images.public_access.with_gallery.paginate_and_sort(filtered_params)
       end
     end
 

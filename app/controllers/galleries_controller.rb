@@ -21,7 +21,7 @@ class GalleriesController < ApplicationController
 
   def show_public
     user = User.find(params[:author])
-    @galleries = user.galleries.open.with_images.paginate_and_sort(filtered_params)
+    @galleries = user.galleries.public_access.with_images.paginate_and_sort(filtered_params)
     render :action => :index
   end
 

@@ -10,8 +10,8 @@ class Gallery < ActiveRecord::Base
   validates :user, presence: true
 
   default_scope order('galleries.name asc')
-  scope :closed, where(permission: Permission::Private.new)
-  scope :open,   where(permission: Permission::Public.new)
+  scope :private_access, where(permission: Permission::Private.new)
+  scope :public_access, where(permission: Permission::Public.new)
   scope :with_images, includes(:images)
 
   def self.search_scope(query)

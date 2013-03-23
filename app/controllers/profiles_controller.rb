@@ -9,11 +9,11 @@ class ProfilesController < ApplicationController
       @galleries = @user.galleries.with_images.paginate_and_sort(filtered_params)
       @images = @user.images.unflagged.with_gallery.paginate_and_sort(filtered_params)
     else
-      @galleries = @user.galleries.open.with_images.paginate_and_sort(filtered_params)
+      @galleries = @user.galleries.public_access.with_images.paginate_and_sort(filtered_params)
       @images = @user.images.popular_with_pagination(filtered_params)
     end
 
-    @liked_images = @user.liked_images.visible_everyone.with_gallery.paginate_and_sort(filtered_params)
+    @liked_images = @user.liked_images.public_access.with_gallery.paginate_and_sort(filtered_params)
     @followers = @user.followers.paginate_and_sort(filtered_params)
     @followed_users = @user.followed_users.paginate_and_sort(filtered_params)
   end
@@ -52,7 +52,7 @@ class ProfilesController < ApplicationController
 
   def show_likes
     if request.xhr?
-      @images = @user.liked_images.visible_everyone.with_gallery.paginate_and_sort(filtered_params)
+      @images = @user.liked_images.public_access.with_gallery.paginate_and_sort(filtered_params)
       html = render_to_string :partial => 'likes'
       counter = @images.count
       render :json => {:html => html, :counter => counter}
@@ -61,7 +61,7 @@ class ProfilesController < ApplicationController
 
   def get_likes
     if request.xhr?
-      images = @user.liked_images.visible_everyone.with_gallery.paginate_and_sort(filtered_params)
+      images = @user.liked_images.public_access.with_gallery.paginate_and_sort(filtered_params)
 
       if @user == current_user
         template = render_to_string :partial => 'edit_likes_template', :locals => { :images => images }
@@ -80,7 +80,7 @@ class ProfilesController < ApplicationController
       if @user == current_user
         @galleries = @user.galleries.with_images.paginate_and_sort(filtered_params)
       else
-        @galleries = @user.galleries.open.with_images.paginate_and_sort(filtered_params)
+        @galleries = @user.galleries.public_access.with_images.paginate_and_sort(filtered_params)
       end
       html = render_to_string :partial => 'galleries'
       counter = @galleries.count
@@ -93,7 +93,7 @@ class ProfilesController < ApplicationController
       if @user == current_user
         galleries = @user.galleries.with_images.paginate_and_sort(filtered_params)
       else
-        galleries = @user.galleries.open.with_images.paginate_and_sort(filtered_params)
+        galleries = @user.galleries.public_access.with_images.paginate_and_sort(filtered_params)
       end
       template = render_to_string :partial => 'galleries_template',
                     :locals => { :galleries => galleries, :galleries_per_line => 4 }

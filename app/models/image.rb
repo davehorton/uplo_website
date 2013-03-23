@@ -35,9 +35,9 @@ class Image < ActiveRecord::Base
   scope :flagged,     not_removed.joins(:image_flags)
   scope :unflagged,   not_removed.includes(:image_flags).where(image_flags: { id: nil })
 
-  scope :processing,  not_removed.joins(:active_user).where(data_processing: true)
-  scope :visible,     not_removed.joins(:active_user).where(data_processing: false)
-  scope :visible_everyone, visible.unflagged.joins(:public_gallery)
+  scope :processing,    not_removed.joins(:active_user).where(data_processing: true)
+  scope :visible,       not_removed.joins(:active_user).where(data_processing: false)
+  scope :public_access, visible.unflagged.joins(:public_gallery)
 
   scope :spotlight, where(promote: true)
   scope :with_gallery, includes(:gallery)
@@ -78,7 +78,7 @@ class Image < ActiveRecord::Base
 
   def self.popular_with_pagination(params = {})
     params[:sort_expression] = "images.promote desc, images.updated_at desc, images.image_likes_count desc"
-    visible_everyone.paginate_and_sort(params)
+    public_access.paginate_and_sort(params)
   end
 
   delegate :username, :to => :user, allow_nil: true

@@ -28,7 +28,7 @@ class Api::GalleriesController < Api::BaseController
   #   user_id
   def popular
     if params[:user_id].blank?
-      galleries = Gallery.open.with_images.paginate_and_sort(filtered_params)
+      galleries = Gallery.public_access.with_images.paginate_and_sort(filtered_params)
     else
       user = User.find(params[:user_id])
 
