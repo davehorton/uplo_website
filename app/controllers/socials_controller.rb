@@ -164,7 +164,7 @@ class SocialsController < ApplicationController
 					  :picture => photo,
 					  :link => link,
 					  :name => 'Shared from UPLO',
-					  :caption => "uplo.com",
+					  :caption => "#{DOMAIN}",
 					  :description => description
 					)
 					flash[:notice] = "Post successful"
@@ -242,7 +242,7 @@ class SocialsController < ApplicationController
 						end
 
 						begin
-							message = (@message.to_s << "<p>Shared from <a href='http://uplo.com'>UPLO</a></p>")
+							message = (@message.to_s << "<p>Shared from <a href='http://#{DOMAIN}'>UPLO</a></p>")
 
 							response = access_token.request(:post, "/v2/blog/#{base_name}/post",
 																		{:type => "photo" ,:caption => message, :link => link, :source => medium_photo})
