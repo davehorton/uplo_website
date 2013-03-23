@@ -27,7 +27,7 @@
       .image-container{:id => "image-container-#{image.id}", :class => image_css}
         - image_link = url_for(:controller => "/images", :action => "browse", :id => "#{image.id}")
         %a.image-link{:href => image_link}
-          = async_image_tag(image.url(:thumb), :class => "image-thumb image small", :alt => image.name)
+          = async_image_tag(image.image.url(:thumb), :class => "image-thumb image small", :alt => image.name)
 
         .image-info
           - if image.promoted?

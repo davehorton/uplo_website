@@ -3,6 +3,8 @@
 - content_for :head do
   = javascript_include_tag("admin") if can_promote
 
+- content_for :body_class, 'images'
+
 - content_for :right_content do
   .text.black.font18.bold= @image.name
   .line-separator
