@@ -89,7 +89,7 @@ class Admin::FlaggedUsersController < Admin::AdminController
           result_hash[:status] = 'error'
           result_hash[:message] = I18n.t("admin.error_remove_myself")
         else
-          if user.remove
+          if user.remove!
             result_hash[:status] = 'ok'
             result_hash[:message] = I18n.t("admin.notice_remove_user_succeeded")
             result_hash[:redirect_url] = admin_members_path

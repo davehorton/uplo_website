@@ -36,7 +36,7 @@ class User < ActiveRecord::Base
 
   has_many :profile_images, :dependent => :destroy, :order => 'updated_at DESC'
   has_many :galleries, :dependent => :destroy
-  has_many :images, :through => :galleries
+  has_many :images
   has_many :public_galleries, class_name: 'Gallery', conditions: { permission: Permission::Public.new.to_s }
   has_many :public_images, :through => :public_galleries, :source => :images
   has_many :comments, :dependent => :destroy
@@ -76,9 +76,10 @@ class User < ActiveRecord::Base
 
   default_scope where(removed: false, banned: false).order('users.username asc')
 
-  scope :confirmed_users, where("confirmed_at IS NOT NULL")
+  scope :not_removed,   where(removed: false)
   scope :removed_users, where(removed: true)
-  scope :flagged_users, where(removed: false, banned: true)
+  scope :flagged_users, not_removed.where(banned: true)
+  scope :confirmed_users, not_removed.where("confirmed_at IS NOT NULL")
 
   scope :reinstate_ready_users, flagged_users.joins(self.sanitize_sql([
     "LEFT JOIN (
@@ -140,7 +141,7 @@ class User < ActiveRecord::Base
   def self.remove_flagged_users
     self.transaction do
       self.reinstate_ready_users.each do |user|
-        user.remove
+        user.remove!
       end
     end
   end
@@ -405,10 +406,14 @@ class User < ActiveRecord::Base
     end
   end
 
-  def remove
+  def remove!
     unless removed?
-      update_attribute(:removed, true)
-      UserMailer.delay.removed_user_email(id)
+      transaction do
+        images.not_removed.update_all(removed: true)
+        self.removed = true
+        save!
+        UserMailer.delay.removed_user_email(id)
+      end
     end
   end
 

@@ -243,7 +243,7 @@ class ImagesController < ApplicationController
     image = Image.unflagged.find_by_id params[:id]
     if image.user.nil?
       result = { msg: "Member no longer exists" }
-    if image.nil? && !current_user.admin?
+    elsif image.nil? && !current_user.admin?
       result = { msg: "Photo no longer exists" }
     else
       result = image.flag!(current_user, params)
