@@ -6,7 +6,7 @@
 
 .wrapper
   - if @sales.blank?
-    .empty-data= "There is no image to view saled status."
+    .empty-data= "No sales yet"
   - else
     .sale-chart.left
       = render :partial => 'chart', :locals => {:total_sales => @year_sales, :sales => @monthly_sales}

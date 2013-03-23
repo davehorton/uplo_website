@@ -7,7 +7,7 @@
 .wrapper
   .clearfix
     - if @sales.blank?
-      .empty-data= "There is no image to view saled status."
+      .empty-data= "No sales yet"
     - else
       - image = @image
       .sale-item.detail.left
