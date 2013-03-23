@@ -30,6 +30,10 @@ class ProfileImage < ActiveRecord::Base
   end
 
   def url(style = :thumb)
-    avatar.expiring_url(style)
+    storage = Rails.application.config.paperclip_defaults[:storage]
+    case storage
+      when :s3 then avatar.expiring_url(style)
+      when :filesystem then avatar.url
+    end
   end
 end

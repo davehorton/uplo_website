@@ -58,7 +58,7 @@ deletePhoto = (node) ->
           $('.pagination-panel').each( (idx, elem) -> $(elem).html response.pagination )
           $('#gallery_selector_id').html response.gallery_options
           $('select').selectmenu({ style: 'dropdown' })
-          helper.show_notification("Delete successfully!")
+          helper.show_notification("Deleted successfully!")
         else
           helper.show_notification(response.msg)
       complete: ->

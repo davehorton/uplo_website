@@ -361,13 +361,6 @@ class Image < ActiveRecord::Base
     self.update_attribute(:promoted, false)
   end
 
-#==============================================================================
-# Description:
-# - get available styles
-# - including all DEFAULT_STYLES & printable size (for ordering)
-# Note:
-#
-#==============================================================================
   def available_styles
     result = DEFAULT_STYLES
     self.printed_sizes.each do |size|

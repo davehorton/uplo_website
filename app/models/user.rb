@@ -34,7 +34,7 @@ class User < ActiveRecord::Base
                  :confirmed_at,
                  :created_at
 
-  has_many :profile_images, :dependent => :destroy, :order => 'last_used DESC'
+  has_many :profile_images, :dependent => :destroy, :order => 'updated_at DESC'
   has_many :galleries, :dependent => :destroy
   has_many :images, :through => :galleries
   has_many :public_galleries, class_name: 'Gallery', conditions: { permission: Permission::Public.new.to_s }

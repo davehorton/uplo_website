@@ -85,7 +85,6 @@ requestDeleteProfilePhoto = (node) ->
   window.setTimeout("$('#delete-confirm-popup').modal()", 300)
   $('#delete-confirm-popup #btn-ok').click ->
     $.modal.close()
-    window.setTimeout("$('#mask').modal()", 300)
     target = $(node)
     $.ajax({
       url: target.attr('data-url'),
@@ -101,7 +100,7 @@ requestDeleteProfilePhoto = (node) ->
           $('#edit-profile-photo-popup .current-photo .avatar').attr 'src', response.extra_avatar_url
           $('#user-section .avatar.large').attr 'src', response.large_avatar_url
           $('#edit-profile-photo-popup .held-photos .photos').html response.profile_photos
-          helper.show_notification('Delete successfully!')
+          helper.show_notification('Deleted successfully!')
           $.modal.close()
           window.setTimeout("$('#edit-profile-photo-popup').modal()", 300)
     })
