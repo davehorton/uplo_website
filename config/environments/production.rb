@@ -66,14 +66,14 @@ Uplo::Application.configure do
 
   config.action_mailer.default_url_options = { :host => DOMAIN }
   config.action_mailer.delivery_method = :smtp
+  config.action_mailer.raise_delivery_errors = true
 
   # SENDGRID
   config.action_mailer.smtp_settings = {
     :authentication => :plain,
-    :enable_starttls_auto => true,
     :address        => "smtp.sendgrid.net",
     :port           => 587,
-    :domain         => EY::Config.get(:sendgrid, 'SENDGRID_SMTP_HOST'),
+    :domain         => DOMAIN,
     :user_name      => EY::Config.get(:sendgrid, 'SENDGRID_USERNAME'),
     :password       => EY::Config.get(:sendgrid, 'SENDGRID_PASSWORD')
   }
