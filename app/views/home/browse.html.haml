@@ -1,3 +1,5 @@
+- content_for :body_class, 'images'
+
 - result_type = (params[:filtered_by]==User::SEARCH_TYPE) ? 'User' : 'Photo'
 - content_for :top_content do
   = render :partial => 'browse_header', :locals => {:num_of_records => @data.total_entries, :current_views => @current_views}
