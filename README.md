@@ -31,7 +31,7 @@ Observers are disabled in specs (see spec_helper) but have their own specific te
 
 ### Engine Yard
 
-* Staging and Production environments
+* Unicorn is used in staging and production environments
 * Add-ons:
  * SendGrid
 * Custom Chef Recipes

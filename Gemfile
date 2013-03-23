@@ -4,7 +4,6 @@ ruby '1.9.3'
 # main stack
 gem 'rails', '3.2.12'
 gem 'pg'
-gem 'unicorn'
 
 # application components
 gem 'activemerchant'
@@ -83,4 +82,9 @@ group :test do
   gem 'spork-rails'
   gem 'shoulda-matchers'
   gem 'timecop'
+end
+
+group :staging, :production do
+  gem 'ey_config'
+  gem 'unicorn'
 end

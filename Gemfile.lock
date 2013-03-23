@@ -109,6 +109,7 @@ GEM
     erubis (2.7.0)
     execjs (1.4.0)
       multi_json (~> 1.0)
+    ey_config (0.0.6)
     facter (1.6.18)
     factory_girl (4.2.0)
       activesupport (>= 3.0.0)
@@ -378,6 +379,7 @@ DEPENDENCIES
   devise (= 1.5.4)
   draper
   email_spec
+  ey_config
   factory_girl_rails (~> 4.2)
   faker
   fb_graph
