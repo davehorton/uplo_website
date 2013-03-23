@@ -20,7 +20,7 @@
       Bio:
       = current_user.biography
   .yield_edit.hide
-    = simple_form_for user, :remote => true do |u|
+    = simple_form_for current_user, :remote => true do |u|
       .form_wrapper.left
         .line First Name
         .line Last Name
