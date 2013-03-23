@@ -28,7 +28,7 @@
 .images-wrapper.wrapper.left
   #gallery-form-container.clearfix.hidden{:style => "display: none"}
   - if @images.blank?
-    .empty-data= 'There is no image in this gallery. Please add image.'
+    .empty-data= 'Upload an image to your gallery'
   - else
     = render :partial => 'images/photos_template', :locals => { :images => @images, :photos_per_line => 6, :photo_size => 'thumb' }
 = render_pagination(@images, {:controller => "images", :action => params[:action], :gallery_id => @gallery.id})

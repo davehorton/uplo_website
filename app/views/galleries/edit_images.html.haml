@@ -11,7 +11,7 @@
       %a#delete-gallery.left{ :href => gallery_path(@gallery), :data => { :method => :delete, :confirm => I18n.t("gallery.delete_confirm") } } Delete Gallery
       .separator.left= '|'
       #add-files.hidden-uploader.text.black.bold.font12.left{ :data => { :method => :get } }
-        Add Files
+        Add Photos
         = form_for :image, :url=>"/galleries/#{@gallery.id}/images", :method => 'post', :html => { :multipart => true, :id => 'fileupload' } do |f|
           = f.file_field :data, :multiple => true
   .line-separator.left
@@ -24,7 +24,7 @@
   .line-separator.left
   #images-panel.container.left
     - if @images.blank?
-      .empty-data= 'There is no image in this gallery. Please add image.'
+      .empty-data= 'Upload an image to your gallery'
     - else
       = render :partial => 'edit_photos', :locals => { :images => @images }
   .right
