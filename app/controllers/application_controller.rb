@@ -13,6 +13,10 @@ class ApplicationController < ActionController::Base
   before_filter :show_processing
   before_filter :set_current_tab, :check_banned_user
 
+  def result_hash
+    @result_hash ||= {}
+  end
+
   def render_not_found
     render_error_response("public/404.html", :not_found)
   end
