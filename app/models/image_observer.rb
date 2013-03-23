@@ -3,6 +3,10 @@ class ImageObserver < ActiveRecord::Observer
     update_avatar if image.owner_avatar_changed?
   end
 
+  def after_create(image)
+    image.user.update_column(:photo_processing, true)
+  end
+
   private
 
     def update_avatar(image)

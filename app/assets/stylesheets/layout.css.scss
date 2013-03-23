@@ -1310,9 +1310,9 @@ textarea { padding-top:5px; }
   .header {
     width: 470px;
     padding: 10px;
-    background: url("/assets/bg-popup-header.png") repeat-x;
+    background: image-url("bg-popup-header.png") repeat-x;
     .email-icon {
-      background-image: url('/assets/icon-email.png');
+      background-image: image-url('icon-email.png');
       width: 32px;
       height: 32px;
     }

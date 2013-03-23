@@ -65,7 +65,7 @@ class Api::UsersController < Api::BaseController
            @result[:user_info] = current_user
         else
           msg = []
-          key = ['data_file_size', 'data_content_type']
+          key = ['avatar_file_size', 'avatar_content_type']
           avatar.errors.messages.each do |k, v|
             msg << v if key.index(k.to_s)
           end

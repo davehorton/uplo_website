@@ -96,6 +96,11 @@
 .context-menu-item.icon-delete { background-image: image-url('page_white_delete.png'); }
 .context-menu-item.icon-add { background-image: image-url('page_white_add.png'); }
 .context-menu-item.icon-quit { background-image: image-url('door.png'); }
+.context-menu-item.icon-email { background-image: image-url('icon-email-16x16.png'); }
+.context-menu-item.icon-facebook { background-image: image-url('icon-facebook-16x16.png'); }
+.context-menu-item.icon-twitter { background-image: image-url('icon-twitter-16x16.png'); }
+.context-menu-item.icon-tumblr { background-image: image-url('icon-tumblr-16x16.png'); }
+.context-menu-item.icon-flickr { background-image: image-url('icon-flickr-16x16.png'); }
 
 /* vertically align inside labels */
 .context-menu-input > label > * { vertical-align: top; }

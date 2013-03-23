@@ -11,9 +11,9 @@
       %a#delete-gallery.left{ :href => gallery_path(@gallery), :data => { :method => :delete, :confirm => I18n.t("gallery.delete_confirm") } } Delete Gallery
       .separator.left= '|'
       #add-files.hidden-uploader.text.black.bold.font12.left{ :data => { :method => :get } }
-        Add Photos
-        = form_for :image, :url=>"/galleries/#{@gallery.id}/images", :method => 'post', :html => { :multipart => true, :id => 'fileupload' } do |f|
-          = f.file_field :data, :multiple => true
+        Upload Photo
+        = form_for @image, url: "/galleries/#{@gallery.id}/images", html: { id: 'fileupload' } do |f|
+          = f.file_field :image
   .line-separator.left
 
 .wrapper.left

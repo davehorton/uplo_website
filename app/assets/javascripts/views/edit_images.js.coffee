@@ -76,16 +76,16 @@ saveGridChanges = (callback) ->
       gallery_id: node.find('#image_gallery_id').val(),
       price: node.find('#image_price').val(),
       description: node.find('#image_description').val(),
-      album_cover: node.find('.album-cover').is(':checked'),
-      avatar: node.find('.user-avatar').is(':checked'),
-      keyword: node.find('#image_key_words').val()
+      gallery_cover: node.find('.album-cover').is(':checked'),
+      owner_avatar: node.find('.user-avatar').is(':checked'),
+      keyword: node.find('#image_keyword').val()
     }
   )
   $('#mask').modal()
   $.ajax({
     url: '/images/update_images',
     type: 'POST',
-    data: { images: $.parseJSON(data), gallery_id: $('#gallery_selector_id').val() },
+    data: { images: JSON.stringify(data), gallery_id: $('#gallery_selector_id').val() },
     dataType: 'json',
     success: (response) ->
       $('#images-panel').html response.items
@@ -244,7 +244,7 @@ $ ->
           $('#delete-gallery').attr('href', response.delete_url)
           $('#fileupload').attr('action', response.upload_url)
           $('#edit-gallery-popup').replaceWith response.edit_popup
-          $(@).html response.gallery_options
+          $('#gallery_selector_id').html response.gallery_options
           $('select').selectmenu({ style: 'dropdown' })
           $.modal.close()
       })

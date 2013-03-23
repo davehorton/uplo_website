@@ -1,4 +1,3 @@
-//local values: gallery
 = form_for(gallery, :html => {:id => 'frm-edit-gallery', :class => "gallery-form left"}) do |f|
   .info-line.left.no-padding-top
     .label.text.black.bold.font12.left= "Gallery Name &nbsp;<span style='color:red;'>*</span>".html_safe
@@ -7,7 +6,7 @@
     .label.text.black.bold.font12.left Description
     = f.text_area :description, :class => 'left', :value => gallery.description
   .info-line.left
-    .label.text.black.bold.font12.left Key Words
+    .label.text.black.bold.font12.left Tags
     = f.text_area :keyword, :class => 'left', :value => gallery.keyword
   .info-line.left.no-padding-bottom
     .label.text.black.bold.font12.left Permission

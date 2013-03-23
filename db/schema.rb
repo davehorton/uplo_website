@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130322035612) do
+ActiveRecord::Schema.define(:version => 20130323221058) do
 
   create_table "addresses", :force => true do |t|
     t.string   "first_name"
@@ -91,7 +91,7 @@ ActiveRecord::Schema.define(:version => 20130322035612) do
   add_index "image_tags", ["image_id"], :name => "index_image_tags_on_image_id"
 
   create_table "images", :force => true do |t|
-    t.string   "name",                                  :null => false
+    t.string   "name"
     t.text     "description"
     t.integer  "gallery_id",                            :null => false
     t.boolean  "gallery_cover",      :default => false

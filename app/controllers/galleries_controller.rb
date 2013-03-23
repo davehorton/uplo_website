@@ -97,7 +97,9 @@ class GalleriesController < ApplicationController
     end
 
     if !@gallery.nil?
+      @image = Image.new(gallery_id: @gallery.id)
       @images = @gallery.images.paginate_and_sort(filtered_params)
+
       if request.xhr?
         pagination = render_to_string :partial => 'pagination',
           :locals => {  :source => @images, :params => { :controller => "galleries",

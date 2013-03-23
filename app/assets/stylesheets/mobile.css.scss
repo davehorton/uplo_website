@@ -262,20 +262,20 @@ textarea { padding-top:5px; }
 
 .icon {
   &.edit {
-    background: url("/assets/icon-edit.jpg") no-repeat scroll 0 0 transparent;
+    background: image-url("icon-edit.jpg") no-repeat scroll 0 0 transparent;
     height: 9px;
     width: 9px;
     margin-top: 1px;
     margin-right: 3px;
   }
   &.check {
-    background: url("/assets/icon-check.png") no-repeat scroll 0 0 transparent;
+    background: image-url("icon-check.png") no-repeat scroll 0 0 transparent;
     height: 12px;
     width: 15px;
     margin-right: 3px;
   }
   &.loading-small {
-    background: url("/assets/loading-small.gif") no-repeat scroll 0 0 transparent;
+    background: image-url("loading-small.gif") no-repeat scroll 0 0 transparent;
     height: 32px;
     width: 32px;
   }
@@ -301,14 +301,14 @@ textarea { padding-top:5px; }
         .cvv { margin-left: 5px;}
       }
       .close {
-        background: url("/assets/icon-close.png") no-repeat;
+        background: image-url("icon-close.png") no-repeat;
         height: 16px;
         width: 16px;
       }
     }
   }
   .tail {
-    background: url("/assets/icon-cvv-arrow.png") no-repeat;
+    background: image-url("icon-cvv-arrow.png") no-repeat;
     width: 34px;
     height: 18px;
     margin-left: 140px;

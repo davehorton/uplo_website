@@ -77,40 +77,37 @@ class ImagesController < ApplicationController
   end
 
   def create
-    image = current_user.images.build(params[:image])
+    gallery = Gallery.find(params[:gallery_id])
+    image_params = params[:image][:image]
+    image = gallery.images.build(name: image_params.original_filename, image: image_params)
+    image.user = current_user
 
-    if !image.save
-      msg = []
-      key = ['data_file_size', 'data_content_type', 'base']
-      image.errors.messages.each do |k, v|
-        msg << v if key.index(k.to_s)
-      end
-      if msg.size == 0
-        msg = 'Cannot save this image'
-      else
-        msg = msg.join(' and ')
-      end
-      result = { :success => false, :msg => msg }
-    else
-      current_user.update_attribute(:photo_processing , true)
-      gallery = Gallery.find_by_id params[:gallery_id]
+    if image.save
       images = gallery.images.unflagged.paginate_and_sort(filtered_params)
-      pagination = render_to_string :partial => 'pagination',
-        :locals => {
-          :source => images,
-          :params => {
-            :controller => 'galleries',
-            :action => 'edit_images',
-            :gallery_id => gallery.id },
-          :classes => 'text left' }
-      item = render_to_string :partial => 'images/edit_photo_template',
-                              :locals => { :image => image }
-      gal_options = self.class.helpers.gallery_options(current_user.id, gallery.id, true)
-      result = {:success => true, :item => item,
-                :pagination => pagination, :gallery_options => gal_options }
-    end
 
-    render :json => result, :content_type => 'text/plain'
+      pagination = render_to_string(
+        partial: 'pagination',
+        locals: {
+          source: images,
+          params: {
+            controller: 'galleries',
+            action:     'edit_images',
+            gallery_id: gallery.id
+          },
+          classes: 'text left'
+        })
+
+      item = render_to_string(
+        partial: 'images/edit_photo_template',
+        locals: { image: image })
+
+      gal_options = self.class.helpers.gallery_options(current_user.id, gallery.id, true)
+
+      render json: { success: true, item: item, pagination: pagination, gallery_options: gal_options },
+             content_type: 'text/plain'
+    else
+      render(json: { msg: image.errors.full_messages.join(', ') }, content_type: 'text/plain') and return
+    end
   end
 
   def switch_like
@@ -252,12 +249,12 @@ class ImagesController < ApplicationController
   end
 
   def update_images
-    if !Gallery.exists?({:id => params[:gallery_id].to_i, :user_id => current_user.id})
-      flash[:error] = "You cannot edit another member's gallery!"
-      redirect_to :controller => :galleries, :actions => :index
+    if !Gallery.exists?(id: params[:gallery_id], user_id: current_user.id)
+      render(json: { msg: "You cannot edit another member's gallery!" }) and return
     end
+
     error = ''
-    data = JSON.parse params[:images]
+    data = JSON.parse(params[:images])
     Image.transaction do
       data.each do |img|
         id = img.delete 'id'
