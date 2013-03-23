@@ -102,6 +102,7 @@ class Admin::FlaggedUsersController < Admin::AdminController
           if user.remove
             result[:status] = 'ok'
             result[:message] = I18n.t("admin.notice_remove_user_succeeded")
+            result[:redirect_url] = admin_members_path
           else
             result[:status] = 'error'
             result[:message] = I18n.t("admin.error_remove_user_failed")
