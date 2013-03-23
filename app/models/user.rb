@@ -112,11 +112,11 @@ class User < ActiveRecord::Base
     if sort_field = params[:sort_field]
       user_params[:sort_field] = case sort_field
         when 'signup_date' then
-          'created_at'
+          'users.created_at'
         when 'username' then
-          'username'
+          'users.username'
         when 'num_of_likes' then
-          'image_likes_count'
+          'users.image_likes_count'
         else
           sort_field
         end

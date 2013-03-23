@@ -4,9 +4,9 @@ module ImageConstants
   SORT_OPTIONS = { :spotlight => 'spotlight', :view => 'views', :recent => 'recent'}
 
   SORT_CRITERIA = {
-    SORT_OPTIONS[:view] => 'pageview DESC',
-    SORT_OPTIONS[:recent] => 'created_at DESC',
-    SORT_OPTIONS[:spotlight] => 'promote DESC'
+    SORT_OPTIONS[:view] => 'images.pageview desc',
+    SORT_OPTIONS[:recent] => 'images.created_at desc',
+    SORT_OPTIONS[:spotlight] => 'images.promote desc'
   }
 
   FILTER_OPTIONS = ['date_uploaded', 'num_of_views', 'num_of_likes']

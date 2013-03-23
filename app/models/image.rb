@@ -63,11 +63,11 @@ class Image < ActiveRecord::Base
     if sort_field = params[:sort_field]
       image_params[:sort_field] = case sort_field
         when 'date_uploaded' then
-          'created_at'
+          'images.created_at'
         when 'num_of_views' then
-          'pageview'
+          'images.pageview'
         when 'num_of_likes' then
-          'image_likes_count'
+          'images.image_likes_count'
         else
           sort_field
         end
