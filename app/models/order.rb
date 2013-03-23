@@ -31,7 +31,7 @@ class Order < ActiveRecord::Base
     :newyork => {:state_code => 'NY', :tax => 0.08875}
   }
 
-  default_scope order('transaction_date desc')
+  default_scope order('orders.transaction_date desc')
   scope :completed, where(transaction_status: TRANSACTION_STATUS[:complete])
 
   validates_length_of :cvv, :in => 3..4, :allow_nil => true

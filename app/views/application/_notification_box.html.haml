@@ -15,7 +15,7 @@
         .header.left
           .left
           .title.text.black.bold.font12.left{:style => "font-size:12px"}
-            UPLO Notification
+            Message from UPLO
           #notification_close.right
         .container.left
           .main-panel.left.messages
@@ -29,22 +29,22 @@
   - if flash.blank?
     - flash_class = ""
     - style = "display: none"
-    
+
   .flash{:class => flash_class, :style => style}
     - flash.each do |key, value|
-      .box{:class => "box-#{key}"}= value
-    
+      .box{:class => "box-#{key}"}= value unless key == sticky_flash_message_key
+
     / Show the box template
     .notification-container.hidden.fixed-right
       .notification.right
         .header.left
           .left
           .title.text.black.bold.font12.left{:style => "font-size:12px"}
-            UPLO Notification
+            Message from UPLO
           #notification_close.right
         .container.left
           .main-panel.left.messages
-          
+
 - content_for :js do
   = javascript_tag do
     :erb

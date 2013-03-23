@@ -3,6 +3,8 @@
   %meta{:property=>"og:description", :content=>"#{@gallery.description}" }
   %meta{:property=>"og:image", :content=>"#{gallery_cover_image_url(@gallery)}" }
 
+- content_for :body_class, 'public'
+
 - content_for :right_content do
   #gallery-section.left
     .text.black.font18.bold= @gallery.name.truncate(30)

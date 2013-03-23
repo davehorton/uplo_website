@@ -11,7 +11,7 @@ class ApplicationController < ActionController::Base
 
   before_filter :authenticate_user!
   before_filter :show_processing
-  before_filter :set_current_tab, :check_banned_user, :set_auto_hide
+  before_filter :set_current_tab, :check_banned_user
 
   def render_not_found
     render_error_response("public/404.html", :not_found)
@@ -47,6 +47,16 @@ class ApplicationController < ActionController::Base
     "/" # <- Path you want to redirect the user to.
   end
 
+  def sticky_flash_message_key
+    :sticky_flash_message
+  end
+  helper_method :sticky_flash_message_key
+
+  def sticky_flash_message?
+    @sticky_flash_message ||= flash.delete(sticky_flash_message_key)
+  end
+  helper_method :sticky_flash_message?
+
   protected
 
     # To show notification popup or not.
@@ -67,22 +77,13 @@ class ApplicationController < ActionController::Base
       flash.delete :processing_photo
       if current_user && current_user.images.processing.any?
         flash[:processing_photo] = "Your photo is being processed. This may take a few moments."
-        flash[:auto_hide_notification] = false
+        flash[:sticky_flash_message] = true
       end
     end
 
     def set_current_tab
       "please override this method in your sub class"
       # @current_tab = "home"
-    end
-
-    def set_auto_hide
-      @auto_hide_notification = true
-
-      if flash[:auto_hide_notification].present?
-        @auto_hide_notification = flash[:auto_hide_notification]
-        flash.delete(:auto_hide_notification)
-      end
     end
 
     def check_banned_user

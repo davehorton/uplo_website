@@ -1,4 +1,19 @@
 module ApplicationHelper
+  # this helper generates the body tag for a page or layout, e.g.
+  #
+  # <body id="[controller_name]-body" class="[specified classes]">
+  # ...content...
+  # </body>
+  #
+  # options:
+  #  id: ID for body tag, defaults to "body-[controller_name]".
+  #  class: class (or classes) for the body tag, will not be added unless specified.
+  def body_tag(opts = {}, &block)
+    opts[:id] = content_for?(:body_id) ? content_for(:body_id) : "body-"+controller_name.dasherize
+    opts[:class] = content_for(:body_class) if content_for?(:body_class)
+    content_tag(:body, opts, &block)
+  end
+
   def yield_content!(content_key)
     view_flow.content.delete(content_key)
   end

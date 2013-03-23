@@ -25,10 +25,10 @@ class Image < ActiveRecord::Base
     :message => 'File type must be one of [.jpeg, .jpg]' }, :on => :create
   validate :validate_quality, :on => :create
 
-  before_create :init_tier, :set_as_cover_if_first_one
+  before_create :init_tier, :set_as_cover_if_first_one, :set_user
   before_post_process :init_image_info
 
-  default_scope order('created_at desc')
+  default_scope order('images.created_at desc')
   scope :removed,     where(removed: true)
   scope :not_removed, where(removed: false)
 
@@ -68,6 +68,8 @@ class Image < ActiveRecord::Base
           'pageview'
         when 'num_of_likes' then
           'image_likes_count'
+        else
+          sort_field
         end
     end
 
@@ -203,7 +205,11 @@ class Image < ActiveRecord::Base
     if data_processing
       "/assets/gallery-thumb.jpg"
     else
-      self.image.expiring_url(s3_expire_time, options)
+      storage = Rails.application.config.paperclip_defaults[:storage]
+      case storage
+        when :s3 then self.image.expiring_url(s3_expire_time, options)
+        when :filesystem then image.url
+      end
     end
   end
 
@@ -268,7 +274,7 @@ class Image < ActiveRecord::Base
 
   def raw_purchased_info(item_paging_params = {})
     result = {:data => [], :total => 0}
-    order_ids = orders.complete.map(&:id)
+    order_ids = orders.completed.map(&:id)
 
     sold_items = []
 
@@ -284,7 +290,7 @@ class Image < ActiveRecord::Base
 
   def get_purchased_info(item_paging_params = {})
     result = {:data => [], :total_quantity => 0, :total_sale => 0}
-    order_ids = self.orders.complete.map(&:id)
+    order_ids = self.orders.completed.map(&:id)
 
     if order_ids.any?
       sold_items = LineItem.paginate(item_paging_params.merge(sort_expression: 'purchased_date desc')).
@@ -432,5 +438,9 @@ class Image < ActiveRecord::Base
 
     def set_as_cover_if_first_one
       self.gallery_cover = true unless Image.exists?(gallery_id: gallery_id, gallery_cover: true)
+    end
+
+    def set_user
+      self.user = gallery.user
     end
 end

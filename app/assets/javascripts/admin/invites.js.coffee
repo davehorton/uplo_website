@@ -14,13 +14,13 @@ $ ->
       success: (response) ->
         if response.success
           $('#emails-container').html(response.emails)
-          $('#email_invitation_warning').html('The invitation has been sent!')
+          $('#email_invitation_warning').html('Invite(s) sent!')
           $.modal.close()
         else
           $('#email_invitation_warning').html(response.msg)
           $.modal.close()
       error: ->
-        $('#email_invitation_warning').html('Cannot invite this email right now! Please try again later!')
+        $('#email_invitation_warning').html('Problem sending invite.')
         $.modal.close()
     })
 
@@ -34,13 +34,13 @@ $ ->
       success: (response) ->
         if response.success
           $('#emails-container').html(response.emails)
-          $('#email_invitation_warning').html('The invitation has been sent!')
+          $('#email_invitation_warning').html('Invite(s) sent!')
           $.modal.close()
         else
           $('#email_invitation_warning').html(response.msg)
           $.modal.close()
       error: ->
-        $('#email_invitation_warning').html('Cannot invite this email right now! Please try again later!')
+        $('#email_invitation_warning').html('Problem sending invite.')
         $.modal.close()
     })
 
@@ -57,6 +57,6 @@ $ ->
         $('#inv_message').val('');
         $.modal.close()
       error: ->
-        $('#email_invitation_warning').html('Cannot invite this email right now! Please try again later!')
+        $('#email_invitation_warning').html('Problem sending invite.')
         $.modal.close()
     })

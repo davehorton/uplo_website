@@ -16,7 +16,7 @@
     = yield :head
     = render(partial: "google/analytics") if Rails.env.production?
 
-  %body
+  = body_tag do
     #fb-root
     :erb
       <script>(function(d, s, id) {

@@ -2,7 +2,8 @@ class Mailchimp
 
 	UPLO_LIST_ID = "1fd9693012"
 
-	def self.subscribe_user(user)
+	def self.subscribe_user(user_id)
+		user = User.unscoped.find(user_id)
 		gibbon.list_subscribe({
 			:id => UPLO_LIST_ID,
 			:email_address => user.email,

@@ -4,15 +4,15 @@
     %meta{:content => "text/html; charset=UTF-8", "http-equiv" => "Content-Type"}/
   %body
     %p
-      Dear Sir/Madam,
+      Greetings!
     %p
-      You have an invitation from UPLO.
+      You've been invited to join UPLO.
     - unless @inv.message.blank?
-      %p With a message:
-      %p{:style => 'font-style: italic; color: #b3b3b3;'}= @inv.message
+      %p Message:
+      = @inv.message
     %p
-      %span Click this
-      %a{:href => "#{ url_for(:action=>"new", :controller=>"users/registrations", :token => @inv.token, :only_path => false)}"} link
-      %span to register an UPLO account.
+      %span Click
+      %a{:href => "#{ url_for(:action=>"new", :controller=>"users/registrations", :token => @inv.token, :only_path => false)}"} this link
+      %span to sign up for a free UPLO account.
     %p
-      Best regards.
+      Best regards!

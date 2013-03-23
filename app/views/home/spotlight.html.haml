@@ -6,7 +6,7 @@
     .text.font16.line12.left Recent Uploads
     %a.text.font10.left{:href => "#{url_for(:controller => 'home', :action => 'browse')}", :style => 'margin: 2px 0 0 20px;' } +VIEW ALL
   .clear
-  #recent-images.images-wrapper
+  #recent-images.images-wrapper.clearfix
     - if @recent_images.blank?
       .empty-data= "There is no image. Please add image."
     - else

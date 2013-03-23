@@ -1,7 +1,12 @@
+require 'sidekiq/web'
+
 Uplo::Application.routes.draw do
 
   # WEB ROUTING
   root :to => "home#index"
+
+  resources :invitations, only: [:create]
+
   get "shopping_cart/show"
   post "shopping_cart/update_cart"
   post "shopping_cart/add_to_cart"
@@ -10,7 +15,6 @@ Uplo::Application.routes.draw do
   get "shopping_cart/checkout"
 
   get "orders/index"
-
   get "orders", :to => "orders#index"
   get "browse", :to => "home#browse"
   get "search", :to => "home#search"
@@ -103,8 +107,6 @@ Uplo::Application.routes.draw do
     get 'set_avatar', :to => 'users#set_avatar'
     put 'update_profile_info', :to => 'users#update_profile_info'
     get 'unlike_image', :to => 'users#unlike_image'
-    post 'request_invitation', :to => 'users#request_invitation'
-
   end
 
   # SOCIAL NETWORK
@@ -224,5 +226,11 @@ Uplo::Application.routes.draw do
       get 'get_moulding', :to => 'users#get_moulding'
       post 'request_invitation', :to => 'users#request_invitation'
     end
+  end
+
+  # allow sidekiq dashboard access to admins only
+  constraint = lambda { |request| Rails.env.development? || (request.env["warden"].authenticate? and request.env['warden'].user.admin?) }
+  constraints constraint do
+    mount Sidekiq::Web => '/sidekiq'
   end
 end

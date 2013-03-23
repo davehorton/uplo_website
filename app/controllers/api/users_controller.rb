@@ -17,21 +17,12 @@ class Api::UsersController < Api::BaseController
 
   # params: email
   def request_invitation
-    @result[:success] = false
-    if !params.has_key?('email') || params[:email].blank?
-      @result[:msg] = "Please input an email first"
-    elsif (User::EMAIL_REG_EXP =~ params[:email]).nil?
-      @result[:msg] = 'The email is invalid'
-    elsif Invitation.exists?(:email => params[:email]) || User.exists?(:email => params[:email])
-      @result[:msg] = 'The email has been used'
+    invite_request = Invitation.new(params[:email])
+    if invite_request.save
+      @result[:success] = true
+      @result[:msg] = "Your request has been sent"
     else
-      req = Invitation.new(params[:email])
-      if req.save
-        @result[:success] = true
-        @result[:msg] = "Your request has been sent"
-      else
-        @result[:msg] = req.errors.full_messages[0]
-      end
+      @result[:msg] = invite_request.errors.full_messages[0]
     end
     render :json => @result
   end

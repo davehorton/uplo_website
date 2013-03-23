@@ -5,42 +5,35 @@ class Admin::InvitesController < Admin::AdminController
 
   def confirm_request
     params[:ids].each do |id|
-      invitation_request = Invitation.find_by_id(id)
-
-      if invitation_request.nil?
-        result = { msg: 'This request does not exist anymore.' }
-      else
-        invitation_request.invite!
-        result[:success] = true
-
-        emails = render_to_string :partial => 'emails_for_invite',
-          :locals => { :emails => Invitation.requested.paginate_and_sort(filtered_params) }
-        result = { :success => true, :emails => emails }
-      end
+      invitation_request = Invitation.find(id)
+      invitation_request.invite!
     end
 
-    render(json: result)
+    emails = render_to_string(
+      partial: 'emails_for_invite',
+      locals: { emails: Invitation.requested.paginate_and_sort(filtered_params) }
+    )
+
+    render json: { success: true, emails: emails }
+
+  rescue ActiveRecord::RecordNotFound
+    render json: { msg: 'This request does not exist anymore.' }
   end
 
   def send_invitation
-    result = { :success => false }
-    if !params[:inv].has_key?('emails') || params[:inv]['emails'].blank?
-      result[:msg] = 'Input at least 1 email first!'
-    else
-      invs = []
-      msg = ''
-      Invitation.transaction do
-        emails = params[:inv]['emails'].split(',')
-        emails.each do |email|
-          inv = Invitation.create(email: email, message: params[:inv][:message])
+    if params[:inv][:emails].present?
+      params[:inv][:emails].split(',').each do |email|
+        Invitation.transaction do
+          inv = Invitation.where(email: email).first_or_create(message: params[:inv][:message])
           inv.invite!
-          invs << inv.id
-          result = { :success => true, :msg => 'Invitations have been sent!' }
         end
       end
+      result = { success: true, msg: 'Invite(s) sent!' }
+    else
+      result = { msg: 'Enter at least one email address' }
     end
 
-    render :json => result
+    render json: result
   end
 
   protected

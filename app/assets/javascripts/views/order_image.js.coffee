@@ -2,8 +2,9 @@ computePrice = ->
   size = $('#line_item_size').val()
   moulding = $('#line_item_moulding').val()
   quantity = $('#line_item_quantity').val()
-  price = moulding_price[moulding][tier][size] * quantity
-  $('#total .number').text "$#{price.toFixed(2)}"
+  if (moulding_price?)
+    price = moulding_price[moulding][tier][size] * quantity
+    $('#total .number').text "$#{price.toFixed(2)}"
 
 refreshMouldingOptions = (size) ->
   has_constrain = false

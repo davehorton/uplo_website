@@ -97,152 +97,154 @@ $color-line-separator: #cccccc;
   width: 472px;
 }
 
-/* select buttons */
-.ui-selectmenu, .ui-selectmenu-menu-dropdown { min-width: 194px; max-width: 194px; }
 #order_expiration_1i-button { margin-left: 3px; }
 #order_expiration_1i-button, #order_expiration_1i-menu, #order_expiration_2i-menu, #order_expiration_2i-button {
   min-width: 92px;
   max-width: 92px;
 }
 
-/*==================================================================================*/
-/* CLASS */
-/*==================================================================================*/
-.cart-details {
-  font-size: 11.5px;
-  line-height: 22px;
-  .cell {
-    width: 120px;
-    text-align: center;
-    &.preview {
-      width: 360px;
-      margin: 0;
-      text-align: left;
+.order-page {
+
+  /* select buttons */
+  .ui-selectmenu, .ui-selectmenu-menu-dropdown { min-width: 194px; max-width: 194px; }
+
+  .cart-details {
+    font-size: 11.5px;
+    line-height: 22px;
+    .cell {
+      width: 120px;
+      text-align: center;
+      &.preview {
+        width: 360px;
+        margin: 0;
+        text-align: left;
+      }
+      &.subtotal {
+        text-align: right;
+      }
     }
-    &.subtotal {
-      text-align: right;
+    .line {
+        padding: 10px 0;
+        border-bottom: 1px solid $color-line-separator;
+        .cell {
+          line-height: 66px;
+        }
+        .preview {
+          a:link {
+            font-weight: normal;
+            text-decoration: none;
+          }
+          .item-info {
+            margin: 22px 0 10px 10px;
+            .edit-section, .delete-section { cursor: pointer; }
+            .edit { margin-top: 4px; }
+            .delete { margin-left: 10px; }
+            .name { width: 280px; }
+          }
+        }
     }
-  }
-  .line {
-      padding: 10px 0;
+    .header {
+      padding: 10px 0 5px;
+      text-shadow: 0 0 1px #c3c3c3;
       border-bottom: 1px solid $color-line-separator;
       .cell {
-        line-height: 66px;
+        margin: 0;
       }
-      .preview {
-        a:link {
-          font-weight: normal;
-          text-decoration: none;
-        }
-        .item-info {
-          margin: 22px 0 10px 10px;
-          .edit-section, .delete-section { cursor: pointer; }
-          .edit { margin-top: 4px; }
-          .delete { margin-left: 10px; }
-          .name { width: 280px; }
-        }
-      }
-  }
-  .header {
-    padding: 10px 0 5px;
-    text-shadow: 0 0 1px #c3c3c3;
-    border-bottom: 1px solid $color-line-separator;
-    .cell {
-      margin: 0;
     }
-  }
-  .footer {
-    margin-top: 10px;
-    width: 100%;
-    .summary { margin: 10px 0; }
-    .cell { margin-top: 0; }
-  }
-}
-
-.actions {
-  margin: 10px 0 20px 0;
-  a.shopping {
-    font-weight: normal;
-    text-decoration: underline;
-    line-height: 28px;
-  }
-  .checkout {
-    background: image-url("btn-checkout.jpg") no-repeat scroll 0 0 transparent;
-    height: 28px;
-    width: 137px;
-  }
-}
-
-.option {
-  margin-bottom: 15px;
-  .header {
-    line-height: 31px;
-    padding-left: 10px;
-    background: image-url("option-header-bg.png") repeat-x scroll 0 0 transparent;
-    border-bottom: 1px solid $color-line-separator;
-    border: {
-      top-left-radius: 5px;
-      top-right-radius: 5px;
-    }
-  }
-}
-
-.order_summary {
-  margin: 20px 30px 0 0;
-  width: 300px;
-  input {
-    width: 200px;
-  }
-  .header{
-    .italic {
-      margin-top: 5px;
-    }
-  }
-  .inputs{
-    width: 100%;
-    .info {
+    .footer {
       margin-top: 10px;
-      height: 28px;
-      label {
-        width: 94px;
-        margin: 8px 10px 8px 0;
-        font-size: 11px;
-      }
-      input {
-        width: 183px;
-        font-size: 12px;
-      }
-    }
-    .simple_form {
-      label {
-        width: 110px;
-      }
-      input[type=text], input[type=email], input[type=password] {
-        width: 176px;
-      }
+      width: 100%;
+      .summary { margin: 10px 0; }
+      .cell { margin-top: 0; }
     }
   }
-  .actions{
-    float:left;
-  }
-}
 
-.block {
-  width: 100%;
-  padding: 10px 0;
-  .line {
-    padding: 0 10px;
-    width: 260px;
-    &.name {
-      padding-bottom: 8px;
+  .actions {
+    margin: 10px 0 20px 0;
+    a.shopping {
+      font-weight: normal;
+      text-decoration: underline;
+      line-height: 28px;
+    }
+    .checkout {
+      background: image-url("btn-checkout.jpg") no-repeat scroll 0 0 transparent;
+      height: 28px;
+      width: 137px;
     }
   }
-}
-.summary {
-  .text {
-    .right {
-      width: 120px;
-      text-align: right;
+
+  .option {
+    margin-bottom: 15px;
+    .header {
+      line-height: 31px;
+      padding-left: 10px;
+      background: image-url("option-header-bg.png") repeat-x scroll 0 0 transparent;
+      border-bottom: 1px solid $color-line-separator;
+      border: {
+        top-left-radius: 5px;
+        top-right-radius: 5px;
+      }
     }
   }
+
+  .order_summary {
+    margin: 20px 30px 0 0;
+    width: 300px;
+    input {
+      width: 200px;
+    }
+    .header{
+      .italic {
+        margin-top: 5px;
+      }
+    }
+    .inputs{
+      width: 100%;
+      .info {
+        margin-top: 10px;
+        height: 28px;
+        label {
+          width: 94px;
+          margin: 8px 10px 8px 0;
+          font-size: 11px;
+        }
+        input {
+          width: 183px;
+          font-size: 12px;
+        }
+      }
+      .simple_form {
+        label {
+          width: 110px;
+        }
+        input[type=text], input[type=email], input[type=password] {
+          width: 176px;
+        }
+      }
+    }
+    .actions{
+      float:left;
+    }
+  }
+
+  .block {
+    width: 100%;
+    padding: 10px 0;
+    .line {
+      padding: 0 10px;
+      width: 260px;
+      &.name {
+        padding-bottom: 8px;
+      }
+    }
+  }
+  .summary {
+    .text {
+      .right {
+        width: 120px;
+        text-align: right;
+      }
+    }
+  }
+
 }

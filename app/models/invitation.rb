@@ -2,11 +2,11 @@ class Invitation < ActiveRecord::Base
   include ::Shared::QueryMethods
 
   before_validation :strip_email
-  validates :email, presence: true, format: { with: Devise.email_regexp }, uniqueness: { case_sensitive: false }
+  validates :email, presence: true, format: { with: Devise.email_regexp }, uniqueness: { case_sensitive: false, message: 'is already associated with an invite.' }
 
   before_create :set_token
 
-  default_scope order('created_at desc')
+  default_scope order('invitations.created_at desc')
   scope :requested, where(invited_at: nil)
 
   def invite!

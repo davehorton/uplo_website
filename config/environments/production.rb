@@ -1,7 +1,7 @@
 Uplo::Application.configure do
   # Settings specified here will take precedence over those in config/application.rb
 
-  DOMAIN = 'uplo.com'
+  DOMAIN = 'preview.uplo.com'
 
   # Code is not reloaded between requests
   config.cache_classes = true

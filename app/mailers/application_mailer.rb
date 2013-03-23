@@ -1,3 +1,3 @@
 class ApplicationMailer < ActionMailer::Base
-  default :from => "Uplo <uplo.no-reply@uplo.com>"
+  default :from => "Uplo <support@uplo.com>"
 end

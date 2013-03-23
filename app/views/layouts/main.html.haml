@@ -17,7 +17,7 @@
     = yield :head
     = render(partial: "google/analytics") if Rails.env.production?
 
-  %body
+  = body_tag do
     #header
       .wrapper
         %a.left#logo{:href => "/"}
@@ -55,11 +55,14 @@
       #bottom.panel
         .line-separator
         .text.light-gray.font11.line18
-          Copyright &copy; 2013 UPLO. All rights reserved
+          Copyright &copy; #{Date.today.year} UPLO. All rights reserved
         .text.black.font11.line18.center
           = link_to "Payment Policy", "/payment", :style => "font-weight:normal"
           = "/"
           = link_to "Terms of Service", "/terms", :style => "font-weight:normal"
+          - if current_user && current_user.admin?
+            = "/"
+            = link_to "Admin", "/admin"
         #mask.hide
           = image_tag('loading.gif')
 
@@ -69,5 +72,5 @@
       $('body').delegate('.bubble .close', 'click', function(e){ $.modal.close() });
       $('select[id!=my_links]').selectmenu({style:'dropdown'});
       $('#my_links').selectmenu({ style: 'dropdown', select: function(e, obj){ window.location = obj.value; }});
-      - if (@auto_hide_notification)
+      - unless sticky_flash_message?
         helper.auto_hide_flash_message();

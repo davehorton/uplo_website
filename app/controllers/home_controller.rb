@@ -16,11 +16,11 @@ class HomeController < ApplicationController
 
   def index
     session[:back_url] = url_for(:controller => 'home', :action => "browse") if session[:back_url].nil?
-    @images = Image.search_scope(current_user).spotlight.paginate_and_sort(filtered_params)
+    @images = Image.spotlight.paginate_and_sort(filtered_params)
     if user_signed_in?
       @current_views = 'recent images'
-      filtered_params[:sort_direction] = 'DESC'
-      filtered_params[:sort_field] = "updated_at"
+      filtered_params[:sort_direction] = 'desc'
+      filtered_params[:sort_field] = "images.updated_at"
       @recent_images = Image.visible_everyone.paginate_and_sort(filtered_params)
       render :template => 'home/spotlight'
     else
@@ -30,16 +30,16 @@ class HomeController < ApplicationController
 
   def browse
     @current_views = IMAGE_SORT_VIEW[Image::SORT_OPTIONS[:recent]]
-    filtered_params[:sort_direction] = 'DESC'
-    filtered_params[:sort_field] = "created_at"
+    filtered_params[:sort_direction] = 'desc'
+    filtered_params[:sort_field] = "images.created_at"
     @data = Image.visible_everyone.paginate_and_sort(filtered_params)
   end
 
   def spotlight
     @current_views = IMAGE_SORT_VIEW[Image::SORT_OPTIONS[:spotlight]]
-    filtered_params[:sort_direction] = 'DESC'
-    filtered_params[:sort_field] = "created_at"
-    @data = Image.search_scope(current_user).spotlight.paginate_and_sort(filtered_params)
+    filtered_params[:sort_direction] = 'desc'
+    filtered_params[:sort_field] = "images.created_at"
+    @data = Image.spotlight.paginate_and_sort(filtered_params)
     render :template => 'home/browse'
   end
 
@@ -63,11 +63,11 @@ class HomeController < ApplicationController
       filtered_params[:sort_direction] = 'DESC'
       case params[:sort_by]
       when "recent"
-        filtered_params[:sort_field] = "created_at"
+        filtered_params[:sort_field] = "images.created_at"
       when "views"
-        filtered_params[:sort_field] = "pageview"
+        filtered_params[:sort_field] = "images.pageview"
       when "spotlight"
-        filtered_params[:sort_field] = "promote"
+        filtered_params[:sort_field] = "images.promote"
       end
 
       @data = Image.search_scope(params[:query]).

@@ -267,6 +267,6 @@ $ ->
   $("#user_first_name").keypress (event) -> helper.prevent_exceed_characters(@, event.charCode, 30)
   $("#user_last_name").keypress (event) -> helper.prevent_exceed_characters(@, event.charCode, 30)
   $("#user_first_name").blur ->
-    helper.check_less_than_characters(@.value, 2, -> helper.show_notification('First name must be at least 2 characters!'))
+    helper.check_less_than_characters(@.value, 1, -> helper.show_notification('First name must be at least 2 characters!'))
   $("#user_last_name").blur ->
-    helper.check_less_than_characters(@.value, 2, -> helper.show_notification('Last name must be at least 2 characters!'))
+    helper.check_less_than_characters(@.value, 1, -> helper.show_notification('Last name must be at least 2 characters!'))

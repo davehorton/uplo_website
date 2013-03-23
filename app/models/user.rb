@@ -8,7 +8,6 @@ class User < ActiveRecord::Base
 
   attr_accessor :force_submit, :login, :skip_state_changed_tracking
 
-  EMAIL_REG_EXP = /^([0-9a-zA-Z]([-.\w]*[0-9a-zA-Z])*@(([0-9a-zA-Z])+([-\w]*[0-9a-zA-Z])*\.)+[a-zA-Z]{2,9})$/i
   GENDER_MALE = "0"
   MIN_FLAGGED_IMAGES = 3
   FILTER_OPTIONS = ['signup_date', 'username', 'num_of_likes']
@@ -62,8 +61,10 @@ class User < ActiveRecord::Base
   validates :password, :presence => true, :confirmation => true, :if => :check_password?
   validates_format_of :website, :allow_blank => true,
           :with => /(^$)|(^((http|https):\/\/){1}[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(([0-9]{1,5})?\/.*)?$)/i
-  validates_uniqueness_of :username, :message => 'must be unique'
-  validates_length_of :first_name, :last_name, :in => 2..30, :message => 'must be 2 - 30 characters in length'
+  validates_uniqueness_of :username, :message => 'is taken. Choose another one.'
+
+  validates_length_of :first_name, :in => 1..30
+  validates_length_of :last_name,  :in => 1..30
   validates_confirmation_of :paypal_email, :message => "should match confirmation"
 
   validates_length_of :cvv, :in => 3..4, :allow_nil => true
@@ -73,10 +74,7 @@ class User < ActiveRecord::Base
   validates_presence_of :paypal_email_confirmation, :if => :paypal_email_changed?
   validates :paypal_email, :email => true, :if => :paypal_email_changed?
 
-  after_create :cleanup_invitation
-  after_create :subscribe
-
-  default_scope where(removed: false, banned: false).order('username asc')
+  default_scope where(removed: false, banned: false).order('users.username asc')
 
   scope :confirmed_users, where("confirmed_at IS NOT NULL")
   scope :removed_users, where(removed: true)
@@ -119,6 +117,8 @@ class User < ActiveRecord::Base
           'username'
         when 'num_of_likes' then
           'image_likes_count'
+        else
+          sort_field
         end
     end
 
@@ -130,16 +130,6 @@ class User < ActiveRecord::Base
     conditions = warden_conditions.dup
     if login = conditions.delete(:login)
       where(conditions).where(["lower(username) = :value OR lower(email) = :value", { :value => login.downcase }]).first
-    else
-      where(conditions).first
-    end
-  end
-
-  # Override Devise method so that User can log in with username or email.
-  def self.find_for_database_authentication(warden_conditions)
-    conditions = warden_conditions.dup
-    if login = conditions.delete(:login).downcase
-      where(conditions).where('$or' => [ {:username => /^#{Regexp.escape(login)}$/i}, {:email => /^#{Regexp.escape(login)}$/i} ]).first
     else
       where(conditions).first
     end
@@ -513,13 +503,5 @@ class User < ActiveRecord::Base
 
     def check_password?
       (!self.force_submit && self.password_required?)
-    end
-
-    def cleanup_invitation
-      Invitation.destroy_all(:email => self.email)
-    end
-
-    def subscribe
-      Mailchimp.subscribe_user(self)
     end
 end

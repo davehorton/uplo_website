@@ -16,7 +16,7 @@
     = yield :head
     = render(partial: "google/analytics") if Rails.env.production?
 
-  %body
+  = body_tag do
     #wrapper
       #header.blue-gradient-reverse
         #logo-wrapper
@@ -42,20 +42,8 @@
         .content-wrapper.clearfix
           = yield
 
-        #contact-panel
-          =# render(:partial => "contact_panel")
-
-      #footer.round-box.blue-gradient
-        =# render(:partial => "footer")
-
     #build-version{:style => "text-align: center; font-size: 12px"}= "Build 8: 2012-03-27"
 
-:erb
-  <script type="text/javascript">
-    $(document).ready(function(){
-      //helper.hide_require_signs();
-      <% if (@auto_hide_notification) %>
+    = javascript_tag do
+      - unless sticky_flash_message?
         helper.auto_hide_flash_message();
-      <% end %>
-    });
-  </script>

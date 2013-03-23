@@ -1,4 +1,4 @@
-.account{
+.account {
 	width: 960px;
 	.header{
 	}
@@ -80,6 +80,9 @@
 			}
 		}
 	}
+
+  /* select buttons */
+  .ui-selectmenu, .ui-selectmenu-menu-dropdown { min-width: 200px; max-width: 200px; }
 }
 
 #cvv-explanation {
@@ -93,9 +96,6 @@
 #cvv-form {
   width: 472px;
 }
-
-/* select buttons */
-.ui-selectmenu, .ui-selectmenu-menu-dropdown { min-width: 200px; max-width: 200px; }
 
 #user_card_type-button, #user_card_type-menu {
   min-width: 200px;

@@ -30,7 +30,7 @@ module Shared
           opts[:sort_expression] ||= begin
             opts[:sort_field] ||= 'id'
             opts[:sort_direction] ||= 'desc'
-            "#{opts[:sort_field]} #{opts[:sort_direction]}"
+            sanitize_sql_array ["%s %s", opts[:sort_field], opts[:sort_direction]]
           end
           opts[:sort_expression]
         end

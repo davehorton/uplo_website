@@ -7,7 +7,7 @@ class Comment < ActiveRecord::Base
 
   validates_presence_of :image, :user, :description
 
-  default_scope order('created_at desc')
+  default_scope order('comments.created_at desc')
   scope :available, joins(:active_user)
 
   alias_attribute :commenter_id, :user_id

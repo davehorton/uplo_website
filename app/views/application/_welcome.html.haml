@@ -7,8 +7,8 @@
     .main
       .header.text.white.bold New to UPLO?
       .title.text.bold.font16.line18 UPLO is invite-only. Request a free invite by entering your email address below.
-      = form_for(:user, :url => '/request_invitation', :html => {:id => 'frm-request', :class => 'left'}) do |f|
-        = f.label :user_email, 'Email', :class => 'left'
+      = form_for(Invitation.new, :html => {:id => 'frm-request', :class => 'left'}) do |f|
+        = f.label :email, 'Email', :class => 'left'
         = f.text_field :email, :autofocus => true, :required => true
         .line
           #btn-request-inv.button.request-invite.left

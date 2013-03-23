@@ -9,7 +9,7 @@ class Gallery < ActiveRecord::Base
   validates :name, presence: true, uniqueness: { scope: :user_id, case_sensitive: false }
   validates :user, presence: true
 
-  default_scope order('name asc')
+  default_scope order('galleries.name asc')
   scope :closed, where(permission: Permission::Private.new)
   scope :open,   where(permission: Permission::Public.new)
   scope :with_images, includes(:images)

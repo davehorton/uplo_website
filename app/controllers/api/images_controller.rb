@@ -45,7 +45,7 @@ class Api::ImagesController < Api::BaseController
   #   sort_field
   #   sort_direction
   def popular
-    images = Image.search_scope(current_user).spotlight.paginate_and_sort(filtered_params)
+    images = Image.spotlight.paginate_and_sort(filtered_params)
     render json: images, meta: { total: images.size }
   end
 
