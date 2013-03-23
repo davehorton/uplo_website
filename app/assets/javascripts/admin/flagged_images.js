@@ -70,7 +70,7 @@ var flagged_images = {
           }
 
           if(need_close_loading)
-            $.modal.close();
+            window.setTimeout("$.modal.close();", 200);
         }
       });
     });

@@ -61,27 +61,27 @@ en:
     remove_all_users_confirm: "Are you sure you want to remove all users? Users will not be able to access UPLO anymore."
 
     error_user_not_found: "User not found"
-    error_reinstate_user_failed: "Cannot reinstate the user"
+    error_reinstate_user_failed: "Cannot reinstate the user."
     error_not_ready_for_reinstating: "Cannot reinstate user: you must reinstate flagged images first."
     error_not_ready_for_removing: "User cannot be removed: you must remove or reinstate flagged images first."
-    error_reinstate_users_failed: "Cannot reinstate flagged users"
-    error_remove_user_failed: "Cannot remove user"
-    error_remove_myself: "You cannot remove yourself"
-    error_remove_users_failed: "Cannot remove flagged users"
-    error_reinstate_images_failed: "Cannot reinstate flagged images"
-    error_remove_images_failed: "Cannot remove flagged images"
-    error_remove_image_failed: "Cannot remove image"
-    error_reinstate_image_failed: "Cannot reinstate image"
+    error_reinstate_users_failed: "Cannot reinstate flagged users."
+    error_remove_user_failed: "Cannot remove user."
+    error_remove_myself: "You cannot remove yourself."
+    error_remove_users_failed: "Cannot remove flagged users."
+    error_reinstate_images_failed: "Cannot reinstate flagged images."
+    error_remove_images_failed: "Cannot remove flagged images."
+    error_remove_image_failed: "Cannot remove image."
+    error_reinstate_image_failed: "Cannot reinstate image."
 
-    notice_reinstate_user_succeeded: "Reinstated user successfully"
-    notice_reinstate_users_succeeded: "Reinstated users successfully"
-    notice_remove_user_succeeded: "Removed user successfully"
-    notice_remove_users_succeeded: "Removed users successfully"
+    notice_reinstate_user_succeeded: "Reinstated user successfully."
+    notice_reinstate_users_succeeded: "Reinstated users successfully."
+    notice_remove_user_succeeded: "Removed user successfully."
+    notice_remove_users_succeeded: "Removed users successfully."
 
-    notice_reinstate_image_succeeded: "Reinstated image successfully"
-    notice_reinstate_images_succeeded: "Reinstated images successfully"
-    notice_remove_image_succeeded: "Removed image successfully"
-    notice_remove_images_succeeded: "Removed images successfully"
+    notice_reinstate_image_succeeded: "Reinstated image successfully."
+    notice_reinstate_images_succeeded: "Reinstated images successfully."
+    notice_remove_image_succeeded: "Removed image successfully."
+    notice_remove_images_succeeded: "Removed images successfully."
 
     contact_user: "Contact User"
 
@@ -97,12 +97,12 @@ en:
       num_of_sales: "Number of Orders"
 
   gallery:
-    create_done: "Your gallery was created successfully"
-    update_done: "Your gallery was updated successfully"
-    delete_done: "Your gallery was deleted"
-    delete_failed: "Cannot delete the gallery"
+    create_done: "Your gallery was created successfully."
+    update_done: "Your gallery was updated successfully."
+    delete_done: "Your gallery was deleted."
+    delete_failed: "Cannot delete the gallery."
     delete_confirm: "Are you sure you want to delete this gallery?"
-    not_found: "Gallery not found"
+    not_found: "Gallery not found."
 
   image:
     not_found: "Image not found"
@@ -115,50 +115,50 @@ en:
     save: "Save"
 
   user:
-    update_done: "Your profile was updated successfully"
-    update_password_done: "Your password was changed successfully"
-    user_was_banned_or_removed: "Sorry, the user was banned or removed from UPLO"
-    error_already_unfollowed: "You have already unfollowed this user"
-    error_already_followed: "You have already followed this user"
+    update_done: "Your profile was updated successfully."
+    update_password_done: "Your password was changed successfully."
+    user_was_banned_or_removed: "Sorry, the user was banned or removed from UPLO."
+    error_already_unfollowed: "You have already unfollowed this user."
+    error_already_followed: "You have already followed this user."
 
   user_mailer:
     mail_greeting: "Hi %{name},"
 
-    subject_banned_user: "Your account has been suspended"
-    message_banned_user: "We are very sorry that your account has been suspended because you have too many flagged images."
+    subject_banned_user: "Your account has been suspended."
+    message_banned_user: "We are sorry that your account has been suspended because you have too many flagged images."
 
-    subject_removed_user: "Your account has been removed from UPLO"
+    subject_removed_user: "Your account has been removed from UPLO."
     message_removed_user: "We are very sorry that your account has been removed from UPLO by the administrator."
 
-    subject_reinstated_user: "Your account has been reactivated"
+    subject_reinstated_user: "Your account has been reactivated."
     message_reinstated_user: "Your account has been reactivated, you can access UPLO again. Welcome back!"
 
-    subject_flagged_image: "Your image has been flagged"
-    message_flagged_image: "Your image \"%{image_name}\" has been reported as the reason of %{flag_reason}."
+    subject_flagged_image: "Your image has been flagged."
+    message_flagged_image: "Your image \"%{image_name}\" has been reported. Reason: %{flag_reason}."
 
-    subject_removed_image: "Your image has been removed"
+    subject_removed_image: "Your image has been removed."
     message_removed_image: "Your image \"%{image_name}\" has been removed by the administrator."
 
-    subject_removed_images: "Your images have been removed"
+    subject_removed_images: "Your images have been removed."
     message_removed_images: "Some of your images have been removed by the administrator."
 
-    subject_reinstated_image: "Your image has been reinstated"
-    message_reinstated_image: "Your image \"%{image_name}\" has been reactivated, you can see it here"
+    subject_reinstated_image: "Your image has been reinstated."
+    message_reinstated_image: "Your image \"%{image_name}\" has been reinstated."
 
-    subject_reinstated_images: "All your flagged images has been reinstated"
+    subject_reinstated_images: "All your flagged images have been reinstated."
     message_reinstated_images: "All your reported images have been reactivated."
 
-    sub_message: "Please contact the administrator if you need assistance."
+    sub_message: "Please contact support@uplo.com if you have any questions."
     mail_end: "Best regards."
 
   order:
     transaction_canceled: "You've canceled the transaction"
-    cart_empty: "Sorry, your shopping cart is empty. (Did you already submit your order? Check your email for receipts.)"
-    not_found: "Could not find the order to checkout."
+    cart_empty: "Sorry, your shopping cart is empty. Did you already submit your order? Check your email for receipts."
+    not_found: "Could not find your order."
     transaction_completed: "Your payment was completed successfully."
     email:
       transaction_finish_subject: "Your payment was processed."
-      inform_new_order: "New order"
+      inform_new_order: "New Order"
 
   date:
     formats:

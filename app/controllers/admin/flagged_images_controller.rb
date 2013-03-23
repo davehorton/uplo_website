@@ -2,25 +2,14 @@ class Admin::FlaggedImagesController < Admin::AdminController
   self.page_size = 12
 
   def index
-    @flagged_images = Image.flagged.with_gallery.paginate_and_sort(filtered_params)
-    @flagged_images = @flagged_images.where("flag_type = ?", params[:flag_type]) if params[:flag_type].present?
+    @flagged_images = Image.flagged_of_type(params[:flag_type]).with_gallery.paginate_and_sort(filtered_params)
   end
 
   def reinstate_all
     result = {}
-    users = []
 
     begin
-      flags = ImageFlag.joins(:image)
-      flags = flags.where(flag_type: params[:flag_type]) if params[:flag_type].present?
-      flags.each do |flag|
-        if flag.image.reinstate
-          users << flag.image.user_id
-        end
-      end
-
-      ImageFlag.send_reinstated_email(users.uniq) unless users.blank?
-
+      Image.reinstate_all_flagged_images(params[:flag_type])
       result[:status] = 'ok'
       flash[:notice] = I18n.t("admin.notice_reinstate_images_succeeded")
       result[:redirect_url] = admin_flagged_images_path(:flag_type => params[:flag_type])
@@ -36,17 +25,9 @@ class Admin::FlaggedImagesController < Admin::AdminController
 
   def remove_all
     result = {}
-    users = []
 
     begin
-      Image.flagged.where(flag_type: params[:flag_type]).each do |image|
-        if image.update_attribute(:removed, true)
-          users << image.user_id
-        end
-      end
-
-      ImageFlag.send_image_removed_email(users.uniq) unless users.blank?
-
+      Image.remove_all_flagged_images(params[:flag_type])
       result[:status] = 'ok'
       flash[:notice] = I18n.t("admin.notice_remove_images_succeeded")
       result[:redirect_url] = admin_flagged_images_path(:flag_type => params[:flag_type])
@@ -65,8 +46,7 @@ class Admin::FlaggedImagesController < Admin::AdminController
 
     begin
       image = Image.flagged.find_by_id(params[:image_id])
-      if image && image.reinstate
-        UserMailer.delay.flagged_image_reinstated_email(image.user_id, image.id)
+      if image && image.reinstate!
         result[:status] = 'ok'
         flash[:notice] = I18n.t("admin.notice_reinstate_image_succeeded")
         result[:redirect_url] = admin_flagged_images_path(:flag_type => params[:flag_type])
@@ -86,10 +66,9 @@ class Admin::FlaggedImagesController < Admin::AdminController
   def remove_image
     result = {}
 
-    #begin
-      image = Image.flagged.where(id: params[:image_id]).first
-      if image && image.update_column(:removed, true)
-        UserMailer.delay.flagged_image_removed_email(image.user_id, image.id)
+    begin
+      image = Image.flagged.find_by_id(params[:image_id])
+      if image && image.remove!
         result[:status] = 'ok'
         flash[:notice] = I18n.t("admin.notice_remove_image_succeeded")
         result[:redirect_url] = admin_flagged_images_path(:flag_type => params[:flag_type])
@@ -97,11 +76,11 @@ class Admin::FlaggedImagesController < Admin::AdminController
         result[:status] = 'error'
         result[:message] = I18n.t("admin.error_remove_image_failed")
       end
-    #rescue Exception => exc
-    #  ExternalLogger.new.log_error(exc, "Admin::FlaggedImagesController#remove_image", params)
-    #  result[:status] = 'error'
-    #  result[:message] = I18n.t("admin.error_remove_image_failed")
-    #end
+    rescue Exception => exc
+      ExternalLogger.new.log_error(exc, "Admin::FlaggedImagesController#remove_image", params)
+      result[:status] = 'error'
+      result[:message] = I18n.t("admin.error_remove_image_failed")
+    end
 
     render json: result
   end

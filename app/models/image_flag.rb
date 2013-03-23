@@ -36,18 +36,6 @@ class ImageFlag < ActiveRecord::Base
     return result
   end
 
-  def self.send_image_removed_email(*user_ids)
-    user_ids.each do |user_id|
-      UserMailer.delay.flagged_image_removed_email(user_id)
-    end
-  end
-
-  def self.send_reinstated_email(*user_ids)
-    user_ids.each do |user_id|
-      UserMailer.delay.flagged_image_reinstated_email(user_id)
-    end
-  end
-
   def reported_date
     self.created_at.strftime('%b %d, %Y')
   end

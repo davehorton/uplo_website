@@ -1,7 +1,7 @@
 class ExternalLogger
   def log_error(exception, description, params_as_hash=nil)
     # log in the server log just in case external service is down
-    Rails.logger.warn(description)
+    Rails.logger.warn("#{description}: #{exception.message}")
 
     opts = {
       error_class: "System Error",

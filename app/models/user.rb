@@ -109,6 +109,8 @@ class User < ActiveRecord::Base
   def self.paginate_and_sort(params = {})
     user_params = params
 
+    # TODO: can't we just use the same values in the front-end/API
+    # so that we don't have to scrub them here?
     if sort_field = params[:sort_field]
       user_params[:sort_field] = case sort_field
         when 'signup_date' then
@@ -422,7 +424,7 @@ class User < ActiveRecord::Base
   def reinstate_flagged_images
     Image.transaction do
       self.images.flagged.each do |image|
-        image.reinstate
+        image.reinstate!
       end
     end
   end

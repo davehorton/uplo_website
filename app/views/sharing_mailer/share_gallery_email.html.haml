@@ -6,7 +6,7 @@
   %body
     %div= "Gallery <span style='font-weight:bold;'>#{@gallery.name}</span> has been shared with you by <span style='font-weight:bold;'>#{@user.fullname}</span>".html_safe
     - if @message != nil
-      %div with a message below:
+      %div Message:
       %div{ :style => 'font-style:italic; margin:10px 20px; padding:10px; border:1px solid #EEEEEE;' }= @message
     %br
     %a{ :href => "#{ @gallery.public_link }", :style => 'clear:both;' }

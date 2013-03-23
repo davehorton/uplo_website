@@ -32,8 +32,8 @@ class Image < ActiveRecord::Base
   scope :removed,     where(removed: true)
   scope :not_removed, where(removed: false)
 
-  scope :flagged,     not_removed.joins(:image_flags)
-  scope :unflagged,   not_removed.includes(:image_flags).where(image_flags: { id: nil })
+  scope :flagged,     not_removed.joins(:image_flags).readonly(false)
+  scope :unflagged,   not_removed.includes(:image_flags).where(image_flags: { id: nil }).readonly(false)
 
   scope :processing,    not_removed.joins(:active_user).where(data_processing: true)
   scope :visible,       not_removed.joins(:active_user).where(data_processing: false)
@@ -41,6 +41,22 @@ class Image < ActiveRecord::Base
 
   scope :spotlight, where(promoted: true)
   scope :with_gallery, includes(:gallery)
+
+  def self.flagged_of_type(image_flag_type = nil)
+    images = Image.flagged
+    images = images.where(image_flags: { flag_type: image_flag_type }) if image_flag_type.present?
+    images
+  end
+
+  def self.remove_all_flagged_images(flag_type = nil)
+    images = Image.flagged_of_type(flag_type)
+    images.each(&:remove!)
+  end
+
+  def self.reinstate_all_flagged_images(flag_type = nil)
+    images = Image.flagged_of_type(flag_type)
+    images.each(&:reinstate!)
+  end
 
   def self.search_scope(query)
     images = Image.scoped
@@ -56,10 +72,12 @@ class Image < ActiveRecord::Base
   end
 
   # re-implements Shared::QueryMethods function
-  # by replacing search fields before caling super
+  # by replacing search fields before calling super
   def self.paginate_and_sort(params = {})
     image_params = params
 
+    # TODO: can't we just use the same values in the front-end/API
+    # so that we don't have to scrub them here?
     if sort_field = params[:sort_field]
       image_params[:sort_field] = case sort_field
         when 'date_uploaded' then
@@ -196,11 +214,29 @@ class Image < ActiveRecord::Base
     return result
   end
 
-  def reinstate
+  def reinstate!
     transaction do
       image_flags.destroy_all
-      update_column(:removed, false)
+      self.removed = false
+      save!
+      UserMailer.delay.flagged_image_reinstated_email(user_id, id)
     end
+  end
+
+  def promote!
+    self.promoted = true
+    save!
+  end
+
+  def demote!
+    self.promoted = false
+    save!
+  end
+
+  def remove!
+    self.removed = true
+    save!
+    UserMailer.delay.flagged_image_removed_email(user_id, id)
   end
 
   def url(options = nil)
@@ -351,14 +387,6 @@ class Image < ActiveRecord::Base
     else
       self.attributes['sales_count'].to_i
     end
-  end
-
-  def promote!
-    self.update_attribute(:promoted, true)
-  end
-
-  def demote!
-    self.update_attribute(:promoted, false)
   end
 
   def available_styles
