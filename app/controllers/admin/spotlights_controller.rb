@@ -21,6 +21,7 @@ class Admin::SpotlightsController < Admin::AdminController
   def promote
     image = Image.unflagged.find_by_id(params[:id])
     result = {}
+
     if image
       if params[:demote]
         method = :demote!
