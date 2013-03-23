@@ -180,23 +180,18 @@ class ImagesController < ApplicationController
   # GET images/:id/browse
   def browse
     push_redirect
-    @image = Image.unflagged.find_by_id(params[:id])
+
+    @image = Image.find_by_id(params[:id])
+
     if @image.nil? || (@image.user.blocked? && !current_user.admin?)
       render_not_found
     elsif @image.gallery && !current_user.can_access?(@image.gallery)
       render_unauthorized
     end
 
-    # if params.has_key?(:flickr_post) && params[:flickr_post]=='success'
-    #   @flickr_post = true
-    # elsif params.has_key?(:flickr_post) && params[:flickr_post]!='success'
-    #   @flickr_post = false
-    # end
-
-    # @images = @image.gallery.images.all(:order => 'name')
     @is_owner = current_user.owns_image?(@image)
 
-    if (@is_owner)
+    if @is_owner
       @images = @image.gallery.images.unflagged.where("images.id not in (#{@image.id})").order('name')
     else
       @images = @image.gallery.get_images_without([@image.id])

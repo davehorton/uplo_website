@@ -12,7 +12,7 @@
           %a.tumblr.button.right{ :href => '#', :onclick => "showSocialPopup('tumblr');"}
         - if current_user.flickr_token?
           %a.flickr.button.right{ :href => '#', :onclick => "showSocialPopup('flickr');"}
-        - if current_user.twitter_token.?
+        - if current_user.twitter_token?
           %a.twitter.button.right{ :href => '#', :onclick => "showSocialPopup('twitter');"}
         - if current_user.facebook_token?
           %a.facebook.button.right{ :href => '#', :onclick => "showSocialPopup('facebook');"}

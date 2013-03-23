@@ -2,9 +2,9 @@
 
 - is_current_user = current_user?(user.id)
 - if is_current_user
-  - user_profile_page = url_for(:controller => 'profiles', :action => 'show')
+  - user_profile_page = profile_path
 - else
-  - user_profile_page = url_for(:controller => 'profiles', :action => 'show', :user_id => user.id)
+  - user_profile_page = profile_user_path(user)
 #user-section.left
   .avatar.left
     %a{ :href => "#{user_profile_page}" }
@@ -28,7 +28,7 @@
 .biography.left
   .text.wordwrap.black.bold.font14.span= user.location
   .text.wordwrap.black.bold.font12.span= user.job
-  .text.wordwrap.black.bold.font12.span= link_to user.website, user.website
+  .text.wordwrap.black.bold.font12.span= link_to(user.website, user.website) if user.website?
   .text.wordwrap.gray.font12.span= user.biography
 
 - if is_current_user

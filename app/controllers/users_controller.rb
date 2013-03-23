@@ -100,10 +100,10 @@ class UsersController < ApplicationController
   def update_profile_info
     if current_user.update_profile(params[:user])
       flash[:notice] = 'Profile was successfully updated.'
-      redirect_to :controller => 'profiles', :action => 'show'
+      redirect_to profile_path
     else
       flash[:alert] = current_user.errors.full_messages.to_sentence
-      redirect_to  :controller => 'profiles', :action => 'show'
+      redirect_to profile_path
     end
   end
 

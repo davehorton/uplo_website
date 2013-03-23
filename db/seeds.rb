@@ -46,7 +46,7 @@ puts 'Creating galleries...'
 galleries = []
 10.times do |counter|
   galleries << Gallery.create!({
-    :name => Faker::Name.name,
+    :name => Faker::Lorem.words,
     :user => user,
     :description => Faker::Lorem.paragraph
   })

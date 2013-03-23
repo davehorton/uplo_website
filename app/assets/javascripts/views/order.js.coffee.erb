@@ -105,8 +105,10 @@ $ ->
     if $('#shipping-address .edit.hide').length==0
       $('#shipping-address .inputs').text("")
 
+    <% if Rails.env.production? %>
     # Google Analytics
     _gaq.push(['_trackEvent', 'UPLO Web / Check Out', 'Place Order', 'checkout', -1])
+    <% end %>
     $('#order-shippings').submit()
 
   # Form inline error showing

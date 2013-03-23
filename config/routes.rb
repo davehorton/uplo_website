@@ -27,17 +27,26 @@ Uplo::Application.routes.draw do
   get "my_account", :to => "users#profile"
   get "my_account/edit", :to => "users#edit"
   put "my_account/update", :to => "users#update"
-  get 'profile', :to => 'profiles#show'
-  get 'profile/photos', :to => 'profiles#show_photos'
-  get 'profile/get_photos', :to => 'profiles#get_photos'
-  get 'profile/likes', :to => 'profiles#show_likes'
-  get 'profile/get_likes', :to => 'profiles#get_likes'
-  get 'profile/galleries', :to => 'profiles#show_galleries'
-  get 'profile/get_galleries', :to => 'profiles#get_galleries'
-  get 'profile/followers', :to => 'profiles#show_followers'
-  get 'profile/get_followers', :to => 'profiles#get_followers'
-  get 'profile/followed_users', :to => 'profiles#show_followed_users'
-  get 'profile/get_followed_users', :to => 'profiles#get_followed_users'
+
+  resource :profile, only: [:show] do
+    member do
+      get :photos
+      get :get_photos
+      get :likes
+      get :get_likes
+      get :galleries
+      get :get_galleries
+      get :followers
+      get :get_followers
+      get :followed_users
+      get :get_followed_users
+      get :followed_users
+      get :get_followed_users
+    end
+  end
+
+  get 'profile/:user_id', :to => 'profiles#show', :as => :profile_user
+
 
   get 'images/browse/:id', :to => 'images#browse'
   get 'images/public/:id', :to => 'images#public'

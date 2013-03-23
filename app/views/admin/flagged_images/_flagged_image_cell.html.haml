@@ -3,7 +3,7 @@
 .flagged_image_container
   - popup_url = url_for(:controller => 'admin/flagged_images', :action => 'get_image_popup', :image_id => image.id)
   .button.image_frame{:target => flag.image.id, 'data-url' => popup_url}
-    = async_image_tag image.url(:thumb), {:width => "155px", :height=> "155px", :class => "image-thumb"}
+    = async_image_tag image.image.url(:thumb), {:width => "155px", :height=> "155px", :class => "image-thumb"}
 
   .button_area.info_line.action-container
     .button.reinstate.left{:id => "button-reinstate-#{image.id}", 'data-confirm' => t('admin.reinstate_image_confirm')}

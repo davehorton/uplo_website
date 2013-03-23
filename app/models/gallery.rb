@@ -10,9 +10,11 @@ class Gallery < ActiveRecord::Base
   validates :user, presence: true
 
   default_scope order('galleries.name asc')
-  scope :private_access, where(permission: Permission::Private.new)
-  scope :public_access, where(permission: Permission::Public.new)
+  scope :private_access, where(permission: Permission::Private.new.to_s)
+  scope :public_access,  where(permission: Permission::Public.new.to_s)
   scope :with_images, includes(:images)
+
+  before_create :set_permission
 
   def self.search_scope(query)
     galleries = Gallery.scoped
@@ -50,4 +52,10 @@ class Gallery < ActiveRecord::Base
   def last_update
     updated_at.strftime('%B %Y')
   end
+
+  private
+
+    def set_permission
+      self.permission = Permission::Public.new.to_s
+    end
 end

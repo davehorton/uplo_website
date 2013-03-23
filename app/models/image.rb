@@ -5,7 +5,7 @@ class Image < ActiveRecord::Base
   belongs_to :active_user, class_name: 'User', foreign_key: 'user_id', conditions: { banned: false, removed: false }
   belongs_to :user, counter_cache: true
   belongs_to :gallery,     :touch => true
-  belongs_to :public_gallery, class_name: 'Gallery', foreign_key: 'gallery_id', conditions: { permission: Permission::Public.new }
+  belongs_to :public_gallery, class_name: 'Gallery', foreign_key: 'gallery_id', conditions: { permission: Permission::Public.new.to_s }
 
   has_many :comments,      :dependent => :destroy
   has_many :image_flags,   :dependent => :destroy
@@ -39,7 +39,7 @@ class Image < ActiveRecord::Base
   scope :visible,       not_removed.joins(:active_user).where(data_processing: false)
   scope :public_access, visible.unflagged.joins(:public_gallery)
 
-  scope :spotlight, where(promote: true)
+  scope :spotlight, where(promoted: true)
   scope :with_gallery, includes(:gallery)
 
   def self.search_scope(query)
@@ -52,7 +52,7 @@ class Image < ActiveRecord::Base
   end
 
   def self.public_or_owner(user)
-    where("images.user_id = ? or permission = #{Permission::Public.new}", user)
+    joins(:gallery).where("images.user_id = ? or galleries.permission = ?", user, Permission::Public.new.to_s)
   end
 
   # re-implements Shared::QueryMethods function
@@ -77,7 +77,7 @@ class Image < ActiveRecord::Base
   end
 
   def self.popular_with_pagination(params = {})
-    params[:sort_expression] = "images.promote desc, images.updated_at desc, images.image_likes_count desc"
+    params[:sort_expression] = "images.promoted desc, images.updated_at desc, images.image_likes_count desc"
     public_access.paginate_and_sort(params)
   end
 
@@ -197,8 +197,10 @@ class Image < ActiveRecord::Base
   end
 
   def reinstate
-    self.image_flags.destroy_all
-    self.update_attribute(:removed, false)
+    transaction do
+      image_flags.destroy_all
+      update_column(:removed, false)
+    end
   end
 
   def url(options = nil)
@@ -352,11 +354,11 @@ class Image < ActiveRecord::Base
   end
 
   def promote!
-    self.update_attribute(:promote, true)
+    self.update_attribute(:promoted, true)
   end
 
   def demote!
-    self.update_attribute(:promote, false)
+    self.update_attribute(:promoted, false)
   end
 
 #==============================================================================

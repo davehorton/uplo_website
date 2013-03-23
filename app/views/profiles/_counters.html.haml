@@ -1,25 +1,25 @@
 #photos-counter.counter.left
-  .info{ :data => { :url => "#{ url_for(:controller => 'profiles', :action => 'show_photos', :user_id => @user.id) }" } }
+  .info{ :data => { :url => photos_profile_path(user_id: @user.id) } }
     .number.text.black.bold.center= photos
     .label.text.gray.center.font14.line16= pluralize_without_count(photos, 'Photo')
   .tail
 #galleries-counter.counter.left
-  .info{ :data => { :url => "#{ url_for(:controller => 'profiles', :action => 'show_galleries', :user_id => @user.id) }" } }
+  .info{ :data => { :url => galleries_profile_path(user_id: @user.id) } }
     .number.text.black.bold.center= galleries
     .label.text.gray.center.font14.line16= pluralize_without_count(galleries, 'Gallery')
   .tail
 #likes-counter.counter.left
-  .info{ :data => { :url => "#{ url_for(:controller => 'profiles', :action => 'show_likes', :user_id => @user.id) }" } }
+  .info{ :data => { :url => likes_profile_path(user_id: @user.id) } }
     .number.text.black.bold.center= likes
     .label.text.gray.center.font14.line16= "Likes"
   .tail
 #followers-counter.counter.left
-  .info{ :data => { :url => "#{ url_for(:controller => 'profiles', :action => 'show_followers', :user_id => @user.id) }" } }
+  .info{ :data => { :url => followers_profile_path(user_id: @user.id) } }
     .number.text.black.bold.center= followers
     .label.text.gray.center.font14.line16= pluralize_without_count(followers, 'Follower')
   .tail
 #following-counter.counter.no-padding-right.left
-  .info{ :data => { :url => "#{ url_for(:controller => 'profiles', :action => 'show_followed_users', :user_id => @user.id) }" } }
+  .info{ :data => { :url => followed_users_profile_path(user_id: @user.id) } }
     .number.text.black.bold.center= following
     .label.text.gray.center.font14.line16 Following
   .tail

@@ -12,7 +12,7 @@ en:
     invalid_params: "Invalid parameters"
     error_resource_notfound: "Resource not found"
     error_unauthorized: "You are not authorized to access this resource"
-    error_not_login: "You must login first"
+    error_not_login: "Please login"
     search_hint: "Search"
     male: "Male"
     female: "Female"
@@ -42,46 +42,46 @@ en:
       title: "Flagged Users"
     search: "Search"
 
-    promote_confirm: "Are you sure you want to promote this photo to spotlight ?"
-    demote_confirm: "Are you sure you want to remove this photo from spotlight ?"
+    promote_confirm: "Are you sure you want to promote this photo?"
+    demote_confirm: "Are you sure you want to unpromote this photo?"
     error_image_not_found: "Image not found"
-    error_promote_failed: "Cannot promote the photo tp spotlight"
-    error_demote_failed: "Cannot remove this photo from spotlight"
-    notice_promote_succeeded: "Promote photo successfully"
-    notice_demote_succeeded: "Remove the photo successfully from spotlight"
+    error_promote_failed: "Cannot promote photo"
+    error_demote_failed: "Cannot remove this photo"
+    notice_promote_succeeded: "Photo promoted"
+    notice_demote_succeeded: "Photo removed"
 
-    reinstate_image_confirm: "Are you sure you want to reinstate this image ?"
-    remove_image_confirm: "Are you sure you want to remove this image ?"
-    remove_all_images_confirm: "Are you sure you want to remove all flagged images ?"
-    reinstate_all_images_confirm: "Are you sure you want to reinstate all flagged images ?"
+    reinstate_image_confirm: "Are you sure you want to reinstate this image?"
+    remove_image_confirm: "Are you sure you want to remove this image?"
+    remove_all_images_confirm: "Are you sure you want to remove all flagged images?"
+    reinstate_all_images_confirm: "Are you sure you want to reinstate all flagged images?"
 
-    reinstate_user_confirm: "Are you sure you want to reinstate this user ?"
-    reinstate_all_users_confirm: "Are you sure you want to reinstate all users ? Only users have less than 3 flagged images will be reinstated."
-    remove_user_confirm: "Do you really want to remove '%{username}' ? This action is not reversible."
-    remove_all_users_confirm: "Are you sure you want to remove all users ? The users will not be able to access UPLO anymore."
+    reinstate_user_confirm: "Are you sure you want to reinstate this user?"
+    reinstate_all_users_confirm: "Are you sure you want to reinstate all users? Only users with less than 3 flagged images will be reinstated."
+    remove_user_confirm: "Do you really want to remove '%{username}'? This action is not reversible."
+    remove_all_users_confirm: "Are you sure you want to remove all users? Users will not be able to access UPLO anymore."
 
     error_user_not_found: "User not found"
     error_reinstate_user_failed: "Cannot reinstate the user"
-    error_not_ready_for_reinstating: "User is not ready for resintating. Please reinstate flagged images first"
-    error_not_ready_for_removing: "User is not ready for removing. Please remove or reinstate flagged images first"
+    error_not_ready_for_reinstating: "Cannot reinstate user: you must reinstate flagged images first."
+    error_not_ready_for_removing: "User cannot be removed: you must remove or reinstate flagged images first."
     error_reinstate_users_failed: "Cannot reinstate flagged users"
-    error_remove_user_failed: "Cannot remove the user"
+    error_remove_user_failed: "Cannot remove user"
     error_remove_myself: "You cannot remove yourself"
     error_remove_users_failed: "Cannot remove flagged users"
     error_reinstate_images_failed: "Cannot reinstate flagged images"
     error_remove_images_failed: "Cannot remove flagged images"
-    error_remove_image_failed: "Cannot remove the image"
-    error_reinstate_image_failed: "Cannot reinstate the image"
+    error_remove_image_failed: "Cannot remove image"
+    error_reinstate_image_failed: "Cannot reinstate image"
 
-    notice_reinstate_user_succeeded: "Reinstate user successfully"
-    notice_reinstate_users_succeeded: "Reinstate users successfully"
-    notice_remove_user_succeeded: "Remove user successfully"
-    notice_remove_users_succeeded: "Remove users successfully"
+    notice_reinstate_user_succeeded: "Reinstated user successfully"
+    notice_reinstate_users_succeeded: "Reinstated users successfully"
+    notice_remove_user_succeeded: "Removed user successfully"
+    notice_remove_users_succeeded: "Removed users successfully"
 
-    notice_reinstate_image_succeeded: "Reinstate image successfully"
-    notice_reinstate_images_succeeded: "Reinstate images successfully"
-    notice_remove_image_succeeded: "Remove image successfully"
-    notice_remove_images_succeeded: "Remove images successfully"
+    notice_reinstate_image_succeeded: "Reinstated image successfully"
+    notice_reinstate_images_succeeded: "Reinstated images successfully"
+    notice_remove_image_succeeded: "Removed image successfully"
+    notice_remove_images_succeeded: "Removed images successfully"
 
     contact_user: "Contact User"
 
@@ -97,7 +97,7 @@ en:
       num_of_sales: "Number of Orders"
 
   gallery:
-    create_done: "Your new gallery was created successfully"
+    create_done: "Your gallery was created successfully"
     update_done: "Your gallery was updated successfully"
     delete_done: "Your gallery was deleted"
     delete_failed: "Cannot delete the gallery"
@@ -131,7 +131,7 @@ en:
     message_removed_user: "We are very sorry that your account has been removed from UPLO by the administrator."
 
     subject_reinstated_user: "Your account has been reactivated"
-    message_reinstated_user: "Congratulation! Your account has been reactivated, you can access UPLO again. Welcome back!"
+    message_reinstated_user: "Your account has been reactivated, you can access UPLO again. Welcome back!"
 
     subject_flagged_image: "Your image has been flagged"
     message_flagged_image: "Your image \"%{image_name}\" has been reported as the reason of %{flag_reason}."
@@ -139,25 +139,25 @@ en:
     subject_removed_image: "Your image has been removed"
     message_removed_image: "Your image \"%{image_name}\" has been removed by the administrator."
 
-    subject_removed_images: "Your images has been removed"
+    subject_removed_images: "Your images have been removed"
     message_removed_images: "Some of your images have been removed by the administrator."
 
     subject_reinstated_image: "Your image has been reinstated"
-    message_reinstated_image: "Congratulation! Your image \"%{image_name}\" has been reactivated, you can see it here"
+    message_reinstated_image: "Your image \"%{image_name}\" has been reactivated, you can see it here"
 
     subject_reinstated_images: "All your flagged images has been reinstated"
-    message_reinstated_images: "Congratulation! All your reported images have been reactivated."
+    message_reinstated_images: "All your reported images have been reactivated."
 
-    sub_message: "Please contact the administrator if there is something wrong."
+    sub_message: "Please contact the administrator if you need assistance."
     mail_end: "Best regards."
 
   order:
     transaction_canceled: "You've canceled the transaction"
     cart_empty: "Sorry, your shopping cart is empty. (Did you already submit your order? Check your email for receipts.)"
     not_found: "Could not find the order to checkout."
-    transaction_completed: "Your payment was completed successfully"
+    transaction_completed: "Your payment was completed successfully."
     email:
-      transaction_finish_subject: "Your payment completed successfully."
+      transaction_finish_subject: "Your payment was processed."
       inform_new_order: "New order"
 
   date:

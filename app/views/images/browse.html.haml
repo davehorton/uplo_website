@@ -8,7 +8,7 @@
   .line-separator
   .user-section.left
     - images_count = current_user?(@author.id) ? @author.images.count : @author.public_images.count
-    - author_profile = url_for(:controller => 'profiles', :action => 'show', :user_id => @author.id)
+    - author_profile = profile_user_path(@author)
     %a{:href => "#{ author_profile }"}
       = image_tag @author.avatar_url(:small), :class => 'avatar small left'
     .left
@@ -68,8 +68,8 @@
     .left
       .like.left
         .icon.left
-        .times.text.fuzzy-gray.bold.font16.left= @image.likes
-        .label.text.fuzzy-gray.font16.left= pluralize_without_count(@image.likes, "Like")
+        .times.text.fuzzy-gray.bold.font16.left= @image.image_likes_count
+        .label.text.fuzzy-gray.font16.left= pluralize_without_count(@image.image_likes_count, "Like")
       .comment.text.fuzzy-gray.font16.left
         .icon.left
         .times.text.fuzzy-gray.bold.left= @image.comments.count
@@ -89,7 +89,7 @@
     #current_comments
       = render :partial => 'comments_template', :locals => { :comments => @comments }
     .user-section.left
-      %a{ :href => "#{ url_for(:controller => 'profiles', :action => 'show', :user_id => current_user.id)}" }
+      %a{ :href => profile_user_path(current_user) }
         = image_tag current_user.avatar_url(:medium), :class => "avatar medium left"
       .left
         = form_for :comment, :url => '/comments', :method => 'post', :html => {:id =>'frm-comment'} do |f|
@@ -176,11 +176,13 @@
           $('#social-sharing').addClass('hide');
         });
 
+        <% if Rails.env.production? %>
         $('#post-comment').click(function(){
           // Google Analytics
           _gaq.push(['_trackEvent', 'UPLO Web / Comment', 'post comment', 'status', 1]);
           return true;
         });
+        <% end %>
 
         $('.image-container-wrapper .image-container.medium img.image.medium').each(function(){
           var img = this;
@@ -301,6 +303,7 @@
           fail: function(){}
         });
 
+        <% if Rails.env.production? %>
         // Google Analytics
         if(dislike == 'false'){
           _gaq.push(['_trackEvent', 'UPLO Web / Like', 'like', 'status', 1]);
@@ -308,6 +311,7 @@
         else{
           _gaq.push(['_trackEvent', 'UPLO Web / Like', 'dislike', 'status', 0]);
         }
+        <% end %>
       }
 
       !function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");

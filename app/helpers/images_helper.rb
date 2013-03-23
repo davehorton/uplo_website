@@ -24,7 +24,7 @@ module ImagesHelper
     if @no_async_image_tag
       image_html = image_tag(source, options)
     else
-      image_html = image_tag("blank.png", options.merge({"data-href" => path_to_image(source)}))
+      image_html = image_tag("blank.png", options.merge({"data-src" => path_to_image(source)}))
       image_html << content_tag("noscript") do # Tag to show image when the JS is disabled.
         image_tag(source, options)
       end

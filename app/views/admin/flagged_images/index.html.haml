@@ -10,8 +10,8 @@
     .left
       - index_link = url_for(:controller => "admin/flagged_images", :action => "index")
       %form{:action => index_link, :id => "flag_type_form", :method => 'get'}
-        Sort By:
-        = select_tag :flag_type, options_for_select(categories, params[:flag_type]), :id => "flagged_image_type"
+        Filter By:
+        = select_tag :flag_type, options_for_select(categories, params[:flag_type]), prompt: 'None - View All',:id => "flagged_image_type"
 
     .button.remove_all.left#remove_flagged_images{'data-confirm' => t('admin.remove_all_images_confirm')}
       - remove_link = url_for(:controller => "admin/flagged_images", :action => "remove_all", :flag_type => params[:flag_type])

@@ -493,9 +493,9 @@
 
 			// focus on dialog or the first visible/enabled input element
 			var input = $(':input:enabled:visible:' + p, s.d.wrap);
-			setTimeout(function () {
+			//setTimeout(function () {
 				input.length > 0 ? input.focus() : s.d.wrap.focus();
-			}, 10);
+			//}, 100);
 		},
 		getDimensions: function () {
 			// fix a jQuery bug with determining the window height - use innerHeight if available

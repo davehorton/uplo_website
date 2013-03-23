@@ -5,7 +5,7 @@
     - if !current_user.owns_gallery?(@gallery)
       %span.text.fuzzy-gray= "From "
       %span.text.fuzzy-gray
-        %a{:href => "#"}= @gallery.user.fullname
+        = link_to @gallery.user.fullname, profile_user_path(@gallery.user)
   .text.black.bold.font12.line12.right
     - if can_modify_gallery?(@gallery)
       - if @images.blank?

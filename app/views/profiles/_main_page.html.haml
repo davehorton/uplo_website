@@ -3,7 +3,7 @@
 .main.right
   #photos-section.container.left
     .head
-      - url = url_for(:controller => 'profiles', :action => 'show_photos', :user_id => @user.id)
+      - url = photos_profile_path(user_id: @user.id)
       %a.title{:href => "#{ url }" }
         .text.black.bold.font20.left= "#{ user_possesive } #{ pluralize_without_count(@images.total_entries, 'Photo') }"
         .text.fuzzy-gray.font20.left= "&nbsp;(#{ @images.total_entries })".html_safe
@@ -13,7 +13,7 @@
 
   #galleries-section.container.left
     .head
-      - url = url_for(:controller => 'profiles', :action => 'show_galleries', :user_id => @user.id)
+      - url = galleries_profile_path(user_id: @user.id)
       %a.title{:href => "#{ url }" }
         .text.black.bold.font20.left= "#{ user_possesive } #{ pluralize_without_count(@galleries.total_entries, 'Gallery') }"
         .text.fuzzy-gray.font20.left= "&nbsp;(#{ @galleries.total_entries })".html_safe
@@ -25,7 +25,7 @@
         .image-container.thumb.profile{:title=>"#{ gallery.name }", :class => "#{ additional_class }"}
           = image_tag(gallery_cover_image_url(gallery), :class => "image-thumb profile image thumb")
 
-  - url = url_for(:controller => 'profiles', :action => 'show_likes', :user_id => @user.id)
+  - url = likes_profile_path(user_id: @user.id)
   #likes-section.container.left
     .head
       %a.title{ :href => "#{ url }" }
@@ -35,7 +35,7 @@
     .images-wrapper.left
       = render :partial => 'images/photos_template', :locals => { :images => @liked_images, :photos_per_line => 6, :photo_size => 'thumb', :other_classes => 'profile' }
 
-  - url = url_for(:controller => 'profiles', :action => 'show_followers', :user_id => @user.id)
+  - url = followers_profile_path(user_id: @user.id)
   #followers-section.container.left
     .head
       %a.title{ :href => "#{ url }" }
@@ -48,7 +48,7 @@
       - (0...@followers.length). each do |idx|
         - user = @followers[idx]
         - additional_class = (idx%3 == 0) ? 'no-padding-left' : ((idx%3==2) ? 'no-padding-right' : '')
-        - url = url_for(:controller => 'profiles', :action => 'show', :user_id => user.id)
+        - url = profile_user_path(user)
         .user-section.left{ :class => "#{ additional_class }" }
           %a{ :href => "#{ url }" }
             = image_tag(user.avatar_url(:small), :class => "avatar small left")
@@ -57,7 +57,7 @@
             .text.gray.font11.line10= user.fullname.truncate(21)
 
   - following_margin = 'margin-top:15px;' if @followed_users.length > 0
-  - url = url_for(:controller => 'profiles', :action => 'show_followed_users', :user_id => @user.id)
+  - url = followed_users_profile_path(user_id: @user.id)
   #following-section.container.left{ :style => "#{ following_margin }" }
     .head
       %a.title{ :href => "#{ url }" }
@@ -69,7 +69,7 @@
       - (0...@followed_users.length). each do |idx|
         - user = @followed_users[idx]
         - additional_class = (idx%3 == 0) ? 'no-padding-left' : ((idx%3==2) ? 'no-padding-right' : '')
-        - url = url_for(:controller => 'profiles', :action => 'show', :user_id => user.id)
+        - url = profile_user_path(user)
         .user-section.left{ :class => "#{ additional_class }" }
           %a{:href => "#{ url }"}
             = image_tag(user.avatar_url(:small), :class => "avatar small left")

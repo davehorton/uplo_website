@@ -4,7 +4,7 @@
 - comments.decorate.each do |comment|
   .user-section.left
     - commenter = comment.user
-    - url = url_for(:controller => 'profiles', :action => 'show', :user_id => commenter.id)
+    - url = profile_user_path(commenter)
     %a{ :href => "#{ url }" }
       = image_tag(commenter.avatar_url(:medium), :class => "avatar medium left")
     .info-panel.left

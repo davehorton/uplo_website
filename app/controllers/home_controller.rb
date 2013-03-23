@@ -67,7 +67,7 @@ class HomeController < ApplicationController
       when "views"
         filtered_params[:sort_field] = "images.pageview"
       when "spotlight"
-        filtered_params[:sort_field] = "images.promote"
+        filtered_params[:sort_field] = "images.promoted"
       end
 
       @data = Image.search_scope(params[:query]).

@@ -37,7 +37,7 @@ class User < ActiveRecord::Base
   has_many :profile_images, :dependent => :destroy, :order => 'last_used DESC'
   has_many :galleries, :dependent => :destroy
   has_many :images, :through => :galleries
-  has_many :public_galleries, class_name: 'Gallery', conditions: { permission: Permission::Public.new }
+  has_many :public_galleries, class_name: 'Gallery', conditions: { permission: Permission::Public.new.to_s }
   has_many :public_images, :through => :public_galleries, :source => :images
   has_many :comments, :dependent => :destroy
   has_many :image_likes, :dependent => :destroy
@@ -151,11 +151,12 @@ class User < ActiveRecord::Base
     end
   end
 
+  def to_param
+    "#{id}-#{username.parameterize}"
+  end
+
   def liked_images
-    self.source_liked_images.unflagged.joins('LEFT JOIN galleries ON galleries.id = images.gallery_id').where(
-      "galleries.permission = '#{Permission::Public.new}' OR
-      (galleries.permission = '#{Permission::Private.new}' AND galleries.user_id = #{ self.id })"
-    )
+    source_liked_images.unflagged.public_or_owner(self)
   end
 
   def avatar
@@ -487,12 +488,12 @@ class User < ActiveRecord::Base
 
   def like_image(image)
     image_likes.create(image_id: image.id) unless image.liked_by?(self)
-    { likes_count: image.image_likes.size }
+    { likes_count: image.reload.image_likes.size }
   end
 
   def unlike_image(image)
-    image_likes.where(image_id: image.id).destroy if image.liked_by?(self)
-    { likes_count: image.image_likes.size }
+    image_likes.where(image_id: image.id).first.destroy if image.liked_by?(self)
+    { likes_count: image.reload.image_likes.size }
   end
 
   private

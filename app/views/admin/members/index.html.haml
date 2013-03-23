@@ -23,7 +23,7 @@
     - @users.each_with_index do |user, idx|
       - user_css = line_item_additional_class(idx, 3)
       .user-container{:id => "user-container-#{user.id}", :class => user_css}
-        - author_profile = profile_path(:user_id => user.id)
+        - author_profile = profile_user_path(user)
         %a.profile-link.left{:href => author_profile}
           = image_tag user.avatar_url(:large), :class => 'avatar large left'
         .user-info.left
