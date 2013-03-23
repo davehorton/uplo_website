@@ -32,19 +32,19 @@
   = javascript_tag do
     :erb
       function reloadEvent(){
-        $('.edit_button').livequery('click', function(){
+        $(document).on('click', '.edit_button', function(){
           $(this).hide();
           $(this).parent().find('.yield_info').hide(100);
           $(this).parent().find('.yield_edit').show(100);
         });
 
-        $('.cancel').livequery('click', function(){
+        $(document).on('click', '.cancel', function(){
           $(this).closest('.account_wrapper').find('.edit_button').show(100);
           $(this).closest('.account_wrapper').find('.yield_edit').hide(100);
           $(this).closest('.account_wrapper').find('.yield_info').show(100);
         });
 
-        $('.update_button').livequery('click', function(){
+        $(document).on('click', '.update_button', function(){
           $(this).closest('form').submit();
         });
 
@@ -56,7 +56,6 @@
             $.modal.close();
             var $form = $(this);
 
-            // Reset fields and any validation errors, so form can be used again, but leave hidden_field values intact.
             $form.closest('.partial_wrapper').html(xhr.responseText);
             helper.show_notification("Update successfully");
             $('select[id!=my_links]').selectmenu({style:'dropdown'});
@@ -64,41 +63,34 @@
           })
           .bind('ajax:complete', function(evt, xhr, status){
             $.modal.close();
-
           })
-          .bind("ajax:error", function(evt, xhr, status, error){
+          .bind('ajax:error', function(evt, xhr, status, error){
             $.modal.close();
             var $form = $(this),
                 errors,
                 errorText;
 
             try {
-              // Populate errorText with the comment errors
               errors = $.parseJSON(xhr.responseText);
             } catch(err) {
-              // If the responseText is not valid JSON (like if a 500 exception was thrown), populate errors with a generic error message.
               errors = {message: "Please reload the page and try again"};
             }
 
-            // Build an unordered list from the list of errors
             errorText = "<ul>";
-
             errors = errors.users;
 
             for (var i = 0; i < errors.length; i++ ) {
               errorText +=  "<li>" + errors[i] + "</li> ";
             }
+
             if (errors.length == 0 || errors.length == undefined){
               errorText +=  "<li>Something went wrong, please try later</li>";
             }
 
             errorText += "</ul>";
 
-            // Insert error list into form
             helper.show_notification(errorText);
           });
-
-
       }
 
       $(document).ready(function(){
