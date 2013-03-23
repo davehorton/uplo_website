@@ -31,7 +31,7 @@ class SocialsController < ApplicationController
       flash[:error] = paresed_json["error"]["message"]
 		end
 
-		redirect_to :controller => :users, :action => :profile
+		redirect_to :controller => :users, :action => :account
 	end
 
 	def twitter_callback
@@ -54,7 +54,7 @@ class SocialsController < ApplicationController
       flash[:notice] = "Invalid OAuth token, unable to connect to twitter"
     end
 
-		redirect_to :controller => :users, :action => :profile
+		redirect_to :controller => :users, :action => :account
 	end
 
 	def tumblr_callback
@@ -71,7 +71,7 @@ class SocialsController < ApplicationController
 			flash[:notice] = "Cannot authorize Tumblr"
 		end
 
-		redirect_to :controller => :users, :action => :profile
+		redirect_to :controller => :users, :action => :account
 	end
 
 	def flickr_callback
@@ -89,7 +89,7 @@ class SocialsController < ApplicationController
 			flash[:notice] = "Cannot authorize Flickr #{e.message} #{access_token.inspect}"
 		end
 
-		redirect_to :controller => :users, :action => :profile
+		redirect_to :controller => :users, :action => :account
 	end
 
 	# params
@@ -164,7 +164,7 @@ class SocialsController < ApplicationController
 					  :picture => photo,
 					  :link => link,
 					  :name => 'Shared from UPLO',
-					  :caption => "uplo.heroku.com",
+					  :caption => "uplo.com",
 					  :description => description
 					)
 					flash[:notice] = "Post successful"
@@ -174,8 +174,8 @@ class SocialsController < ApplicationController
 				    flash[:notice] = "Duplicated message"
 				  when /Error validating access token/
 				    current_user.update_attribute(:facebook_token, "")
-				    flash[:notice] = "There is some problem with authetication, please re-enable your Facebook"
-						redirect_to :controller => :users, :action => :profile and return
+				    flash[:notice] = "There is some problem with authentication, please re-enable Facebook"
+						redirect_to :controller => :users, :action => :account and return
 				  else
 				    flash[:notice] = "Cannot share the link at this moment: #{e.message}"
 				  end
@@ -184,7 +184,7 @@ class SocialsController < ApplicationController
 				end
 			else
 				flash[:notice] = "You must enable Facebook sharing"
-				redirect_to :controller => :users, :action => :profile and return
+				redirect_to :controller => :users, :action => :account and return
 			end
 		end
 
@@ -215,7 +215,7 @@ class SocialsController < ApplicationController
 
 			else
 				flash[:notice] = "You must enable Twitter sharing"
-				redirect_to :controller => :users, :action => :profile and return
+				redirect_to :controller => :users, :action => :account and return
 			end
 		end
 
@@ -242,7 +242,7 @@ class SocialsController < ApplicationController
 						end
 
 						begin
-							message = (@message.to_s << "<p>Shared from <a href='http://uplo.heroku.com'>UPLO</a></p>")
+							message = (@message.to_s << "<p>Shared from <a href='http://uplo.com'>UPLO</a></p>")
 
 							response = access_token.request(:post, "/v2/blog/#{base_name}/post",
 																		{:type => "photo" ,:caption => message, :link => link, :source => medium_photo})
@@ -264,7 +264,7 @@ class SocialsController < ApplicationController
 				end
 			else
 				flash[:notice] = "You must enable Tumblr sharing"
-				redirect_to :controller => :users, :action => :profile and return
+				redirect_to :controller => :users, :action => :account and return
 			end
 
 		end
@@ -308,7 +308,7 @@ class SocialsController < ApplicationController
 				end
 			else
 				flash[:notice] = "You must enable Flickr sharing"
-				redirect_to :controller => :users, :action => :profile and return
+				redirect_to :controller => :users, :action => :account and return
 			end
 		end
 
