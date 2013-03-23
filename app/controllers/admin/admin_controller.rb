@@ -1,5 +1,6 @@
 class Admin::AdminController < ApplicationController
   before_filter :authenticate_admin_user!
+  around_filter :apply_user_scope
   layout "admin"
 
   def index

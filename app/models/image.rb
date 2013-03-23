@@ -161,57 +161,40 @@ class Image < ActiveRecord::Base
     image_flags.any?
   end
 
-  def flag(user, params={}, result = {})
-    if user.banned?
-      result = { :success => false, :msg => "The author is already banned." }
-    else
-      if (self.image_flags.count > 0)
-        result = { :success => false, :msg => "The image is already flagged." }
-      else
-        if user.owns_image?(self)
-         return result = { :success => false, :msg => "You cannot flag your own image" }
-        end
-        description = ImageFlag.process_description(params[:type].to_i, params[:desc])
-        if description.nil?
-          if params[:type].to_i == ImageFlag::FLAG_TYPE['copyright']
-            msg = "Copyright flag must have photo's owner information"
-          else
-            msg = "Terms of Use Violation flag must have reason reporting"
-          end
-          result = { :success => false, :msg => msg }
-        else
-          flag = ImageFlag.new({ :image_id => self.id, :reported_by => user.id,
-            :flag_type => params[:type].to_i, :description => description })
-          if flag.save
-            # Remove all images in shopping carts
-            line_items = LineItem.joins(:order).joins(:image).where(
-              :images => {:id => self.id}
-            ).where("status = '#{Order::STATUS[:shopping]}' OR status = '#{Order::STATUS[:checkout]}'").readonly(false)
-            self.transaction do
-              line_items.each do |line_item|
-                line_item.update_attribute(:quantity, 0)
-              end
-            end
+  def flag!(flagged_by_user, params={})
+    return { success: false, msg: "The author is already banned." } if self.user.banned?
+    return { success: false, msg: "This image is already flagged." } if image_flags.any?
+    return { success: false, msg: "You cannot flag your own image." } if flagged_by_user == user
 
-            if user.will_be_banned?
-              # Ban the image's author.
-              user.update_attribute(:banned, true)
-              # Send email.
-              UserMailer.delay.banned_user_email(user.id)
-            else
-              # Send email about the flagged image.
-              UserMailer.delay.flagged_image_email(user.id, id)
-            end
+    flag = ImageFlag.new(
+             image_id:    id,
+             reported_by: flagged_by_user.id,
+             flag_type:   params[:type],
+             description: params[:desc]
+           )
 
-            # Update result
-            result = { :success => true }
-          else
-            result = { :success => false, :msg => flag.errors.full_messages[0]}
-          end
+    if flag.save
+      # Remove all images in shopping carts
+      line_items = LineItem.readonly(false).joins(:image, :order).
+        where(images: { id: id }).
+        where("status = '#{Order::STATUS[:shopping]}' OR status = '#{Order::STATUS[:checkout]}'")
+
+      transaction do
+        line_items.each do |line_item|
+          line_item.update_attribute(:quantity, 0)
         end
       end
+
+      if user.ban_threshold_met?
+        user.ban!
+      else
+        UserMailer.delay.flagged_image_email(user.id, id)
+      end
+
+      return { success: true }
+    else
+      return { success: false, msg: flag.errors.full_messages.join(', ') }
     end
-    return result
   end
 
   def reinstate!

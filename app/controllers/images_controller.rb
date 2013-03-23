@@ -43,7 +43,7 @@ class ImagesController < ApplicationController
       image = current_user.images.find_by_id params[:id]
       gallery = image.gallery
       if(!current_user.owns_image?(image))
-        render :json => {:success => false, :msg => "The image do not belong to you"} and return
+        render :json => {:success => false, :msg => "You're not the owner of this image"} and return
       end
       images = gallery.images.unflagged.paginate_and_sort(filtered_params)
 
@@ -239,25 +239,21 @@ class ImagesController < ApplicationController
   #         type => Flag type
   #         desc => Flag description
   def flag
-    result = {
-      :success => false,
-      :msg => ""
-    }
+    result = { success: false, msg: "" }
     image = Image.unflagged.find_by_id params[:id]
-    if image.nil? || (image.user.blocked? && !current_user.admin?)
-      result = {
-        :success => false,
-        :msg => "The image does not exist right now."
-      }
+    if image.user.nil?
+      result = { msg: "Member no longer exists" }
+    if image.nil? && !current_user.admin?
+      result = { msg: "Photo no longer exists" }
     else
-      result = image.flag(current_user, params, result)
+      result = image.flag!(current_user, params)
     end
-    render :json => result
+    render json: result
   end
 
   def update_images
     if !Gallery.exists?({:id => params[:gallery_id].to_i, :user_id => current_user.id})
-      flash[:error] = 'You cannot edit gallery of other!'
+      flash[:error] = "You cannot edit another member's gallery!"
       redirect_to :controller => :galleries, :actions => :index
     end
     error = ''

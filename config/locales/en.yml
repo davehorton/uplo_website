@@ -107,6 +107,10 @@ en:
   image:
     not_found: "Image not found"
 
+  image_flag:
+    missing_description_terms_of_use_violation: "of violation should include a reason."
+    missing_description_copyright: "of violation should include copyright owner's information."
+
   slideshow:
     picture_name: "Picture Name"
     description: "Description"

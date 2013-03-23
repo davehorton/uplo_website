@@ -397,6 +397,14 @@ class User < ActiveRecord::Base
     end
   end
 
+  def ban!
+    transaction do
+      self.banned = true
+      save!
+      UserMailer.delay.banned_user_email(id)
+    end
+  end
+
   def remove
     unless removed?
       update_attribute(:removed, true)
@@ -429,12 +437,12 @@ class User < ActiveRecord::Base
     end
   end
 
-  def will_be_banned?
-    (!self.banned? && !self.ready_for_reinstating?)
+  def ban_threshold_met?
+    !banned? && !ready_for_reinstating?
   end
 
   def ready_for_reinstating?
-    (self.images.flagged.length < MIN_FLAGGED_IMAGES)
+    images.flagged.length < MIN_FLAGGED_IMAGES
   end
 
   def blocked?

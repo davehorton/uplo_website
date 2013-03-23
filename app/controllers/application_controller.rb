@@ -63,6 +63,22 @@ class ApplicationController < ActionController::Base
 
   protected
 
+    def apply_user_scope
+      if current_user.try(:admin?)
+        User.unscoped { yield }
+      else
+        yield
+      end
+    end
+
+    def filtered_params
+      @filtered_params ||= begin
+        filtered_params = params
+        filtered_params[:page_size] ||= page_size
+        filtered_params
+      end
+    end
+
     # To show notification popup or not.
     def toggle_notification(visible)
       @notification_visible = visible
@@ -93,14 +109,6 @@ class ApplicationController < ActionController::Base
     def check_banned_user
       if current_user && !current_user.admin? && current_user.blocked?
         render_banned_message
-      end
-    end
-
-    def filtered_params
-      @filtered_params ||= begin
-        filtered_params = params
-        filtered_params[:page_size] ||= page_size
-        filtered_params
       end
     end
 end

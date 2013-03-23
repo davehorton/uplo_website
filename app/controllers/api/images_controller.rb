@@ -158,9 +158,12 @@ class Api::ImagesController < Api::BaseController
   end
 
   # POST /api/images/:id/flag
+  # required:
+  #   type: see ImageFlag::FLAG_TYPE
+  #   desc: description (not required for nudity flags)
   def flag_image
     image = Image.unflagged.find(params[:id])
-    result = image.flag
+    result = image.flag!(current_user, params)
     render json: result
   end
 end

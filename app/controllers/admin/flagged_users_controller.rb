@@ -5,124 +5,114 @@ class Admin::FlaggedUsersController < Admin::AdminController
     @users = User.flagged_users.paginate_and_sort(self.filtered_params)
   end
 
-  # TODO: optimize this method
   def reinstate_all
-    result = {}
-
     begin
       if User.reinstate_flagged_users
-        result[:status] = 'ok'
+        result_hash[:status] = 'ok'
         flash[:notice] = I18n.t("admin.notice_reinstate_users_succeeded")
-        result[:redirect_url] = admin_flagged_users_path
+        result_hash[:redirect_url] = admin_flagged_users_path
       else
-        result[:status] = 'error'
-        result[:message] = I18n.t("admin.error_reinstate_users_failed")
+        result_hash[:status] = 'error'
+        result_hash[:message] = I18n.t("admin.error_reinstate_users_failed")
       end
     rescue User::NotReadyForReinstatingError
-      result[:status] = 'error'
-      result[:message] = I18n.t("admin.error_not_ready_for_reinstating")
+      result_hash[:status] = 'error'
+      result_hash[:message] = I18n.t("admin.error_not_ready_for_reinstating")
     rescue Exception => exc
       ExternalLogger.new.log_error(exc, "Admin::FlaggedUsersController#reinstate_all", params)
-      result[:status] = 'error'
-      result[:message] = I18n.t("admin.error_reinstate_users_failed")
+      result_hash[:status] = 'error'
+      result_hash[:message] = I18n.t("admin.error_reinstate_users_failed")
     end
 
-    render(:json => result)
+    render json: result_hash
   end
 
-  # TODO: optimize this method
   def remove_all
-    result = {}
-
     begin
       if User.remove_flagged_users
-        result[:status] = 'ok'
+        result_hash[:status] = 'ok'
         flash[:notice] = I18n.t("admin.notice_remove_users_succeeded")
-        result[:redirect_url] = admin_flagged_users_path
+        result_hash[:redirect_url] = admin_flagged_users_path
       else
-        result[:status] = 'error'
-        result[:message] = I18n.t("admin.error_remove_users_failed")
+        result_hash[:status] = 'error'
+        result_hash[:message] = I18n.t("admin.error_remove_users_failed")
       end
     rescue User::NotReadyForReinstatingError
-      result[:status] = 'error'
-      result[:message] = I18n.t("admin.error_not_ready_for_removing")
+      result_hash[:status] = 'error'
+      result_hash[:message] = I18n.t("admin.error_not_ready_for_removing")
     rescue Exception => exc
       ExternalLogger.new.log_error(exc, "Admin::FlaggedUsersController#remove_all", params)
-      result[:status] = 'error'
-      result[:message] = I18n.t("admin.error_reinstate_users_failed")
+      result_hash[:status] = 'error'
+      result_hash[:message] = I18n.t("admin.error_reinstate_users_failed")
     end
 
-    render(:json => result)
+    render json: result_hash
   end
 
   # Reinstate all flagged images of a user.
   def reinstate_user
-    result = {}
-
     begin
       user = User.find_by_id(params[:id])
 
       if user
         if user.reinstate
-          result[:status] = 'ok'
+          result_hash[:status] = 'ok'
           flash[:notice] = I18n.t("admin.notice_reinstate_user_succeeded")
-          result[:redirect_url] = admin_flagged_users_path
+          result_hash[:redirect_url] = admin_flagged_users_path
         else
-          result[:status] = 'error'
-          result[:message] = I18n.t("admin.error_reinstate_user_failed")
+          result_hash[:status] = 'error'
+          result_hash[:message] = I18n.t("admin.error_reinstate_user_failed")
         end
       else
-        result[:status] = 'error'
-        result[:message] = I18n.t("admin.error_user_not_found")
+        result_hash[:status] = 'error'
+        result_hash[:message] = I18n.t("admin.error_user_not_found")
       end
     rescue User::NotReadyForReinstatingError
-      result[:status] = 'error'
-      result[:message] = I18n.t("admin.error_not_ready_for_reinstating")
+      result_hash[:status] = 'error'
+      result_hash[:message] = I18n.t("admin.error_not_ready_for_reinstating")
     rescue Exception => exc
       ExternalLogger.new.log_error(exc, "Admin::FlaggedUsersController#reinstate_user", params)
-      result[:status] = 'error'
-      result[:message] = I18n.t("admin.error_reinstate_users_failed")
+      result_hash[:status] = 'error'
+      result_hash[:message] = I18n.t("admin.error_reinstate_users_failed")
     end
 
-    render(:json => result)
+    render json: result_hash
   end
 
   # Remove all flagged images of a user.
   def remove_user
-    result = {}
-
     begin
       user = User.find_by_id(params[:id])
 
       if user
         if user.id == current_user.id
-          result[:status] = 'error'
-          result[:message] = I18n.t("admin.error_remove_myself")
+          result_hash[:status] = 'error'
+          result_hash[:message] = I18n.t("admin.error_remove_myself")
         else
           if user.remove
-            result[:status] = 'ok'
-            result[:message] = I18n.t("admin.notice_remove_user_succeeded")
-            result[:redirect_url] = admin_members_path
+            result_hash[:status] = 'ok'
+            result_hash[:message] = I18n.t("admin.notice_remove_user_succeeded")
+            result_hash[:redirect_url] = admin_members_path
           else
-            result[:status] = 'error'
-            result[:message] = I18n.t("admin.error_remove_user_failed")
+            result_hash[:status] = 'error'
+            result_hash[:message] = I18n.t("admin.error_remove_user_failed")
           end
         end
       else
-        result[:status] = 'error'
-        result[:message] = I18n.t("admin.error_user_not_found")
+        result_hash[:status] = 'error'
+        result_hash[:message] = I18n.t("admin.error_user_not_found")
       end
 
     rescue User::NotReadyForReinstatingError
-      result[:status] = 'error'
-      result[:message] = I18n.t("admin.error_not_ready_for_removing")
+      result_hash[:status] = 'error'
+      result_hash[:message] = I18n.t("admin.error_not_ready_for_removing")
     rescue Exception => exc
       ExternalLogger.new.log_error(exc, "Admin::FlaggedUsersController#remove_user", params)
-      result[:status] = 'error'
-      result[:message] = I18n.t("admin.error_reinstate_users_failed")
+      result_hash[:status] = 'error'
+      result_hash[:message] = I18n.t("admin.error_reinstate_users_failed")
     end
 
-    render(:json => result)
+    render json: result_hash
   end
 
   protected

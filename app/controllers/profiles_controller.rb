@@ -150,14 +150,6 @@ class ProfilesController < ApplicationController
 
   protected
 
-    def apply_user_scope
-      if current_user.try(:admin?)
-        User.unscoped { yield }
-      else
-        yield
-      end
-    end
-
     def find_user
       user_id = params[:user_id]
       @user = user_id.nil? ? current_user : User.find(user_id)
