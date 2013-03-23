@@ -276,7 +276,7 @@ class UsersController < ApplicationController
     end
 
     flash[:notice] = "Not found the social network integration"
-    redirect_to :action => :profile
+    redirect_to :action => :account
   end
 
   # params
@@ -294,6 +294,10 @@ class UsersController < ApplicationController
       current_user.update_attribute(:flickr_token, "")
     end
     flash[:notice] = "Disabled #{params[:type_social]}"
-    redirect_to :action => :profile
+    redirect_to :action => :account
+  end
+
+  def account
+    @user = current_user
   end
 end

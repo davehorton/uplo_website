@@ -83,6 +83,8 @@
             // Build an unordered list from the list of errors
             errorText = "<ul>";
 
+            errors = errors.users;
+
             for (var i = 0; i < errors.length; i++ ) {
               errorText +=  "<li>" + errors[i] + "</li> ";
             }

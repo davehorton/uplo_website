@@ -24,7 +24,7 @@ Uplo::Application.routes.draw do
   get "intro", :to => "home#intro"
   get 'friends', :to => 'home#friends_feed'
   get "back", :to => "application#redirect_back"
-  get "my_account", :to => "users#profile"
+  get "my_account", :to => "users#account"
   get "my_account/edit", :to => "users#edit"
   put "my_account/update", :to => "users#update"
 
