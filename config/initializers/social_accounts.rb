@@ -1,4 +1,4 @@
-config = YAML::load_file("#{Rails.root}/config/social_config.yml")[Rails.env]
+config = YAML::load_file("#{Rails.root}/config/social.yml")[Rails.env]
 
 FACEBOOK_CONFIG  = config['facebook']
 TWITTER_CONFIG   = config['twitter']
