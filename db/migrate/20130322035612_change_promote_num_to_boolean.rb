@@ -10,7 +10,7 @@ class ChangePromoteNumToBoolean < ActiveRecord::Migration
     end
 
     remove_column :images, :promote_num
-    rename_column :images, :convert_promote_num, :promote
+    rename_column :images, :convert_promote_num, :promoted
   end
 
   def down

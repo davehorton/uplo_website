@@ -113,7 +113,7 @@ ActiveRecord::Schema.define(:version => 20130322035612) do
     t.integer  "pageview",           :default => 0
     t.boolean  "data_processing",    :default => false
     t.integer  "user_id"
-    t.boolean  "promote",            :default => false
+    t.boolean  "promoted",           :default => false
   end
 
   add_index "images", ["data_processing"], :name => "index_images_on_data_processing"
