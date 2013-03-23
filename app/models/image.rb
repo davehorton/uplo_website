@@ -26,6 +26,7 @@ class Image < ActiveRecord::Base
   validate :validate_quality, :on => :create
 
   before_create :init_tier, :set_as_cover_if_first_one, :set_user
+  before_destroy :ensure_not_associated_with_an_order
   before_post_process :init_image_info
 
   default_scope order('images.created_at desc')
@@ -410,6 +411,10 @@ class Image < ActiveRecord::Base
   end
 
   protected
+
+    def ensure_not_associated_with_an_order
+      return false if orders.any?
+    end
 
     def s3_expire_time
       Time.zone.now.beginning_of_day.since 25.hours

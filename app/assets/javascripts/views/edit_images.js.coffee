@@ -62,7 +62,7 @@ deletePhoto = (node) ->
         else
           helper.show_notification(response.msg)
       complete: ->
-        $.modal.close()
+        window.setTimeout("$.modal.close();", 400)
     });
 
 saveGridChanges = (callback) ->
@@ -98,7 +98,7 @@ saveGridChanges = (callback) ->
     error: ->
       helper.show_notification("Problem saving!")
     complete: ->
-      $.modal.close()
+      window.setTimeout("$.modal.close();", 200)
   });
 
 confirmChanges = (callback) ->
@@ -246,7 +246,7 @@ $ ->
           $('#edit-gallery-popup').replaceWith response.edit_popup
           $('#gallery_selector_id').html response.gallery_options
           $('select').selectmenu({ style: 'dropdown' })
-          $.modal.close()
+          window.setTimeout("$.modal.close();", 200)
       })
 
   $('#images-panel').delegate '.edit-template .price', 'click', (e) ->

@@ -47,19 +47,25 @@ class ImagesController < ApplicationController
       end
       images = gallery.images.unflagged.paginate_and_sort(filtered_params)
 
-      image.destroy
-      pagination = render_to_string :partial => 'pagination',
-        :locals => {  :source => images, :params => { :controller => 'galleries',
-          :action => 'edit_images', :gallery_id => gallery.id }, :classes => 'text left' }
-      items = render_to_string :partial => 'galleries/edit_photos',
-                              :locals => { :images => images }
-      gal_options = self.class.helpers.gallery_options(current_user.id, gallery.id, true)
-      render :json => { :success => true, :items => items, :pagination => pagination, :gallery_options => gal_options }
+      if image.destroy
+        pagination = render_to_string :partial => 'pagination',
+          :locals => {  :source => images, :params => { :controller => 'galleries',
+            :action => 'edit_images', :gallery_id => gallery.id }, :classes => 'text left' }
+        items = render_to_string :partial => 'galleries/edit_photos',
+                                :locals => { :images => images }
+        gal_options = self.class.helpers.gallery_options(current_user.id, gallery.id, true)
+        render :json => { :success => true, :items => items, :pagination => pagination, :gallery_options => gal_options }
+      else
+        render :json => {:msg => "Could not delete image"}
+      end
     else
       ids = params[:id]
       ids = params[:id].join(',') if params[:id].instance_of? Array
-      current_user.images.destroy_all("id in (#{ids})")
-      render :json => {:success => true}
+      if current_user.images.where(id: ids).destroy
+        render :json => {:success => true}
+      else
+        render :json => {:msg => "Could not delete images"}
+      end
     end
   end
 
