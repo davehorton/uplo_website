@@ -92,11 +92,11 @@ saveGridChanges = (callback) ->
       $('.pagination-panel').each((idx, elem) -> $(elem).html response.pagination)
       $('#gallery_selector_id').html response.gallery_options
       $('select').selectmenu({ style: 'dropdown' })
-      helper.show_notification("Update successfully!")
+      helper.show_notification("Updated successfully!")
       callback.call() if callback
       window.grid_changed = false
     error: ->
-      helper.show_notification("Fail to update!")
+      helper.show_notification("Problem saving!")
     complete: ->
       $.modal.close()
   });
@@ -123,7 +123,7 @@ requestUpdateTier = (node) ->
     dataType: 'json',
     success: (response) ->
       if response.success
-        helper.show_notification("Price has been updated successfully!")
+        helper.show_notification("Price updated!")
         $(node).siblings().text "Tier #{response.tier}"
         $.modal.close()
       else
@@ -196,7 +196,7 @@ $ ->
       dataType: 'json',
       success: (response) ->
         if response.success
-          helper.show_notification("Your gallery has been updated!")
+          helper.show_notification("Gallery updated!")
           $.modal.close()
           $('#edit-gallery-popup').replaceWith response.edit_popup
           $('#gallery_selector_id').html(response.gal_with_number_options)

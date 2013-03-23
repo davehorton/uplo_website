@@ -13,7 +13,7 @@ $ ->
   $('#user_card_number').change ->
     card_type = $('#user_card_type').val()
     if card_type == ''
-      helper.show_notification('Please choose card type!')
+      helper.show_notification('Please choose credit card type!')
     else
       for validator in CARD_TYPE_VALIDATORS
         if validator.value == card_type

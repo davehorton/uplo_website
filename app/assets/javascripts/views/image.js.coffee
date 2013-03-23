@@ -44,7 +44,7 @@ $ ->
           $("#post-comment-warning").html(response.msg)
           $.modal.close()
       error: ->
-        helper.show_notification('Something went wrong! Try to post your comment later!')
+        helper.show_notification('Something went wrong!')
         $.modal.close()
     });
 

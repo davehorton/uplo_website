@@ -176,7 +176,7 @@ class GalleriesController < ApplicationController
 
     def check_paypal_email
       if (current_user.paypal_email.blank?)
-        flash[:warning] = "You have to update your Paypal email"
+        flash[:warning] = "Please provide a PayPal email before creating a gallery"
         redirect_to(:controller => :users, :action => :account) and return
       end
     end

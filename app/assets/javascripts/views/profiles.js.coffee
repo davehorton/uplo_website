@@ -117,7 +117,7 @@ requestUpdateAvatar = (node) ->
       if(response.success==false)
         helper.show_notification(response.msg)
       else
-        helper.show_notification('Update successfully!')
+        helper.show_notification('Updated successfully!')
         $('#edit-profile-photo-popup .current-photo .avatar').attr 'src', response.extra_avatar_url
         $('#user-section .avatar.large').attr 'src', response.large_avatar_url
   })
@@ -159,7 +159,7 @@ $ ->
         $.modal.close()
         window.setTimeout("$('#edit-profile-photo-popup').modal()", 300)
       else
-        helper.show_notification('Update successfully!')
+        helper.show_notification('Updated successfully!')
         $('#edit-profile-photo-popup .held-photos .photos').html(response.profile_photos)
         $('#edit-profile-photo-popup .current-photo .avatar').attr 'src', response.extra_avatar_url
         $('#user-section .avatar.large').attr 'src', response.large_avatar_url
@@ -234,10 +234,10 @@ $ ->
       helper.show_notification('Email is invalid!')
     else if website_reg.test($('#user_website').val()) == false
       helper.show_notification('Website is invalid!')
-    else if $("#user_first_name").val().length < 2 || $("#user_first_name").val().length > 30
-      helper.show_notification('First name must be 2 - 30 characters in length')
-    else if $("#user_last_name").val().length < 2 || $("#user_last_name").val().length > 30
-      helper.show_notification('Last name must be 2 - 30 characters in length')
+    else if $("#user_first_name").val().length < 1 || $("#user_first_name").val().length > 30
+      helper.show_notification('First name must be between 1 to 30 characters in length')
+    else if $("#user_last_name").val().length < 1 || $("#user_last_name").val().length > 30
+      helper.show_notification('Last name must between 1 to 30 characters in length')
     else
       data_form = $('#frm-edit-profile-info')
       $.modal.close()
@@ -258,7 +258,7 @@ $ ->
             window.setTimeout("$('#edit-profile-info-popup').modal()", 300)
         ,
         error: ->
-          helper.show_notification("Something went wrong, can not update your profile")
+          helper.show_notification("Something went wrong!")
           $.modal.close()
           window.setTimeout("$('#edit-profile-info-popup').modal()", 300)
       });
@@ -266,6 +266,6 @@ $ ->
   $("#user_first_name").keypress (event) -> helper.prevent_exceed_characters(@, event.charCode, 30)
   $("#user_last_name").keypress (event) -> helper.prevent_exceed_characters(@, event.charCode, 30)
   $("#user_first_name").blur ->
-    helper.check_less_than_characters(@.value, 1, -> helper.show_notification('First name must be at least 2 characters!'))
+    helper.check_less_than_characters(@.value, 1, -> helper.show_notification('First name must be at least 1 character!'))
   $("#user_last_name").blur ->
-    helper.check_less_than_characters(@.value, 1, -> helper.show_notification('Last name must be at least 2 characters!'))
+    helper.check_less_than_characters(@.value, 1, -> helper.show_notification('Last name must be at least 1 character!'))

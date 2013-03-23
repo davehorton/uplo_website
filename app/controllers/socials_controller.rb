@@ -51,7 +51,7 @@ class SocialsController < ApplicationController
 				flash[:notice] = current_user.errors.full_messages.to_sentence
 			end
     rescue OAuth::Unauthorized
-      flash[:notice] = "Invalid OAuth token, unable to connect to twitter"
+      flash[:notice] = "Cannot authorize Twitter"
     end
 
 		redirect_to :controller => :users, :action => :account
@@ -174,7 +174,7 @@ class SocialsController < ApplicationController
 				    flash[:notice] = "Duplicated message"
 				  when /Error validating access token/
 				    current_user.update_attribute(:facebook_token, "")
-				    flash[:notice] = "There is some problem with authentication, please re-enable Facebook"
+				    flash[:notice] = "Could not authenticate you with Facebook, please try again."
 						redirect_to :controller => :users, :action => :account and return
 				  else
 				    flash[:notice] = "Cannot share the link at this moment: #{e.message}"

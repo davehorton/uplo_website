@@ -99,9 +99,9 @@
           if(response.success == false){
             window.setTimeout( function(){ update_status(task_id); }, 5000);
           }else if(response.status=="error"){
-            helper.show_notification("ERROR! Your process has been stop!");
+            helper.show_notification("There was a problem processing your request.");
           }else if(response.status=="cancelled"){
-            helper.show_notification("Your process has been cancelled!");
+            helper.show_notification("Request has been cancelled!");
           }
         },
         fail: function(){}

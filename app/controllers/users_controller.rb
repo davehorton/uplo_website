@@ -1,7 +1,6 @@
 class UsersController < ApplicationController
   self.page_size = 12
 
-  skip_before_filter :authenticate_user!
   before_filter :show_notification
   respond_to :json
 
@@ -51,7 +50,6 @@ class UsersController < ApplicationController
 
     respond_to do |format|
       if current_user.update_profile(params[:user])
-        puts params
         sign_in current_user, :bypass => true
         format.html do
           if request.xhr?
@@ -275,7 +273,7 @@ class UsersController < ApplicationController
 
     end
 
-    flash[:notice] = "Not found the social network integration"
+    flash[:notice] = "Problem enabling social connection"
     redirect_to :action => :account
   end
 

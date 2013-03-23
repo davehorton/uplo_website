@@ -57,7 +57,7 @@
             var $form = $(this);
 
             $form.closest('.partial_wrapper').html(xhr.responseText);
-            helper.show_notification("Update successfully");
+            helper.show_notification("Updated successfully!");
             $('select[id!=my_links]').selectmenu({style:'dropdown'});
             reloadEvent();
           })

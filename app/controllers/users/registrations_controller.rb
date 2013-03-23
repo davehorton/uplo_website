@@ -6,7 +6,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
       @inv  = Invitation.find_by_token params[:token]
       super
     else
-      flash[:info] = 'You have to log in first!'
+      flash[:info] = 'Please login.'
       redirect_to '/'
     end
   end
@@ -16,7 +16,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
       @inv  = Invitation.find_by_token params[:token]
       super
     else
-      flash[:info] = 'Missing invitation token!'
+      flash[:info] = 'Invalid invitation!'
       redirect_to '/'
     end
   end
