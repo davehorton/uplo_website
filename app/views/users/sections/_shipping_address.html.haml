@@ -15,8 +15,9 @@
         = address.optional_address
       .line_info
         = [address.city, address.state].join(',')
-      .line_info
         = address.zip
+      .line_info
+        = address.country
   .yield_edit.hide
     = simple_form_for address, :url => user_path(current_user) , :remote => true, :method => :put do |add|
       .form_wrapper.left
@@ -25,16 +26,18 @@
         .line Street Address
         .line
         .line City
-        .line State
+        .line State/Province
         .line Zip Code
+        .line Country
       .form_wrapper.left{:style => "width:200px; margin-left:10px"}
         .line= add.input_field :first_name
         .line= add.input_field :last_name
         .line= add.input_field :street_address
         .line= add.input_field :optional_address
         .line= add.input_field :city
-        .line= add.select :state, state_options(address.state), {:prompt => 'Select One'}
+        .line= add.input_field :state
         .line= add.input_field :zip
+        .line= add.input_field :country, priority: [ "United States", "Canada" ]
         .line= hidden_field :user, :type_update, :value => :shipping_address
         %br
         .update_button.left

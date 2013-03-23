@@ -8,9 +8,7 @@
   #gallery-form-container.clearfix.hidden{:style => "display: none"}
     = render(:partial => "form", :locals => {:gallery => @gallery})
 
-  - if @galleries.blank?
-    .empty-data= "There is no gallery. Let create one."
-  - else
+  - if @galleries.any?
     - (0...@galleries.length). each do |idx|
       - gallery = GalleryDecorator.new(@galleries[idx])
       - additional_class = (idx%6 == 0) ? "no-padding-left" : ((idx%6==5) ? "no-padding-right" : "")
@@ -32,7 +30,6 @@
 - content_for :js do
   = javascript_tag do
     :erb
-
       function showSocialPopup(class_name){
         $('#social-sharing').addClass('hide');
         $("#social-sharing-popup").modal();
@@ -92,10 +89,10 @@
       });
 
       $(function(){
-
-        <% if (@gallery.errors && @gallery.errors.count > 0) %>
-          $('#new-gallery').click();
+        <% if @galleries.blank? || (@gallery.errors && @gallery.errors.any?) %>
+        $('#new-gallery').click();
         <% end %>
+
         $.contextMenu({
           selector: '.share-link',
           trigger: 'left',
