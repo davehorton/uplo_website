@@ -79,7 +79,7 @@ var helper = {
           }
         });
       } else if($('#simplemodal-container').find('#mask').length > 0){
-        $.modal.close();
+        window.setTimeout("$.modal.close();", 200);
       }
     });
   },

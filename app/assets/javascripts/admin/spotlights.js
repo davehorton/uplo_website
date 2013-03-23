@@ -63,7 +63,7 @@ var spotlights = {
             }
           }
 
-          $.modal.close();
+          window.setTimeout("$.modal.close();", 200);
         }
       });
     });
