@@ -192,7 +192,7 @@
           // Auto-resize the image frame
           $(img).load(function(){
             $(img).parent().removeClass('no-border');
-            image_util.resize_frame($(img));
+            image_util.resize_frame(img);
           });
 
           if($(img).prop('complete')){

@@ -52,7 +52,7 @@ image_util = {
     var new_h = params.height;
     var correct_h = new_w / params.ratio;
 
-    if(correct_h < new_h){
+    if(correct_h < new_h) {
       new_w = new_h * params.ratio;
     } else {
       var correct_w = new_h * params.ratio;
@@ -62,8 +62,12 @@ image_util = {
     }
 
     $(img).width(new_w).height(new_h);
+
     $(img).css('max-width', new_w);
     $(img).css('max-height', new_h);
+
+    $(img).center();
+
     return {width: new_w, height: new_h};
   },
 
@@ -101,6 +105,8 @@ image_util = {
       if(height > 0){
         $(parent).height(ratio * height);
       }
+
+      $(img).center();
     }
   },
 

@@ -19,6 +19,7 @@
 //= require highcharts/highcharts-more
 //= require load_image
 //= require jquery-fileupload/basic
+//= require jquery.center
 //= require jquery.contextMenu
 //= require jquery.inline_label
 //= require jquery.inputHintOverlay
