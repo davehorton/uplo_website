@@ -14,6 +14,7 @@ class Admin::ProductsController < Admin::AdminController
 
   def update
     if product.save
+      flash[:notice] = "Product updated"
       redirect_to admin_products_path
     else
       render :edit

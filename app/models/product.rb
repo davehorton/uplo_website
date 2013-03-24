@@ -8,4 +8,6 @@ class Product < ActiveRecord::Base
   validates :tier, presence: true
   validates :price, presence: true
   validates :commission, presence: true
+
+  default_scope joins(:tier, :size, :moulding).order('tiers.name, sizes.width, sizes.height, mouldings.name').readonly(false)
 end

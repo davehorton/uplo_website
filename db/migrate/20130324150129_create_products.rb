@@ -1,9 +1,9 @@
 class CreateProducts < ActiveRecord::Migration
   def change
     create_table :products do |t|
-      t.string :tier_id
-      t.string :size_id
-      t.string :moulding_id
+      t.integer :tier_id
+      t.integer :size_id
+      t.integer :moulding_id
       t.decimal :price,      :precision => 8, :scale => 2, :default => 0
       t.decimal :commission, :precision => 8, :scale => 2, :default => 0
 

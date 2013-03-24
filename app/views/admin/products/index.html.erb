@@ -51,7 +51,7 @@
     <td><%= product.size.name %></td>
     <td><%= product.moulding.name %></td>
     <td><%= number_to_currency product.price %></td>
-    <td><%= number_to_currency product.commission %></td>
+    <td><%= number_to_percentage product.commission %></td>
     <td><%= link_to 'Edit', edit_admin_product_path(product) %></td>
   </tr>
   <% end %>
