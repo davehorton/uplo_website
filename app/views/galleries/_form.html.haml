@@ -1,10 +1,9 @@
 .line-separator.clear
 .gallery-form-container
-  - gallery ||= @gallery
-  = simple_form_for(gallery, :html => {:id => 'frm-edit-gallery', :class => "gallery-form"}) do |f|
+  = simple_form_for(@gallery, :html => {:id => 'frm-edit-gallery', :class => "gallery-form"}) do |f|
     .sections.left
       = f.input(:name, :wrapper_class => "input left", :label => 'Gallery Name',
-                :input_html => {:class => "name"}, :required => true)
+                :input_html => {:class => "name"}, :required => true, :error => false)
       = f.input(:description, :as => 'text', :wrapper_class => "input left",
                 :input_html => {:class => "description"}, :required => false)
     .sections.right

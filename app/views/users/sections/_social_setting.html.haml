@@ -1,4 +1,3 @@
-/locals user
 = render :layout => "account_wrapper", :locals => {:header => "My Social Networks", :hide_edit => true} do
   .yield_info
     = simple_form_for user, :remote => true do |u|
@@ -15,13 +14,13 @@
             - if user.facebook_token.blank?
               = link_to "Enable", {:action => :enable_social, :type_social => "Facebook"}, :method => :put
             - else
-              = link_to "Disable", {:action => :disable_social, :type_social => "Facebook"}, :method => :put 
+              = link_to "Disable", {:action => :disable_social, :type_social => "Facebook"}, :method => :put
         .line
           .remove_css_effect
             - if user.twitter_token.blank?
               = link_to "Enable", {:action => :enable_social, :type_social => "Twitter"}, :method => :put
             - else
-              = link_to "Disable", {:action => :disable_social, :type_social => "Twitter"}, :method => :put 
+              = link_to "Disable", {:action => :disable_social, :type_social => "Twitter"}, :method => :put
         .line
           .remove_css_effect
             - if user.tumblr_token.blank?

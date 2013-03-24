@@ -1,4 +1,3 @@
-/ locals: comments
 .container.left
   = render :partial => 'pagination', :locals => { :source => comments, :params => { :controller => 'comments', :action => 'index' }, :classes => 'comments right' }
 - comments.decorate.each do |comment|

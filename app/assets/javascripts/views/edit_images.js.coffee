@@ -187,7 +187,9 @@ $ ->
     other_checkboxes.attr('checked', false)
 
   $('#images-panel').delegate '.button.delete-photo', 'click', (e) -> deletePhoto(e.target)
+
   $('#edit-gallery').click -> $('#edit-gallery-popup').modal()
+
   $('body').delegate '#btn-gallery-save', 'click', (e) ->
     $.ajax({
       url: $('#frm-edit-gallery').attr('action'),
