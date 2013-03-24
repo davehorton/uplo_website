@@ -53,6 +53,6 @@
     :erb
       var image_id = '<%= params[:id] %>';
       var tier = <%= @image.tier %>;
-      var moulding_pending = <%= Image::PENDING_MOULDING.to_json %>;
-      var moulding_constrain = <%= Image::MOULDING_SIZES_CONSTRAIN.to_json %>;
-      var moulding_price = <%= Image::MOULDING_PRICES.to_json %>;
+      var moulding_pending = <%= PENDING_MOULDING.to_json %>;
+      var moulding_constrain = <%= MOULDING_SIZES_CONSTRAIN.to_json %>;
+      var moulding_price = <%= MOULDING_PRICES.to_json %>;

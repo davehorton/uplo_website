@@ -78,8 +78,8 @@ class Api::ImagesController < Api::BaseController
     image = Image.unflagged.find(filtered_params[:id])
 
     sizes = []
-    Image::MOULDING.each do |k, v|
-      if Image::MOULDING_PRICES[v]
+    MOULDING.each do |k, v|
+      if MOULDING_PRICES[v]
         image.printed_sizes.each { |s| sizes << { :id => image.id, :size => s, :mould => v, :price => image.get_price(v, s) }}
       end
     end

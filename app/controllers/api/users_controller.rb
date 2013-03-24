@@ -303,7 +303,7 @@ class Api::UsersController < Api::BaseController
   end
 
   def get_moulding
-    result = { :success => true, :msg => "", :moulding => Image::MOULDING, :discount => Image::MOULDING_DISCOUNT}
+    result = { :success => true, :msg => "", :moulding => MOULDING, :discount => MOULDING_DISCOUNT}
     render :json => result
   end
 

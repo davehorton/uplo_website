@@ -2,21 +2,21 @@
 
   .frame-fit.left
     .cell.header.text.black.bold.font11.left
-    - Image::TIERS.each do |k, v|
+    - TIERS.each do |k, v|
       .type.cell.header.text.black.bold.font11.left
         - checked = (image.tier.to_s == v.to_s)
         = f.radio_button(:tier, v, :checked => checked)
         = f.label("tier_#{v}", "Tier #{v}", :class => 'text gray font11')
 
-  - GlobalConstant::MOULDING_PRICES_AVAI.each do |mould|
+  - MOULDING_PRICES_AVAI.each do |mould|
     .price-tab{:id => "tab-#{mould}"}
       - printed_sizes = image.printed_sizes
       - printed_sizes.each do |size|
         .frame-fit.left
           .cell.text.black.bold.font11.left= size
-          - Image::TIERS.each do |k, v|
-            .cell.text.black.bold.font11.left= number_to_currency GlobalConstant::MOULDING_PRICES[mould][v][size], {:precision => 0}
+          - TIERS.each do |k, v|
+            .cell.text.black.bold.font11.left= number_to_currency MOULDING_PRICES[mould][v][size], {:precision => 0}
   %ul#tabs
-    - GlobalConstant::MOULDING_PRICES_AVAI.each do |mould|
+    - MOULDING_PRICES_AVAI.each do |mould|
       %li
-        %a.tab.text.black.bold.font11.left{:href => "#tab-#{mould}"}= GlobalConstant::MOULDING_PRICE_DISPLAY[mould]
+        %a.tab.text.black.bold.font11.left{:href => "#tab-#{mould}"}= MOULDING_PRICE_DISPLAY[mould]

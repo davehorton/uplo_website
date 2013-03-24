@@ -25,7 +25,7 @@ class ShoppingCartController < ApplicationController
       redirect_to :controller => :images, :action => :order, :id => image.id and return
 
     #check moulding & size constrain
-    elsif Image::MOULDING_SIZES_CONSTRAIN.has_key?(params[:line_item]['moulding']) and Image::MOULDING_SIZES_CONSTRAIN[params[:line_item]['moulding']].index(params[:line_item]['size'])
+    elsif MOULDING_SIZES_CONSTRAIN.has_key?(params[:line_item]['moulding']) and MOULDING_SIZES_CONSTRAIN[params[:line_item]['moulding']].index(params[:line_item]['size'])
       flash[:error] = "The mould is not compatible with this size. Please change your options."
       redirect_to :controller => :images, :action => :order, :id => image.id and return
 
@@ -72,7 +72,7 @@ class ShoppingCartController < ApplicationController
       redirect_to :controller => :images, :action => :order, :id => line_item.image.id, :line_item => line_item.id and return
 
     #check moulding & size constrain
-    elsif Image::MOULDING_SIZES_CONSTRAIN.has_key?(params[:line_item]['moulding']) and Image::MOULDING_SIZES_CONSTRAIN[params[:line_item]['moulding']].index(params[:line_item]['size'])
+    elsif MOULDING_SIZES_CONSTRAIN.has_key?(params[:line_item]['moulding']) and MOULDING_SIZES_CONSTRAIN[params[:line_item]['moulding']].index(params[:line_item]['size'])
       flash[:error] = "The mould is not compatible with this size. Please change your options."
       redirect_to :controller => :images, :action => :order, :id => image.id and return
 

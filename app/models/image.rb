@@ -119,7 +119,7 @@ class Image < ActiveRecord::Base
   end
 
   def get_commission
-    return GlobalConstant::IMAGE_COMMISSIONS[self.tier]
+    return IMAGE_COMMISSIONS[self.tier]
   end
 
   def square?
@@ -422,7 +422,7 @@ class Image < ActiveRecord::Base
 
     def validate_quality
       save_dimensions
-      min_size = self.square? ? Image::PRINTED_SIZES[:square][0] : Image::PRINTED_SIZES[:rectangular][0]
+      min_size = self.square? ? PRINTED_SIZES[:square][0] : PRINTED_SIZES[:rectangular][0]
       if !self.valid_for_size?(min_size)
         self.errors.add :base, "Low quality of file! Please try again with higher quality images!"
         return false

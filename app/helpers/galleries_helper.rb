@@ -1,15 +1,4 @@
 module GalleriesHelper
-  MOULDING_DISPLAY = {
-    Image::MOULDING[:print] => 'Print Only (Gloss)',
-    Image::MOULDING[:print_luster] => 'Print Only (Luster)',
-    Image::MOULDING[:canvas] => 'Canvas',
-    Image::MOULDING[:plexi] => 'Plexi',
-    Image::MOULDING[:black] => 'Black',
-    Image::MOULDING[:white] => 'White',
-    Image::MOULDING[:light_wood] => 'Light Wood',
-    Image::MOULDING[:rustic_wood] => 'Rustic Wood'
-  }
-
   def gallery_options(user_id, selected_gallery = nil, size_necessary = false)
     user = User.find_by_id user_id
     collection = user.galleries
@@ -40,7 +29,7 @@ module GalleriesHelper
 
   def mounding_options(selected = nil)
     options = []
-    Image::MOULDING.each do |k, v|
+    MOULDING.each do |k, v|
       options << [MOULDING_DISPLAY[v], v]
     end
     options_for_select(options, selected)

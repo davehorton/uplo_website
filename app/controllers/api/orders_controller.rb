@@ -27,7 +27,7 @@ class Api::OrdersController < Api::BaseController
       @result[:msg] = "Please fill all options first."
 
     #check moulding & size constrain
-    elsif Image::MOULDING_SIZES_CONSTRAIN.has_key?(item_info[:moulding]) and Image::MOULDING_SIZES_CONSTRAIN[item_info[:moulding]].index(item_info[:size])
+    elsif MOULDING_SIZES_CONSTRAIN.has_key?(item_info[:moulding]) and MOULDING_SIZES_CONSTRAIN[item_info[:moulding]].index(item_info[:size])
       @result[:success] = false
       @result[:msg] = "The mould is not compatible with this size. Please change your options."
 
@@ -74,7 +74,7 @@ class Api::OrdersController < Api::BaseController
       @result[:msg] = "Please fill all options first."
 
     #check moulding & size constrain
-    elsif Image::MOULDING_SIZES_CONSTRAIN.has_key?(item_info[:moulding]) and Image::MOULDING_SIZES_CONSTRAIN[item_info[:moulding]].index(item_info[:size])
+    elsif MOULDING_SIZES_CONSTRAIN.has_key?(item_info[:moulding]) and MOULDING_SIZES_CONSTRAIN[item_info[:moulding]].index(item_info[:size])
       @result[:success] = false
       @result[:msg] = "The mould is not compatible with this size. Please change your options."
 
