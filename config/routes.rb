@@ -191,7 +191,10 @@ Uplo::Application.routes.draw do
       end
     end
 
-    resources :pricing
+    resources :products, except: [:show]
+    resources :tiers, except: [:show]
+    resources :sizes, except: [:show]
+    resources :mouldings, except: [:show]
   end
 
   # API ROUTING

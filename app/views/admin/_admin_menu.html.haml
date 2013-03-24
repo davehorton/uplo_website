@@ -14,6 +14,6 @@
   %li{:class => set_current_tab("invites")}
     %div
       = link_to 'Invites', {:controller => :invites, :action => :index}
-  %li{:class => set_current_tab("pricing")}
+  %li{:class => set_current_tab("products")}
     %div
-      = link_to 'Pricing', {:controller => :pricing, :action => :index}
+      = link_to 'Products', [:admin, :products]

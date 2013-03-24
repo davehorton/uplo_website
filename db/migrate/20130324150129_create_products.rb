@@ -4,8 +4,8 @@ class CreateProducts < ActiveRecord::Migration
       t.string :tier_id
       t.string :size_id
       t.string :moulding_id
-      t.decimal :price,      :precision => 10, :scale => 0, :default => 0
-      t.decimal :commission, :precision => 10, :scale => 0, :default => 0
+      t.decimal :price,      :precision => 8, :scale => 2, :default => 0
+      t.decimal :commission, :precision => 8, :scale => 2, :default => 0
 
       t.timestamps
     end

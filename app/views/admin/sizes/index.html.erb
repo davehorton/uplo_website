@@ -1,0 +1,25 @@
+<%= render partial: 'admin/admin_menu' %>
+
+<style type="text/css">
+  #actions {
+    margin-bottom: 30px;
+  }
+
+  #actions a {
+    background-color: #ddd;
+    border: 1px solid #999;
+    padding: 10px;
+  }
+</style>
+
+<div id="actions">
+  <%= link_to "Back to Products", admin_products_path %>
+  <%= link_to "Add New Size", new_admin_size_path %>
+</div>
+
+<ul>
+  <% Size.all.each do |size| %>
+    <li><%= link_to size.name, edit_admin_size_path(size) %> (<%= size.width %> x <%= size.height %>)</li>
+  <% end %>
+</ul>
+

@@ -191,10 +191,10 @@ ActiveRecord::Schema.define(:version => 20130324155640) do
     t.string   "tier_id"
     t.string   "size_id"
     t.string   "moulding_id"
-    t.decimal  "price",       :precision => 10, :scale => 0, :default => 0
-    t.decimal  "commission",  :precision => 10, :scale => 0, :default => 0
-    t.datetime "created_at",                                                :null => false
-    t.datetime "updated_at",                                                :null => false
+    t.decimal  "price",       :precision => 8, :scale => 2, :default => 0.0
+    t.decimal  "commission",  :precision => 8, :scale => 2, :default => 0.0
+    t.datetime "created_at",                                                 :null => false
+    t.datetime "updated_at",                                                 :null => false
   end
 
   add_index "products", ["moulding_id"], :name => "index_products_on_moulding_id"
