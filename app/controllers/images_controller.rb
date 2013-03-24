@@ -31,7 +31,7 @@ class ImagesController < ApplicationController
   end
 
   def index
-    find_gallery
+    find_gallery_and_authorize
     @images = @gallery.images.unflagged.paginate_and_sort(filtered_params)
   end
 
@@ -70,7 +70,7 @@ class ImagesController < ApplicationController
   end
 
   def public_images
-    find_gallery
+    find_gallery_and_authorize
     @images = @gallery.images.popular_with_pagination(filtered_params, current_user)
     render :layout => 'application'
   end
@@ -355,10 +355,9 @@ class ImagesController < ApplicationController
 
   protected
 
-    def find_gallery
+    def find_gallery_and_authorize
       @gallery = Gallery.find(params[:gallery_id])
-      render_unauthorized if !current_user.can_access?(@gallery) ||
-        (!current_user.owns_gallery?(@gallery) && %w(edit update destroy create list).include?(params[:action]))
+      render_unauthorized if !current_user.can_access?(@gallery)
     end
 
     def push_to_uplo_photoset(image_id)

@@ -16,3 +16,32 @@
 #button-container
   #btn-gallery-save.button.save.left
   .close.button.cancel.left
+
+:erb
+  <script type="text/javascript">
+  $(document).on('click', '#btn-gallery-save', function(e){
+    e.preventDefault();
+    $.ajax({
+      url: $('#frm-edit-gallery').attr('action'),
+      type: 'POST',
+      data: $('#frm-edit-gallery').serialize(),
+      dataType: 'json',
+      success: function(response) {
+        if(response.success) {
+          $('#gallery_selector_id').html(response.gallery_options);
+          $('select').selectmenu({ style: 'dropdown' });
+          helper.show_notification("Gallery updated!");
+          $.modal.close();
+          $('#edit-gallery-popup').replaceWith(response.edit_popup);
+          $('#gallery_selector_id').html(response.gal_with_number_options);
+          $('.edit-template #image_gallery_id').each(function(idx, val){
+            $(val).html(response.gallery_options);
+          });
+          $('select[id=gallery_permission]').selectmenu({ style: 'dropdown' });
+        } else {
+          helper.show_notification(response.msg);
+        }
+      }
+    });
+  });
+  </script>

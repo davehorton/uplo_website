@@ -489,11 +489,11 @@ class User < ActiveRecord::Base
   end
 
   def owns_image?(image)
-    image.user == self
+    image.user_id == id
   end
 
   def owns_gallery?(gallery)
-    gallery.user == self
+    gallery.user_id == id
   end
 
   # TODO: move into ability class

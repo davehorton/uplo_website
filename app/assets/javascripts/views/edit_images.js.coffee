@@ -190,24 +190,6 @@ $ ->
 
   $('#edit-gallery').click -> $('#edit-gallery-popup').modal()
 
-  $('body').delegate '#btn-gallery-save', 'click', (e) ->
-    $.ajax({
-      url: $('#frm-edit-gallery').attr('action'),
-      type: 'POST',
-      data: $('#frm-edit-gallery').serialize(),
-      dataType: 'json',
-      success: (response) ->
-        if response.success
-          helper.show_notification("Gallery updated!")
-          $.modal.close()
-          $('#edit-gallery-popup').replaceWith response.edit_popup
-          $('#gallery_selector_id').html(response.gal_with_number_options)
-          $('.edit-template #image_gallery_id').each((idx, val) -> $(val).html(response.gallery_options))
-          $('select[id=gallery_permission]').selectmenu({ style: 'dropdown' })
-        else
-          helper.show_notification(response.msg)
-    });
-
   $('#images-panel').delegate '.edit-template input', 'change', (e) ->
     window.grid_changed = true
   $('#images-panel').delegate '.edit-template textarea', 'change', (e) ->

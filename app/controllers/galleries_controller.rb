@@ -119,28 +119,28 @@ class GalleriesController < ApplicationController
   end
 
   def update
-    if find_gallery
-      if request.xhr?
-        if @gallery.update_attributes(params[:gallery])
-          edit_popup = render_to_string :partial => 'edit_gallery', :layout => 'layouts/popup',
-            :locals => { :title => 'Edit Your Gallery Infomation',
-            :id => 'edit-gallery-popup', :gallery => @gallery }
-          gal_number_options = self.class.helpers.gallery_options(current_user.id, @gallery.id, true)
-          gal_options = self.class.helpers.gallery_options(current_user.id, @gallery.id, false)
-          result = { :success => true, :edit_popup => edit_popup,
-            :gal_with_number_options => gal_number_options.gsub(/\n/, ''), :gallery_options => gal_options.gsub(/\n/, '') }
-        else
-          result = { :success => false, :msg => @gallery.errors.full_messages[0] }
-        end
-        return render :json => result
+    @gallery = current_user.galleries.find(params[:id])
+
+    if request.xhr?
+      if @gallery.update_attributes(params[:gallery])
+        edit_popup = render_to_string :partial => 'edit_gallery', :layout => 'layouts/popup',
+          :locals => { :title => 'Edit Your Gallery Infomation',
+          :id => 'edit-gallery-popup', :gallery => @gallery }
+        gal_number_options = self.class.helpers.gallery_options(current_user.id, @gallery.id, true)
+        gal_options = self.class.helpers.gallery_options(current_user.id, @gallery.id, false)
+        result = { :success => true, :edit_popup => edit_popup,
+          :gal_with_number_options => gal_number_options.gsub(/\n/, ''), :gallery_options => gal_options.gsub(/\n/, '') }
       else
-        respond_to do |format|
-          if @gallery.update_attributes(params[:gallery])
-            format.html { redirect_to(gallery_images_path(@gallery), :notice => I18n.t('gallery.update_done')) }
-          else
-            @galleries = current_user.galleries.with_images.paginate_and_sort(filtered_params)
-            format.html { render :action => :index, :notice => @gallery.errors}
-          end
+        result = { :success => false, :msg => @gallery.errors.full_messages[0] }
+      end
+      return render :json => result
+    else
+      respond_to do |format|
+        if @gallery.update_attributes(params[:gallery])
+          format.html { redirect_to(gallery_images_path(@gallery), :notice => I18n.t('gallery.update_done')) }
+        else
+          @galleries = current_user.galleries.with_images.paginate_and_sort(filtered_params)
+          format.html { render :action => :index, :notice => @gallery.errors}
         end
       end
     end
@@ -162,8 +162,7 @@ class GalleriesController < ApplicationController
 
     def find_gallery
       @gallery = Gallery.find(params[:id])
-      render_unauthorized if !current_user.can_access?(@gallery) ||
-            (!current_user.owns_gallery?(@gallery) && %w(edit update destroy).include?(params[:action]))
+      render_unauthorized if !current_user.can_access?(@gallery) && !current_user.admin?
     end
 
     def detect_device
