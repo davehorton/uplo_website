@@ -256,9 +256,6 @@ order_preview = {
       $(img).height('auto');
       $('#preview-frame').height('auto');
 
-      // Hide the loading image.
-      order_preview.toggle_waiting(false);
-
       // Exit!
       return false;
     }
@@ -273,9 +270,6 @@ order_preview = {
         var height = $(this).height();
         $(frame_img).parent().height(height);
         $('#preview-frame').height(height);
-
-        // Hide the loading image.
-        order_preview.toggle_waiting(false);
       });
 
       if($(frame_img).prop('complete')){
@@ -501,7 +495,6 @@ order_preview = {
       'z-index': 11
     });
 
-    //====== conner: bottom-right =======
     tmp_img = $('<img id="frame-bottom-right" src="' + url_bottom + '"/>');
     tmp_img.css({
       position: 'absolute',
@@ -521,11 +514,6 @@ order_preview = {
       width: corner_width,
       height: frame_info.margin_top,
       'z-index': 11
-    });
-
-    // Setup the callback on finish loading.
-    order_preview.on_images_finish_loading(images_queue, function() {
-      order_preview.toggle_waiting(false);
     });
   },
 
@@ -586,7 +574,6 @@ order_preview = {
   setup: function(){
     // Change the frame
     $('#line_item_moulding').change(function(){
-      order_preview.toggle_waiting(true);
       order_preview.adjust_image_frame_sizes_with_num($(this).val());
     });
 
@@ -594,7 +581,6 @@ order_preview = {
     $('#line_item_size').change(function(){
       var url = $(this).find("option[value=" + $(this).val() + "]").attr('data-url');
       if(url){
-        order_preview.toggle_waiting(true);
         var img = $('#preview-frame > img.image');
         $(img).attr('src', url);
       }
@@ -609,9 +595,6 @@ order_preview = {
       $(img).attr('data-original-height', img_size.height)
 
       order_preview.adjust_image_frame_sizes_with_num($('#line_item_moulding').val());
-
-      // Hide the loading image.
-      order_preview.toggle_waiting(false);
     });
 
     // In case the image was cached.
