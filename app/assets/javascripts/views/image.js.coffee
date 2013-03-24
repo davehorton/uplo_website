@@ -39,13 +39,12 @@ $ ->
           $('#comment_description').val('')
           $('form#frm-comment').inputHintOverlay(5, 8)
           $("#post-comment-warning").html("")
-          $.modal.close()
         else
           $("#post-comment-warning").html(response.msg)
-          $.modal.close()
       error: ->
         helper.show_notification('Something went wrong!')
-        $.modal.close()
+      complete: ->
+        window.setTimeout("$.modal.close();", 400)
     });
 
   $('#comments-section').delegate '.pagination.comments a', 'click', (e) ->
