@@ -452,6 +452,6 @@ class Image < ActiveRecord::Base
     end
 
     def set_user
-      self.user = gallery.user
+      self.user_id = gallery.user_id
     end
 end

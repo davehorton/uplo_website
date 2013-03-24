@@ -46,7 +46,7 @@ class GalleriesController < ApplicationController
   end
 
   def search_public
-    if not params.has_key? "user"
+    if !params.has_key? "user"
       with_condition = {}
     elsif params[:user].nil? or params[:user]==""
       with_condition = {}
@@ -79,11 +79,8 @@ class GalleriesController < ApplicationController
   end
 
   def edit
-    if find_gallery
-      if request.xhr?
-        render :layout => false
-      end
-    end
+    @gallery = current_user.galleries.find(params[:id])
+    render layout: false if request.xhr?
   end
 
   def edit_images
@@ -147,23 +144,17 @@ class GalleriesController < ApplicationController
   end
 
   def destroy
-    if find_gallery
-      respond_to do |format|
-        if @gallery.destroy
-          format.html { redirect_to(galleries_path, :notice => I18n.t("gallery.delete_done")) }
-        else
-          format.html { redirect_to(galleries_path, :notice => I18n.t("gallery.delete_failed")) }
-        end
+    @gallery = current_user.galleries.find(params[:id])
+    respond_to do |format|
+      if @gallery.destroy
+        format.html { redirect_to(galleries_path, :notice => I18n.t("gallery.delete_done")) }
+      else
+        format.html { redirect_to(galleries_path, :notice => I18n.t("gallery.delete_failed")) }
       end
     end
   end
 
   protected
-
-    def find_gallery
-      @gallery = Gallery.find(params[:id])
-      render_unauthorized if !current_user.can_access?(@gallery) && !current_user.admin?
-    end
 
     def detect_device
       if is_mobile_device? && params[:action]=='public' && (params[:web_default].nil? || params[:web_default]==false)
