@@ -16,7 +16,7 @@
 
       $("#search-form-main").submit(function(){
         var not_support = ["^", "*", "_"];
-        var val = $("#search-keyword-main").attr('value');
+        var val = $("#search-keyword-main").val();
         for(var i=0; i<not_support.length; i++){
           if(val.indexOf(not_support[i]) > -1){
             helper.show_notification("Search can't be performed with these characters: ^, *, _");
