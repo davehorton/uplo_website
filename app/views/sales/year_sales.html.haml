@@ -22,13 +22,13 @@
       .round-box.option.right
         .header.text.black.bold.font12= "Total amount earned"
         .content.text.bold.font14
-          = number_to_currency @user.total_earn, {:precision => 2}
+          = number_to_currency current_user.total_earn, {:precision => 2}
       %br
       .round-box.option.right
         .header.text.black.bold.font12= "Amount owed"
         .content.text.bold.font14
-          = number_to_currency @user.owned_amount, {:precision => 2}
-          -if (@user.owned_amount > 0)
+          = number_to_currency current_user.owned_amount, {:precision => 2}
+          -if current_user.owned_amount > 0
             .request_button
               = link_to image_tag( 'btn-request-payout.png'), {:controller => :sales, :action => :withdraw}, :method => :post
     .line-separator.left.clear
