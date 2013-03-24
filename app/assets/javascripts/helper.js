@@ -154,22 +154,6 @@ var helper = {
     return true;
   },
 
-  setup_async_image_tag: function(img_selector, container_selector){
-    if(!img_selector)
-      img_selector = "img.user-avatar";
-    $(img_selector).livequery(function(){
-      $(this).jail({
-        triggerElement: container_selector,
-        callbackAfterEachImage : function(img, event) {
-          $(img).parent().removeClass("default");
-          $(img).error(function(){
-            $(this).parent().addClass("default");
-          });
-        }
-      });
-    });
-  },
-
   equal_elements: function(elm1, elm2){
     return (elm1 == elm2 || $.inArray(elm1, elm2) >= 0)
   },

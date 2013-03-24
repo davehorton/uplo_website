@@ -25,7 +25,7 @@ class GalleriesController < ApplicationController
     render :action => :index
   end
 
-  def mail_shared_gallery
+  def share
     emails = params[:email]['emails'].split(',')
     emails.map { |email| email.strip }
 
@@ -55,7 +55,6 @@ class GalleriesController < ApplicationController
       with_condition = {:user_id => params[:user]}
     end
 
-    @no_async_image_tag = true
     @galleries = Gallery.search params[:query], :star => true, :page => params[:page_id], :per_page => page_size, :with => with_condition
     render :layout => 'application'
   end
@@ -68,7 +67,7 @@ class GalleriesController < ApplicationController
     @gallery = current_user.galleries.new(params[:gallery])
     respond_to do |format|
       if @gallery.save
-        format.html { redirect_to :action => 'edit_images', :gallery_id => @gallery.id }
+        format.html { redirect_to edit_images_gallery_path(@gallery) }
       else
         hide_notification
         @galleries = current_user.galleries.with_images.paginate_and_sort(filtered_params)
@@ -87,7 +86,7 @@ class GalleriesController < ApplicationController
     if params[:gallery_id].nil?
       @gallery = current_user.galleries.first
     elsif !Gallery.exists?({:id => params[:gallery_id].to_i, :user_id => current_user.id})
-      flash[:error] = 'You cannot edit gallery of other!'
+      flash[:error] = "You cannot edit another person's gallery!"
       redirect_to :controller => :galleries, :actions => :index
     else
       @gallery = Gallery.find_by_id params[:gallery_id]

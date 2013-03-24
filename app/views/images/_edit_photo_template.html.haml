@@ -4,11 +4,11 @@
   .info-panel.left
     .info-line.left
       .label.text.black.bold.font12 Photo Name
-      = text_field :image, :name, :value => image.name, :style => "font-size:12px; margin-top:5px; padding-top:2px; padding-bottom:2px", :disabled => image.data_processing
+      = text_field :image, :name, :value => image.name, :style => "font-size:12px; margin-top:5px; padding-top:2px; padding-bottom:2px", :disabled => image.image_processing
     .info-line.left
       .label.text.black.bold.font12{:style => "margin-bottom:5px;" } Move to Another Gallery
-      = select :image, :gallery_id, gallery_options(current_user, image.gallery_id), { class: "left" }, :disabled => image.data_processing
-    - if !image.data_processing
+      = select :image, :gallery_id, gallery_options(current_user, image.gallery_id), { class: "left" }, :disabled => image.image_processing
+    - if !image.image_processing
       .info-line.left
         .label.text.black.bold.font12 Pricing
         .inline.left
@@ -18,12 +18,12 @@
       .info-line.left
         .inline.left
           %br
-          .text.font11.bold.line16.left{:style => "color:red"} Processing...
+          = link_to('Image being processed. This may take a minute. Click to refresh.', edit_gallery_image_path(image.gallery, image), remote: true, class: 'processing', :'data-image_id' => image.id)
   .info-panel.left
     .info-line.left
       .label.text.black.bold.font12 Description
-      = text_area :image, :description, :value => image.description, :disabled => image.data_processing
-    - if !image.data_processing
+      = text_area :image, :description, :value => image.description, :disabled => image.image_processing
+    - if !image.image_processing
       .info-line.left
         .label.text.black.bold.font12 Other Actions
         .inline.half.left
@@ -36,9 +36,9 @@
   .info-panel.left
     .info-line.left
       .label.text.black.bold.font12 Tags
-      = text_area :image, :keyword, :value => image.keyword, :disabled => image.data_processing
+      = text_area :image, :keyword, :value => image.keyword, :disabled => image.image_processing
     .info-line.left{:style => "margin-top:20px"}
-      .button.delete-photo.right{ :data => { :url => "#{ url_for(:controller => 'images', :action => 'destroy', :gallery_id => image.gallery_id, :id => image.id)}" } }
+      .button.delete-photo.right{ :data => { :url => gallery_image_path(image.gallery, image) } }
 
   .clear
   .line-separator

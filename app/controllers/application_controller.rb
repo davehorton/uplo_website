@@ -10,7 +10,6 @@ class ApplicationController < ActionController::Base
   rescue_from CanCan::AccessDenied,         :with => :render_unauthorized
 
   before_filter :authenticate_user!
-  before_filter :show_processing
   before_filter :set_current_tab, :check_banned_user
 
   def result_hash
@@ -90,15 +89,6 @@ class ApplicationController < ActionController::Base
 
     def show_notification
       toggle_notification(true)
-    end
-
-    # To let user know how many images are processing
-    def show_processing
-      flash.delete :processing_photo
-      if current_user && current_user.images.processing.any?
-        flash[:processing_photo] = "Your photo is being processed. This may take a few moments."
-        flash[:sticky_flash_message] = true
-      end
     end
 
     def set_current_tab

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130323221058) do
+ActiveRecord::Schema.define(:version => 20130324155640) do
 
   create_table "addresses", :force => true do |t|
     t.string   "first_name"
@@ -23,24 +23,24 @@ ActiveRecord::Schema.define(:version => 20130323221058) do
     t.string   "state"
     t.string   "phone"
     t.string   "fax"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                          :null => false
+    t.datetime "updated_at",                          :null => false
     t.string   "country",          :default => "usa"
   end
 
   create_table "carts", :force => true do |t|
     t.integer  "user_id"
     t.integer  "order_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
   end
 
   create_table "comments", :force => true do |t|
     t.integer  "user_id",     :null => false
     t.integer  "image_id"
     t.text     "description"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
   end
 
   add_index "comments", ["image_id"], :name => "index_comments_on_image_id"
@@ -51,8 +51,8 @@ ActiveRecord::Schema.define(:version => 20130323221058) do
     t.string   "name",                          :null => false
     t.text     "description"
     t.boolean  "delta",       :default => true, :null => false
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                    :null => false
+    t.datetime "updated_at",                    :null => false
     t.string   "keyword"
     t.string   "permission"
   end
@@ -66,8 +66,8 @@ ActiveRecord::Schema.define(:version => 20130323221058) do
     t.integer  "reported_by", :null => false
     t.integer  "flag_type",   :null => false
     t.string   "description"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
   end
 
   add_index "image_flags", ["image_id"], :name => "index_image_flags_on_image_id"
@@ -75,8 +75,8 @@ ActiveRecord::Schema.define(:version => 20130323221058) do
   create_table "image_likes", :force => true do |t|
     t.integer  "image_id",   :null => false
     t.integer  "user_id",    :null => false
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
   end
 
   add_index "image_likes", ["image_id"], :name => "index_image_likes_on_image_id"
@@ -84,8 +84,8 @@ ActiveRecord::Schema.define(:version => 20130323221058) do
   create_table "image_tags", :force => true do |t|
     t.integer  "image_id",   :null => false
     t.integer  "tag_id",     :null => false
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
   end
 
   add_index "image_tags", ["image_id"], :name => "index_image_tags_on_image_id"
@@ -98,8 +98,8 @@ ActiveRecord::Schema.define(:version => 20130323221058) do
     t.float    "price",              :default => 0.0
     t.boolean  "delta",              :default => true,  :null => false
     t.integer  "image_likes_count",  :default => 0
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                            :null => false
+    t.datetime "updated_at",                            :null => false
     t.string   "image_file_name"
     t.string   "image_content_type"
     t.integer  "image_file_size"
@@ -111,15 +111,15 @@ ActiveRecord::Schema.define(:version => 20130323221058) do
     t.string   "tier"
     t.boolean  "removed",            :default => false
     t.integer  "pageview",           :default => 0
-    t.boolean  "data_processing",    :default => false
+    t.boolean  "image_processing",   :default => false
     t.integer  "user_id"
     t.boolean  "promoted",           :default => false
   end
 
-  add_index "images", ["data_processing"], :name => "index_images_on_data_processing"
   add_index "images", ["gallery_cover"], :name => "index_images_on_gallery_cover"
   add_index "images", ["gallery_id"], :name => "index_images_on_gallery_id"
   add_index "images", ["image_likes_count"], :name => "index_images_on_image_likes_count"
+  add_index "images", ["image_processing"], :name => "index_images_on_data_processing"
   add_index "images", ["removed"], :name => "index_images_on_removed"
   add_index "images", ["user_id"], :name => "index_images_on_user_id"
 
@@ -127,8 +127,8 @@ ActiveRecord::Schema.define(:version => 20130323221058) do
     t.string   "email",      :null => false
     t.string   "token",      :null => false
     t.datetime "invited_at"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
     t.string   "message"
   end
 
@@ -141,9 +141,15 @@ ActiveRecord::Schema.define(:version => 20130323221058) do
     t.boolean  "plexi_mount",                                       :default => false
     t.string   "moulding"
     t.string   "size"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                                                           :null => false
+    t.datetime "updated_at",                                                           :null => false
     t.float    "commission_percent"
+  end
+
+  create_table "mouldings", :force => true do |t|
+    t.string   "name"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
   end
 
   create_table "orders", :force => true do |t|
@@ -160,8 +166,8 @@ ActiveRecord::Schema.define(:version => 20130323221058) do
     t.string   "message"
     t.integer  "shipping_address_id"
     t.integer  "billing_address_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                                                          :null => false
+    t.datetime "updated_at",                                                          :null => false
     t.string   "last_name"
     t.string   "city"
     t.string   "country"
@@ -181,6 +187,20 @@ ActiveRecord::Schema.define(:version => 20130323221058) do
     t.string   "name_on_card"
   end
 
+  create_table "products", :force => true do |t|
+    t.string   "tier_id"
+    t.string   "size_id"
+    t.string   "moulding_id"
+    t.decimal  "price",       :precision => 10, :scale => 0, :default => 0
+    t.decimal  "commission",  :precision => 10, :scale => 0, :default => 0
+    t.datetime "created_at",                                                :null => false
+    t.datetime "updated_at",                                                :null => false
+  end
+
+  add_index "products", ["moulding_id"], :name => "index_products_on_moulding_id"
+  add_index "products", ["size_id"], :name => "index_products_on_size_id"
+  add_index "products", ["tier_id"], :name => "index_products_on_tier_id"
+
   create_table "profile_images", :force => true do |t|
     t.integer  "user_id",                                :null => false
     t.boolean  "default",             :default => false, :null => false
@@ -189,17 +209,31 @@ ActiveRecord::Schema.define(:version => 20130323221058) do
     t.string   "avatar_content_type",                    :null => false
     t.integer  "avatar_file_size",                       :null => false
     t.datetime "avatar_updated_at",                      :null => false
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                             :null => false
+    t.datetime "updated_at",                             :null => false
+  end
+
+  create_table "sizes", :force => true do |t|
+    t.string   "name"
+    t.integer  "width"
+    t.integer  "height"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
   end
 
   create_table "tags", :force => true do |t|
     t.string   "name",       :null => false
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
   end
 
   add_index "tags", ["name"], :name => "index_tags_on_name", :unique => true
+
+  create_table "tiers", :force => true do |t|
+    t.string   "name"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
 
   create_table "user_devices", :force => true do |t|
     t.string   "device_token",                       :null => false
@@ -208,15 +242,15 @@ ActiveRecord::Schema.define(:version => 20130323221058) do
     t.boolean  "notify_likes",     :default => true
     t.boolean  "notify_purchases", :default => true
     t.datetime "last_notified",                      :null => false
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                         :null => false
+    t.datetime "updated_at",                         :null => false
   end
 
   create_table "user_follows", :force => true do |t|
     t.integer  "user_id",     :null => false
     t.integer  "followed_by", :null => false
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
   end
 
   create_table "users", :force => true do |t|
@@ -241,8 +275,8 @@ ActiveRecord::Schema.define(:version => 20130323221058) do
     t.datetime "confirmation_sent_at"
     t.string   "authentication_token"
     t.boolean  "delta",                                 :default => true,  :null => false
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                                               :null => false
+    t.datetime "updated_at",                                               :null => false
     t.string   "avatar_file_name"
     t.string   "avatar_content_type"
     t.integer  "avatar_file_size"

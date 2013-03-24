@@ -115,7 +115,7 @@ class SocialsController < ApplicationController
 		elsif (params[:image_id])
 			img = Image.find_by_id params[:image_id]
 			if (img)
-				link = url_for(:controller => :images, :action => :public, :id => img.id, :only_path => false)
+				link = public_image_path(img)
 				photo = img.url(:thumb)
 				medium_photo = img.url(:medium)
 				description = img.description
@@ -313,7 +313,7 @@ class SocialsController < ApplicationController
 		end
 
 		def go_to_browser_image_url(id)
-			redirect_to :controller => :images, :action => :browse, :id => id
+			redirect_to browse_image_path(id)
 		end
 
 		def go_to_galleries_url

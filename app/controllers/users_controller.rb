@@ -145,7 +145,6 @@ class UsersController < ApplicationController
   end
 
   def search
-    @no_async_image_tag = true
     @users = User.search params[:query], :star => true, :page => params[:page_id], :per_page => page_size
   end
 

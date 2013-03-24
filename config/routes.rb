@@ -47,19 +47,48 @@ Uplo::Application.routes.draw do
 
   get 'profile/:user_id', :to => 'profiles#show', :as => :profile_user
 
+  get 'galleries/edit_images', :to => 'galleries#edit_images'
 
-  get 'images/browse/:id', :to => 'images#browse'
-  get 'images/public/:id', :to => 'images#public'
-  get 'images/order/:id', :to => "images#order"
-  get 'images/switch_like', :to => 'images#switch_like'
-  get 'images/flickr_authorize', :to => "images#get_flickr_authorize"
-  get 'images/flickr_response' => 'images#flickr_response'
-  get 'images/flickr_post', :to => 'images#post_image_to_flickr'
-  post 'images/mail_shared_image', :to => 'images#mail_shared_image'
-  post 'images/update_images', :to => 'images#update_images'
-  post "images/flag", :to => "images#flag"
-  get 'images/show_pricing', :to => 'images#show_pricing'
-  post 'images/update_tier', :to => 'images#update_tier'
+  resources :galleries do
+    member do
+      get :edit_images
+      get :share
+    end
+
+    collection do
+      get :public
+      get :search
+      get :search_public
+      get :show_public
+    end
+
+    get 'public_images', :to => 'images#public_images'
+    get 'images/search', :to => 'images#search'
+    get 'images/load_image', :to => 'images#get_image_data'
+    put 'filter_status', :to => 'images#get_filter_status'
+
+    resources :images
+  end
+
+  resources :images, only: [] do
+    collection do
+      put :update_images
+    end
+
+    member do
+      get  :browse
+      post :flag
+      get  :flickr_authorize
+      get  :flickr_post
+      get  :flickr_response
+      get  :mail_shared_image
+      get  :order
+      get  :pricing
+      get  :public
+      put  :switch_like
+      put  :tier
+    end
+  end
 
   get "invites/index"
 
@@ -78,22 +107,9 @@ Uplo::Application.routes.draw do
   resources :payments
   resources :comments
 
-  get 'galleries/search', :to => 'galleries#search'
-  get 'galleries/search_public', :to => 'galleries#search_public'
-  get 'galleries/show_public', :to => 'galleries#show_public'
+
   get 'users/search', :to => 'users#search'
   get 'users/follow', :to => 'users#set_follow'
-  get 'galleries/edit_images', :to => 'galleries#edit_images'
-  resources :galleries do
-    post 'mail_shared_gallery', :to => 'galleries#mail_shared_gallery'
-    get 'public', :to => 'galleries#public'
-    get 'public_images', :to => 'images#public_images'
-    get 'images/search', :to => 'images#search'
-    get 'images/delete/:id', :to => 'images#destroy'
-    get 'images/load_image', :to => 'images#get_image_data'
-    put 'filter_status', :to => 'images#get_filter_status'
-    resources :images
-  end
 
   devise_for :users, :controllers => {:registrations => "users/registrations", :sessions => "users/sessions",
     :confirmations => "users/confirmations", :passwords => "users/passwords" }
@@ -174,6 +190,8 @@ Uplo::Application.routes.draw do
         get :confirm_request
       end
     end
+
+    resources :pricing
   end
 
   # API ROUTING

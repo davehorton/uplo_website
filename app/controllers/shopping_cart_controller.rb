@@ -22,12 +22,12 @@ class ShoppingCartController < ApplicationController
       redirect_to :controller => :home, :action => :browse and return
     elsif not valid_item?(params[:line_item])
       flash[:warning] = "Please fill all options first."
-      redirect_to :controller => :images, :action => :order, :id => image.id and return
+      redirect_to order_image_path(image) and return
 
     #check moulding & size constrain
     elsif MOULDING_SIZES_CONSTRAIN.has_key?(params[:line_item]['moulding']) and MOULDING_SIZES_CONSTRAIN[params[:line_item]['moulding']].index(params[:line_item]['size'])
       flash[:error] = "The mould is not compatible with this size. Please change your options."
-      redirect_to :controller => :images, :action => :order, :id => image.id and return
+      redirect_to order_image_path(image) and return
 
     else
       # Find line_item to reuse line item which has the same image, size and mounding
@@ -41,7 +41,7 @@ class ShoppingCartController < ApplicationController
           @order = @cart.order.reload
         else
           flash[:warning] = line_item.errors.full_messages.to_sentence
-          redirect_to :controller => :images, :action => :order, :id => image.id and return
+          redirect_to order_image_path(image) and return
         end
       else
         line_item = @cart.order.line_items.new do |item|
@@ -54,7 +54,7 @@ class ShoppingCartController < ApplicationController
             @order = @cart.order.reload
           else
             flash[:warning] = item.errors.full_messages.to_sentence
-            redirect_to :controller => :images, :action => :order, :id => image.id and return
+            redirect_to order_image_path(image) and return
           end
         end
       end
@@ -69,12 +69,12 @@ class ShoppingCartController < ApplicationController
       flash[:warning] = "Your recent ordered image does not exist anymore."
     elsif not valid_item?(params[:line_item])
       flash[:warning] = "Please fill all options first."
-      redirect_to :controller => :images, :action => :order, :id => line_item.image.id, :line_item => line_item.id and return
+      redirect_to order_image_path(line_item.image.id, :line_item => line_item.id) and return
 
     #check moulding & size constrain
     elsif MOULDING_SIZES_CONSTRAIN.has_key?(params[:line_item]['moulding']) and MOULDING_SIZES_CONSTRAIN[params[:line_item]['moulding']].index(params[:line_item]['size'])
       flash[:error] = "The mould is not compatible with this size. Please change your options."
-      redirect_to :controller => :images, :action => :order, :id => image.id and return
+      redirect_to order_image_path(image) and return
 
     else
       image = line_item.image
@@ -86,7 +86,7 @@ class ShoppingCartController < ApplicationController
         @order = @cart.order.reload
       else
         flash[:warning] = line_item.errors.full_messages.to_sentence
-        redirect_to :controller => :images, :action => :order, :id => image.id, :line_item => line_item.id and return
+        redirect_to order_image_path(image, :line_item => line_item.id) and return
       end
     end
     redirect_to :action => :show

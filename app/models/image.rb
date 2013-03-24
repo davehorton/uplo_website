@@ -21,9 +21,11 @@ class Image < ActiveRecord::Base
 
   validates_attachment :image, :presence => true,
     :size => { :in => 0..100.megabytes, :message => 'File size cannot exceed 100MB' },
-    :content_type => { :content_type => [ 'image/jpeg','image/jpg'],
+    :content_type => { :content_type => [ 'image/jpeg','image/jpg' ],
     :message => 'File type must be one of [.jpeg, .jpg]' }, :on => :create
   validate :validate_quality, :on => :create
+
+  process_in_background :image
 
   before_create :init_tier, :set_as_cover_if_first_one, :set_user
   before_destroy :ensure_not_associated_with_an_order
@@ -36,8 +38,8 @@ class Image < ActiveRecord::Base
   scope :flagged,     not_removed.joins(:image_flags).readonly(false)
   scope :unflagged,   not_removed.includes(:image_flags).where(image_flags: { id: nil }).readonly(false)
 
-  scope :processing,    not_removed.joins(:active_user).where(data_processing: true)
-  scope :visible,       not_removed.joins(:active_user).where(data_processing: false)
+  scope :processing,    not_removed.joins(:active_user).where(image_processing: true)
+  scope :visible,       not_removed.joins(:active_user).where(image_processing: false)
   scope :public_access, visible.unflagged.joins(:public_gallery)
 
   scope :spotlight, where(promoted: true)
@@ -224,14 +226,10 @@ class Image < ActiveRecord::Base
   end
 
   def url(options = nil)
-    if data_processing
-      "/assets/gallery-thumb.jpg"
-    else
-      storage = Rails.application.config.paperclip_defaults[:storage]
-      case storage
-        when :s3 then self.image.expiring_url(s3_expire_time, options)
-        when :filesystem then image.url
-      end
+    storage = Rails.application.config.paperclip_defaults[:storage]
+    case storage
+      when :s3 then self.image.expiring_url(s3_expire_time, options)
+      when :filesystem then image.url(options)
     end
   end
 

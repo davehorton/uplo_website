@@ -50,7 +50,7 @@ deletePhoto = (node) ->
     window.setTimeout "$('#mask').modal()", 500
     $.ajax({
       url: $(node).attr('data-url'),
-      type: 'GET',
+      type: 'DELETE',
       dataType: 'json',
       success: (response) ->
         if (response.success)
@@ -84,7 +84,7 @@ saveGridChanges = (callback) ->
   $('#mask').modal()
   $.ajax({
     url: '/images/update_images',
-    type: 'POST',
+    type: 'PUT',
     data: { images: JSON.stringify(data), gallery_id: $('#gallery_selector_id').val() },
     dataType: 'json',
     success: (response) ->
@@ -117,8 +117,8 @@ requestUpdateTier = (node) ->
   $.modal.close()
   window.setTimeout "$('#mask').modal()", 300
   $.ajax({
-    url: "/images/update_tier?id=#{ image_id }",
-    type: 'POST',
+    url: "/images/" + image_id + "/tier",
+    type: 'PUT',
     data: data,
     dataType: 'json',
     success: (response) ->
@@ -216,9 +216,8 @@ $ ->
   $('#gallery_selector_id').change ->
     confirmChanges ->
       $.ajax({
-        url: 'edit_images',
+        url: '/galleries/' + $('#gallery_selector_id').val() + '/edit_images',
         type: 'GET',
-        data: { gallery_id: $('#gallery_selector_id').val() },
         dataType: 'json',
         success: (response) ->
           $('#images-panel').html response.items
@@ -250,9 +249,8 @@ $ ->
             $('#pricing-form .button').fadeOut()
             image_id = $(node).closest('.edit-template').attr('data-id')
             $.ajax({
-              url: '/images/show_pricing',
+              url: '/images/' + image_id + '/pricing',
               type: 'GET',
-              data: { id: image_id },
               dataType: 'json',
               success: (response) ->
                 if response.success

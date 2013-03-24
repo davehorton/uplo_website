@@ -18,7 +18,7 @@
       %a.text.black.normal.font12.line12{:href => "#{ author_profile }"}= @author.username.truncate(20)
       .text.gray.font11= "#{@author.fullname} &bull; #{ pluralize(images_count, 'Item')}".html_safe
     - if current_user?(@author.id)
-      %a#btn-edit.button.edit.right{ :href => "#{ url_for(:controller => 'galleries', :action => 'edit_images', :gallery_id => @image.gallery_id) }" }
+      %a#btn-edit.button.edit.right{ :href => "#{ edit_images_gallery_path(@image.gallery) }" }
     - else
       - is_author_following = @author.has_follower?(current_user.id)
       - follow_class = is_author_following ? 'unfollow' : 'follow'
@@ -38,7 +38,7 @@
   .line-separator.left
   .clearfix
     - if @images.blank?
-      .empty-data= "There is no image. Please add image."
+      .empty-data= "Please upload a photo."
     - else
       - (0...@images.length). each do |idx|
         - image = @images[idx]
@@ -209,9 +209,9 @@
         $.modal.close();
         setTimeout(show_mask,100);
         $.ajax({
-          url: '/images/flag',
+          url: '/images/' + image_id + '/flag',
           type: "POST",
-          data: {id:image_id , type: type, desc: desc },
+          data: { type: type, desc: desc },
           dataType: "json",
           success: function(data){
             $.modal.close();
@@ -280,9 +280,9 @@
         var dislike = $('#btn-like').attr('data-dislike');
         $('#mask').modal();
         $.ajax({
-          url: '/images/switch_like',
-          type: "GET",
-          data: { id:image_id, dislike:dislike },
+          url: '/images/' + image_id + '/switch_like',
+          type: "PUT",
+          data: { dislike:dislike },
           dataType: "json",
           success: function(response){
             $(".actions .like .times").html(response.likes_count);

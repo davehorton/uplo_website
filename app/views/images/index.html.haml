@@ -16,7 +16,7 @@
         - images_action = "Edit Images"
 
       .action-container
-        %a#edit-images{:href => "#{ url_for(:controller => 'galleries', :action => 'edit_images', :gallery_id => @gallery.id) }", :class => "ui-button-container icon-link"}= images_action
+        %a#edit-images{:href => "#{ edit_images_gallery_path(@gallery) }", :class => "ui-button-container icon-link"}= images_action
         %span.saparator= "|"
         %a#edit-gallery{:href => edit_gallery_path(@gallery), :class => "ui-button-container icon-link"} Edit Gallery
         %span.saparator= "|"

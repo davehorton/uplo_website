@@ -6,80 +6,15 @@ class ImagesController < ApplicationController
   skip_before_filter :authenticate_user!, only: [:public]
   skip_authorize_resource :only => :public
 
-  def mail_shared_image
-    begin
-      emails = params[:email]['emails'].split(',')
-      email_format = Regexp.new(/^([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})$/)
-      emails.map do |email|
-        if(email_format.match(email))
-          email.strip
-        else
-          raise "The email #{email} is invalid"
-        end
-      end
-
-      if emails.length > 0 && SharingMailer.delay.share_image_email(params[:id], emails, current_user.id, params[:email]['message'])
-        flash[:notice] = "Email sent"
-      else
-        flash[:warning] = "Could not send the email. Please re-check your information (email, message)."
-      end
-    rescue Exception => e
-      flash[:warning] = e.message
-      redirect_to :action => 'browse', :id => params[:id] and return
-    end
-    redirect_to :action => 'browse', :id => params[:id]
-  end
-
   def index
     find_gallery_and_authorize
     @images = @gallery.images.unflagged.paginate_and_sort(filtered_params)
   end
 
-  def new
-  end
-
-  def destroy
-    if request.xhr?
-      image = current_user.images.find_by_id params[:id]
-      gallery = image.gallery
-      if(!current_user.owns_image?(image))
-        render :json => {:success => false, :msg => "You're not the owner of this image"} and return
-      end
-      images = gallery.images.unflagged.paginate_and_sort(filtered_params)
-
-      if image.destroy
-        pagination = render_to_string :partial => 'pagination',
-          :locals => {  :source => images, :params => { :controller => 'galleries',
-            :action => 'edit_images', :gallery_id => gallery.id }, :classes => 'text left' }
-        items = render_to_string :partial => 'galleries/edit_photos',
-                                :locals => { :images => images }
-        gal_options = self.class.helpers.gallery_options(current_user.id, gallery.id, true)
-        render :json => { :success => true, :items => items, :pagination => pagination, :gallery_options => gal_options }
-      else
-        render :json => {:msg => "Could not delete image"}
-      end
-    else
-      ids = params[:id]
-      ids = params[:id].join(',') if params[:id].instance_of? Array
-      if current_user.images.where(id: ids).destroy
-        render :json => {:success => true}
-      else
-        render :json => {:msg => "Could not delete images"}
-      end
-    end
-  end
-
-  def public_images
-    find_gallery_and_authorize
-    @images = @gallery.images.popular_with_pagination(filtered_params, current_user)
-    render :layout => 'application'
-  end
-
-  def get_image_data
-    img = Image.find_by_id params[:id]
-    img_url = img.url(params[:size])
-    img_data = Magick::Image.read(img_url).first
-    send_data(img_data.to_blob, :disposition => 'inline', :type => 'image/jpeg')
+  def show
+    @image  = Image.unflagged.find(params[:id])
+    @images = @image.gallery.images.unflagged.all(order: 'images.id')
+    render layout: 'application'
   end
 
   def create
@@ -116,6 +51,97 @@ class ImagesController < ApplicationController
     end
   end
 
+  def edit
+    @image = current_user.images.unflagged.find(params[:id])
+  end
+
+  def update
+    image = current_user.images.unflagged.find(params[:id])
+    img_info = params[:image]
+    img_info.delete :filtered_effect
+    image.attributes = img_info
+    image.save
+    redirect_to browse_image_path(image)
+  end
+
+  def destroy
+    if request.xhr?
+      image = current_user.images.find_by_id params[:id]
+      gallery = image.gallery
+      if(!current_user.owns_image?(image))
+        render :json => {:success => false, :msg => "You're not the owner of this image"} and return
+      end
+      images = gallery.images.unflagged.paginate_and_sort(filtered_params)
+
+      if image.destroy
+        pagination = render_to_string :partial => 'pagination',
+          :locals => {  :source => images, :params => { :controller => 'galleries',
+            :action => 'edit_images', :gallery_id => gallery.id }, :classes => 'text left' }
+        items = render_to_string :partial => 'galleries/edit_photos',
+                                :locals => { :images => images }
+        gal_options = self.class.helpers.gallery_options(current_user.id, gallery.id, true)
+        render :json => { :success => true, :items => items, :pagination => pagination, :gallery_options => gal_options }
+      else
+        render :json => {:msg => "Could not delete image"}
+      end
+    else
+      ids = params[:id]
+      ids = params[:id].join(',') if params[:id].instance_of? Array
+      if current_user.images.where(id: ids).destroy
+        render :json => {:success => true}
+      else
+        render :json => {:msg => "Could not delete images"}
+      end
+    end
+  end
+
+  def mail_shared_image
+    begin
+      emails = params[:email]['emails'].split(',')
+      email_format = Regexp.new(/^([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})$/)
+      emails.map do |email|
+        if(email_format.match(email))
+          email.strip
+        else
+          raise "The email #{email} is invalid"
+        end
+      end
+
+      if emails.length > 0 && SharingMailer.delay.share_image_email(params[:id], emails, current_user.id, params[:email]['message'])
+        flash[:notice] = "Email sent"
+      else
+        flash[:warning] = "Could not send the email. Please re-check your information (email, message)."
+      end
+    rescue Exception => e
+      flash[:warning] = e.message
+    ensure
+      redirect_to browse_image_path(params[:id])
+    end
+  end
+
+  def public
+    @image = Image.unflagged.find_by_id(params[:id])
+    if @image.nil? || (@image.user.blocked? && !current_user.admin?)
+      render_not_found
+    end
+    @author = @image.user
+    @purchased_info = @image.raw_purchased_info(filtered_params)
+    render :layout => 'public', :formats => 'html'
+  end
+
+  def public_images
+    find_gallery_and_authorize
+    @images = @gallery.images.popular_with_pagination(filtered_params, current_user)
+    render :layout => 'application'
+  end
+
+  def get_image_data
+    img = Image.find_by_id params[:id]
+    img_url = img.url(params[:size])
+    img_data = Magick::Image.read(img_url).first
+    send_data(img_data.to_blob, :disposition => 'inline', :type => 'image/jpeg')
+  end
+
   def switch_like
     image = Image.find_by_id(params[:id])
     dislike = params[:dislike].to_bool
@@ -130,27 +156,11 @@ class ImagesController < ApplicationController
     render :json => result
   end
 
-  # GET images/:id/slideshow
-  # params: id => Image ID
-  def show
-    redirect_list = [ url_for(:controller=>"images", :action=>"index", :only_path => false)]
-    push_redirect if redirect_list.index(request.env["HTTP_REFERER"])
-    # get selected Image
-    @selected_image = Image.unflagged.find_by_id(params[:id])
-    if (@selected_image.nil? || @selected_image.flagged? || (@selected_image.user.blocked? && !current_user.admin?))
-      render_not_found
-    end
-    # get Gallery
-    @images = @selected_image.gallery.images.unflagged.all(:order => 'id')
-    # get Images belongs Gallery
-    render :layout => 'application'
-  end
-
-  def get_flickr_authorize
+  def flickr_authorize
     FlickRaw.api_key = FLICKR_CONFIG["api_key"]
     FlickRaw.shared_secret = FLICKR_CONFIG["secret"]
     flickr = FlickRaw::Flickr.new
-    token = flickr.get_request_token(:oauth_callback => url_for(:controller => 'images', :action => 'flickr_response', :image_id => params[:image_id], :only_path => false))
+    token = flickr.get_request_token(oauth_callback: flickr_response_image_url(params[:id]))
 
     session[:flickr_token_secret] = token['oauth_token_secret']
     auth_url = flickr.get_authorize_url(token['oauth_token'], :perms => 'write')
@@ -165,22 +175,14 @@ class ImagesController < ApplicationController
     flickr.get_access_token(params['oauth_token'], session[:flickr_token_secret], verify)
     session.delete :flickr_token_secret
     session[:flickr_verify_key] = verify
-    uplo_photoset = push_to_uplo_photoset(params[:image_id])
-
-    redirect_to :action => :browse, :id => params[:image_id] and return
+    uplo_photoset = push_to_uplo_photoset(params[:id])
+    redirect_to browse_image_path(params[:id])
   end
 
-  def post_image_to_flickr
-    redirect_to :action => :get_flickr_authorize, :image_id => params[:id]
-    # if session.has_key?(:flickr_verify_key)==false || session[:flickr_verify_key].nil? || session[:flickr_verify_key]==''
-    #   return redirect_to :action => :get_flickr_authorize, :image_id => params[:id]
-    # end
-
-    # push_to_uplo_photoset params[:id]
-    # return redirect_to :action => :browse, :id => params[:id], :flickr_post => 'success'
+  def flickr_post
+    redirect_to flickr_authorize_image_path(params[:id])
   end
 
-  # GET images/:id/browse
   def browse
     push_redirect
 
@@ -206,6 +208,11 @@ class ImagesController < ApplicationController
       @dislike = @image.liked_by?(current_user)
     end
 
+    if @image.image_processing?
+      flash[:processing_photo] = "Your uploaded photo is being processed. This may take a few moments."
+      flash[:sticky_flash_message] = true
+    end
+
     filtered_params[:page_size] = 10
     @comments = @image.comments.available.paginate_and_sort(filtered_params)
 
@@ -213,34 +220,6 @@ class ImagesController < ApplicationController
     @image.increase_pageview
   end
 
-  def public
-    # if user_signed_in?
-    #   return redirect_to :action => 'browse', :id => params[:id]
-    # end
-    @image = Image.unflagged.find_by_id(params[:id])
-    if @image.nil? || (@image.user.blocked? && !current_user.admin?)
-      render_not_found
-    end
-    @author = @image.user
-    @purchased_info = @image.raw_purchased_info(filtered_params)
-    render :layout => 'public', :formats => 'html'
-  end
-
-  # PUT images/:id/slideshow_update
-  # params: id => Image ID
-  def update
-    image = current_user.images.unflagged.find_by_id params[:id]
-    img_info = params[:image]
-    img_info.delete :filtered_effect
-    image.attributes = img_info
-    image.save
-    redirect_to :action => :browse
-  end
-
-  # PUT images/flag/:id
-  # params: id => Image ID
-  #         type => Flag type
-  #         desc => Flag description
   def flag
     result = { success: false, msg: "" }
     image = Image.unflagged.find_by_id params[:id]
@@ -272,7 +251,7 @@ class ImagesController < ApplicationController
 
           render(:json => result) and return
         else
-          next if image.data_processing
+          next if image.image_processing
           if !(image.update_attributes img)
             error << image.errors.full_messages.to_sentence
           end
@@ -331,7 +310,7 @@ class ImagesController < ApplicationController
     end
   end
 
-  def show_pricing
+  def pricing
     image = Image.unflagged.find_by_id params[:id]
     if image.nil? || (image.user.blocked? && !current_user.admin?)
       result = { :success => false, :msg => 'This image does not exist anymore' }

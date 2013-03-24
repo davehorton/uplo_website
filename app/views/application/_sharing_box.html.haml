@@ -22,7 +22,7 @@
       .text.fuzzy.clear#object_owner_name_email= "by #{ owner_name }"
     #info.right
       .text.bold{ :style => 'margin-top:-4px;' } Email Address
-      - action_url = url_for(:controller => 'images', :action => 'mail_shared_image', :id => id)
+      - action_url = mail_shared_image_image_path(id)
       = simple_form_for(:email, :url => action_url, :method => 'post', :html => { :id => 'email-details', :class => 'left sharing-form' }) do |f|
         = f.input :emails, :label => false, :required => true, :as => :string
         = f.input :message, :as => :text, :label => false, :required => false

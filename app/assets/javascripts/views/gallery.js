@@ -1,7 +1,5 @@
 var gallery = {
   setup: function(){
-    helper.setup_async_image_tag("img.image-thumb");
-    helper.setup_async_image_tag("img.gallery-cover-image");
     var target = "#gallery-form-container";
     var toggle_form = function(){
       if($(target).hasClass("hidden")){

@@ -9,7 +9,7 @@
       .wrapper{:id => "gallery-container-#{gallery.id}"}
         %a{:href => gallery_images_path(gallery), :style => "float:left;"}
           .preview
-            =raw async_image_tag(gallery_cover_image_url(gallery), :class => "gallery-cover-image")
+            =raw image_tag(gallery_cover_image_url(gallery), :class => "gallery-cover-image")
         .info
           .name{:title => gallery.name}=raw gallery.name
           .name= gallery.user.username

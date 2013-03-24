@@ -30,7 +30,7 @@
           - url = url_for(:controller => "images", :action => "browse", :id => "#{image.id}")
           %a.gallery-image{:href => "#{url}" }
             %span.image-link.default
-              = async_image_tag(image.url(:thumb), :class => "image-thumb",
+              = image_tag(image.url(:thumb), :class => "image-thumb",
                                 "data-width" => image.width, "data-height" => image.height)
 
   = render_pagination(@images, {:controller => "images", :action => params[:action]})

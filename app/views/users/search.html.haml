@@ -9,7 +9,7 @@
     - @users.each do |user|
       .wrapper
         .preview
-          =raw async_image_tag("member_normal.gif", :class => "gallery-cover-image")
+          =raw image_tag("member_normal.gif", :class => "gallery-cover-image")
         .info
           .name= user.username
           .name= user.fullname

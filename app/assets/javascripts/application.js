@@ -30,7 +30,6 @@
 //= require jquery.purl
 //= require superfish
 //= require supersubs
-//= require jail
 //= require filtrr
 //= require_tree ./extensions
 //= require effects

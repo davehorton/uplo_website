@@ -856,7 +856,6 @@ textarea { padding-top:5px; }
 }
 
 
-
 /*JQUERY MODIFY */
 .ui-widget.ui-widget-content.ui-selectmenu-menu-dropdown.ui-corner-bottom{
   li{
@@ -1704,4 +1703,9 @@ textarea { padding-top:5px; }
 
 #login-overlay.overlay {
   background: image-url('bg-mask.png') repeat;
+}
+
+a.processing {
+  color: red;
+  font-weight: bold;
 }

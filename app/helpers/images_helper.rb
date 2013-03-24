@@ -16,19 +16,4 @@ module ImagesHelper
     user ||= current_user
     (current_user.admin? && !image.promoted? && !image.removed? && !image.flagged?)
   end
-
-  # This is a helper to use with the JAIL (jQuery Asynchronous Image Loader plugin)
-  def async_image_tag(source, options = {})
-    options ||= {}
-    image_html = ""
-    if @no_async_image_tag
-      image_html = image_tag(source, options)
-    else
-      image_html = image_tag("blank.png", options.merge({"data-src" => path_to_image(source)}))
-      image_html << content_tag("noscript") do # Tag to show image when the JS is disabled.
-        image_tag(source, options)
-      end
-    end
-    render :inline => image_html
-  end
 end

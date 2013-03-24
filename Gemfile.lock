@@ -1,6 +1,6 @@
 GIT
   remote: git://github.com/jrgifford/delayed_paperclip.git
-  revision: e1a66a386a5a304602ade2f2a08aae70fd739d7b
+  revision: d3f9ae880483063b3d7039c690e0bf19055b1b3f
   specs:
     delayed_paperclip (2.5.1.0)
       paperclip (>= 3.3.0)
@@ -8,12 +8,12 @@ GIT
 GEM
   remote: http://rubygems.org/
   specs:
-    actionmailer (3.2.12)
-      actionpack (= 3.2.12)
-      mail (~> 2.4.4)
-    actionpack (3.2.12)
-      activemodel (= 3.2.12)
-      activesupport (= 3.2.12)
+    actionmailer (3.2.13)
+      actionpack (= 3.2.13)
+      mail (~> 2.5.3)
+    actionpack (3.2.13)
+      activemodel (= 3.2.13)
+      activesupport (= 3.2.13)
       builder (~> 3.0.0)
       erubis (~> 2.7.0)
       journey (~> 1.0.4)
@@ -34,19 +34,19 @@ GEM
       json (>= 1.5.1)
       money
       nokogiri
-    activemodel (3.2.12)
-      activesupport (= 3.2.12)
+    activemodel (3.2.13)
+      activesupport (= 3.2.13)
       builder (~> 3.0.0)
-    activerecord (3.2.12)
-      activemodel (= 3.2.12)
-      activesupport (= 3.2.12)
+    activerecord (3.2.13)
+      activemodel (= 3.2.13)
+      activesupport (= 3.2.13)
       arel (~> 3.0.2)
       tzinfo (~> 0.3.29)
-    activeresource (3.2.12)
-      activemodel (= 3.2.12)
-      activesupport (= 3.2.12)
-    activesupport (3.2.12)
-      i18n (~> 0.6)
+    activeresource (3.2.13)
+      activemodel (= 3.2.13)
+      activesupport (= 3.2.13)
+    activesupport (3.2.13)
+      i18n (= 0.6.1)
       multi_json (~> 1.0)
     addressable (2.3.3)
     aescrypt (1.0.0)
@@ -94,6 +94,7 @@ GEM
     country-select (1.1.1)
     dalli (2.6.2)
     database_cleaner (0.9.1)
+    decent_exposure (2.1.0)
     devise (1.5.4)
       bcrypt-ruby (~> 3.0)
       orm_adapter (~> 0.0.3)
@@ -157,7 +158,7 @@ GEM
       multi_xml (>= 0.5.2)
     httpauth (0.2.0)
     httpclient (2.3.3)
-    i18n (0.6.4)
+    i18n (0.6.1)
     journey (1.0.4)
     jquery-fileupload-rails (0.4.1)
       actionpack (>= 3.1)
@@ -175,7 +176,7 @@ GEM
       launchy (~> 2.2.0)
     listen (0.7.3)
     lumberjack (1.0.2)
-    mail (2.4.4)
+    mail (2.5.3)
       i18n (>= 0.4.0)
       mime-types (~> 1.16)
       treetop (~> 1.4.8)
@@ -189,7 +190,7 @@ GEM
       metaclass (~> 0.0.1)
     money (5.1.1)
       i18n (~> 0.6.0)
-    multi_json (1.7.0)
+    multi_json (1.7.2)
     multi_xml (0.5.3)
     multipart-post (1.2.0)
     nested_form (0.3.1)
@@ -236,17 +237,17 @@ GEM
       rack
     rack-test (0.6.2)
       rack (>= 1.0)
-    rails (3.2.12)
-      actionmailer (= 3.2.12)
-      actionpack (= 3.2.12)
-      activerecord (= 3.2.12)
-      activeresource (= 3.2.12)
-      activesupport (= 3.2.12)
+    rails (3.2.13)
+      actionmailer (= 3.2.13)
+      actionpack (= 3.2.13)
+      activerecord (= 3.2.13)
+      activeresource (= 3.2.13)
+      activesupport (= 3.2.13)
       bundler (~> 1.0)
-      railties (= 3.2.12)
-    railties (3.2.12)
-      actionpack (= 3.2.12)
-      activesupport (= 3.2.12)
+      railties (= 3.2.13)
+    railties (3.2.13)
+      actionpack (= 3.2.13)
+      activesupport (= 3.2.13)
       rack-ssl (~> 1.3.2)
       rake (>= 0.8.7)
       rdoc (~> 3.4)
@@ -326,7 +327,7 @@ GEM
     textacular (3.0.0)
       activerecord (>= 3.0, < 4.1)
     thor (0.17.0)
-    tilt (1.3.5)
+    tilt (1.3.6)
     timecop (0.6.1)
     timers (1.1.0)
     treetop (1.4.12)
@@ -375,6 +376,7 @@ DEPENDENCIES
   country-select
   dalli
   database_cleaner
+  decent_exposure
   delayed_paperclip!
   devise (= 1.5.4)
   draper
@@ -405,7 +407,7 @@ DEPENDENCIES
   paperclip
   pg
   quiet_assets
-  rails (= 3.2.12)
+  rails (= 3.2.13)
   rb-fsevent
   rmagick
   rspec-nc

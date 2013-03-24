@@ -6,8 +6,8 @@
       .text.black.bold.font14.line12.left Share this via:
       .line-separator.left
       .buttons-container.right
-        - public_url = url_for(:controller => 'images', :action => 'public', :id => params[:id], :only_path => false)
-        - flickr_request = url_for(:controller => 'images', :action => 'post_image_to_flickr', :id => params[:id], :only_path => false)
+        - public_url = public_image_path(params[:id])
+        - flickr_request = flickr_post_image_url(params[:id])
         - if current_user.tumblr_token?
           %a.tumblr.button.right{ :href => '#', :onclick => "showSocialPopup('tumblr');"}
         - if current_user.flickr_token?

@@ -2,7 +2,7 @@ source 'http://rubygems.org'
 ruby '1.9.3'
 
 # main stack
-gem 'rails', '3.2.12'
+gem 'rails', '3.2.13'
 gem 'pg'
 
 # application components
@@ -17,6 +17,7 @@ gem 'cancan'
 gem 'classy_enum'
 gem 'country-select'
 gem 'dalli'
+gem 'decent_exposure'
 gem 'devise', '1.5.4'
 gem 'delayed_paperclip', git: 'git://github.com/jrgifford/delayed_paperclip.git' # with Sidekiq support
 gem 'draper'
