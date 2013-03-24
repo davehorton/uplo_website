@@ -254,10 +254,10 @@ class Image < ActiveRecord::Base
   def total_sales(month = nil)
     total = 0
 
-    orders = orders.completed
+    orders = self.orders.completed
 
     if month
-      start_date = DateTime.parse("01 #{mon}")
+      start_date = DateTime.parse("01 #{month}")
       end_date = TimeCalculator.last_day_of_month(start_date.mon, start_date.year).end_of_day
       end_date = end_date.strftime("%Y-%m-%d %T")
       start_date = start_date.strftime("%Y-%m-%d %T")
@@ -265,7 +265,7 @@ class Image < ActiveRecord::Base
     end
 
     order_ids = orders.collect(&:id)
-    sold_items = (orders.length == 0) ? [] : line_items.where("order_id in (#{order_ids.join(',')})")
+    sold_items = (orders.length == 0) ? [] : line_items.where(order_id: order_ids)
     sold_items.each do |item|
       total += ((item.price * item.quantity) * item.commission_percent)
     end
@@ -289,7 +289,7 @@ class Image < ActiveRecord::Base
     end
 
     orders_in = orders.collect &:id
-    saled_items = (orders.length==0) ? [] : self.line_items.where("order_id in (#{orders_in.join(',')})")
+    saled_items = (orders.length==0) ? [] : self.line_items.where(order_id: orders_in)
     saled_items.each { |item| result += item.quantity }
     return result
   end
@@ -304,7 +304,7 @@ class Image < ActiveRecord::Base
       sold_items = LineItem.paginate_and_sort(item_paging_params.merge(sort_expression: 'purchased_date desc')).
         joins("LEFT JOIN orders ON orders.id = line_items.order_id LEFT JOIN users ON users.id = orders.user_id").
         select("line_items.*, users.id as purchaser_id, orders.transaction_date as purchased_date").
-        where(["image_id=? and order_id in (#{order_ids.join(',')})", id])
+        where(image_id: id, order_id: order_ids)
     end
 
     sold_items
@@ -318,7 +318,7 @@ class Image < ActiveRecord::Base
       sold_items = LineItem.paginate(item_paging_params.merge(sort_expression: 'purchased_date desc')).
         joins("LEFT JOIN orders ON orders.id = line_items.order_id LEFT JOIN users ON users.id = orders.user_id").
         select("line_items.*, users.id as purchaser_id, orders.transaction_date as purchased_date").
-        where(["image_id=? and order_id in (#{order_ids.join(',')})", id])
+        where(image_id: id, order_id: order_ids)
 
       sold_items.each { |item|
         user = User.find_by_id(item.purchaser_id)

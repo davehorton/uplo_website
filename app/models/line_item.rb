@@ -4,15 +4,6 @@ class LineItem < ActiveRecord::Base
 
   validates :quantity, numericality: { less_than_or_equal_to: 10 }
 
-  def image_thumb_url
-    self.image.image_thumb_url
-  end
-
-  def image_url
-    self.image.image_url
-  end
-
-  def image_name
-    self.image.name
-  end
+  delegate :image_thumb_url, :image_url, :to => :image
+  delegate :name, :to => :image, :prefix => true
 end

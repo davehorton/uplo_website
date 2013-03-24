@@ -41,18 +41,18 @@ class Order < ActiveRecord::Base
     has_tax  = false
     # considering shipping state
     if self.shipping_address
-      has_tax = true if self.shipping_address.state == Order::REGION_TAX[:newyork][:state_code]
+      has_tax = true if self.shipping_address.in_new_york?
 
     # considering billing state, 'cause of shipping to billing
     elsif self.billing_address
-      has_tax = true if self.billing_address.state == Order::REGION_TAX[:newyork][:state_code]
+      has_tax = true if self.billing_address.in_new_york?
     end
 
     if has_tax
-      self.tax = self.compute_image_total * Order::REGION_TAX[:newyork][:tax]
+      self.tax = self.compute_image_total * REGION_TAX[:newyork][:tax]
       self.transaction do
         self.line_items.each do |line_item|
-          line_item.tax = line_item.price * Order::REGION_TAX[:newyork][:tax]
+          line_item.tax = line_item.price * REGION_TAX[:newyork][:tax]
           line_item.save
         end
       end
@@ -82,8 +82,8 @@ class Order < ActiveRecord::Base
     begin
       params.to_options!
       params.merge!({
-        :transaction_status => Order::TRANSACTION_STATUS[:complete],
-        :status => Order::STATUS[:complete]
+        :transaction_status => TRANSACTION_STATUS[:complete],
+        :status => STATUS[:complete]
       })
 
       # Update order attributes
