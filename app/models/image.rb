@@ -233,10 +233,14 @@ class Image < ActiveRecord::Base
   end
 
   def url(options = nil)
-    storage = Rails.application.config.paperclip_defaults[:storage]
-    case storage
-      when :s3 then self.image.expiring_url(s3_expire_time, options)
-      when :filesystem then image.url(options)
+    if (self.data_processing)
+      "/assets/gallery-thumb.jpg"
+    else
+      storage = Rails.application.config.paperclip_defaults[:storage]
+      case storage
+        when :s3 then self.image.expiring_url(s3_expire_time, options)
+        when :filesystem then image.url(options)
+      end
     end
   end
 
