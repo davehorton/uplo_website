@@ -162,19 +162,6 @@ class User < ActiveRecord::Base
     source_liked_images.unflagged.public_or_owner(self)
   end
 
-  def avatar
-    img = ProfileImage.find :first, :conditions => {:user_id => self.id, :default => true}
-    if img.nil?
-      result = nil
-    else
-      if img.source && (img.source.removed? || (img.source.flagged?))
-        return nil
-      end
-      result = img.avatar
-    end
-    return result
-  end
-
   def joined_date
     if !self.confirmed_at.nil?
       return self.confirmed_at.strftime('%B %Y')
@@ -186,13 +173,25 @@ class User < ActiveRecord::Base
     [self.first_name, self.last_name].join(" ")
   end
 
-  # allow_flagged=true: show avatar even when flagged
+  def avatar
+    img = ProfileImage.find :first, :conditions => {:user_id => self.id, :default => true}
+    if img.nil?
+      result = nil
+    else
+      if img.source && (img.source.removed? || (img.source.flagged?))
+        return nil
+      end
+      result = img
+    end
+    return result
+  end
+
   def avatar_url(style='thumb')
-    avatar = self.avatar
-    if avatar.nil?
+    av = avatar
+    if av.nil?
       url = "/assets/avatar-default-#{style.to_s}.jpg"
     else
-      url = avatar.url(style.to_sym)
+      url = av.url(style.to_sym)
     end
     return url
   end

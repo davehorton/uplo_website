@@ -29,11 +29,16 @@ class ProfileImage < ActiveRecord::Base
     default
   end
 
-  def url(style = :thumb)
+  def s3_expire_time
+    Time.zone.now.beginning_of_day.since 25.hours
+  end
+
+  def url(options = nil)
     storage = Rails.application.config.paperclip_defaults[:storage]
     case storage
-      when :s3 then avatar.expiring_url(style)
-      when :filesystem then avatar.url
+      when :s3 then self.avatar.expiring_url(s3_expire_time, options)
+      when :filesystem then avatar.url(options)
     end
   end
 end
+
