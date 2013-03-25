@@ -1,10 +1,21 @@
 computePrice = ->
-  size = $('#line_item_size').val()
-  moulding = $('#line_item_moulding').val()
   quantity = $('#line_item_quantity').val()
-  if (moulding_price?)
-    price = moulding_price[moulding][tier][size] * quantity
-    $('#total .number').text "$#{price.toFixed(2)}"
+  if (image_id?)
+    $.ajax({
+      url: '/images/' + image_id + '/price',
+      type: 'GET',
+      data: {
+        size_id: $('#line_item_size').val(),
+        moulding_id: $('#line_item_moulding').val()
+      },
+      dataType: 'json',
+      success: (response) ->
+        if response.success
+          price = response.price * quantity
+          $('#total .number').text "$#{price.toFixed(2)}"
+      error: ->
+        helper.show_notification('Something went wrong!')
+    });
 
 refreshMouldingOptions = (size) ->
   has_constrain = false
@@ -32,25 +43,11 @@ refreshSizeOptions = (mould) ->
   options.prop 'disabled', has_constrain
   sizes_selection.selectmenu()
 
-initMouldingOptions = ->
-  moulding_selection = $('#line_item_moulding')
-  options = moulding_selection.find 'option'
-  $.each options, (idx, val) ->
-    option = $(val)
-    option.prop 'disabled', moulding_pending[option.val()]
-  moulding_selection.selectmenu({
-    style: 'dropdown',
-    change: (e, obj) ->
-      computePrice()
-      # refreshSizeOptions obj.value
-  })
-
 initSizeOptions = ->
-  $('#line_item_size').selectmenu({
+  $('#line_item_size, #line_item_moulding').selectmenu({
     style: 'dropdown',
     change: (e, obj) ->
       computePrice()
-      # refreshMouldingOptions obj.value
   })
 
 $ ->
@@ -61,7 +58,6 @@ $ ->
   $('.add-to-cart').click -> $("#order-details").submit();
 
   initSizeOptions()
-  initMouldingOptions()
   $('#line_item_quantity').keyup -> computePrice()
   $('#line_item_quantity').keypress (event) ->
     reg = /^\d{1,2}$/

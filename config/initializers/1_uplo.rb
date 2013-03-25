@@ -48,23 +48,6 @@ MOULDING_DISPLAY = {
   MOULDING[:rustic_wood] => 'Rustic Wood'
 }
 
-MOULDING_PRICE_DISPLAY = {
-  MOULDING[:print]  => 'Print Only',
-  MOULDING[:canvas] => 'Canvas',
-  MOULDING[:plexi]  => 'Plexi'
-}
-
-PENDING_MOULDING = {
-  MOULDING[:print] => false,
-  MOULDING[:print_luster] => false,
-  MOULDING[:canvas] => false,
-  MOULDING[:plexi] => false,
-  MOULDING[:black] => true,
-  MOULDING[:white] => true,
-  MOULDING[:light_wood] => true,
-  MOULDING[:rustic_wood] => true
-}
-
 MOULDING_SIZES_CONSTRAIN = {
   MOULDING[:rustic_wood] => [IMAGE_SQUARE_PRINTED_SIZES[0], IMAGE_PORTRAIT_PRINTED_SIZES[0]]
 }
@@ -161,10 +144,6 @@ MOULDING_PRICES = {
 
   MOULDING[:rustic_wood] => nil
 }
-
-MOULDING_PRICES_AVAI = [
-  MOULDING[:print], MOULDING[:canvas], MOULDING[:plexi]
-]
 
 # TODO: temp reset to 0, plz check with iOS & remove, also see: users api: get_moulding
 MOULDING_DISCOUNT = {

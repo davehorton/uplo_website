@@ -8,24 +8,23 @@
     - size = nil
     - moulding = nil
     - quantity = 1
-    - action_url = url_for(:controller => "shopping_cart", :action => "add_to_cart", :image_id => @image.id)
   - else
     - size = @line_item.size
     - quantity = @line_item.quantity
-    - moulding = @line_item.moulding
-    - action_url = url_for(:controller => "shopping_cart", :action => "update_cart", :line_item_id => @line_item.id)
+    - size = @line_item.product.size_id
+    - moulding = @line_item.product.moulding_id
   .right
     .text.black.bold.font18 Build Your Order
     .line-separator
-    = simple_form_for(:line_item, :url => action_url, :method => 'post', :html => { :id => 'order-details', :class => 'left' }) do |f|
+    = simple_form_for(:line_item, :url => url_for(:controller => "shopping_cart", :action => "add_to_cart", :image_id => @image.id), :method => 'post', :html => { :id => 'order-details', :class => 'left' }) do |f|
       .round-box.option.left.print-sizes-container
         .header.text.black.bold.font14= "Print Size"
         .item.left
-          = f.select :size, printed_sizes_options(@image, size)
+          = f.select :size, options_from_collection_for_select(@sizes, :id, :to_name, size)
       .round-box.option.left{:style => 'width:138px;'}
         .header.text.black.bold.font14= "Moulding Choice"
         .item.left
-          = f.select :moulding, moulding_options(moulding)
+          = f.select :moulding, options_from_collection_for_select(@mouldings, :id, :name, moulding)
       .round-box.option.right{:style => 'width:138px;'}
         .header.text.black.bold.font14= "Quantity"
         .item.left
@@ -52,7 +51,3 @@
   = javascript_tag do
     :erb
       var image_id = '<%= params[:id] %>';
-      var tier = <%= @image.tier %>;
-      var moulding_pending = <%= PENDING_MOULDING.to_json %>;
-      var moulding_constrain = <%= MOULDING_SIZES_CONSTRAIN.to_json %>;
-      var moulding_price = <%= MOULDING_PRICES.to_json %>;

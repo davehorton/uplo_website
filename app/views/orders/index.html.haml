@@ -152,7 +152,7 @@
               .text.bold.font13.right= line_item.quantity
             .line.left
               .text.font10.left PRICE
-              .price.text.bold.font13.right= number_to_currency(line_item.price * line_item.quantity)
+              .price.text.bold.font13.right= number_to_currency(line_item.total_price)
             .line.no-background.left
               .text.font10.left TAX
               .tax.text.bold.font13.right= (line_item.tax > 0 ? number_to_currency(line_item.tax * line_item.quantity) : "--")

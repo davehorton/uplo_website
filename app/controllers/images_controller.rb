@@ -296,9 +296,11 @@ class ImagesController < ApplicationController
 
   def order
     @image = Image.unflagged.find_by_id(params[:id])
+
     if @image.nil? || (@image.user.blocked? && !current_user.admin?)
       render_not_found
     end
+
     if params[:line_item].nil?
       if @image.blank?
         render_not_found
@@ -308,6 +310,17 @@ class ImagesController < ApplicationController
     else
       @line_item = LineItem.find_by_id params[:line_item]
     end
+
+    @products = Product.in_sizes(@image.printed_sizes).all
+    @sizes = @products.map(&:size).uniq
+    @mouldings = @products.map(&:moulding).uniq
+  end
+
+  def price
+    @image = Image.unflagged.find_by_id(params[:id])
+    @moulding = Moulding.find(params[:moulding_id])
+    @size = Size.find(params[:size_id])
+    render json: { success: true, price: @image.get_price(@moulding, @size) }
   end
 
   def pricing

@@ -8,88 +8,35 @@ class ShoppingCartController < ApplicationController
 
   def show
     if @cart.order
-      @line_items = @cart.order.line_items.find(:all, :include => [:order, :image], :order => "line_items.updated_at DESC, line_items.created_at DESC")
+      @line_items = @cart.order.line_items.includes(:image, :product).order("line_items.updated_at DESC, line_items.created_at DESC")
       @order = @cart.order
       @order.compute_totals
     end
   end
 
   def add_to_cart
-    image = Image.find_by_id params[:image_id]
-    params[:line_item].delete(:image_id)
+    image = Image.find_by_id(params[:image_id])
+
     if(image.nil? || image.image_flags.count > 0)
       flash[:warning] = "Your recent ordered image does not exist anymore."
       redirect_to :controller => :home, :action => :browse and return
     elsif not valid_item?(params[:line_item])
       flash[:warning] = "Please fill all options first."
       redirect_to order_image_path(image) and return
-
-    #check moulding & size constrain
-    elsif MOULDING_SIZES_CONSTRAIN.has_key?(params[:line_item]['moulding']) and MOULDING_SIZES_CONSTRAIN[params[:line_item]['moulding']].index(params[:line_item]['size'])
-      flash[:error] = "The mould is not compatible with this size. Please change your options."
-      redirect_to order_image_path(image) and return
-
     else
-      # Find line_item to reuse line item which has the same image, size and mounding
-      line_item = @cart.order.line_items.find(:first, :conditions => ["image_id = ? AND size = ? AND moulding = ?",params[:image_id], params[:line_item]['size'],  params[:line_item]['moulding']])
-      if (line_item)
-        line_item.quantity = line_item.quantity + params[:line_item]['quantity'].to_i
-        line_item.price = image.get_price(params[:line_item]['moulding'], params[:line_item]['size'])
-        line_item.tax = line_item.price * PER_TAX
-        line_item.commission_percent = image.get_commission
-        if line_item.save
-          @order = @cart.order.reload
-        else
-          flash[:warning] = line_item.errors.full_messages.to_sentence
-          redirect_to order_image_path(image) and return
-        end
-      else
-        line_item = @cart.order.line_items.new do |item|
-          item.image = image
-          item.attributes = params[:line_item]
-          item.price = image.get_price(params[:line_item]['moulding'], params[:line_item]['size'])
-          item.tax = item.price * PER_TAX
-          item.commission_percent = image.get_commission
-          if item.save
-            @order = @cart.order.reload
-          else
-            flash[:warning] = item.errors.full_messages.to_sentence
-            redirect_to order_image_path(image) and return
-          end
-        end
-      end
-    end
-    redirect_to :action => :show
-  end
+      product = Product.where(moulding_id: params[:line_item][:moulding], size_id: params[:line_item][:size]).first
 
-  def update_cart
-    line_item = LineItem.find_by_id params[:line_item_id]
+      line_item = @cart.order.line_items.where(image_id: image.id, product_id: product.id).first_or_initialize
+      line_item.quantity = params[:line_item][:quantity].to_i
 
-    if line_item.nil?
-      flash[:warning] = "Your recent ordered image does not exist anymore."
-    elsif not valid_item?(params[:line_item])
-      flash[:warning] = "Please fill all options first."
-      redirect_to order_image_path(line_item.image.id, :line_item => line_item.id) and return
-
-    #check moulding & size constrain
-    elsif MOULDING_SIZES_CONSTRAIN.has_key?(params[:line_item]['moulding']) and MOULDING_SIZES_CONSTRAIN[params[:line_item]['moulding']].index(params[:line_item]['size'])
-      flash[:error] = "The mould is not compatible with this size. Please change your options."
-      redirect_to order_image_path(image) and return
-
-    else
-      image = line_item.image
-      line_item.attributes = params[:line_item]
-      line_item.price = image.get_price(params[:line_item]['moulding'], params[:line_item]['size'])
-      line_item.tax = line_item.price * PER_TAX
-      line_item.commission_percent = image.get_commission
       if line_item.save
         @order = @cart.order.reload
+        redirect_to :action => :show
       else
         flash[:warning] = line_item.errors.full_messages.to_sentence
-        redirect_to order_image_path(image, :line_item => line_item.id) and return
+        redirect_to order_image_path(image) and return
       end
     end
-    redirect_to :action => :show
   end
 
   def checkout

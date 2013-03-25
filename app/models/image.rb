@@ -124,7 +124,7 @@ class Image < ActiveRecord::Base
   end
 
   def get_price(moulding, size)
-    Product.where(moulding_id: moulding.id, size_id: size.id, tier_id: self.tier.id).first.price
+    Product.where(moulding_id: moulding.id, size_id: size.id).first.price_for_tier(tier_id)
   end
 
   def get_commission
@@ -155,9 +155,9 @@ class Image < ActiveRecord::Base
 
   def printed_sizes
     sizes = if square?
-      Size.square
+      Size.square.where(id: Product.all.map(&:size_id))
     else
-      Size.rectangular
+      Size.rectangular.where(id: Product.all.map(&:size_id))
     end
 
     sizes.select { |s| valid_for_size?(s) }

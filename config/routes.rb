@@ -83,6 +83,7 @@ Uplo::Application.routes.draw do
       get  :flickr_response
       get  :mail_shared_image
       get  :order
+      get  :price
       get  :pricing
       get  :public
       put  :switch_like

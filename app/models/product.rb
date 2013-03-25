@@ -22,4 +22,8 @@ class Product < ActiveRecord::Base
   def price_for_tier(tier_id)
     send(:"tier#{tier_id}_price")
   end
+
+  def commission_for_tier(tier_id)
+    send(:"tier#{tier_id}_commission")
+  end
 end

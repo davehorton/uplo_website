@@ -14,7 +14,7 @@
     - unless line_item.image.nil?
       - total_quantity += line_item.quantity.to_i
       - image = line_item.image
-      - line_price = line_item.price * line_item.quantity.to_i
+      - line_price = line_item.total_price
       / # - line_tax = line_item.price * line_item.quantity.to_i * PER_TAX
       .line.left
         .cell.left.preview
@@ -30,13 +30,13 @@
               .icon.delete.text.font20.left &times;
               .text.font11.left Remove
         .cell.text.gray.font12.line18.left
-          = line_item.size
+          = line_item.product.size.to_name
         .cell.text.gray.font12.line18.left
-          = MOULDING_DISPLAY[line_item.moulding]
+          = line_item.product.moulding.name
         .cell.text.gray.font12.line18.left
           = line_item.quantity
         .cell.text.gray.font12.line18.left
-          = number_to_currency(line_price, {:precision => 2})
+          = number_to_currency(line_item.price, {:precision => 2})
         .cell.text.gray.font12.line18.left.subtotal
           = number_to_currency(line_price, {:precision => 2})
 
