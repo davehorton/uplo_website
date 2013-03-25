@@ -32,6 +32,7 @@ Observers are disabled in specs (see spec_helper) but have their own specific te
 ### Engine Yard
 
 * Unicorn is used in staging and production environments
+* Amazon S3 credentials stored on server in /data/uplo_web/shared/config/amazon_s3.yml
 * Add-ons:
  * SendGrid
 * Custom Chef Recipes

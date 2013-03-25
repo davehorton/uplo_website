@@ -8,10 +8,3 @@ development:
 
 test:
   <<: *common
-
-staging:
-  <<: *common
-
-production:
-  <<: *common
-  bucket: uplo
