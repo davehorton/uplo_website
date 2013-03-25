@@ -189,7 +189,7 @@ $ ->
 
   $('#images-panel').delegate '.button.delete-photo', 'click', (e) -> deletePhoto(e.target)
 
-  $('#edit-gallery').click -> $('#edit-gallery-popup').modal()
+  $('#body-galleries #edit-gallery').click -> $('#edit-gallery-popup').modal()
 
   $('#images-panel').delegate '.edit-template input', 'change', (e) ->
     window.grid_changed = true
