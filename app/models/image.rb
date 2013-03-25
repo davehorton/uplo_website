@@ -233,7 +233,7 @@ class Image < ActiveRecord::Base
   end
 
   def url(options = nil)
-    if (self.data_processing)
+    if image_processing?
       "/assets/gallery-thumb.jpg"
     else
       storage = Rails.application.config.paperclip_defaults[:storage]
