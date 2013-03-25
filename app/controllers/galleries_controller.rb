@@ -83,17 +83,17 @@ class GalleriesController < ApplicationController
   end
 
   def edit_images
-    if params[:gallery_id].nil?
+    if params[:id].nil?
       @gallery = current_user.galleries.first
-    elsif !Gallery.exists?({:id => params[:gallery_id].to_i, :user_id => current_user.id})
+    elsif !Gallery.exists?({:id => params[:id].to_i, :user_id => current_user.id})
       flash[:error] = "You cannot edit another person's gallery!"
       redirect_to :controller => :galleries, :actions => :index
     else
-      @gallery = Gallery.find_by_id params[:gallery_id]
+      @gallery = Gallery.find_by_id params[:id]
     end
 
     if !@gallery.nil?
-      @image = Image.new(gallery_id: @gallery.id)
+      @image = Image.new(id: @gallery.id)
       @images = @gallery.images.paginate_and_sort(filtered_params)
 
       if request.xhr?
