@@ -1,13 +1,25 @@
 class Product < ActiveRecord::Base
   belongs_to :moulding
   belongs_to :size
-  belongs_to :tier
 
   validates :moulding, presence: true
   validates :size, presence: true
-  validates :tier, presence: true
-  validates :price, presence: true
-  validates :commission, presence: true
+  validates :tier1_price, presence: true
+  validates :tier2_price, presence: true
+  validates :tier3_price, presence: true
+  validates :tier4_price, presence: true
+  validates :tier1_commission, presence: true
+  validates :tier2_commission, presence: true
+  validates :tier3_commission, presence: true
+  validates :tier4_commission, presence: true
 
-  default_scope joins(:tier, :size, :moulding).order('tiers.name, sizes.width, sizes.height, mouldings.name').readonly(false)
+  default_scope joins(:size, :moulding).order('sizes.width, sizes.height, mouldings.id').readonly(false)
+
+  def self.in_sizes(sizes)
+    where(size_id: sizes)
+  end
+
+  def price_for_tier(tier_id)
+    send(:"tier#{tier_id}_price")
+  end
 end

@@ -22,12 +22,12 @@ module GalleriesHelper
   def printed_sizes_options(image, selected = nil)
     options = []
     image.printed_sizes.each do |size|
-      options << ["#{size}", size, {'data-url' => image.url("scale_preview#{size}")}]
+      options << [size.to_name, size, {'data-url' => image.url("scale_preview#{size.to_name}")}]
     end
     options_for_select(options, selected)
   end
 
-  def mounding_options(selected = nil)
+  def moulding_options(selected = nil)
     options = []
     MOULDING.each do |k, v|
       options << [MOULDING_DISPLAY[v], v]

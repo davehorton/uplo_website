@@ -321,13 +321,13 @@ class ImagesController < ApplicationController
     render :json => result
   end
 
-  def update_tier
+  def tier
     image = Image.unflagged.find_by_id params[:id]
     if image.nil? || (image.user.blocked? && !current_user.admin?)
       result = { :success => false, :msg => 'This image does not exist anymore' }
     else
-      image.update_attribute(:tier, params[:price]['tier'])
-      result = { :success => true, :tier => params[:price]['tier'] }
+      image.update_attributes(params[:image])
+      result = { :success => true, :tier => image.tier_id }
     end
     render :json => result
   end

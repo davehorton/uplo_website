@@ -1,6 +1,24 @@
 class Size < ActiveRecord::Base
-  validates :name, presence: true
   validates :width, presence: true
   validates :height, presence: true
+
   default_scope order('sizes.width, sizes.height')
+  scope :rectangular, where("sizes.width <> sizes.height")
+  scope :square,      where("sizes.width = sizes.height")
+
+  def to_name
+    "#{width}x#{height}"
+  end
+
+  def to_a
+    [ width, height ]
+  end
+
+  def rectangular?
+    self.width != self.height
+  end
+
+  def square?
+    self.width == self.height
+  end
 end

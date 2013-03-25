@@ -1,8 +1,13 @@
 <%= simple_form_for [:admin, product] do |f| %>
-  <%= f.association :tier, hint: link_to('Manage tiers', admin_tiers_path) %>
-  <%= f.association :size, hint: link_to('Manage sizes', admin_sizes_path) %>
+  <%= f.association :size, label_method: :to_name, hint: link_to('Manage sizes', admin_sizes_path) %>
   <%= f.association :moulding, hint: link_to('Manage mouldings', admin_mouldings_path) %>
-  <%= f.input :price %>
-  <%= f.input :commission %>
+  <%= f.input :tier1_price, label: 'Tier 1 Price ($)' %>
+  <%= f.input :tier1_commission, label: 'Tier 1 Commission (%)' %>
+  <%= f.input :tier2_price, label: 'Tier 2 Price ($)' %>
+  <%= f.input :tier2_commission, label: 'Tier 2 Commission (%)' %>
+  <%= f.input :tier3_price, label: 'Tier 3 Price ($)' %>
+  <%= f.input :tier3_commission, label: 'Tier 3 Commission (%)' %>
+  <%= f.input :tier4_price, label: 'Tier 4 Price ($)' %>
+  <%= f.input :tier4_commission, label: 'Tier 4 Commission (%)' %>
   <%= f.submit %>
 <% end %>

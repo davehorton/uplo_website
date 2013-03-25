@@ -36,22 +36,32 @@
 <table id="product_options">
 <thead>
   <tr>
-    <th>Tier</th>
     <th>Size</th>
     <th>Moulding</th>
-    <th>Price</th>
-    <th>Commission</th>
+    <th>Tier 1<br/>Price</th>
+    <th>Tier 1<br/>Comm.</th>
+    <th>Tier 2<br/>Price</th>
+    <th>Tier 3<br/>Comm.</th>
+    <th>Tier 3<br/>Price</th>
+    <th>Tier 3<br/>Comm.</th>
+    <th>Tier 4<br/>Price</th>
+    <th>Tier 4<br/>Comm.</th>
     <th></th>
   </tr>
 </thead>
 <tbody>
   <% Product.all.each do |product| %>
   <tr>
-    <td><%= product.tier.name %></td>
-    <td><%= product.size.name %></td>
+    <td><%= product.size.to_name %></td>
     <td><%= product.moulding.name %></td>
-    <td><%= number_to_currency product.price %></td>
-    <td><%= number_to_percentage product.commission %></td>
+    <td><%= number_to_currency product.tier1_price %></td>
+    <td><%= number_to_percentage product.tier1_commission, precision: 1 %></td>
+    <td><%= number_to_currency product.tier2_price %></td>
+    <td><%= number_to_percentage product.tier2_commission, precision: 1 %></td>
+    <td><%= number_to_currency product.tier3_price %></td>
+    <td><%= number_to_percentage product.tier3_commission, precision: 1 %></td>
+    <td><%= number_to_currency product.tier4_price %></td>
+    <td><%= number_to_percentage product.tier4_commission, precision: 1 %></td>
     <td><%= link_to 'Edit', edit_admin_product_path(product) %></td>
   </tr>
   <% end %>

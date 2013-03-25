@@ -80,7 +80,7 @@ class Api::ImagesController < Api::BaseController
     sizes = []
     MOULDING.each do |k, v|
       if MOULDING_PRICES[v]
-        image.printed_sizes.each { |s| sizes << { :id => image.id, :size => s, :mould => v, :price => image.get_price(v, s) }}
+        image.printed_sizes.each { |s| sizes << { :id => image.id, :size => s.to_name, :mould => v, :price => image.get_price(v, s.to_name) }}
       end
     end
 

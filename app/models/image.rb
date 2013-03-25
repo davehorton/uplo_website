@@ -102,6 +102,13 @@ class Image < ActiveRecord::Base
     public_access.paginate_and_sort(params)
   end
 
+  # reprocesses images based on any new sizes
+  def self.rebuild_all_photos
+    Image.find_each do |image|
+      image.image.reprocess!
+    end
+  end
+
   delegate :username, :to => :user, allow_nil: true
   delegate :id, :fullname, :to => :user, allow_nil: true, prefix: true
   delegate :name, :to => :gallery, prefix: true
@@ -117,11 +124,15 @@ class Image < ActiveRecord::Base
   end
 
   def get_price(moulding, size)
-    return MOULDING_PRICES[moulding][self.tier][size]
+    Product.where(moulding_id: moulding.id, size_id: size.id, tier_id: self.tier.id).first.price
   end
 
   def get_commission
     return IMAGE_COMMISSIONS[self.tier]
+  end
+
+  def sample_product_price
+    Product.where(size_id: printed_sizes.first.id).first.try(:price_for_tier, tier_id) || 'Unknown'
   end
 
   def square?
@@ -132,28 +143,24 @@ class Image < ActiveRecord::Base
   end
 
   def valid_for_size?(size)
-    if self.square?
+    if square?
       edge = [self.width, self.height].min
-      (edge / PRINT_RESOLUTION) >= size.split('x')[0].strip.to_i
-    else
-      edges = size.split('x')
+      (edge / PRINT_RESOLUTION) >= size.width
+    elsif size.rectangular?
       short_edge = [self.width, self.height].min
-      long_edge = [self.width, self.height].max
-      (short_edge / PRINT_RESOLUTION) >= edges[0].strip.to_i && (long_edge / PRINT_RESOLUTION) >= edges[1].strip.to_i
+      long_edge  = [self.width, self.height].max
+      (short_edge / PRINT_RESOLUTION) >= size.width && (long_edge / PRINT_RESOLUTION) >= size.height
     end
   end
 
   def printed_sizes
-    result = []
-    if self.square?
-      sizes = PRINTED_SIZES[:square]
+    sizes = if square?
+      Size.square
     else
-      sizes = PRINTED_SIZES[:rectangular]
+      Size.rectangular
     end
-    sizes.each { |size|
-      result << size if self.valid_for_size?(size)
-    }
-    result
+
+    sizes.select { |s| valid_for_size?(s) }
   end
 
   def comments_number
@@ -373,13 +380,12 @@ class Image < ActiveRecord::Base
 
   def available_styles
     result = DEFAULT_STYLES
-    self.printed_sizes.each do |size|
-      ratios = size.split('x')
-      ratios.collect! { |tmp| tmp.strip.to_i }
+    printed_sizes.each do |size|
+      ratios = size.to_a
       tmp_width = 0
       tmp_height = 0
-      if self.square?
-        tmp_width = height = ratios[0] * PRINT_RESOLUTION
+      if square?
+        tmp_width = height = size.width * PRINT_RESOLUTION
       elsif self.width > self.height
         tmp_width = ratios.max * PRINT_RESOLUTION
         tmp_height = ratios.min * PRINT_RESOLUTION
@@ -387,12 +393,12 @@ class Image < ActiveRecord::Base
         tmp_width = ratios.min * PRINT_RESOLUTION
         tmp_height = ratios.max * PRINT_RESOLUTION
       end
-      result["scale#{size}".to_sym] = "#{tmp_width}x#{tmp_height}#"
+      result["scale#{size.to_name}".to_sym] = "#{tmp_width}x#{tmp_height}#"
       ratio = tmp_width/640.to_f
       ratio = 1 if ratio < 1
       preview_width = tmp_width / ratio
       preview_height = tmp_height / ratio
-      result["scale_preview#{size}".to_sym] = "#{preview_width.to_i}x#{preview_height.to_i}#"
+      result["scale_preview#{size.to_name}".to_sym] = "#{preview_width.to_i}x#{preview_height.to_i}#"
     end
     result
   end
@@ -420,12 +426,11 @@ class Image < ActiveRecord::Base
 
     def validate_quality
       save_dimensions
-      min_size = self.square? ? PRINTED_SIZES[:square][0] : PRINTED_SIZES[:rectangular][0]
-      if !self.valid_for_size?(min_size)
-        self.errors.add :base, "Low quality of file! Please try again with higher quality images!"
-        return false
+      min_size = square? ? Size.square.first : Size.rectangular.first
+      if !valid_for_size?(min_size)
+        self.errors.add :base, "Quality of image is not high enough for printing. Please try uploading a larger image."
+        false
       end
-      return true
     end
 
     # Detect the image dimensions.
@@ -442,7 +447,7 @@ class Image < ActiveRecord::Base
     end
 
     def init_tier
-      self.tier = TIERS[:tier_1] if self.tier.blank?
+      self.tier_id ||= 1
     end
 
     def set_as_cover_if_first_one

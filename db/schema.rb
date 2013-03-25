@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130324155640) do
+ActiveRecord::Schema.define(:version => 20130325042942) do
 
   create_table "addresses", :force => true do |t|
     t.string   "first_name"
@@ -108,12 +108,12 @@ ActiveRecord::Schema.define(:version => 20130324155640) do
     t.integer  "height"
     t.string   "keyword"
     t.boolean  "owner_avatar",       :default => false
-    t.string   "tier"
     t.boolean  "removed",            :default => false
     t.integer  "pageview",           :default => 0
     t.boolean  "image_processing",   :default => false
     t.integer  "user_id"
     t.boolean  "promoted",           :default => false
+    t.integer  "tier_id"
   end
 
   add_index "images", ["gallery_cover"], :name => "index_images_on_gallery_cover"
@@ -121,6 +121,7 @@ ActiveRecord::Schema.define(:version => 20130324155640) do
   add_index "images", ["image_likes_count"], :name => "index_images_on_image_likes_count"
   add_index "images", ["image_processing"], :name => "index_images_on_data_processing"
   add_index "images", ["removed"], :name => "index_images_on_removed"
+  add_index "images", ["tier_id"], :name => "index_images_on_tier_id"
   add_index "images", ["user_id"], :name => "index_images_on_user_id"
 
   create_table "invitations", :force => true do |t|
@@ -144,7 +145,10 @@ ActiveRecord::Schema.define(:version => 20130324155640) do
     t.datetime "created_at",                                                           :null => false
     t.datetime "updated_at",                                                           :null => false
     t.float    "commission_percent"
+    t.integer  "product_id"
   end
+
+  add_index "line_items", ["product_id"], :name => "index_line_items_on_product_id"
 
   create_table "mouldings", :force => true do |t|
     t.string   "name"
@@ -188,18 +192,22 @@ ActiveRecord::Schema.define(:version => 20130324155640) do
   end
 
   create_table "products", :force => true do |t|
-    t.integer  "tier_id"
     t.integer  "size_id"
     t.integer  "moulding_id"
-    t.decimal  "price",       :precision => 8, :scale => 2, :default => 0.0
-    t.decimal  "commission",  :precision => 8, :scale => 2, :default => 0.0
-    t.datetime "created_at",                                                 :null => false
-    t.datetime "updated_at",                                                 :null => false
+    t.decimal  "tier1_price",      :precision => 8, :scale => 2, :default => 0.0
+    t.decimal  "tier2_price",      :precision => 8, :scale => 2, :default => 0.0
+    t.decimal  "tier3_price",      :precision => 8, :scale => 2, :default => 0.0
+    t.decimal  "tier4_price",      :precision => 8, :scale => 2, :default => 0.0
+    t.decimal  "tier1_commission", :precision => 8, :scale => 2, :default => 0.0
+    t.decimal  "tier2_commission", :precision => 8, :scale => 2, :default => 0.0
+    t.decimal  "tier3_commission", :precision => 8, :scale => 2, :default => 0.0
+    t.decimal  "tier4_commission", :precision => 8, :scale => 2, :default => 0.0
+    t.datetime "created_at",                                                      :null => false
+    t.datetime "updated_at",                                                      :null => false
   end
 
   add_index "products", ["moulding_id"], :name => "index_products_on_moulding_id"
   add_index "products", ["size_id"], :name => "index_products_on_size_id"
-  add_index "products", ["tier_id"], :name => "index_products_on_tier_id"
 
   create_table "profile_images", :force => true do |t|
     t.integer  "user_id",                                :null => false
@@ -214,7 +222,6 @@ ActiveRecord::Schema.define(:version => 20130324155640) do
   end
 
   create_table "sizes", :force => true do |t|
-    t.string   "name"
     t.integer  "width"
     t.integer  "height"
     t.datetime "created_at", :null => false
@@ -228,12 +235,6 @@ ActiveRecord::Schema.define(:version => 20130324155640) do
   end
 
   add_index "tags", ["name"], :name => "index_tags_on_name", :unique => true
-
-  create_table "tiers", :force => true do |t|
-    t.string   "name"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
-  end
 
   create_table "user_devices", :force => true do |t|
     t.string   "device_token",                       :null => false

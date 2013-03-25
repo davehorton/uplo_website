@@ -1,3 +1,5 @@
+- page_title "Browse"
+
 - can_promote = can_promote_image?(@image)
 
 - content_for :head do
@@ -28,7 +30,7 @@
     .text.black.font12.left{:style => 'margin-top:7px;'}= "Uploaded on #{@image.created_at.strftime('%m/%d/%Y')}"
     .right
       %span.text.black.font12 from
-      %span.text.black.bold.font20= number_to_currency @image.get_price(MOULDING[:print], @image.printed_sizes.first), {:precision => 2}
+      %span.text.black.bold.font20= number_to_currency @image.sample_product_price, {:precision => 2}
   .line-separator.left
   .text.gray.font12.line16.left
     = @image.description
