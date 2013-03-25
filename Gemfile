@@ -38,7 +38,6 @@ gem 'oauth'
 gem 'oauth2'
 gem 'oj'
 gem 'paperclip'
-gem 'rmagick', require: false
 gem 'sidekiq'
 gem 'simple_form'
 gem 'textacular', '~> 3.0', require: 'textacular/rails'

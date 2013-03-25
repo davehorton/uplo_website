@@ -261,7 +261,6 @@ GEM
     redis-namespace (1.2.1)
       redis (~> 3.0.0)
     request_store (1.0.5)
-    rmagick (2.13.2)
     rspec (2.13.0)
       rspec-core (~> 2.13.0)
       rspec-expectations (~> 2.13.0)
@@ -409,7 +408,6 @@ DEPENDENCIES
   quiet_assets
   rails (= 3.2.13)
   rb-fsevent
-  rmagick
   rspec-nc
   rspec-rails (~> 2.13)
   sass-rails (~> 3.2.3)
