@@ -125,10 +125,11 @@ requestUpdateTier = (node) ->
       if response.success
         helper.show_notification("Price updated!")
         $(node).siblings().text "Tier #{response.tier}"
-        $.modal.close()
       else
         helper.show_notification('Something went wrong!')
         $('#pricing-form').modal()
+    complete: ->
+        window.setTimeout("$.modal.close();", 400)
   });
 
 initTabs = (tab) ->
