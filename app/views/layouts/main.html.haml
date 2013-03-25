@@ -2,10 +2,8 @@
 
 %html
   %head
-    - title = "UPLO #{yield(:title)} | #{I18n.t("common.site_title")}"
-    %title= title
+    %title= page_title_with_default
     %meta{ charset: "utf-8" }
-    %meta{ name: "title", content: title }
     = csrf_meta_tags
 
     %link(href="#{path_to_image('/favicon.ico')}" type="image/x-icon" rel="shortcut icon")/

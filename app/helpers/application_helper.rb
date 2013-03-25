@@ -14,6 +14,22 @@ module ApplicationHelper
     content_tag(:body, opts, &block)
   end
 
+  # uses action and controller name if title is not already set (see page_title)
+  def page_title_with_default
+    if content_for?(:page_title)
+      title = content_for(:page_title)
+    else
+      title = "#{action_name.humanize.titleize} #{controller_name.humanize.singularize}"
+    end
+
+    title  + ' | ' + t('common.site_title')
+  end
+
+  # sets current page title
+  def page_title(name)
+    content_for(:page_title, name)
+  end
+
   def yield_content!(content_key)
     view_flow.content.delete(content_key)
   end
