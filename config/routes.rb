@@ -192,8 +192,9 @@ Uplo::Application.routes.draw do
     end
 
     resources :products, except: [:show]
-    resources :tiers, except: [:show]
-    resources :sizes, except: [:show]
+    resources :sizes, except: [:show] do
+      get :rebuild_photos, on: :collection
+    end
     resources :mouldings, except: [:show]
   end
 

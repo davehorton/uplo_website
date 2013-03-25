@@ -2,6 +2,7 @@ class Admin::SizesController < Admin::AdminController
   expose(:size)
 
   def index
+    @sizes = Size.all
   end
 
   def create
@@ -18,6 +19,12 @@ class Admin::SizesController < Admin::AdminController
     else
       render :edit
     end
+  end
+
+  def rebuild_photos
+    Image.delay.rebuild_all_photos
+    flash[:notice] = "Images scheduled for reprocessing."
+    redirect_to admin_sizes_path
   end
 
   protected
