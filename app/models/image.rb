@@ -126,10 +126,6 @@ class Image < ActiveRecord::Base
     Product.where(moulding_id: moulding.id, size_id: size.id).first.price_for_tier(tier_id)
   end
 
-  def get_commission
-    return IMAGE_COMMISSIONS[self.tier]
-  end
-
   def sample_product_price
     Product.first.try(:price_for_tier, tier_id) || 'Unknown'
   end
