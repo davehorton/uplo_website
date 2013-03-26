@@ -23,9 +23,29 @@ See https://github.com/webficient/standards/tree/master/testing for guidelines.
 
 Observers are disabled in specs (see spec_helper) but have their own specific tests.
 
-### Development Environment Gotchas
+## Development Environment Notes
 
-* We're using the 'letter opener' gem to intercept emails and display them in a Web browser
+### Emails
+
+We are using the 'letter opener' gem to intercept emails and display them in a Web browser
+
+### Sidekiq
+
+We are using Sidekiq to process images via the delayed_paperclip gem. Therefore to run the Sidekiq locally to process the queue, do this:
+
+```
+bundle exec sidekiq -q default -q paperclip
+```
+
+To view the Sidekiq dashboard, go to http://locahost:3000/sidekiq
+
+To purge Sidekiq jobs, open up the Redis client:
+
+```
+redis-cli
+```
+
+And type: FLUSHALL
 
 ## Operations
 
