@@ -7,6 +7,7 @@ FactoryGirl.define do
     image_file_name { 'test.jpg' }
     image_content_type { 'image/jpeg' }
     image_file_size { 128 }
+    tier_id 1
   end
 
   factory :real_image, class: Image do

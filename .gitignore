@@ -22,7 +22,8 @@
 /log/*.log
 TODO
 Thumbs.db
-
+*~
 db/dumpfile_final
 .rvmrc
 .powrc
+/coverage

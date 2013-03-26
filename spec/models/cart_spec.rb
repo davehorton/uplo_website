@@ -1,5 +1,9 @@
 require 'spec_helper'
 
 describe Cart do
-  pending "add some examples to (or delete) #{__FILE__}"
+
+  it { should belong_to(:user) }
+  it { should belong_to(:order) }
+  it { should have_many(:line_items).through(:order) }
+
 end

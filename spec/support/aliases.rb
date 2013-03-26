@@ -17,7 +17,6 @@ module Aliases
 
         # stub image methods that communicate with Paperclip
         Image.any_instance.stub(:init_image_info)
-        Image.any_instance.stub(:validate_quality => true)
         Image.any_instance.stub(:width => 100)
         Image.any_instance.stub(:height => 100)
       end

@@ -1,9 +1,9 @@
 require 'rubygems'
 require 'spork'
 
-if ENV['COVERAGE']
-  require 'simplecov'
-  SimpleCov.start
+require 'simplecov'
+SimpleCov.start do
+  add_group "Models", "app/models"
 end
 
 Spork.prefork do

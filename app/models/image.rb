@@ -23,7 +23,6 @@ class Image < ActiveRecord::Base
     :size => { :in => 0..100.megabytes, :message => 'File size cannot exceed 100MB' },
     :content_type => { :content_type => [ 'image/jpeg','image/jpg' ],
     :message => 'File type must be one of [.jpeg, .jpg]' }, :on => :create
-  validate :validate_quality, :on => :create
 
   process_in_background :image
 
@@ -127,40 +126,16 @@ class Image < ActiveRecord::Base
     Product.where(moulding_id: moulding.id, size_id: size.id).first.price_for_tier(tier_id)
   end
 
-  def get_commission
-    return IMAGE_COMMISSIONS[self.tier]
-  end
-
   def sample_product_price
-    Product.where(size_id: printed_sizes.first.id).first.try(:price_for_tier, tier_id) || 'Unknown'
+    Product.first.try(:price_for_tier, tier_id) || 'Unknown'
   end
 
   def square?
-    ratio = self.width*1.0 / self.height
-    threshold = (1 + (RECTANGULAR_RATIO - 1)/2)
-
-    (1.0/threshold < ratio)
-  end
-
-  def valid_for_size?(size)
-    if square?
-      edge = [self.width, self.height].min
-      (edge / PRINT_RESOLUTION) >= size.width
-    elsif size.rectangular?
-      short_edge = [self.width, self.height].min
-      long_edge  = [self.width, self.height].max
-      (short_edge / PRINT_RESOLUTION) >= size.width && (long_edge / PRINT_RESOLUTION) >= size.height
-    end
+    Paperclip::Geometry.new(width, height).square?
   end
 
   def printed_sizes
-    sizes = if square?
-      Size.square.where(id: Product.all.map(&:size_id))
-    else
-      Size.rectangular.where(id: Product.all.map(&:size_id))
-    end
-
-    sizes.select { |s| valid_for_size?(s) }
+    Product.all.map(&:size_id).uniq
   end
 
   def comments_number
@@ -383,28 +358,7 @@ class Image < ActiveRecord::Base
   end
 
   def available_styles
-    result = DEFAULT_STYLES
-    printed_sizes.each do |size|
-      ratios = size.to_a
-      tmp_width = 0
-      tmp_height = 0
-      if square?
-        tmp_width = height = size.width * PRINT_RESOLUTION
-      elsif self.width > self.height
-        tmp_width = ratios.max * PRINT_RESOLUTION
-        tmp_height = ratios.min * PRINT_RESOLUTION
-      else
-        tmp_width = ratios.min * PRINT_RESOLUTION
-        tmp_height = ratios.max * PRINT_RESOLUTION
-      end
-      result["scale#{size.to_name}".to_sym] = "#{tmp_width}x#{tmp_height}#"
-      ratio = tmp_width/640.to_f
-      ratio = 1 if ratio < 1
-      preview_width = tmp_width / ratio
-      preview_height = tmp_height / ratio
-      result["scale_preview#{size.to_name}".to_sym] = "#{preview_width.to_i}x#{preview_height.to_i}#"
-    end
-    result
+    DEFAULT_STYLES
   end
 
   def save_dimensions
@@ -426,15 +380,6 @@ class Image < ActiveRecord::Base
 
     def s3_expire_time
       Time.zone.now.beginning_of_day.since 25.hours
-    end
-
-    def validate_quality
-      save_dimensions
-      min_size = square? ? Size.square.first : Size.rectangular.first
-      if !valid_for_size?(min_size)
-        self.errors.add :base, "Quality of image is not high enough for printing. Please try uploading a larger image."
-        false
-      end
     end
 
     # Detect the image dimensions.
