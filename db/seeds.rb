@@ -5,6 +5,25 @@ Rails.cache.clear # in case caching is enabled
 
 puts "Creating seed data..."
 
+puts 'Creating sizes'
+smallest = Size.create(width: 8, height: 8)
+Size.create(width: 8, height: 10)
+Size.create(width: 12, height: 12)
+Size.create(width: 12, height: 16)
+Size.create(width: 20, height: 24)
+largest = Size.create(width: 24, height: 36)
+
+puts 'Creating mouldings'
+print = Moulding.create(name: 'Print Only (Gloss)')
+canvas = Moulding.create(name: 'Canvas')
+Moulding.create(name: 'Plexi')
+
+puts 'Creating products'
+Product.create(size: smallest, moulding: print, tier1_price: 20, tier2_price: 30, tier3_price: 40, tier4_price: 50, tier1_commission: 30, tier2_commission: 35, tier3_commission: 40, tier4_commission: 50)
+Product.create(size: smallest, moulding: canvas, tier1_price: 50, tier2_price: 80, tier3_price: 90, tier4_price: 100, tier1_commission: 30, tier2_commission: 35, tier3_commission: 40, tier4_commission: 50)
+Product.create(size: largest, moulding: print, tier1_price: 300, tier2_price: 600, tier3_price: 1000, tier4_price: 5000, tier1_commission: 30, tier2_commission: 35, tier3_commission: 40, tier4_commission: 50)
+Product.create(size: largest, moulding: canvas, tier1_price: 500, tier2_price: 800, tier3_price: 1500, tier4_price: 7500, tier1_commission: 30, tier2_commission: 35, tier3_commission: 40, tier4_commission: 50)
+
 puts "Admin login: admin/secret"
 admin = User.new({
   :email => "admin@uplo.com",
