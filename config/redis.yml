@@ -9,3 +9,4 @@ test:
 staging:
   host: 'localhost'
   port: 6379
+

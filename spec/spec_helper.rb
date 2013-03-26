@@ -2,7 +2,9 @@ require 'rubygems'
 require 'spork'
 
 require 'simplecov'
-SimpleCov.start
+SimpleCov.start do
+  add_group "Models", "app/models"
+end
 
 Spork.prefork do
 

@@ -9,7 +9,9 @@ class LineItemObserver < ActiveRecord::Observer
 
   private
 
-    def update_order(line_item)
-      line_item.order.compute_totals
-    end
+  def update_order(line_item)
+    line_item.order.compute_totals
+  end
+
 end
+
