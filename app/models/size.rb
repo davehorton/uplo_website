@@ -14,6 +14,10 @@ class Size < ActiveRecord::Base
     [ width, height ]
   end
 
+  def aspect_ratio
+    Paperclip::Geometry.new(width, height).aspect
+  end
+
   def rectangular?
     self.width != self.height
   end
