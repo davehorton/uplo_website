@@ -26,4 +26,8 @@ class Product < ActiveRecord::Base
   def commission_for_tier(tier_id)
     send(:"tier#{tier_id}_commission")
   end
+
+  def associated_with_any_orders?
+    LineItem.where(product_id: self.id).exists?
+  end
 end

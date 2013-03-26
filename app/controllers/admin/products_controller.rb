@@ -21,6 +21,11 @@ class Admin::ProductsController < Admin::AdminController
     end
   end
 
+  def destroy
+    product.destroy
+    redirect_to admin_products_path
+  end
+
   protected
 
     def set_current_tab

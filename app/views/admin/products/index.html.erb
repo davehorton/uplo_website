@@ -62,7 +62,12 @@
     <td><%= number_to_percentage product.tier3_commission, precision: 1 %></td>
     <td><%= number_to_currency product.tier4_price %></td>
     <td><%= number_to_percentage product.tier4_commission, precision: 1 %></td>
-    <td><%= link_to 'Edit', edit_admin_product_path(product) %></td>
+    <td>
+      <%= link_to 'Edit', edit_admin_product_path(product) %>
+      <% unless product.associated_with_any_orders? %>
+        | <%= link_to 'Delete', admin_product_path(product), method: :delete, confirm: 'Are you sure?' %>
+      <% end %>
+    </td>
   </tr>
   <% end %>
 </tbody>
