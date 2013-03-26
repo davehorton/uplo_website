@@ -1,11 +1,4 @@
-helper.endless_load_more( ->
-  if($(document).height() - 20  <= $(window).height())
-    return $(window).scroll()
-  else if $('#simplemodal-container').find('#mask').length > 0
-    return $.modal.close()
-)
 load = (url, counter)->
-  helper.stopLoadmore = true
   $('#mask').modal()
   $.ajax({
     url: url,
@@ -21,7 +14,6 @@ load = (url, counter)->
       $('#container').html response.html
       $("##{counter}").find('.info .number').text response.counter
       $("##{counter}").find('.info .label').text count_label
-      helper.stopLoadmore = false
       $(window).scroll()
   })
 

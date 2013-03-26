@@ -1,5 +1,5 @@
 class HomeController < ApplicationController
-  self.page_size = 30
+  self.per_page = 30
 
   skip_before_filter :authenticate_user!, only: [:index, :terms, :privacy]
 

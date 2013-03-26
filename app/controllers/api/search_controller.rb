@@ -3,8 +3,8 @@ class Api::SearchController < Api::BaseController
   # params:
   #   query: search key
   #   search_type: take value in [nil, "users", "galleries", "images"]
-  #   page_id
-  #   page_size
+  #   page
+  #   per_page
   #   sort_field
   #   sort_direction
   def search

@@ -1,6 +1,6 @@
 class Api::BaseController < ActionController::Base
-  cattr_accessor :page_size
-  self.page_size = 20 # Override in other controllers as needed
+  cattr_accessor :per_page
+  self.per_page = 20 # Override in other controllers as needed
 
   respond_to :json
 
@@ -52,7 +52,7 @@ class Api::BaseController < ActionController::Base
     def filtered_params
       @filtered_params ||= begin
         filtered_params = params
-        filtered_params[:page_size] ||= page_size
+        filtered_params[:per_page] ||= per_page
         filtered_params
       end
     end

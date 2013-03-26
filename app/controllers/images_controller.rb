@@ -1,5 +1,5 @@
 class ImagesController < ApplicationController
-  self.page_size = 30
+  self.per_page = 30
 
   has_mobile_fu
   before_filter :detect_device
@@ -185,6 +185,7 @@ class ImagesController < ApplicationController
 
   def browse
     push_redirect
+    self.per_page = 10
 
     @image = Image.find_by_id(params[:id])
 
@@ -213,7 +214,6 @@ class ImagesController < ApplicationController
       flash[:sticky_flash_message] = true
     end
 
-    filtered_params[:page_size] = 10
     @comments = @image.comments.available.paginate_and_sort(filtered_params)
 
     # Increase page view

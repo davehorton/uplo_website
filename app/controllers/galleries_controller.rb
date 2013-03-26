@@ -38,7 +38,7 @@ class GalleriesController < ApplicationController
   end
 
   def search
-    galleries = Gallery.search params[:query], :star => true, :with => {:user_id => current_user.id}, :page => params[:page_id], :per_page => page_size
+    galleries = Gallery.search_scope(params[:query]).paginate_and_sort(filtered_params)
     galleries.each { |g| g.name = g.name.truncate(30) and g.name = g.excerpts.name}
     @galleries = galleries
     @gallery = Gallery.new
@@ -55,7 +55,7 @@ class GalleriesController < ApplicationController
       with_condition = {:user_id => params[:user]}
     end
 
-    @galleries = Gallery.search params[:query], :star => true, :page => params[:page_id], :per_page => page_size, :with => with_condition
+    @galleries = Gallery.search_scope(params[:query]).paginate_and_sort(filtered_params)
     render :layout => 'application'
   end
 

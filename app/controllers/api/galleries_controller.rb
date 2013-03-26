@@ -3,8 +3,8 @@ class Api::GalleriesController < Api::BaseController
 
   # GET /api/galleries
   # params:
-  #   page_id
-  #   page_size
+  #   page
+  #   per_page
   #   sort_field
   #   sort_direction
   #   user_id: if null, list galleries of current user
@@ -21,8 +21,8 @@ class Api::GalleriesController < Api::BaseController
 
   # GET /api/galleries/popular
   # params:
-  #   page_id
-  #   page_size
+  #   page
+  #   per_page
   #   sort_field
   #   sort_direction
   #   user_id

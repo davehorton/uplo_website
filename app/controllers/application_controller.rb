@@ -1,6 +1,6 @@
 class ApplicationController < ActionController::Base
-  cattr_accessor :page_size
-  self.page_size = 10 # Override in other controllers as needed
+  cattr_accessor :per_page
+  self.per_page = 10 # Override in other controllers as needed
 
   protect_from_forgery
 
@@ -73,7 +73,7 @@ class ApplicationController < ActionController::Base
     def filtered_params
       @filtered_params ||= begin
         filtered_params = params
-        filtered_params[:page_size] ||= page_size
+        filtered_params[:per_page] ||= per_page
         filtered_params
       end
     end

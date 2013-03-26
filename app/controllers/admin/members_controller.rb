@@ -1,5 +1,5 @@
 class Admin::MembersController < Admin::AdminController
-  self.page_size = 24
+  self.per_page = 24
 
   def index
     @sort_field = params[:sort_field] || "signup_date"

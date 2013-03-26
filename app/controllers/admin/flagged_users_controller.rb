@@ -1,5 +1,5 @@
 class Admin::FlaggedUsersController < Admin::AdminController
-  self.page_size = 24
+  self.per_page = 24
 
   def index
     @users = User.flagged_users.paginate_and_sort(self.filtered_params)

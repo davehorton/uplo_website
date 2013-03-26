@@ -1,5 +1,5 @@
 class UsersController < ApplicationController
-  self.page_size = 12
+  self.per_page = 12
 
   before_filter :show_notification
   respond_to :json
@@ -145,7 +145,7 @@ class UsersController < ApplicationController
   end
 
   def search
-    @users = User.search params[:query], :star => true, :page => params[:page_id], :per_page => page_size
+    @users = User.search_scope(params[:query]).paginate_and_sort(filtered_params)
   end
 
   def set_current_tab

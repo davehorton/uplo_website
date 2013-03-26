@@ -1,5 +1,5 @@
 class ProfilesController < ApplicationController
-  self.page_size = 12
+  self.per_page = 12
   around_filter :apply_user_scope
   before_filter :find_user
 

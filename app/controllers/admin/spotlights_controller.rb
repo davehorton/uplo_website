@@ -1,5 +1,5 @@
 class Admin::SpotlightsController < Admin::AdminController
-  self.page_size = 12
+  self.per_page = 12
 
   def index
     @sort_field = params[:sort_field] || "date_uploaded"

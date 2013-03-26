@@ -1,6 +1,5 @@
 var helper = {
   timerID: null,
-  stopLoadmore: false,
 
   showErrorMessage: function(condit_value, elem, msg_text, cl) {
     var s;
@@ -54,34 +53,6 @@ var helper = {
       }
     }
     return true;
-  },
-
-  endless_load_more: function(callback) {
-    return $(window).scroll(function() {
-      var loading_point, url;
-      url = $('.pagination .next_page').attr('href');
-      loading_point = $(document).height() - $(window).height() - 20;
-      if(url && ($(window).scrollTop() >= loading_point)) {
-        $('.pagination').removeClass('hidden');
-        $('.pagination').text('Loading....');
-        return $.ajax({
-          url: url,
-          type: 'GET',
-          dataType: 'html',
-          success: function(response) {
-            if (helper.stopLoadmore)
-              return;
-            var result;
-            result = $.parseJSON(response);
-            $('#endless-pages').append(result.items);
-            $('.pagination').replaceWith(result.pagination);
-            callback.call();
-          }
-        });
-      } else if($('#simplemodal-container').find('#mask').length > 0){
-        window.setTimeout("$.modal.close();", 200);
-      }
-    });
   },
 
   create_message_panel: function (type, message){

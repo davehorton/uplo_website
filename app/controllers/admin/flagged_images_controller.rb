@@ -1,5 +1,5 @@
 class Admin::FlaggedImagesController < Admin::AdminController
-  self.page_size = 12
+  self.per_page = 12
 
   def index
     @flagged_images = Image.flagged_of_type(params[:flag_type]).with_gallery.paginate_and_sort(filtered_params)

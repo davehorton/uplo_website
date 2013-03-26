@@ -1,5 +1,5 @@
 class CommentsController < ApplicationController
-  self.page_size = 10
+  self.per_page = 10
 
   def index
     image = Image.unflagged.find_by_id params[:image_id]

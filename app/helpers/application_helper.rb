@@ -122,7 +122,7 @@ module ApplicationHelper
     will_paginate(data_source, options.merge({
       :previous_label => empty_space,
       :next_label => empty_space,
-      :param_name => "page_id",
+      :param_name => "page",
       :params => paging_params
     }))
   end
@@ -143,7 +143,6 @@ module ApplicationHelper
     additional_class << 'no-padding-left' if (index % max_item_per_line == 0)
     additional_class << 'no-padding-right' if (index % max_item_per_line == last_column_index)
     additional_class << 'no-padding-top' if (index / max_item_per_line == 0)
-    # additional_class << 'no-padding-bottom' if page_size > 0 && (index + max_item_per_line)/ page_size == 1
 
     return additional_class.join(' ')
   end
