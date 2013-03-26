@@ -82,6 +82,7 @@ group :test do
   gem 'spork-rails'
   gem 'shoulda-matchers'
   gem 'timecop'
+  gem 'simplecov', :require => false    
 end
 
 group :staging, :production do
