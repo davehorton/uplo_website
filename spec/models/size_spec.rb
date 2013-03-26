@@ -17,13 +17,13 @@ describe Size do
   describe "#rectangular" do
     context "when width not equal to height" do
       it "should return true" do
-        size.rectangular?.should == true
+        size.rectangular?.should be_true
       end
     end
     context "when width equal to height" do
       it "should return false" do
         new_size = create(:size, :width => 50)
-        new_size.rectangular?.should == false
+        new_size.rectangular?.should be_false
       end
     end
   end
@@ -31,13 +31,13 @@ describe Size do
   describe "square?" do
     context "when width not equal to height" do
       it "should return false" do
-        size.square?.should == false
+        size.square?.should be_false
       end
     end
     context "when width equal to height" do
       it "should return true" do
         new_size = create(:size, :width => 50)
-        new_size.square?.should == true
+        new_size.square?.should be_true
       end
     end
   end
