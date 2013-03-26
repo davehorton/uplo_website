@@ -2,6 +2,7 @@
 
 FactoryGirl.define do
   factory :size do
-    name "MyString"
+    height 50
+    width 45
   end
 end
