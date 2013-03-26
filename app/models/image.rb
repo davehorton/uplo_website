@@ -136,10 +136,7 @@ class Image < ActiveRecord::Base
   end
 
   def square?
-    ratio = self.width*1.0 / self.height
-    threshold = (1 + (RECTANGULAR_RATIO - 1)/2)
-
-    (1.0/threshold < ratio)
+    Paperclip::Geometry.new(width, height).square?
   end
 
   def valid_for_size?(size)
