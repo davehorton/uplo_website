@@ -84,6 +84,6 @@ Uplo::Application.configure do
     :s3_credentials => "#{Rails.root}/config/amazon_s3.yml",
     :s3_permissions => :private,
     :s3_headers => { 'Cache-Control' => 'max-age=315576000', 'Expires' => 10.years.from_now.httpdate },
-    :s3_protocol => ''
+    :s3_protocol => 'https'
   }
 end
