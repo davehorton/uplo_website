@@ -94,29 +94,40 @@ class Api::UsersController < Api::BaseController
   end
 
   def login
+    logger.info("logging in...")
+    @result = {} if @result.nil?
+    status = 200
     @result[:success] = false
 
     # Sign out if signing in
     signed_in = signed_in?(:user)
     Devise.sign_out_all_scopes ? sign_out : sign_out(:user)
-    # Modify to apply devise
-    user = warden.authenticate!(:api)
-    sign_in(:user, user)
-    # End of modification
+    user = authenticate_user(params[:username], params[:password])
 
-    unless params[:device_token].blank?
-      device = UserDevice.find_by_device_token params[:device_token].to_s
-      if device.nil?
-        UserDevice.create({:user_id => user.id, :device_token => params[:device_token].to_s, :last_notified => Time.now()})
-        Urbanairship.register_device(params[:device_token].to_s)
-      elsif device.user_id!=user.id
-        device.update_attribute(:user_id, user.id)
+    logger.info("user=#{user}")
+
+    if user
+      sign_in(:user, user)
+      if params[:device_token].present?
+        logger.info("device_token=#{params[:device_token]}")
+        device = UserDevice.find_by_device_token params[:device_token].to_s
+        if device.nil?
+          UserDevice.create({:user_id => user.id, :device_token => params[:device_token].to_s, :last_notified => Time.now()})
+          Urbanairship.register_device(params[:device_token].to_s)
+        elsif device.user_id!=user.id
+          device.update_attribute(:user_id, user.id)
+        end
       end
+
+      @result[:user_info] = user
+      @result[:success] = true
+    else 
+      status = 401
+      @result[:status] = status
     end
 
-    @result[:user_info] = user
-    @result[:success] = true
-    render :json => @result
+    render :json => @result, :status => status
+
   end
 
   def logout
@@ -347,4 +358,11 @@ class Api::UsersController < Api::BaseController
       end
       result
     end
+
+    def authenticate_user(login, password)
+      user = User.find_by_username login
+      user = User.find_by_email login if user.nil?
+      user
+    end
+
 end
