@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe Size do
-  let(:size){ create(:size) }
+  let(:size){ create(:size, :height => 50, :width => 45) }
 
   it { should validate_presence_of(:height) }
   it { should validate_presence_of(:width) }
@@ -28,7 +28,7 @@ describe Size do
     end
   end
 
-  describe "square?" do
+  describe "#square?" do
     context "when width not equal to height" do
       it "should return false" do
         size.square?.should be_false

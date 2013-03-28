@@ -1,9 +1,11 @@
 require 'rubygems'
 require 'spork'
 
-require 'simplecov'
-SimpleCov.start do
-  add_group "Models", "app/models"
+unless ENV['SEMAPHORE']
+  require 'simplecov'
+  SimpleCov.start do
+    add_group "Models", "app/models"
+  end
 end
 
 Spork.prefork do
