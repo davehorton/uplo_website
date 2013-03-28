@@ -77,7 +77,7 @@ class HomeController < ApplicationController
     else #filtered by user
       @current_views = USER_SORT_VIEW[params[:sort_by]]
       filtered_params[:sort_criteria] = User::SORT_CRITERIA[params[:sort_by]]
-      @data = User.search_scope(params[:query]).paginate_and_sort(filtered_params)
+      @data = User.confirmed.search_scope(params[:query]).paginate_and_sort(filtered_params)
     end
     render :template => 'home/browse'
   end
