@@ -20,14 +20,14 @@ class Gallery < ActiveRecord::Base
     galleries = Gallery.scoped
     if query.present?
       query = query.gsub(/[[:punct:]]/, ' ').squish
-      galleries = images.advanced_search_by_name_or_description_or_keyword(query, query, query)
+      galleries = galleries.collect { |c| c.images.advanced_search_by_name_or_description_or_keyword(query, query, query) }
     end
     galleries
   end
 
   def get_images_without(ids)
     ids = [] unless ids.instance_of? Array
-    self.images.unflagged.where("images.id not in (#{ids.join(',')})").order('name')
+    self.images.unflagged.where("images.id not in #{ids.join(',')}").order('name')
   end
 
   def updated_at_string

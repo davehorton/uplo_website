@@ -2,7 +2,13 @@ FactoryGirl.define do
 
   factory :gallery do
     user
-    name { Faker::Lorem.name }
+    name { Faker::Name.name }
+  end
+
+  factory :gallery_with_images, :parent => :gallery do
+    after(:create) do |gallery|
+      create_list(:image, 2, :name => "demo_image", :gallery => gallery)
+    end
   end
 
 end

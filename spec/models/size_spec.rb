@@ -6,12 +6,16 @@ describe Size do
   it { should validate_presence_of(:height) }
   it { should validate_presence_of(:width) }
 
-  it "should check #to_name" do
-    size.to_name.should == "45x50"
+  describe "#to_name" do
+    it "should return value" do
+      size.to_name.should == "45x50"
+    end
   end
 
-  it "should check #to_a" do
-    size.to_a.should == [45, 50]
+  describe "to_a" do
+    it "should return array" do
+      size.to_a.should == [45, 50]
+    end
   end
 
   describe "#rectangular" do

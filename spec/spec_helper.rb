@@ -33,7 +33,7 @@ Spork.prefork do
   end
 
   # quieter logger
-  Rails.logger.level = 4
+#  Rails.logger.level = 4
 
   RSpec.configure do |config|
     # == Mock Framework
