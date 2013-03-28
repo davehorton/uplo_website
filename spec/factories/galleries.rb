@@ -11,4 +11,10 @@ FactoryGirl.define do
     end
   end
 
+  factory :gallery_with_images_without_cover, :parent => :gallery do
+    after(:create) do |gallery|
+      create_list(:image, 2, :gallery_cover => false, :gallery => gallery)
+    end
+  end
+
 end

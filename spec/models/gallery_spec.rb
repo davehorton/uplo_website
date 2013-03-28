@@ -61,14 +61,23 @@ describe Gallery do
   describe "#cover_image" do
     context "when conditions met" do
       it "should get cover image" do
-        image = create(:image, :gallery_id => gallery.id, :gallery_cover => true)
+        image = create(:image, :gallery_id => gallery.id)
         gallery.cover_image.should == image
       end
     end
     context "when conditions are not met" do
       it "should set cover image" do
-        gallery.cover_image.should be_blank
+        new_gallery = create(:gallery_with_images_without_cover)
+        new_gallery.images.last.update_attribute(:gallery_cover, false)
+        image1 = new_gallery.images.first
+        new_gallery.cover_image.should == image1
       end
+    end
+  end
+
+  describe "updated_at_string" do
+    it "should check proper format" do
+      gallery.updated_at_string.should == gallery.updated_at.strftime("%m/%d/%y")
     end
   end
 
