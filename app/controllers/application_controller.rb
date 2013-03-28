@@ -1,5 +1,5 @@
 class ApplicationController < ActionController::Base
-  cattr_accessor :per_page
+  class_attribute :per_page
   self.per_page = 10 # Override in other controllers as needed
 
   protect_from_forgery

@@ -1,5 +1,5 @@
 class Api::BaseController < ActionController::Base
-  cattr_accessor :per_page
+  class_attribute :per_page
   self.per_page = 20 # Override in other controllers as needed
 
   respond_to :json
