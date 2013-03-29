@@ -19,7 +19,7 @@ class Image < ActiveRecord::Base
     styles: lambda { |attachment| attachment.instance.available_styles || {}},
     default_url: "/assets/gallery-thumb.jpg"
 
-  validates_attachment :image, :presence => true,
+  validates_attachment_presence :image,
     :size => { :in => 0..100.megabytes, :message => 'File size cannot exceed 100MB' },
     :content_type => { :content_type => [ 'image/jpeg','image/jpg' ],
     :message => 'File type must be one of [.jpeg, .jpg]' }, :on => :create
