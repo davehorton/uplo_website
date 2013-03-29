@@ -211,6 +211,7 @@ Uplo::Application.routes.draw do
         get :liked
         get :popular
         get :search
+        get :user_images
       end
 
       member do
@@ -249,12 +250,12 @@ Uplo::Application.routes.draw do
       get 'user_followers', :to => 'users#get_followers'
       get 'follow', :to => 'users#set_follow'
       get 'check_following', :to => 'users#check_following'
-      post 'get_notification_settings', :to => 'users#get_notification_settings'
+      get 'get_notification_settings', :to => 'users#get_notification_settings'
       post 'update_notification_settings', :to => 'users#update_notification_settings'
       post "check_emails", :to => "users#check_emails"
       get 'payment_info', :to => "users#get_user_payment_info"
       post 'withdraw', :to => "users#withdraw"
-      post 'card_info', :to => "users#get_user_card_info"
+      get 'card_info', :to => "users#get_user_card_info"
       get 'get_moulding', :to => 'users#get_moulding'
       post 'request_invitation', :to => 'users#request_invitation'
     end

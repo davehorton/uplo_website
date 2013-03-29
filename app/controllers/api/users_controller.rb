@@ -1,68 +1,56 @@
 class Api::UsersController < Api::BaseController
   include Devise::Controllers::InternalHelpers
 
+  respond_to :json
   skip_before_filter :require_login!, only: [:login, :create_user, :reset_password, :request_invitation]
 
+  # GET /api/user_info
   def get_user_info
-    @result[:success] = false
-    user = User.find_by_id(params[:id])
+    user = current_user
     if user.nil?
-      @result[:msg] = "This user does not exist"
+      render json: { msg: "This user does not exist" }, status: :bad_request
     else
-      @result[:user_info] = user
-      @result[:success] = true
+      render json: user.to_json, status: :ok
     end
-    render :json => @result
   end
 
+  # POST /api/request_invitation
   # params: email
   def request_invitation
     invite_request = Invitation.new(params[:email])
     if invite_request.save
-      @result[:success] = true
-      @result[:msg] = "Your request has been sent"
+      render json: { msg: "Your request has been sent" }, status: :ok
     else
-      @result[:msg] = invite_request.errors.full_messages[0]
+      render json: { msg: invite_request.errors.full_messages[0]}, status: :bad_request
     end
-    render :json => @result
   end
 
+  # POST /api/registration
+  # params: user
   def create_user
     info = params[:user]
     profile_image_params = params[:profile_image]
     user = User.new(info)
-    @result = {
-      :success => true,
-      :msg => {}
-    }
     user.profile_images.build profile_image_params
+
     if user.save
-      @result[:user_info] = user
+      render json: user.to_json, status: :created
     else
-      messages = user.errors.full_messages
-      if messages.is_a?(Array)
-        @result[:msg] = messages.first
-      else
-        @result[:msg] = messages
-      end
-      @result[:success] = false
+      render json: { msg: user.errors.full_messages.to_sentence }, status: :bad_request
     end
-    render :json => @result
   end
 
-  # POST update_profile
+  # POST /api/update_profile
   # params = {:user => {}}
   def update_profile
     if params[:user].blank?
-      @result[:success] = false
-      @result[:msg] = I18n.t("common.invalid_params")
+      render json: { msg: "common.invalid_params" }, status: :bad_request
     elsif current_user.update_profile(params[:user])
       profile_image_params = params[:profile_image]
       if (!profile_image_params.nil?)
         avatar = current_user.profile_images.build(params[:profile_image])
         if avatar.save
-           @result[:success] = true
-           @result[:user_info] = current_user
+          render json: current_user.to_json, status: :ok
         else
           msg = []
           key = ['avatar_file_size', 'avatar_content_type']
@@ -74,37 +62,25 @@ class Api::UsersController < Api::BaseController
           else
             msg = msg.join(' and ')
           end
-          @result = { :success => false, :msg => msg }
+          render json: { msg: msg }, status: :bad_request
         end
       else
-        @result[:success] = true
-        @result[:user_info] = current_user
+        render json: current_user.to_json, status: :ok
       end
     else
-      @result[:success] = false
-      messages = current_user.errors.full_messages
-      if messages.is_a?(Array)
-        @result[:msg] = messages.first
-      else
-        @result[:msg] = messages
-      end
+      render json: { msg: current_user.errors.full_messages.to_sentence }, status: :bad_request
     end
-
-    render :json => @result
   end
 
+  # POST /api/login
+  # params:
+  #   username
+  #   password
   def login
-    logger.info("logging in...")
-    @result = {} if @result.nil?
-    status = 200
-    @result[:success] = false
-
     # Sign out if signing in
     signed_in = signed_in?(:user)
     Devise.sign_out_all_scopes ? sign_out : sign_out(:user)
     user = authenticate_user(params[:username], params[:password])
-
-    logger.info("user=#{user}")
 
     if user
       sign_in(:user, user)
@@ -118,65 +94,49 @@ class Api::UsersController < Api::BaseController
           device.update_attribute(:user_id, user.id)
         end
       end
-
-      @result[:user_info] = user
-      @result[:success] = true
+      render json: user.to_json, :status => :ok
     else 
-      status = 401
-      @result[:status] = status
+      render json: { msg: "Invalid credentials"}, status: :bad_request
     end
-
-    render :json => @result, :status => status
-
   end
 
+  # POST /api/logout
   def logout
-    @result[:success] = false
     signed_in = signed_in?(:user)
     Devise.sign_out_all_scopes ? sign_out : sign_out(:user)
-    if signed_in
-      @result[:msg] = :signed_out
-      @result[:success] = true
-    end
-    render :json => @result
+    render json: { msg: :signed_out }, :status => :ok
   end
 
+  # GET /api/reset_password
+  # params: email
   def reset_password
-    @result[:success] = true
     user = User.find_by_email params[:email].downcase
     if user.nil?
-      @result[:success] = false
-      @result[:msg] = "Email does not exist"
+      render json: { msg: "Email does not exist" }, status: :bad_request
     else
       User.send_reset_password_instructions({:email => params[:email]})
+      render json: { msg: "Reset instructions sent" }, status: :ok
     end
-    render :json => @result
   end
 
+  # GET /api/total_sales
   def get_total_sales
     user = current_user
     user_sales = user.total_sales(filtered_params)
-    result = {
-      :success => true,
-      :total => user_sales[:total_entries],
-      :data => user_sales[:data]
-    }
-    render :json => result
+    render json: user_sales[:data].to_json, meta: { total: user_sales[:total_entries] }, status: :ok
   end
 
   # GET /api/user_followers
   # params: user_id
   def get_followers
     user = User.find_by_id params[:user_id]
+    user = current_user if user.nil?
     if user.nil?
-      result = {:success => false, :msg => 'This user does not exist.'}
+      render json: { msg: "This user does not exist" }, status: :bad_request
     else
       followers = user.followers.paginate_and_sort(filtered_params)
-      result = {
-        :success => true,
-        :data => process_followers_info(user.id, followers) }
+      render json: process_followers_info(user.id, followers), status: :ok
     end
-    render :json => result
   end
 
   # GET /api/user_followings
@@ -184,39 +144,32 @@ class Api::UsersController < Api::BaseController
   def get_followed_users
     user = User.find_by_id params[:user_id]
     if user.nil?
-      result = {:success => false, :msg => 'This user does not exist.'}
+      render json: { msg: "This user does not exist" }, status: :bad_request
     else
       followed_users = user.followed_users.paginate_and_sort(filtered_params)
-      result = {
-        :success => true,
-        :data => process_followed_users_info(user.id, followed_users) }
+      render json: process_followed_users_info(user.id, followed_users), status: :ok
     end
-    render :json => result
   end
 
   # /api/follow
   # follow: T/F <follow/unfollow user>
   # user_id: <current user will follow this user>
   def set_follow
-    result = {}
     user = User.find_by_id params[:user_id]
     follower = current_user
     if user.nil?
-      result = {:success => false, :msg => 'This user does not exist.'}
+      render json: { msg: "This user does not exist" }, status: :bad_request
     elsif user.id == follower.id
-      result[:msg] = 'You cannot follow yourself'
-      result[:success] = false
+      render json: { msg: "You cannot follow yourself" }, status: :bad_request
     elsif !params[:follow].to_bool
       UserFollow.destroy_all({ :user_id => user.id, :followed_by => follower.id })
       result[:success] = true
     elsif UserFollow.exists?({ :user_id => user.id, :followed_by => follower.id })
-      result[:msg] = 'You have already followed this user.'
-      result[:success] = false
+      render json: { msg: "You have already followed this user" }, status: :bad_request
     else
       UserFollow.create({ :user_id => user.id, :followed_by => follower.id })
       result[:success] = true
     end
-    render :json => result
   end
 
   # /api/check_following
@@ -225,30 +178,30 @@ class Api::UsersController < Api::BaseController
     result = {}
     user = User.find_by_id params[:user_id]
     if user.nil?
-      result = {:success => false, :msg => 'This user does not exist.'}
+      render json: { msg: "This user does not exist" }, status: :bad_request
     else
-      result = {:success => true, :check_result => user.has_follower?(current_user.id)}
+      render json: { check_result: user.has_follower?(current_user.id) }, status: :ok
     end
-    render :json => result
   end
 
+  # POST /api/get_notification_settings
   def get_notification_settings
     device = UserDevice.find_by_device_token params[:device_token].to_s,
       :conditions => { :user_id => current_user.id }
     if device.nil?
-      result = { :success => false, :msg => 'You have to log in on this device first!' }
+      render json: { msg: "You have to log in on this device first!" }, status: :bad_request
     else
-      result = { :success => true, :data => { :enable_comments => device.notify_comments,
-        :enable_likes => device.notify_likes, :enable_purchases => device.notify_purchases }}
+      render json: { data:  {:enable_comments => device.notify_comments,
+        :enable_likes => device.notify_likes, :enable_purchases => device.notify_purchases } }, status: :ok
     end
-    render :json => result
   end
 
+  # POST /api/update_notification_settings
   def update_notification_settings
     device = UserDevice.find_by_device_token params[:device_token].to_s,
       :conditions => { :user_id => current_user.id }
     if device.nil?
-      result = { :success => false, :msg => 'You have to log in on this device first!' }
+      render json: { msg: "You have to log in on this device first!" }, status: :bad_request
     else
       begin
         attrs = {
@@ -257,7 +210,7 @@ class Api::UsersController < Api::BaseController
           :notify_comments => params[:enable_comments].to_bool,
           :last_notified => device.last_notified }
         rescue ArgumentError => e
-          result = { :success => false, :msg => 'Accepted values: 0/1, t/f, true/false, y/n, yes/no' }
+          render json: { msg: "Accepted values: 0/1, t/f, true/false, y/n, yes/no" }, status: :bad_request
         else
           disable_all = (!attrs[:notify_purchases] && !attrs[:notify_comments] && !attrs[:notify_likes])
           if device.update_attributes(attrs)
@@ -266,74 +219,56 @@ class Api::UsersController < Api::BaseController
             elsif !device.active? && !disable_all
               Urbanairship.register_device(params[:device_token].to_s)
             end
-            result = { :success => true }
+            render status: :ok
           else
-            result = { :success => false, :msg => device.errors.full_messages}
+            render json: { msg: device.errors.full_messages }, status: :bad_request
           end
         end
     end
-    render :json => result
   end
 
   # POST /api/check_emails
   # Params
   # emails => JSON ARRAY
-
   def check_emails
-    result = { :success => false, :msg => "", :emails => []}
     if (params[:emails])
       parsed_json = ActiveSupport::JSON.decode(params[:emails])
       avai_emails = []
       users = User.find_all_by_email(parsed_json)
-      result = { :success => true, :data => process_followers_info(current_user.id, users)}
+      render json: { data: process_followers_info(current_user.id, users) }, status: :ok
     else
-      result = { :success => false, :msg => "No email found", :emails => []}
+      render json: { msg: "No email found" }, status: :bad_request
     end
-    render :json => result
   end
 
   # GET /api/payment_info
   # Params
-  #
-
   def get_user_payment_info
-    result = { :success => true, :msg => "", :payment_info => {}}
-    result[:payment_info][:total_earn] = current_user.total_earn
-    result[:payment_info][:owned_amount] = current_user.owned_amount
-    render :json => result
+    render json: { payment_info: { total_earn: current_user.total_earn, owned_amount: current_user.owned_amount }}, status: :ok
   end
 
+  # GET /api/card_info
   def get_user_card_info
-    result = { :success => true, :msg => "", :card_info => {}}
-    result[:card_info][:name_on_card] = current_user.name_on_card
-    result[:card_info][:card_type] = current_user.card_type
-    result[:card_info][:card_number] = current_user.card_number
-    result[:card_info][:expiration] = Date.parse(current_user.expiration).strftime("%m/%Y")
-    result[:card_info][:cvv] = current_user.cvv
-    render :json => result
+    render json: { card_info: { name_on_card: current_user.name_on_card, card_type: current_user.card_type, 
+      card_number: current_user.card_number, expiration: current_user.expiration.present? ? Date.parse(current_user.expiration).strftime("%m/%Y") : '', 
+      cvv: current_user.cvv.to_json }}, status: :ok
   end
 
+  # GET /api/get_moulding
   def get_moulding
-    result = { :success => true, :msg => "", :moulding => MOULDING, :discount => MOULDING_DISCOUNT}
-    render :json => result
+    render json: { moulding: MOULDING, discount: MOULDING_DISCOUNT}, status: :ok
   end
 
   # POST /api/withdraw
   # Params
   # amount => float
-
   def withdraw
-    result = { :success => false, :msg => "", :payment_info => {}}
     amount = params[:amount].to_f
-
-    if (current_user.withdraw_paypal amount)
-      result[:success] = true
+    if (current_user.withdraw_paypal(amount))
+      render json: { payment_info: { total_earn: current_user.total_earn, owned_amount: current_user.owned_amount }}, status: :ok
     else
-      result[:msg] = current_user.errors.full_messages.to_sentence
+      render json: { msg: current_user.errors.full_messages.to_sentence }, status: :bad_request
     end
-    result[:payment_info][:total_earn] = current_user.total_earn
-    result[:payment_info][:owned_amount] = current_user.owned_amount
-    render :json => result
   end
 
   protected
