@@ -79,7 +79,7 @@ class User < ActiveRecord::Base
   scope :not_removed,   where(removed: false)
   scope :removed_users, where(removed: true)
   scope :flagged_users, not_removed.where(banned: true)
-  scope :confirmed_users, not_removed.where("confirmed_at IS NOT NULL")
+  scope :confirmed, not_removed.where("confirmed_at IS NOT NULL")
 
   scope :reinstate_ready_users, flagged_users.joins(self.sanitize_sql([
     "LEFT JOIN (

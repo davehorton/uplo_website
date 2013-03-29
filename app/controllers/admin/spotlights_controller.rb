@@ -11,8 +11,7 @@ class Admin::SpotlightsController < Admin::AdminController
   end
 
   def search
-    search_params = {:query => URI.unescape(params[:admin_query]), :filtered_params => filtered_params}
-    @images = Image.search_scope(search_params).public_access
+    @images = Image.search_scope(params[:admin_query]).paginate_and_sort(filtered_params)
     render 'admin/spotlights/index'
   end
 
