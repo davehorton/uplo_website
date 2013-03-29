@@ -16,6 +16,7 @@ class Gallery < ActiveRecord::Base
 
   before_create :set_permission
 
+  #could not find implementation
   def self.search_scope(query)
     galleries = Gallery.scoped
     if query.present?
@@ -26,8 +27,8 @@ class Gallery < ActiveRecord::Base
   end
 
   def get_images_without(ids)
-    ids = [] unless ids.instance_of? Array
-    self.images.unflagged.where("images.id not in #{ids.join(',')}").order('name')
+    ids = [] unless ids.is_a?(Array)
+    self.images.unflagged.where("images.id not in (?)", ids).order('name')
   end
 
   def updated_at_string
