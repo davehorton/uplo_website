@@ -18,25 +18,25 @@ describe Gallery do
 
   describe ".search_scope" do
     context "when query name present" do
+      subject { create(:gallery_with_images) }
       it "should return searched results" do
-        new_gallery = create(:gallery_with_images)
-        @img1 =  new_gallery.images.first
-        @img2 = new_gallery.images.last
-        Gallery.search_scope("---\n- demo\n- image\n").should == [[@img1, @img2]]
+        img1 =  subject.images.first
+        img2 = subject.images.last
+        Gallery.search_scope("---\n- demo\n- image\n").should == [[img1,  img2]]
       end
     end
     context "when query description present" do
+      subject { create(:gallery_with_images) }
       it "should return searched results" do
-        new_gallery = create(:gallery_with_images)
-        img1 =  new_gallery.images.first
+        img1 =  subject.images.first
         img1.update_attribute(:description, "testing")
         Gallery.search_scope("---\n- testing").should == [[img1]]
       end
     end
     context "when query keyword present" do
+      subject { create(:gallery_with_images) }
       it "should return searched results" do
-        new_gallery = create(:gallery_with_images)
-        img1 =  new_gallery.images.first
+        img1 =  subject.images.first
         img1.update_attribute(:keyword, "secret")
         Gallery.search_scope("---\n- secret\n").should == [[img1]]
         Gallery.search_scope("---\n- demo\n- keyword\n").should == [[]]
@@ -46,9 +46,9 @@ describe Gallery do
 
   describe "#total_images" do
     context "with images" do
+      subject { create(:gallery_with_images) }
       it "should show total" do
-        gallery = create(:gallery_with_images)
-        gallery.total_images.should == 2
+        subject.total_images.should == 2
       end
     end
     context "without images" do
@@ -66,11 +66,11 @@ describe Gallery do
       end
     end
     context "when conditions are not met" do
+      subject { create(:gallery_with_images_without_cover) }
       it "should set cover image" do
-        new_gallery = create(:gallery_with_images_without_cover)
-        new_gallery.images.last.update_attribute(:gallery_cover, false)
-        image1 = new_gallery.images.first
-        new_gallery.cover_image.should == image1
+        subject.images.last.update_attribute(:gallery_cover, false)
+        image1 = subject.images.first
+        subject.cover_image.should == image1
       end
     end
   end
