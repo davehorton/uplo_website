@@ -24,7 +24,7 @@ class Api::ImagesController < Api::BaseController
       end
     end
 
-    render json: images, meta: { total: images.size }
+    render json: images.to_json, meta: { total: images.size }
   end
 
   # GET /api/images/liked
@@ -35,7 +35,7 @@ class Api::ImagesController < Api::BaseController
   #   sort_direction
   def liked
     images = current_user.source_liked_images.paginate_and_sort(filtered_params)
-    render json: images, meta: { total: images.size }
+    render json: images.to_json, meta: { total: images.size }
   end
 
   # GET /api/images/popular
@@ -46,7 +46,7 @@ class Api::ImagesController < Api::BaseController
   #   sort_direction
   def popular
     images = Image.spotlight.paginate_and_sort(filtered_params)
-    render json: images, meta: { total: images.size }
+    render json: images.to_json, meta: { total: images.size }
   end
 
   # GET /api/images/search
@@ -59,7 +59,7 @@ class Api::ImagesController < Api::BaseController
   #   sort_direction
   def search
     images = Image.unflagged.where(id: filtered_params[:ids]).paginate_and_sort(filtered_params)
-    render json: images, meta: { total: images.size }
+    render json: images.to_json, meta: { total: images.size }
   end
 
   # GET /api/images/by_friends
@@ -70,7 +70,7 @@ class Api::ImagesController < Api::BaseController
   #   sort_direction
   def by_friends
     images = current_user.friends_images.popular_with_pagination(filtered_params)
-    render json: images, meta: { total: images.size }
+    render json: images.to_json, meta: { total: images.size }
   end
 
   # GET /api/images/:id/printed_sizes
@@ -84,7 +84,7 @@ class Api::ImagesController < Api::BaseController
       end
     end
 
-    render json: sizes
+    render json: sizes.to_json
   end
 
   # POST /api/images
@@ -95,7 +95,7 @@ class Api::ImagesController < Api::BaseController
     image = current_user_gallery.images.unflagged.build(filtered_params[:image])
 
     if image.save
-      render json: image, status: :created
+      render json: image.to_json, status: :created
     else
       render json: { msg: image.errors.full_messages.to_sentence }, status: :bad_request
     end
@@ -106,7 +106,7 @@ class Api::ImagesController < Api::BaseController
   #   image
   def update
     if current_user_image.update_attributes(filtered_params[:image])
-      render json: image, status: :accepted
+      render json: image.to_json, status: :accepted
     else
       render json: { msg: image.errors.full_messages.to_sentence }, status: :bad_request
     end
@@ -121,13 +121,13 @@ class Api::ImagesController < Api::BaseController
   # POST /api/images/:id/like
   def like
     image = Image.unflagged.find(params[:id])
-    render json: current_user.like_image(image)
+    render json: current_user.like_image(image).to_json
   end
 
   # PUT /api/images/:id/unlike
   def unlike
     image = Image.unflagged.find(params[:id])
-    render json: current_user.unlike_image(image)
+    render json: current_user.unlike_image(image).to_json
   end
 
   # GET /api/images/:id/total_sales
@@ -164,6 +164,11 @@ class Api::ImagesController < Api::BaseController
   def flag_image
     image = Image.unflagged.find(params[:id])
     result = image.flag!(current_user, params)
-    render json: result
+    render json: result.to_json
+  end
+
+  def user_images
+    images = current_user.images
+    render json: images.to_json, meta: { total: images.size }
   end
 end

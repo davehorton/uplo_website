@@ -1,4 +1,7 @@
 class Api::GalleriesController < Api::BaseController
+
+  respond_to :json
+
   skip_before_filter :require_login!, only: [:popular]
 
   # GET /api/galleries
@@ -16,7 +19,7 @@ class Api::GalleriesController < Api::BaseController
     end
 
     galleries = author.galleries.with_images.paginate_and_sort(filtered_params)
-    render json: galleries, meta: { total: galleries.total_entries }
+    render json: galleries.to_json, meta: { total: galleries.total_entries }
   end
 
   # GET /api/galleries/popular
@@ -39,7 +42,7 @@ class Api::GalleriesController < Api::BaseController
       end
     end
 
-    render json: galleries, meta: { total: galleries.total_entries }
+    render json: galleries.to_json, meta: { total: galleries.total_entries }
   end
 
   # POST /api/galleries
