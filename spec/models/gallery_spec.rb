@@ -17,7 +17,7 @@ describe Gallery do
   end
 
   describe "search_scope" do
-    pending "could not find implementation"
+    pending "could not find implementation, method seems broken"
   end
 
    describe "#total_images" do
