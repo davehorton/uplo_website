@@ -63,7 +63,6 @@ describe ImageFlag do
         image_flag.description_presence.should == ["Unknown violation type!"]
       end
     end
-
   end
 
   describe "reported_date" do

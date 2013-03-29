@@ -5,4 +5,5 @@ FactoryGirl.define do
     description "hello"
     image
   end
+
 end
