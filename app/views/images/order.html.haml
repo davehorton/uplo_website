@@ -42,8 +42,8 @@
     #order-preview.image-container.medium.left
       #preview-frame.clearfix
         = image_tag(@image.url(:medium), :id => "preview-image", :class => 'image',
-                  'data-width' => @image.width,
-                  'data-height' => @image.height, :alt => @image.name)
+                  'data-width' => @image.image.width,
+                  'data-height' => @image.image.height, :alt => @image.name)
         .image-frame
         .icon.loading-small#preview-waiting{:style => 'display: none'}
 

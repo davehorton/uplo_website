@@ -11,14 +11,14 @@
   .text.black.bold.font12.line12.right
     - if can_modify_gallery?(@gallery)
       - if @images.blank?
-        - images_action = "Add Images"
+        - images_action = "Upload Photos"
       - else
-        - images_action = "Edit Images"
+        - images_action = "Edit / Upload Photos"
 
       .action-container
         %a#edit-images{:href => "#{ edit_images_gallery_path(@gallery) }", :class => "ui-button-container icon-link"}= images_action
         %span.saparator= "|"
-        %a#edit-gallery{:href => edit_gallery_path(@gallery), :class => "ui-button-container icon-link"} Edit Gallery
+        %a#edit-gallery{:href => edit_gallery_path(@gallery), :class => "ui-button-container icon-link"} Edit Gallery Details
         %span.saparator= "|"
         = link_to("Delete Gallery", gallery_path(@gallery),
                   :method => :delete,

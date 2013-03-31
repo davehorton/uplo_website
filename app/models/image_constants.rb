@@ -1,15 +1,4 @@
 module ImageConstants
-  DEFAULT_STYLES = {
-    smallest:        '66x66#',
-    smaller:         '67x67#',
-    small:           '68x68#',
-    spotlight_small: '74x74#',
-    thumb:           '155x155#',
-    spotlight_thumb: '174x154#',
-    profile_thumb:   '101x101#',
-    medium:          '640x640>'
-  }
-
   FILTER_OPTIONS = ['date_uploaded', 'num_of_views', 'num_of_likes']
 
   SALE_REPORT_TYPE = {

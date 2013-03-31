@@ -38,6 +38,7 @@ gem 'oauth'
 gem 'oauth2'
 gem 'oj'
 gem 'paperclip'
+gem 'paperclip-meta'
 gem 'sidekiq'
 gem 'simple_form'
 gem 'textacular', '~> 3.0', require: 'textacular/rails'
@@ -82,7 +83,7 @@ group :test do
   gem 'spork-rails'
   gem 'shoulda-matchers'
   gem 'timecop'
-  gem 'simplecov', :require => false    
+  gem 'simplecov', :require => false
 end
 
 group :staging, :production do

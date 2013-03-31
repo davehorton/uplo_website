@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130325042942) do
+ActiveRecord::Schema.define(:version => 20130331225211) do
 
   create_table "addresses", :force => true do |t|
     t.string   "first_name"
@@ -114,6 +114,7 @@ ActiveRecord::Schema.define(:version => 20130325042942) do
     t.integer  "user_id"
     t.boolean  "promoted",           :default => false
     t.integer  "tier_id"
+    t.text     "image_meta"
   end
 
   add_index "images", ["gallery_cover"], :name => "index_images_on_gallery_cover"
@@ -219,6 +220,7 @@ ActiveRecord::Schema.define(:version => 20130325042942) do
     t.datetime "avatar_updated_at",                      :null => false
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.text     "avatar_meta"
   end
 
   create_table "sizes", :force => true do |t|
@@ -278,10 +280,6 @@ ActiveRecord::Schema.define(:version => 20130325042942) do
     t.boolean  "delta",                                 :default => true,  :null => false
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "avatar_file_name"
-    t.string   "avatar_content_type"
-    t.integer  "avatar_file_size"
-    t.datetime "avatar_updated_at"
     t.string   "twitter"
     t.string   "facebook"
     t.text     "biography"

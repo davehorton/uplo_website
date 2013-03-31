@@ -16,19 +16,28 @@ class Image < ActiveRecord::Base
   has_many :tags,          :through => :image_tags
 
   has_attached_file :image,
-    styles: lambda { |attachment| attachment.instance.available_styles || {}},
+    styles: {
+      smallest:        '66x66#',
+      smaller:         '67x67#',
+      small:           '68x68#',
+      thumb:           '155x155#',
+      spotlight_thumb: '174x154#',
+      medium:          '640x640>'
+    },
     default_url: "/assets/gallery-thumb.jpg"
 
   validates_attachment :image, :presence => true,
     :size => { :in => 0..100.megabytes, :message => 'File size cannot exceed 100MB' },
     :content_type => { :content_type => [ 'image/jpeg','image/jpg' ],
-    :message => 'File type must be one of [.jpeg, .jpg]' }, :on => :create
+    :message => 'File must have an extension of .jpeg or .jpg' }, :on => :create
 
   process_in_background :image
 
-  before_create :init_tier, :set_as_cover_if_first_one, :set_user
+  before_create  :set_name,
+                 :set_tier,
+                 :set_user,
+                 :set_as_cover_if_first_one
   before_destroy :ensure_not_associated_with_an_order
-  before_post_process :init_image_info
 
   default_scope order('images.created_at desc')
   scope :removed,     where(removed: true)
@@ -357,21 +366,6 @@ class Image < ActiveRecord::Base
     end
   end
 
-  def available_styles
-    DEFAULT_STYLES
-  end
-
-  def save_dimensions
-    file = self.image.queued_for_write[:original]
-    if file.blank?
-      file = image.expiring_url(:original)
-    end
-
-    geo = Paperclip::Geometry.from_file(file)
-    self.width = geo.width
-    self.height = geo.height
-  end
-
   protected
 
     def ensure_not_associated_with_an_order
@@ -382,20 +376,11 @@ class Image < ActiveRecord::Base
       Time.zone.now.beginning_of_day.since 25.hours
     end
 
-    # Detect the image dimensions.
-    def init_image_info
-      save_dimensions
-      file = self.image.queued_for_write[:original]
-      if file.blank?
-        file = self.image.expiring_url(:original)
-      end
-
-      if !self.name.blank?
-        self.name = file.original_filename.gsub(/(.jpeg|.jpg)$/i, '') if file.original_filename =~ /(.jpeg|.jpg)$/i
-      end
+    def set_name
+      self.name = image.original_filename.gsub(/(.jpeg|.jpg)$/i, '')
     end
 
-    def init_tier
+    def set_tier
       self.tier_id ||= 1
     end
 

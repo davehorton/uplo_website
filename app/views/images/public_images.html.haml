@@ -31,7 +31,7 @@
           %a.gallery-image{:href => "#{url}" }
             %span.image-link.default
               = image_tag(image.url(:thumb), :class => "image-thumb",
-                                "data-width" => image.width, "data-height" => image.height)
+                                "data-width" => image.image.width, "data-height" => image.image.height)
 
   = render_pagination(@images, {:controller => "images", :action => params[:action]})
 
