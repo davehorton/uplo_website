@@ -26,7 +26,7 @@ class Image < ActiveRecord::Base
     },
     default_url: "/assets/gallery-thumb.jpg"
 
-  validates_attachment :image, :presence => true,
+  validates_attachment_presence :image,
     :size => { :in => 0..100.megabytes, :message => 'File size cannot exceed 100MB' },
     :content_type => { :content_type => [ 'image/jpeg','image/jpg' ],
     :message => 'File must have an extension of .jpeg or .jpg' }, :on => :create
