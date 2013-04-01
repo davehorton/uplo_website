@@ -55,7 +55,8 @@ GEM
     attr_required (0.0.5)
     authorize-net (1.5.2)
       nokogiri (~> 1.4)
-    aws-sdk (1.8.5)
+    aws-sdk (1.5.8)
+      httparty (~> 0.7)
       json (~> 1.4)
       nokogiri (>= 1.4.4)
       uuidtools (~> 2.1)
@@ -373,7 +374,7 @@ DEPENDENCIES
   aescrypt
   alchemist
   authorize-net
-  aws-sdk
+  aws-sdk (~> 1.5.7)
   cancan
   capybara
   classy_enum
