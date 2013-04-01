@@ -15,6 +15,7 @@ load = (url, counter)->
       $("##{counter}").find('.info .number').text response.counter
       $("##{counter}").find('.info .label').text count_label
       $(window).scroll()
+      $.modal.close()
   })
 
 requestDislike = (node) ->
