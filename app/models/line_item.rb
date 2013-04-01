@@ -1,4 +1,6 @@
 class LineItem < ActiveRecord::Base
+  include ::Shared::QueryMethods
+
   belongs_to :image
   belongs_to :product
   belongs_to :order
@@ -10,8 +12,12 @@ class LineItem < ActiveRecord::Base
 
   before_save :calculate_totals
 
+  def self.sold_items
+    LineItem.joins(:image, :order).where(orders: { transaction_status: Order::TRANSACTION_STATUS[:complete] })
+  end
+
   def total_price
-    price * quantity
+    (tax + price) * quantity
   end
 
   private

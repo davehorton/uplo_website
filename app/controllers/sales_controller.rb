@@ -5,12 +5,12 @@ class SalesController < ApplicationController
 
   def image_sale_details
     @image = Image.find_by_id params[:id]
-    @sales = @image.get_monthly_sales_over_year(Time.now, {:report_by => Image::SALE_REPORT_TYPE[:price]}).decorate
+    @sales = ImageDecorator.decorate_collection(@image.get_monthly_sales_over_year(Time.now, {:report_by => Image::SALE_REPORT_TYPE[:price]}))
     @purchased_info = @image.raw_purchased_info(filtered_params)
   end
 
   def year_sales
-    @sales = current_user.raw_sales(filtered_params)
+    @sales = current_user.raw_sales.paginate_and_sort(filtered_params)
     @monthly_sales = current_user.monthly_sales(Time.now)
     @year_sales = total_sales(@monthly_sales)
   end

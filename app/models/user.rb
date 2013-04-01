@@ -34,25 +34,30 @@ class User < ActiveRecord::Base
                  :confirmed_at,
                  :created_at
 
-  has_many :profile_images, :dependent => :destroy, :order => 'updated_at DESC'
+  belongs_to :billing_address,  :class_name => "Address"
+  belongs_to :shipping_address, :class_name => "Address"
+
   has_many :galleries, :dependent => :destroy
-  has_many :images
   has_many :public_galleries, class_name: 'Gallery', conditions: { permission: Permission::Public.new.to_s }
+
+  has_many :images
   has_many :public_images, :through => :public_galleries, :source => :images
-  has_many :comments, :dependent => :destroy
+  has_many :profile_images, :dependent => :destroy, :order => 'updated_at DESC'
+
   has_many :image_likes, :dependent => :destroy
   has_many :source_liked_images, :through => :image_likes, :source => :image
-  has_many :orders
+
+  has_many :comments, :dependent => :destroy
   has_many :devices, :class_name => 'UserDevice'
+  has_many :orders
+
   has_many :user_followers, :foreign_key => :user_id, :class_name => 'UserFollow'
   has_many :followers, :through => :user_followers
   has_many :user_followings, :foreign_key => :followed_by, :class_name => 'UserFollow'
   has_many :followed_users, :through => :user_followings
   has_many :friends_images, :through => :followed_users, :source => :images
-  has_one  :cart, :dependent => :destroy
 
-  belongs_to :billing_address,  :class_name => "Address"
-  belongs_to :shipping_address, :class_name => "Address"
+  has_one  :cart, :dependent => :destroy
 
   accepts_nested_attributes_for :billing_address
   accepts_nested_attributes_for :shipping_address
@@ -187,13 +192,11 @@ class User < ActiveRecord::Base
   end
 
   def avatar_url(style='thumb')
-    av = avatar
-    if av.nil?
-      url = "/assets/avatar-default-#{style.to_s}.jpg"
+    if avatar.nil?
+      "/assets/avatar-default-#{style.to_s}.jpg"
     else
-      url = av.url(style.to_sym)
+      avatar.url(style.to_sym)
     end
-    return url
   end
 
   # Generate email address including full name.
@@ -319,38 +322,8 @@ class User < ActiveRecord::Base
     result
   end
 
-  #===============================================================================
-  # Description:
-  # - get saled ($) and saled quantity of each images
-  # - sort by highest sold ($)
-  # Note:
-  #===============================================================================
-  def raw_sales(paging_params = {})
-    Image.paginate(
-      :page => (paging_params[:page] || 1),
-      :per_page => paging_params[:per_page],
-      :select => ' img.*, purchased_items.saled AS sales,
-                   purchased_items.saled_quantity AS quantity_sales',
-      :from => "
-        ( SELECT    images.*
-          FROM      images
-          LEFT JOIN galleries ON galleries.id = images.gallery_id
-          WHERE     galleries.user_id = #{ self.id })
-        AS img",
-      :joins => "
-        LEFT JOIN
-          ( SELECT    l.image_id AS image_id,
-                      SUM(l.quantity *(l.tax+l.price)) AS saled,
-                      SUM(l.quantity) AS saled_quantity
-            FROM      line_items AS l
-            LEFT JOIN orders ON orders.id = l.order_id
-            WHERE     orders.transaction_status = '#{ Order::TRANSACTION_STATUS[:complete] }'
-            GROUP BY  l.image_id )
-        AS purchased_items
-        ON purchased_items.image_id = img.id",
-      :order => "(CASE WHEN purchased_items.saled IS NULL THEN 0 ELSE 1 END) desc,
-                 purchased_items.saled DESC, img.name ASC"
-    )
+  def raw_sales
+    LineItem.sold_items.where(images: { user_id: id })
   end
 
   #==============================================================================
