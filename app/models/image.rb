@@ -31,7 +31,7 @@ class Image < ActiveRecord::Base
     :content_type => { :content_type => [ 'image/jpeg','image/jpg' ],
     :message => 'File must have an extension of .jpeg or .jpg' }, :on => :create
 
-  process_in_background :image
+  #process_in_background :image
 
   before_create  :set_name,
                  :set_tier,
