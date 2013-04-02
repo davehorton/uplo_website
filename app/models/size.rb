@@ -2,7 +2,7 @@ class Size < ActiveRecord::Base
   validates :width, presence: true
   validates :height, presence: true
 
-  has_many :products, :dependent => :nullify
+  has_many :products
 
   default_scope order('sizes.width, sizes.height')
   scope :rectangular, where("sizes.width <> sizes.height")
