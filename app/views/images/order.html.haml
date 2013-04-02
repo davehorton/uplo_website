@@ -17,6 +17,9 @@
     .text.black.bold.font18 Build Your Order
     .line-separator
     = simple_form_for(:line_item, :url => url_for(:controller => "shopping_cart", :action => "add_to_cart", :image_id => @image.id), :method => 'post', :html => { :id => 'order-details', :class => 'left' }) do |f|
+      - [:crop_x, :crop_y, :crop_w, :crop_h].each do |attr|
+        = f.hidden_field attr, id: attr
+
       .round-box.option.left.print-sizes-container
         .header.text.black.bold.font14= "Print Size"
         .item.left
@@ -51,3 +54,4 @@
   = javascript_tag do
     :erb
       var image_id = '<%= params[:id] %>';
+      var geometry = <%= {width: @image.image_geometry.width, height: @image.image_geometry.height}.to_json %>;

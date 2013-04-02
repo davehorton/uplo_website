@@ -28,6 +28,7 @@ class ShoppingCartController < ApplicationController
 
       line_item = @cart.order.line_items.where(image_id: image.id, product_id: product.id).first_or_initialize
       line_item.quantity = params[:line_item][:quantity].to_i
+      line_item.set_crop_dimension(params[:line_item])
 
       if line_item.save
         @order = @cart.order.reload

@@ -28,6 +28,7 @@
 //= require jquery.livequery
 //= require jquery.simplemodal
 //= require jquery.purl
+//= require jquery.Jcrop.min
 //= require superfish
 //= require supersubs
 //= require filtrr
