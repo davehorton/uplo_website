@@ -309,6 +309,7 @@ describe Image do
    it "should be true" do
       image.remove!
       image.removed.should be_true
+      #delay jobs test pending as gem not added
     end
   end
 
