@@ -7,10 +7,6 @@ FactoryGirl.define do
     image_file_name { 'test.jpg' }
     image_content_type { 'image/jpeg' }
     image_file_size { 128 }
-
-    before(:create) do |image|
-      image.tier_id = 1
-    end
   end
 
   factory :real_image, :class => :image do
@@ -29,12 +25,6 @@ FactoryGirl.define do
   factory :image_with_comments, :parent => :image do
     after(:create) do |image|
       create_list(:comment, 3, :image => image)
-    end
-  end
-
-  factory :image_with_image_likes, :parent => :image do
-    after(:create) do |image|
-      create_list(:image_like, 3, :image => image)
     end
   end
 

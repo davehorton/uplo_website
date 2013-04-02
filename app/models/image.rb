@@ -273,7 +273,7 @@ class Image < ActiveRecord::Base
     if month.nil?
       orders = self.orders.where({:transaction_status => Order::TRANSACTION_STATUS[:complete]})
     else
-      start_date = DateTime.parse("01 #{mon}")
+      start_date = DateTime.parse("01 #{month}")
       end_date = TimeCalculator.last_day_of_month(start_date.mon, start_date.year).end_of_day
       end_date = end_date.strftime("%Y-%m-%d %T")
       start_date = start_date.strftime("%Y-%m-%d %T")
@@ -392,3 +392,4 @@ class Image < ActiveRecord::Base
       self.user_id = gallery.user_id
     end
 end
+
