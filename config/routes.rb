@@ -81,7 +81,7 @@ Uplo::Application.routes.draw do
       get  :flickr_authorize
       get  :flickr_post
       get  :flickr_response
-      get  :mail_shared_image
+      post  :mail_shared_image
       get  :order
       get  :price
       get  :pricing
