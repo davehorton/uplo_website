@@ -42,7 +42,7 @@ class Api::GalleriesController < Api::BaseController
       end
     end
 
-    render json: galleries.to_json, meta: { total: galleries.total_entries }
+    render json: galleries, meta: { total: galleries.total_entries }
   end
 
   # POST /api/galleries
