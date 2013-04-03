@@ -5,7 +5,7 @@ class UserSerializer < ActiveModel::Serializer
              :confirmed_at, :galleries_num, :images_num, :followers_num, :following_num, :cart_items_num
 
   def galleries_num
-    if object == current_user
+    if object == scope
       object.galleries.size
     else
       object.public_galleries.size
@@ -13,7 +13,7 @@ class UserSerializer < ActiveModel::Serializer
   end
 
   def images_num
-    if object == current_user
+    if object == scope
       object.images.unflagged.size
     else
       object.images.public_access.size
@@ -29,7 +29,7 @@ class UserSerializer < ActiveModel::Serializer
   end
 
   def cart_items_num
-    if object == current_user && object.cart.try(:order)
+    if object == scope && object.cart.try(:order)
       object.cart.order.line_items.count
     end
   end

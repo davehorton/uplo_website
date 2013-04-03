@@ -2,6 +2,7 @@ class Api::UsersController < Api::BaseController
   include Devise::Controllers::InternalHelpers
 
   respond_to :json
+  
   skip_before_filter :require_login!, only: [:login, :create_user, :reset_password, :request_invitation]
 
   # GET /api/user_info
@@ -10,7 +11,7 @@ class Api::UsersController < Api::BaseController
     if user.nil?
       render json: { msg: "This user does not exist" }, status: :bad_request
     else
-      render json: user.to_json, status: :ok
+      render json: user, status: :ok
     end
   end
 
@@ -34,7 +35,7 @@ class Api::UsersController < Api::BaseController
     user.profile_images.build profile_image_params
 
     if user.save
-      render json: user.to_json, status: :created
+      render json: user, status: :created
     else
       render json: { msg: user.errors.full_messages.to_sentence }, status: :bad_request
     end
@@ -50,7 +51,7 @@ class Api::UsersController < Api::BaseController
       if (!profile_image_params.nil?)
         avatar = current_user.profile_images.build(params[:profile_image])
         if avatar.save
-          render json: current_user.to_json, status: :ok
+          render json: current_user, status: :ok
         else
           msg = []
           key = ['avatar_file_size', 'avatar_content_type']
@@ -65,7 +66,7 @@ class Api::UsersController < Api::BaseController
           render json: { msg: msg }, status: :bad_request
         end
       else
-        render json: current_user.to_json, status: :ok
+        render json: current_user, status: :ok
       end
     else
       render json: { msg: current_user.errors.full_messages.to_sentence }, status: :bad_request
@@ -94,7 +95,7 @@ class Api::UsersController < Api::BaseController
           device.update_attribute(:user_id, user.id)
         end
       end
-      render json: user.to_json, :status => :ok
+      render json: user, :status => :ok
     else 
       render json: { msg: "Invalid credentials"}, status: :bad_request
     end
@@ -123,7 +124,7 @@ class Api::UsersController < Api::BaseController
   def get_total_sales
     user = current_user
     user_sales = user.total_sales(filtered_params)
-    render json: user_sales[:data].to_json, meta: { total: user_sales[:total_entries] }, status: :ok
+    render json: user_sales[:data], meta: { total: user_sales[:total_entries] }, status: :ok
   end
 
   # GET /api/user_followers
@@ -251,7 +252,7 @@ class Api::UsersController < Api::BaseController
   def get_user_card_info
     render json: { card_info: { name_on_card: current_user.name_on_card, card_type: current_user.card_type, 
       card_number: current_user.card_number, expiration: current_user.expiration.present? ? Date.parse(current_user.expiration).strftime("%m/%Y") : '', 
-      cvv: current_user.cvv.to_json }}, status: :ok
+      cvv: current_user.cvv }}, status: :ok
   end
 
   # GET /api/get_moulding
