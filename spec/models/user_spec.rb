@@ -1,4 +1,4 @@
-require 'spec_helper'
+equire 'spec_helper'
 
 describe User do
   let(:user) { create(:user) }
@@ -244,7 +244,24 @@ describe User do
   end
 
   describe "update_profile" do
-    pending "add examples"
+    context "when password present in params" do
+      it "should update with password" do
+        user1 = create(:user)
+        user1.update_profile({:first_name => "mike" :password => "new_password", :password_confirmation => "new_password" })
+        user1.password.should == "new_password"
+        user1.password_confirmation.should == "new_password"
+      end
+    end
+
+    context "when password not present in params" do
+      it "should update without password" do
+        user1 = create(:user, :password => "old_password")
+        user1.update_profile({:first_name => "mike"} )
+        user1.password.should == "old_password"
+        user1.password_confirmation.should == "old_password"
+        user1.first_name.should == "mike"
+      end
+    end
   end
 
   describe "#male?" do
