@@ -637,10 +637,21 @@ var image_cropper = {
 
       var min_width = parseInt((img_width / geometry.width) * ratio_width);
       var min_height = parseInt((img_height / geometry.height) * ratio_height);
-      var x1 = parseInt(img_width/2 - min_width/2);
-      var x2 = x1 + min_width;
-      var y1 = parseInt(img_height/2 - min_height/2);
-      var y2 = y1 + min_height;
+
+      if (cropped_dimensions.length == 0){
+        var x1 = parseInt(img_width/2 - min_width/2);
+        var x2 = x1 + min_width;
+        var y1 = parseInt(img_height/2 - min_height/2);
+        var y2 = y1 + min_height;
+      }
+      else {
+        var w = parseInt(cropped_dimensions[0] / image_cropper.x_shift_ratio);
+        var h = parseInt(cropped_dimensions[1] / image_cropper.y_shift_ratio);
+        var x1 = parseInt(cropped_dimensions[2] / image_cropper.x_shift_ratio);
+        var y1 = parseInt(cropped_dimensions[3] / image_cropper.y_shift_ratio);
+        var x2 = x1 + w;
+        var y2 = y1 + h;
+      }
 
       var options = {
         onChange: image_cropper.update_crop,

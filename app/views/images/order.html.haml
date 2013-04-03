@@ -55,3 +55,4 @@
     :erb
       var image_id = '<%= params[:id] %>';
       var geometry = <%= {width: @image.image.width, height: @image.image.height}.to_json %>;
+      var cropped_dimensions = <%= @line_item.try(:cropped_dimensions).to_a %>;

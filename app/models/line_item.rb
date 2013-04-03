@@ -41,8 +41,8 @@ class LineItem < ActiveRecord::Base
     self.crop_dimension = "#{options[:crop_w]}x#{options[:crop_h]}+#{options[:crop_x]}+#{options[:crop_y]}"
   end
 
-  def crop_dimensions
-    self.crop_dimension.to_s.split(/[x,+]/)
+  def cropped_dimensions
+    self.crop_dimension.to_s.split(/[x,+]/).collect(&:to_i)
   end
 
   def delayed_copy_image
@@ -51,7 +51,7 @@ class LineItem < ActiveRecord::Base
 
   def copy_image
     self.crop_flag = false
-    self.crop_w, self.crop_h, self.crop_x, self.crop_y = self.crop_dimensions
+    self.crop_w, self.crop_h, self.crop_x, self.crop_y = self.cropped_dimensions
     self.content = download_remote_image
     self.save!
   end
