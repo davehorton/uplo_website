@@ -21,7 +21,7 @@
 .wrapper.left
   .right
     .pagination-panel.left
-      = render :partial => 'pagination', :locals => { :source => @images, :params => { :controller => 'galleries', :action => 'edit_images', :gallery_id => @gallery.id }, :classes => 'text left' }
+      = render :partial => 'pagination', :locals => { :source => @images, :params => { :controller => 'galleries', :action => 'edit_images', :id => @gallery.id }, :classes => 'text left' }
     .button.save-grid-changes.left
   .line-separator.left
   #images-panel.container.left
@@ -31,7 +31,7 @@
       = render :partial => 'edit_photos', :locals => { :images => @images }
   .right
     .pagination-panel.left
-      = render :partial => 'pagination', :locals => { :source => @images, :params => { :controller => 'galleries', :action => 'edit_images', :gallery_id => @gallery.id }, :classes => 'text left' }
+      = render :partial => 'pagination', :locals => { :source => @images, :params => { :controller => 'galleries', :action => 'edit_images', :id => @gallery.id }, :classes => 'text left' }
     .button.save-grid-changes.left
 
 = render :partial => 'edit_gallery', :layout => 'layouts/popup', :locals => { :title => 'Edit Your Gallery Infomation', :id => 'edit-gallery-popup', :gallery => @gallery }

@@ -96,7 +96,6 @@ class SocialsController < ApplicationController
 	# image_id
 	# social[:message]
 	# social[:type_social]
-
 	def share
 		social = params[:social]
 		@message = social[:message]
@@ -108,7 +107,7 @@ class SocialsController < ApplicationController
 		if (params[:gallery_id])
 			gallery = Gallery.find_by_id params[:gallery_id]
 			if (gallery)
-				link = url_for(:controller => :galleries, :action => :public, :gallery_id => gallery.id, :only_path => false)
+				link = url_for(:controller => :galleries, :action => :public, :id => gallery.id, :only_path => false)
 				photo = gallery_cover_image_url(gallery)
 				medium_photo = gallery_cover_image_url(gallery, :medium)
 			end

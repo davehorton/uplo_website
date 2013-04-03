@@ -52,11 +52,11 @@ Uplo::Application.routes.draw do
   resources :galleries do
     member do
       get :edit_images
+      get :public
       get :share
     end
 
     collection do
-      get :public
       get :search
       get :search_public
       get :show_public
