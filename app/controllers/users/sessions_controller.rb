@@ -9,13 +9,13 @@ class Users::SessionsController < Devise::SessionsController
     flash.now[:alert] = nil
     redirect_to "/"
   end
-  
+
   def create
     super
     # Clear the flash
     flash.clear
   end
-  
+
   def destroy
     super
     # Clear the flash

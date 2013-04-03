@@ -52,11 +52,11 @@ Uplo::Application.routes.draw do
   resources :galleries do
     member do
       get :edit_images
+      get :public
       get :share
     end
 
     collection do
-      get :public
       get :search
       get :search_public
       get :show_public
@@ -81,7 +81,7 @@ Uplo::Application.routes.draw do
       get  :flickr_authorize
       get  :flickr_post
       get  :flickr_response
-      get  :mail_shared_image
+      post  :mail_shared_image
       get  :order
       get  :price
       get  :pricing

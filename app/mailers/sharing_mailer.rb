@@ -4,12 +4,8 @@ class SharingMailer < ApplicationMailer
   def share_image_email(image_id, emails, user_id, message = nil)
     @message = message
     @user = User.unscoped.find(user_id)
-    @image = Image.unscoped.find(image_id)
-    begin
-      mail(:to => emails, :subject => "Shared Photo from UPLO")
-    rescue
-      return false
-    end
+    @image = Image.unscoped.find(image_id).decorate
+    mail(:to => emails, :subject => "Shared Photo from UPLO")
   end
 
   def share_gallery_email(gallery_id, emails, user_id, message = nil)
