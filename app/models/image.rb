@@ -366,12 +366,6 @@ class Image < ActiveRecord::Base
     end
   end
 
-  def image_geometry(style = :original)
-    @geometry ||= {}
-    local_storage = Rails.application.config.paperclip_defaults[:storage] == :filesystem
-    @geometry[style] ||= Paperclip::Geometry.from_file(local_storage ? image.path(style) : image.url(style))
-  end
-
   protected
 
     def ensure_not_associated_with_an_order
