@@ -9,15 +9,16 @@ class LineItem < ActiveRecord::Base
   attr_accessor :crop_x, :crop_y, :crop_w, :crop_h, :crop_flag
   after_save :delayed_copy_image, :if => :crop_flag
 
+  STORAGE_PATH = "image/:image_id/orders/:order_id/:id.:extension"
   STORAGE_OPTIONS = if Rails.application.config.paperclip_defaults[:storage] == :s3
-                      {path: "image/:image_id/orders/:order_id/:style/:id.:extension"}
+                      {path: STORAGE_PATH}
                     else
-                      { path: ":rails_root/public/system/image/:image_id/orders/:order_id/:style/:id.:extension",
-                        url: "/system/image/:image_id/orders/:order_id/:style/:id.:extension" }
+                      { path: ":rails_root/public/system/#{STORAGE_PATH}",
+                        url: "/system/#{STORAGE_PATH}" }
                     end
 
   has_attached_file :content, {
-    styles: lambda {|attachment| {:cropped => (attachment.instance.dyn_style)}},
+    styles: lambda {|attachment| {:original => (attachment.instance.dyn_style)}},
     processors: [:cropper]
   }.merge(STORAGE_OPTIONS)
 
