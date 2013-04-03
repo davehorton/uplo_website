@@ -129,6 +129,7 @@ describe User do
         User.search_scope("---\n- rosy\n").should == []
       end
     end
+
     context "when query last name present" do
       it "should return searched results" do
         user1 = create(:user, :last_name => "doe")
@@ -136,6 +137,7 @@ describe User do
         User.search_scope("---\n- abc..;").should == []
       end
     end
+
     context "when query username present" do
       it "should return searched results" do
         user1 = create(:user, :username => "julia")
@@ -143,6 +145,7 @@ describe User do
         User.search_scope("---\n- private..;").should == []
       end
     end
+
     context "when query email present" do
       it "should return searched results" do
         pending "search with email seems broken"
@@ -159,12 +162,14 @@ describe User do
         User.paginate_and_sort({ :page => 1, :per_page => 2 }).should == [user3, user1]
       end
     end
+
     context "with sign_up date as sort field" do
       it "should display output" do
         users = create_list(:user, 10)
         User.paginate_and_sort({ :page => 1, :per_page => 5, :sort_field => "signup_date" }).should == users.reverse.first(5)
       end
     end
+
     context "with num of likes as sort field" do
       it "should display output" do
         user1 = create(:user, :image_likes_count=> 3)
@@ -187,9 +192,11 @@ describe User do
   end
 
   describe ".remove_flagged_users" do
+    pending "add examples"
   end
 
   describe ".reinstate_flagged_users" do
+    pending "add examples"
   end
 
   describe "#liked_images" do
@@ -209,6 +216,7 @@ describe User do
         user.joined_date.should be_blank
       end
     end
+
     context "with confirmed at" do
       it "should return result" do
         user1 = create(:user, :confirmed_at => "02-04-2013")
@@ -232,8 +240,9 @@ describe User do
   end
 
   describe "#birthday" do
-
+    pending "method seemd broken if date is a string"
   end
+
   describe "update_profile" do
     pending "add examples"
   end
@@ -253,6 +262,7 @@ describe User do
         user.has_follower?(another_user.id).should be_true
       end
     end
+
     context "when not followed" do
       it "should return false" do
         another_user = create(:user)
@@ -263,6 +273,19 @@ describe User do
   end
 
   describe "has_profile_photo?" do
+    context "with profile image" do
+      it "should return true" do
+        profile_photo = create(:profile_image, :user_id => user.id)
+        user.has_profile_photo?(profile_photo).should be_true
+      end
+    end
+
+    context "without profile image" do
+      it "should return false" do
+        profile_photo = create(:profile_image)
+        user.has_profile_photo?(profile_photo).should be_false
+      end
+    end
   end
 
   describe "gender_string" do
@@ -272,6 +295,7 @@ describe User do
         user1.gender_string.should == "Male"
       end
     end
+
     context "without gender" do
       it "should return female" do
         user.gender_string.should == "Female"
@@ -280,14 +304,7 @@ describe User do
   end
 
   describe "#recent_empty_order" do
-    context "with orders" do
-      it "should return appropriate order" do
-        user1 = create(:user_with_orders)
-        order1 = user1.orders.last
-     #   user1.recent_empty_order.should == order1
-      end
-    end
-    context "with orders" do
+    context "without orders" do
       it "should create a new order and return" do
         user1 = create(:user)
         user1.recent_empty_order.should == user1.orders.first
@@ -295,16 +312,109 @@ describe User do
     end
   end
 
+  describe "#avatar" do
+    context "when image is nil" do
+      it "should return nil" do
+        user.avatar.should be_nil
+      end
+    end
+
+    context "when image is not nil" do
+      it "should return image if it has source and source is removed" do
+        profile_image = create(:profile_image, :user_id => user.id, :default => true)
+        profile_image.source.update_attribute(:removed, true)
+        puts profile_image.source.inspect
+        user.avatar.should == nil
+      end
+
+      it "should return image if it has source and source is flagged" do
+        profile_image = create(:profile_image, :user_id => user.id)
+        img = profile_image.source
+        img_flags = create_list(:image_flag, 2, :image_id => img.id)
+        user.avatar.should == nil
+      end
+
+      it "should return image if conditions are met" do
+        profile_image = create(:profile_image, :user_id => user.id)
+        user.avatar.should == profile_image
+      end
+    end
+  end
+
+  describe "#init_cart" do
+    context "with cart nil" do
+      pending "create_cart seems broken"
+    end
+
+    context "with cart" do
+      it "should return cart when order has no billing address" do
+        cart = create(:cart, :user_id => user.id)
+        cart.order.update_attribute(:billing_address_id, nil)
+        user.init_cart
+        cart.order.billing_address.first_name.should == user.billing_address.first_name
+        cart.order.billing_address.last_name.should == user.billing_address.last_name
+        cart.order.billing_address.street_address.should == user.billing_address.street_address
+      end
+
+      it "should update cart and return" do
+        user1 = create(:user, :name_on_card => "test1", :card_type => "master card", :expiration => "january", :cvv => "234")
+        cart = create(:cart, :user_id => user1.id)
+        cart.order.update_attribute(:billing_address_id, nil)
+        user1.init_cart
+        cart.order.shipping_address.first_name == user1.shipping_address.first_name
+        cart.order.shipping_address.last_name == user1.shipping_address.last_name
+      end
+    end
+  end
+
+  describe "#paid_items" do
+    context "with image id" do
+      it "should" do
+        image = create(:image)
+        new_order = create(:order, :transaction_status => "completed", :user_id => user.id)
+        line_item = create(:line_item, :image_id => image.id, :order_id => new_order.id)
+        user.paid_items(image.id).should == [line_item]
+      end
+    end
+
+    context "with blank image id" do
+      it "should return blank array" do
+        line_items = create_list(:line_item, 5)
+        user.paid_items("").should == []
+      end
+    end
+  end
+
+  describe "#paid_items_number" do
+    it "should calculate result" do
+      image = create(:image)
+      new_order = create(:order, :transaction_status => "completed", :user_id => user.id)
+      line_item = create(:line_item, :image_id => image.id, :order_id => new_order.id, :quantity => 5)
+      user.paid_items_number(image.id).should == 5
+    end
+  end
+
+  describe "total_paid" do
+    it "should calculate result" do
+      image = create(:image)
+      new_order = create(:order, :transaction_status => "completed", :user_id => user.id)
+      line_item = create(:line_item, :image_id => image.id, :order_id => new_order.id, :quantity => 5, :price => 50.0, :tax => 10.0)
+      user.total_paid(image.id).should == 2500
+    end
+  end
+
   describe "#raw_sales" do
     context "with line items" do
       it "should return result" do
-        image = create(:image, :user_id => user.id)
+        another_user = create(:user_with_gallery)
+        gallery1 = another_user.galleries.first
+        image = create(:image, :gallery => gallery1)
         new_order = create(:order, :transaction_status => "completed")
         line_item = create(:line_item, :image_id => image.id, :order_id => new_order.id, :quantity => 4)
-        #needs to be checked
-        user.raw_sales.should == []
+        another_user.raw_sales.should == [line_item]
       end
     end
+
     context "without line items" do
       it "should return blank array" do
         user.raw_sales.should == []
@@ -312,14 +422,30 @@ describe User do
     end
   end
 
+  describe "#monthly_sales" do
+    it "should return calculated hash" do
+      another_user = create(:user_with_gallery)
+      gallery1 = another_user.galleries.first
+      image = create(:image, :gallery => gallery1)
+      new_order = create(:order, :transaction_status => "completed", :transaction_date => "03-03-2012")
+      line_item = create(:line_item, :image_id => image.id, :order_id => new_order.id, :quantity => 4, :price => 500, :commission_percent => 35.0)
+      another_user.monthly_sales("01-03-2012").should == [{:month=>"Mar", :sales=>0}, {:month=>"Apr", :sales=>0}, {:month=>"May", :sales=>0}, {:month=>"Jun", :sales=>0}, {:month=>"Jul", :sales=>0}, {:month=>"Aug", :sales=>0}, {:month=>"Sep", :sales=>0}, {:month=>"Oct", :sales=>0}, {:month=>"Nov", :sales=>0}, {:month=>"Dec", :sales=>0}, {:month=>"Jan", :sales=>0}, {:month=>"Feb", :sales=>0}, {:month=>"Mar", :sales=>200000.0}]
+    end
+  end
+
+  describe "#total_sales" do
+  end
+
   describe "#images_pageview" do
     context "with images having pageview" do
       it "should return count" do
-        user1 = create(:user_with_images)
-        #needs to be checked
-        user1.images_pageview.should == 0
+        user1 = create(:user_with_gallery)
+        gallery1 = user1.galleries.first
+        img = create(:image, :pageview => 2, :gallery => gallery1)
+        user1.images_pageview.should == 2
       end
     end
+
     context "without images" do
       it "should return count" do
         user.images_pageview.should be_zero
@@ -336,15 +462,16 @@ describe User do
 
   describe "#remove!" do
     it "should update removed attribute" do
-      user1 = create(:user_with_images)
+      user1 = create(:user_with_gallery)
+      gallery1 = user1.galleries.first
+      img = create(:image, :gallery => gallery1)
       user1.remove!
-      puts user.images.count
-     # user1.images.first.removed.should be_true
+      img.removed.should be_false
       user1.removed.should be_true
     end
   end
 
-  describe "remove_flagged_images" do
+  describe "#remove_flagged_images" do
     it "should remove associated flagged images" do
       image = create(:image_with_image_flags, :user_id => user.id)
       user.remove_flagged_images
@@ -352,14 +479,64 @@ describe User do
     end
   end
 
-  describe "blocked?" do
+  describe "#reinstate_flagged_images" do
+    it "should reinstate" do
+      another_user = create(:user_with_gallery)
+      gallery1 = another_user.galleries.first
+      image = create(:image_with_image_flags, :gallery => gallery1)
+      another_user.reinstate_flagged_images
+      another_user.banned.should be_false
+    end
+  end
+
+  describe "#reinstate" do
+    context "when not ready for reinstating" do
+      it "should return false" do
+        another_user = create(:user_with_gallery)
+        gallery1 = another_user.galleries.first
+        image = create(:image_with_five_image_flags, :gallery => gallery1)
+        another_user.reinstate.should be_false
+      end
+    end
+
+    context "when banned" do
+      it "should return update banned atribute" do
+        user1 = create(:user, :banned => true)
+        user1.reinstate
+        user1.banned.should be_false
+      end
+    end
+  end
+
+  describe "#ban_threshold_met?" do
+    context "user is not banned and not ready_for_reinstating?" do
+      it "should return true" do
+        another_user = create(:user_with_gallery, :banned => false)
+        gallery1 = another_user.galleries.first
+        image = create(:image_with_five_image_flags, :gallery => gallery1)
+        another_user.ban_threshold_met?.should be_true
+      end
+    end
+  end
+
+  describe "#ready_for_reinstating?" do
+    it "should return true if flagged images length less than 3" do
+      another_user = create(:user_with_gallery)
+      gallery1 = another_user.galleries.first
+      image = create(:image_with_image_flags, :gallery => gallery1)
+      another_user.ready_for_reinstating?.should be_true
+    end
+  end
+
+  describe "#blocked?" do
     context "banned" do
       it "should return true" do
         user.update_attribute(:banned, true)
         user.blocked?.should be_true
       end
     end
-    context "removed" do
+
+    context "#removed" do
       it "should return true" do
         user.update_attribute(:removed, true)
         user.blocked?.should be_true
@@ -367,23 +544,118 @@ describe User do
     end
   end
 
-  describe "total_earn" do
+  describe "#total_earn" do
     it "should calculate result" do
-      another_user = create(:user)
-      image = create(:image, :user_id => another_user.id)
+      another_user = create(:user_with_gallery)
+      gallery1 = another_user.galleries.first
+      image = create(:image, :gallery => gallery1)
       new_order = create(:order, :transaction_status => "completed")
       line_item = create(:line_item, :image_id => image.id, :order_id => new_order.id, :quantity => 4, :price => 50, :commission_percent => 35.0)
       another_user.total_earn.should == 200000.0
     end
   end
 
-  describe "owned_amount" do
+  describe "#owned_amount" do
     it "should return amount" do
-      another_user = create(:user, :withdrawn_amount => 100000.0)
-      image = create(:image, :user_id => another_user.id)
+      another_user = create(:user_with_gallery, :withdrawn_amount => 100000.0)
+      gallery1 = another_user.galleries.first
+      image = create(:image, :gallery => gallery1)
       new_order = create(:order, :transaction_status => "completed")
       line_item = create(:line_item, :image_id => image.id, :order_id => new_order.id, :quantity => 4, :price => 50, :commission_percent => 35.0)
-      another_user.total_earn.should == 100000.0
+      another_user.owned_amount.should == 100000.0
+    end
+  end
+
+  describe "#withdraw_paypal" do
+    context "without paypal_email" do
+      it "should raise error" do
+        user.withdraw_paypal(500).should raise_error
+      end
+    end
+
+    context "with paypal_email" do
+      it "should raise error with amount less or equal to zero" do
+        one_user = create(:user)
+        one_user.withdraw_paypal(0).should raise_error
+      end
+      it "should raise error with amount greater than owned_amount" do
+        another_user = create(:user_with_gallery)
+        gallery1 = another_user.galleries.first
+        image = create(:image, :gallery => gallery1)
+        new_order = create(:order, :transaction_status => "completed")
+        line_item = create(:line_item, :image_id => image.id, :order_id => new_order.id, :quantity => 4, :price => 50, :commission_percent => 10.0)
+        another_user.withdraw_paypal(5000000).should raise_error
+      end
+    end
+  end
+
+  describe "#owns_image?" do
+    context "when image matches" do
+      it "should return true" do
+        another_user = create(:user_with_gallery)
+        gallery1 = another_user.galleries.first
+        image = create(:image, :gallery => gallery1)
+        another_user.owns_image?(image).should be_true
+      end
+    end
+
+    context "when image does not match" do
+      it "should return false" do
+        img = create(:image)
+        user.owns_image?(img).should be_false
+      end
+    end
+  end
+
+  describe "#owns_gallery?" do
+    context "when gallery matches" do
+      it "should return true" do
+        another_user = create(:user_with_gallery)
+        gallery1 = another_user.galleries.first
+        another_user.owns_gallery?(gallery1).should be_true
+      end
+    end
+
+    context "when gallery does not match" do
+      it "should return false" do
+        gallery = create(:gallery)
+        user.owns_gallery?(gallery).should be_false
+      end
+    end
+  end
+
+  describe "#like_image" do
+    it "should like an image" do
+      img = create(:image)
+      user.like_image(img).should == { :likes_count => 1}
+    end
+  end
+
+  describe "#unlike_image" do
+    it "should unlike image" do
+      another_user = create(:user_with_gallery)
+      gallery1 = another_user.galleries.first
+      img = create(:image_with_image_flags, :gallery => gallery1)
+      another_user.unlike_image(img).should == { :likes_count => 0}
+    end
+  end
+
+  describe "#can_access?" do
+    context "when gallery is owned" do
+      it "should return true" do
+        new_user = create(:user_with_gallery)
+        gallery1 = new_user.galleries.first
+        new_user.can_access?(gallery1).should be_true
+      end
+    end
+
+    context "when gallery is public" do
+      it "should return true" do
+        new_user = create(:user_with_gallery)
+        gallery1 = new_user.galleries.first
+        gallery1.update_attribute(:permission, "public")
+        new_user.can_access?(gallery1).should be_true
+      end
     end
   end
 

@@ -18,15 +18,15 @@ FactoryGirl.define do
     end
   end
 
-  factory :user_with_orders, :parent => :user do
+  factory :user_with_gallery, :parent => :user do
     after(:create) do |user|
-      create_list(:order, 2, :status => "shopping", :user => user)
+      create(:gallery, :user => user)
     end
   end
 
-  factory :user_with_images, :parent => :user do
+  factory :user_with_image_likes, :parent => :user do
     after(:create) do |user|
-      create_list(:image, 2, :pageview => 2, :user => user)
+      create(:gallery, :user => user)
     end
   end
 
