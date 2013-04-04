@@ -78,10 +78,14 @@ class Api::UsersController < Api::BaseController
   #   username
   #   password
   def login
+    user = nil
+    logger.info("signed_in=#{signed_in?(:user)}")
+    pw = params[:password]
     # Sign out if signing in
     signed_in = signed_in?(:user)
     Devise.sign_out_all_scopes ? sign_out : sign_out(:user)
     user = authenticate_user(params[:username], params[:password])
+    logger.info("params=#{pw}")
 
     if user
       sign_in(:user, user)
@@ -122,8 +126,9 @@ class Api::UsersController < Api::BaseController
 
   # GET /api/total_sales
   def get_total_sales
+    logger.info("filtered_params=#{filtered_params}")
     user = current_user
-    user_sales = user.total_sales(filtered_params)
+    user_sales = user.total_sales #(filtered_params)
     render json: user_sales[:data], meta: { total: user_sales[:total_entries] }, status: :ok
   end
 
@@ -295,9 +300,9 @@ class Api::UsersController < Api::BaseController
       result
     end
 
-    def authenticate_user(login, password)
-      user = User.find_by_username login
-      user = User.find_by_email login if user.nil?
+    def authenticate_user(username, password)
+      user = User.find_for_authentication(:username => username)
+      user = user.valid_password?(password) ? user : nil      
       user
     end
 
