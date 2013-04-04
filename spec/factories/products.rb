@@ -1,6 +1,7 @@
 # Read about factories at https://github.com/thoughtbot/factory_girl
 
 FactoryGirl.define do
+
   factory :product do
     tier1_price 500
     tier2_price 300
@@ -13,4 +14,5 @@ FactoryGirl.define do
     moulding
     size
   end
+
 end
