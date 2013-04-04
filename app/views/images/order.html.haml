@@ -19,7 +19,8 @@
     = simple_form_for(:line_item, :url => url_for(:controller => "shopping_cart", :action => "add_to_cart", :image_id => @image.id), :method => 'post', :html => { :id => 'order-details', :class => 'left' }) do |f|
       - [:crop_x, :crop_y, :crop_w, :crop_h].each do |attr|
         = f.hidden_field attr, id: attr
-
+      %h1 Instructions: Use the cropping tool visible in the photo to select the printable area for your order.
+      .line-separator.left
       .round-box.option.left.print-sizes-container
         .header.text.black.bold.font14= "Print Size"
         .item.left
