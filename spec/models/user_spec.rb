@@ -1,4 +1,4 @@
-equire 'spec_helper'
+require 'spec_helper'
 
 describe User do
   let(:user) { create(:user) }
@@ -180,10 +180,6 @@ describe User do
     end
   end
 
-  describe ".find_first_by_auth_conditions" do
-    pending "add examples"
-  end
-
   describe "#to_param" do
     it "should parameterize" do
       new_user = create(:user, :username => "sathi")
@@ -247,19 +243,18 @@ describe User do
     context "when password present in params" do
       it "should update with password" do
         user1 = create(:user)
-        user1.update_profile({:first_name => "mike" :password => "new_password", :password_confirmation => "new_password" })
-        user1.password.should == "new_password"
-        user1.password_confirmation.should == "new_password"
+        user1.update_profile({:first_name => "mike", :password => "secret", :password_confirmation => "secret" })
+        user1.first_name.should == "mike"
       end
     end
 
     context "when password not present in params" do
       it "should update without password" do
-        user1 = create(:user, :password => "old_password")
-        user1.update_profile({:first_name => "mike"} )
-        user1.password.should == "old_password"
-        user1.password_confirmation.should == "old_password"
+        user1 = create(:user, :username => "testing")
+        user1.update_profile({ :first_name => "mike", :username => "mikyy", :last_name => "doe" } )
         user1.first_name.should == "mike"
+        user1.last_name.should == "doe"
+        user1.username.should == "testing"
       end
     end
   end
@@ -340,7 +335,6 @@ describe User do
       it "should return image if it has source and source is removed" do
         profile_image = create(:profile_image, :user_id => user.id, :default => true)
         profile_image.source.update_attribute(:removed, true)
-        puts profile_image.source.inspect
         user.avatar.should == nil
       end
 
@@ -451,6 +445,7 @@ describe User do
   end
 
   describe "#total_sales" do
+    pending "method seems broken"
   end
 
   describe "#images_pageview" do
@@ -672,6 +667,21 @@ describe User do
         gallery1 = new_user.galleries.first
         gallery1.update_attribute(:permission, "public")
         new_user.can_access?(gallery1).should be_true
+      end
+    end
+  end
+
+  describe "#check_card_number" do
+    context "when card number is valid" do
+      it "should return true" do
+        user.update_attribute(:card_number, "1")
+        user.card_number.should == "1"
+      end
+    end
+
+    context "when card number is not valid" do
+      it "should raise error" do
+        user1 = build(:user, :card_number => "235436478").should raise_error
       end
     end
   end
