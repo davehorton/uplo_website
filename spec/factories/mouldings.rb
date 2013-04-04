@@ -2,6 +2,6 @@
 
 FactoryGirl.define do
   factory :moulding do
-    name "MyString"
+    name "Moulding1"
   end
 end

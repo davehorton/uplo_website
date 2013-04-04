@@ -1,6 +1,6 @@
 FactoryGirl.define do
 
-  factory :image do
+  factory :image, :aliases => [:source] do
     gallery
     user { gallery.user } # intentional denormalization
     name { Faker::Name.name }
@@ -19,6 +19,12 @@ FactoryGirl.define do
   factory :image_with_image_flags, :parent => :image do
     after(:create) do |image|
       create_list(:image_flag, 2, :image => image)
+    end
+  end
+
+  factory :image_with_five_image_flags, :parent => :image do
+    after(:create) do |image|
+      create_list(:image_flag, 5, :image => image)
     end
   end
 

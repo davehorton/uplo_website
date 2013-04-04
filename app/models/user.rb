@@ -348,7 +348,7 @@ class User < ActiveRecord::Base
 
   def total_sales(image_paging_params = {})
     result = {:total_entries => 0, :data => []}
-    images = raw_sales(image_paging_params)
+    images = raw_sales.paginate_and_sort(image_paging_params)
     array = []
     images.each { |img|
       info = img
