@@ -76,7 +76,7 @@ class ImagesController < ApplicationController
       if image.destroy
         pagination = render_to_string :partial => 'pagination',
           :locals => {  :source => images, :params => { :controller => 'galleries',
-            :action => 'edit_images', :gallery_id => gallery.id }, :classes => 'text left' }
+            :action => 'edit_images', :id => gallery.id }, :classes => 'text left' }
         items = render_to_string :partial => 'galleries/edit_photos',
                                 :locals => { :images => images }
         gal_options = self.class.helpers.gallery_options(current_user.id, gallery.id, true)

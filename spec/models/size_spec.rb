@@ -1,17 +1,21 @@
 require 'spec_helper'
 
 describe Size do
-  let(:size){ create(:size) }
+  let(:size){ create(:size, :height => 50, :width => 45) }
 
   it { should validate_presence_of(:height) }
   it { should validate_presence_of(:width) }
 
-  it "should check #to_name" do
-    size.to_name.should == "45x50"
+  describe "#to_name" do
+    it "should return value" do
+      size.to_name.should == "45x50"
+    end
   end
 
-  it "should check #to_a" do
-    size.to_a.should == [45, 50]
+  describe "to_a" do
+    it "should return array" do
+      size.to_a.should == [45, 50]
+    end
   end
 
   describe "#rectangular" do
@@ -28,7 +32,7 @@ describe Size do
     end
   end
 
-  describe "square?" do
+  describe "#square?" do
     context "when width not equal to height" do
       it "should return false" do
         size.square?.should be_false

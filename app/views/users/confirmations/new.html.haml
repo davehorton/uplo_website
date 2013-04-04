@@ -45,7 +45,7 @@
 				%br.clear
 				.inputs
 					= f.input_field :email, :required => true, :style => "width:268px; margin-right:5px;"
-					= f.button :submit, :type => :image, :src => "btn-submit.png"
+					= image_submit_tag "btn-submit.png"
 				.inputs{:style => "color:red"}
 					= f.full_error :email
 			%br.clear

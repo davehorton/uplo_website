@@ -1,5 +1,5 @@
 FactoryGirl.define do
-  factory :address do
+  factory :address, :aliases => [:billing_address, :shipping_address] do
     first_name "Address1"
     last_name "Address2"
     street_address "Lincoln Street"

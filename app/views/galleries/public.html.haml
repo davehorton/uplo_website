@@ -41,7 +41,7 @@
     %a.left{:target => '_blank', :href=>"https://twitter.com/share", :class=>"twitter-share-button", :data => {:lang => "en", :count => "horizontal", :text => "Shared from UPLO -"}}
     .fb-like.left{ 'data-href'=>"#{ url_for(:only_path => false) }", 'data-send'=>'false', 'data-layout'=>'button_count', 'data-show-faces'=>'false', 'data-font'=>'arial' }
 
-  = render_pagination(@images, { :controller => "galleries", :action => params[:action], :gallery_id => params[:gallery_id] })
+  = render_pagination(@images, { :controller => "galleries", :action => params[:action], :id => params[:gallery_id] })
 
 - content_for :js do
   = javascript_tag do

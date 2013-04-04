@@ -2,10 +2,15 @@
 
 FactoryGirl.define do
   factory :product do
-    tier_id "MyString"
-    size_id "MyString"
-    moulding_id "MyString"
-    price "9.99"
-    commission "9.99"
+    tier1_price 500
+    tier2_price 300
+    tier3_price 200
+    tier4_price 100
+    tier1_commission 100
+    tier2_commission 50
+    tier3_commission 20
+    tier4_commission 10
+    moulding
+    size
   end
 end

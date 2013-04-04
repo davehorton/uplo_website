@@ -4,7 +4,7 @@ class GalleriesController < ApplicationController
   skip_authorize_resource :only => [:public]
 
   before_filter :detect_device
-  before_filter :check_paypal_email
+  before_filter :check_paypal_email, :except => [:public]
   before_filter :show_notification
 
   def index
@@ -13,7 +13,7 @@ class GalleriesController < ApplicationController
   end
 
   def public
-    @gallery = Gallery.find(params[:gallery_id])
+    @gallery = Gallery.find(params[:id])
     @author = @gallery.user
     @images = @gallery.images.popular_with_pagination(filtered_params)
     render :layout => "public"
@@ -29,7 +29,7 @@ class GalleriesController < ApplicationController
     emails = params[:email]['emails'].split(',')
     emails.map { |email| email.strip }
 
-    if emails.length > 0 && SharingMailer.delay.share_gallery_email(params[:gallery_id], emails, current_user.id, params[:email]['message'])
+    if emails.length > 0 && SharingMailer.delay.share_gallery_email(params[:id], emails, current_user.id, params[:email]['message'])
       flash[:notice] = "Email sent"
     else
       flash[:warning] = "Could not send the email. Please re-check your information (email, message)."
@@ -99,7 +99,7 @@ class GalleriesController < ApplicationController
       if request.xhr?
         pagination = render_to_string :partial => 'pagination',
           :locals => {  :source => @images, :params => { :controller => "galleries",
-          :action => 'edit_images', :gallery_id => @gallery.id }, :classes => 'text left' }
+          :action => 'edit_images', :id => @gallery.id }, :classes => 'text left' }
         items = render_to_string :partial => 'galleries/edit_photos',
                                 :locals => { :images => @images }
         edit_popup = render_to_string :partial => 'edit_gallery', :layout => 'layouts/popup',
@@ -158,7 +158,7 @@ class GalleriesController < ApplicationController
     def detect_device
       if is_mobile_device? && params[:action]=='public' && (params[:web_default].nil? || params[:web_default]==false)
         @type = 'gallery'
-        @id = params[:gallery_id]
+        @id = params[:id]
         return render :template => 'device_requests/show', :layout => nil
       else
         request.formats.unshift Mime::HTML
