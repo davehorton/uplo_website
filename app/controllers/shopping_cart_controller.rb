@@ -26,7 +26,7 @@ class ShoppingCartController < ApplicationController
     else
       product = Product.where(moulding_id: params[:line_item][:moulding], size_id: params[:line_item][:size]).first
 
-      line_item = @cart.order.line_items.where(image_id: image.id, product_id: product.id).first_or_initialize
+      line_item = @cart.order.line_items.new(image_id: image.id, product_id: product.id)
       line_item.quantity = params[:line_item][:quantity].to_i
       line_item.set_crop_dimension(params[:line_item])
 
