@@ -7,5 +7,12 @@ FactoryGirl.define do
     avatar_content_type { 'image/jpeg' }
     avatar_file_size { 128 }
   end
+
+  factory :real_profile_image, :class => :profile_image do
+    user
+    source
+    avatar File.open("#{Rails.root}/spec/fixtures/assets/photo.jpg")
+  end
+
 end
 
