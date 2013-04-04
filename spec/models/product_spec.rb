@@ -2,6 +2,7 @@ require 'spec_helper'
 
 describe Product do
   let(:product) { create(:product) }
+  let(:size) { create(:size) }
 
   it { should belong_to(:moulding) }
   it { should belong_to(:size) }
@@ -21,7 +22,6 @@ describe Product do
   describe ".in_sizes" do
     context "with matched sizes" do
       it "should return appropriate products" do
-        size = create(:size)
         product1 = create(:product, :size_id => size.id)
         Product.in_sizes([size.id]).should == [product1]
       end
@@ -29,7 +29,6 @@ describe Product do
 
     context "with unmatched sizes" do
       it "should return blank array" do
-        size = create(:size)
         Product.in_sizes([size.id]).should == []
       end
     end
@@ -61,7 +60,6 @@ describe Product do
 
     context "without line item" do
       it "should be false" do
-        line_item = create(:line_item)
         product.associated_with_any_orders?.should be_false
       end
     end
