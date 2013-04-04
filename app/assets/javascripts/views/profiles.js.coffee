@@ -115,6 +115,15 @@ requestUpdateAvatar = (node) ->
         $('#user-section .avatar.large').attr 'src', response.large_avatar_url
   })
 
+displayPaginatedItems = (node) ->
+  $.ajax({
+    url: $(node).attr('href'),
+    dataType: 'json',
+    success: (response) ->
+      $('#endless-pages').html response.items
+      $('.pagination').each( (idx, elem) -> $(elem).html response.pagination )
+  });
+
 $ ->
   if($('#body-profiles').length)
     $.ajaxSetup({
@@ -161,6 +170,10 @@ $ ->
 
     $('body').delegate '#edit-profile-photo-popup .held-photos .delete', 'click', (e) -> requestDeleteProfilePhoto(e.target)
     $('body').delegate '#edit-profile-photo-popup .held-photos img', 'click', (e) -> requestUpdateAvatar(e.target)
+
+    $(document).on 'click', '.pagination a', (e) ->
+      e.preventDefault()
+      displayPaginatedItems(e.target)
 
     $('#container').delegate '.user-section .button', 'click', (e) ->
       requestFollow(e.target)
