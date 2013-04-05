@@ -227,6 +227,7 @@ order_preview = {
     var frame = $('#preview-frame .image-frame');
     var img = $('#preview-frame > img.image');
 
+/*
     if(frame_name == 'canvas' || frame_name == 'plexi'){
       // remove jcrop
       image_cropper.removeJcrop();
@@ -237,6 +238,7 @@ order_preview = {
       });
     }
     else{
+*/
       // Show the image
       $(img).css({
         display: 'inline-block',
@@ -247,8 +249,9 @@ order_preview = {
         position: 'absolute',
         top: 0
       });
-    }
+//    }
 
+/*
     if(!frame_info){
       // Remove the frame
       $(frame).find('img').remove();
@@ -359,6 +362,7 @@ order_preview = {
       $('#preview-frame').width(frame_width);
       $('#preview-frame').height(frame_height);
     }
+*/
   },
 
   // Initialize the 8 elements that make the frame.
@@ -628,7 +632,7 @@ var image_cropper = {
 
     var frame_num = $('#line_item_moulding').val();
     var frame_name = order_preview.frame_alias[frame_num];
-    if (!(frame_name == 'canvas' || frame_name == 'plexi')){
+    //if (!(frame_name == 'canvas' || frame_name == 'plexi')){
       var dpi = 72;
       var size = $('#line_item_size-button .ui-selectmenu-status').text().split('x');
       var ratio_width = parseInt(size[0]) * dpi;
@@ -668,7 +672,7 @@ var image_cropper = {
       $("#preview-image").Jcrop(options, function(){
         image_cropper.jcrop_api = this;
       });
-    }
+    //}
   },
 
   removeJcrop: function(){
