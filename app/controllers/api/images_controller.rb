@@ -13,9 +13,6 @@ class Api::ImagesController < Api::BaseController
   #   sort_field
   #   sort_direction
   def index
-    logger.info("params=#{params}")
-    logger.info("filtered_params=#{filtered_params}")
-
     if gallery_id = filtered_params[:gallery_id]
       gallery = Gallery.find(gallery_id)
       images = gallery.images.unflagged.size
@@ -30,8 +27,6 @@ class Api::ImagesController < Api::BaseController
         #images = current_user.images.public_access.with_gallery.paginate_and_sort(filtered_params)
       end
     end
-
-    logger.info("images=#{images}")
 
     render json: images, meta: { total: images.size }
   end
@@ -54,7 +49,6 @@ class Api::ImagesController < Api::BaseController
   #   sort_field
   #   sort_direction
   def popular
-    logger.info("filtered_params=#{filtered_params}")
     images = Image.spotlight.paginate_and_sort(filtered_params)
     render json: images, meta: { total: images.size }
   end
@@ -90,9 +84,19 @@ class Api::ImagesController < Api::BaseController
     sizes = []
     MOULDING.each do |k, v|
       if MOULDING_PRICES[v]
-        image.printed_sizes.each { |s| sizes << { :id => image.id, :size => s.to_name, :mould => v, :price => image.get_price(v, s.to_name) }}
+        image.printed_sizes.each do |s| 
+          begin
+            size = Size.find_by_id(s)
+            mould = Moulding.find_by_id(v)
+            sizes << { :id => image.id, :size => size.to_name, :mould => v, :price => image.get_price(mould, size) } unless size.nil? || mould.nil?
+          rescue
+            logger.info "error"
+          end
+        end
       end
     end
+
+    logger.info("sizes=#{sizes}")
 
     render json: sizes
   end
@@ -177,8 +181,12 @@ class Api::ImagesController < Api::BaseController
     render json: result
   end
 
+  # GET /api/images/user_images
+  # params:
+  # => user_id
+  #
   def user_images
-    images = current_user.images
-    render json: images, root: :images, meta: { total: images.size }
+    images = Image.find_all_by_user_id(params[:user_id])
+    render json: images, root: :images, meta: { total: images.count }
   end
 end
