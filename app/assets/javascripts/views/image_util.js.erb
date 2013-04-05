@@ -143,7 +143,7 @@ order_preview = {
     '5': 'white',
     '6': 'light_wood',
     '7': 'rustic_wood',
-    '8': 'print_only_luster',
+    '8': 'print_only_luster'
   },
 
   // Image frames info
@@ -227,14 +227,18 @@ order_preview = {
     var frame = $('#preview-frame .image-frame');
     var img = $('#preview-frame > img.image');
 
+/*
     if(frame_name == 'canvas' || frame_name == 'plexi'){
+      // remove jcrop
+      image_cropper.removeJcrop();
       // Hide the image
       $(img).css('display', 'none');
       frame.css({
-        position: 'relative',
+        position: 'relative'
       });
     }
     else{
+*/
       // Show the image
       $(img).css({
         display: 'inline-block',
@@ -245,8 +249,9 @@ order_preview = {
         position: 'absolute',
         top: 0
       });
-    }
+//    }
 
+/*
     if(!frame_info){
       // Remove the frame
       $(frame).find('img').remove();
@@ -357,6 +362,7 @@ order_preview = {
       $('#preview-frame').width(frame_width);
       $('#preview-frame').height(frame_height);
     }
+*/
   },
 
   // Initialize the 8 elements that make the frame.
@@ -573,9 +579,9 @@ order_preview = {
   // This is the entry point of all other functions.
   setup: function(){
     // Change the frame
-    $('#line_item_moulding').change(function(){
-      order_preview.adjust_image_frame_sizes_with_num($(this).val());
-    });
+    //$('#line_item_moulding').change(function(){
+    //  order_preview.adjust_image_frame_sizes_with_num($(this).val());
+    //});
 
     // Change the image
     $('#line_item_size').change(function(){
@@ -588,21 +594,98 @@ order_preview = {
 
     // Force change the frame
     var img = $('#preview-frame > img.image');
-    $(img).load(function(){
+
+    $(img).one('load', function(){
       var img_size = image_util.detect_image_size($(this));
       // Store the image's original size
       $(img).attr('data-original-width', img_size.width);
-      $(img).attr('data-original-height', img_size.height)
+      $(img).attr('data-original-height', img_size.height);
 
       order_preview.adjust_image_frame_sizes_with_num($('#line_item_moulding').val());
+      // add cropper on image load
+      image_cropper.addJcrop();
+    }).each(function() {
+      // call load event if loaded from cache
+      if(this.complete) $(this).load();
     });
-
-    // In case the image was cached.
-    if($(img).prop('complete')){
-      $(img).load();
-    }
 
     // Force change on page-loading.
     $('#line_item_size').change();
+
+    // add cropper on size and moulding changes
+    $(document).on('change', '#line_item_size', function () {
+      image_cropper.addJcrop();
+    });
+  }
+};
+
+var image_cropper = {
+  jcrop_api: null,
+  x_shift_ratio: 1,
+  y_shift_ratio: 1,
+
+  addJcrop: function(){
+    if (image_cropper.jcrop_api){
+      image_cropper.jcrop_api.destroy();
+      image_cropper.jcrop_api = null;
+    }
+
+    var frame_num = $('#line_item_moulding').val();
+    var frame_name = order_preview.frame_alias[frame_num];
+    //if (!(frame_name == 'canvas' || frame_name == 'plexi')){
+      var dpi = 72;
+      var size = $('#line_item_size-button .ui-selectmenu-status').text().split('x');
+      var ratio_width = parseInt(size[0]) * dpi;
+      var ratio_height = parseInt(size[1]) * dpi;
+      var img_width = $('#preview-image').width();
+      var img_height = $('#preview-image').height();
+      image_cropper.x_shift_ratio = geometry.width / img_width;
+      image_cropper.y_shift_ratio = geometry.height / img_height;
+
+      var min_width = parseInt((img_width / geometry.width) * ratio_width);
+      var min_height = parseInt((img_height / geometry.height) * ratio_height);
+
+      if (cropped_dimensions.length == 0){
+        var x1 = parseInt(img_width/2 - min_width/2);
+        var x2 = x1 + min_width;
+        var y1 = parseInt(img_height/2 - min_height/2);
+        var y2 = y1 + min_height;
+      }
+      else {
+        var w = parseInt(cropped_dimensions[0] / image_cropper.x_shift_ratio);
+        var h = parseInt(cropped_dimensions[1] / image_cropper.y_shift_ratio);
+        var x1 = parseInt(cropped_dimensions[2] / image_cropper.x_shift_ratio);
+        var y1 = parseInt(cropped_dimensions[3] / image_cropper.y_shift_ratio);
+        var x2 = x1 + w;
+        var y2 = y1 + h;
+        // reset crop dimensions so that if user changes size again, it resets
+        cropped_dimensions = [];
+      }
+
+      var options = {
+        onChange: image_cropper.update_crop,
+        onSelect: image_cropper.update_crop,
+        aspectRatio: ratio_width/ratio_height,
+        minSize: [min_width, min_height],
+        setSelect: [x1, y1, x2, y2]
+      };
+      $("#preview-image").Jcrop(options, function(){
+        image_cropper.jcrop_api = this;
+      });
+    //}
+  },
+
+  removeJcrop: function(){
+    if (image_cropper.jcrop_api){
+      image_cropper.jcrop_api.destroy();
+      image_cropper.jcrop_api = null;
+    }
+  },
+
+  update_crop: function(coords){
+    $("#crop_x").val(Math.round(coords.x * image_cropper.x_shift_ratio));
+    $("#crop_y").val(Math.round(coords.y * image_cropper.y_shift_ratio));
+    $("#crop_w").val(Math.round(coords.w * image_cropper.x_shift_ratio));
+    $("#crop_h").val(Math.round(coords.h * image_cropper.y_shift_ratio));
   }
 };

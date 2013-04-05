@@ -17,6 +17,13 @@
     .text.black.bold.font18 Build Your Order
     .line-separator
     = simple_form_for(:line_item, :url => url_for(:controller => "shopping_cart", :action => "add_to_cart", :image_id => @image.id), :method => 'post', :html => { :id => 'order-details', :class => 'left' }) do |f|
+      - [:crop_x, :crop_y, :crop_w, :crop_h].each do |attr|
+        = f.hidden_field attr, id: attr
+
+      = hidden_field_tag :line_item_id, @line_item.id if @line_item
+
+      %h1 Instructions: Use the cropping tool visible in the photo to select the printable area for your order.
+      .line-separator.left
       .round-box.option.left.print-sizes-container
         .header.text.black.bold.font14= "Print Size"
         .item.left
@@ -51,3 +58,5 @@
   = javascript_tag do
     :erb
       var image_id = '<%= params[:id] %>';
+      var geometry = <%= {width: @image.image.width, height: @image.image.height}.to_json %>;
+      var cropped_dimensions = <%= @line_item.try(:cropped_dimensions).to_a %>;
