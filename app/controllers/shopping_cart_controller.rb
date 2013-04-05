@@ -20,13 +20,17 @@ class ShoppingCartController < ApplicationController
     if(image.nil? || image.image_flags.count > 0)
       flash[:warning] = "Your recent ordered image does not exist anymore."
       redirect_to :controller => :home, :action => :browse and return
-    elsif not valid_item?(params[:line_item])
+    elsif !valid_item?(params[:line_item])
       flash[:warning] = "Please fill all options first."
       redirect_to order_image_path(image) and return
     else
       product = Product.where(moulding_id: params[:line_item][:moulding], size_id: params[:line_item][:size]).first
 
-      line_item = @cart.order.line_items.new(image_id: image.id, product_id: product.id)
+      line_item = if params[:line_item_id].present?
+                    @cart.order.line_items.find(params[:line_item_id])
+                  else
+                    @cart.order.line_items.new(image_id: image.id, product_id: product.id)
+                  end
       line_item.quantity = params[:line_item][:quantity].to_i
       line_item.set_crop_dimension(params[:line_item])
 
