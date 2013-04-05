@@ -301,14 +301,14 @@ class ImagesController < ApplicationController
       render_not_found
     end
 
-    if params[:line_item].nil?
+    if params[:line_item].blank?
       if @image.blank?
         render_not_found
       elsif @image.gallery && !current_user.can_access?(@image.gallery)
         render_unauthorized
       end
     else
-      @line_item = LineItem.find_by_id params[:line_item]
+      @line_item = LineItem.find_by_id(params[:line_item])
     end
 
     @products = Product.in_sizes(@image.printed_sizes).all
