@@ -17,8 +17,8 @@ describe ProfileImage do
     context "execute after create callback" do
       it "should update default to true" do
         user = create(:user)
-        photo = create(:profile_image, :user_id => user.id)
-        photo1 = create(:profile_image, :user_id => user.id)
+        photo = create(:real_profile_image, :user_id => user.id)
+        photo1 = create(:real_profile_image, :user_id => user.id)
         photo1.default.should be_true
         photo.default.should be_true
       end
@@ -41,7 +41,7 @@ describe ProfileImage do
 
     context "with default" do
       it "should return true" do
-        profile_image1 = create(:profile_image, :default => true)
+        profile_image.update_attribute(:default, true)
         profile_image.current_avatar?.should be_true
       end
     end
