@@ -247,8 +247,6 @@ order_preview = {
         position: 'absolute',
         top: 0
       });
-      // add jcrop
-      image_cropper.addJcrop();
     }
 
     if(!frame_info){
@@ -577,9 +575,9 @@ order_preview = {
   // This is the entry point of all other functions.
   setup: function(){
     // Change the frame
-    $('#line_item_moulding').change(function(){
-      order_preview.adjust_image_frame_sizes_with_num($(this).val());
-    });
+    //$('#line_item_moulding').change(function(){
+    //  order_preview.adjust_image_frame_sizes_with_num($(this).val());
+    //});
 
     // Change the image
     $('#line_item_size').change(function(){
@@ -588,27 +586,32 @@ order_preview = {
         var img = $('#preview-frame > img.image');
         $(img).attr('src', url);
       }
-      image_cropper.addJcrop();
     });
 
     // Force change the frame
     var img = $('#preview-frame > img.image');
-    $(img).load(function(){
+
+    $(img).one('load', function(){
       var img_size = image_util.detect_image_size($(this));
       // Store the image's original size
       $(img).attr('data-original-width', img_size.width);
       $(img).attr('data-original-height', img_size.height);
 
       order_preview.adjust_image_frame_sizes_with_num($('#line_item_moulding').val());
+      // add cropper on image load
+      image_cropper.addJcrop();
+    }).each(function() {
+      // call load event if loaded from cache
+      if(this.complete) $(this).load();
     });
-
-    // In case the image was cached.
-    if($(img).prop('complete')){
-      $(img).load();
-    }
 
     // Force change on page-loading.
     $('#line_item_size').change();
+
+    // add cropper on size and moulding changes
+    $(document).on('change', '#line_item_size', function () {
+      image_cropper.addJcrop();
+    });
   }
 };
 
@@ -651,6 +654,8 @@ var image_cropper = {
         var y1 = parseInt(cropped_dimensions[3] / image_cropper.y_shift_ratio);
         var x2 = x1 + w;
         var y2 = y1 + h;
+        // reset crop dimensions so that if user changes size again, it resets
+        cropped_dimensions = [];
       }
 
       var options = {
@@ -663,8 +668,6 @@ var image_cropper = {
       $("#preview-image").Jcrop(options, function(){
         image_cropper.jcrop_api = this;
       });
-
-      $('#preview-image').hide();
     }
   },
 
