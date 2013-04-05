@@ -29,8 +29,9 @@ class ShoppingCartController < ApplicationController
       line_item = if params[:line_item_id].present?
                     @cart.order.line_items.find(params[:line_item_id])
                   else
-                    @cart.order.line_items.new(image_id: image.id, product_id: product.id)
+                    @cart.order.line_items.new(image_id: image.id)
                   end
+      line_item.product_id = product.id
       line_item.quantity = params[:line_item][:quantity].to_i
       line_item.set_crop_dimension(params[:line_item])
 
