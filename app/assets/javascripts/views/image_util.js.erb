@@ -575,9 +575,9 @@ order_preview = {
   // This is the entry point of all other functions.
   setup: function(){
     // Change the frame
-    $('#line_item_moulding').change(function(){
-      order_preview.adjust_image_frame_sizes_with_num($(this).val());
-    });
+    //$('#line_item_moulding').change(function(){
+    //  order_preview.adjust_image_frame_sizes_with_num($(this).val());
+    //});
 
     // Change the image
     $('#line_item_size').change(function(){
@@ -609,7 +609,7 @@ order_preview = {
     $('#line_item_size').change();
 
     // add cropper on size and moulding changes
-    $(document).on('change', '#line_item_moulding, #line_item_size', function () {
+    $(document).on('change', '#line_item_size', function () {
       image_cropper.addJcrop();
     });
   }
