@@ -143,8 +143,8 @@ ActiveRecord::Schema.define(:version => 20130401061825) do
     t.boolean  "plexi_mount",                                         :default => false
     t.string   "moulding"
     t.string   "size"
-    t.datetime "created_at",                                                           :null => false
-    t.datetime "updated_at",                                                           :null => false
+    t.datetime "created_at",                                                             :null => false
+    t.datetime "updated_at",                                                             :null => false
     t.float    "commission_percent"
     t.integer  "product_id"
     t.string   "crop_dimension"
