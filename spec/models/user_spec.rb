@@ -97,7 +97,7 @@ describe User do
   end
 
   it "has a default sort of username_asc" do
-    a = create(:user,:username => "rose" )
+    a = create(:user, :username => "rose" )
     b = create(:user, :username => "jane")
     klass.all.should == [b, a]
   end
