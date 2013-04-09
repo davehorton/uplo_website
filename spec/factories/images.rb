@@ -34,4 +34,10 @@ FactoryGirl.define do
     end
   end
 
+  factory :image_with_image_likes, :parent => :image do
+    after(:create) do |image|
+      create_list(:image_like, 3, :image => image)
+    end
+  end
+
 end
