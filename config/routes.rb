@@ -252,7 +252,7 @@ Uplo::Application.routes.draw do
       get 'check_following', :to => 'users#check_following'
       get 'get_notification_settings', :to => 'users#get_notification_settings'
       post 'update_notification_settings', :to => 'users#update_notification_settings'
-      post "check_emails", :to => "users#check_emails"
+      get "check_emails", :to => "users#check_emails"
       get 'payment_info', :to => "users#get_user_payment_info"
       post 'withdraw', :to => "users#withdraw"
       get 'card_info', :to => "users#get_user_card_info"

@@ -1,6 +1,8 @@
 class Api::ImagesController < Api::BaseController
-  skip_before_filter :require_login!, only: [:index]
+  skip_before_filter :require_login!, only: [:index, :popular]
+
   respond_to :html, only: [:sale_chart]
+  respond_to :json
 
   # GET /api/images
   # required:
@@ -20,11 +22,13 @@ class Api::ImagesController < Api::BaseController
       if user_id == current_user.id
         images = current_user.images.unflagged.with_gallery.paginate_and_sort(filtered_params)
       else
-        images = current_user.images.public_access.with_gallery.paginate_and_sort(filtered_params)
+        images = current_user.images.public_access
+        #images = current_user.images.public_access.with_gallery
+        #images = current_user.images.public_access.with_gallery.paginate_and_sort(filtered_params)
       end
     end
 
-    render json: images.to_json, meta: { total: images.size }
+    render json: images, meta: { total: images.size }
   end
 
   # GET /api/images/liked
@@ -35,7 +39,7 @@ class Api::ImagesController < Api::BaseController
   #   sort_direction
   def liked
     images = current_user.source_liked_images.paginate_and_sort(filtered_params)
-    render json: images.to_json, meta: { total: images.size }
+    render json: images, meta: { total: images.size }
   end
 
   # GET /api/images/popular
@@ -46,7 +50,7 @@ class Api::ImagesController < Api::BaseController
   #   sort_direction
   def popular
     images = Image.spotlight.paginate_and_sort(filtered_params)
-    render json: images.to_json, meta: { total: images.size }
+    render json: images, meta: { total: images.size }
   end
 
   # GET /api/images/search
@@ -59,7 +63,7 @@ class Api::ImagesController < Api::BaseController
   #   sort_direction
   def search
     images = Image.unflagged.where(id: filtered_params[:ids]).paginate_and_sort(filtered_params)
-    render json: images.to_json, meta: { total: images.size }
+    render json: images, meta: { total: images.size }
   end
 
   # GET /api/images/by_friends
@@ -70,7 +74,7 @@ class Api::ImagesController < Api::BaseController
   #   sort_direction
   def by_friends
     images = current_user.friends_images.popular_with_pagination(filtered_params)
-    render json: images.to_json, meta: { total: images.size }
+    render json: images, meta: { total: images.size }
   end
 
   # GET /api/images/:id/printed_sizes
@@ -80,11 +84,21 @@ class Api::ImagesController < Api::BaseController
     sizes = []
     MOULDING.each do |k, v|
       if MOULDING_PRICES[v]
-        image.printed_sizes.each { |s| sizes << { :id => image.id, :size => s.to_name, :mould => v, :price => image.get_price(v, s.to_name) }}
+        image.printed_sizes.each do |s| 
+          begin
+            size = Size.find_by_id(s)
+            mould = Moulding.find_by_id(v)
+            sizes << { :id => image.id, :size => size.to_name, :mould => v, :price => image.get_price(mould, size) } unless size.nil? || mould.nil?
+          rescue
+            logger.info "error"
+          end
+        end
       end
     end
 
-    render json: sizes.to_json
+    logger.info("sizes=#{sizes}")
+
+    render json: sizes
   end
 
   # POST /api/images
@@ -95,7 +109,7 @@ class Api::ImagesController < Api::BaseController
     image = current_user_gallery.images.unflagged.build(filtered_params[:image])
 
     if image.save
-      render json: image.to_json, status: :created
+      render json: image, status: :created
     else
       render json: { msg: image.errors.full_messages.to_sentence }, status: :bad_request
     end
@@ -106,7 +120,7 @@ class Api::ImagesController < Api::BaseController
   #   image
   def update
     if current_user_image.update_attributes(filtered_params[:image])
-      render json: image.to_json, status: :accepted
+      render json: image, status: :accepted
     else
       render json: { msg: image.errors.full_messages.to_sentence }, status: :bad_request
     end
@@ -121,13 +135,13 @@ class Api::ImagesController < Api::BaseController
   # POST /api/images/:id/like
   def like
     image = Image.unflagged.find(params[:id])
-    render json: current_user.like_image(image).to_json
+    render json: current_user.like_image(image)
   end
 
   # PUT /api/images/:id/unlike
   def unlike
     image = Image.unflagged.find(params[:id])
-    render json: current_user.unlike_image(image).to_json
+    render json: current_user.unlike_image(image)
   end
 
   # GET /api/images/:id/total_sales
@@ -164,11 +178,15 @@ class Api::ImagesController < Api::BaseController
   def flag_image
     image = Image.unflagged.find(params[:id])
     result = image.flag!(current_user, params)
-    render json: result.to_json
+    render json: result
   end
 
+  # GET /api/images/user_images
+  # params:
+  # => user_id
+  #
   def user_images
-    images = current_user.images
-    render json: images.to_json, meta: { total: images.size }
+    images = Image.find_all_by_user_id(params[:user_id])
+    render json: images, root: :images, meta: { total: images.count }
   end
 end

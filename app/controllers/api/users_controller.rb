@@ -78,6 +78,8 @@ class Api::UsersController < Api::BaseController
   #   username
   #   password
   def login
+    user = nil
+    pw = params[:password]
     # Sign out if signing in
     signed_in = signed_in?(:user)
     Devise.sign_out_all_scopes ? sign_out : sign_out(:user)
@@ -86,7 +88,6 @@ class Api::UsersController < Api::BaseController
     if user
       sign_in(:user, user)
       if params[:device_token].present?
-        logger.info("device_token=#{params[:device_token]}")
         device = UserDevice.find_by_device_token params[:device_token].to_s
         if device.nil?
           UserDevice.create({:user_id => user.id, :device_token => params[:device_token].to_s, :last_notified => Time.now()})
@@ -124,7 +125,7 @@ class Api::UsersController < Api::BaseController
   def get_total_sales
     user = current_user
     user_sales = user.total_sales(filtered_params)
-    render json: user_sales[:data], meta: { total: user_sales[:total_entries] }, status: :ok
+    render json: { data: user_sales[:data], total: user_sales[:total_entries] }, status: :ok
   end
 
   # GET /api/user_followers
@@ -164,20 +165,19 @@ class Api::UsersController < Api::BaseController
       render json: { msg: "You cannot follow yourself" }, status: :bad_request
     elsif !params[:follow].to_bool
       UserFollow.destroy_all({ :user_id => user.id, :followed_by => follower.id })
-      result[:success] = true
+      render json: { msg: "Follows removed" }, status: :ok
     elsif UserFollow.exists?({ :user_id => user.id, :followed_by => follower.id })
       render json: { msg: "You have already followed this user" }, status: :bad_request
     else
-      UserFollow.create({ :user_id => user.id, :followed_by => follower.id })
-      result[:success] = true
+      user_follow = UserFollow.create({ :user_id => user.id, :followed_by => follower.id })
+      render json: user_follow, status: :ok
     end
   end
 
   # /api/check_following
   # user_id: <user to check whether current user's follow it or not>
   def check_following
-    result = {}
-    user = User.find_by_id params[:user_id]
+    user = User.find_by_id(params[:user_id])
     if user.nil?
       render json: { msg: "This user does not exist" }, status: :bad_request
     else
@@ -295,9 +295,11 @@ class Api::UsersController < Api::BaseController
       result
     end
 
-    def authenticate_user(login, password)
-      user = User.find_by_username login
-      user = User.find_by_email login if user.nil?
+    def authenticate_user(username, password)
+      user = User.find_for_authentication(:username => username)
+      unless user.nil?
+        user = user.valid_password?(password) ? user : nil      
+      end
       user
     end
 
