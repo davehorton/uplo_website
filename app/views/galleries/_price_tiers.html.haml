@@ -1,4 +1,4 @@
--products = Product.in_sizes(image.printed_sizes).group_by(&:moulding)
+-products = Product.for_sizes(image.printed_sizes).group_by(&:moulding)
 
 = form_for(image, :url => tier_image_path(image), :method => :put, :html => { :id => 'frm-pricing', :class => 'left' }) do |f|
 
