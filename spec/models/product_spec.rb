@@ -19,17 +19,17 @@ describe Product do
   it { should validate_presence_of(:tier3_commission) }
   it { should validate_presence_of(:tier4_commission) }
 
-  describe ".in_sizes" do
+  describe ".for_sizes" do
     context "with matched sizes" do
       it "should return appropriate products" do
         product1 = create(:product, :size_id => size.id)
-        Product.in_sizes([size.id]).should == [product1]
+        Product.for_sizes([size.id]).should == [product1]
       end
     end
 
     context "with unmatched sizes" do
       it "should return blank array" do
-        Product.in_sizes([size.id]).should == []
+        Product.for_sizes([size.id]).should == []
       end
     end
   end

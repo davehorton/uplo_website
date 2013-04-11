@@ -15,7 +15,7 @@ class Product < ActiveRecord::Base
 
   default_scope joins(:size, :moulding).order('sizes.width, sizes.height, mouldings.id').readonly(false)
 
-  def self.in_sizes(sizes)
+  def self.for_sizes(sizes)
     where(size_id: sizes)
   end
 

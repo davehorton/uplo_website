@@ -7,6 +7,11 @@ FactoryGirl.define do
     image_file_name { 'test.jpg' }
     image_content_type { 'image/jpeg' }
     image_file_size { 128 }
+
+    after(:create) do |image|
+      # stub out image_meta data, see https://github.com/y8/paperclip-meta
+      image.image.stub(:width => 45, :height => 50, :size => 1000)
+    end
   end
 
   factory :real_image, :class => :image do

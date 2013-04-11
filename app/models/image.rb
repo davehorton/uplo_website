@@ -140,11 +140,25 @@ class Image < ActiveRecord::Base
   end
 
   def square?
-    Paperclip::Geometry.new(width, height).square?
+    Paperclip::Geometry.new(image.width, image.height).square?
   end
 
-  def printed_sizes
-    Product.all.map(&:size_id).uniq
+  def available_products
+    compatible_sizes = if square?
+      Size.square
+    else
+      Size.rectangular
+    end
+
+    Product.for_sizes(compatible_sizes)
+  end
+
+  def available_sizes
+    available_products.map(&:size).uniq
+  end
+
+  def available_mouldings
+    available_products.map(&:moulding).uniq
   end
 
   def comments_number

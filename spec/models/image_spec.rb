@@ -284,13 +284,19 @@ describe Image do
     end
   end
 
-  describe "#printed_sizes" do
+  describe "#available_products" do
+    pending 'implement'
+  end
+
+  describe "#available_sizes" do
     it "should return uniq array" do
       new_size = create(:size_with_products)
-      product1 = new_size.products.first
-      product2 = new_size.products.last
-      image.printed_sizes.should == [new_size.id]
+      image.available_sizes.should == [new_size]
     end
+  end
+
+  describe "#available_mouldings" do
+    pending 'implement'
   end
 
   describe "#comments_number" do

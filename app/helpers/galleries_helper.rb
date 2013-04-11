@@ -19,22 +19,6 @@ module GalleriesHelper
     return options_from_collection_for_select(collection, 'id', 'name', selected)
   end
 
-  def printed_sizes_options(image, selected = nil)
-    options = []
-    image.printed_sizes.each do |size|
-      options << [size.to_name, size, {'data-url' => image.url("scale_preview#{size.to_name}")}]
-    end
-    options_for_select(options, selected)
-  end
-
-  def moulding_options(selected = nil)
-    options = []
-    MOULDING.each do |k, v|
-      options << [MOULDING_DISPLAY[v], v]
-    end
-    options_for_select(options, selected)
-  end
-
   def gallery_cover_image_url(gallery)
     img_url = "#{root_url}/assets/gallery-thumb-180.jpg" # Default image.
     image = gallery.cover_image
