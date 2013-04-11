@@ -92,7 +92,34 @@ describe Image do
   end
 
   describe "#flag" do
-    pending "need to see user model for this"
+    context "when user equals flagged by user" do
+      it "should return message" do
+        image.flag!(image.user).should == {:success=>false, :msg=>"You cannot flag your own image."}
+      end
+    end
+
+    context "when image has image_flags" do
+      it "should return message" do
+        user1 = create(:user)
+        img = create(:image_with_image_flags)
+        img.flag!(user1).should == {:success=>false, :msg=>"This image is already flagged."}
+      end
+    end
+
+    context "when image not successfully flagged" do
+      it "should return" do
+        user1 = create(:user)
+        image.flag!(user1).should == {:success=>false, :msg=>"Flag type cannot be blank, Description Unknown violation type!"}
+      end
+    end
+
+    context "when image successfully flagged" do
+      it "should return" do
+        user1 = create(:user)
+        image.flag!(user1, { :type => 1, :desc => "hello" }).should == {:success=>true}
+        user1.banned.should be_false
+      end
+    end
   end
 
   describe ".search_scope" do
@@ -175,7 +202,7 @@ describe Image do
     context "with sort expression" do
       it "should display output" do
         images = create_list(:image, 10)
-        Image.paginate_and_sort({ :page => 1, :per_page => 5}).should == images.reverse.first(5)
+        Image.popular_with_pagination({ :page => 1, :per_page => 5}).should == images.reverse.first(5)
       end
     end
   end
@@ -247,6 +274,13 @@ describe Image do
         img = create(:image)
         img.sample_product_price.should == "Unknown"
       end
+    end
+  end
+
+  describe "#square" do
+    it "should return true" do
+      image1 = create(:real_image, :height => 40, :width => 40)
+      image1.square?.should be_true
     end
   end
 
