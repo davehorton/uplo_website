@@ -285,7 +285,23 @@ describe Image do
   end
 
   describe "#available_products" do
-    pending 'implement'
+    context "when compatible sizes are square" do
+      it "should return appropriate products" do
+        square_size = create(:size, :height => 8, :width => 8)
+        img = create(:image, :height => 40, :width => 40)
+        product1 = create(:product, :size_id => square_size.id)
+        img.available_products.should == [product1]
+      end
+    end
+
+    context "when compatible sizes are rectangular" do
+      it "should return appropriate products" do
+        rect_size = create(:size, :height => 12, :width => 8)
+        image.update_attributes(:height => 50, :width => 40)
+        product1 = create(:product, :size_id => rect_size.id)
+        image.available_products.should == [product1]
+      end
+    end
   end
 
   describe "#available_sizes" do
@@ -296,7 +312,10 @@ describe Image do
   end
 
   describe "#available_mouldings" do
-    pending 'implement'
+    it "should return uniq array" do
+      new_moulding = create(:moulding_with_products)
+      image.available_mouldings.should == [new_moulding]
+    end
   end
 
   describe "#comments_number" do
