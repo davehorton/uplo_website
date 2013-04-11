@@ -216,7 +216,7 @@ Uplo::Application.routes.draw do
 
       member do
         post :like
-        get  :printed_sizes
+        get  :ordering_options
         get  :purchases
         get  :sale_chart
         get  :total_sales

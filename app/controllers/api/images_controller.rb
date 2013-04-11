@@ -77,28 +77,10 @@ class Api::ImagesController < Api::BaseController
     render json: images, meta: { total: images.size }
   end
 
-  # GET /api/images/:id/printed_sizes
-  def printed_sizes
+  # GET /api/images/:id/ordering_options
+  def ordering_options
     image = Image.unflagged.find(filtered_params[:id])
-
-    sizes = []
-    MOULDING.each do |k, v|
-      if MOULDING_PRICES[v]
-        image.printed_sizes.each do |s| 
-          begin
-            size = Size.find_by_id(s)
-            mould = Moulding.find_by_id(v)
-            sizes << { :id => image.id, :size => size.to_name, :mould => v, :price => image.get_price(mould, size) } unless size.nil? || mould.nil?
-          rescue
-            logger.info "error"
-          end
-        end
-      end
-    end
-
-    logger.info("sizes=#{sizes}")
-
-    render json: sizes
+    render json: ImageSerializer.new(image).ordering_options
   end
 
   # POST /api/images
