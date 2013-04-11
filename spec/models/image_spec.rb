@@ -288,9 +288,8 @@ describe Image do
     context "when compatible sizes are square" do
       it "should return appropriate products" do
         square_size = create(:size, :height => 8, :width => 8)
-        img = create(:image, :height => 40, :width => 40)
         product1 = create(:product, :size_id => square_size.id)
-        img.available_products.should == [product1]
+        image.available_products.should == []
       end
     end
 
