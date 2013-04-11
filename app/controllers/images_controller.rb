@@ -311,9 +311,8 @@ class ImagesController < ApplicationController
       @line_item = LineItem.find_by_id(params[:line_item])
     end
 
-    @products = Product.for_sizes(@image.printed_sizes).all
-    @sizes = @products.map(&:size).uniq
-    @mouldings = @products.map(&:moulding).uniq
+    @sizes = @image.available_sizes
+    @mouldings = @image.mouldings
   end
 
   def price
