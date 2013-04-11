@@ -2,7 +2,7 @@ class Api::UsersController < Api::BaseController
   include Devise::Controllers::InternalHelpers
 
   respond_to :json
-  
+
   skip_before_filter :require_login!, only: [:login, :create_user, :reset_password, :request_invitation]
 
   # GET /api/user_info
@@ -97,7 +97,7 @@ class Api::UsersController < Api::BaseController
         end
       end
       render json: user, :status => :ok
-    else 
+    else
       render json: { msg: "Invalid credentials"}, status: :bad_request
     end
   end
@@ -250,14 +250,14 @@ class Api::UsersController < Api::BaseController
 
   # GET /api/card_info
   def get_user_card_info
-    render json: { card_info: { name_on_card: current_user.name_on_card, card_type: current_user.card_type, 
-      card_number: current_user.card_number, expiration: current_user.expiration.present? ? Date.parse(current_user.expiration).strftime("%m/%Y") : '', 
+    render json: { card_info: { name_on_card: current_user.name_on_card, card_type: current_user.card_type,
+      card_number: current_user.card_number, expiration: current_user.expiration.present? ? Date.parse(current_user.expiration).strftime("%m/%Y") : '',
       cvv: current_user.cvv }}, status: :ok
   end
 
   # GET /api/get_moulding
   def get_moulding
-    render json: { moulding: MOULDING, discount: MOULDING_DISCOUNT}, status: :ok
+    render json: { moulding: Product.all.map(&:moulding).uniq, discount: []}, status: :ok
   end
 
   # POST /api/withdraw
@@ -298,7 +298,7 @@ class Api::UsersController < Api::BaseController
     def authenticate_user(username, password)
       user = User.find_for_authentication(:username => username)
       unless user.nil?
-        user = user.valid_password?(password) ? user : nil      
+        user = user.valid_password?(password) ? user : nil
       end
       user
     end

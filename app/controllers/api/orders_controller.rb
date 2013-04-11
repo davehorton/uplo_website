@@ -25,12 +25,6 @@ class Api::OrdersController < Api::BaseController
     elsif not valid_item?(item_info)
       @result[:success] = false
       @result[:msg] = "Please fill all options first."
-
-    #check moulding & size constrain
-    elsif MOULDING_SIZES_CONSTRAIN.has_key?(item_info[:moulding]) and MOULDING_SIZES_CONSTRAIN[item_info[:moulding]].index(item_info[:size])
-      @result[:success] = false
-      @result[:msg] = "The mould is not compatible with this size. Please change your options."
-
     else
       line_item = current_user.init_cart.order.line_items.find(:first, :conditions => ["image_id = ? AND size = ? AND moulding = ?",item_info[:image_id], item_info['size'],  item_info['moulding']])
       if (line_item)
@@ -72,12 +66,6 @@ class Api::OrdersController < Api::BaseController
     elsif not valid_item?(item_info)
       @result[:success] = false
       @result[:msg] = "Please fill all options first."
-
-    #check moulding & size constrain
-    elsif MOULDING_SIZES_CONSTRAIN.has_key?(item_info[:moulding]) and MOULDING_SIZES_CONSTRAIN[item_info[:moulding]].index(item_info[:size])
-      @result[:success] = false
-      @result[:msg] = "The mould is not compatible with this size. Please change your options."
-
     else
       image = item.image
       item.attributes = item_info
