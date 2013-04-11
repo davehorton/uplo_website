@@ -312,7 +312,7 @@ class ImagesController < ApplicationController
     end
 
     @sizes = @image.available_sizes
-    @mouldings = @image.mouldings
+    @mouldings = @image.available_mouldings
   end
 
   def price
