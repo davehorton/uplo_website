@@ -74,17 +74,17 @@ class PaymentsController < ApplicationController
         redirect_to pp_gateway.redirect_url_for(setup_response.token)
       when "an"
         order_info = params[:order]
-        address_required_info = ['first_name', 'last_name', 'street_address', 'city', 'zip', 'state']
-        card_required_info = ['name_on_card', 'card_type', 'card_number', 'expiration(1i)', 'expiration(2i)']
 
-        card_required_info.each { |val|
-          if !params[:order].has_key?(val) || params[:order][val].blank?
-            flash[:error] = "Please fill all required fields first!"
-            redirect_to :controller => 'orders', :action => 'index' and return
-          end
-        }
+        credit_card = CreditCard.build_card_from_param(order_info)
+        unless credit_card.valid?
+          flash[:error] = "Please fill all required fields first!"
+          redirect_to :controller => 'orders', :action => 'index' and return
+        end
+        order_info[:card_number] = credit_card.display_number
+        order_info[:cvv] = "***"
+
         @remove_shipping_info = false
-        unless order_info['ship_to_billing'].blank? || !order_info['ship_to_billing']
+        if order_info['ship_to_billing'].present?
           order_info[:shipping_address_attributes] = order_info[:billing_address_attributes]
           @remove_shipping_info = true
         end
@@ -94,13 +94,11 @@ class PaymentsController < ApplicationController
         # UPDATE PAYMENT INFO TO ORDER
 
 
-        expires_on = Date.civil(order_info["expiration(1i)"].to_i,
-                         order_info["expiration(2i)"].to_i, 1)
+        expires_on = Date.civil(Date.civil(credit_card.expiry_date.year, credit_card.expiry_date.month, 1))
         order_info[:expiration] = expires_on.strftime("%m-%Y")
         order_info.delete "expiration(1i)"
         order_info.delete "expiration(2i)"
         order_info.delete "expiration(3i)"
-        card_string = order_info["card_number"]
 
         @order = Order.find_by_id params[:order_id]
 
@@ -111,11 +109,12 @@ class PaymentsController < ApplicationController
           @order.compute_totals
 
           if current_user.update_profile(order_info)
-            an_value = Payment.create_authorizenet_test(card_string, expires_on, {:shipping => order_info[:shipping_address_attributes], :address => order_info[:billing_address_attributes]})
+            an_value = Payment.create_authorizenet_test(credit_card.number, expires_on, {:shipping => order_info[:shipping_address_attributes], :address => order_info[:billing_address_attributes]})
             response = an_value[:transaction].purchase(@order.order_total, an_value[:credit_card])
 
             success = !response.nil? && response.success?
             if success
+              PaymentProfile.setup_for_user(current_user, credit_card)
               finalize_cart
               flash[:success] = "Successfully made a purchase (authorization code: #{response.authorization_code})"
               redirect_to :action => :checkout_result, :trans_id => response.transaction_id and return

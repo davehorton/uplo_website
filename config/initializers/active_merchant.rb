@@ -23,3 +23,10 @@ AN_HASH_VALUE = "a3317f627b92eef9b6126b7a50e196c3"
 ActionView::Base.send(:include, ActiveMerchant::Billing::Integrations::ActionViewHelper)
 
 PAYPAL_API_URL = "https://www.sandbox.paypal.com/cgi-bin/webscr"
+
+
+::GATEWAY = ActiveMerchant::Billing::AuthorizeNetCimGateway.new(
+  login:    AN_LOGIN_ID,
+  password: AN_TRANS_KEY,
+  test:     true
+)

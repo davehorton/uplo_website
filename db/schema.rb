@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130401061825) do
+ActiveRecord::Schema.define(:version => 20130412122018) do
 
   create_table "addresses", :force => true do |t|
     t.string   "first_name"
@@ -262,18 +262,18 @@ ActiveRecord::Schema.define(:version => 20130401061825) do
   end
 
   create_table "users", :force => true do |t|
-    t.string   "first_name",                                               :null => false
-    t.string   "last_name",                                                :null => false
+    t.string   "first_name",                                                    :null => false
+    t.string   "last_name",                                                     :null => false
     t.string   "username"
     t.datetime "birthday"
     t.string   "nationality"
     t.string   "gender"
-    t.string   "email",                                 :default => "",    :null => false
-    t.string   "encrypted_password",     :limit => 128, :default => "",    :null => false
+    t.string   "email",                                      :default => "",    :null => false
+    t.string   "encrypted_password",          :limit => 128, :default => "",    :null => false
     t.string   "reset_password_token"
     t.datetime "reset_password_sent_at"
     t.datetime "remember_created_at"
-    t.integer  "sign_in_count",                         :default => 0
+    t.integer  "sign_in_count",                              :default => 0
     t.datetime "current_sign_in_at"
     t.datetime "last_sign_in_at"
     t.string   "current_sign_in_ip"
@@ -282,16 +282,16 @@ ActiveRecord::Schema.define(:version => 20130401061825) do
     t.datetime "confirmed_at"
     t.datetime "confirmation_sent_at"
     t.string   "authentication_token"
-    t.boolean  "delta",                                 :default => true,  :null => false
+    t.boolean  "delta",                                      :default => true,  :null => false
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "twitter"
     t.string   "facebook"
     t.text     "biography"
     t.string   "website"
-    t.boolean  "admin",                                 :default => false
-    t.boolean  "removed",                               :default => false
-    t.boolean  "banned",                                :default => false
+    t.boolean  "admin",                                      :default => false
+    t.boolean  "removed",                                    :default => false
+    t.boolean  "banned",                                     :default => false
     t.string   "paypal_email"
     t.string   "location"
     t.string   "job"
@@ -302,9 +302,9 @@ ActiveRecord::Schema.define(:version => 20130401061825) do
     t.string   "cvv"
     t.integer  "shipping_address_id"
     t.integer  "billing_address_id"
-    t.boolean  "facebook_enabled",                      :default => false
-    t.boolean  "twitter_enabled",                       :default => false
-    t.float    "withdrawn_amount",                      :default => 0.0
+    t.boolean  "facebook_enabled",                           :default => false
+    t.boolean  "twitter_enabled",                            :default => false
+    t.float    "withdrawn_amount",                           :default => 0.0
     t.string   "facebook_token"
     t.string   "twitter_token"
     t.string   "flickr_token"
@@ -313,9 +313,11 @@ ActiveRecord::Schema.define(:version => 20130401061825) do
     t.string   "twitter_secret_token"
     t.string   "tumblr_secret_token"
     t.string   "flickr_secret_token"
-    t.boolean  "photo_processing",                      :default => false
-    t.integer  "image_likes_count",                     :default => 0
-    t.integer  "images_count",                          :default => 0
+    t.boolean  "photo_processing",                           :default => false
+    t.integer  "image_likes_count",                          :default => 0
+    t.integer  "images_count",                               :default => 0
+    t.integer  "billing_system_profile_id"
+    t.integer  "customer_payment_profile_id"
   end
 
   add_index "users", ["banned"], :name => "index_users_on_banned"
