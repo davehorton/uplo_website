@@ -1,5 +1,5 @@
 class Api::ImagesController < Api::BaseController
-  skip_before_filter :require_login!, only: [:index, :popular]
+  skip_before_filter :require_login!, only: [:index, :mouldings, :popular]
 
   respond_to :html, only: [:sale_chart]
   respond_to :json
@@ -170,5 +170,10 @@ class Api::ImagesController < Api::BaseController
   def user_images
     images = Image.find_all_by_user_id(params[:user_id])
     render json: images, root: :images, meta: { total: images.count }
+  end
+
+  # GET /api/images/mouldings
+  def mouldings
+    render json: Product.all.map(&:moulding).uniq, root: 'mouldings'
   end
 end

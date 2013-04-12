@@ -209,6 +209,7 @@ Uplo::Application.routes.draw do
       collection do
         get :by_friends
         get :liked
+        get :mouldings
         get :popular
         get :search
         get :user_images
@@ -256,7 +257,6 @@ Uplo::Application.routes.draw do
       get 'payment_info', :to => "users#get_user_payment_info"
       post 'withdraw', :to => "users#withdraw"
       get 'card_info', :to => "users#get_user_card_info"
-      get 'get_moulding', :to => 'users#get_moulding'
       post 'request_invitation', :to => 'users#request_invitation'
     end
   end

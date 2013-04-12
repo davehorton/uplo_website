@@ -255,11 +255,6 @@ class Api::UsersController < Api::BaseController
       cvv: current_user.cvv }}, status: :ok
   end
 
-  # GET /api/get_moulding
-  def get_moulding
-    render json: { moulding: Product.all.map(&:moulding).uniq, discount: []}, status: :ok
-  end
-
   # POST /api/withdraw
   # Params
   # amount => float
