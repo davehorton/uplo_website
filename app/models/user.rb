@@ -207,10 +207,11 @@ class User < ActiveRecord::Base
   # Override attribute setter.
   def birthday=(date)
     if date.is_a?(String)
-      date = DateTime.strptime(String, I18n.t("date.formats.default"))
+      date = DateTime.strptime(date, I18n.t("date.formats.default"))
       date = date.to_date if date
     end
     self[:birthday] = date
+    self.save!
   end
 
   def update_profile(params)

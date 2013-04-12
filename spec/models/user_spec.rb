@@ -121,6 +121,11 @@ describe User do
     User.confirmed.should == [one_user]
   end
 
+  it "has a reinstate_ready_users scope" do
+    another_user = create(:user_with_gallery, :banned => true)
+    User.reinstate_ready_users.should == [another_user]
+  end
+
   describe ".search_scope" do
     context "when query first name present" do
       it "should return searched results" do
@@ -170,6 +175,14 @@ describe User do
       end
     end
 
+    context "with username as sort field" do
+      it "should display output" do
+        user1 = create(:user, :username => "test")
+        user.update_attribute(:username , "demo")
+        User.paginate_and_sort({ :page => 1, :per_page => 2, :sort_field => "username"}).should == [user1, user]
+      end
+    end
+
     context "with num of likes as sort field" do
       it "should display output" do
         user1 = create(:user, :image_likes_count=> 3)
@@ -188,11 +201,37 @@ describe User do
   end
 
   describe ".remove_flagged_users" do
-    pending "add examples"
+    context "when banned" do
+      it "should update removed attribute" do
+        another_user = create(:user_with_gallery, :banned => true)
+        User.remove_flagged_users.should == [another_user]
+        another_user.removed.should be_false
+      end
+    end
+
+    context "when not banned" do
+      it "should update removed attribute" do
+        another_user = create(:user_with_gallery)
+        User.remove_flagged_users.should == []
+      end
+    end
   end
 
   describe ".reinstate_flagged_users" do
-    pending "add examples"
+    context "when banned" do
+      it "should return banned true" do
+        another_user = create(:user_with_gallery, :banned => true)
+        User.reinstate_flagged_users.should == [another_user]
+        another_user.banned.should be_true
+      end
+    end
+
+    context "when not banned" do
+      it "should return blank array" do
+        another_user = create(:user_with_gallery)
+        User.reinstate_flagged_users.should == []
+      end
+    end
   end
 
   describe "#liked_images" do
@@ -236,7 +275,19 @@ describe User do
   end
 
   describe "#birthday" do
-    pending "method seemd broken if date is a string"
+    context "when date is a string" do
+      it "should save birthday" do
+        user.birthday=("03/04/2013")
+        user.birthday.should == "Mon, 04 Mar 2013".to_date
+      end
+    end
+
+    context "when date is not a string" do
+      it "should save birthday" do
+        user.birthday=("Mon, 04 Mar 2013".to_date)
+        user.birthday.should == "Mon, 04 Mar 2013".to_date
+      end
+    end
   end
 
   describe "update_profile" do
@@ -346,15 +397,19 @@ describe User do
       end
 
       it "should return image if conditions are met" do
-        profile_image = create(:profile_image, :user_id => user.id)
-        user.avatar.should == profile_image
+        user1 = create(:user)
+        profile_image = create(:profile_image, :user_id => user1.id)
+        user1.avatar.should == profile_image
       end
     end
   end
 
   describe "#init_cart" do
     context "with cart nil" do
-      pending "create_cart seems broken"
+      it "should create a new cart" do
+        user.init_cart
+        user.cart.should == Cart.last
+      end
     end
 
     context "with cart" do

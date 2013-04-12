@@ -92,7 +92,34 @@ describe Image do
   end
 
   describe "#flag" do
-    pending "need to see user model for this"
+    context "when user equals flagged by user" do
+      it "should return message" do
+        image.flag!(image.user).should == {:success=>false, :msg=>"You cannot flag your own image."}
+      end
+    end
+
+    context "when image has image_flags" do
+      it "should return message" do
+        user1 = create(:user)
+        img = create(:image_with_image_flags)
+        img.flag!(user1).should == {:success=>false, :msg=>"This image is already flagged."}
+      end
+    end
+
+    context "when image not successfully flagged" do
+      it "should return" do
+        user1 = create(:user)
+        image.flag!(user1).should == {:success=>false, :msg=>"Flag type cannot be blank, Description Unknown violation type!"}
+      end
+    end
+
+    context "when image successfully flagged" do
+      it "should return" do
+        user1 = create(:user)
+        image.flag!(user1, { :type => 1, :desc => "hello" }).should == {:success=>true}
+        user1.banned.should be_false
+      end
+    end
   end
 
   describe ".search_scope" do
@@ -175,7 +202,7 @@ describe Image do
     context "with sort expression" do
       it "should display output" do
         images = create_list(:image, 10)
-        Image.paginate_and_sort({ :page => 1, :per_page => 5}).should == images.reverse.first(5)
+        Image.popular_with_pagination({ :page => 1, :per_page => 5}).should == images.reverse.first(5)
       end
     end
   end
@@ -250,12 +277,30 @@ describe Image do
     end
   end
 
-  describe "#square?" do
-    pending 'implement'
+  describe "#square" do
+    it "should return true" do
+      image1 = create(:real_image, :height => 40, :width => 40)
+      image1.square?.should be_true
+    end
   end
 
   describe "#available_products" do
-    pending 'implement'
+    context "when compatible sizes are square" do
+      it "should return appropriate products" do
+        square_size = create(:size, :height => 8, :width => 8)
+        product1 = create(:product, :size_id => square_size.id)
+        image.available_products.should == []
+      end
+    end
+
+    context "when compatible sizes are rectangular" do
+      it "should return appropriate products" do
+        rect_size = create(:size, :height => 12, :width => 8)
+        image.update_attributes(:height => 50, :width => 40)
+        product1 = create(:product, :size_id => rect_size.id)
+        image.available_products.should == [product1]
+      end
+    end
   end
 
   describe "#available_sizes" do
@@ -266,7 +311,10 @@ describe Image do
   end
 
   describe "#available_mouldings" do
-    pending 'implement'
+    it "should return uniq array" do
+      new_moulding = create(:moulding_with_products)
+      image.available_mouldings.should == [new_moulding]
+    end
   end
 
   describe "#comments_number" do
