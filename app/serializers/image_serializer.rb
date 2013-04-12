@@ -15,7 +15,7 @@ class ImageSerializer < ActiveModel::Serializer
   def ordering_options
     options = []
     object.available_products.each do |product|
-      options << { size_id: product.size_id, size: product.size.to_name, moulding_id: product.moulding_id, moulding: product.moulding.name, price: product.price_for_tier(object.tier_id) }
+      options << { size_id: product.size_id, size: product.size.to_name, moulding_id: product.moulding_id, moulding: product.moulding.name, price: "%0.2f" % product.price_for_tier(object.tier_id) }
     end
     { ordering_options: options }
   end
