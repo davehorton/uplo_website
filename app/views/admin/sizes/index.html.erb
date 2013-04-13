@@ -14,12 +14,12 @@
 
 <div id="actions">
   <%= link_to "Back to Products", admin_products_path %>
-  <%= link_to "Add New Size", new_admin_size_path %>
+  <%= link_to "Add New Print Size", new_admin_size_path %>
 </div>
 
 <ul>
   <% @sizes.each do |size| %>
-    <li><%= link_to size.to_name, edit_admin_size_path(size) %> (<%= size.width %> x <%= size.height %>)</li>
+    <li><%= link_to "#{size.to_name} (#{size.to_recommended_pixels})", edit_admin_size_path(size) %></li>
   <% end %>
 </ul>
 
