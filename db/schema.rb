@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130401061825) do
+ActiveRecord::Schema.define(:version => 20130413073942) do
 
   create_table "addresses", :force => true do |t|
     t.string   "first_name"
@@ -104,8 +104,6 @@ ActiveRecord::Schema.define(:version => 20130401061825) do
     t.string   "image_content_type"
     t.integer  "image_file_size"
     t.datetime "image_updated_at"
-    t.integer  "width"
-    t.integer  "height"
     t.string   "keyword"
     t.boolean  "owner_avatar",       :default => false
     t.boolean  "removed",            :default => false
@@ -231,8 +229,10 @@ ActiveRecord::Schema.define(:version => 20130401061825) do
   create_table "sizes", :force => true do |t|
     t.integer  "width"
     t.integer  "height"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
+    t.datetime "created_at",                 :null => false
+    t.datetime "updated_at",                 :null => false
+    t.integer  "minimum_recommended_width"
+    t.integer  "minimum_recommended_height"
   end
 
   create_table "tags", :force => true do |t|

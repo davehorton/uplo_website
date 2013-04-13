@@ -26,12 +26,14 @@ class Image < ActiveRecord::Base
     },
     default_url: "/assets/gallery-thumb.jpg"
 
+  process_in_background :image
+
   validates_attachment_presence :image,
     :size => { :in => 0..100.megabytes, :message => 'File size cannot exceed 100MB' },
     :content_type => { :content_type => [ 'image/jpeg','image/jpg' ],
     :message => 'File must have an extension of .jpeg or .jpg' }, :on => :create
 
-  process_in_background :image
+  validate :minimum_dimensions_are_met, on: :create
 
   before_create  :set_name,
                  :set_tier,
@@ -150,6 +152,13 @@ class Image < ActiveRecord::Base
     else
       Size.rectangular
     end
+
+    compatible_sizes.select! do |size|
+      self.image.width  >= size.minimum_recommended_resolution[:w] &&
+      self.image.height >= size.minimum_recommended_resolution[:h]
+    end
+
+    raise 'No compatible sizes!' if compatible_sizes.empty?
 
     Product.for_sizes(compatible_sizes)
   end
@@ -382,6 +391,17 @@ class Image < ActiveRecord::Base
   end
 
   protected
+
+    def minimum_dimensions_are_met
+      file = image.queued_for_write[:original]
+      geo = Paperclip::Geometry.from_file(file)
+
+      smallest_size = Size.first
+      if geo.width < smallest_size.minimum_recommended_resolution[:w] ||
+         geo.height < smallest_size.minimum_recommended_resolution[:h]
+         errors.add(:base, "Image should be at least #{smallest_size.minimum_recommended_resolution[:w]} x #{smallest_size.minimum_recommended_resolution[:h]}")
+      end
+    end
 
     def ensure_not_associated_with_an_order
       return false if orders.any?
