@@ -140,7 +140,8 @@ class Image < ActiveRecord::Base
   end
 
   def square?
-    Paperclip::Geometry.new(image.width, image.height).square?
+    geometry = Paperclip::Geometry.new(image.width, image.height)
+    Paperclip::Geometry.new(geometry.larger, geometry.smaller).aspect < 1.2
   end
 
   def available_products

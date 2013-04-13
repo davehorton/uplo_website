@@ -277,10 +277,25 @@ describe Image do
     end
   end
 
-  describe "#square" do
-    it "should return true" do
-      image1 = create(:real_image, :height => 40, :width => 40)
-      image1.square?.should be_true
+  describe "#square?" do
+    context "when pure square" do
+      before { subject.image.stub(:width => 50, :height => 50) }
+      its(:square?) { should be_true }
+    end
+
+    context "when rectangular" do
+      before { subject.image.stub(:width => 50, :height => 100) }
+      its(:square?) { should be_false }
+    end
+
+    context "when slightly square" do
+      before { subject.image.stub(:width => 50, :height => 59) }
+      its(:square?) { should be_true }
+    end
+
+    context "when slightly square, longer width" do
+      before { subject.image.stub(:width => 59, :height => 50) }
+      its(:square?) { should be_true }
     end
   end
 
