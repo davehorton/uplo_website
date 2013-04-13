@@ -7,6 +7,13 @@ describe Image do
   let(:square_product) { create(:product, size: square_size) }
   let(:rectangular_product) { create(:product, size: rectangular_size) }
 
+  before do
+    square_size
+    rectangular_size
+    square_product
+    rectangular_product
+  end
+
   it { should belong_to(:active_user) }
   it { should belong_to(:user) }
   it { should belong_to(:gallery) }
@@ -269,12 +276,14 @@ describe Image do
     context "when tier id matches" do
       it "should return price" do
         product = create(:product)
-        img = create(:image, :tier_id => 1)
+        img = create(:image, tier_id: 1)
         img.sample_product_price.to_i.should == 500
       end
     end
+
     context "when tier id does not match" do
       it "should return unknown" do
+        Product.delete_all
         img = create(:image)
         img.sample_product_price.should == "Unknown"
       end
@@ -304,13 +313,6 @@ describe Image do
   end
 
   describe "#available_products" do
-    before do
-      square_size
-      rectangular_size
-      square_product
-      rectangular_product
-    end
-
     context "for a square image" do
       it "should return appropriate products" do
         create(:image, square_aspect_ratio: true).available_products.should == [square_product]
@@ -325,22 +327,12 @@ describe Image do
   end
 
   describe "#available_sizes" do
-    before do
-      square_size
-      square_product
-    end
-
     it "should return uniq array" do
       image.available_sizes.should == [square_size]
     end
   end
 
   describe "#available_mouldings" do
-    before do
-      square_size
-      square_product
-    end
-
     it "should return uniq array" do
       image.available_mouldings.should == [square_product.moulding]
     end

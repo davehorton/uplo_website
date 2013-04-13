@@ -141,8 +141,10 @@ class Image < ActiveRecord::Base
     Product.first.try(:price_for_tier, tier_id) || 'Unknown'
   end
 
-  def square?
-    geometry = Paperclip::Geometry.new(image.width, image.height)
+  def square?(width = nil, height = nil)
+    width ||= image.width
+    height ||= image.height
+    geometry = Paperclip::Geometry.new(width, height)
     Paperclip::Geometry.new(geometry.larger, geometry.smaller).aspect < 1.2
   end
 
@@ -394,9 +396,11 @@ class Image < ActiveRecord::Base
 
     def minimum_dimensions_are_met
       file = image.queued_for_write[:original]
+      return true if file.nil?
       geo = Paperclip::Geometry.from_file(file)
 
-      smallest_size = Size.first
+      smallest_size = square?(geo.width, geo.height) ? Size.square.first : Size.rectangular.first
+
       if geo.width < smallest_size.minimum_recommended_resolution[:w] ||
          geo.height < smallest_size.minimum_recommended_resolution[:h]
          errors.add(:base, "Image should be at least #{smallest_size.minimum_recommended_resolution[:w]} x #{smallest_size.minimum_recommended_resolution[:h]}")

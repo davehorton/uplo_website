@@ -12,6 +12,16 @@ FactoryGirl.define do
       square_aspect_ratio true
     end
 
+    before(:create) do |img, evaluator|
+      if evaluator.square_aspect_ratio
+        geo = Paperclip::Geometry.new(1200, 1200)
+      else
+        geo = Paperclip::Geometry.new(1200, 1500)
+      end
+
+      Paperclip::Geometry.stub(:from_file => geo)
+    end
+
     after(:create) do |img, evaluator|
       # stub out image_meta data, see https://github.com/y8/paperclip-meta
       if evaluator.square_aspect_ratio
