@@ -197,6 +197,12 @@ Uplo::Application.routes.draw do
       get :rebuild_photos, on: :collection
     end
     resources :mouldings, except: [:show]
+
+    resources :image_tools, only: [:index] do
+      collection do
+        get :low_res_tool
+      end
+    end
   end
 
   # API ROUTING

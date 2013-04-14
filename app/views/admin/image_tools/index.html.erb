@@ -1,0 +1,13 @@
+<% page_title 'Image Tools' %>
+
+<%= render partial: 'admin/admin_menu' %>
+
+<ul>
+  <li><%= link_to 'Check for low res images', low_res_tool_admin_image_tools_path, id: 'low_res_link' %></li>
+</ul>
+
+<script type="text/javascript">
+  $('#low_res_link').click(function(e){
+    $(this).text("Please wait. Checking all images. This will take a few moments...").attr('disabled', 'disabled');
+  })
+</script>
