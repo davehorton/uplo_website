@@ -16,4 +16,13 @@ module ImagesHelper
     user ||= current_user
     (current_user.admin? && !image.promoted? && !image.removed? && !image.flagged?)
   end
+
+  def size_options(sizes, selected_size=nil)
+    opts = []
+    sizes.each do |size|
+      opts << [ size.to_name, size.id, { :'data-min-width' => size.minimum_recommended_resolution[:w], :'data-min-height' => size.minimum_recommended_resolution[:h] } ]
+    end
+
+    options_for_select(opts, selected_size)
+  end
 end
