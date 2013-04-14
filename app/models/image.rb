@@ -160,8 +160,6 @@ class Image < ActiveRecord::Base
       self.image.height >= size.minimum_recommended_resolution[:h]
     end
 
-    raise 'No compatible sizes!' if compatible_sizes.empty?
-
     Product.for_sizes(compatible_sizes)
   end
 
