@@ -54,13 +54,14 @@
         .line-separator
         .text.light-gray.font11.line18
           Copyright &copy; #{Date.today.year} UPLO. All rights reserved
-        .text.black.font11.line18.center
+          = "/"
           = link_to "Payment Policy", "/payment", :style => "font-weight:normal"
           = "/"
           = link_to "Terms of Service", "/terms", :style => "font-weight:normal"
-          - if current_user && current_user.admin?
-            = "/"
-            = link_to "Admin", "/admin"
+          = "/"
+          = link_to "Facebook", "http://facebook.com/uploapp"
+          = "/"
+          = link_to "Twitter", "http://twitter.com/uplo_"
         #mask.hide
           = image_tag('loading.gif')
 
