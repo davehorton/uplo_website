@@ -215,7 +215,6 @@ Uplo::Application.routes.draw do
       collection do
         get :by_friends
         get :liked
-        get :mouldings
         get :popular
         get :search
         get :user_images
@@ -223,9 +222,11 @@ Uplo::Application.routes.draw do
 
       member do
         post :like
+        get  :mouldings
         get  :ordering_options
         get  :purchases
         get  :sale_chart
+        get  :sizes
         get  :total_sales
         put  :unlike
       end
