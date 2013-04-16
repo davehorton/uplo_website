@@ -396,7 +396,6 @@ class Image < ActiveRecord::Base
       file = image.queued_for_write[:original]
       return true if file.nil?
       geo = Paperclip::Geometry.from_file(file)
-
       smallest_size = square?(geo.width, geo.height) ? Size.square.first : Size.rectangular.first
 
       if geo.width < smallest_size.minimum_recommended_resolution[:w] ||

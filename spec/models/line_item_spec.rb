@@ -2,7 +2,8 @@ require 'spec_helper'
 require 'sidekiq/testing/inline'
 
 describe LineItem do
-  let(:line_item) { create(:line_item, image: create(:real_image))}
+  before { create_sizes }
+  let(:line_item) { create(:line_item, image: create(:image))}
 
   it { should belong_to(:image) }
   it { should belong_to(:product) }
@@ -63,6 +64,8 @@ describe LineItem do
   end
 
   describe "#copy_image" do
+    let(:line_item) { create(:line_item, image: create(:real_image)) }
+
     it "should copy image, crop and save it" do
       line_item.update_attribute(:crop_dimension, "888x888+1445+312")
       line_item.copy_image
