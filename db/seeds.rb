@@ -78,6 +78,7 @@ gallery = galleries.first
 10.times do |counter|
   img = gallery.images.create!({
     name: Faker::Lorem.words,
-    image: File.open("#{Rails.root}/spec/fixtures/assets/photo.jpg")
+    image: File.open("#{Rails.root}/spec/fixtures/assets/photo.jpg"),
+    tier_id: 1
   })
 end
