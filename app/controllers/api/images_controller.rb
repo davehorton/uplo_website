@@ -83,6 +83,18 @@ class Api::ImagesController < Api::BaseController
     render json: ImageSerializer.new(image).ordering_options
   end
 
+  # GET /api/images/:id/mouldings
+  def mouldings
+    image = Image.unflagged.find(params[:id])
+    render json: image.available_mouldings, root: 'mouldings'
+  end
+
+  # GET /api/images/:id/sizes
+  def sizes
+    image = Image.unflagged.find(params[:id])
+    render json: image.available_sizes, root: 'sizes'
+  end
+
   # POST /api/images
   # required:
   #   gallery_id
@@ -170,10 +182,5 @@ class Api::ImagesController < Api::BaseController
   def user_images
     images = Image.find_all_by_user_id(params[:user_id])
     render json: images, root: :images, meta: { total: images.count }
-  end
-
-  # GET /api/images/mouldings
-  def mouldings
-    render json: Product.all.map(&:moulding).uniq, root: 'mouldings'
   end
 end

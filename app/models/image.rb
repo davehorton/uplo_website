@@ -134,7 +134,9 @@ class Image < ActiveRecord::Base
   end
 
   def get_price(moulding, size)
-    Product.where(moulding_id: moulding.id, size_id: size.id).first.price_for_tier(tier_id)
+    product = Product.where(moulding_id: moulding.id, size_id: size.id).first
+    raise "No matching product" if product.nil?
+    product.price_for_tier(tier_id)
   end
 
   def sample_product_price
@@ -332,7 +334,7 @@ class Image < ActiveRecord::Base
     order_ids = self.orders.completed.map(&:id)
 
     if order_ids.any?
-      sold_items = LineItem.paginate(item_paging_params.merge(sort_expression: 'purchased_date desc')).
+      sold_items = LineItem.paginate_and_sort(item_paging_params.merge(sort_expression: 'purchased_date desc')).
         joins("LEFT JOIN orders ON orders.id = line_items.order_id LEFT JOIN users ON users.id = orders.user_id").
         select("line_items.*, users.id as purchaser_id, orders.transaction_date as purchased_date").
         where(image_id: id, order_id: order_ids)
@@ -358,7 +360,7 @@ class Image < ActiveRecord::Base
     result
   end
 
-  # return saled quantity
+  # return sold quantity
   def get_monthly_sales_over_year(current_date, options = {:report_by => SALE_REPORT_TYPE[:price]})
     result = []
     date = DateTime.parse current_date.to_s
@@ -396,7 +398,6 @@ class Image < ActiveRecord::Base
       file = image.queued_for_write[:original]
       return true if file.nil?
       geo = Paperclip::Geometry.from_file(file)
-
       smallest_size = square?(geo.width, geo.height) ? Size.square.first : Size.rectangular.first
 
       if geo.width < smallest_size.minimum_recommended_resolution[:w] ||

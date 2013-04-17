@@ -183,7 +183,11 @@ describe Image do
   end
 
   describe "#get_purchased_info" do
-    pending "seems broken for sort_expression"
+    it "should paginate" do
+      new_order = create(:order, :transaction_status => "completed", :transaction_date => "03-04-2012")
+      line_items = create_list(:line_item, 20, :image_id => image.id, :order_id => new_order.id, :quantity => 4)
+      image.get_purchased_info({ :page => 1, :per_page => 10 }).should be_a(Hash)
+    end
   end
 
   describe ".paginate_and_sort" do
@@ -249,8 +253,18 @@ describe Image do
     end
   end
 
-  describe "get_price" do
-    pending "method seems broken if no product found"
+  describe "#get_price" do
+    context "when product exists" do
+      it "returns the price" do
+        create(:image).get_price(square_product.moulding, square_product.size).should be_a(BigDecimal)
+      end
+    end
+
+    context "when no matching product exists" do
+      it "raises an error" do
+        expect { create(:image).get_price(create(:moulding), rectangular_size) }.to raise_error("No matching product")
+      end
+    end
   end
 
   describe "#liked_by?" do

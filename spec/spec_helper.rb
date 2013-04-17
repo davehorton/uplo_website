@@ -1,7 +1,7 @@
 require 'rubygems'
 require 'spork'
 
-unless ENV['SEMAPHORE']
+if ENV['COVERAGE']
   require 'simplecov'
   SimpleCov.start do
     add_group "Models", "app/models"

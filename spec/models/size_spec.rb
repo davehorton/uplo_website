@@ -26,7 +26,7 @@ describe Size do
     end
     context "when width equal to height" do
       it "should return false" do
-        new_size = create(:size, :width => 50)
+        new_size = create(:size, :width => 50, :height => 50)
         new_size.rectangular?.should be_false
       end
     end
@@ -40,7 +40,7 @@ describe Size do
     end
     context "when width equal to height" do
       it "should return true" do
-        new_size = create(:size, :width => 50)
+        new_size = create(:size, :width => 50, :height => 50)
         new_size.square?.should be_true
       end
     end
