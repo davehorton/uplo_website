@@ -157,7 +157,7 @@ class Image < ActiveRecord::Base
       Size.rectangular
     end
 
-    compatible_sizes.select! do |size|
+    compatible_sizes = compatible_sizes.select do |size|
       self.image.width  >= size.minimum_recommended_resolution[:w] &&
       self.image.height >= size.minimum_recommended_resolution[:h]
     end
