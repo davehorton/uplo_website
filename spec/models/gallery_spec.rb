@@ -16,8 +16,29 @@ describe Gallery do
     klass.all.should == [b, a]
   end
 
-  describe "search_scope" do
-    pending "could not find implementation, method seems broken"
+  describe ".search_scope" do
+    context "when query name present" do
+      it "should return searched results" do
+        gallery.update_attribute(:name, "test")
+        Gallery.search_scope("---\n- test\n").should == [gallery]
+      end
+    end
+
+    context "when query description present" do
+      it "should return searched results" do
+        gallery.update_attribute(:description, "hello")
+        Gallery.search_scope("---\n- hello;").should == [gallery]
+        Gallery.search_scope("---\n- abc..;").should == []
+      end
+    end
+
+    context "when query keyword present" do
+      it "should return searched results" do
+        gallery.update_attribute(:keyword, "public")
+        Gallery.search_scope("---\n- ...public;").should == [gallery]
+        Gallery.search_scope("---\n- private..;").should == []
+      end
+    end
   end
 
    describe "#total_images" do

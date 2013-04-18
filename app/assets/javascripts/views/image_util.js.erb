@@ -633,28 +633,36 @@ var image_cropper = {
     var frame_num = $('#line_item_moulding').val();
     var frame_name = order_preview.frame_alias[frame_num];
     //if (!(frame_name == 'canvas' || frame_name == 'plexi')){
-      var size = $('#line_item_size-button .ui-selectmenu-status').text().split('x');
       var ratio_width = parseInt($('#line_item_size option:selected').data('min-width'));
       var ratio_height = parseInt($('#line_item_size option:selected').data('min-height'));
+
       var img_width = $('#preview-image').width();
       var img_height = $('#preview-image').height();
 
       image_cropper.x_shift_ratio = geometry.width / img_width;
       image_cropper.y_shift_ratio = geometry.height / img_height;
 
-      if(img_width > img_height) {
-        var min_width = parseInt((img_width / geometry.width) * ratio_width);
-        var min_height = parseInt(img_height);
-      } else {
-        var min_width = parseInt(img_width);
-        var min_height = parseInt((img_height / geometry.height) * ratio_height);
-      }
-
       if (cropped_dimensions.length == 0){
-        var x1 = parseInt(img_width/2 - min_width/2);
-        var x2 = x1 + min_width;
-        var y1 = parseInt(img_height/2 - min_height/2);
-        var y2 = y1 + min_height;
+        var x1 = 0;
+        var y1 = 0;
+        var aspectRatio = ratio_width/ratio_height;
+
+        if (geometry.width > geometry.height){
+          var x2 = img_width;
+          var y2 = img_width * aspectRatio;
+          if (y2 > img_height){
+            y2 = img_height;
+            x2 = img_height / aspectRatio;
+          }
+        }
+        else {
+          var y2 = img_height;
+          var x2 = img_height * aspectRatio;
+          if (x2 > img_width){
+            x2 = img_width;
+            y2 = img_width / aspectRatio;
+          }
+        }
       }
       else {
         var w = parseInt(cropped_dimensions[0] / image_cropper.x_shift_ratio);
@@ -670,10 +678,9 @@ var image_cropper = {
       var options = {
         onChange: image_cropper.update_crop,
         onSelect: image_cropper.update_crop,
-        aspectRatio: ratio_width/ratio_height,
-        //minSize: [min_width, min_height],
-        setSelect: [0, 0, x2, y2],
-        allowResize: false
+        setSelect: [x1, y1, x2, y2],
+        allowResize: false,
+        allowSelect: false
       };
 
       $("#preview-image").Jcrop(options, function(){

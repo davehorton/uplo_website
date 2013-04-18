@@ -21,7 +21,7 @@ class Gallery < ActiveRecord::Base
     galleries = Gallery.scoped
     if query.present?
       query = query.gsub(/[[:punct:]]/, ' ').squish
-      galleries = images.advanced_search_by_name_or_description_or_keyword(query, query, query)
+      galleries = galleries.advanced_search_by_name_or_description_or_keyword(query, query, query)
     end
     galleries
   end
