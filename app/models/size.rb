@@ -12,6 +12,10 @@ class Size < ActiveRecord::Base
     "#{width}x#{height}"
   end
 
+  def to_recommended_pixels
+    "#{minimum_recommended_resolution[:w]}x#{minimum_recommended_resolution[:h]}"
+  end
+
   def to_a
     [ width, height ]
   end
@@ -21,10 +25,18 @@ class Size < ActiveRecord::Base
   end
 
   def rectangular?
-    self.width != self.height
+    width != height
   end
 
   def square?
-    self.width == self.height
+    width == height
+  end
+
+  # returns a hash consisting of a width and height;
+  # values are either based on stored values or, if not set,
+  # a calculation based on a DPI of 150
+  def minimum_recommended_resolution(dpi = 150)
+    @minimum_recommended_resolution ||=
+      { w: (minimum_recommended_width || dpi*width), h: (minimum_recommended_height || dpi*height) }
   end
 end

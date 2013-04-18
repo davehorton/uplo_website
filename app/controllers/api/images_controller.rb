@@ -1,5 +1,5 @@
 class Api::ImagesController < Api::BaseController
-  skip_before_filter :require_login!, only: [:index, :popular]
+  skip_before_filter :require_login!, only: [:index, :mouldings, :popular]
 
   respond_to :html, only: [:sale_chart]
   respond_to :json
@@ -81,6 +81,18 @@ class Api::ImagesController < Api::BaseController
   def ordering_options
     image = Image.unflagged.find(filtered_params[:id])
     render json: ImageSerializer.new(image).ordering_options
+  end
+
+  # GET /api/images/:id/mouldings
+  def mouldings
+    image = Image.unflagged.find(params[:id])
+    render json: image.available_mouldings, root: 'mouldings'
+  end
+
+  # GET /api/images/:id/sizes
+  def sizes
+    image = Image.unflagged.find(params[:id])
+    render json: image.available_sizes, root: 'sizes'
   end
 
   # POST /api/images

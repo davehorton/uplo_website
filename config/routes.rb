@@ -197,6 +197,12 @@ Uplo::Application.routes.draw do
       get :rebuild_photos, on: :collection
     end
     resources :mouldings, except: [:show]
+
+    resources :image_tools, only: [:index] do
+      collection do
+        get :low_res_tool
+      end
+    end
   end
 
   # API ROUTING
@@ -216,9 +222,11 @@ Uplo::Application.routes.draw do
 
       member do
         post :like
+        get  :mouldings
         get  :ordering_options
         get  :purchases
         get  :sale_chart
+        get  :sizes
         get  :total_sales
         put  :unlike
       end
@@ -256,7 +264,6 @@ Uplo::Application.routes.draw do
       get 'payment_info', :to => "users#get_user_payment_info"
       post 'withdraw', :to => "users#withdraw"
       get 'card_info', :to => "users#get_user_card_info"
-      get 'get_moulding', :to => 'users#get_moulding'
       post 'request_invitation', :to => 'users#request_invitation'
     end
   end

@@ -7,6 +7,11 @@ module Aliases
     described_class
   end
 
+  def create_sizes
+    create(:square_size)
+    create(:rectangular_size)
+  end
+
   module ClassMethods
     # keeps tests faster by stubbing out file system operations
     def stub_image_processing(model)

@@ -8,9 +8,27 @@ FactoryGirl.define do
     image_content_type { 'image/jpeg' }
     image_file_size { 128 }
 
-    after(:create) do |image|
+    ignore do
+      square_aspect_ratio true
+    end
+
+    before(:create) do |img, evaluator|
+      if evaluator.square_aspect_ratio
+        geo = Paperclip::Geometry.new(1200, 1200)
+      else
+        geo = Paperclip::Geometry.new(1200, 1500)
+      end
+
+      Paperclip::Geometry.stub(:from_file => geo)
+    end
+
+    after(:create) do |img, evaluator|
       # stub out image_meta data, see https://github.com/y8/paperclip-meta
-      image.image.stub(:width => 45, :height => 50, :size => 1000)
+      if evaluator.square_aspect_ratio
+        img.image.stub(:width => 1200, :height => 1200, :size => 10000)
+      else
+        img.image.stub(:width => 1200, :height => 1500, :size => 10000)
+      end
     end
   end
 

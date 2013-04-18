@@ -1,3 +1,4 @@
+<%= page_title 'Products' %>
 <%= render partial: 'admin/admin_menu' %>
 
 <style type="text/css">
@@ -31,6 +32,8 @@
 
 <div id="actions">
   <%= link_to "Add New Product", new_admin_product_path %>
+  <%= link_to('Manage Print Sizes', admin_sizes_path) %>
+  <%= link_to('Manage Mouldings', admin_mouldings_path) %>
 </div>
 
 <table id="product_options">

@@ -2,6 +2,17 @@ require 'spec_helper'
 
 describe Image do
   let(:image){ create(:image) }
+  let(:square_size) { create(:size, width: 8, height: 8) }
+  let(:rectangular_size) { create(:size, width: 8, height: 10) }
+  let(:square_product) { create(:product, size: square_size) }
+  let(:rectangular_product) { create(:product, size: rectangular_size) }
+
+  before do
+    square_size
+    rectangular_size
+    square_product
+    rectangular_product
+  end
 
   it { should belong_to(:active_user) }
   it { should belong_to(:user) }
@@ -172,7 +183,11 @@ describe Image do
   end
 
   describe "#get_purchased_info" do
-    pending "seems broken for sort_expression"
+    it "should paginate" do
+      new_order = create(:order, :transaction_status => "completed", :transaction_date => "03-04-2012")
+      line_items = create_list(:line_item, 20, :image_id => image.id, :order_id => new_order.id, :quantity => 4)
+      image.get_purchased_info({ :page => 1, :per_page => 10 }).should be_a(Hash)
+    end
   end
 
   describe ".paginate_and_sort" do
@@ -238,8 +253,18 @@ describe Image do
     end
   end
 
-  describe "get_price" do
-    pending "method seems broken if no product found"
+  describe "#get_price" do
+    context "when product exists" do
+      it "returns the price" do
+        create(:image).get_price(square_product.moulding, square_product.size).should be_a(BigDecimal)
+      end
+    end
+
+    context "when no matching product exists" do
+      it "raises an error" do
+        expect { create(:image).get_price(create(:moulding), rectangular_size) }.to raise_error("No matching product")
+      end
+    end
   end
 
   describe "#liked_by?" do
@@ -265,55 +290,65 @@ describe Image do
     context "when tier id matches" do
       it "should return price" do
         product = create(:product)
-        img = create(:image, :tier_id => 1)
+        img = create(:image, tier_id: 1)
         img.sample_product_price.to_i.should == 500
       end
     end
+
     context "when tier id does not match" do
       it "should return unknown" do
+        Product.delete_all
         img = create(:image)
         img.sample_product_price.should == "Unknown"
       end
     end
   end
 
-  describe "#square" do
-    it "should return true" do
-      image1 = create(:real_image, :height => 40, :width => 40)
-      image1.square?.should be_true
+  describe "#square?" do
+    context "when pure square" do
+      subject { create(:image, square_aspect_ratio: true) }
+      its(:square?) { should be_true }
+    end
+
+    context "when rectangular" do
+      subject { create(:image, square_aspect_ratio: false) }
+      its(:square?) { should be_false }
+    end
+
+    context "when slightly square" do
+      before { subject.image.stub(:width => 1200, :height => 1300) }
+      its(:square?) { should be_true }
+    end
+
+    context "when slightly square, longer width" do
+      before { subject.image.stub(:width => 1300, :height => 1200) }
+      its(:square?) { should be_true }
     end
   end
 
   describe "#available_products" do
-    context "when compatible sizes are square" do
+    context "for a square image" do
       it "should return appropriate products" do
-        square_size = create(:size, :height => 8, :width => 8)
-        product1 = create(:product, :size_id => square_size.id)
-        image.available_products.should == []
+        create(:image, square_aspect_ratio: true).available_products.should == [square_product]
       end
     end
 
-    context "when compatible sizes are rectangular" do
+    context "for a rectangular image" do
       it "should return appropriate products" do
-        rect_size = create(:size, :height => 12, :width => 8)
-        image.update_attributes(:height => 50, :width => 40)
-        product1 = create(:product, :size_id => rect_size.id)
-        image.available_products.should == [product1]
+        create(:image, square_aspect_ratio: false).available_products.should == [rectangular_product]
       end
     end
   end
 
   describe "#available_sizes" do
     it "should return uniq array" do
-      new_size = create(:size_with_products)
-      image.available_sizes.should == [new_size]
+      image.available_sizes.should == [square_size]
     end
   end
 
   describe "#available_mouldings" do
     it "should return uniq array" do
-      new_moulding = create(:moulding_with_products)
-      image.available_mouldings.should == [new_moulding]
+      image.available_mouldings.should == [square_product.moulding]
     end
   end
 

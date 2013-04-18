@@ -27,7 +27,7 @@
       .round-box.option.left.print-sizes-container
         .header.text.black.bold.font14= "Print Size"
         .item.left
-          = f.select :size, options_from_collection_for_select(@sizes, :id, :to_name, size)
+          = f.select :size, size_options(@sizes, size)
       .round-box.option.left{:style => 'width:138px;'}
         .header.text.black.bold.font14= "Moulding Choice"
         .item.left

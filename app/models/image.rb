@@ -26,12 +26,14 @@ class Image < ActiveRecord::Base
     },
     default_url: "/assets/gallery-thumb.jpg"
 
+  process_in_background :image
+
   validates_attachment_presence :image,
     :size => { :in => 0..100.megabytes, :message => 'File size cannot exceed 100MB' },
     :content_type => { :content_type => [ 'image/jpeg','image/jpg' ],
     :message => 'File must have an extension of .jpeg or .jpg' }, :on => :create
 
-  process_in_background :image
+  validate :minimum_dimensions_are_met, on: :create
 
   before_create  :set_name,
                  :set_tier,
@@ -132,15 +134,20 @@ class Image < ActiveRecord::Base
   end
 
   def get_price(moulding, size)
-    Product.where(moulding_id: moulding.id, size_id: size.id).first.price_for_tier(tier_id)
+    product = Product.where(moulding_id: moulding.id, size_id: size.id).first
+    raise "No matching product" if product.nil?
+    product.price_for_tier(tier_id)
   end
 
   def sample_product_price
     Product.first.try(:price_for_tier, tier_id) || 'Unknown'
   end
 
-  def square?
-    Paperclip::Geometry.new(image.width, image.height).square?
+  def square?(width = nil, height = nil)
+    width ||= image.width
+    height ||= image.height
+    geometry = Paperclip::Geometry.new(width, height)
+    Paperclip::Geometry.new(geometry.larger, geometry.smaller).aspect < 1.2
   end
 
   def available_products
@@ -148,6 +155,11 @@ class Image < ActiveRecord::Base
       Size.square
     else
       Size.rectangular
+    end
+
+    compatible_sizes.select! do |size|
+      self.image.width  >= size.minimum_recommended_resolution[:w] &&
+      self.image.height >= size.minimum_recommended_resolution[:h]
     end
 
     Product.for_sizes(compatible_sizes)
@@ -322,7 +334,7 @@ class Image < ActiveRecord::Base
     order_ids = self.orders.completed.map(&:id)
 
     if order_ids.any?
-      sold_items = LineItem.paginate(item_paging_params.merge(sort_expression: 'purchased_date desc')).
+      sold_items = LineItem.paginate_and_sort(item_paging_params.merge(sort_expression: 'purchased_date desc')).
         joins("LEFT JOIN orders ON orders.id = line_items.order_id LEFT JOIN users ON users.id = orders.user_id").
         select("line_items.*, users.id as purchaser_id, orders.transaction_date as purchased_date").
         where(image_id: id, order_id: order_ids)
@@ -348,7 +360,7 @@ class Image < ActiveRecord::Base
     result
   end
 
-  # return saled quantity
+  # return sold quantity
   def get_monthly_sales_over_year(current_date, options = {:report_by => SALE_REPORT_TYPE[:price]})
     result = []
     date = DateTime.parse current_date.to_s
@@ -381,6 +393,18 @@ class Image < ActiveRecord::Base
   end
 
   protected
+
+    def minimum_dimensions_are_met
+      file = image.queued_for_write[:original]
+      return true if file.nil?
+      geo = Paperclip::Geometry.from_file(file)
+      smallest_size = square?(geo.width, geo.height) ? Size.square.first : Size.rectangular.first
+
+      if geo.width < smallest_size.minimum_recommended_resolution[:w] ||
+         geo.height < smallest_size.minimum_recommended_resolution[:h]
+         errors.add(:base, "Image should be at least #{smallest_size.minimum_recommended_resolution[:w]} x #{smallest_size.minimum_recommended_resolution[:h]}")
+      end
+    end
 
     def ensure_not_associated_with_an_order
       return false if orders.any?
