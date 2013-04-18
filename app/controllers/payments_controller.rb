@@ -75,13 +75,15 @@ class PaymentsController < ApplicationController
       when "an"
         order_info = params[:order]
 
-        credit_card = CreditCard.build_card_from_param(order_info)
-        unless credit_card.valid?
-          flash[:error] = "Please fill all required fields first!"
-          redirect_to :controller => 'orders', :action => 'index' and return
+        if params[:use_stored_cc].to_i == 0
+          @credit_card = CreditCard.build_card_from_param(order_info)
+          unless @credit_card.valid?
+            flash[:error] = "Please fill all required fields first!"
+            return redirect_to :controller => 'orders', :action => 'index'
+          end
+          order_info[:card_number] = @credit_card.display_number
+          order_info[:cvv] = "***"
         end
-        order_info[:card_number] = credit_card.display_number
-        order_info[:cvv] = "***"
 
         @remove_shipping_info = false
         if order_info['ship_to_billing'].present?
@@ -92,15 +94,11 @@ class PaymentsController < ApplicationController
         order_info[:billing_address_attributes].delete 'id'
         order_info.delete 'ship_to_billing'
         # UPDATE PAYMENT INFO TO ORDER
-
-
-        expires_on = Date.civil(Date.civil(credit_card.expiry_date.year, credit_card.expiry_date.month, 1))
-        order_info[:expiration] = expires_on.strftime("%m-%Y")
         order_info.delete "expiration(1i)"
         order_info.delete "expiration(2i)"
         order_info.delete "expiration(3i)"
 
-        @order = Order.find_by_id params[:order_id]
+        @order = Order.find_by_id(params[:order_id])
 
         if @order.update_attributes(params[:order])
           order_info.delete 'shipping_address_attributes' if @remove_shipping_info
@@ -109,20 +107,17 @@ class PaymentsController < ApplicationController
           @order.compute_totals
 
           if current_user.update_profile(order_info)
-            an_value = Payment.create_authorizenet_test(credit_card.number, expires_on, {:shipping => order_info[:shipping_address_attributes], :address => order_info[:billing_address_attributes]})
-            response = an_value[:transaction].purchase(@order.order_total, an_value[:credit_card])
-
+            response = Payment.process_purchase(current_user, @order, @credit_card)
             success = !response.nil? && response.success?
             if success
-              PaymentProfile.setup_for_user(current_user, credit_card)
               finalize_cart
-              flash[:success] = "Successfully made a purchase (authorization code: #{response.authorization_code})"
-              redirect_to :action => :checkout_result, :trans_id => response.transaction_id and return
+              flash[:success] = "Successfully made a purchase (authorization code: #{response.authorization})"
+              transaction_id = response.params["direct_response"]["transaction_id"]
+              redirect_to :action => :checkout_result, :trans_id => transaction_id and return
             else
               flash.now[:error] = "Failed to make purchase. #{response.response_reason_text}"
               render :template => "orders/index", :params => params and return
             end
-
           else
             render :template => "orders/index", :params => params and return
           end
@@ -146,30 +141,6 @@ class PaymentsController < ApplicationController
       :login => PP_API_USERNAME,
       :password => PP_API_PASSWORD,
       :signature => PP_API_SIGN
-    )
-  end
-
-  def an_gateway
-    @an_gateway ||= ActiveMerchant::Billing::AuthorizeNetGateway.new(
-    :login => AN_LOGIN_ID,
-    :password => AN_TRANS_KEY,
-    :test => false)
-  end
-
-  def an_credit_card
-    @an_credit_card ||= AuthorizeNet::CreditCard.new(nil, nil,
-    :track_1 => '%B4111111111111111^DOE/JOHN^1803101000000000020000831000000?')
-  end
-
-  def credit_card
-    @credit_card ||= ActiveMerchant::Billing::CreditCard.new(
-      :number     => '4007000000027',
-      :month      => '8',
-      :year       => '2020',
-      :first_name => 'Uplo',
-      :last_name  => 'Payment',
-      :verification_value  => '123',
-      :type => "visa"
     )
   end
 

@@ -56,6 +56,11 @@ class ApplicationController < ActionController::Base
   end
   helper_method :sticky_flash_message_key
 
+  def has_payment_profile?
+    current_user && current_user.an_customer_payment_profile_id
+  end
+  helper_method :has_payment_profile?
+
   def sticky_flash_message?
     @sticky_flash_message ||= flash.delete(sticky_flash_message_key)
   end

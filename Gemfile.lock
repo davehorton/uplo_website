@@ -21,6 +21,9 @@ GEM
       rack-cache (~> 1.2)
       rack-test (~> 0.6.1)
       sprockets (~> 2.2.1)
+    active_attr (0.7.0)
+      activemodel (>= 3.0.2, < 4.1)
+      activesupport (>= 3.0.2, < 4.1)
     active_model_serializers (0.7.0)
       activemodel (>= 3.0)
     active_utils (1.0.5)
@@ -53,8 +56,6 @@ GEM
     alchemist (0.1.5)
     arel (3.0.2)
     attr_required (0.0.5)
-    authorize-net (1.5.2)
-      nokogiri (~> 1.4)
     aws-sdk (1.5.8)
       httparty (~> 0.7)
       json (~> 1.4)
@@ -368,12 +369,12 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  active_attr
   active_model_serializers (~> 0.7.0)
   active_utils
   activemerchant
   aescrypt
   alchemist
-  authorize-net
   aws-sdk (~> 1.5.7)
   cancan
   capybara

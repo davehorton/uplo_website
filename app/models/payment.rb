@@ -26,25 +26,6 @@ class Payment
     return payment
   end
 
-  def self.create_authorizenet_test(card_number, expiration, addresses)
-    credit_card = AuthorizeNet::CreditCard.new(card_number, expiration)
-    transaction = AuthorizeNet::AIM::Transaction.new(AN_LOGIN_ID, AN_TRANS_KEY, :gateway => :production, :transaction_type => :auth_and_capture, :verify_ssl => false)
-
-    if addresses.has_key?(:address) and !addresses[:address].blank?
-      addresses[:address][:customer_address_id] = "address"
-      address = AuthorizeNet::Address.new(addresses[:address])
-      transaction.set_address(address)
-    end
-
-    if addresses.has_key?(:shipping) and !addresses[:shipping].blank?
-      addresses[:shipping][:customer_address_id] = "address"
-      shipping_address = AuthorizeNet::ShippingAddress.new(addresses[:shipping])
-      transaction.set_shipping_address(shipping_address)
-    end
-
-    return {:transaction => transaction, :credit_card => credit_card}
-  end
-
   def self.transfer_ballance_via_paypal(amount, receiver)
     ActiveMerchant::Billing::PaypalGateway.default_currency = 'USD'
     gateway = ActiveMerchant::Billing::PaypalGateway.new({
@@ -55,4 +36,21 @@ class Payment
 
     gateway.transfer(Converter.decimal_to_cents(amount), receiver, :subject => 'Payment from UPLO', :note => "UPLO has transfered $#{amount} for your request payout.")
   end
+
+  def self.process_purchase(user, order, credit_card = nil)
+    raise "Need credit card to complete purchase" unless (user.an_customer_payment_profile_id || credit_card)
+    PaymentInfo.create_payment_profile(user, credit_card) if credit_card
+
+    transaction = {
+      transaction: {
+        type: :auth_capture,
+        amount: order.order_total,
+        customer_profile_id: user.an_customer_profile_id,
+        customer_payment_profile_id: user.an_customer_payment_profile_id
+      }
+    }
+
+    GATEWAY.create_customer_profile_transaction(transaction)
+  end
+
 end

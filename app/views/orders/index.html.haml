@@ -106,16 +106,21 @@
       .order_summary.clear{:style => "padding-top:35px;"}
         .header
           .text.black.bold.font16.left Payment Information
-          .italic.text.heavy-gray.font11.left
+          .italic.text.heavy-gray.font11.left.cc_info{:style => ("display:none;" if has_payment_profile?)}
             %span{:style=>'color:red;'} &nbsp;&nbsp;&nbsp;*
             Required Fields
         .line-separator.left
-        .inputs.left
+        - if has_payment_profile?
+          .inputs.left
+            = check_box_tag :use_stored_cc, 1, true
+            = label_tag :use_stored_cc, "Use stored Credit Card", :style => "height: 20px;"
+
+        .inputs.left.cc_info{:style => ("display:none;" if has_payment_profile?)}
           .info
             = f.label :name_on_card, "Name on Card <span style='color:red;'>*</span>".html_safe
             - message = first_error_message_for(f.object, :name_on_card)
             - css = message ? "error" : nil
-            = f.input_field :name_on_card, :autofocus => true, :required => true, :label => false, :class => css, :title => message
+            = f.input_field :name_on_card, :autofocus => true, :required => true, :label => false, :class => css, :title => message, :value => nil
           .info
             = f.label :card_type, "Card Type <span style='color:red;'>*</span>".html_safe
             - message = first_error_message_for(f.object, :card_type)
@@ -125,7 +130,7 @@
             = f.label :card_number, "Card Number <span style='color:red;'>*</span>".html_safe
             - message = first_error_message_for(f.object, :card_number)
             - css = message ? "error" : nil
-            = f.input_field :card_number, :autofocus => true, :required => true, :label => false, :class => css, :title => message
+            = f.input_field :card_number, :autofocus => true, :required => true, :label => false, :class => css, :title => message, :value => nil
           .info.expiration-date
             - today = Date.today
             = f.label :expiration, "Expiration Date <span style='color:red;'>*</span>".html_safe
@@ -135,7 +140,7 @@
             = f.label :cvv, "CVV <span style='color:red;'>*</span> <span id='cvv-explanation'>What's This?</span>".html_safe
             - message = first_error_message_for(f.object, :cvv)
             - css = message ? "error" : nil
-            = f.input_field :cvv, :required => true, :label => false, :maxlength => 4, :class => css, :title => message
+            = f.input_field :cvv, :required => true, :label => false, :maxlength => 4, :class => css, :title => message, :value => nil
           = hidden_field_tag :order_id, @order.id
 
     #order-summary.order_summary.no-padding-right.left{:style => "height:auto;min-height: 100px;"}
