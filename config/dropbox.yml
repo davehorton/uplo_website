@@ -1,0 +1,9 @@
+development: &development
+  app_token: 'l0rj7yhvm6f0jtj'
+  app_secret: 'spmfic5xcltg06i'
+  access_token: "27v4sksxr4qjo6t"
+  access_secret: "1ftwkh55v42hap5"
+  
+test:
+  <<: *development
+  

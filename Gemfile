@@ -46,6 +46,7 @@ gem 'twitter'
 gem 'urbanairship'
 gem 'valid_email'
 gem 'will_paginate', '~> 3.0'
+gem "dropbox-api"
 
 # for sidekiq admin
 gem 'sinatra', require: false
