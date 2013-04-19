@@ -36,5 +36,7 @@
             .left Grand Total: #{number_to_currency(@order.tax + subtotal + SHIPPING_FEE)}
         .line-separator.left
         .submit.right
+          %p
+            The photo to be printed has been saved to the Uplo Dropbox folder, order ID #{@order.id}
     %p
       Thanks and best regards.

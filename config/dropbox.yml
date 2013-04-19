@@ -1,7 +1,11 @@
 development: &development
-  access_token: "27v4sksxr4qjo6t"
-  access_secret: "1ftwkh55v42hap5"
-  
+  app_key: "wbwpuawqf52814w"
+  app_secret: "uzms5h4q4v97fuh"
+  access_token: "i9awg3wjw38xrlc"
+  access_token_secret: "z31ts93uq9sexhg"
+  user_id: "118744057"
+  access_type: "app_folder"  
+ 
 test:
   <<: *development
   
