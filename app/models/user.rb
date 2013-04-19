@@ -85,20 +85,20 @@ class User < ActiveRecord::Base
   scope :flagged_users, not_removed.where(banned: true)
   scope :confirmed, not_removed.where("confirmed_at IS NOT NULL")
 
-  # scope :reinstate_ready_users, flagged_users.joins(self.sanitize_sql([
-  #   "LEFT JOIN (
-  #       SELECT galleries.user_id,
-  #       SUM(images_data.flagged_images_count) AS flagged_images_count
-  #       FROM galleries JOIN (
-  #         SELECT gallery_id, COUNT(flagged_images.id) AS flagged_images_count
-  #         FROM (#{Image.flagged.to_sql}) AS flagged_images GROUP BY gallery_id
-  #       ) images_data ON galleries.id = images_data.gallery_id
-  #       GROUP BY galleries.user_id
-  #     ) galleries_data
-  #     ON galleries_data.user_id = users.id
-  #     AND galleries_data.flagged_images_count < ?",
-  #     MIN_FLAGGED_IMAGES])
-  #   ).select("DISTINCT users.*, galleries_data.flagged_images_count")
+  scope :reinstate_ready_users, flagged_users.joins(self.sanitize_sql([
+    "LEFT JOIN (
+        SELECT galleries.user_id,
+        SUM(images_data.flagged_images_count) AS flagged_images_count
+        FROM galleries JOIN (
+          SELECT gallery_id, COUNT(flagged_images.id) AS flagged_images_count
+          FROM (#{Image.flagged.to_sql}) AS flagged_images GROUP BY gallery_id
+        ) images_data ON galleries.id = images_data.gallery_id
+        GROUP BY galleries.user_id
+      ) galleries_data
+      ON galleries_data.user_id = users.id
+      AND galleries_data.flagged_images_count < ?",
+      MIN_FLAGGED_IMAGES])
+    ).select("DISTINCT users.*, galleries_data.flagged_images_count")
 
   def self.search_scope(query)
     users = User.scoped
