@@ -82,13 +82,6 @@ class LineItem < ActiveRecord::Base
     "orders/#{order_id}/#{id}.#{content.original_filename.split('.').last}"
   end
 
-  def url(options = :cropped)
-    storage = Rails.application.config.paperclip_defaults[:storage]
-    case storage
-      when :s3 then self.content.expiring_url(s3_expire_time, options)
-      when :filesystem then content.url(options)
-    end
-  end
 
   private
 

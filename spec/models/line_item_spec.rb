@@ -63,17 +63,6 @@ describe LineItem do
     end
   end
 
-  describe "#copy_image" do
-    let(:line_item) { create(:line_item, image: create(:real_image)) }
-
-    it "should copy image, crop and save it" do
-      line_item.update_attribute(:crop_dimension, "888x888+1445+312")
-      line_item.copy_image
-      line_item.url.should_not be_blank
-      file_path = Rails.root.to_s + "/public" + line_item.url.split('?').first
-      Paperclip::Geometry.from_file(file_path).to_s.should == "888x888"
-    end
-  end
 
   describe "#cropping?" do
     context "with cropping parameters" do
