@@ -7,7 +7,6 @@ gem 'pg'
 
 # application components
 gem 'activemerchant'
-gem 'active_attr'
 gem 'active_model_serializers', '~> 0.7.0'
 gem 'active_utils'
 gem 'alchemist'

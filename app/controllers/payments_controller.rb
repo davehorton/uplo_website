@@ -73,40 +73,37 @@ class PaymentsController < ApplicationController
         setup_response = pp_gateway.setup_purchase(total_as_cents, setup_purchase_params)
         redirect_to pp_gateway.redirect_url_for(setup_response.token)
       when "an"
-        order_info = params[:order]
+        order_info = params[:order].clone
+        user_info = order_info.delete(:user)
 
         if params[:use_stored_cc].to_i == 0
-          @credit_card = CreditCard.build_card_from_param(order_info)
+          @credit_card = CreditCard.build_card_from_param(user_info)
           unless @credit_card.valid?
             flash[:error] = "Please fill all required fields first!"
             return redirect_to :controller => 'orders', :action => 'index'
           end
-          order_info[:card_number] = @credit_card.display_number
-          order_info[:cvv] = "***"
+          user_info[:card_number] = @credit_card.display_number
+        else
+          user_info = {}
         end
+        user_info.delete "expiration(1i)"
+        user_info.delete "expiration(2i)"
+        user_info.delete "expiration(3i)"
+        user_info[:billing_address_attributes] = order_info[:billing_address_attributes]
 
-        @remove_shipping_info = false
-        if order_info['ship_to_billing'].present?
+        if params[:ship_to_billing].present?
           order_info[:shipping_address_attributes] = order_info[:billing_address_attributes]
-          @remove_shipping_info = true
+          user_info[:shipping_address_attributes] = order_info[:billing_address_attributes]
         end
-        order_info[:shipping_address_attributes].delete 'id'
-        order_info[:billing_address_attributes].delete 'id'
-        order_info.delete 'ship_to_billing'
-        # UPDATE PAYMENT INFO TO ORDER
-        order_info.delete "expiration(1i)"
-        order_info.delete "expiration(2i)"
-        order_info.delete "expiration(3i)"
 
         @order = Order.find_by_id(params[:order_id])
 
-        if @order.update_attributes(params[:order])
-          order_info.delete 'shipping_address_attributes' if @remove_shipping_info
+        if @order.update_attributes(order_info)
           # TODO: update tax + price follow shipping state
           @order.update_tax_by_state
           @order.compute_totals
 
-          if current_user.update_profile(order_info)
+          if current_user.update_profile(user_info)
             response = Payment.process_purchase(current_user, @order, @credit_card)
             success = !response.nil? && response.success?
             if success
@@ -115,7 +112,7 @@ class PaymentsController < ApplicationController
               transaction_id = response.params["direct_response"]["transaction_id"]
               redirect_to :action => :checkout_result, :trans_id => transaction_id and return
             else
-              flash.now[:error] = "Failed to make purchase. #{response.response_reason_text}"
+              flash.now[:error] = "Failed to make purchase."
               render :template => "orders/index", :params => params and return
             end
           else

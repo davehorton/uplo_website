@@ -274,26 +274,6 @@ class User < ActiveRecord::Base
       cart.order = recent_empty_order
       cart.save
     end
-
-    if !cart.order.billing_address
-      if billing_address
-        cart.order.billing_address = billing_address.dup
-        cart.order.billing_address.save
-      end
-
-      if shipping_address
-        cart.order.shipping_address = shipping_address.dup
-        cart.order.shipping_address.save
-      end
-
-      cart.order.name_on_card = name_on_card
-      cart.order.card_type = card_type
-      cart.order.card_number = card_number
-      cart.order.expiration = expiration
-      cart.order.cvv = cvv
-      cart.order.save
-    end
-
     cart
   end
 

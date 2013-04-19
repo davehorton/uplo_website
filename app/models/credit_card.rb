@@ -1,14 +1,5 @@
 class CreditCard < ActiveMerchant::Billing::CreditCard
 
-  include ActiveAttr::Model
-
-  attribute :address
-  attribute :city
-  attribute :state
-  attribute :zip
-
-  validates_presence_of :address, :city, :state, :zip
-
   ACCEPTED_CREDIT_CARDS = [
                            ['American Express', 'american_express'],
                            ['Discover', 'discover'],
@@ -24,8 +15,6 @@ class CreditCard < ActiveMerchant::Billing::CreditCard
 
   def self.build_card_from_param(options)
     first_name, last_name = options['name_on_card'].split
-    billing_address = options[:billing_address_attributes]
-
     CreditCard.new(
                    first_name: first_name,
                    last_name: last_name,
@@ -34,21 +23,6 @@ class CreditCard < ActiveMerchant::Billing::CreditCard
                    number: options['card_number'],
                    brand: options['card_type'],
                    verification_value:  options['cvv'],
-                   address: [billing_address[:street_address], billing_address[:optional_address]].join(','),
-                   city: billing_address[:city],
-                   state: billing_address[:state],
-                   zip: billing_address[:zip]
                    )
   end
-
-
-  def billing_address
-    {
-      address: self.address,
-      city: self.city,
-      state: self.state,
-      zip: self.zip,
-    }
-  end
-
 end

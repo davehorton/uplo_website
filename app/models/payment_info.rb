@@ -30,7 +30,7 @@ class PaymentInfo
     end
 
     payment_profile = {
-      bill_to: credit_card.billing_address,
+      bill_to: user.billing_address,
       payment: {
         credit_card: credit_card
       }

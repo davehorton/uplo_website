@@ -2,12 +2,11 @@
 - content_for :top_content do
   .text.black.bold.font16.left Checkout - Step 2 of 2
   .line-separator.left
-- if @order.expiration
-  - @order.expiration = Date.strptime(@order.expiration, "%m-%Y")
-- else
-  - @order.expiration = Date.today
+
 .wrapper
   = simple_form_for(@order, :url => "/payments/checkout?type=an", :html => {:class => "card_form left", :id => 'order-shippings'}) do |f|
+    = hidden_field_tag :order_id, @order.id
+
     #billing-address.order_summary.left
       .header
         %span.text.black.bold.font16.left Billing Address
@@ -17,44 +16,10 @@
       .line-separator.left
       = f.fields_for :billing_address do |billing_f|
         .inputs.left
+          = render "orders/address_fields", :address => billing_f
           .info
-            = billing_f.label :first_name, "First Name <span style='color:red;'>*</span>".html_safe
-            - message = first_error_message_for(billing_f.object, :first_name)
-            - css = message ? "error" : nil
-            = billing_f.input_field :first_name, :autofocus => true, :required => true, :class => css, :title => message
-          .info
-            = billing_f.label :last_name, "Last Name <span style='color:red;'>*</span>".html_safe
-            - message = first_error_message_for(billing_f.object, :last_name)
-            - css = message ? "error" : nil
-            = billing_f.input_field :last_name, :required => true, :class => css, :title => message
-          .info
-            = billing_f.label :street_address, "Street Address <span style='color:red;'>*</span>".html_safe
-            - message = first_error_message_for(billing_f.object, :street_address)
-            - css = message ? "error" : nil
-            = billing_f.input_field :street_address, :required => true, :class => css, :title => message
-          .info
-            = label_tag :optional_address, ""
-            = billing_f.input_field :optional_address
-          .info
-            = billing_f.label :city, "City <span style='color:red;'>*</span>".html_safe
-            - message = first_error_message_for(billing_f.object, :city)
-            - css = message ? "error" : nil
-            = billing_f.input_field :city, :required => true, :class => css, :title => message
-          .info
-            = billing_f.label :state, "State <span style='color:red;'>*</span>".html_safe
-            - message = first_error_message_for(billing_f.object, :state)
-            - css = message ? "error" : nil
-            = billing_f.input_field :state, :required => true, :class => css, :title => message
-          .info
-            = billing_f.label :zip, "Postal/Zip Code <span style='color:red;'>*</span>".html_safe
-            - message = first_error_message_for(billing_f.object, :zip)
-            - css = message ? "error" : nil
-            = billing_f.input_field :zip, :required => true, :class => "zip_input #{css}", :title => message
-
-          .info
-            / = hidden_field_tag 'billing[ship_to_billing]', 0
-            %input{ :type => 'checkbox', :name => 'order[ship_to_billing]', :value => '1', :id => 'billing_ship_to_billing', :class => 'left', :checked =>  'checked' }
-            = label_tag :billing_ship_to_billing, 'Ship Items to the Above Billing Address', :style => 'line-height:15px; width:auto;', :class => 'left'
+            = check_box_tag :ship_to_billing, 1, true, :class => 'left'
+            = label_tag :ship_to_billing, 'Ship Items to the Above Billing Address', :style => 'line-height:15px; width:auto;', :class => 'left'
 
     .left
       #shipping-address.order_summary.left
@@ -69,39 +34,7 @@
           %a.right{:href => '#'} Edit
         .inputs.clear.hide
           = f.fields_for :shipping_address do |shipping_f|
-            .info
-              = shipping_f.label :first_name, "First Name <span style='color:red;'>*</span>".html_safe
-              - message = first_error_message_for(shipping_f.object, :first_name)
-              - css = message ? "error" : nil
-              = shipping_f.input_field :first_name, :autofocus => true, :required => true, :class => css, :title => message
-            .info
-              = shipping_f.label :last_name, "Last Name <span style='color:red;'>*</span>".html_safe
-              - message = first_error_message_for(shipping_f.object, :last_name)
-              - css = message ? "error" : nil
-              = shipping_f.input_field :last_name, :required => true, :class => css, :title => message
-            .info
-              = shipping_f.label :street_address, "Street Address <span style='color:red;'>*</span>".html_safe
-              - message = first_error_message_for(shipping_f.object, :street_address)
-              - css = message ? "error" : nil
-              = shipping_f.input_field :street_address, :required => true, :class => css, :title => message
-            .info
-              = label_tag :optional_address, ""
-              = shipping_f.input_field :optional_address
-            .info
-              = shipping_f.label :city, "City <span style='color:red;'>*</span>".html_safe
-              - message = first_error_message_for(shipping_f.object, :city)
-              - css = message ? "error" : nil
-              = shipping_f.input_field :city, :required => true, :class => css, :title => message
-            .info
-              = shipping_f.label :state, "State <span style='color:red;'>*</span>".html_safe
-              - message = first_error_message_for(shipping_f.object, :state)
-              - css = message ? "error" : nil
-              = shipping_f.input_field :state, :required => true, :class => css, :title => message
-            .info
-              = shipping_f.label :zip, "Postal/Zip Code <span style='color:red;'>*</span>".html_safe
-              - message = first_error_message_for(shipping_f.object, :zip)
-              - css = message ? "error" : nil
-              = shipping_f.input_field :zip, :required => true, :class => "zip_input #{css}", :title => message
+            = render "orders/address_fields", :address => shipping_f
 
       .order_summary.clear{:style => "padding-top:35px;"}
         .header
@@ -116,32 +49,32 @@
             = label_tag :use_stored_cc, "Use stored Credit Card", :style => "height: 20px;"
 
         .inputs.left.cc_info{:style => ("display:none;" if has_payment_profile?)}
-          .info
-            = f.label :name_on_card, "Name on Card <span style='color:red;'>*</span>".html_safe
-            - message = first_error_message_for(f.object, :name_on_card)
-            - css = message ? "error" : nil
-            = f.input_field :name_on_card, :autofocus => true, :required => true, :label => false, :class => css, :title => message, :value => nil
-          .info
-            = f.label :card_type, "Card Type <span style='color:red;'>*</span>".html_safe
-            - message = first_error_message_for(f.object, :card_type)
-            - css = message ? "error" : nil
-            = f.select :card_type, options_for_select(CreditCard.brands, @order.card_type), {:prompt => 'Select One', :class => css, :title => message}
-          .info
-            = f.label :card_number, "Card Number <span style='color:red;'>*</span>".html_safe
-            - message = first_error_message_for(f.object, :card_number)
-            - css = message ? "error" : nil
-            = f.input_field :card_number, :autofocus => true, :required => true, :label => false, :class => css, :title => message, :value => nil
-          .info.expiration-date
-            - today = Date.today
-            = f.label :expiration, "Expiration Date <span style='color:red;'>*</span>".html_safe
-            = f.date_select :expiration, :discard_day => true, :start_year => Date.today.year, :end_year => (Date.today.year+10), :add_month_numbers => false, :order => [:month, :year], :required => true, :label => false, :default => { :day => '1', :mon => '12' }, :prompt => { :month => 'Month', :year => 'Year' }
+          = f.fields_for :user do |user_f|
+            .info
+              = user_f.label :name_on_card, "Name on Card <span style='color:red;'>*</span>".html_safe
+              - message = first_error_message_for(user_f.object, :name_on_card)
+              - css = message ? "error" : nil
+              = user_f.input_field :name_on_card, :autofocus => true, :required => true, :label => false, :class => css, :title => message, :value => nil
+            .info
+              = user_f.label :card_type, "Card Type <span style='color:red;'>*</span>".html_safe
+              - message = first_error_message_for(user_f.object, :card_type)
+              - css = message ? "error" : nil
+              = user_f.select :card_type, options_for_select(CreditCard.brands, current_user.card_type), {:prompt => 'Select One', :class => css, :title => message}
+            .info
+              = user_f.label :card_number, "Card Number <span style='color:red;'>*</span>".html_safe
+              - message = first_error_message_for(user_f.object, :card_number)
+              - css = message ? "error" : nil
+              = user_f.input_field :card_number, :autofocus => true, :required => true, :label => false, :class => css, :title => message, :value => nil
+            .info.expiration-date
+              - today = Date.today
+              = user_f.label :expiration, "Expiration Date <span style='color:red;'>*</span>".html_safe
+              = user_f.date_select :expiration, :discard_day => true, :start_year => Date.today.year, :end_year => (Date.today.year+10), :add_month_numbers => false, :order => [:month, :year], :required => true, :label => false, :default => { :day => '1', :mon => '12' }, :prompt => { :month => 'Month', :year => 'Year' }
 
-          .info
-            = f.label :cvv, "CVV <span style='color:red;'>*</span> <span id='cvv-explanation'>What's This?</span>".html_safe
-            - message = first_error_message_for(f.object, :cvv)
-            - css = message ? "error" : nil
-            = f.input_field :cvv, :required => true, :label => false, :maxlength => 4, :class => css, :title => message, :value => nil
-          = hidden_field_tag :order_id, @order.id
+            .info
+              = user_f.label :cvv, "CVV <span style='color:red;'>*</span> <span id='cvv-explanation'>What's This?</span>".html_safe
+              - message = first_error_message_for(user_f.object, :cvv)
+              - css = message ? "error" : nil
+              = user_f.input_field :cvv, :required => true, :label => false, :maxlength => 4, :class => css, :title => message, :value => nil
 
     #order-summary.order_summary.no-padding-right.left{:style => "height:auto;min-height: 100px;"}
       .header.text.black.bold.font16 Order Summary
