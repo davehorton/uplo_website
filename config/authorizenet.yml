@@ -1,12 +1,16 @@
-development:
+common: &common
   login: 2PuDj8E2t4k
   password: 5ehxv73R4468URSF
   testmode: true
 
+development:
+  <<: *common
+
 staging:
-  login: 2PuDj8E2t4k
-  password: 5ehxv73R4468URSF
-  testmode: true
+  <<: *common
+
+test:
+  <<: *common
 
 production:
   login: 56weNE5N8cG3

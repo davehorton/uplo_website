@@ -34,9 +34,6 @@ class Order < ActiveRecord::Base
   default_scope order('orders.transaction_date desc')
   scope :completed, where(transaction_status: TRANSACTION_STATUS[:complete])
 
-  #validates_length_of :cvv, :in => 3..4, :allow_nil => true
-  #validates_numericality_of :cvv, :card_number, :only_integer => true, :allow_nil => true
-
   def update_tax_by_state
     has_tax  = false
     # considering shipping state

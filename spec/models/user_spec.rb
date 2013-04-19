@@ -41,7 +41,6 @@ describe User do
   it { should validate_confirmation_of(:paypal_email).with_message(/should match confirmation/) }
   it { should ensure_length_of(:cvv).is_at_least(3).is_at_most(4) }
   it { should validate_numericality_of(:cvv).only_integer }
-  it { should validate_numericality_of(:card_number).only_integer }
   it { should validate_format_of(:website) }
 
   describe "validations" do
