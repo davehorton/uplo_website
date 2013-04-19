@@ -15,9 +15,7 @@ class UsersController < ApplicationController
       end
 
       params[:user][:card_number] = credit_card.display_number
-      params[:user].delete "expiration(1i)"
-      params[:user].delete "expiration(2i)"
-      params[:user].delete "expiration(3i)"
+      set_expiration(params[:user])
 
       # update Authorize Net Account
       begin

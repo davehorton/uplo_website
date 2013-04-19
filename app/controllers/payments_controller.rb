@@ -76,22 +76,20 @@ class PaymentsController < ApplicationController
         order_info = params[:order].clone
         user_info = order_info.delete(:user)
 
+        if params[:ship_to_billing].present?
+          order_info[:shipping_address_attributes] = order_info[:billing_address_attributes]
+        end
+
+        # set user info
         if params[:use_stored_cc].to_i == 0
           @credit_card = CreditCard.build_card_from_param(user_info)
           user_info[:card_number] = @credit_card.display_number
         else
           user_info = {}
         end
-
-        user_info.delete "expiration(1i)"
-        user_info.delete "expiration(2i)"
-        user_info.delete "expiration(3i)"
         user_info[:billing_address_attributes] = order_info[:billing_address_attributes]
-
-        if params[:ship_to_billing].present?
-          order_info[:shipping_address_attributes] = order_info[:billing_address_attributes]
-          user_info[:shipping_address_attributes] = order_info[:billing_address_attributes]
-        end
+        user_info[:shipping_address_attributes] = order_info[:shipping_address_attributes]
+        set_expiration(user_info)
 
         @order = Order.find_by_id(params[:order_id])
 
