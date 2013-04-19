@@ -72,9 +72,8 @@ class User < ActiveRecord::Base
   validates_length_of :last_name,  :in => 1..30
   validates_confirmation_of :paypal_email, :message => "should match confirmation"
 
-  #validates_length_of :cvv, :in => 3..4, :allow_nil => true
-  #validates_numericality_of :cvv, :card_number, :only_integer => true, :allow_nil => true
-  #validate :check_card_number, :if => :card_number_changed?
+  validates_length_of :cvv, :in => 3..4, :allow_nil => true
+  validates_numericality_of :cvv, :only_integer => true, :allow_nil => true
 
   validates_presence_of :paypal_email_confirmation, :if => :paypal_email_changed?
   validates :paypal_email, :email => true, :if => :paypal_email_changed?
@@ -465,10 +464,6 @@ class User < ActiveRecord::Base
   end
 
   private
-
-    def check_card_number
-      errors.add(:card_number, "is not valid") unless CreditCard.valid_number?(card_number)
-    end
 
     def check_password?
       (!self.force_submit && self.password_required?)

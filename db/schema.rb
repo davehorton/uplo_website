@@ -188,7 +188,6 @@ ActiveRecord::Schema.define(:version => 20130419061525) do
     t.string   "transaction_subject"
     t.string   "zip_code"
     t.float    "shipping_fee",                                       :default => 0.0
-    t.string   "name_on_card"
   end
 
   create_table "products", :force => true do |t|

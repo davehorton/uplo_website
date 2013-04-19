@@ -78,14 +78,11 @@ class PaymentsController < ApplicationController
 
         if params[:use_stored_cc].to_i == 0
           @credit_card = CreditCard.build_card_from_param(user_info)
-          unless @credit_card.valid?
-            flash[:error] = "Please fill all required fields first!"
-            return redirect_to :controller => 'orders', :action => 'index'
-          end
           user_info[:card_number] = @credit_card.display_number
         else
           user_info = {}
         end
+
         user_info.delete "expiration(1i)"
         user_info.delete "expiration(2i)"
         user_info.delete "expiration(3i)"
@@ -104,6 +101,11 @@ class PaymentsController < ApplicationController
           @order.compute_totals
 
           if current_user.update_profile(user_info)
+            if @credit_card && !@credit_card.valid?
+              flash[:error] = "Please fill all required fields first!"
+              return redirect_to :controller => 'orders', :action => 'index'
+            end
+
             response = Payment.process_purchase(current_user, @order, @credit_card)
             success = !response.nil? && response.success?
             if success

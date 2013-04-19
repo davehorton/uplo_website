@@ -97,8 +97,8 @@ $color-line-separator: #cccccc;
   width: 472px;
 }
 
-#order_expiration_1i-button { margin-left: 3px; }
-#order_expiration_1i-button, #order_expiration_1i-menu, #order_expiration_2i-menu, #order_expiration_2i-button {
+#order_user_expiration_1i-button { margin-left: 3px; }
+#order_user_expiration_1i-button, #order_user_expiration_1i-menu, #order_user_expiration_2i-menu, #order_user_expiration_2i-button {
   min-width: 92px;
   max-width: 92px;
 }
@@ -246,7 +246,7 @@ $color-line-separator: #cccccc;
 
 }
 
-#body-orders {
+#body-orders, #body-payments {
     .cart-details {
     font-size: 11.5px;
     line-height: 22px;
