@@ -56,6 +56,11 @@ class ApplicationController < ActionController::Base
   end
   helper_method :sticky_flash_message_key
 
+  def has_payment_profile?
+    current_user && current_user.an_customer_payment_profile_id
+  end
+  helper_method :has_payment_profile?
+
   def sticky_flash_message?
     @sticky_flash_message ||= flash.delete(sticky_flash_message_key)
   end
@@ -101,5 +106,11 @@ class ApplicationController < ActionController::Base
       if current_user && !current_user.admin? && current_user.blocked?
         render_banned_message
       end
+    end
+
+    def set_expiration(options)
+      expires_on = Date.civil(options["expiration(1i)"].to_i, options["expiration(2i)"].to_i, 1)
+      ["expiration(1i)", "expiration(2i)", "expiration(3i)"].each { |attr| options.delete(attr)}
+      options[:expiration] = expires_on.strftime("%m-%Y")
     end
 end

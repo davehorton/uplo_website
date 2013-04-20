@@ -73,57 +73,48 @@ class PaymentsController < ApplicationController
         setup_response = pp_gateway.setup_purchase(total_as_cents, setup_purchase_params)
         redirect_to pp_gateway.redirect_url_for(setup_response.token)
       when "an"
-        order_info = params[:order]
-        address_required_info = ['first_name', 'last_name', 'street_address', 'city', 'zip', 'state']
-        card_required_info = ['name_on_card', 'card_type', 'card_number', 'expiration(1i)', 'expiration(2i)']
+        order_info = params[:order].clone
+        user_info = order_info.delete(:user)
 
-        card_required_info.each { |val|
-          if !params[:order].has_key?(val) || params[:order][val].blank?
-            flash[:error] = "Please fill all required fields first!"
-            redirect_to :controller => 'orders', :action => 'index' and return
-          end
-        }
-        @remove_shipping_info = false
-        unless order_info['ship_to_billing'].blank? || !order_info['ship_to_billing']
+        if params[:ship_to_billing].present?
           order_info[:shipping_address_attributes] = order_info[:billing_address_attributes]
-          @remove_shipping_info = true
         end
-        order_info[:shipping_address_attributes].delete 'id'
-        order_info[:billing_address_attributes].delete 'id'
-        order_info.delete 'ship_to_billing'
-        # UPDATE PAYMENT INFO TO ORDER
 
+        # set user info
+        if params[:use_stored_cc].to_i == 0
+          @credit_card = CreditCard.build_card_from_param(user_info)
+          user_info[:card_number] = @credit_card.display_number
+        else
+          user_info = {}
+        end
+        user_info[:billing_address_attributes] = order_info[:billing_address_attributes]
+        user_info[:shipping_address_attributes] = order_info[:shipping_address_attributes]
+        set_expiration(user_info)
 
-        expires_on = Date.civil(order_info["expiration(1i)"].to_i,
-                         order_info["expiration(2i)"].to_i, 1)
-        order_info[:expiration] = expires_on.strftime("%m-%Y")
-        order_info.delete "expiration(1i)"
-        order_info.delete "expiration(2i)"
-        order_info.delete "expiration(3i)"
-        card_string = order_info["card_number"]
+        @order = Order.find_by_id(params[:order_id])
 
-        @order = Order.find_by_id params[:order_id]
-
-        if @order.update_attributes(params[:order])
-          order_info.delete 'shipping_address_attributes' if @remove_shipping_info
+        if @order.update_attributes(order_info)
           # TODO: update tax + price follow shipping state
           @order.update_tax_by_state
           @order.compute_totals
 
-          if current_user.update_profile(order_info)
-            an_value = Payment.create_authorizenet_test(card_string, expires_on, {:shipping => order_info[:shipping_address_attributes], :address => order_info[:billing_address_attributes]})
-            response = an_value[:transaction].purchase(@order.order_total, an_value[:credit_card])
+          if current_user.update_profile(user_info)
+            if @credit_card && !@credit_card.valid?
+              flash[:error] = "Please fill all required fields first!"
+              return redirect_to :controller => 'orders', :action => 'index'
+            end
 
+            response = Payment.process_purchase(current_user, @order, @credit_card)
             success = !response.nil? && response.success?
             if success
               finalize_cart
-              flash[:success] = "Successfully made a purchase (authorization code: #{response.authorization_code})"
-              redirect_to :action => :checkout_result, :trans_id => response.transaction_id and return
+              flash[:success] = "Successfully made a purchase (authorization code: #{response.authorization})"
+              transaction_id = response.params["direct_response"]["transaction_id"]
+              redirect_to :action => :checkout_result, :trans_id => transaction_id and return
             else
-              flash.now[:error] = "Failed to make purchase. #{response.response_reason_text}"
+              flash.now[:error] = "Failed to make purchase."
               render :template => "orders/index", :params => params and return
             end
-
           else
             render :template => "orders/index", :params => params and return
           end
@@ -147,30 +138,6 @@ class PaymentsController < ApplicationController
       :login => PP_API_USERNAME,
       :password => PP_API_PASSWORD,
       :signature => PP_API_SIGN
-    )
-  end
-
-  def an_gateway
-    @an_gateway ||= ActiveMerchant::Billing::AuthorizeNetGateway.new(
-    :login => AN_LOGIN_ID,
-    :password => AN_TRANS_KEY,
-    :test => false)
-  end
-
-  def an_credit_card
-    @an_credit_card ||= AuthorizeNet::CreditCard.new(nil, nil,
-    :track_1 => '%B4111111111111111^DOE/JOHN^1803101000000000020000831000000?')
-  end
-
-  def credit_card
-    @credit_card ||= ActiveMerchant::Billing::CreditCard.new(
-      :number     => '4007000000027',
-      :month      => '8',
-      :year       => '2020',
-      :first_name => 'Uplo',
-      :last_name  => 'Payment',
-      :verification_value  => '123',
-      :type => "visa"
     )
   end
 

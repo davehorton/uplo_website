@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130413073942) do
+ActiveRecord::Schema.define(:version => 20130419061525) do
 
   create_table "addresses", :force => true do |t|
     t.string   "first_name"
@@ -23,24 +23,24 @@ ActiveRecord::Schema.define(:version => 20130413073942) do
     t.string   "state"
     t.string   "phone"
     t.string   "fax"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                          :null => false
+    t.datetime "updated_at",                          :null => false
     t.string   "country",          :default => "usa"
   end
 
   create_table "carts", :force => true do |t|
     t.integer  "user_id"
     t.integer  "order_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
   end
 
   create_table "comments", :force => true do |t|
     t.integer  "user_id",     :null => false
     t.integer  "image_id"
     t.text     "description"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
   end
 
   add_index "comments", ["image_id"], :name => "index_comments_on_image_id"
@@ -51,8 +51,8 @@ ActiveRecord::Schema.define(:version => 20130413073942) do
     t.string   "name",                          :null => false
     t.text     "description"
     t.boolean  "delta",       :default => true, :null => false
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                    :null => false
+    t.datetime "updated_at",                    :null => false
     t.string   "keyword"
     t.string   "permission"
   end
@@ -66,8 +66,8 @@ ActiveRecord::Schema.define(:version => 20130413073942) do
     t.integer  "reported_by", :null => false
     t.integer  "flag_type",   :null => false
     t.string   "description"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
   end
 
   add_index "image_flags", ["image_id"], :name => "index_image_flags_on_image_id"
@@ -75,8 +75,8 @@ ActiveRecord::Schema.define(:version => 20130413073942) do
   create_table "image_likes", :force => true do |t|
     t.integer  "image_id",   :null => false
     t.integer  "user_id",    :null => false
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
   end
 
   add_index "image_likes", ["image_id"], :name => "index_image_likes_on_image_id"
@@ -84,8 +84,8 @@ ActiveRecord::Schema.define(:version => 20130413073942) do
   create_table "image_tags", :force => true do |t|
     t.integer  "image_id",   :null => false
     t.integer  "tag_id",     :null => false
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
   end
 
   add_index "image_tags", ["image_id"], :name => "index_image_tags_on_image_id"
@@ -98,8 +98,8 @@ ActiveRecord::Schema.define(:version => 20130413073942) do
     t.float    "price",              :default => 0.0
     t.boolean  "delta",              :default => true,  :null => false
     t.integer  "image_likes_count",  :default => 0
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                            :null => false
+    t.datetime "updated_at",                            :null => false
     t.string   "image_file_name"
     t.string   "image_content_type"
     t.integer  "image_file_size"
@@ -127,8 +127,8 @@ ActiveRecord::Schema.define(:version => 20130413073942) do
     t.string   "email",      :null => false
     t.string   "token",      :null => false
     t.datetime "invited_at"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
     t.string   "message"
   end
 
@@ -141,8 +141,8 @@ ActiveRecord::Schema.define(:version => 20130413073942) do
     t.boolean  "plexi_mount",                                         :default => false
     t.string   "moulding"
     t.string   "size"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                                                             :null => false
+    t.datetime "updated_at",                                                             :null => false
     t.float    "commission_percent"
     t.integer  "product_id"
     t.string   "crop_dimension"
@@ -174,8 +174,8 @@ ActiveRecord::Schema.define(:version => 20130413073942) do
     t.string   "message"
     t.integer  "shipping_address_id"
     t.integer  "billing_address_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                                                          :null => false
+    t.datetime "updated_at",                                                          :null => false
     t.string   "last_name"
     t.string   "city"
     t.string   "country"
@@ -187,12 +187,7 @@ ActiveRecord::Schema.define(:version => 20130413073942) do
     t.string   "currency"
     t.string   "transaction_subject"
     t.string   "zip_code"
-    t.string   "card_type"
-    t.string   "card_number"
-    t.string   "expiration"
-    t.string   "cvv"
     t.float    "shipping_fee",                                       :default => 0.0
-    t.string   "name_on_card"
   end
 
   create_table "products", :force => true do |t|
@@ -221,8 +216,8 @@ ActiveRecord::Schema.define(:version => 20130413073942) do
     t.string   "avatar_content_type",                    :null => false
     t.integer  "avatar_file_size",                       :null => false
     t.datetime "avatar_updated_at",                      :null => false
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                             :null => false
+    t.datetime "updated_at",                             :null => false
     t.text     "avatar_meta"
   end
 
@@ -237,8 +232,8 @@ ActiveRecord::Schema.define(:version => 20130413073942) do
 
   create_table "tags", :force => true do |t|
     t.string   "name",       :null => false
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
   end
 
   add_index "tags", ["name"], :name => "index_tags_on_name", :unique => true
@@ -250,30 +245,30 @@ ActiveRecord::Schema.define(:version => 20130413073942) do
     t.boolean  "notify_likes",     :default => true
     t.boolean  "notify_purchases", :default => true
     t.datetime "last_notified",                      :null => false
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                         :null => false
+    t.datetime "updated_at",                         :null => false
   end
 
   create_table "user_follows", :force => true do |t|
     t.integer  "user_id",     :null => false
     t.integer  "followed_by", :null => false
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
   end
 
   create_table "users", :force => true do |t|
-    t.string   "first_name",                                               :null => false
-    t.string   "last_name",                                                :null => false
+    t.string   "first_name",                                                       :null => false
+    t.string   "last_name",                                                        :null => false
     t.string   "username"
     t.datetime "birthday"
     t.string   "nationality"
     t.string   "gender"
-    t.string   "email",                                 :default => "",    :null => false
-    t.string   "encrypted_password",     :limit => 128, :default => "",    :null => false
+    t.string   "email",                                         :default => "",    :null => false
+    t.string   "encrypted_password",             :limit => 128, :default => "",    :null => false
     t.string   "reset_password_token"
     t.datetime "reset_password_sent_at"
     t.datetime "remember_created_at"
-    t.integer  "sign_in_count",                         :default => 0
+    t.integer  "sign_in_count",                                 :default => 0
     t.datetime "current_sign_in_at"
     t.datetime "last_sign_in_at"
     t.string   "current_sign_in_ip"
@@ -282,16 +277,16 @@ ActiveRecord::Schema.define(:version => 20130413073942) do
     t.datetime "confirmed_at"
     t.datetime "confirmation_sent_at"
     t.string   "authentication_token"
-    t.boolean  "delta",                                 :default => true,  :null => false
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.boolean  "delta",                                         :default => true,  :null => false
+    t.datetime "created_at",                                                       :null => false
+    t.datetime "updated_at",                                                       :null => false
     t.string   "twitter"
     t.string   "facebook"
     t.text     "biography"
     t.string   "website"
-    t.boolean  "admin",                                 :default => false
-    t.boolean  "removed",                               :default => false
-    t.boolean  "banned",                                :default => false
+    t.boolean  "admin",                                         :default => false
+    t.boolean  "removed",                                       :default => false
+    t.boolean  "banned",                                        :default => false
     t.string   "paypal_email"
     t.string   "location"
     t.string   "job"
@@ -302,9 +297,9 @@ ActiveRecord::Schema.define(:version => 20130413073942) do
     t.string   "cvv"
     t.integer  "shipping_address_id"
     t.integer  "billing_address_id"
-    t.boolean  "facebook_enabled",                      :default => false
-    t.boolean  "twitter_enabled",                       :default => false
-    t.float    "withdrawn_amount",                      :default => 0.0
+    t.boolean  "facebook_enabled",                              :default => false
+    t.boolean  "twitter_enabled",                               :default => false
+    t.float    "withdrawn_amount",                              :default => 0.0
     t.string   "facebook_token"
     t.string   "twitter_token"
     t.string   "flickr_token"
@@ -313,9 +308,11 @@ ActiveRecord::Schema.define(:version => 20130413073942) do
     t.string   "twitter_secret_token"
     t.string   "tumblr_secret_token"
     t.string   "flickr_secret_token"
-    t.boolean  "photo_processing",                      :default => false
-    t.integer  "image_likes_count",                     :default => 0
-    t.integer  "images_count",                          :default => 0
+    t.boolean  "photo_processing",                              :default => false
+    t.integer  "image_likes_count",                             :default => 0
+    t.integer  "images_count",                                  :default => 0
+    t.integer  "an_customer_profile_id"
+    t.integer  "an_customer_payment_profile_id"
   end
 
   add_index "users", ["banned"], :name => "index_users_on_banned"

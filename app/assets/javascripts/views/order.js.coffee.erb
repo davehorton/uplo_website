@@ -111,5 +111,11 @@ $ ->
     <% end %>
     $('#order-shippings').submit()
 
+  $('#use_stored_cc').change ->
+    if $(@).is(':checked')
+      $('.cc_info').hide();
+    else
+      $('.cc_info').show();                  
+
   # Form inline error showing
   form_validation.setup($('form.simple_form .error'))

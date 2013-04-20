@@ -8,21 +8,22 @@ class UsersController < ApplicationController
     type_update = params[:user][:type_update]
     params[:user].delete(:type_update)
     if (type_update == "payment_info")
-      card_required_info = ['name_on_card', 'card_type', 'card_number', 'expiration(1i)', 'expiration(2i)']
+      credit_card = CreditCard.build_card_from_param(params[:user])
+      unless credit_card.valid?
+        error = "#{credit_card.errors.full_messages.to_sentence}"
+        return render :json => [error], :status => :unprocessable_entity
+      end
 
-      card_required_info.each { |val|
-        if !params[:user].has_key?(val) || params[:user][val].blank?
-          error = 'Please fill all required fields first!'
-          return render :json => [error], :status => :unprocessable_entity
-        end
-      }
+      params[:user][:card_number] = credit_card.display_number
+      set_expiration(params[:user])
 
-      expires_on = Date.civil(params[:user]["expiration(1i)"].to_i,
-                         params[:user]["expiration(2i)"].to_i, 1)
-      params[:expiration] = expires_on.strftime("%m-%Y")
-      params[:user].delete "expiration(1i)"
-      params[:user].delete "expiration(2i)"
-      params[:user].delete "expiration(3i)"
+      # update Authorize Net Account
+      begin
+        PaymentInfo.create_payment_profile(current_user, credit_card)
+      rescue Exception => ex
+        error = "There was a problem processing your credit card. Please try again."
+        return render :json => [error], :status => :unprocessable_entity
+      end
     end
     address = nil
     if (type_update == "billing_address" || type_update == "shipping_address")

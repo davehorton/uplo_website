@@ -1,0 +1,33 @@
+.info
+  = address.label :first_name, "First Name <span style='color:red;'>*</span>".html_safe
+  - message = first_error_message_for(address.object, :first_name)
+  - css = message ? "error" : nil
+  = address.input_field :first_name, :autofocus => true, :required => true, :class => css, :title => message
+.info
+  = address.label :last_name, "Last Name <span style='color:red;'>*</span>".html_safe
+  - message = first_error_message_for(address.object, :last_name)
+  - css = message ? "error" : nil
+  = address.input_field :last_name, :required => true, :class => css, :title => message
+.info
+  = address.label :street_address, "Street Address <span style='color:red;'>*</span>".html_safe
+  - message = first_error_message_for(address.object, :street_address)
+  - css = message ? "error" : nil
+  = address.input_field :street_address, :required => true, :class => css, :title => message
+.info
+  = label_tag :optional_address, ""
+  = address.input_field :optional_address
+.info
+  = address.label :city, "City <span style='color:red;'>*</span>".html_safe
+  - message = first_error_message_for(address.object, :city)
+  - css = message ? "error" : nil
+  = address.input_field :city, :required => true, :class => css, :title => message
+.info
+  = address.label :state, "State <span style='color:red;'>*</span>".html_safe
+  - message = first_error_message_for(address.object, :state)
+  - css = message ? "error" : nil
+  = address.input_field :state, :required => true, :class => css, :title => message
+.info
+  = address.label :zip, "Postal/Zip Code <span style='color:red;'>*</span>".html_safe
+  - message = first_error_message_for(address.object, :zip)
+  - css = message ? "error" : nil
+  = address.input_field :zip, :required => true, :class => "zip_input #{css}", :title => message

@@ -4,8 +4,13 @@ class OrdersController < ApplicationController
   def index
     if find_cart
       @order = @cart.order
-      @order.billing_address = Address.new if !@order.billing_address
-      @order.shipping_address = Address.new if !@order.shipping_address
+      @order.billing_address = Address.new.initialize_dup(@order.billing_address ||
+                                                          current_user.billing_address ||
+                                                          Address.new)
+
+      @order.shipping_address = Address.new.initialize_dup(@order.shipping_address ||
+                                                           current_user.shipping_address ||
+                                                           Address.new)
     end
   end
 end

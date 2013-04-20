@@ -15,10 +15,6 @@ describe Order do
   it { should accept_nested_attributes_for(:billing_address) }
   it { should accept_nested_attributes_for(:shipping_address) }
 
-  it { should ensure_length_of(:cvv).is_at_least(3).is_at_most(4) }
-  it { should validate_numericality_of(:cvv).only_integer }
-  it { should validate_numericality_of(:card_number).only_integer }
-
   it "has a completed scope" do
     empty_order.update_attribute(:transaction_status, "completed")
     Order.completed.should == [empty_order]

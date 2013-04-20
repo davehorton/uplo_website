@@ -53,8 +53,6 @@ GEM
     alchemist (0.1.5)
     arel (3.0.2)
     attr_required (0.0.5)
-    authorize-net (1.5.2)
-      nokogiri (~> 1.4)
     aws-sdk (1.5.8)
       httparty (~> 0.7)
       json (~> 1.4)
@@ -373,7 +371,6 @@ DEPENDENCIES
   activemerchant
   aescrypt
   alchemist
-  authorize-net
   aws-sdk (~> 1.5.7)
   cancan
   capybara

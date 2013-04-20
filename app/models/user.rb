@@ -73,8 +73,7 @@ class User < ActiveRecord::Base
   validates_confirmation_of :paypal_email, :message => "should match confirmation"
 
   validates_length_of :cvv, :in => 3..4, :allow_nil => true
-  validates_numericality_of :cvv, :card_number, :only_integer => true, :allow_nil => true
-  validate :check_card_number, :if => :card_number_changed?
+  validates_numericality_of :cvv, :only_integer => true, :allow_nil => true
 
   validates_presence_of :paypal_email_confirmation, :if => :paypal_email_changed?
   validates :paypal_email, :email => true, :if => :paypal_email_changed?
@@ -274,26 +273,6 @@ class User < ActiveRecord::Base
       cart.order = recent_empty_order
       cart.save
     end
-
-    if !cart.order.billing_address
-      if billing_address
-        cart.order.billing_address = billing_address.dup
-        cart.order.billing_address.save
-      end
-
-      if shipping_address
-        cart.order.shipping_address = shipping_address.dup
-        cart.order.shipping_address.save
-      end
-
-      cart.order.name_on_card = name_on_card
-      cart.order.card_type = card_type
-      cart.order.card_number = card_number
-      cart.order.expiration = expiration
-      cart.order.cvv = cvv
-      cart.order.save
-    end
-
     cart
   end
 
@@ -485,10 +464,6 @@ class User < ActiveRecord::Base
   end
 
   private
-
-    def check_card_number
-      errors.add(:card_number, "is not valid") unless CreditCard.valid_number?(card_number)
-    end
 
     def check_password?
       (!self.force_submit && self.password_required?)

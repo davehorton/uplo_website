@@ -1,0 +1,18 @@
+common: &common
+  login: 2PuDj8E2t4k
+  password: 5ehxv73R4468URSF
+  testmode: true
+
+development:
+  <<: *common
+
+staging:
+  <<: *common
+
+test:
+  <<: *common
+
+production:
+  login: 56weNE5N8cG3
+  password: 7baEgf3P875XTv6z
+  testmode: false
