@@ -9,18 +9,13 @@ class LineItem < ActiveRecord::Base
   attr_accessor :crop_x, :crop_y, :crop_w, :crop_h, :crop_flag
   after_save :delayed_copy_image, :if => :crop_flag
 
-  STORAGE_PATH = "image/:image_id/orders/:order_id/:id.:extension"
-  STORAGE_OPTIONS = if Rails.application.config.paperclip_defaults[:storage] == :s3
-                      {path: STORAGE_PATH}
-                    else
-                      { path: ":rails_root/public/system/#{STORAGE_PATH}",
-                        url: "/system/#{STORAGE_PATH}" }
-                    end
-
-  has_attached_file :content, {
-    styles: lambda {|attachment| {:original => (attachment.instance.dyn_style)}},
-    processors: [:cropper]
-  }.merge(STORAGE_OPTIONS)
+  STORAGE_PATH = "orders/:order_id/:id.:extension"
+  has_attached_file :content,
+                    :storage => :dropbox,
+                    :dropbox_credentials => "#{Rails.root}/config/dropbox.yml",
+                    :styles => lambda {|attachment| {:original => (attachment.instance.dyn_style)}},
+                    :processors => [:cropper],
+                    :dropbox_options => { :path => proc { |style| dropbox_path } }
 
   validates :quantity, numericality: { less_than_or_equal_to: 10 }
 
@@ -83,13 +78,10 @@ class LineItem < ActiveRecord::Base
     Time.zone.now.beginning_of_day.since 25.hours
   end
 
-  def url(options = :cropped)
-    storage = Rails.application.config.paperclip_defaults[:storage]
-    case storage
-      when :s3 then self.content.expiring_url(s3_expire_time, options)
-      when :filesystem then content.url(options)
-    end
+  def dropbox_path
+    "orders/#{order_id}/#{id}.#{content.original_filename.split('.').last}"
   end
+
 
   private
 
