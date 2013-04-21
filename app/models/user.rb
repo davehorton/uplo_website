@@ -191,10 +191,16 @@ class User < ActiveRecord::Base
   end
 
   def avatar_url(style='thumb')
+    protocol = Rails.env.production? ? 'https' : 'http'
+
     if avatar.nil?
-      "/assets/avatar-default-#{style.to_s}.jpg"
+      "#{protocol}://#{DOMAIN}/assets/avatar-default-#{style.to_s}.jpg"
     else
-      avatar.url(style.to_sym)
+      storage = Rails.application.config.paperclip_defaults[:storage]
+      case storage
+        when :s3 then avatar.url(style.to_sym)
+        when :filesystem then "#{protocol}://#{DOMAIN}#{avatar.url(style.to_sym)}"
+      end
     end
   end
 
