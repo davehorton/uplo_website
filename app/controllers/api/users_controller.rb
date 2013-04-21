@@ -4,15 +4,37 @@ class Api::UsersController < Api::BaseController
   respond_to :json
 
   skip_before_filter :require_login!, only: [:login, :create_user, :reset_password, :request_invitation]
+  before_filter      :find_user, only: [:show, :followers, :following]
 
-  # GET /api/user_info
-  def get_user_info
-    user = current_user
-    if user.nil?
-      render json: { msg: "This user does not exist" }, status: :bad_request
+  # POST /api/users/check_emails
+  # required:
+  #   emails
+  def check_emails
+    emails = ActiveSupport::JSON.decode(params[:emails])
+    users = User.find_all_by_email(emails)
+
+    if users
+      render json: users
     else
-      render json: user, status: :ok
+      render json: { msg: "No email found" }, status: :not_found
     end
+  end
+
+  # GET /api/users/:id
+  def show
+    render json: @user
+  end
+
+  # GET /api/users/:id/followers
+  def followers
+    followers = @user.followers.paginate_and_sort(filtered_params)
+    render json: followers
+  end
+
+  # GET /api/users/:id/following
+  def following
+    followed_users = @user.followed_users.paginate_and_sort(filtered_params)
+    render json: followed_users
   end
 
   # POST /api/request_invitation
@@ -128,31 +150,6 @@ class Api::UsersController < Api::BaseController
     render json: { data: user_sales[:data], total: user_sales[:total_entries] }, status: :ok
   end
 
-  # GET /api/user_followers
-  # params: user_id
-  def get_followers
-    user = User.find_by_id params[:user_id]
-    user = current_user if user.nil?
-    if user.nil?
-      render json: { msg: "This user does not exist" }, status: :bad_request
-    else
-      followers = user.followers.paginate_and_sort(filtered_params)
-      render json: process_followers_info(user.id, followers), status: :ok
-    end
-  end
-
-  # GET /api/user_followings
-  # params: user_id
-  def get_followed_users
-    user = User.find_by_id params[:user_id]
-    if user.nil?
-      render json: { msg: "This user does not exist" }, status: :bad_request
-    else
-      followed_users = user.followed_users.paginate_and_sort(filtered_params)
-      render json: process_followed_users_info(user.id, followed_users), status: :ok
-    end
-  end
-
   # /api/follow
   # follow: T/F <follow/unfollow user>
   # user_id: <current user will follow this user>
@@ -228,20 +225,6 @@ class Api::UsersController < Api::BaseController
     end
   end
 
-  # POST /api/check_emails
-  # Params
-  # emails => JSON ARRAY
-  def check_emails
-    if (params[:emails])
-      parsed_json = ActiveSupport::JSON.decode(params[:emails])
-      avai_emails = []
-      users = User.find_all_by_email(parsed_json)
-      render json: { data: process_followers_info(current_user.id, users) }, status: :ok
-    else
-      render json: { msg: "No email found" }, status: :bad_request
-    end
-  end
-
   # GET /api/payment_info
   # Params
   def get_user_payment_info
@@ -269,25 +252,10 @@ class Api::UsersController < Api::BaseController
 
   protected
 
-    def process_followers_info(user_id, users)
-      result = []
-      users.each do |u|
-        info = u
-        info[:following] = u.has_follower?(user_id)
-        info[:followed_by_current_user] = u.has_follower?(current_user.id)
-        result << {:user => info}
-      end
-      result
-    end
-
-    def process_followed_users_info(user_id, users)
-      result = []
-      users.each do |u|
-        info = u
-        info[:followed_by_current_user] = u.has_follower?(current_user.id)
-        result << {:user => info}
-      end
-      result
+    def find_user
+      @user = User.find(params[:id])
+    rescue ActiveRecord::RecordNotFound
+      render json: { msg: "This user does not exist" }, status: :not_found
     end
 
     def authenticate_user(username, password)

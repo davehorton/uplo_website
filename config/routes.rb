@@ -247,20 +247,27 @@ Uplo::Application.routes.draw do
 
     # User
     devise_scope :user do
+      resources :users, only: [:show] do
+        collection do
+          post :check_emails
+        end
+
+        member do
+          get :followers
+          get :following
+        end
+      end
+
       get "total_sales", :to => "users#get_total_sales"
       post "login", :to => "users#login"
       post "logout", :to => "users#logout"
-      get "user_info", :to => "users#get_user_info"
       post "register", :to => "users#create_user"
       get "reset_password", :to => "users#reset_password"
       post "update_profile", :to => "users#update_profile"
-      get 'user_followings', :to => 'users#get_followed_users'
-      get 'user_followers', :to => 'users#get_followers'
       get 'follow', :to => 'users#set_follow'
       get 'check_following', :to => 'users#check_following'
       get 'get_notification_settings', :to => 'users#get_notification_settings'
       post 'update_notification_settings', :to => 'users#update_notification_settings'
-      get "check_emails", :to => "users#check_emails"
       get 'payment_info', :to => "users#get_user_payment_info"
       post 'withdraw', :to => "users#withdraw"
       get 'card_info', :to => "users#get_user_card_info"

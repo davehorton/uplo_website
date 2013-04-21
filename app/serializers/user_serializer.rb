@@ -1,8 +1,19 @@
 class UserSerializer < ActiveModel::Serializer
-  attributes :id, :email, :first_name, :biography, :facebook_enabled, :twitter_enabled, :location,
-             :paypal_email, :website, :job, :last_name, :username, :nationality, :birthday, :gender,
-             :twitter, :facebook, :avatar_url, :fullname, :joined_date, :billing_address, :shipping_address,
-             :confirmed_at, :galleries_num, :images_num, :followers_num, :following_num, :cart_items_num
+  attributes :id, :first_name, :biography, :facebook_enabled, :twitter_enabled, :location,
+             :website, :job, :last_name, :username, :birthday, :gender,
+             :twitter, :facebook, :avatar_url, :fullname, :joined_date, :galleries_num, :images_num, :followers_num, :following_num, :followed_by_current_user, :cart_items_num
+
+  def attributes
+    hash = super
+    if object == scope
+      hash["email"] = object.email
+      hash["paypal_email"] = object.paypal_email
+      hash["billing_address"] = object.billing_address
+      hash["shipping_address"] = object.shipping_address
+      hash["confirmed_at"] = object.confirmed_at
+    end
+    hash
+  end
 
   def galleries_num
     if object == scope
@@ -32,5 +43,9 @@ class UserSerializer < ActiveModel::Serializer
     if object == scope && object.cart.try(:order)
       object.cart.order.line_items.count
     end
+  end
+
+  def followed_by_current_user
+    object.has_follower?(scope.id)
   end
 end
