@@ -234,8 +234,6 @@ Uplo::Application.routes.draw do
       resources :comments, only: [:index, :create]
     end
 
-    get "search", :to => "search#search"
-
     # Order
     get "list_orders", :to => "orders#list_orders"
     post "create_order", :to => "orders#create_order"
@@ -250,6 +248,7 @@ Uplo::Application.routes.draw do
       resources :users, only: [:show] do
         collection do
           post :check_emails
+          get :search
         end
 
         member do

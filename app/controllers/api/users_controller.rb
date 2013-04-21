@@ -20,6 +20,22 @@ class Api::UsersController < Api::BaseController
     end
   end
 
+  # GET /api/users/search
+  # required:
+  #   query
+  # optional:
+  #   page
+  #   per_page
+  #   sort_field
+  #   sort_direction
+  def search
+    raise 'Invalid request' if params[:query].blank?
+
+    users = User.search_scope(params[:query]).
+              paginate_and_sort(filtered_params)
+    render json: users, meta: { total: users.size }
+  end
+
   # GET /api/users/:id
   def show
     render json: @user

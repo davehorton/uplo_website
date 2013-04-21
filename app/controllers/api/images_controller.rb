@@ -55,14 +55,18 @@ class Api::ImagesController < Api::BaseController
 
   # GET /api/images/search
   # required:
-  #   ids
+  #   query
   # optional:
   #   page
   #   per_page
   #   sort_field
   #   sort_direction
   def search
-    images = Image.unflagged.where(id: filtered_params[:ids]).paginate_and_sort(filtered_params)
+    raise 'Invalid request' if params[:query].blank?
+
+    images = Image.search_scope(params[:query]).
+              public_or_owner(current_user).
+              paginate_and_sort(filtered_params)
     render json: images, meta: { total: images.size }
   end
 
