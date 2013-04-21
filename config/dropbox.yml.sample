@@ -3,9 +3,8 @@ development: &development
   app_secret: "uzms5h4q4v97fuh"
   access_token: "i9awg3wjw38xrlc"
   access_token_secret: "z31ts93uq9sexhg"
-  user_id: "118744057"
-  access_type: "app_folder"  
- 
+  user_id: 85370
+  access_type: "app_folder"
+
 test:
   <<: *development
-  
