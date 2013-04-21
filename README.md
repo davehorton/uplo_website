@@ -14,8 +14,9 @@ Historical note: we inherited this project from another shop in February 2013. W
 
 1. Install the above components and Redis
 2. cp config/database.yml.example config/database.yml (update settings if needed)
-3. bundle
-4. bin/rake db:setup
+3. Setup other config files (see config/*.yml.sample)
+4. bundle
+5. bin/rake db:setup
 
 ## Testing
 
@@ -29,7 +30,7 @@ Observers are disabled in specs (see spec_helper) but have their own specific te
 
 We are using the 'letter opener' gem to intercept emails and display them in a Web browser
 
-### Sidekiq
+### Image Renditions
 
 We are using Sidekiq to process images via the delayed_paperclip gem. Therefore to run the Sidekiq locally to process the queue, do this:
 
@@ -46,6 +47,14 @@ redis-cli
 ```
 
 And type: FLUSHALL
+
+#### Rebuilding Image Metadata
+
+To rebuild images metadata locally, be sure Sidekiq is running and run the following Paperclip task:
+
+```
+bundle exec rake paperclip:refresh:metadata CLASS=Image
+```
 
 ## Operations
 
