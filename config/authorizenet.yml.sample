@@ -6,13 +6,5 @@ common: &common
 development:
   <<: *common
 
-staging:
-  <<: *common
-
 test:
   <<: *common
-
-production:
-  login: 56weNE5N8cG3
-  password: 7baEgf3P875XTv6z
-  testmode: false
