@@ -19,6 +19,7 @@
 # files
 /config/authorizenet.yml
 /config/database.yml
+/config/dropbox.yml
 /db/dumpfile
 /log/*.log
 TODO
@@ -28,4 +29,3 @@ db/dumpfile_final
 .rvmrc
 .powrc
 /coverage
-
