@@ -17,6 +17,7 @@
 .rspec
 
 # files
+/config/authorizenet.yml
 /config/database.yml
 /db/dumpfile
 /log/*.log
@@ -27,3 +28,4 @@ db/dumpfile_final
 .rvmrc
 .powrc
 /coverage
+
