@@ -93,6 +93,8 @@ class Order < ActiveRecord::Base
       # Send the notification email to the buyer.
       PaymentMailer.delay.transaction_finish(id)
       PaymentMailer.delay.inform_new_order(id)
+
+      # For adding processed orders to dropbox
       self.add_to_dropbox
 
     rescue Exception => exc
