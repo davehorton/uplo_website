@@ -225,7 +225,7 @@ Uplo::Application.routes.draw do
         get  :sale_chart
         get  :sizes
         get  :total_sales
-        put  :unlike
+        post :unlike
       end
 
       resources :comments, only: [:index, :create]
