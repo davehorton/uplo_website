@@ -20,7 +20,6 @@ class Api::BaseController < ActionController::Base
   end
 
   def require_login!
-    puts "Here in require_login"
     render_require_login if !user_signed_in?
   end
 
@@ -33,7 +32,6 @@ class Api::BaseController < ActionController::Base
   end
 
   def render_require_login
-    puts "Here in render_require_login"
     render_error_response(:unauthorized, "common.error_not_login")
   end
 
