@@ -207,9 +207,7 @@ Uplo::Application.routes.draw do
 
   # API ROUTING
   namespace :api do
-    resources :galleries, except: [:show, :edit] do
-      get :popular, on: :collection
-    end
+    resources :galleries, except: [:show, :edit]
 
     resources :images do
       collection do

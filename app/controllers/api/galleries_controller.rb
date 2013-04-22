@@ -7,38 +7,21 @@ class Api::GalleriesController < Api::BaseController
   #   per_page
   #   sort_field
   #   sort_direction
-  #   user_id: if null, list galleries of current user
+  #   user_id (if null, list galleries of current user)
   def index
-    author = if filtered_params[:user_id]
-      User.find(filtered_params[:user_id])
-    else
-      current_user
-    end
-
-    galleries = author.galleries.with_images.paginate_and_sort(filtered_params)
-    render json: galleries, meta: { total: galleries.total_entries }
-  end
-
-  # GET /api/galleries/popular
-  # params:
-  #   page
-  #   per_page
-  #   sort_field
-  #   sort_direction
-  #   user_id
-  def popular
     if params[:user_id].blank?
-      galleries = Gallery.public_access.with_images.paginate_and_sort(filtered_params)
+      galleries = Gallery.public_access
     else
       user = User.find(params[:user_id])
 
       if user == current_user
-        galleries = user.with_images.paginate_and_sort(filtered_params)
+        galleries = user.galleries.scoped
       else
-        galleries = user.public_galleries.with_images.paginate_and_sort(filtered_params)
+        galleries = user.public_galleries.scoped
       end
     end
 
+    galleries = galleries.with_images.paginate_and_sort(filtered_params)
     render json: galleries, meta: { total: galleries.total_entries }
   end
 

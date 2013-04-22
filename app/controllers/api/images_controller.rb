@@ -15,17 +15,18 @@ class Api::ImagesController < Api::BaseController
   def index
     if gallery_id = filtered_params[:gallery_id]
       gallery = Gallery.find(gallery_id)
-      images = gallery.images.unflagged.size
+      images = gallery.images.unflagged
     else
-      user_id = filtered_params[:user_id]
+      user = User.find(params[:user_id])
 
-      if user_id == current_user.id
-        images = current_user.images.unflagged.with_gallery.paginate_and_sort(filtered_params)
+      if user == current_user
+        images = current_user.images.unflagged
       else
-        user = User.find(user_id)
-        images = user.images.public_access.with_gallery.paginate_and_sort(filtered_params)
+        images = user.images.public_access
       end
     end
+
+    images = images.with_gallery.paginate_and_sort(filtered_params)
 
     render json: images, meta: { total: images.size }
   end
