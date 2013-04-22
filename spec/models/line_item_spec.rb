@@ -63,7 +63,6 @@ describe LineItem do
     end
   end
 
-
   describe "#cropping?" do
     context "with cropping parameters" do
       it "should return true" do
@@ -76,6 +75,13 @@ describe LineItem do
       it "should return false" do
         line_item.cropping?.should be_false
       end
+    end
+  end
+
+  describe "#dropbox_path" do
+    it "should return the dropbox path" do
+      line_item1 = create(:line_item, :content_file_name => 'test.jpg')
+      line_item1.dropbox_path.should == "orders/#{line_item1.order.id}/#{line_item1.id}.jpg"
     end
   end
 

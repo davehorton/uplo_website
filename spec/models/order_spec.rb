@@ -92,10 +92,6 @@ describe Order do
     end
   end
 
-  describe "#finalize_transaction" do
-    pending "method seems broken"
-  end
-
   describe "before create callback init_transaction_date" do
     it "should assign transaction date" do
       order1 = create(:order, :transaction_date => "")

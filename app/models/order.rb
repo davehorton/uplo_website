@@ -94,6 +94,9 @@ class Order < ActiveRecord::Base
       PaymentMailer.delay.transaction_finish(id)
       PaymentMailer.delay.inform_new_order(id)
 
+      # For adding processed orders to dropbox
+      self.add_to_dropbox
+
     rescue Exception => exc
       ExternalLogger.log_error(exc, "Finalizing transaction failed")
       raise
@@ -104,6 +107,12 @@ class Order < ActiveRecord::Base
 
   def transaction_completed?
     return (self.transaction_status.to_s == TRANSACTION_STATUS[:complete])
+  end
+
+  def add_to_dropbox
+    self.line_items.each do |line_item|
+      line_item.delay.copy_image
+    end
   end
 
   protected
