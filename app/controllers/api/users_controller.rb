@@ -187,17 +187,6 @@ class Api::UsersController < Api::BaseController
     end
   end
 
-  # /api/check_following
-  # user_id: <user to check whether current user's follow it or not>
-  def check_following
-    user = User.find_by_id(params[:user_id])
-    if user.nil?
-      render json: { msg: "This user does not exist" }, status: :bad_request
-    else
-      render json: { check_result: user.has_follower?(current_user.id) }, status: :ok
-    end
-  end
-
   # POST /api/get_notification_settings
   def get_notification_settings
     device = UserDevice.find_by_device_token params[:device_token].to_s,

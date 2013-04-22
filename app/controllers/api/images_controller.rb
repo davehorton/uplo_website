@@ -22,9 +22,8 @@ class Api::ImagesController < Api::BaseController
       if user_id == current_user.id
         images = current_user.images.unflagged.with_gallery.paginate_and_sort(filtered_params)
       else
-        images = current_user.images.public_access
-        #images = current_user.images.public_access.with_gallery
-        #images = current_user.images.public_access.with_gallery.paginate_and_sort(filtered_params)
+        user = User.find(user_id)
+        images = user.images.public_access.with_gallery.paginate_and_sort(filtered_params)
       end
     end
 
@@ -177,14 +176,5 @@ class Api::ImagesController < Api::BaseController
     image = Image.unflagged.find(params[:id])
     result = image.flag!(current_user, params)
     render json: result
-  end
-
-  # GET /api/images/user_images
-  # params:
-  # => user_id
-  #
-  def user_images
-    images = Image.find_all_by_user_id(params[:user_id])
-    render json: images, root: :images, meta: { total: images.count }
   end
 end

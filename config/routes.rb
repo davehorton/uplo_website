@@ -217,7 +217,6 @@ Uplo::Application.routes.draw do
         get :liked
         get :popular
         get :search
-        get :user_images
       end
 
       member do
@@ -264,7 +263,6 @@ Uplo::Application.routes.draw do
       get "reset_password", :to => "users#reset_password"
       post "update_profile", :to => "users#update_profile"
       get 'follow', :to => 'users#set_follow'
-      get 'check_following', :to => 'users#check_following'
       get 'get_notification_settings', :to => 'users#get_notification_settings'
       post 'update_notification_settings', :to => 'users#update_notification_settings'
       get 'payment_info', :to => "users#get_user_payment_info"

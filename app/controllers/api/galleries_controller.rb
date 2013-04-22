@@ -1,8 +1,5 @@
 class Api::GalleriesController < Api::BaseController
-
   respond_to :json
-
-  skip_before_filter :require_login!, only: [:popular]
 
   # GET /api/galleries
   # params:
