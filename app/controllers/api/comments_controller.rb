@@ -17,10 +17,11 @@ class Api::CommentsController < Api::BaseController
   def create
     image = Image.unflagged.find(params[:image_id])
 
-    comment = Comment.new(params[:comment])
+    comment = image.comments.build(params[:comment])
     comment.user = current_user
+    comment.save
 
-    if gal.comment
+    if comment
       render json: comment, status: :created
     else
       render json: { msg: comment.errors.full_messages.to_sentence }, status: :bad_request
