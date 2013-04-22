@@ -84,12 +84,12 @@ class PaymentsController < ApplicationController
         if params[:use_stored_cc].to_i == 0
           @credit_card = CreditCard.build_card_from_param(user_info)
           user_info[:card_number] = @credit_card.display_number
+          set_expiration(user_info)
         else
           user_info = {}
         end
         user_info[:billing_address_attributes] = order_info[:billing_address_attributes]
         user_info[:shipping_address_attributes] = order_info[:shipping_address_attributes]
-        set_expiration(user_info)
 
         @order = Order.find_by_id(params[:order_id])
 
