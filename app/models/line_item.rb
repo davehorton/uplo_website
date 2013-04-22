@@ -6,16 +6,14 @@ class LineItem < ActiveRecord::Base
   belongs_to :order
 
   # for cropping
-  attr_accessor :crop_x, :crop_y, :crop_w, :crop_h, :crop_flag
-  after_save :delayed_copy_image, :if => :crop_flag
+  attr_accessor :crop_x, :crop_y, :crop_w, :crop_h
 
-  STORAGE_PATH = "orders/:order_id/:id.:extension"
   has_attached_file :content,
                     :storage => :dropbox,
                     :dropbox_credentials => "#{Rails.root}/config/dropbox.yml",
                     :styles => lambda {|attachment| {:original => (attachment.instance.dyn_style)}},
                     :processors => [:cropper],
-                    :dropbox_options => { :path => proc { |style| dropbox_path } }
+                    :dropbox_options => { :path => proc { |style| dropbox_path }  }
 
   validates :quantity, numericality: { less_than_or_equal_to: 10 }
 
@@ -33,7 +31,6 @@ class LineItem < ActiveRecord::Base
   end
 
   def set_crop_dimension(options)
-    self.crop_flag = true
     self.crop_dimension = "#{options[:crop_w]}x#{options[:crop_h]}+#{options[:crop_x]}+#{options[:crop_y]}"
   end
 
@@ -41,12 +38,7 @@ class LineItem < ActiveRecord::Base
     self.crop_dimension.to_s.split(/[x,+]/).collect(&:to_i)
   end
 
-  def delayed_copy_image
-    self.delay.copy_image
-  end
-
   def copy_image
-    self.crop_flag = false
     self.crop_w, self.crop_h, self.crop_x, self.crop_y = self.cropped_dimensions
     self.content = download_remote_image
     self.save!
