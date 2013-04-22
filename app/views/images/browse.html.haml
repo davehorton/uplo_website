@@ -287,8 +287,8 @@
           data: { dislike:dislike },
           dataType: "json",
           success: function(response){
-            $(".actions .like .times").html(response.likes_count);
-            if (response.likes_count != 1)
+            $(".actions .like .times").html(response.image_likes_count);
+            if (response.image_likes_count != 1)
               $(".actions .like .label").html("Likes");
             else
               $(".actions .like .label").html("Like");

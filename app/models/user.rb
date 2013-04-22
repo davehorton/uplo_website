@@ -461,12 +461,12 @@ class User < ActiveRecord::Base
 
   def like_image(image)
     image_likes.create(image_id: image.id) unless image.liked_by?(self)
-    { likes_count: image.reload.image_likes.size }
+    { image_likes_count: image.reload.image_likes.size }
   end
 
   def unlike_image(image)
     image_likes.where(image_id: image.id).first.destroy if image.liked_by?(self)
-    { likes_count: image.reload.image_likes.size }
+    { image_likes_count: image.reload.image_likes.size }
   end
 
   private

@@ -693,7 +693,7 @@ describe User do
   describe "#like_image" do
     it "should like an image" do
       img = create(:image)
-      user.like_image(img).should == { :likes_count => 1}
+      user.like_image(img).should == { :image_likes_count => 1}
     end
   end
 
@@ -702,7 +702,7 @@ describe User do
       another_user = create(:user_with_gallery)
       gallery1 = another_user.galleries.first
       img = create(:image_with_image_flags, :gallery => gallery1)
-      another_user.unlike_image(img).should == { :likes_count => 0}
+      another_user.unlike_image(img).should == { :image_likes_count => 0}
     end
   end
 
