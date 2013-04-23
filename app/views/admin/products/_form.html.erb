@@ -9,5 +9,7 @@
   <%= f.input :tier3_commission, label: 'Tier 3 Commission (%)' %>
   <%= f.input :tier4_price, label: 'Tier 4 Price ($)' %>
   <%= f.input :tier4_commission, label: 'Tier 4 Commission (%)' %>
+  <%= f.input :public_gallery, label: 'Public Gallery', collection: ["true", "false"], include_blank: false %>
+  <%= f.input :private_gallery, label: 'Private Gallery', collection: ["true", "false"], include_blank: false %>
   <%= f.submit %>
 <% end %>

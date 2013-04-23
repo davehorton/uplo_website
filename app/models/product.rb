@@ -14,6 +14,8 @@ class Product < ActiveRecord::Base
   validates :tier4_commission, presence: true
 
   default_scope joins(:size, :moulding).order('sizes.width, sizes.height, mouldings.id').readonly(false)
+  scope :private_gallery, where(private_gallery: true)
+  scope :public_gallery, where(public_gallery: true)
 
   def self.for_sizes(sizes)
     where(size_id: sizes)
