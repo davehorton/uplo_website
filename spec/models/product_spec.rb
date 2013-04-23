@@ -19,6 +19,17 @@ describe Product do
   it { should validate_presence_of(:tier3_commission) }
   it { should validate_presence_of(:tier4_commission) }
 
+  it "has a private_gallery scope" do
+    product1 = create(:product, :private_gallery => true)
+    klass.all.should == [product1]
+  end
+
+  it "has a public_gallery scope" do
+    product
+    product1 = create(:product, :public_gallery => true)
+    klass.all.should == [product, product1]
+  end
+
   describe ".for_sizes" do
     context "with matched sizes" do
       it "should return appropriate products" do

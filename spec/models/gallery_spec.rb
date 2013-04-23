@@ -99,6 +99,21 @@ describe Gallery do
     end
   end
 
+  describe "#is_public?" do
+    context "when permission public" do
+      it "should return true" do
+        gallery.is_public?.should be_true
+      end
+    end
+
+    context "when permission public" do
+      it "should return true" do
+        gallery.update_attribute(:permission, "private")
+        gallery.is_public?.should be_false
+      end
+    end
+  end
+
 end
 
 

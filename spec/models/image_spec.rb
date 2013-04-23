@@ -328,14 +328,33 @@ describe Image do
 
   describe "#available_products" do
     context "for a square image" do
-      it "should return appropriate products" do
+      it "with public gallery should return appropriate products" do
         create(:image, square_aspect_ratio: true).available_products.should == [square_product]
+      end
+
+      it "without public gallery should return blank array" do
+        square_product.update_attribute(:public_gallery, false)
+        create(:image, square_aspect_ratio: true).available_products.should == []
       end
     end
 
     context "for a rectangular image" do
-      it "should return appropriate products" do
+      it "with public gallery should return appropriate products" do
         create(:image, square_aspect_ratio: false).available_products.should == [rectangular_product]
+      end
+
+      it "without public gallery should return blank array" do
+        rectangular_product.update_attribute(:public_gallery, false)
+        create(:image, square_aspect_ratio: false).available_products.should == []
+      end
+    end
+
+    context "for images belonging to private gallery" do
+      it "with public gallery should return appropriate products" do
+        create(:image, square_aspect_ratio: true)
+        image.gallery.update_attribute(:permission, "private")
+        square_product.update_attribute(:private_gallery, true)
+        image.available_products.should == [square_product]
       end
     end
   end
