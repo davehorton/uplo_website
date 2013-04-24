@@ -54,6 +54,10 @@ class Gallery < ActiveRecord::Base
     updated_at.strftime('%B %Y')
   end
 
+  def is_public?
+    self.permission == "public"
+  end
+
   private
 
     def set_permission

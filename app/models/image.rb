@@ -162,7 +162,11 @@ class Image < ActiveRecord::Base
       self.image.height >= size.minimum_recommended_resolution[:h]
     end
 
-    Product.for_sizes(compatible_sizes)
+    if self.gallery.is_public?
+      Product.public_gallery.for_sizes(compatible_sizes)
+    else
+      Product.private_gallery.for_sizes(compatible_sizes)
+    end
   end
 
   def available_sizes
