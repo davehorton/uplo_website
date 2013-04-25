@@ -1,4 +1,4 @@
-$("#gallery_permission").on("change", function(){
+$(document).on('change', '#gallery_permission', function(){
   if ($(this).val() == "public")
     $("#has-commission").hide();
   else
