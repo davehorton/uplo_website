@@ -1,3 +1,10 @@
+$("#gallery_permission").on("change", function(){
+  if ($(this).val() == "public")
+    $("#has-commission").hide();
+  else
+    $("#has-commission").show();
+})
+
 var gallery = {
   setup: function(){
     var target = "#gallery-form-container";
@@ -58,3 +65,4 @@ var gallery = {
     });
   }
 };
+                                

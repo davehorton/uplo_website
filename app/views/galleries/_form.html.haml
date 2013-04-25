@@ -13,6 +13,9 @@
         .input.right
           = f.input :permission, :as => :select, :label => "Permission", :collection => Permission.select_options, :include_blank => false
           %span.text.gray.italic.font11.left.require_text= "&nbsp;<span style='color:red;'>*</span> Required Fields".html_safe
+      .select_control
+        .input.right     
+          = f.input(:has_commission, :input_html => {:id => "has-commission"} )          
       .clear
       #button-container.left
         #btn-gallery-cancel.button.cancel.left
