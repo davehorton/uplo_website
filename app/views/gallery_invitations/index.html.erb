@@ -1,0 +1,40 @@
+
+<style type="text/css">
+  
+  #gallery_invitation_options {
+    width: 100%
+  }
+
+  #gallery_invitation_options thead th {
+    padding-bottom: 10px;
+  }
+
+  #gallery_invitation_options th {
+    text-align: left;
+  }
+
+  #gallery_invitation_options td {
+    border: 1px solid #ddd;
+    padding: 10px;
+  }
+</style>
+
+<table id="gallery_invitation_options">
+  <thead>
+    <tr>
+      <th>Email</th>
+      <th>Invited At</th>
+      <th>Accepted</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @gallery_invites.each do |gallery_inv| %>
+    <tr>
+      <td><%= gallery_inv.email %></td>
+      <td><%= gallery_inv.created_at.strftime("%d/%m/%Y") %></td>
+      <td><%= gallery_inv.accepted %></td>   
+    </tr>
+    <% end %>
+  </tbody>
+</table>
+

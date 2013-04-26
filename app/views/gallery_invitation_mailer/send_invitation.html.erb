@@ -1,0 +1,3 @@
+<p> Greetings!!!</p>
+<p> <strong><%= @gallery_invitation.email %></strong> has been invited to join UPLO gallery.</p>
+<p>Click on <%= link_to "Login", accept_gallery_invitation_url(:secret_token => @gallery_invitation.secret_token) %> this link to signin.</p>

@@ -5,6 +5,9 @@ class Users::RegistrationsController < Devise::RegistrationsController
     if Invitation.exists?({:token => params[:token]})
       @inv  = Invitation.find_by_token params[:token]
       super
+    elsif GalleryInvitation.exists?({:secret_token => params[:secret_token]})
+      @inv  = GalleryInvitation.find_by_secret_token params[:secret_token]
+      super
     else
       flash[:info] = 'Please login.'
       redirect_to '/'
@@ -14,6 +17,9 @@ class Users::RegistrationsController < Devise::RegistrationsController
   def create
     if Invitation.exists?({:token => params[:token]})
       @inv  = Invitation.find_by_token params[:token]
+      super
+    elsif GalleryInvitation.exists?({:secret_token => params[:secret_token]})
+      @inv  = GalleryInvitation.find_by_secret_token params[:secret_token]
       super
     else
       flash[:info] = 'Invalid invitation!'

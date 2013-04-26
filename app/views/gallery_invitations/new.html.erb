@@ -1,0 +1,11 @@
+<h1>Send an Invitation</h1>
+
+<%= simple_form_for @gallery_invitation, :url => gallery_gallery_invitations_path(@gallery) do |f| %>
+<%= f.label :email, "Email" %>   
+<%= f.email_field :email , required: true %></br>
+
+<%= f.label :email, "Message" %>   
+<%= f.text_area :message %></br>
+
+<%= f.submit 'Send an Invitation' %>
+<% end %>

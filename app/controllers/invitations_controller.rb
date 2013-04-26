@@ -14,4 +14,17 @@ class InvitationsController < ApplicationController
 
     redirect_to root_path
   end
+
+  def accept_gallery_invitation
+    @inv = GalleryInvitation.find_by_secret_token params[:secret_token]
+    user = User.find_by_email(@inv.email)
+    if user
+      session[:user_return_to] =  gallery_images_path(@inv.gallery)
+      redirect_to new_user_session_path(:secret_token => params[:secret_token])
+    else
+      session[:user_return_to] =  gallery_images_path(@inv.gallery)
+      redirect_to new_user_registration_path(:secret_token => params[:secret_token])
+    end
+  end
+
 end

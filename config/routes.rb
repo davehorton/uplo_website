@@ -46,7 +46,7 @@ Uplo::Application.routes.draw do
   end
 
   get 'profile/:user_id', :to => 'profiles#show', :as => :profile_user
-
+  match '/accept_gallery_invitation' => 'invitations#accept_gallery_invitation'
   get 'galleries/edit_images', :to => 'galleries#edit_images'
 
   resources :galleries do
@@ -68,6 +68,7 @@ Uplo::Application.routes.draw do
     put 'filter_status', :to => 'images#get_filter_status'
 
     resources :images
+    resources :gallery_invitations
   end
 
   resources :images, only: [] do
