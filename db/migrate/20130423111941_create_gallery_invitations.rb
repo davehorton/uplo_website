@@ -6,6 +6,7 @@ class CreateGalleryInvitations < ActiveRecord::Migration
       t.string :secret_token, :null => false
       t.boolean :accepted, :default => false
       t.string :message
+      t.integer :user_id
       t.timestamps
     end
     add_foreign_key(:gallery_invitations, :galleries)

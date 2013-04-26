@@ -5,7 +5,11 @@ Uplo::Application.routes.draw do
   # WEB ROUTING
   root :to => "home#index"
 
-  resources :invitations, only: [:create]
+  resources :invitations, only: [:create] do
+    member do
+      get :accept_gallery_invitation
+    end
+  end
 
   get "shopping_cart/show"
   post "shopping_cart/update_cart"
@@ -46,7 +50,6 @@ Uplo::Application.routes.draw do
   end
 
   get 'profile/:user_id', :to => 'profiles#show', :as => :profile_user
-  match '/accept_gallery_invitation' => 'invitations#accept_gallery_invitation'
   get 'galleries/edit_images', :to => 'galleries#edit_images'
 
   resources :galleries do
