@@ -16,14 +16,14 @@ class InvitationsController < ApplicationController
   end
 
   def accept_gallery_invitation
-    @inv = GalleryInvitation.find_by_secret_token params[:secret_token]
+    @inv = GalleryInvitation.where(:secret_token => params[:id]).first
     user = User.find_by_email(@inv.email)
-    session[:user_return_to] =  gallery_images_path(@inv.gallery)
+    session[:gallery_invitation_id] = @inv.id
     if user
       @inv.update_attribute(:user_id, user.id)
-      redirect_to new_user_session_path(:id => @inv.id)
+      redirect_to new_user_session_path
     else
-      redirect_to new_user_registration_path(:id => @inv.id)
+      redirect_to new_user_registration_path(:secret_token => params[:id])
     end
   end
 

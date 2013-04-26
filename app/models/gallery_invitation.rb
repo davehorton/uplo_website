@@ -1,5 +1,5 @@
 class GalleryInvitation < ActiveRecord::Base
-  attr_accessible :email, :message, :gallery_id
+  attr_accessible :email, :message, :gallery_id, :secret_token, :user_id
 
   validates :email, presence: true, format: { with: Devise.email_regexp }, uniqueness: { case_sensitive: false, message: 'is already associated with an invite.' }
   validates :gallery_id, presence: true

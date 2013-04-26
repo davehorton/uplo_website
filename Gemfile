@@ -46,7 +46,7 @@ gem 'urbanairship'
 gem 'valid_email'
 gem 'will_paginate', '~> 3.0'
 gem "paperclip-dropbox"
-gem 'foreigner'
+
 
 # for sidekiq admin
 gem 'sinatra', require: false

@@ -8,7 +8,7 @@
     .message.text.highlight{:class => message ? "" : "hidden"}=  message
     = form_for(:user, :url => registration_path(:user), :html => {:id => 'register-form', :class => 'left'}) do |f|
       = hidden_field_tag :token, params[:token]
-      = hidden_field_tag :id, params[:id]
+      = hidden_field_tag :secret_token, params[:secret_token]
       .line
         .half.left
           = f.label :user_first_name, 'First name', :class => 'left'

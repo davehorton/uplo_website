@@ -24,7 +24,6 @@
     <tr>
       <th>Email</th>
       <th>Invited At</th>
-      <th>Accepted</th>
     </tr>
   </thead>
   <tbody>
@@ -32,7 +31,6 @@
     <tr>
       <td><%= gallery_inv.email %></td>
       <td><%= gallery_inv.created_at.strftime("%d/%m/%Y") %></td>
-      <td><%= gallery_inv.accepted %></td>   
     </tr>
     <% end %>
   </tbody>

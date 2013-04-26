@@ -1,12 +1,9 @@
 class Users::RegistrationsController < Devise::RegistrationsController
   layout 'main'
+  before_filter :find_invitation, :only => [:new, :create]
 
   def new
-    if Invitation.exists?({:token => params[:token]})
-      @inv  = Invitation.find_by_token params[:token]
-      super
-    elsif GalleryInvitation.exists?({:id => params[:id]})
-      @inv  = GalleryInvitation.find_by_id params[:id]
+    if @inv
       super
     else
       flash[:info] = 'Please login.'
@@ -15,11 +12,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
   end
 
   def create
-    if Invitation.exists?({:token => params[:token]})
-      @inv  = Invitation.find_by_token params[:token]
-      super
-    elsif GalleryInvitation.exists?({:id => params[:id]})
-      @inv  = GalleryInvitation.find_by_id params[:id]
+    if @inv
       super
     else
       flash[:info] = 'Invalid invitation!'
@@ -32,6 +25,14 @@ class Users::RegistrationsController < Devise::RegistrationsController
   end
 
   protected
+
+  def find_invitation
+    @inv = if params[:token].present?
+             Invitation.find_by_token params[:token]
+           elsif params[:secret_token].present?
+             GalleryInvitation.find_by_secret_token(params[:secret_token])
+           end
+  end
 
   def after_sign_up_path_for(resource)
     session[:user_return_to].nil? ? root_url : session[:user_return_to]
