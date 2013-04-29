@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130423054359) do
+ActiveRecord::Schema.define(:version => 20130429113216) do
 
   create_table "addresses", :force => true do |t|
     t.string   "first_name"
@@ -47,14 +47,15 @@ ActiveRecord::Schema.define(:version => 20130423054359) do
   add_index "comments", ["user_id"], :name => "index_comments_on_user_id"
 
   create_table "galleries", :force => true do |t|
-    t.integer  "user_id",                       :null => false
-    t.string   "name",                          :null => false
+    t.integer  "user_id",                          :null => false
+    t.string   "name",                             :null => false
     t.text     "description"
-    t.boolean  "delta",       :default => true, :null => false
-    t.datetime "created_at",                    :null => false
-    t.datetime "updated_at",                    :null => false
+    t.boolean  "delta",          :default => true, :null => false
+    t.datetime "created_at",                       :null => false
+    t.datetime "updated_at",                       :null => false
     t.string   "keyword"
     t.string   "permission"
+    t.boolean  "has_commission", :default => true, :null => false
   end
 
   add_index "galleries", ["name"], :name => "index_galleries_on_name"
@@ -143,7 +144,7 @@ ActiveRecord::Schema.define(:version => 20130423054359) do
     t.string   "size"
     t.datetime "created_at",                                                             :null => false
     t.datetime "updated_at",                                                             :null => false
-    t.float    "commission_percent"
+    t.float    "commission_percent",                                  :default => 0.0
     t.integer  "product_id"
     t.string   "crop_dimension"
     t.string   "content_file_name"
@@ -163,8 +164,8 @@ ActiveRecord::Schema.define(:version => 20130423054359) do
   create_table "orders", :force => true do |t|
     t.integer  "user_id"
     t.float    "tax"
-    t.decimal  "price_total",         :precision => 16, :scale => 2
-    t.decimal  "order_total",         :precision => 16, :scale => 2
+    t.decimal  "price_total",                       :precision => 16, :scale => 2
+    t.decimal  "order_total",                       :precision => 16, :scale => 2
     t.string   "transaction_code"
     t.string   "transaction_status"
     t.datetime "transaction_date"
@@ -174,8 +175,8 @@ ActiveRecord::Schema.define(:version => 20130423054359) do
     t.string   "message"
     t.integer  "shipping_address_id"
     t.integer  "billing_address_id"
-    t.datetime "created_at",                                                          :null => false
-    t.datetime "updated_at",                                                          :null => false
+    t.datetime "created_at",                                                                        :null => false
+    t.datetime "updated_at",                                                                        :null => false
     t.string   "last_name"
     t.string   "city"
     t.string   "country"
@@ -183,11 +184,12 @@ ActiveRecord::Schema.define(:version => 20130423054359) do
     t.string   "state"
     t.string   "payer_email"
     t.string   "payment_type"
-    t.decimal  "payment_fee",         :precision => 8,  :scale => 2
+    t.decimal  "payment_fee",                       :precision => 8,  :scale => 2
     t.string   "currency"
     t.string   "transaction_subject"
     t.string   "zip_code"
-    t.float    "shipping_fee",                                       :default => 0.0
+    t.float    "shipping_fee",                                                     :default => 0.0
+    t.string   "transaction_id",      :limit => 40
   end
 
   create_table "products", :force => true do |t|

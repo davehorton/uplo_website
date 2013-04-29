@@ -3,7 +3,7 @@ $(document).on('change', '#gallery_permission', function(){
     $("#has-commission").hide();
   else
     $("#has-commission").show();
-})
+});
 
 var gallery = {
   setup: function(){
@@ -27,6 +27,7 @@ var gallery = {
           }
         });
       }
+      $('#gallery_permission').change();
     };
 
     // New gallery form
@@ -65,4 +66,3 @@ var gallery = {
     });
   }
 };
-                                

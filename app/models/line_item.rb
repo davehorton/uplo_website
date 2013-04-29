@@ -80,7 +80,7 @@ class LineItem < ActiveRecord::Base
     def calculate_totals
       self.price = product.price_for_tier(image.tier_id)
       self.tax   = self.price * PER_TAX
-      self.commission_percent = product.commission_for_tier(image.tier_id) if self.image.gallery.has_commission
+      self.commission_percent = product.commission_for_tier(image.tier_id) if self.image.gallery.commission_percent?
     end
 end
 

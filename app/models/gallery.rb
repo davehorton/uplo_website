@@ -56,4 +56,8 @@ class Gallery < ActiveRecord::Base
     self.permission == "public"
   end
 
+  def commission_percent?
+    is_public? || has_commission
+  end
+
 end

@@ -1,5 +1,12 @@
 #has-commission {
-  margin-left: 110px;  
-  margin-top: 20px;
+  margin: 20px 0 0 110px;  
 }
-    
+
+#gallery-form-container {
+  #has-commission {
+    margin: 0 0 0 78px;
+    label {
+      width: 300px !important
+    }
+  }
+}    

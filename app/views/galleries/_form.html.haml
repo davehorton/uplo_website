@@ -12,11 +12,10 @@
       .select_control
         .input.right
           = f.input :permission, :as => :select, :label => "Permission", :collection => Permission.select_options, :include_blank => false
+          .info-line.no-padding-bottom{:id => "has-commission", :style => 'display:none;'}
+            = f.check_box :has_commission
+            = f.label :has_commission, "Does this gallery has commission?", :class => "text gray font11 line16 left"
           %span.text.gray.italic.font11.left.require_text= "&nbsp;<span style='color:red;'>*</span> Required Fields".html_safe
-      .select_control
-        .input.right     
-          = f.input(:has_commission, :label => "Allow Commission?",
-          :input_html => {:id => "has-commission", :style => (@gallery.is_public? ? 'display:none;' : '')})          
       .clear
       #button-container.left
         #btn-gallery-cancel.button.cancel.left
