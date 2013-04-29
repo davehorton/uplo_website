@@ -20,11 +20,11 @@
     </tr>
   </thead>
   <tbody>
-      <% @gallery_invites.each do |gallery_inv| %>
+      <% @gallery_invitations.each do |gallery_invitation| %>
       <tr>
-        <td><%= gallery_inv.email %></td>
-        <td><%= gallery_inv.created_at.strftime("%d/%m/%Y") %></td>
-        <td><%= (gallery_inv.accepted? ? "Yes" : "No") %></td>
+        <td><%= gallery_invitation.email %></td>
+        <td><%= gallery_invitation.created_at.strftime("%d/%m/%Y") %></td>
+        <td><%= (gallery_invitation.accepted? ? "Yes" : "No") %></td>
       </tr>   
       <% end %>
   </tbody>

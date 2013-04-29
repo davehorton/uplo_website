@@ -35,11 +35,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
   end
 
   def after_sign_up_path_for(resource)
-    session[:user_return_to].nil? ? root_url : session[:user_return_to]
-  end
-
-  def after_inactive_sign_up_path_for(resource)
-    session[:user_return_to].nil? ? root_url : session[:user_return_to]
+    super(resource)
   end
 
 end

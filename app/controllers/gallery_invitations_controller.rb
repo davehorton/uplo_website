@@ -2,7 +2,7 @@ class GalleryInvitationsController < ApplicationController
   before_filter :get_gallery
 
   def index
-    @gallery_invites = @gallery.gallery_invitations.all
+    @gallery_invitations = @gallery.gallery_invitations
   end
 
   def new
@@ -13,7 +13,7 @@ class GalleryInvitationsController < ApplicationController
     @gallery_invitation = @gallery.gallery_invitations.new(params[:gallery_invitation])
     if @gallery_invitation.save
       flash[:success] = "An Invitation has been sent!"
-      GalleryInvitationMailer.send_invitation(@gallery_invitation.id).deliver
+      GalleryInvitationMailer.delay.send_invitation(@gallery_invitation.id)
       redirect_to gallery_gallery_invitations_path(@gallery)
     else
       flash[:error] = @gallery_invitation.errors.full_messages[0]

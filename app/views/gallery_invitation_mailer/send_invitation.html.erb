@@ -1,6 +1,9 @@
 <p> <strong><%= @gallery_invitation.email %></strong> has been invited to join UPLO gallery.</p>
 <p><%= @gallery_invitation.message %></p>
-<p>Click on <%= link_to "this link", accept_gallery_invitation_invitation_url(@gallery_invitation.secret_token) %> to signin or signup.</p>
+<p>Follow the link below to access:</p>
+<%= link_to accept_gallery_invitation_invitation_url(@gallery_invitation.secret_token), accept_gallery_invitation_invitation_url(@gallery_invitation.secret_token) %></p>
 
-Thanks!!
+Regards,
+</br>
+<%= @gallery_invitation.gallery.user.fullname %>
 
