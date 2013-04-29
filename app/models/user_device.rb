@@ -6,6 +6,6 @@ class UserDevice < ActiveRecord::Base
   validates :last_notified, presence: true
 
   def active?
-  	notify_purchases || notify_comments || notify_likes
+    notify_purchases || notify_comments || notify_likes
   end
 end
