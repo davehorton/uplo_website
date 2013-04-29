@@ -10,4 +10,5 @@ class CreateGalleryInvitations < ActiveRecord::Migration
     end
     add_index :gallery_invitations, :secret_token
   end
+
 end
