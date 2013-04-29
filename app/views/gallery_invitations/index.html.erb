@@ -1,38 +1,36 @@
+<% content_for :top_content do %>
+  <div class="text bold font16 line12 left">
+    <span class="text black">My Gallery /</span>
+    <span class="text black"><%= @gallery.name %> /</span>
+    <span class="text gray">Invitations</span>
+  </div>
+  <div class="text black bold font12 line12 right">
+    <div class="action-container">
+      <%= link_to "Send Invitation", new_gallery_gallery_invitation_path(@gallery), :class => "ui-button-container icon-link" %>
+    </div>
+  </div>
+<% end %>
 
-<style type="text/css">
-  
-  #gallery_invitation_options {
-    width: 100%
-  }
-
-  #gallery_invitation_options thead th {
-    padding-bottom: 10px;
-  }
-
-  #gallery_invitation_options th {
-    text-align: left;
-  }
-
-  #gallery_invitation_options td {
-    border: 1px solid #ddd;
-    padding: 10px;
-  }
-</style>
-
-<table id="gallery_invitation_options">
+<table id="gallery-invitation-options">
   <thead>
     <tr>
       <th>Email</th>
       <th>Invited At</th>
+      <th>Accepted</th>
     </tr>
   </thead>
   <tbody>
-    <% @gallery_invites.each do |gallery_inv| %>
-    <tr>
-      <td><%= gallery_inv.email %></td>
-      <td><%= gallery_inv.created_at.strftime("%d/%m/%Y") %></td>
-    </tr>
-    <% end %>
+      <% @gallery_invites.each do |gallery_inv| %>
+      <tr>
+        <td><%= gallery_inv.email %></td>
+        <td><%= gallery_inv.created_at.strftime("%d/%m/%Y") %></td>
+        <td><%= (gallery_inv.accepted? ? "Yes" : "No") %></td>
+      </tr>   
+      <% end %>
   </tbody>
 </table>
+   
+
+
+
 

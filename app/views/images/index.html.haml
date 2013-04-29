@@ -26,7 +26,7 @@
                   :confirm => I18n.t("gallery.delete_confirm"))
         - unless @gallery.is_public?
           %span.saparator= "|"
-          = link_to("Send Invitation", new_gallery_gallery_invitation_path(@gallery))
+          = link_to("Invitations", gallery_gallery_invitations_path(@gallery))
     
 .images-wrapper.wrapper.left
   #gallery-form-container.clearfix.hidden{:style => "display: none"}

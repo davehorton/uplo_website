@@ -1,11 +1,16 @@
-<h1>Send an Invitation</h1>
-
-<%= simple_form_for @gallery_invitation, :url => gallery_gallery_invitations_path(@gallery) do |f| %>
-<%= f.label :email, "Email" %>   
-<%= f.email_field :email , required: true %></br>
-
-<%= f.label :email, "Message" %>   
-<%= f.text_area :message %></br>
-
-<%= f.submit 'Send an Invitation' %>
+<%= content_for :top_content do %>
+  <div class="text black bold font16 left">Send An Invitation</div>
+  <div class="line-separator left">
 <% end %>
+<div class="wrapper">
+  <%= simple_form_for @gallery_invitation, :url => gallery_gallery_invitations_path(@gallery), :html => { } do |f| %>
+  <div class="info">
+    <%= f.input :email, input_html: { id: 'gallery-inv-email' } %>   
+  </div>
+  <div class="info">    
+    <%= f.input :message, input_html: { id: 'gallery-inv-message' } %>
+  </div>
+  <div class="line-separator left"></div>
+  <%= f.submit 'Send' %>
+  <% end %>
+</div>

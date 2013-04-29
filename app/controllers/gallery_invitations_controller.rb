@@ -2,7 +2,7 @@ class GalleryInvitationsController < ApplicationController
   before_filter :get_gallery
 
   def index
-    @gallery_invites = GalleryInvitation.all
+    @gallery_invites = @gallery.gallery_invitations.all
   end
 
   def new
