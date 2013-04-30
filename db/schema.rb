@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130423054359) do
+ActiveRecord::Schema.define(:version => 20130430095120) do
 
   create_table "addresses", :force => true do |t|
     t.string   "first_name"
@@ -35,6 +35,9 @@ ActiveRecord::Schema.define(:version => 20130423054359) do
     t.datetime "updated_at", :null => false
   end
 
+  add_index "carts", ["order_id"], :name => "index_carts_on_order_id"
+  add_index "carts", ["user_id"], :name => "index_carts_on_user_id"
+
   create_table "comments", :force => true do |t|
     t.integer  "user_id",     :null => false
     t.integer  "image_id"
@@ -47,19 +50,32 @@ ActiveRecord::Schema.define(:version => 20130423054359) do
   add_index "comments", ["user_id"], :name => "index_comments_on_user_id"
 
   create_table "galleries", :force => true do |t|
-    t.integer  "user_id",                       :null => false
-    t.string   "name",                          :null => false
+    t.integer  "user_id",                          :null => false
+    t.string   "name",                             :null => false
     t.text     "description"
-    t.boolean  "delta",       :default => true, :null => false
-    t.datetime "created_at",                    :null => false
-    t.datetime "updated_at",                    :null => false
+    t.boolean  "delta",          :default => true, :null => false
+    t.datetime "created_at",                       :null => false
+    t.datetime "updated_at",                       :null => false
     t.string   "keyword"
     t.string   "permission"
+    t.boolean  "has_commission", :default => true, :null => false
   end
 
   add_index "galleries", ["name"], :name => "index_galleries_on_name"
   add_index "galleries", ["permission"], :name => "index_galleries_on_permission"
   add_index "galleries", ["user_id"], :name => "index_galleries_on_user_id"
+
+  create_table "gallery_invitations", :force => true do |t|
+    t.integer  "gallery_id",   :null => false
+    t.string   "email",        :null => false
+    t.string   "secret_token"
+    t.text     "message"
+    t.integer  "user_id"
+    t.datetime "created_at",   :null => false
+    t.datetime "updated_at",   :null => false
+  end
+
+  add_index "gallery_invitations", ["secret_token"], :name => "index_gallery_invitations_on_secret_token"
 
   create_table "image_flags", :force => true do |t|
     t.integer  "image_id",    :null => false
@@ -71,6 +87,7 @@ ActiveRecord::Schema.define(:version => 20130423054359) do
   end
 
   add_index "image_flags", ["image_id"], :name => "index_image_flags_on_image_id"
+  add_index "image_flags", ["reported_by"], :name => "index_image_flags_on_reported_by"
 
   create_table "image_likes", :force => true do |t|
     t.integer  "image_id",   :null => false
@@ -80,6 +97,7 @@ ActiveRecord::Schema.define(:version => 20130423054359) do
   end
 
   add_index "image_likes", ["image_id"], :name => "index_image_likes_on_image_id"
+  add_index "image_likes", ["user_id"], :name => "index_image_likes_on_user_id"
 
   create_table "image_tags", :force => true do |t|
     t.integer  "image_id",   :null => false
@@ -89,6 +107,7 @@ ActiveRecord::Schema.define(:version => 20130423054359) do
   end
 
   add_index "image_tags", ["image_id"], :name => "index_image_tags_on_image_id"
+  add_index "image_tags", ["tag_id"], :name => "index_image_tags_on_tag_id"
 
   create_table "images", :force => true do |t|
     t.string   "name"
@@ -119,6 +138,7 @@ ActiveRecord::Schema.define(:version => 20130423054359) do
   add_index "images", ["gallery_id"], :name => "index_images_on_gallery_id"
   add_index "images", ["image_likes_count"], :name => "index_images_on_image_likes_count"
   add_index "images", ["image_processing"], :name => "index_images_on_data_processing"
+  add_index "images", ["promoted"], :name => "index_images_on_promoted"
   add_index "images", ["removed"], :name => "index_images_on_removed"
   add_index "images", ["tier_id"], :name => "index_images_on_tier_id"
   add_index "images", ["user_id"], :name => "index_images_on_user_id"
@@ -131,6 +151,8 @@ ActiveRecord::Schema.define(:version => 20130423054359) do
     t.datetime "updated_at", :null => false
     t.string   "message"
   end
+
+  add_index "invitations", ["token"], :name => "index_invitations_on_token"
 
   create_table "line_items", :force => true do |t|
     t.integer  "order_id"
@@ -152,6 +174,8 @@ ActiveRecord::Schema.define(:version => 20130423054359) do
     t.datetime "content_updated_at"
   end
 
+  add_index "line_items", ["image_id"], :name => "index_line_items_on_image_id"
+  add_index "line_items", ["order_id"], :name => "index_line_items_on_order_id"
   add_index "line_items", ["product_id"], :name => "index_line_items_on_product_id"
 
   create_table "mouldings", :force => true do |t|
@@ -190,6 +214,8 @@ ActiveRecord::Schema.define(:version => 20130423054359) do
     t.float    "shipping_fee",                                       :default => 0.0
   end
 
+  add_index "orders", ["user_id"], :name => "index_orders_on_user_id"
+
   create_table "products", :force => true do |t|
     t.integer  "size_id"
     t.integer  "moulding_id"
@@ -223,6 +249,9 @@ ActiveRecord::Schema.define(:version => 20130423054359) do
     t.text     "avatar_meta"
   end
 
+  add_index "profile_images", ["link_to_image"], :name => "index_profile_images_on_link_to_image"
+  add_index "profile_images", ["user_id"], :name => "index_profile_images_on_user_id"
+
   create_table "sizes", :force => true do |t|
     t.integer  "width"
     t.integer  "height"
@@ -251,12 +280,17 @@ ActiveRecord::Schema.define(:version => 20130423054359) do
     t.datetime "updated_at",                         :null => false
   end
 
+  add_index "user_devices", ["user_id"], :name => "index_user_devices_on_user_id"
+
   create_table "user_follows", :force => true do |t|
     t.integer  "user_id",     :null => false
     t.integer  "followed_by", :null => false
     t.datetime "created_at",  :null => false
     t.datetime "updated_at",  :null => false
   end
+
+  add_index "user_follows", ["followed_by"], :name => "index_user_follows_on_followed_by"
+  add_index "user_follows", ["user_id"], :name => "index_user_follows_on_user_id"
 
   create_table "users", :force => true do |t|
     t.string   "first_name",                                                       :null => false
