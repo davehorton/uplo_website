@@ -1,6 +1,6 @@
 FactoryGirl.define do
   factory :image_flag do
-    reported_by 1
+    reporter
     flag_type 1
     description "hello"
     image

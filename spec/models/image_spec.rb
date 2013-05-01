@@ -178,7 +178,7 @@ describe Image do
     it "should paginate" do
       new_order = create(:order, :transaction_status => "completed", :transaction_date => "03-04-2012")
       line_items = create_list(:line_item, 20, :image_id => image.id, :order_id => new_order.id, :quantity => 4)
-      image.raw_purchased_info({ :page => 1, :per_page => 10 }).should == line_items.first(10)
+      image.raw_purchased_info({ :page => 1, :per_page => 10 }).should == line_items.last(10).reverse
     end
   end
 
@@ -464,7 +464,7 @@ describe Image do
       it "should calculate result" do
         new_order = create(:order, :transaction_status => "completed")
         line_item = create(:line_item, :image_id => image.id, :order_id => new_order.id, :quantity => 4)
-        image.get_monthly_sales_over_year("01-04-2013").should == [{:month=>"Apr", :sales=>0}, {:month=>"May", :sales=>0}, {:month=>"Jun", :sales=>0}, {:month=>"Jul", :sales=>0}, {:month=>"Aug", :sales=>0}, {:month=>"Sep", :sales=>0}, {:month=>"Oct", :sales=>0}, {:month=>"Nov", :sales=>0}, {:month=>"Dec", :sales=>0}, {:month=>"Jan", :sales=>0}, {:month=>"Feb", :sales=>0}, {:month=>"Mar", :sales=>0}, {:month=>"Apr", :sales=> 200000.0}]
+        image.get_monthly_sales_over_year("01-04-2013").should == [{:month=>"Apr", :sales=>0}, {:month=>"May", :sales=>0}, {:month=>"Jun", :sales=>0}, {:month=>"Jul", :sales=>0}, {:month=>"Aug", :sales=>0}, {:month=>"Sep", :sales=>0}, {:month=>"Oct", :sales=>0}, {:month=>"Nov", :sales=>0}, {:month=>"Dec", :sales=>0}, {:month=>"Jan", :sales=>0}, {:month=>"Feb", :sales=>0}, {:month=>"Mar", :sales=>0}, {:month=>"Apr", :sales=> 0}]
       end
     end
     context "with options having report by quantity" do
