@@ -1,0 +1,36 @@
+<% content_for :top_content do %>
+  <div class="text bold font16 line12 left">
+    <span class="text black">My Gallery /</span>
+    <span class="text black"><%= @gallery.name %> /</span>
+    <span class="text gray">Invitations</span>
+  </div>
+  <div class="text black bold font12 line12 right">
+    <div class="action-container">
+      <%= link_to "Send Invitation", new_gallery_gallery_invitation_path(@gallery), :class => "ui-button-container icon-link" %>
+    </div>
+  </div>
+<% end %>
+
+<table id="gallery-invitation-options">
+  <thead>
+    <tr>
+      <th>Email</th>
+      <th>Invited At</th>
+      <th>Accepted</th>
+    </tr>
+  </thead>
+  <tbody>
+      <% @gallery_invitations.each do |gallery_invitation| %>
+      <tr>
+        <td><%= gallery_invitation.email %></td>
+        <td><%= gallery_invitation.created_at.strftime("%d/%m/%Y") %></td>
+        <td><%= (gallery_invitation.accepted? ? "Yes" : "No") %></td>
+      </tr>   
+      <% end %>
+  </tbody>
+</table>
+   
+
+
+
+

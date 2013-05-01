@@ -29,5 +29,4 @@ FactoryGirl.define do
       create(:gallery, :user => user)
     end
   end
-
 end
