@@ -1,7 +1,7 @@
 <%= simple_form_for [:admin, size] do |f| %>
   <%= f.input :width, hint: ' inches' %>
   <%= f.input :height, hint: ' inches' %>
-  <%= f.input :minimum_recommended_width, label: 'Min Width', hint: ' pixels', input_html: { value: f.object.minimum_recommended_resolution[:w] } %>
-  <%= f.input :minimum_recommended_height, label: 'Min Height', hint: ' pixels', input_html: { value: f.object.minimum_recommended_resolution[:h] } %>
+  <%= f.input :minimum_width_in_pixels, label: 'Min Width', hint: ' pixels', input_html: { value: f.object.minimum_recommended_resolution[:w] } %>
+  <%= f.input :minimum_height_in_pixels, label: 'Min Height', hint: ' pixels', input_html: { value: f.object.minimum_recommended_resolution[:h] } %>
   <%= f.submit %>
 <% end %>
