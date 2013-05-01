@@ -3,6 +3,7 @@ FactoryGirl.define do
   factory :gallery do
     user
     name { Faker::Name.name }
+    permission "public"
   end
 
   factory :gallery_with_images, :parent => :gallery do

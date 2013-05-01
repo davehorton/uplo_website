@@ -2,6 +2,8 @@ class Product < ActiveRecord::Base
   belongs_to :moulding
   belongs_to :size
 
+  after_save :expire_cached_entries
+
   validates :moulding, presence: true
   validates :size, presence: true
   validates :tier1_price, presence: true
@@ -22,14 +24,23 @@ class Product < ActiveRecord::Base
   end
 
   def price_for_tier(tier_id)
-    send(:"tier#{tier_id}_price")
+    send(:"tier#{tier_id || 1}_price")
   end
 
   def commission_for_tier(tier_id)
-    send(:"tier#{tier_id}_commission")
+    send(:"tier#{tier_id || 1}_commission")
   end
 
   def associated_with_any_orders?
     LineItem.where(product_id: self.id).exists?
   end
+
+  private
+
+    def expire_cached_entries
+      # brute approach since memcached doesn't support deleting of
+      # keys using regex patterns; but fortunately products don't
+      # change with enough frequency to make this a dangerous option
+      Rails.cache.clear
+    end
 end

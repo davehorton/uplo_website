@@ -67,8 +67,8 @@
     <td><%= number_to_percentage product.tier3_commission, precision: 1 %></td>
     <td><%= number_to_currency product.tier4_price %></td>
     <td><%= number_to_percentage product.tier4_commission, precision: 1 %></td>
-    <td><%= product.public_gallery %></td>
-    <td><%= product.private_gallery %></td>
+    <td><%= yes_or_no product.public_gallery %></td>
+    <td><%= yes_or_no product.private_gallery %></td>
     <td>
       <%= link_to 'Edit', edit_admin_product_path(product) %>
       <% unless product.associated_with_any_orders? %>

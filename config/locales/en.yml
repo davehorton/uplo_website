@@ -2,8 +2,10 @@
 # See https://github.com/svenfuchs/rails-i18n/tree/master/rails%2Flocale for starting points.
 
 en:
+  no: 'No'
   not_found: 'Not found'
   unauthorized: 'Unauthorized'
+  yes: 'Yes'
   classy_enum:
     permission:
       private: 'Private'

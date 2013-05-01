@@ -24,7 +24,10 @@
                   :method => :delete,
                   :class => "ui-button-container icon-link",
                   :confirm => I18n.t("gallery.delete_confirm"))
-
+        - unless @gallery.is_public?
+          %span.saparator= "|"
+          = link_to("Invitations", gallery_gallery_invitations_path(@gallery))
+    
 .images-wrapper.wrapper.left
   #gallery-form-container.clearfix.hidden{:style => "display: none"}
   - if @images.blank?

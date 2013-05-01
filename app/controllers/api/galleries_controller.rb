@@ -10,24 +10,20 @@ class Api::GalleriesController < Api::BaseController
   #   user_id (if null, list galleries of current user)
   def index
     if params[:user_id].blank?
-      galleries = Gallery.public_access
+      user = current_user
+      galleries = user.galleries.scoped
     else
       user = User.find(params[:user_id])
-
-      if user == current_user
-        galleries = user.galleries.scoped
-      else
-        galleries = user.public_galleries.scoped
-      end
+      galleries = user.public_galleries.scoped
     end
 
-    galleries = galleries.with_images.paginate_and_sort(filtered_params)
+    galleries = galleries.paginate_and_sort(filtered_params)
     render json: galleries, meta: { total: galleries.total_entries }
   end
 
   # POST /api/galleries
   def create
-    gal = GalleryDecorator.new(filtered_params[:gallery])
+    gal = Gallery.new(filtered_params[:gallery])
     gal.user = current_user
 
     if gal.save
@@ -39,13 +35,18 @@ class Api::GalleriesController < Api::BaseController
 
   # PUT /api/galleries/:id
   def update
-    gal = current_user_gallery.update_attributes(filtered_params[:gallery])
-    render json: gal, status: :ok
+    gal = current_user_gallery
+
+    if gal.update_attributes(filtered_params[:gallery])
+      render json: gal
+    else
+      render json: { msg: gal.errors.full_messages.to_sentence }, status: :bad_request
+    end
   end
 
   # DELETE /api/galleries/:id
   def destroy
     current_user_gallery.destroy
-    head :ok
+    render json: { msg: 'gallery deleted' }
   end
 end

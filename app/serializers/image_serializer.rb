@@ -4,6 +4,8 @@ class ImageSerializer < ActiveModel::Serializer
              :image_url, :image_thumb_url, :username, :creation_timestamp, :user_fullname,
              :public_link, :user_id, :user_avatar, :comments_number, :gallery_name, :ordering_options
 
+             has_many :available_sizes, :available_mouldings
+
   def public_link
     object.decorate.public_link
   end
@@ -17,6 +19,6 @@ class ImageSerializer < ActiveModel::Serializer
     object.available_products.each do |product|
       options << { size_id: product.size_id, size: product.size.to_name, moulding_id: product.moulding_id, moulding: product.moulding.name, price: "%0.2f" % product.price_for_tier(object.tier_id), name: "#{product.moulding.name} - #{product.size.to_name}" }
     end
-    { ordering_options: options }
+    options
   end
 end

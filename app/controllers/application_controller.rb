@@ -47,8 +47,7 @@ class ApplicationController < ActionController::Base
   end
 
   def after_sign_in_path_for(resource)
-    puts "Here in ApplicationController"
-    "/" # <- Path you want to redirect the user to.
+    "/"
   end
 
   def sticky_flash_message_key

@@ -47,6 +47,7 @@ gem 'valid_email'
 gem 'will_paginate', '~> 3.0'
 gem "paperclip-dropbox"
 
+
 # for sidekiq admin
 gem 'sinatra', require: false
 gem 'slim'
@@ -68,6 +69,7 @@ end
 group :development do
   gem 'letter_opener'
   gem 'quiet_assets'
+  gem 'thin'
 end
 
 group :test do

@@ -226,14 +226,14 @@ class Api::OrdersController < Api::BaseController
   def show_cart
     order = current_user.init_cart.order
     if order.nil?
-      @result[:msg] = "This order does not exist anymore!"
-      @result[:success] = false
-      return render :json => @result
+      render json: { msg: "This order does not exist anymore!" }, status: :not_found
+    else
+      render json: order.line_items
     end
-    return render :json => {:success => true, :data => order.line_items}
   end
 
   protected
+
     def finalize_cart
       if find_cart
         @order = @cart.order
