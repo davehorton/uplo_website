@@ -219,9 +219,11 @@ Uplo::Application.routes.draw do
         get :liked
         get :popular
         get :search
+        get :search_by_id
       end
 
       member do
+        post :flag
         post :like
         get  :mouldings
         get  :ordering_options

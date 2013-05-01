@@ -1,3 +1,10 @@
+$(document).on('change', '#gallery_permission', function(){
+  if ($(this).val() == "public")
+    $("#has-commission").hide();
+  else
+    $("#has-commission").show();
+});
+
 var gallery = {
   setup: function(){
     var target = "#gallery-form-container";
@@ -20,6 +27,7 @@ var gallery = {
           }
         });
       }
+      $('#gallery_permission').change();
     };
 
     // New gallery form

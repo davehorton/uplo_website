@@ -4,9 +4,21 @@ class Size < ActiveRecord::Base
 
   has_many :products
 
-  default_scope order('sizes.width, sizes.height')
-  scope :rectangular, where("sizes.width <> sizes.height")
-  scope :square,      where("sizes.width = sizes.height")
+  after_save :expire_cached_entries
+
+  scope :by_width_height, order('sizes.width, sizes.height')
+
+  def self.rectangular
+    Rails.cache.fetch :rectangular_sizes do
+      where("sizes.width <> sizes.height").by_width_height
+    end
+  end
+
+  def self.square
+    Rails.cache.fetch :square_sizes do
+      where("sizes.width = sizes.height").by_width_height
+    end
+  end
 
   def to_name
     "#{width}x#{height}"
@@ -39,4 +51,11 @@ class Size < ActiveRecord::Base
     @minimum_recommended_resolution ||=
       { w: (minimum_recommended_width || dpi*width), h: (minimum_recommended_height || dpi*height) }
   end
+
+  private
+
+    def expire_cached_entries
+      Rails.cache.delete(:rectangular_sizes)
+      Rails.cache.delete(:square_sizes)
+    end
 end

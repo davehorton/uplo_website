@@ -203,4 +203,8 @@ module ApplicationHelper
       :message   => message
     })
   end
+
+  def yes_or_no(value)
+    value ? t(:'yes') : t(:'no')
+  end
 end

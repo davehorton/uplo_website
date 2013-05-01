@@ -12,6 +12,10 @@
     .label.text.black.bold.font12.left Permission
     = f.select :permission, Permission.select_options, {:value => gallery.permission}, { :class => 'left' }
     %span.note.text.gray.italic.font11= "&nbsp;<span style='color:red;'>*</span> Required Field".html_safe
+  .info-line.left.no-padding-bottom{:id => "has-commission", :style => (gallery.is_public? ? 'display:none;' : '')}
+    = f.check_box :has_commission
+    = f.label :has_commission, "Does this gallery has commission?", :class => "text gray font11 line16 left"
+            
 .line-separator.left
 #button-container
   #btn-gallery-save.button.save.left

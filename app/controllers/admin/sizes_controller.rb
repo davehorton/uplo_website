@@ -2,7 +2,7 @@ class Admin::SizesController < Admin::AdminController
   expose(:size)
 
   def index
-    @sizes = Size.all
+    @sizes = Size.by_width_height.all
   end
 
   def create

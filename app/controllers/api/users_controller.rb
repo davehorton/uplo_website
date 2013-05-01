@@ -33,7 +33,7 @@ class Api::UsersController < Api::BaseController
 
     users = User.search_scope(params[:query]).
               paginate_and_sort(filtered_params)
-    render json: users, meta: { total: users.size }
+    render json: users, meta: { total: users.total_entries }
   end
 
   # GET /api/users/:id
@@ -56,11 +56,13 @@ class Api::UsersController < Api::BaseController
   # POST /api/request_invitation
   # params: email
   def request_invitation
-    invite_request = Invitation.new(params[:email])
+    invite_request = Invitation.new
+    invite_request.email = params[:email]
+
     if invite_request.save
-      render json: { msg: "Your request has been sent" }, status: :ok
+      render json: { msg: "We'll let you know when your account is ready." }, status: :ok
     else
-      render json: { msg: invite_request.errors.full_messages[0]}, status: :bad_request
+      render json: { msg: invite_request.errors.full_messages[0] }, status: :bad_request
     end
   end
 
@@ -136,7 +138,7 @@ class Api::UsersController < Api::BaseController
       end
       render json: user, :status => :ok
     else
-      render json: { msg: "Invalid credentials"}, status: :bad_request
+      render json: { msg: "Invalid credentials" }, status: :bad_request
     end
   end
 
@@ -170,29 +172,28 @@ class Api::UsersController < Api::BaseController
   # follow: T/F <follow/unfollow user>
   # user_id: <current user will follow this user>
   def set_follow
-    user = User.find_by_id params[:user_id]
     follower = current_user
-    if user.nil?
-      render json: { msg: "This user does not exist" }, status: :bad_request
+    user = User.find(params[:user_id])
+
+    if !params[:follow].to_bool
+      UserFollow.destroy_all(user_id: user.id, followed_by: follower.id)
+      render json: { msg: "No longer following user" }
     elsif user.id == follower.id
       render json: { msg: "You cannot follow yourself" }, status: :bad_request
-    elsif !params[:follow].to_bool
-      UserFollow.destroy_all({ :user_id => user.id, :followed_by => follower.id })
-      render json: { msg: "Follows removed" }, status: :ok
     elsif UserFollow.exists?({ :user_id => user.id, :followed_by => follower.id })
-      render json: { msg: "You have already followed this user" }, status: :bad_request
+      render json: { msg: "You are already following this user" }, status: :bad_request
     else
-      user_follow = UserFollow.create({ :user_id => user.id, :followed_by => follower.id })
-      render json: user_follow, status: :ok
+      user_follow = UserFollow.create(user_id: user.id, followed_by: follower.id)
+      render json: user_follow
     end
   end
 
-  # POST /api/get_notification_settings
+  # GET /api/get_notification_settings
   def get_notification_settings
     device = UserDevice.find_by_device_token params[:device_token].to_s,
       :conditions => { :user_id => current_user.id }
     if device.nil?
-      render json: { msg: "You have to log in on this device first!" }, status: :bad_request
+      render json: { msg: "Unable to retrieve notification settings." }, status: :bad_request
     else
       render json: { data:  {:enable_comments => device.notify_comments,
         :enable_likes => device.notify_likes, :enable_purchases => device.notify_purchases } }, status: :ok
@@ -204,7 +205,7 @@ class Api::UsersController < Api::BaseController
     device = UserDevice.find_by_device_token params[:device_token].to_s,
       :conditions => { :user_id => current_user.id }
     if device.nil?
-      render json: { msg: "You have to log in on this device first!" }, status: :bad_request
+      render json: { msg: "Unable to retrieve notification settings." }, status: :bad_request
     else
       begin
         attrs = {

@@ -15,8 +15,6 @@ class Gallery < ActiveRecord::Base
   scope :public_access,  where(permission: Permission::Public.new.to_s)
   scope :with_images, includes(:images)
 
-  before_create :set_permission
-
   #could not find implementation
   def self.search_scope(query)
     galleries = Gallery.scoped
@@ -36,19 +34,14 @@ class Gallery < ActiveRecord::Base
     self.updated_at.strftime("%m/%d/%y")
   end
 
-  # Get the cover image for this album.
   def cover_image
-    img = Image.find_by_gallery_id self.id, :conditions => { :gallery_cover => true }
-    if img.nil? && self.images.unflagged.count > 0
-      result = self.images.unflagged.first :order => 'images.created_at ASC'
-    else
-      result = img
-    end
-    result
+    img = Image.unscoped.where(gallery_id: self.id, gallery_cover: true).first
+    img = images.unscoped.unflagged.first if img.nil?
+    img
   end
 
   def total_images
-    images.unflagged.length
+    images.unflagged.count
   end
 
   def last_update
@@ -59,9 +52,8 @@ class Gallery < ActiveRecord::Base
     self.permission == "public"
   end
 
-  private
+  def commission_percent?
+    is_public? || has_commission
+  end
 
-    def set_permission
-      self.permission = Permission::Public.new.to_s
-    end
 end
