@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130501044947) do
+ActiveRecord::Schema.define(:version => 20130501204814) do
 
   create_table "addresses", :force => true do |t|
     t.string   "first_name"
@@ -358,49 +358,5 @@ ActiveRecord::Schema.define(:version => 20130501044947) do
   add_index "users", ["removed"], :name => "index_users_on_removed"
   add_index "users", ["reset_password_token"], :name => "index_users_on_reset_password_token", :unique => true
   add_index "users", ["username"], :name => "index_users_on_username", :unique => true
-
-  add_foreign_key "carts", "orders", :name => "carts_order_id_fk"
-  add_foreign_key "carts", "users", :name => "carts_user_id_fk"
-
-  add_foreign_key "comments", "images", :name => "comments_image_id_fk"
-  add_foreign_key "comments", "users", :name => "comments_user_id_fk"
-
-  add_foreign_key "galleries", "users", :name => "galleries_user_id_fk"
-
-  add_foreign_key "gallery_invitations", "galleries", :name => "gallery_invitations_gallery_id_fk"
-
-  add_foreign_key "image_flags", "images", :name => "image_flags_image_id_fk"
-  add_foreign_key "image_flags", "users", :name => "image_flags_reported_by_fk", :column => "reported_by"
-
-  add_foreign_key "image_likes", "images", :name => "image_likes_image_id_fk"
-  add_foreign_key "image_likes", "users", :name => "image_likes_user_id_fk"
-
-  add_foreign_key "image_tags", "images", :name => "image_tags_image_id_fk"
-  add_foreign_key "image_tags", "tags", :name => "image_tags_tag_id_fk"
-
-  add_foreign_key "images", "galleries", :name => "images_gallery_id_fk"
-  add_foreign_key "images", "users", :name => "images_user_id_fk"
-
-  add_foreign_key "line_items", "images", :name => "line_items_image_id_fk"
-  add_foreign_key "line_items", "orders", :name => "line_items_order_id_fk"
-  add_foreign_key "line_items", "products", :name => "line_items_product_id_fk"
-
-  add_foreign_key "orders", "addresses", :name => "orders_billing_address_id_fk", :column => "billing_address_id"
-  add_foreign_key "orders", "addresses", :name => "orders_shipping_address_id_fk", :column => "shipping_address_id"
-  add_foreign_key "orders", "users", :name => "orders_user_id_fk"
-
-  add_foreign_key "products", "mouldings", :name => "products_moulding_id_fk"
-  add_foreign_key "products", "sizes", :name => "products_size_id_fk"
-
-  add_foreign_key "profile_images", "images", :name => "profile_images_link_to_image_fk", :column => "link_to_image"
-  add_foreign_key "profile_images", "users", :name => "profile_images_user_id_fk"
-
-  add_foreign_key "user_devices", "users", :name => "user_devices_user_id_fk"
-
-  add_foreign_key "user_follows", "users", :name => "user_follows_followed_by_fk", :column => "followed_by"
-  add_foreign_key "user_follows", "users", :name => "user_follows_user_id_fk"
-
-  add_foreign_key "users", "addresses", :name => "users_billing_address_id_fk", :column => "billing_address_id"
-  add_foreign_key "users", "addresses", :name => "users_shipping_address_id_fk", :column => "shipping_address_id"
 
 end

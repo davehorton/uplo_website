@@ -37,6 +37,7 @@ gem 'oauth'
 gem 'oauth2'
 gem 'oj'
 gem 'paperclip'
+gem 'paperclip-dropbox'
 gem 'paperclip-meta'
 gem 'sidekiq'
 gem 'simple_form'
@@ -45,9 +46,7 @@ gem 'twitter'
 gem 'urbanairship'
 gem 'valid_email'
 gem 'will_paginate', '~> 3.0'
-gem "paperclip-dropbox"
-gem 'foreigner'
-    
+
 # for sidekiq admin
 gem 'sinatra', require: false
 gem 'slim'
