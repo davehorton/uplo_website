@@ -151,21 +151,29 @@ class Image < ActiveRecord::Base
   end
 
   def available_products
-    compatible_sizes = if square?
-      Size.square
-    else
-      Size.rectangular
-    end
+    @available_products ||= begin
+      compatible_sizes = if square?
+        Size.square
+      else
+        Size.rectangular
+      end
 
-    compatible_sizes = compatible_sizes.select do |size|
-      self.image.width  >= size.minimum_recommended_resolution[:w] &&
-      self.image.height >= size.minimum_recommended_resolution[:h]
-    end
+      return [] if self.image_meta.nil?
 
-    if self.gallery.is_public?
-      Product.public_gallery.for_sizes(compatible_sizes)
-    else
-      Product.private_gallery.for_sizes(compatible_sizes)
+      compatible_sizes = compatible_sizes.select do |size|
+        self.image.width  >= size.minimum_recommended_resolution[:w] &&
+        self.image.height >= size.minimum_recommended_resolution[:h]
+      end
+
+      if self.gallery.is_public?
+        Rails.cache.fetch [:compatible_sizes_public, compatible_sizes.map(&:id)] do
+          Product.public_gallery.includes(:moulding, :size).for_sizes(compatible_sizes)
+        end
+      else
+        Rails.cache.fetch [:compatible_sizes_private, compatible_sizes.map(&:id)] do
+          Product.private_gallery.includes(:moulding, :size).for_sizes(compatible_sizes)
+        end
+      end
     end
   end
 
