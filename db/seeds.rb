@@ -83,21 +83,21 @@ puts 'Creating galleries...'
 Gallery.create!(
   name: Faker::Lorem.word,
   user: user,
-  description: Faker::Lorem.words
+  description: Faker::Lorem.sentence
 )
 
 # 1 public gallery for admin user
 Gallery.create!(
   name: Faker::Lorem.word,
   user: admin,
-  description: Faker::Lorem.words
+  description: Faker::Lorem.sentence
 )
 
 # 1 private gallery for admin user
 Gallery.create!(
   name: Faker::Lorem.word,
   user: admin,
-  description: Faker::Lorem.words,
+  description: Faker::Lorem.sentence,
   permission: :private
 )
 
@@ -107,7 +107,7 @@ puts 'Creating gallery images...'
 gallery = user.galleries.first
 3.times do |counter|
   img = gallery.images.create!(
-    name: Faker::Lorem.words,
+    name: Faker::Lorem.word,
     image: File.open("#{Rails.root}/spec/fixtures/assets/photo.jpg"),
     tier_id: 1,
     promoted: [true, false].sample
