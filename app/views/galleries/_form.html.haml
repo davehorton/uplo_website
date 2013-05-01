@@ -1,25 +1,25 @@
 .line-separator.clear
 .gallery-form-container
   = simple_form_for(@gallery, :html => {:id => 'frm-edit-gallery', :class => "gallery-form"}) do |f|
-    .sections.left
-      = f.input(:name, :wrapper_class => "input left", :label => 'Gallery Name',
-                :input_html => {:class => "name"}, :required => true, :error => false)
-      = f.input(:description, :as => 'text', :wrapper_class => "input left",
-                :input_html => {:class => "description"}, :required => false)
-    .sections.right
-      = f.input(:keyword, :as => 'text', :label => 'Tags', :wrapper_class => "input right",
-                :input_html => {:class => "description"}, :required => false)
-      .select_control
-        .input.right
-          = f.input :permission, :as => :select, :label => "Permission", :collection => Permission.select_options, :include_blank => false
-          .info-line.no-padding-bottom{:id => "has-commission", :style => 'display:none;'}
-            = f.check_box :has_commission
-            = f.label :has_commission, "Does this gallery has commission?", :class => "text gray font11 line16 left"
-          %span.text.gray.italic.font11.left.require_text= "&nbsp;<span style='color:red;'>*</span> Required Fields".html_safe
-      .clear
-      #button-container.left
-        #btn-gallery-cancel.button.cancel.left
-        #btn-gallery-save.button.save.left
+    = f.input(:name, :wrapper_class => "input left", :label => 'Gallery Name',
+              :input_html => {:class => "name"}, :required => true, :error => false)
+    = f.input(:description, :as => 'text', :wrapper_class => "input left",
+              :input_html => {:class => "description"}, :required => false)
+    = f.input(:keyword, :as => 'text', :label => 'Tags', :wrapper_class => "input right",
+              :input_html => {:class => "description"}, :required => false)
+
+
+    .select_control
+      = f.input :permission, :as => :select, :label => "Permission", :collection => Permission.select_options, :include_blank => false
+      .info-line.no-padding-bottom{:id => "has-commission", :style => 'display:none;'}
+        = f.label 'commissions'
+        = f.check_box :has_commission
+        = f.label :has_commission, "Earn commissions on sales in this private gallery", :class => "text gray font11 line16 left"
+    .clear
+    #button-container.left
+      #btn-gallery-cancel.button.cancel.left
+      #btn-gallery-save.button.save.left
+      %span.text.gray.italic.font11.left.require_text= "&nbsp;<span style='color:red;'>*</span> Required Fields".html_safe
 
 :erb
   <script type="text/javascript">
