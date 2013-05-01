@@ -5,6 +5,7 @@ class Gallery < ActiveRecord::Base
 
   belongs_to :user
   has_many   :images, :dependent => :destroy
+  has_many :gallery_invitations, :dependent => :destroy
 
   validates :name, presence: true, uniqueness: { scope: :user_id, case_sensitive: false }
   validates :user, presence: true

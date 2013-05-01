@@ -723,6 +723,14 @@ describe User do
         new_user.can_access?(gallery1).should be_true
       end
     end
+
+    context "when gallery has gallery invitations" do
+      it "should return true" do
+        gallery = create(:gallery)
+        gallery_invitation = create(:gallery_invitation, :user_id => user.id)
+        user.can_access?(gallery).should be_true
+      end
+    end
   end
 
   describe "#check_card_number" do

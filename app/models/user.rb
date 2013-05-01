@@ -456,7 +456,7 @@ class User < ActiveRecord::Base
 
   # TODO: move into ability class
   def can_access?(gallery)
-    owns_gallery?(gallery) || gallery.permission.public?
+    owns_gallery?(gallery) || gallery.permission.public? || GalleryInvitation.find_by_user_id(id).present?
   end
 
   def like_image(image)
