@@ -134,3 +134,5 @@ gallery = admin.galleries.private_access.first
     tier_id: 1
   )
 end
+
+puts 'To process uploaded images, do the following: bundle exec sidekiq -q default -q paperclip'
