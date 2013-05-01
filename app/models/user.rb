@@ -34,8 +34,8 @@ class User < ActiveRecord::Base
                  :confirmed_at,
                  :created_at
 
-  belongs_to :billing_address,  :class_name => "Address"
-  belongs_to :shipping_address, :class_name => "Address"
+  belongs_to :billing_address,  :class_name => "Address", :foreign_key => :billing_address_id
+  belongs_to :shipping_address, :class_name => "Address", :foreign_key => :shipping_address_id
 
   has_many :galleries, :dependent => :destroy
   has_many :public_galleries, class_name: 'Gallery', conditions: { permission: Permission::Public.new.to_s }
