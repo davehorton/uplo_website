@@ -37,6 +37,8 @@ Product.create(size: size24x36, moulding: canvas, tier1_price: 500, tier2_price:
 puts "Admin login: admin/secret"
 admin = User.new({
   :email => "admin@uplo.com",
+  :paypal_email => "admin@uplo.com",
+  :paypal_email_confirmation => "admin@uplo.com",
   :username => "admin",
   :last_name => "Admin",
   :first_name => "Super",
@@ -53,9 +55,13 @@ admin.save!
 
 puts 'Creating 10 users...'
 10.times do |counter|
+  email = Faker::Internet.email
+
   user = User.new({
-    :email => Faker::Internet.email,
+    :email => email,
     :username => Faker::Internet.user_name,
+    :paypal_email => email,
+    :paypal_email_confirmation => email,
     :last_name =>  Faker::Name.last_name,
     :first_name =>  Faker::Name.first_name,
     :password => "secret",
@@ -103,7 +109,8 @@ gallery = user.galleries.first
   img = gallery.images.create!(
     name: Faker::Lorem.words,
     image: File.open("#{Rails.root}/spec/fixtures/assets/photo.jpg"),
-    tier_id: 1
+    tier_id: 1,
+    promoted: [true, false].sample
   )
 end
 
@@ -113,7 +120,8 @@ gallery = admin.galleries.public_access.first
   img = gallery.images.create!(
     name: Faker::Lorem.word,
     image: File.open("#{Rails.root}/spec/fixtures/assets/photo.jpg"),
-    tier_id: 1
+    tier_id: 1,
+    promoted: [true, false].sample
   )
 end
 
