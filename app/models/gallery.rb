@@ -15,8 +15,6 @@ class Gallery < ActiveRecord::Base
   scope :public_access,  where(permission: Permission::Public.new.to_s)
   scope :with_images, includes(:images)
 
-  before_create :set_permission
-
   #could not find implementation
   def self.search_scope(query)
     galleries = Gallery.scoped
@@ -54,9 +52,8 @@ class Gallery < ActiveRecord::Base
     self.permission == "public"
   end
 
-  private
+  def commission_percent?
+    is_public? || has_commission
+  end
 
-    def set_permission
-      self.permission = Permission::Public.new.to_s
-    end
 end
