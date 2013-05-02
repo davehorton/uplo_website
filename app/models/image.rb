@@ -28,6 +28,8 @@ class Image < ActiveRecord::Base
 
   process_in_background :image
 
+  validates :gallery_id, presence: true
+
   validates_attachment_presence :image,
     :size => { :in => 0..100.megabytes, :message => 'File size cannot exceed 100MB' },
     :content_type => { :content_type => [ 'image/jpeg','image/jpg' ],
@@ -41,7 +43,7 @@ class Image < ActiveRecord::Base
                  :set_as_cover_if_first_one
   before_destroy :ensure_not_associated_with_an_order
 
-  default_scope order('images.created_at desc')
+  default_scope order('images.id desc')
   scope :removed,     where(removed: true)
   scope :not_removed, where(removed: false)
 
@@ -143,11 +145,12 @@ class Image < ActiveRecord::Base
     Product.first.try(:price_for_tier, tier_id) || 'Unknown'
   end
 
-  def square?(width = nil, height = nil)
-    width ||= image.width
-    height ||= image.height
-    geometry = Paperclip::Geometry.new(width, height)
-    Paperclip::Geometry.new(geometry.larger, geometry.smaller).aspect < 1.2
+  def current_geometry
+    @geometry ||= Paperclip::Geometry.new(image.width, image.height)
+  end
+
+  def square?
+    Paperclip::Geometry.new(current_geometry.larger, current_geometry.smaller).aspect < 1.2
   end
 
   def available_products
@@ -158,14 +161,12 @@ class Image < ActiveRecord::Base
         Size.rectangular
       end
 
-      return [] if self.image_meta.nil?
-
       compatible_sizes = compatible_sizes.select do |size|
-        self.image.width  >= size.minimum_recommended_resolution[:w] &&
-        self.image.height >= size.minimum_recommended_resolution[:h]
+        current_geometry.width.to_i  >= size.minimum_recommended_resolution[:w] &&
+        current_geometry.height.to_i >= size.minimum_recommended_resolution[:h]
       end
 
-      if self.gallery.is_public?
+      if gallery.is_public?
         Rails.cache.fetch [:compatible_sizes_public, compatible_sizes.map(&:id)] do
           Product.public_gallery.includes(:moulding, :size).for_sizes(compatible_sizes)
         end
@@ -175,6 +176,9 @@ class Image < ActiveRecord::Base
         end
       end
     end
+  rescue Exception => ex
+    ExternalLogger.new.log_error(ex, "No compatible products found for image #{self.id}")
+    []
   end
 
   def available_sizes
@@ -411,12 +415,28 @@ class Image < ActiveRecord::Base
     def minimum_dimensions_are_met
       file = image.queued_for_write[:original]
       return true if file.nil?
-      geo = Paperclip::Geometry.from_file(file)
-      smallest_size = square?(geo.width, geo.height) ? Size.square.first : Size.rectangular.first
 
-      if geo.width < smallest_size.minimum_recommended_resolution[:w] ||
-         geo.height < smallest_size.minimum_recommended_resolution[:h]
-         errors.add(:base, "Image should be at least #{smallest_size.minimum_recommended_resolution[:w]} x #{smallest_size.minimum_recommended_resolution[:h]}")
+      @geometry = Paperclip::Geometry.from_file(file)
+
+      if available_sizes.empty?
+        product = if square?
+          format_label = "square"
+          Product.for_square_sizes
+        else
+          format_label = "rectangular"
+          Product.for_rectangular_sizes
+        end
+
+        product = if self.gallery.is_public?
+          permission_label = "public"
+          product.public_gallery
+        else
+          permission_label = "private"
+          product.private_gallery
+        end
+
+        min_size = product.first.size
+        errors.add(:base, "A #{format_label} image being uploaded to a #{permission_label} gallery must be at least #{min_size.minimum_recommended_resolution[:w]} x #{min_size.minimum_recommended_resolution[:h]} pixels.")
       end
     end
 
