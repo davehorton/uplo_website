@@ -1,3 +1,10 @@
+<style type="text/css">
+  #gallery-invitation-options th,
+  #gallery-invitation-options td {
+    padding: 6px;
+  }
+</style>
+
 <% content_for :top_content do %>
   <div class="text bold font16 line12 left">
     <span class="text black">My Gallery /</span>
@@ -11,26 +18,27 @@
   </div>
 <% end %>
 
-<table id="gallery-invitation-options">
-  <thead>
-    <tr>
-      <th>Email</th>
-      <th>Invited At</th>
-      <th>Accepted</th>
-    </tr>
-  </thead>
-  <tbody>
-      <% @gallery_invitations.each do |gallery_invitation| %>
+<% if @gallery_invitations.any? %>
+  <table id="gallery-invitation-options">
+    <thead>
       <tr>
-        <td><%= gallery_invitation.email %></td>
-        <td><%= gallery_invitation.created_at.strftime("%d/%m/%Y") %></td>
-        <td><%= (gallery_invitation.accepted? ? "Yes" : "No") %></td>
-      </tr>   
-      <% end %>
-  </tbody>
-</table>
-   
-
-
-
-
+        <th>Email</th>
+        <th>Invited At</th>
+        <th>Accepted</th>
+      </tr>
+    </thead>
+    <tbody>
+        <% @gallery_invitations.each do |gallery_invitation| %>
+        <tr>
+          <td><%= gallery_invitation.email %></td>
+          <td><%= gallery_invitation.created_at.strftime("%d/%m/%Y") %></td>
+          <td><%= (gallery_invitation.accepted? ? "Yes" : "No") %></td>
+        </tr>
+        <% end %>
+    </tbody>
+  </table>
+<% else %>
+  <div class="info-panel">
+    <p>You have not invited anyone to your gallery yet.</p>
+  </div>
+<% end %>
