@@ -28,8 +28,14 @@ describe Image do
   it { should have_many(:tags) }
 
   it { should have_attached_file(:image) }
-  it { should validate_attachment_presence(:image) }
-  it { should validate_attachment_content_type(:image).allowing('image/jpeg', 'image/jpg') }
+  it { should validate_presence_of(:gallery_id) }
+
+  context "validating uploaded image" do
+    subject { Image.new(gallery: create(:gallery)) }
+
+    it { should validate_attachment_presence(:image) }
+    it { should validate_attachment_content_type(:image).allowing('image/jpeg', 'image/jpg') }
+  end
 
   it "has a default sort of created_asc" do
     a = image
