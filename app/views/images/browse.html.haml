@@ -85,7 +85,7 @@
       - if !@is_owner
         .button.flag.left{:onclick => "show_flag_form();"}
       .button.order.left{:onclick => "window.location.href = '#{order_url}';", :data => {:url => "#{order_url}"}}
-      - if !@image.flagged?
+      - if @image.gallery.is_public? && !@image.flagged?
         .button.share.left{:onclick => "display_sharing_box();"}
   .line-separator.clear
   #comments-section{ :data => { :id => "#{@image.id}" }}

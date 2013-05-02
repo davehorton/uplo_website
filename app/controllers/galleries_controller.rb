@@ -4,11 +4,12 @@ class GalleriesController < ApplicationController
   skip_authorize_resource :only => [:public]
 
   before_filter :detect_device
-  before_filter :check_paypal_email, :except => [:public]
+  #before_filter :check_paypal_email, :only => [:public]
   before_filter :show_notification
 
   def index
     @galleries = current_user.galleries.with_images.paginate_and_sort(filtered_params)
+    @gallery_invitations = current_user.gallery_invitations.includes(:gallery)
     @gallery = Gallery.new
   end
 
@@ -166,7 +167,7 @@ class GalleriesController < ApplicationController
     end
 
     def check_paypal_email
-      if (current_user.paypal_email.blank?)
+      if current_user.paypal_email.blank?
         flash[:warning] = "You must first provide a PayPal email, under My PayPal Information."
         redirect_to(:controller => :users, :action => :account) and return
       end
