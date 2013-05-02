@@ -86,10 +86,10 @@ $ ->
   $('#shipping-address .edit a').click ->
     $('#shipping-address .inputs').removeClass('hide').addClass('show')
     $('#shipping-address .edit').removeClass('show').addClass('hide')
-    $('#billing_ship_to_billing').prop('checked', false)
+    $('#ship_to_billing').prop('checked', false)
     $('#shipping-address .header .italic').removeClass('hide').addClass('show')
 
-  $('#billing_ship_to_billing').change ->
+  $('#ship_to_billing').change ->
     if $(@).is(':checked')
       $('#shipping-address .inputs').removeClass('show').addClass('hide')
       $('#shipping-address .header .italic').removeClass('show').addClass('hide')
