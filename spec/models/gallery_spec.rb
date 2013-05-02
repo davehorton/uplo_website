@@ -66,7 +66,7 @@ describe Gallery do
        subject { create(:gallery_with_images_without_cover) }
        it "should set cover image" do
          subject.images.last.update_attribute(:gallery_cover, false)
-         image1 = subject.images.first
+         image1 = subject.images.last
          subject.cover_image.should == image1
        end
      end
