@@ -3,7 +3,9 @@
 <%= render partial: 'admin/admin_menu' %>
 
 <ul>
-  <li><%= link_to 'Check for low res images', low_res_tool_admin_image_tools_path, id: 'low_res_link' %></li>
+  <li>
+    <%= link_to 'Check for low quality images', low_res_tool_admin_image_tools_path, id: 'low_res_link' %>
+  </li>
 </ul>
 
 <script type="text/javascript">

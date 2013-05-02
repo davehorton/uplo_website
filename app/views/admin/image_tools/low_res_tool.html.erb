@@ -3,12 +3,12 @@
 <%= render partial: 'admin/admin_menu' %>
 
 <% if @too_small_images.any? %>
-  <h1>The following images are too small - please contact the member and advise to upload a higher res version.</h1>
+  <h3>The following images are too small - please contact the member and advise to upload a higher res version.</h3>
   <ul>
     <% @too_small_images.each do |image| %>
       <li><%= link_to image_tag(image.url(:thumb)), browse_image_path(image) %> (<%= image.image.width %>x<%= image.image.height %>)</li>
     <% end %>
   </ul>
 <% else %>
-  <p>All images are good!</p>
+  <p>All <%= @total_images_checked %> images are good!</p>
 <% end %>
