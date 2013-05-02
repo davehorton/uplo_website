@@ -36,7 +36,7 @@
     .info-line.left
       .label.text.black.bold.font12 Tags
       = text_area :image, :keyword, :value => image.keyword
-    .info-line.left{:style => "margin-top:20px;#{'display:none' if image.image_processing}"}
+    .info-line.left{ id: "delete-photo-#{image.id}", style: "margin-top:20px;#{'display:none' if image.image_processing}" }
       .button.delete-photo.right{ :data => { :url => gallery_image_path(image.gallery, image) } }
 
   .clear

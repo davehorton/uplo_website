@@ -6,4 +6,5 @@ $("#image-container-<%= @image.id %>").html("<%= j render partial: 'galleries/im
   }
 <% else %>
   $("#processing-section-<%= @image.id %>").remove();
+  $("#delete-photo-<%= @image.id %>, #other-actions-<%= @image.id %>").show();
 <% end %>
