@@ -30,7 +30,7 @@
               &nbsp;
   = render_pagination(@galleries, {:controller => "galleries", :action => params[:action]})
 
-- if @gallery_invitations
+- if @gallery_invitations.any?
   .line-separator.left
   .text.black.bold.font16.line12.left{ :style => 'margin-top:10px;' } Invited Galleries
   .images-wrapper.wrapper.left

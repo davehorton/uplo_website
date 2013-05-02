@@ -136,13 +136,21 @@ class Image < ActiveRecord::Base
   end
 
   def get_price(moulding, size)
-    product = Product.where(moulding_id: moulding.id, size_id: size.id).first
-    raise "No matching product" if product.nil?
-    product.price_for_tier(tier_id)
+    if gallery.is_public?
+      product = Product.where(moulding_id: moulding.id, size_id: size.id).first
+      raise "No matching product" if product.nil?
+      product.price_for_tier(tier_id)
+    else
+      gallery.private_pricing
+    end
   end
 
   def sample_product_price
-    Product.first.try(:price_for_tier, tier_id) || 'Unknown'
+    if gallery.is_public?
+      Product.first.try(:price_for_tier, tier_id) || 'Unknown'
+    else
+      gallery.private_pricing || 'Unknown'
+    end
   end
 
   def current_geometry

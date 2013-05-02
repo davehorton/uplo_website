@@ -1,12 +1,15 @@
-#has-commission {
-  margin: 20px 0 0 110px;  
-}
-
 #gallery-form-container {
   #has-commission {
-    margin: 0 0 0 78px;
     label {
-      width: 300px !important;
+      width: 140px !important;
     }
   }
-}    
+}
+
+#gallery_private_pricing {
+  width: 110px !important;
+}
+
+.gallery-pricing {
+  margin-left: 4px
+}

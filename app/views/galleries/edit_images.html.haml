@@ -8,7 +8,7 @@
     = select :gallery_selector, :id, gallery_options(current_user, @gallery.id, true), { :class => 'left' }
   .top-nav
     .actions-panel.right
-      %a#edit-gallery.left{ :href => '#' } Edit Gallery Info
+      %a#edit-gallery.left.edit-gallery-link{ :href => '#' } Edit Gallery Info
       .separator.left= '|'
       %a#delete-gallery.left{ :href => gallery_path(@gallery), :data => { :method => :delete, :confirm => I18n.t("gallery.delete_confirm") } } Delete Gallery
       .separator.left= '|'

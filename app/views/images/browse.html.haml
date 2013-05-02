@@ -29,7 +29,8 @@
   .frame-fit.text.line10.left
     .text.black.font12.left{:style => 'margin-top:7px;'}= "Uploaded on #{@image.created_at.strftime('%m/%d/%Y')}"
     .right
-      %span.text.black.font12 from
+      - if @image.gallery.is_public?
+        %span.text.black.font12 from
       %span.text.black.bold.font20= number_to_currency @image.sample_product_price, {:precision => 2}
   .line-separator.left
   .text.gray.font12.line16.left
