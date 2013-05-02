@@ -54,7 +54,7 @@
               = user_f.label :name_on_card, "Name on Card <span style='color:red;'>*</span>".html_safe
               - message = first_error_message_for(user_f.object, :name_on_card)
               - css = message ? "error" : nil
-              = user_f.input_field :name_on_card, :autofocus => true, :required => true, :label => false, :class => css, :title => message, :value => nil
+              = user_f.input_field :name_on_card, :autocomplete => :off, :required => true, :label => false, :class => css, :title => message, :value => nil
             .info
               = user_f.label :card_type, "Card Type <span style='color:red;'>*</span>".html_safe
               - message = first_error_message_for(user_f.object, :card_type)
@@ -64,7 +64,7 @@
               = user_f.label :card_number, "Card Number <span style='color:red;'>*</span>".html_safe
               - message = first_error_message_for(user_f.object, :card_number)
               - css = message ? "error" : nil
-              = user_f.input_field :card_number, :autofocus => true, :required => true, :label => false, :class => css, :title => message, :value => nil
+              = user_f.input_field :card_number, :autocomplete => :off, :autofocus => true, :required => true, :label => false, :class => css, :title => message, :value => nil
             .info.expiration-date
               - today = Date.today
               = user_f.label :expiration, "Expiration Date <span style='color:red;'>*</span>".html_safe
@@ -74,7 +74,7 @@
               = user_f.label :cvv, "CVV <span style='color:red;'>*</span> <span id='cvv-explanation'>What's This?</span>".html_safe
               - message = first_error_message_for(user_f.object, :cvv)
               - css = message ? "error" : nil
-              = user_f.input_field :cvv, :required => true, :label => false, :maxlength => 4, :class => css, :title => message, :value => nil
+              = user_f.input_field :cvv, :autocomplete => :off, :required => true, :label => false, :maxlength => 4, :class => css, :title => message, :value => nil
 
     #order-summary.order_summary.no-padding-right.left{:style => "height:auto;min-height: 100px;"}
       .header.text.black.bold.font16 Order Summary
