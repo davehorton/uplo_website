@@ -39,6 +39,7 @@ class User < ActiveRecord::Base
 
   has_many :galleries, :dependent => :destroy
   has_many :public_galleries, class_name: 'Gallery', conditions: { permission: Permission::Public.new.to_s }
+  has_many :gallery_invitations
 
   has_many :images
   has_many :public_images, :through => :public_galleries, :source => :images

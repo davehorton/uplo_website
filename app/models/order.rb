@@ -83,19 +83,11 @@ class Order < ActiveRecord::Base
         :status => STATUS[:complete]
       })
 
-      # Update order attributes
       self.update_attributes(params)
+      self.add_to_dropbox
 
-      # Start shipping product
-      # TODO: the above was left in here by the previous developer;
-      # assuming this was the intended call to the fulfillment API?
-
-      # Send the notification email to the buyer.
       PaymentMailer.delay.transaction_finish(id)
       PaymentMailer.delay.inform_new_order(id)
-
-      # For adding processed orders to dropbox
-      self.add_to_dropbox
 
     rescue Exception => exc
       ExternalLogger.log_error(exc, "Finalizing transaction failed")
@@ -113,6 +105,10 @@ class Order < ActiveRecord::Base
     self.line_items.each do |line_item|
       line_item.delay.copy_image
     end
+  end
+
+  def dropbox_order_root_path
+    "orders/#{id}"
   end
 
   protected

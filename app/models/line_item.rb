@@ -71,7 +71,7 @@ class LineItem < ActiveRecord::Base
   end
 
   def dropbox_path
-    "orders/#{order_id}/#{id}.#{content.original_filename.split('.').last}"
+    "#{order.dropbox_order_root_path}/#{id}.#{content.original_filename.split('.').last}"
   end
 
 

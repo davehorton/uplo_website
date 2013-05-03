@@ -1,0 +1,34 @@
+- content_for :body_class, 'order-detail-page'
+- content_for :top_content do
+  .text.black.bold.font16.left Order ##{@order.id}
+  .line-separator.left
+
+.wrapper
+
+  %h2 Order Date: #{l @order.transaction_date, format: :default}
+  .line-separator
+  - @order.line_items.each do |line|
+    .left
+      = image_tag line.image.url(:thumb)
+      %p
+        Photo Name:
+        = line.image.name
+      %p
+        Price:
+        = number_to_currency line.price
+  .line-separator.clear
+  %p
+    Tax:
+    = @order.tax > 0 ? number_to_currency(@order.tax) : "n/a"
+  %br
+  %p
+    S&H:
+    = number_to_currency SHIPPING_FEE
+  %br
+  %h2
+    Order Total:
+    = number_to_currency @order.order_total
+
+  %br
+  %p
+    Questions about this order? #{link_to 'Contact Us', 'mailto:support@uplo.com'}

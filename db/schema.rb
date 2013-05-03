@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130501204814) do
+ActiveRecord::Schema.define(:version => 20130502132814) do
 
   create_table "addresses", :force => true do |t|
     t.string   "first_name"
@@ -50,15 +50,16 @@ ActiveRecord::Schema.define(:version => 20130501204814) do
   add_index "comments", ["user_id"], :name => "index_comments_on_user_id"
 
   create_table "galleries", :force => true do |t|
-    t.integer  "user_id",                          :null => false
-    t.string   "name",                             :null => false
+    t.integer  "user_id",                                                              :null => false
+    t.string   "name",                                                                 :null => false
     t.text     "description"
-    t.boolean  "delta",          :default => true, :null => false
-    t.datetime "created_at",                       :null => false
-    t.datetime "updated_at",                       :null => false
+    t.boolean  "delta",                                          :default => true,     :null => false
+    t.datetime "created_at",                                                           :null => false
+    t.datetime "updated_at",                                                           :null => false
     t.string   "keyword"
-    t.string   "permission"
-    t.boolean  "has_commission", :default => true, :null => false
+    t.string   "permission",                                     :default => "public"
+    t.boolean  "has_commission",                                 :default => true,     :null => false
+    t.decimal  "private_pricing", :precision => 16, :scale => 2, :default => 0.0
   end
 
   add_index "galleries", ["name"], :name => "index_galleries_on_name"
@@ -255,10 +256,10 @@ ActiveRecord::Schema.define(:version => 20130501204814) do
   create_table "sizes", :force => true do |t|
     t.integer  "width"
     t.integer  "height"
-    t.datetime "created_at",                 :null => false
-    t.datetime "updated_at",                 :null => false
-    t.integer  "minimum_recommended_width"
-    t.integer  "minimum_recommended_height"
+    t.datetime "created_at",               :null => false
+    t.datetime "updated_at",               :null => false
+    t.integer  "minimum_width_in_pixels"
+    t.integer  "minimum_height_in_pixels"
   end
 
   create_table "tags", :force => true do |t|

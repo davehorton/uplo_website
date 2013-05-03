@@ -49,7 +49,7 @@ class Size < ActiveRecord::Base
   # a calculation based on a DPI of 150
   def minimum_recommended_resolution(dpi = 150)
     @minimum_recommended_resolution ||=
-      { w: (minimum_recommended_width || dpi*width), h: (minimum_recommended_height || dpi*height) }
+      { w: (minimum_width_in_pixels || dpi*width), h: (minimum_height_in_pixels || dpi*height) }
   end
 
   private

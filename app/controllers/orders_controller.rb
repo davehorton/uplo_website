@@ -13,4 +13,8 @@ class OrdersController < ApplicationController
                                                            Address.new)
     end
   end
+
+  def show
+    @order = current_user.orders.find(params[:id])
+  end
 end

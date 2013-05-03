@@ -46,7 +46,7 @@
         - if has_payment_profile?
           .inputs.left
             = check_box_tag :use_stored_cc, 1, true
-            = label_tag :use_stored_cc, "Use stored Credit Card", :style => "height: 20px;"
+            = label_tag :use_stored_cc, "Use card ending in #{current_user.card_number.last(4)} (#{link_to('Edit', '/my_account')})".html_safe, style: "height: 20px; width:200px"
 
         .inputs.left.cc_info{:style => ("display:none;" if has_payment_profile?)}
           = f.fields_for :user do |user_f|

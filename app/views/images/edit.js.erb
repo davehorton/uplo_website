@@ -1,1 +1,10 @@
-$("div[data-id='<%= @image.id %>']").html("<%= j render partial: 'images/edit_photo_template', locals: { image: @image } %>");
+$("#image-container-<%= @image.id %>").html("<%= j render partial: 'galleries/image', locals: { image: @image } %>");
+
+<% if @image.image_processing %>
+  if($("#processing_<%= @image.id %>").length) {
+    setTimeout( function(){ $("#processing_<%= @image.id %>").click(); }, 5000);
+  }
+<% else %>
+  $("#processing-section-<%= @image.id %>").remove();
+  $("#delete-photo-<%= @image.id %>, #other-actions-<%= @image.id %>").show();
+<% end %>

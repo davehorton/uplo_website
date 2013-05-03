@@ -29,7 +29,8 @@
   .frame-fit.text.line10.left
     .text.black.font12.left{:style => 'margin-top:7px;'}= "Uploaded on #{@image.created_at.strftime('%m/%d/%Y')}"
     .right
-      %span.text.black.font12 from
+      - if @image.gallery.is_public?
+        %span.text.black.font12 from
       %span.text.black.bold.font20= number_to_currency @image.sample_product_price, {:precision => 2}
   .line-separator.left
   .text.gray.font12.line16.left
@@ -85,7 +86,7 @@
       - if !@is_owner
         .button.flag.left{:onclick => "show_flag_form();"}
       .button.order.left{:onclick => "window.location.href = '#{order_url}';", :data => {:url => "#{order_url}"}}
-      - if !@image.flagged?
+      - if @image.gallery.is_public? && !@image.flagged?
         .button.share.left{:onclick => "display_sharing_box();"}
   .line-separator.clear
   #comments-section{ :data => { :id => "#{@image.id}" }}

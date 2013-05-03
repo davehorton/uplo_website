@@ -5,6 +5,7 @@
     %span.text.black My Gallery /
     %span.text.gray= @gallery.name.truncate(40)
     - if !current_user.owns_gallery?(@gallery)
+      %span.text.black /
       %span.text.fuzzy-gray= "From "
       %span.text.fuzzy-gray
         = link_to @gallery.user.fullname, profile_user_path(@gallery.user)
@@ -27,7 +28,7 @@
         - unless @gallery.is_public?
           %span.saparator= "|"
           = link_to("Invitations", gallery_gallery_invitations_path(@gallery))
-    
+
 .images-wrapper.wrapper.left
   #gallery-form-container.clearfix.hidden{:style => "display: none"}
   - if @images.blank?

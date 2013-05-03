@@ -1,30 +1,33 @@
 .edit-template.container.left{ :data => {:id => "#{ image.id }"} }
   .image-container.thumb.no-padding{ :id => "image-container-#{image.id}", :title=>"#{image.name}" }
-    = image_tag(image.url(:thumb), :class => "image-thumb image thumb")
+    = render 'galleries/image', image: image
   .info-panel.left
     .info-line.left
       .label.text.black.bold.font12 Photo Name
-      = text_field :image, :name, :value => image.name, :style => "font-size:12px; margin-top:5px; padding-top:2px; padding-bottom:2px", :disabled => image.image_processing
+      = text_field :image, :name, :value => image.name, :style => "font-size:12px; margin-top:5px; padding-top:2px; padding-bottom:2px"
     .info-line.left
       .label.text.black.bold.font12{:style => "margin-bottom:5px;" } Move to Another Gallery
-      = select :image, :gallery_id, gallery_options(current_user, image.gallery_id), { class: "left" }, :disabled => image.image_processing
-    - if !image.image_processing
+      = select :image, :gallery_id, gallery_options(current_user, image.gallery_id), { class: "left" }
       .info-line.left
         .label.text.black.bold.font12 Pricing
         .inline.left
-          .text.gray.font11.line16.left= "Tier #{image.tier_id}"
-          .price.text.black.underline.font11.line16.left change this
-    - else
-      .info-line.left
-        .inline.left
-          %br
-          = link_to('Image being processed. This may take a minute. Click to refresh.', edit_gallery_image_path(image.gallery, image), remote: true, class: 'processing', :'data-image_id' => image.id)
+          - if image.gallery.is_public?
+            .text.gray.font11.line16.left= "Tier #{image.tier_id}"
+            .price.text.black.underline.font11.line16.left Change Photo Pricing
+          - else
+            .text.gray.font11.line16.left= number_to_currency(image.gallery.private_pricing)
+            .text.black.underline.font11.line16.left.gallery-pricing.edit-gallery-link{ :href => '#' } Change Gallery Pricing
+        - if image.image_processing
+          %div{ id: "processing-section-#{image.id}" }
+            = image_tag('loading-thickbox.gif')
+            = link_to('Processing image...', edit_gallery_image_path(image.gallery, image), id: "processing_#{image.id}", class: 'left', remote: true, :'data-image_id' => image.id)
+          = javascript_tag do
+            $("#processing_#{image.id}").click();
   .info-panel.left
     .info-line.left
       .label.text.black.bold.font12 Description
-      = text_area :image, :description, :value => image.description, :disabled => image.image_processing
-    - if !image.image_processing
-      .info-line.left
+      = text_area :image, :description, :value => image.description
+      .info-line.left{ id: "other-actions-#{image.id}", style: "#{'display:none' if image.image_processing}" }
         .label.text.black.bold.font12 Other Actions
         .inline.half.left
           %input{ :id => "image_album_cover_#{image.id}", :type => "checkbox", :name => "image[gallery_cover]", :class => "album-cover no-padding left", :checked => image.gallery_cover? }
@@ -36,8 +39,8 @@
   .info-panel.left
     .info-line.left
       .label.text.black.bold.font12 Tags
-      = text_area :image, :keyword, :value => image.keyword, :disabled => image.image_processing
-    .info-line.left{:style => "margin-top:20px"}
+      = text_area :image, :keyword, :value => image.keyword
+    .info-line.left{ id: "delete-photo-#{image.id}", style: "margin-top:20px;#{'display:none' if image.image_processing}" }
       .button.delete-photo.right{ :data => { :url => gallery_image_path(image.gallery, image) } }
 
   .clear

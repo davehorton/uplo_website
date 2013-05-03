@@ -1,7 +1,7 @@
 class Gallery < ActiveRecord::Base
   include ::Shared::QueryMethods
 
-  classy_enum_attr :permission, default: 'public'
+  classy_enum_attr :permission
 
   belongs_to :user
   has_many   :images, :dependent => :destroy

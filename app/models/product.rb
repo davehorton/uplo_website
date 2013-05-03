@@ -23,6 +23,14 @@ class Product < ActiveRecord::Base
     where(size_id: sizes)
   end
 
+  def self.for_rectangular_sizes
+    where(size_id: Size.rectangular.map(&:id))
+  end
+
+  def self.for_square_sizes
+    where(size_id: Size.square.map(&:id))
+  end
+
   def price_for_tier(tier_id)
     send(:"tier#{tier_id || 1}_price")
   end

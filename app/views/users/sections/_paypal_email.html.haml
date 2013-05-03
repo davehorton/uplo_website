@@ -4,7 +4,7 @@
       - if (user.paypal_email)
         = user.paypal_email
       - else
-        There is no Paypal email
+        Commissions are paid via PayPal. Please enter your PayPal account email address.
   .yield_edit.hide
     = simple_form_for current_user, :remote => true do |user|
       .form_wrapper.left

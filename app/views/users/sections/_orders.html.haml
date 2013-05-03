@@ -1,0 +1,4 @@
+= render :layout => "account_wrapper", :locals => {:header => "My Orders", :hide_edit => true} do
+  .yield_info
+    .line
+      = render user.orders

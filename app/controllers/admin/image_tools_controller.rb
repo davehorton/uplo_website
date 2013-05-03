@@ -4,6 +4,7 @@ class Admin::ImageToolsController < Admin::AdminController
 
   def low_res_tool
     @too_small_images = []
+    @total_images_checked = Image.unflagged.count
 
     Image.unflagged.find_each do |image|
       @too_small_images << image if image.available_sizes.none?

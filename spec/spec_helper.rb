@@ -82,6 +82,7 @@ Spork.prefork do
     config.before(:each) do
       DatabaseCleaner.start
       Warden.test_mode!
+      Rails.cache.clear
     end
 
     config.after(:each) do

@@ -1,29 +1,20 @@
 class PaymentMailer < ApplicationMailer
   def transaction_finish(order_id)
     @order = Order.unscoped.find(order_id)
-    @user = order.user
+    @user = @order.user
 
-    in_tmpdir do |tmpdir, path|
-      @order.images.each do |image|
-        io = open(URI.parse(image.url(:original)))
-        def io.original_filename; base_uri.path.split('/').last; end
-        io.original_filename.blank? ? nil : io
-        attachments.inline["#{image.id}.jpg"] = File.read(io.path)
-      end
-
-      mail(
-        to: @user.friendly_email,
-        subject: I18n.t("order.email.transaction_finish_subject")
-      )
-    end
+    mail(
+      to: @user.friendly_email,
+      subject: I18n.t("order.email.transaction_finish_subject")
+    )
   end
 
   def inform_new_order(order_id)
     @order = Order.unscoped.find(order_id)
-    @user = order.user
+    @user = @order.user
 
     mail(
-      to: ["patrick@uplo.com", "uplo@digital2media.com"],
+      to: ["patrick@uplo.com"], # "uplo@digital2media.com"
       subject: I18n.t("order.email.inform_new_order")
     )
   end

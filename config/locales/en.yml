@@ -174,3 +174,7 @@ en:
       default: "%m/%d/%Y"
       short: "%b %e, %Y"
       long: "%B %e, %Y"
+
+  time:
+    formats:
+      default: "%-m/%-d/%y %l:%M%p %Z"

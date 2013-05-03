@@ -5,6 +5,7 @@ class GalleryInvitation < ActiveRecord::Base
   validates :gallery_id, presence: true
 
   belongs_to :gallery
+  belongs_to :user
 
   before_create :set_secret_token
 
