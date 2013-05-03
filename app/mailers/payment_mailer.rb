@@ -14,7 +14,7 @@ class PaymentMailer < ApplicationMailer
     @user = @order.user
 
     mail(
-      to: ["patrick@uplo.com", "uplo@digital2media.com"]
+      to: ["patrick@uplo.com", "uplo@digital2media.com"],
       subject: I18n.t("order.email.inform_new_order")
     )
   end
