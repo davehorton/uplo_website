@@ -327,7 +327,7 @@ class User < ActiveRecord::Base
     prior_months.each { |mon|
       short_mon = DateTime.parse(mon).strftime('%b')
       total_sales = 0
-      self.images.unflagged.each { |img| total_sales += img.total_sales(mon) }
+      self.images.unflagged.each { |img| total_sales += Sales.new(img).total_image_sales(mon) }
       result << { :month => short_mon, :sales => total_sales }
     }
     result
@@ -339,8 +339,9 @@ class User < ActiveRecord::Base
     array = []
     images.each { |img|
       info = img
-      info[:total_sale] = img.total_sales
-      info[:quantity_sale] = img.sold_quantity
+      sale = Sales.new(img)
+      info[:total_sale] = sale.total_image_sales
+      info[:quantity_sale] = sale.sold_image_quantity
       info[:no_longer_avai] = (img.flagged? || img.removed?)
       array << {:image => info }
     }
@@ -416,7 +417,7 @@ class User < ActiveRecord::Base
   def total_earn
     result = 0
     items = self.images
-    items.each {|item| result += item.total_sales }
+    items.each {|item| result += Sales.new(item).total_image_sales }
     result
   end
 

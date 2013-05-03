@@ -1,17 +1,16 @@
 class Sales
-  include ::Shared::QueryMethods
   include ImageConstants
 
-  attr_reader :image
+  attr_accessor :image
 
-  def initialize(image_info)
-    @image = image_info
+  def initialize(image)
+    self.image = image
   end
 
   def total_image_sales(month = nil)
     total = 0
 
-    orders = @image.orders.completed
+    orders = self.image.orders.completed
 
     if month
       start_date = DateTime.parse("01 #{month}")
@@ -22,7 +21,7 @@ class Sales
     end
 
     order_ids = orders.collect(&:id)
-    sold_items = (orders.length == 0) ? [] : @image.line_items.where(order_id: order_ids)
+    sold_items = (orders.length == 0) ? [] : self.image.line_items.where(order_id: order_ids)
     sold_items.each do |item|
       total += ((item.price * item.quantity) * item.commission_percent)
     end
@@ -35,7 +34,7 @@ class Sales
     result = 0
 
     if month.nil?
-      orders = @image.orders.where({:transaction_status => Order::TRANSACTION_STATUS[:complete]})
+      orders = self.image.orders.where({:transaction_status => Order::TRANSACTION_STATUS[:complete]})
     else
       start_date = DateTime.parse("01 #{month}")
       end_date = TimeCalculator.last_day_of_month(start_date.mon, start_date.year).end_of_day
@@ -46,14 +45,14 @@ class Sales
     end
 
     orders_in = orders.collect &:id
-    saled_items = (orders.length==0) ? [] : @image.line_items.where(order_id: orders_in)
+    saled_items = (orders.length==0) ? [] : self.image.line_items.where(order_id: orders_in)
     saled_items.each { |item| result += item.quantity }
     return result
   end
 
   def raw_image_purchased_info(item_paging_params = {})
     result = {:data => [], :total => 0}
-    order_ids = @image.orders.completed.map(&:id)
+    order_ids = self.image.orders.completed.map(&:id)
 
     sold_items = []
 
@@ -61,7 +60,7 @@ class Sales
       sold_items = LineItem.paginate_and_sort(item_paging_params.merge(sort_expression: 'purchased_date desc')).
         joins("LEFT JOIN orders ON orders.id = line_items.order_id LEFT JOIN users ON users.id = orders.user_id").
         select("line_items.*, users.id as purchaser_id, orders.transaction_date as purchased_date").
-        where(image_id: @image.id, order_id: order_ids)
+        where(image_id: self.image.id, order_id: order_ids)
     end
 
     sold_items
@@ -69,13 +68,13 @@ class Sales
 
   def image_purchased_info(item_paging_params = {})
     result = {:data => [], :total_quantity => 0, :total_sale => 0}
-    order_ids = @image.orders.completed.map(&:id)
+    order_ids = self.image.orders.completed.map(&:id)
 
     if order_ids.any?
       sold_items = LineItem.paginate_and_sort(item_paging_params.merge(sort_expression: 'purchased_date desc')).
         joins("LEFT JOIN orders ON orders.id = line_items.order_id LEFT JOIN users ON users.id = orders.user_id").
         select("line_items.*, users.id as purchaser_id, orders.transaction_date as purchased_date").
-        where(image_id: @image.id, order_id: order_ids)
+        where(image_id: self.image.id, order_id: order_ids)
 
       sold_items.each { |item|
         user = User.find_by_id(item.purchaser_id)
