@@ -11,7 +11,7 @@ class Image < ActiveRecord::Base
   has_many :image_flags,   :dependent => :destroy
   has_many :image_likes,   :dependent => :destroy
   has_many :image_tags,    :dependent => :destroy
-  has_many :line_items,    :dependent => :destroy
+  has_many :line_items
   has_many :orders,        :through => :line_items
   has_many :tags,          :through => :image_tags
 
