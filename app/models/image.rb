@@ -147,9 +147,9 @@ class Image < ActiveRecord::Base
 
   def sample_product_price
     if gallery.is_public?
-      Product.public_gallery.first.try(:price_for_tier, tier_id) || 'Unknown'
+      available_products.first.try(:price_for_tier, tier_id) || 0
     else
-      gallery.private_pricing || 'Unknown'
+      gallery.private_pricing || 0
     end
   end
 
@@ -170,8 +170,8 @@ class Image < ActiveRecord::Base
       end
 
       compatible_sizes = compatible_sizes.select do |size|
-        current_geometry.width.to_i  >= size.minimum_recommended_resolution[:w] &&
-        current_geometry.height.to_i >= size.minimum_recommended_resolution[:h]
+        current_geometry.smaller  >= size.minimum_recommended_resolution[:w] &&
+        current_geometry.larger >= size.minimum_recommended_resolution[:h]
       end
 
       if gallery.is_public?
@@ -185,7 +185,7 @@ class Image < ActiveRecord::Base
       end
     end
   rescue Exception => ex
-    ExternalLogger.new.log_error(ex, "No compatible products found for image #{self.id}")
+    ExternalLogger.new.log_error(ex, "No products for for image #{self.id}")
     []
   end
 
