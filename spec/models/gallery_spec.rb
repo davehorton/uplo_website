@@ -62,12 +62,12 @@ describe Gallery do
          gallery.cover_image.should == image
        end
      end
+
      context "when conditions are not met" do
        subject { create(:gallery_with_images_without_cover) }
+
        it "should set cover image" do
-         subject.images.last.update_attribute(:gallery_cover, false)
-         image1 = subject.images.last
-         subject.cover_image.should == image1
+         subject.cover_image.should == subject.images.last
        end
      end
    end
