@@ -4,7 +4,7 @@ class Gallery < ActiveRecord::Base
   classy_enum_attr :permission
 
   belongs_to :user
-  has_many   :images
+  has_many   :images, :dependent => :destroy
   has_many :gallery_invitations, :dependent => :destroy
 
   validates :name, presence: true, uniqueness: { scope: :user_id, case_sensitive: false }
