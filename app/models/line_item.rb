@@ -7,6 +7,7 @@ class LineItem < ActiveRecord::Base
 
   # for cropping
   attr_accessor :crop_x, :crop_y, :crop_w, :crop_h
+  attr_protected :price
 
   has_attached_file :content,
                     :storage => :dropbox,
@@ -78,7 +79,7 @@ class LineItem < ActiveRecord::Base
   private
 
     def calculate_totals
-      self.price = product.price_for_tier(image.tier_id)
+      self.price = image.gallery.is_public? ? product.price_for_tier(image.tier_id) : image.gallery.private_pricing
       self.tax   = self.price * PER_TAX
       self.commission_percent = product.commission_for_tier(image.tier_id) if self.image.gallery.commission_percent?
     end
