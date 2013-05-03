@@ -45,7 +45,8 @@ describe Order do
       it "should return result" do
         order1 = create(:order_with_line_items)
         line_item = order1.line_items.first
-        line_item.update_attributes(:price => 500, :quantity => 4)
+        line_item.price = 500
+        line_item.update_attributes(:quantity => 4)
         order1.compute_image_total.to_i.should == 4000
       end
     end

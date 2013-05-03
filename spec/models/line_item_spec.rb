@@ -28,7 +28,8 @@ describe LineItem do
 
   describe "total_price" do
     it "should calculate total" do
-      line_item.update_attributes(:tax => 10.0, :quantity => 4, :price => 500)
+      line_item.update_attributes(:tax => 10.0, :quantity => 4)
+      line_item.price = 500
       line_item.total_price.should == 2000
     end
   end
