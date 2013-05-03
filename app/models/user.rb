@@ -335,18 +335,18 @@ class User < ActiveRecord::Base
 
   def total_sales(image_paging_params = {})
     result = {:total_entries => 0, :data => []}
-    images = raw_sales.paginate_and_sort(image_paging_params)
+    line_items = raw_sales.paginate_and_sort(image_paging_params)
     array = []
-    images.each { |img|
-      info = img
-      sale = Sales.new(img)
+    line_items.each { |item|
+      info = item
+      sale = Sales.new(item.image)
       info[:total_sale] = sale.total_image_sales
       info[:quantity_sale] = sale.sold_image_quantity
-      info[:no_longer_avai] = (img.flagged? || img.removed?)
-      array << {:image => info }
+      info[:no_longer_avai] = (item.image.flagged? || item.image.removed?)
+      array << {:item => info }
     }
     result[:data] = array
-    result[:total_entries] = images.total_entries
+    result[:total_entries] = line_items.total_entries
     result
   end
 
