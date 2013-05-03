@@ -29,8 +29,12 @@
         .content.text.bold.font14
           = number_to_currency current_user.owned_amount, {:precision => 2}
           -if current_user.owned_amount > 0
-            .request_button
-              = link_to image_tag( 'btn-request-payout.png'), {:controller => :sales, :action => :withdraw}, :method => :post
+            -if current_user.paypal_email?
+              .request_button
+                = link_to image_tag( 'btn-request-payout.png'), {:controller => :sales, :action => :withdraw}, :method => :post
+            -else
+              .request_button
+                = link_to "Set PayPal email", "/my_account"
     .line-separator.left.clear
     .sales-wrapper.left
       - (0...(@sales.length - 1)). each do |idx|
