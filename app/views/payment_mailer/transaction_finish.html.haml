@@ -6,8 +6,24 @@
     %p
       Hi #{@user.fullname},
     %p
-      Your payment was completed sucessfully. Please wait for the product shipping to your address.
-    - @order.images.each do |image|
-      = image_tag( attachments["#{image.id}.jpg"].url)
+      Congratulations! Your order is being processed and will ship soon.
+    %h3
+      Order ##{@order.id}
+    - @order.line_items.each do |line|
+      %p
+        = image_tag line.image.url(:thumb)
+        %br
+        = line.image.name
+        %br
+        = number_to_currency(line.price * line.quantity)
+    %h4
+      Tax:
+      = @order.tax > 0 ? number_to_currency(@order.tax) : "n/a"
+    %h4
+      S&H:
+      = number_to_currency SHIPPING_FEE
+    %h4
+      Order Total:
+      = number_to_currency @order.order_total
     %p
       Thanks and best regards.

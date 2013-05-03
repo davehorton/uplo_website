@@ -7,36 +7,44 @@
     %p
       Hi,
     %p
-      #{@user.username}'s payment was completed sucessfully. The order details below:
-    Order Summary
-    .solid-block.left
+      #{@user.username} (#{@user.fullname}) purchased a photo on Uplo.com.
+    %h3
+      Order Summary
+    %table
+      %tr
+        %th
+          Name
+        %th
+          Quantity
+        %th
+          Price
       - subtotal = 0
       - (0...@order.line_items.length).each do |idx|
         - line_item = @order.line_items[idx]
         - subtotal += line_item.price * line_item.quantity
-        .block.text.black.line22.left{:style => "#{'padding-top:0;' if idx==0}"}
-          .title{:style => "font-weight:bold"}= line_item.image.name.truncate(36)
-          .line.no-background.left
-            .text.font10.left QTY #{line_item.quantity}
-          .line.left
-            PRICE: #{number_to_currency(line_item.price * line_item.quantity)}
-          .line.no-background.left
-            TAX: #{(line_item.tax > 0 ? number_to_currency(line_item.tax * line_item.quantity) : "--")}
-        .summary.text.black.font11.line18.right
-          .text.bold.right
-            Subtotal: #{number_to_currency subtotal}
-          .text.right.clear
-            Tax: #{(@order.tax > 0 ? number_to_currency(@order.tax) : "--")}
-          .text.clear
-            Shipping & Handling: #{number_to_currency SHIPPING_FEE}
+        %tr
+          %td
+            = line_item.image.name
+          %td
+            = line_item.quantity
+          %td
+            = number_to_currency(line_item.price * line_item.quantity)
+    %br
+    .summary.text.black.font11.line18.right
+      .text.bold.right
+        Subtotal: #{number_to_currency subtotal}
+      .text.right.clear
+        Tax: #{(@order.tax > 0 ? number_to_currency(@order.tax) : "--")}
+      .text.clear
+        S&H: #{number_to_currency SHIPPING_FEE}
 
-        .line-separator.left
-        .summary.right
-          .grand-total.text.black.bold.font14.line18.right.clear
-            .left Grand Total: #{number_to_currency(@order.tax + subtotal + SHIPPING_FEE)}
-        .line-separator.left
-        .submit.right
-          %p
-            The photo to be printed has been saved to the Uplo Dropbox folder, order ID #{@order.id}
+    .line-separator.left
+    .summary.right
+      .grand-total.text.black.bold.font14.line18.right.clear
+        .left Grand Total: #{number_to_currency(@order.order_total)}
+    .line-separator.left
+    .submit.right
+      %p
+        The original photo(s) are located in the Uplo Dropbox subfolder named #{@order.dropbox_order_root_path}.
     %p
       Thanks and best regards.

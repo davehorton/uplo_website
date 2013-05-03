@@ -5,12 +5,6 @@ Uplo::Application.routes.draw do
   # WEB ROUTING
   root :to => "home#index"
 
-  resources :invitations, only: [:create] do
-    member do
-      get :accept_gallery_invitation
-    end
-  end
-
   get "shopping_cart/show"
   post "shopping_cart/update_cart"
   post "shopping_cart/add_to_cart"
@@ -18,8 +12,6 @@ Uplo::Application.routes.draw do
   get "shopping_cart/clear"
   get "shopping_cart/checkout"
 
-  get "orders/index"
-  get "orders", :to => "orders#index"
   get "browse", :to => "home#browse"
   get "search", :to => "home#search"
   get "spotlight", :to => "home#spotlight"
@@ -31,6 +23,14 @@ Uplo::Application.routes.draw do
   get "my_account", :to => "users#account"
   get "my_account/edit", :to => "users#edit"
   put "my_account/update", :to => "users#update"
+
+  resources :invitations, only: [:create] do
+    member do
+      get :accept_gallery_invitation
+    end
+  end
+
+  resources :orders, only: [:index, :show]
 
   resource :profile, only: [:show] do
     member do

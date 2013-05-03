@@ -19,14 +19,17 @@
 
     .partial_wrapper
       = render :partial => "/users/sections/payment_info", :locals => {:user => @user}
+      = render :partial => '/orders/cvv_form', :layout => 'layouts/bubble', :locals => { :id => 'cvv-form' }
 
     .partial_wrapper
       = render :partial => "/users/sections/paypal_email", :locals => {:user => @user}
     .clear
 
     .partial_wrapper
+      = render :partial => "/users/sections/orders", :locals => {:user => @user}
+
+    .partial_wrapper
       = render :partial => "/users/sections/social_setting", :locals => {:user => @user}
-= render :partial => '/orders/cvv_form', :layout => 'layouts/bubble', :locals => { :id => 'cvv-form' }
 
 - content_for :js do
   = javascript_tag do
