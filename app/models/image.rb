@@ -147,7 +147,7 @@ class Image < ActiveRecord::Base
 
   def sample_product_price
     if gallery.is_public?
-      Product.first.try(:price_for_tier, tier_id) || 'Unknown'
+      Product.public_gallery.first.try(:price_for_tier, tier_id) || 'Unknown'
     else
       gallery.private_pricing || 'Unknown'
     end
