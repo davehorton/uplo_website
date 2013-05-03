@@ -3,10 +3,10 @@
 <%= render partial: 'admin/admin_menu' %>
 
 <% if @too_small_images.any? %>
-  <h3>The following images are too small - please contact the member and advise to upload a higher res version. Please refer to the <a href="/admin/sizes">Product Sizes page</a> for guidance on specs.</h3>
+  <p>The following images are too small - please contact the member and advise to upload a higher res version. Please refer to the <a href="/admin/sizes">Product Sizes page</a> for guidance on specs.</p>
   <ul>
     <% @too_small_images.each do |image| %>
-      <li><%= link_to image_tag(image.url(:thumb)), browse_image_path(image) %> (current resolution: <%= image.image.width %>x<%= image.image.height %>)</li>
+      <li class="left" style="padding: 4px"><%= link_to image_tag(image.url(:thumb)), browse_image_path(image) %><br/>(<%= image.image.width %>x<%= image.image.height %>)</li>
     <% end %>
   </ul>
 <% else %>

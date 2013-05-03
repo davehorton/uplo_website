@@ -1,6 +1,8 @@
 class Order < ActiveRecord::Base
   include ::Shared::QueryMethods
 
+  attr_protected :price_total, :order_total
+
   belongs_to :user
   belongs_to :shipping_address, :class_name => 'Address', :foreign_key => :shipping_address_id
   belongs_to :billing_address, :class_name => 'Address', :foreign_key => :billing_address_id

@@ -61,7 +61,8 @@ describe Order do
     context "with line items" do
       it "should return result" do
         line_item = order.line_items.first
-        line_item.update_attributes(:price => 500, :quantity => 4)
+        line_item.price = 500
+        line_item.update_attributes(:quantity => 4)
         order.compute_totals
         order.price_total.to_i.should == 4000
         order.order_total.to_i.should == 4015
