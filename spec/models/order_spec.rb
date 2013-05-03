@@ -33,7 +33,7 @@ describe Order do
         shipping_address = create(:shipping_address, :state => "new york")
         order.shipping_address_id = shipping_address.id
         line_item = order.line_items.first
-        line_item.update_attributes(:price => 500, :quantity => 4)
+        line_item.update_attribute(:quantity, 4)
         order.update_tax_by_state
         order.tax.should == 355.0
       end
@@ -45,7 +45,7 @@ describe Order do
       it "should return result" do
         order1 = create(:order_with_line_items)
         line_item = order1.line_items.first
-        line_item.update_attributes(:price => 500, :quantity => 4)
+        line_item.update_attribute(:quantity, 4)
         order1.compute_image_total.to_i.should == 4000
       end
     end

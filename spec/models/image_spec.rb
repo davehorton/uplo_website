@@ -293,7 +293,7 @@ describe Image do
       it "should return unknown" do
         Product.delete_all
         img = create(:image)
-        img.sample_product_price.should == "Unknown"
+        img.sample_product_price.should be_zero
       end
     end
   end
