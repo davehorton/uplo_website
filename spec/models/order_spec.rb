@@ -33,7 +33,8 @@ describe Order do
         shipping_address = create(:shipping_address, :state => "new york")
         order.shipping_address_id = shipping_address.id
         line_item = order.line_items.first
-        line_item.update_attributes(:price => 500, :quantity => 4)
+        line_item.price = 500
+        line_item.update_attributes(:quantity => 4)
         order.update_tax_by_state
         order.tax.should == 355.0
       end
