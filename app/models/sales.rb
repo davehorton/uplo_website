@@ -53,7 +53,7 @@ class Sales
 
   def image_purchased_info(item_paging_params = {})
     result = {:data => [], :total_quantity => 0, :total_sale => 0}
-    sold_items = self.image_purchased(item_paging_params)
+    sold_items = self.raw_image_purchased(item_paging_params)
 
     sold_items.each { |item|
       user = item.order.user
