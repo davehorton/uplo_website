@@ -7,7 +7,7 @@ class SalesController < ApplicationController
     @image = LineItem.find_by_id(params[:id]).image
     @sale = Sales.new(@image)
     @sales = ImageDecorator.decorate_collection(@sale.image_monthly_sales_over_year(Time.now, {:report_by => Image::SALE_REPORT_TYPE[:price]}))
-    @purchased_info = @sale.raw_image_purchased_info(filtered_params)
+    @purchased_info = @sale.image_purchased(filtered_params)
   end
 
   def year_sales

@@ -7,7 +7,7 @@ class Sales
     self.image = image
   end
 
-  def sold_items_calc(month)
+  def sold_items(month = nil)
     orders = self.image.orders.completed
 
     if month
@@ -19,13 +19,12 @@ class Sales
     end
 
     order_ids = orders.collect(&:id)
-    sold_items = (orders.length==0) ? [] : self.image.line_items.where(order_id: order_ids)
-    sold_items
+    (orders.length==0) ? [] : self.image.line_items.where(order_id: order_ids)
   end
 
   def total_image_sales(month = nil)
     total = 0
-    sold_items = self.sold_items_calc(month)
+    sold_items = self.sold_items(month)
     sold_items.each do |item|
       total += ((item.price * item.quantity) * item.commission_percent)
     end
@@ -35,36 +34,30 @@ class Sales
   # mon with year, return sold quantity
   def sold_image_quantity(month = nil)
     result = 0
-    sold_items = self.sold_items_calc(month)
+    sold_items = self.sold_items(month)
     sold_items.each { |item| result += item.quantity }
     return result
   end
 
-  def image_purchase_calc(item_paging_params)
+  def image_purchased(item_paging_params = {})
     order_ids = self.image.orders.completed.map(&:id)
 
     sold_items = []
     if order_ids.any?
-      sold_items = LineItem.paginate_and_sort(item_paging_params.merge(sort_expression: 'purchased_date desc')).
-        joins("LEFT JOIN orders ON orders.id = line_items.order_id LEFT JOIN users ON users.id = orders.user_id").
-        select("line_items.*, users.id as purchaser_id, orders.transaction_date as purchased_date").
+      sold_items = LineItem.paginate_and_sort(item_paging_params.merge(sort_expression: 'orders.transaction_date desc')).
+        includes(:order => :user).
         where(image_id: self.image.id, order_id: order_ids)
     end
     sold_items
   end
 
-  def raw_image_purchased_info(item_paging_params = {})
-    result = {:data => [], :total => 0}
-    self.image_purchase_calc(item_paging_params)
-  end
-
   def image_purchased_info(item_paging_params = {})
     result = {:data => [], :total_quantity => 0, :total_sale => 0}
-    sold_items = self.image_purchase_calc(item_paging_params)
+    sold_items = self.image_purchased(item_paging_params)
 
     sold_items.each { |item|
-      user = User.find_by_id(item.purchaser_id)
-      purchased_date = DateTime.parse(item.purchased_date).strftime "%B %d, %Y"
+      user = item.order.user
+      purchased_date = DateTime.parse((item.order.transaction_date).strftime "%B %d, %Y")
       result[:data] << {
         :username => user.try(:username) || 'Deleted',
         :plexi_mount => item.plexi_mount ? 'Plexi Mount' : 'No Plexi Mount',

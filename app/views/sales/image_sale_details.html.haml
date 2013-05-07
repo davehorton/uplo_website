@@ -30,7 +30,7 @@
         - if @purchased_info.length > 0
           - (0...(@purchased_info.length - 1)). each do |idx|
             - line_item = @purchased_info[idx]
-            - purchaser = User.find_by_id line_item.purchaser_id.to_i
+            - purchaser = line_item.order.user
             .item.left
               = image_tag(purchaser.avatar_url(:small), :class => "avatar medium left")
               .text.font12.left
@@ -43,7 +43,7 @@
                   %span= "#{line_item.moulding} Mounding,&nbsp;".html_safe
                   %span= "Quantity #{line_item.quantity}"
           - line_item = @purchased_info[@purchased_info.length - 1]
-          - purchaser = User.find_by_id line_item.purchaser_id.to_i
+          - purchaser = line_item.order.user
           .item.left.no-padding
             = image_tag(purchaser.avatar_url(:small), :class => "avatar medium left")
             .text.font12.left
