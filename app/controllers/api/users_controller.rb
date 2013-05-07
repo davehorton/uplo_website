@@ -132,7 +132,7 @@ class Api::UsersController < Api::BaseController
         if device.nil?
           UserDevice.create({:user_id => user.id, :device_token => params[:device_token].to_s, :last_notified => Time.now()})
           Urbanairship.register_device(params[:device_token].to_s)
-        elsif device.user_id!=user.id
+        elsif device.user_id != user.id
           device.update_attribute(:user_id, user.id)
         end
       end
@@ -265,7 +265,7 @@ class Api::UsersController < Api::BaseController
     end
 
     def authenticate_user(username, password)
-      user = User.find_for_authentication(:username => username)
+      user = User.find_for_authentication(:login => username)
       unless user.nil?
         user = user.valid_password?(password) ? user : nil
       end
