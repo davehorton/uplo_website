@@ -17,12 +17,12 @@
           .text.black.bold.font24= @image.name
           - if (image.flagged? || image.removed?)
             .text.font20{:style => "color:red"} Unavailable
-          .quantity.text.fuzzy-gray.font18= "#{@image.sold_quantity} Sales"
-          .price.text.bold= number_to_currency @image.total_sales, {:precision => 2}
+          .quantity.text.fuzzy-gray.font18= "#{@sale.sold_image_quantity} Sales"
+          .price.text.bold= number_to_currency @sale.total_image_sales, {:precision => 2}
       .line-separator.left
       .clear
       .sale-chart.clear
-        = render :partial => 'chart', :locals => {:total_sales => @image.total_sales, :sales => @sales}
+        = render :partial => 'chart', :locals => {:total_sales => @sale.total_image_sales, :sales => @sales}
       .line-separator.clear
 
       .sale-info.left
@@ -35,7 +35,7 @@
               = image_tag(purchaser.avatar_url(:small), :class => "avatar medium left")
               .text.font12.left
                 %span.text.black.bold{:style => 'font-weight:bold;'}= purchaser.username
-                %span.text.fuzzy-gray= "(#{line_item.creation_timestamp} ago)"
+                %span.text.fuzzy-gray= "(#{line_item.created_at} ago)"
                 .text.gray.line22
                   - plexi_mount = line_item.plexi_mount
                   %span= plexi_mount ? 'Plexi Mount,&nbsp;'.html_safe : 'No Plexi Mount,&nbsp;'.html_safe
@@ -48,7 +48,7 @@
             = image_tag(purchaser.avatar_url(:small), :class => "avatar medium left")
             .text.font12.left
               %span.text.black.bold{:style => 'font-weight:bold;'}= purchaser.username
-              %span.text.fuzzy-gray= "(#{line_item.creation_timestamp} ago)"
+              %span.text.fuzzy-gray= "(#{line_item.created_at} ago)"
               .text.gray.line22
                 - plexi_mount = line_item.plexi_mount
                 %span= plexi_mount ? 'Plexi Mount,&nbsp;'.html_safe : 'No Plexi Mount,&nbsp;'.html_safe

@@ -160,17 +160,18 @@ class Api::ImagesController < Api::BaseController
 
   # GET /api/images/:id/total_sales
   def total_sales
+    sale = Sales.new(current_user_image)
     render json: {
-      total: current_user_image.total_sales,
+      total: sale.total_image_sales,
       sale_chart: url_for(:action => :sale_chart, :image_id => current_user_image.id, :only_path => false),
-      sold_quantity: current_user_image.sold_quantity,
-      purchased_info: current_user_image.get_purchased_info
+      sold_quantity: sale.sold_image_quantity,
+      purchased_info: sale.image_purchased_info
     }
   end
 
   # GET /api/images/:id/purchases
   def purchases
-    purchased_info = current_user_image.get_purchased_info
+    purchased_info = Sales.new(current_user_image).image_purchased_info
 
     render json: {
       total_sale: purchased_info[:total_sale],
@@ -181,8 +182,9 @@ class Api::ImagesController < Api::BaseController
 
   # GET /api/images/:id/sale_chart
   def sale_chart
-    @monthly_sales = current_user_image.get_monthly_sales_over_year(Time.now, {:report_by => Image::SALE_REPORT_TYPE[:quantity]})
-    render :file => "sale_chart.html.haml", :layout => false
+    sale = Sales.new(current_user_image)
+    @monthly_sales = sale.image_monthly_sales_over_year(Time.now, {:report_by => Image::SALE_REPORT_TYPE[:quantity]})
+    render :file => "app/views/images/sale_chart.html.haml", :layout => false
   end
 
   # POST /api/images/:id/flag

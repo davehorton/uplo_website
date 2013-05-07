@@ -180,22 +180,6 @@ describe Image do
     end
   end
 
-  describe "#raw_purchased_info" do
-    it "should paginate" do
-      new_order = create(:order, :transaction_status => "completed", :transaction_date => "03-04-2012")
-      line_items = create_list(:line_item, 20, :image_id => image.id, :order_id => new_order.id, :quantity => 4)
-      image.raw_purchased_info({ :page => 1, :per_page => 10 }).should == line_items.last(10).reverse
-    end
-  end
-
-  describe "#get_purchased_info" do
-    it "should paginate" do
-      new_order = create(:order, :transaction_status => "completed", :transaction_date => "03-04-2012")
-      line_items = create_list(:line_item, 20, :image_id => image.id, :order_id => new_order.id, :quantity => 4)
-      image.get_purchased_info({ :page => 1, :per_page => 10 }).should be_a(Hash)
-    end
-  end
-
   describe ".paginate_and_sort" do
     context "without sort_field" do
       it "should display output" do
@@ -203,12 +187,14 @@ describe Image do
         Image.paginate_and_sort({ :page => 1, :per_page => 5 }).should == images.reverse.first(5)
       end
     end
+
     context "with date uploaded as sort field" do
       it "should display output" do
         images = create_list(:image, 10)
         Image.paginate_and_sort({ :page => 1, :per_page => 5, :sort_field => "date_uploaded" }).should == images.reverse.first(5)
       end
     end
+
     context "with num of views as sort field" do
       it "should display output" do
         img1 = create(:image, :pageview => 3)
@@ -237,6 +223,7 @@ describe Image do
         img1.gallery_cover.should be_false
       end
     end
+
     context "without is cover" do
       it "should be nil" do
         image.gallery_cover=().should be_nil
@@ -252,6 +239,7 @@ describe Image do
         img.user.images.first.owner_avatar.should be_false
       end
     end
+
     context "without is owner_avatar" do
       it "should be nil" do
         image.owner_avatar=().should be_nil
@@ -431,24 +419,6 @@ describe Image do
     end
   end
 
-  describe "#total_sales" do
-    context "without month" do
-      it "should calculate total" do
-        new_order = create(:order, :transaction_status => "completed")
-        line_item = create(:line_item, :image_id => image.id, :order_id => new_order.id, :quantity => 4, :price => 50, :commission_percent => 35.0)
-        image.total_sales.should == 200000.0
-      end
-    end
-    context "with month" do
-      it "should calculate total" do
-        new_order = create(:order, :transaction_status => "completed")
-        line_item = create(:line_item, :image_id => image.id, :order_id => new_order.id, :quantity => 4, :price => 500, :commission_percent => 35.0)
-        image.total_sales("April")
-        image.total_sales.should == 200000.0
-      end
-    end
-  end
-
   describe "#sales_count" do
     context "without sales count key" do
       it "should calculate result" do
@@ -461,48 +431,6 @@ describe Image do
     context "with sales count key" do
       it "should display result" do
         image.sales_count.should be_zero
-      end
-    end
-  end
-
-  describe "get_monthly_sales_over_year" do
-    context "without options" do
-      it "should calculate result" do
-        new_order = create(:order, :transaction_status => "completed")
-        line_item = create(:line_item, :image_id => image.id, :order_id => new_order.id, :quantity => 4)
-        image.get_monthly_sales_over_year("01-04-2013").should == [{:month=>"Apr", :sales=>0}, {:month=>"May", :sales=>0}, {:month=>"Jun", :sales=>0}, {:month=>"Jul", :sales=>0}, {:month=>"Aug", :sales=>0}, {:month=>"Sep", :sales=>0}, {:month=>"Oct", :sales=>0}, {:month=>"Nov", :sales=>0}, {:month=>"Dec", :sales=>0}, {:month=>"Jan", :sales=>0}, {:month=>"Feb", :sales=>0}, {:month=>"Mar", :sales=>0}, {:month=>"Apr", :sales=> 0}]
-      end
-    end
-    context "with options having report by quantity" do
-      it "should calculate result" do
-        new_order = create(:order, :transaction_status => "completed", :transaction_date => "05-04-2013")
-        line_item = create(:line_item, :image_id => image.id, :order_id => new_order.id, :quantity => 4)
-        image.get_monthly_sales_over_year("01-04-2013", { :report_by => "quantity"}).should == [{:month=>"Apr", :sales=>0}, {:month=>"May", :sales=>0}, {:month=>"Jun", :sales=>0}, {:month=>"Jul", :sales=>0}, {:month=>"Aug", :sales=>0}, {:month=>"Sep", :sales=>0}, {:month=>"Oct", :sales=>0}, {:month=>"Nov", :sales=>0}, {:month=>"Dec", :sales=>0}, {:month=>"Jan", :sales=>0}, {:month=>"Feb", :sales=>0}, {:month=>"Mar", :sales=>0}, {:month=>"Apr", :sales=> 4}]
-      end
-    end
-    context "with options having report by price" do
-      it "should calculate result" do
-        new_order = create(:order, :transaction_status => "completed", :transaction_date => "05-04-2013")
-        line_item = create(:line_item, :image_id => image.id, :order_id => new_order.id, :quantity => 4)
-        image.get_monthly_sales_over_year("01-04-2013", { :report_by => "price"}).should == [{:month=>"Apr", :sales=>0}, {:month=>"May", :sales=>0}, {:month=>"Jun", :sales=>0}, {:month=>"Jul", :sales=>0}, {:month=>"Aug", :sales=>0}, {:month=>"Sep", :sales=>0}, {:month=>"Oct", :sales=>0}, {:month=>"Nov", :sales=>0}, {:month=>"Dec", :sales=>0}, {:month=>"Jan", :sales=>0}, {:month=>"Feb", :sales=>0}, {:month=>"Mar", :sales=>0}, {:month=>"Apr", :sales=>200000.0}]
-      end
-    end
-  end
-
-  describe "#sold_quantity" do
-    context "without month" do
-      it "should calculate total quantity" do
-        new_order = create(:order, :transaction_status => "completed")
-        line_item = create(:line_item, :image_id => image.id, :order_id => new_order.id, :quantity => 4)
-        image.sold_quantity.should == 4
-      end
-    end
-    context "with month" do
-      it "should calculate total" do
-        new_order = create(:order, :transaction_status => "completed", :transaction_date => "05-04-2013")
-        line_item = create(:line_item, :image_id => image.id, :order_id => new_order.id, :quantity => 4)
-        image.total_sales("April")
-        image.sold_quantity.should == 4
       end
     end
   end

@@ -327,7 +327,7 @@ class User < ActiveRecord::Base
     prior_months.each { |mon|
       short_mon = DateTime.parse(mon).strftime('%b')
       total_sales = 0
-      self.images.unflagged.each { |img| total_sales += img.total_sales(mon) }
+      self.images.unflagged.each { |img| total_sales += Sales.new(img).total_image_sales(mon) }
       result << { :month => short_mon, :sales => total_sales }
     }
     result
@@ -335,17 +335,18 @@ class User < ActiveRecord::Base
 
   def total_sales(image_paging_params = {})
     result = {:total_entries => 0, :data => []}
-    images = raw_sales.paginate_and_sort(image_paging_params)
+    line_items = raw_sales.paginate_and_sort(image_paging_params)
     array = []
-    images.each { |img|
-      info = img
-      info[:total_sale] = img.total_sales
-      info[:quantity_sale] = img.sold_quantity
-      info[:no_longer_avai] = (img.flagged? || img.removed?)
-      array << {:image => info }
+    line_items.each { |item|
+      info = item
+      sale = Sales.new(item.image)
+      info[:total_sale] = sale.total_image_sales
+      info[:quantity_sale] = sale.sold_image_quantity
+      info[:no_longer_avai] = (item.image.flagged? || item.image.removed?)
+      array << {:item => info }
     }
     result[:data] = array
-    result[:total_entries] = images.total_entries
+    result[:total_entries] = line_items.total_entries
     result
   end
 
@@ -416,7 +417,7 @@ class User < ActiveRecord::Base
   def total_earn
     result = 0
     items = self.images
-    items.each {|item| result += item.total_sales }
+    items.each {|item| result += Sales.new(item).total_image_sales }
     result
   end
 

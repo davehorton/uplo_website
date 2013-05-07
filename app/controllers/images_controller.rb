@@ -125,7 +125,8 @@ class ImagesController < ApplicationController
       render_not_found
     end
     @author = @image.user
-    @purchased_info = @image.raw_purchased_info(filtered_params)
+    @sale = Sales.new(@image)
+    @purchased_info = @sale.raw_image_purchased_info(filtered_params)
     render :layout => 'public', :formats => 'html'
   end
 
