@@ -39,7 +39,7 @@ class Sales
     return result
   end
 
-  def image_purchased(item_paging_params = {})
+  def raw_image_purchased(item_paging_params = {})
     order_ids = self.image.orders.completed.map(&:id)
 
     sold_items = []
