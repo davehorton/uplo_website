@@ -118,7 +118,7 @@ class Api::ImagesController < Api::BaseController
   #   gallery_id
   #   image
   def create
-    image = current_user_gallery.images.unflagged.build
+    image = current_user_gallery.images.build
     image.user = current_user
     image.attributes = filtered_params[:image]
 
