@@ -35,7 +35,7 @@
               = image_tag(purchaser.avatar_url(:small), :class => "avatar medium left")
               .text.font12.left
                 %span.text.black.bold{:style => 'font-weight:bold;'}= purchaser.username
-                %span.text.fuzzy-gray= "(#{line_item.created_at} ago)"
+                %span.text.fuzzy-gray= "(created at #{line_item.created_at})"
                 .text.gray.line22
                   - plexi_mount = line_item.plexi_mount
                   %span= plexi_mount ? 'Plexi Mount,&nbsp;'.html_safe : 'No Plexi Mount,&nbsp;'.html_safe
