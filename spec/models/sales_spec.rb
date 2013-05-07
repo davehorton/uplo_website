@@ -2,6 +2,7 @@ require 'spec_helper'
 
 describe Sales do
   let(:image) { create(:image) }
+  let(:order) { create(:order) }
 
   describe "creating" do
     it "should use the image" do
@@ -91,6 +92,7 @@ describe Sales do
     context "with month" do
       it "should calculate total" do
         sale = Sales.new(image)
+        order.update_attributes(:transaction_status => "completed", :transaction_date => "01-01-2013")
         new_order = create(:order, :transaction_status => "completed", :transaction_date => "05-04-2013")
         line_item = create(:line_item, :image_id => image.id, :order_id => new_order.id, :quantity => 4)
         sale.total_image_sales("April")
