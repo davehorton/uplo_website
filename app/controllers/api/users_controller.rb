@@ -123,9 +123,7 @@ class Api::UsersController < Api::BaseController
     # Sign out if signing in
     signed_in = signed_in?(:user)
     Devise.sign_out_all_scopes ? sign_out : sign_out(:user)
-    #user = authenticate_user(params[:username], params[:password])
-
-    user = warden.authenticate!(:api)
+    user = authenticate_user(params[:username], params[:password])
 
     if user
       sign_in(:user, user)
