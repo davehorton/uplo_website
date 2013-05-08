@@ -211,43 +211,40 @@ Uplo::Application.routes.draw do
 
   # API ROUTING
   namespace :api do
-    resources :galleries, except: [:show, :edit]
-
-    resources :images do
-      collection do
-        get :by_friends
-        get :liked
-        get :popular
-        get :search
-        get :search_by_id
-      end
-
-      member do
-        post :flag
-        post :like
-        get  :purchases
-        get  :sale_chart
-        get  :total_sales
-        post :unlike
-      end
-
-      resources :comments, only: [:index, :create]
-    end
-
-    resource :orders, only: [:create] do
-      collection do
-        post :add_item
-        put  :update_item
-        get  :cart
-      end
-    end
-
-    # Order
-    post "finalize_order", :to => "orders#finalize_order"
-    post 'delete_ordered_item', :to => 'orders#delete_ordered_item'
-
     # User
     devise_scope :user do
+
+      resources :galleries, except: [:show, :edit]
+
+      resources :images do
+        collection do
+          get :by_friends
+          get :liked
+          get :popular
+          get :search
+          get :search_by_id
+        end
+
+        member do
+          post :flag
+          post :like
+          get  :purchases
+          get  :sale_chart
+          get  :total_sales
+          post :unlike
+        end
+
+        resources :comments, only: [:index, :create]
+      end
+
+      resource :orders, only: [:create] do
+        collection do
+          post :add_item
+          put  :update_item
+          get  :cart
+        end
+      end
+
       resources :users, only: [:show] do
         collection do
           post :check_emails
@@ -273,6 +270,10 @@ Uplo::Application.routes.draw do
       post 'withdraw', :to => "users#withdraw"
       get 'card_info', :to => "users#get_user_card_info"
       post 'request_invitation', :to => 'users#request_invitation'
+
+      # Order
+      post "finalize_order", :to => "orders#finalize_order"
+      post 'delete_ordered_item', :to => 'orders#delete_ordered_item'
     end
   end
 
