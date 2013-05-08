@@ -3,7 +3,7 @@ class Api::UsersController < Api::BaseController
 
   respond_to :json
 
-  skip_before_filter :require_login!, only: [:login, :create_user, :reset_password, :request_invitation]
+  skip_before_filter :authenticate_user!, only: [:login, :create_user, :reset_password, :request_invitation]
   before_filter      :find_user, only: [:show, :followers, :following]
 
   # POST /api/users/check_emails

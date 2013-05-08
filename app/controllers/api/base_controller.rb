@@ -7,7 +7,7 @@ class Api::BaseController < ActionController::Base
   rescue_from ActiveRecord::RecordNotFound, :with => :render_not_found
   rescue_from CanCan::AccessDenied,         :with => :render_unauthorized
 
-  before_filter :require_login!
+  before_filter :authenticate_user!
 
   def current_user_gallery
     @resource_not_found_key = "gallery.not_found"
