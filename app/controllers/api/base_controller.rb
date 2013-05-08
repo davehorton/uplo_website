@@ -20,7 +20,7 @@ class Api::BaseController < ActionController::Base
   end
 
   def require_login!
-    render_require_login if !user_signed_in?
+    render_require_login if !current_user
   end
 
   def resource_not_found_key
