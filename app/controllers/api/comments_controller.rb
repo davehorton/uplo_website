@@ -1,4 +1,6 @@
 class Api::CommentsController < Api::BaseController
+  before_filter :require_login!
+
   # GET /api/images/:image_id/comments
   # optional:
   #   page
