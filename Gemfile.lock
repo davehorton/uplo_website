@@ -1,6 +1,6 @@
 GIT
   remote: git://github.com/jrgifford/delayed_paperclip.git
-  revision: d3f9ae880483063b3d7039c690e0bf19055b1b3f
+  revision: 5b25db8968ab3ca339a197734426e4c2d82b2c05
   specs:
     delayed_paperclip (2.5.1.0)
       paperclip (>= 3.3.0)
@@ -185,7 +185,7 @@ GEM
       treetop (~> 1.4.8)
     metaclass (0.0.1)
     method_source (0.8.1)
-    mime-types (1.22)
+    mime-types (1.23)
     mobile-fu (1.1.1)
       rack-mobile-detect
       rails
@@ -193,7 +193,7 @@ GEM
       metaclass (~> 0.0.1)
     money (5.1.1)
       i18n (~> 0.6.0)
-    multi_json (1.7.2)
+    multi_json (1.7.3)
     multi_xml (0.5.3)
     multipart-post (1.2.0)
     nested_form (0.3.1)

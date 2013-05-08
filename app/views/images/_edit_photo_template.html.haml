@@ -11,11 +11,8 @@
       .info-line.left
         .label.text.black.bold.font12 Pricing
         .inline.left
-          - if image.gallery.is_public?
-            .text.gray.font11.line16.left= "Tier #{image.tier_id}"
-            .price.text.black.underline.font11.line16.left Change Photo Pricing
-          - else
-            .text.black.underline.font11.line16.left.gallery-pricing.edit-gallery-link{ :href => '#' } Manage Gallery Pricing
+          .text.gray.font11.line16.left= "Tier #{image.tier_id}"
+          .price.text.black.underline.font11.line16.left Change Photo Pricing
         - if image.image_processing
           %div{ id: "processing-section-#{image.id}" }
             = image_tag('loading-thickbox.gif')

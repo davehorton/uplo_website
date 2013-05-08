@@ -13,7 +13,6 @@
       = f.input :permission, :as => :select, :label => "Permission", :collection => Permission.select_options, :include_blank => false
 
     .info-line.left{:id => "has-commission", :style => 'display:none;'}
-      = f.input :private_pricing, :wrapper_class => "input left", label: 'Private Pricing ($)'
       = f.label 'commissions'
       = f.check_box :has_commission
       = f.label :has_commission, "Earn commissions on sales in this private gallery", :class => "text gray font11 line16 left"

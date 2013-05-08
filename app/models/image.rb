@@ -26,7 +26,7 @@ class Image < ActiveRecord::Base
     },
     default_url: "/assets/gallery-thumb.jpg"
 
-  process_in_background :image
+  #process_in_background :image
 
   validates :gallery_id, presence: true
 
@@ -136,21 +136,16 @@ class Image < ActiveRecord::Base
   end
 
   def get_price(moulding, size)
-    if gallery.is_public?
-      product = Product.where(moulding_id: moulding.id, size_id: size.id).first
-      raise "No matching product" if product.nil?
-      product.price_for_tier(tier_id)
-    else
-      gallery.private_pricing
-    end
+    product = Product.where(moulding_id: moulding.id, size_id: size.id)
+    product = gallery.is_public? ? product.public_gallery : product.private_gallery
+    product = product.first
+    raise "No matching product for size, #{size.to_name}, and moulding, #{moulding.name}" if product.nil?
+
+    product.price_for_tier(tier_id)
   end
 
   def sample_product_price
-    if gallery.is_public?
-      available_products.first.try(:price_for_tier, tier_id) || 0
-    else
-      gallery.private_pricing || 0
-    end
+    available_products.first.try(:price_for_tier, tier_id) || 0
   end
 
   def current_geometry
@@ -326,7 +321,7 @@ class Image < ActiveRecord::Base
           Product.for_rectangular_sizes
         end
 
-        product = if self.gallery.is_public?
+        product = if gallery.is_public?
           permission_label = "public"
           product.public_gallery
         else

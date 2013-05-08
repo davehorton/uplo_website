@@ -1,5 +1,5 @@
 class GallerySerializer < ActiveModel::Serializer
-  attributes :id, :name, :description, :permission, :keyword,
+  attributes :id, :name, :description, :permission, :has_commission, :keyword,
              :cover_image_url, :total_images, :public_link, :last_update, :updated_at
 
   def public_link

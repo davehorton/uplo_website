@@ -79,9 +79,8 @@ class LineItem < ActiveRecord::Base
   private
 
     def calculate_totals
-      self.price = image.gallery.is_public? ? product.price_for_tier(image.tier_id) : image.gallery.private_pricing
+      self.price = product.price_for_tier(image.tier_id)
       self.tax   = self.price * PER_TAX
       self.commission_percent = product.commission_for_tier(image.tier_id) if self.image.gallery.commission_percent?
     end
 end
-

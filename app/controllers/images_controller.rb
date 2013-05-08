@@ -18,9 +18,9 @@ class ImagesController < ApplicationController
   end
 
   def create
-    gallery = Gallery.find(params[:gallery_id])
+    gallery = current_user.galleries.find(params[:gallery_id])
     image_params = params[:image][:image]
-    image = gallery.images.build(name: image_params.original_filename, image: image_params)
+    image = Image.new(gallery_id: gallery.id, name: image_params.original_filename, image: image_params)
     image.user = current_user
 
     if image.save
