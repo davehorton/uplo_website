@@ -36,7 +36,7 @@ class Gallery < ActiveRecord::Base
 
   def cover_image
     img = Image.unscoped.where(gallery_id: self.id, gallery_cover: true).first
-    img = images.unscoped.unflagged.first if img.nil?
+    img = images.unflagged.first if img.nil?
     img
   end
 
