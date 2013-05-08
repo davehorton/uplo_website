@@ -5,9 +5,9 @@ class Api::BaseController < ActionController::Base
   respond_to :json
 
   rescue_from ActiveRecord::RecordNotFound, :with => :render_not_found
-  rescue_from CanCan::AccessDenied,         :with => :render_unauthorized
+  #rescue_from CanCan::AccessDenied,         :with => :render_unauthorized
 
-  before_filter :authenticate_user!
+  before_filter :require_login!
 
   def current_user_gallery
     @resource_not_found_key = "gallery.not_found"

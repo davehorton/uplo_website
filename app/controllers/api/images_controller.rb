@@ -1,5 +1,5 @@
 class Api::ImagesController < Api::BaseController
-  skip_before_filter :authenticate_user!, only: [:index, :mouldings, :popular]
+  skip_before_filter :require_login!, only: [:index, :mouldings, :popular]
 
   respond_to :html, only: [:sale_chart]
   respond_to :json
