@@ -225,11 +225,8 @@ Uplo::Application.routes.draw do
       member do
         post :flag
         post :like
-        get  :mouldings
-        get  :ordering_options
         get  :purchases
         get  :sale_chart
-        get  :sizes
         get  :total_sales
         post :unlike
       end
@@ -237,14 +234,17 @@ Uplo::Application.routes.draw do
       resources :comments, only: [:index, :create]
     end
 
+    resource :orders, only: [:create] do
+      collection do
+        post :add_item
+        put  :update_item
+        get  :cart
+      end
+    end
+
     # Order
-    get "list_orders", :to => "orders#list_orders"
-    post "create_order", :to => "orders#create_order"
     post "finalize_order", :to => "orders#finalize_order"
-    post 'update_ordered_item', :to => 'orders#update_ordered_item'
-    post 'add_ordered_item', :to => 'orders#add_ordered_item'
     post 'delete_ordered_item', :to => 'orders#delete_ordered_item'
-    get 'show_cart', :to => 'orders#show_cart'
 
     # User
     devise_scope :user do

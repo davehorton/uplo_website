@@ -95,24 +95,6 @@ class Api::ImagesController < Api::BaseController
     render json: images, meta: { total: images.total_entries }
   end
 
-  # GET /api/images/:id/ordering_options
-  def ordering_options
-    image = Image.find(filtered_params[:id])
-    render json: ImageSerializer.new(image).ordering_options
-  end
-
-  # GET /api/images/:id/mouldings
-  def mouldings
-    image = Image.find(params[:id])
-    render json: image.available_mouldings, root: 'mouldings'
-  end
-
-  # GET /api/images/:id/sizes
-  def sizes
-    image = Image.find(params[:id])
-    render json: image.available_sizes, root: 'sizes'
-  end
-
   # POST /api/images
   # required:
   #   gallery_id

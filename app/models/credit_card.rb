@@ -15,11 +15,19 @@ class CreditCard < ActiveMerchant::Billing::CreditCard
 
   def self.build_card_from_param(options)
     first_name, last_name = options['name_on_card'].split
+
+    if options['expiration(2i)'].present? && options['expiration(1i)'].present?
+      month = options['expiration(2i)']
+      year  = options['expiration(1i)']
+    else
+      month, year = options['expiration'].split('/')
+    end
+
     CreditCard.new(
                    first_name: first_name,
                    last_name: last_name,
-                   month: options['expiration(2i)'],
-                   year: options['expiration(1i)'],
+                   month: month,
+                   year: year,
                    number: options['card_number'],
                    brand: options['card_type'],
                    verification_value:  options['cvv'],

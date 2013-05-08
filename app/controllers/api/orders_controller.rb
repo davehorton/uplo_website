@@ -2,84 +2,56 @@ class Api::OrdersController < Api::BaseController
   include ActiveMerchant::Billing::Integrations
   include CartsHelper
 
-  # GET: /api/list_orders
-  # params:
-  # result:
-  #
-  def list_orders
-    orders = current_user.orders.paginate_and_sort(filtered_params)
-    @result[:total] = orders.total_entries
-    @result[:data] = orders
-    @result[:success] = true
-    render :json => @result
-  end
+  # POST: /api/orders/add_item
+  # required:
+  #   item[image_id]
+  #   item[product_id]
+  #   item[quantity]
+  def add_item
+    item = params[:item]
+    image = Image.find(item[:image_id])
 
-  # params: order_id:1, image_id:299, moulding:4, size:8x8, quantity:1
-  def add_ordered_item
-    item_info = params[:item]
-    item_info[:order_id] = current_user.init_cart.order_id
-    image = Image.find_by_id item_info[:image_id]
-    if image.nil? || image.image_flags.count > 0
-      @result[:success] = false
-      @result[:msg] = "Your recent ordered image does not exist anymore."
-    elsif not valid_item?(item_info)
-      @result[:success] = false
-      @result[:msg] = "Please fill all options first."
+    order = current_user.init_cart.order
+    line_item = order.line_items.where(
+      image_id: image.id,
+      product_id: item[:product_id]
+    ).first
+
+    if line_item.present?
+      line_item.quantity += item[:quantity].to_i
     else
-      line_item = current_user.init_cart.order.line_items.find(:first, :conditions => ["image_id = ? AND size = ? AND moulding = ?",item_info[:image_id], item_info['size'],  item_info['moulding']])
-      if (line_item)
-        line_item.quantity = line_item.quantity + item_info['quantity'].to_i
-        line_item.price = image.get_price(item_info['moulding'], item_info['size'])
-        line_item.tax = line_item.price * PER_TAX
-        if line_item.save
-          @result[:success] = true
-        else
-          @result[:success] = false
-          @result[:msg] = line_item.errors.full_messages.to_sentence
-        end
-      else
-        line_item = LineItem.new do |item|
-          item.attributes = item_info
-          item.price = image.get_price(item_info[:moulding], item_info[:size])
-          item.tax = item.price * PER_TAX
-          if item.save
-            @result[:success] = true
-          else
-            @result[:success] = false
-            @result[:msg] = item.errors.full_messages.to_sentence
-          end
-        end
-      end
+      line_item = order.line_items.build(item)
     end
 
-    render :json => @result
+    line_item.price = Product.find(line_item.product_id).price_for_tier(image.tier_id)
+    line_item.tax = line_item.price * PER_TAX
+
+    if line_item.save
+      render json: line_item, status: :created
+    else
+      render json: { msg: line_item.errors.full_messages.to_sentence }, status: :bad_request
+    end
   end
 
-  # params: id:2, image_id:299, moulding:4, size:8x8, quantity:1
-  def update_ordered_item
-    item_info = params[:item]
-    item = LineItem.find_by_id item_info.delete(:id)
+  # PUT: /api/orders/update_item
+  # required:
+  #   id
+  #   item[image_id]
+  #   item[product_id]
+  #   item[quantity]
+  def update_item
+    order = current_user.init_cart.order
+    line_item = order.line_items.find(params[:id])
+    line_item.attributes = params[:item]
+    image = line_item.image
+    line_item.price = Product.find(line_item.product_id).price_for_tier(image.tier_id)
+    line_item.tax = line_item.price * PER_TAX
 
-    if item.nil?
-      @result[:success] = false
-      @result[:msg] = "Your recent ordered image does not exist anymore."
-    elsif not valid_item?(item_info)
-      @result[:success] = false
-      @result[:msg] = "Please fill all options first."
+    if line_item.save
+      render json: line_item, status: :created
     else
-      image = item.image
-      item.attributes = item_info
-      item.price = image.get_price item_info[:moulding], item_info[:size]
-      item.tax = item.price * PER_TAX
-      if item.save
-        @result[:success] = true
-      else
-        @result[:success] = false
-        @result[:msg] = item.errors.full_messages.to_sentence
-      end
+      render json: { msg: line_item.errors.full_messages.to_sentence }, status: :bad_request
     end
-
-    render :json => @result
   end
 
   # params: id:2
@@ -99,66 +71,33 @@ class Api::OrdersController < Api::BaseController
     render :json => @result
   end
 
-  # POST: /api/create_order
+  # POST: /api/orders
   # params:
-  # {order => {:images => "[{"image_id":1, "plexi_mount":"true", "size":"500x500", "moulding":"Wood", "quantity":"5"}]",
-  #            :transaction_code => "*", :transaction_status => "*"}
-  def create_order
-    card_required_info = ['name_on_card', 'card_type', 'card_number', 'expiration']
+  #   order hash
+  def create
+    order = current_user.init_cart.order
+    order.compute_totals
     order_info = params[:order]
-    expires_on = Date.parse order_info[:expiration]
-    order_info[:expiration] = expires_on.strftime("%m-%Y")
-    images = order_info.delete(:images)
-    order_info[:user] = current_user
+    credit_card = CreditCard.build_card_from_param(order_info)
 
-    # Checking requested information
-    card_required_info.each { |val|
-      if !params[:order].has_key?(val) || params[:order][val].blank?
-        @result[:msg] = "Please fill all required fields first!"
-        @result[:success] = false
-        render :json => @result and return
-      end
-    }
+    user_info = {}
+    user_info[:billing_address_attributes] = order_info[:billing_address_attributes]
+    user_info[:shipping_address_attributes] = order_info[:shipping_address_attributes]
+    current_user.update_profile(user_info)
 
-    order = Order.new(order_info)
-    order_items = build_order_items(JSON.parse(images))
-    order.transaction_date = Time.now
-    order.line_items << order_items
-    card_string = order_info["card_number"]
-    done = false
-    if current_user.update_profile(order_info)
-      if order.valid?
-        order.update_tax_by_state
-        order.compute_totals
+    response = Payment.process_purchase(current_user, order, credit_card)
+    success = !response.nil? && response.success?
 
-        an_value = Payment.create_authorizenet_test(card_string, expires_on, {:shipping => order_info[:shipping_address_attributes], :address => order_info[:billing_address_attributes]})
-        response = an_value[:transaction].purchase(order.order_total, an_value[:credit_card])
-        success = !response.nil? && response.success?
+    if success
+      order.finalize_transaction
+      current_user.cart.try(:destroy)
 
-        if success
-          if order.finalize_transaction
-            @result[:order_id] = order.id
-            @result[:transaction_id] = response.transaction_id
-            done = true
-          end
-        else
-          @result[:success] = false
-          @result[:msg] = 'Failed to make purchase.'
-          return render :json => @result
-        end
-      end
+      render json: { msg: "Order charged" }, status: :created
     else
-      @result[:success] = false
-      @result[:msg] = current_user.errors.full_messages.to_sentence
-      return render :json => @result
+      render json: { msg: "Problem charging your card." }, status: :bad_request
     end
-
-    @result[:success] = done
-    if !done
-      @result[:msg] = order.errors.full_messages.to_sentence
-    end
-
-    return render :json => @result
+  rescue Exception => ex
+    render json: { msg: ex.message }, status: :bad_request
   end
 
   # POST: /api/finalize_order
@@ -221,14 +160,13 @@ class Api::OrdersController < Api::BaseController
     return render :json => @result
   end
 
-  # GET /api/show_cart
-  # PARAMS id
-  def show_cart
+  # GET /api/orders/cart
+  def cart
     order = current_user.init_cart.order
     if order.nil?
       render json: { msg: "This order does not exist anymore!" }, status: :not_found
     else
-      render json: order.line_items
+      render json: order
     end
   end
 
