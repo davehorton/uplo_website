@@ -1,5 +1,5 @@
 class Api::UsersController < Api::BaseController
-  include Devise::Controllers::InternalHelpers
+  include DeviseHelper
 
   respond_to :json
 

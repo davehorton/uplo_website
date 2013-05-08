@@ -17,7 +17,7 @@ gem 'classy_enum'
 gem 'country-select'
 gem 'dalli'
 gem 'decent_exposure'
-gem 'devise', '1.5.4'
+gem 'devise'
 gem 'delayed_paperclip', git: 'git://github.com/jrgifford/delayed_paperclip.git' # with Sidekiq support
 gem 'draper'
 gem 'fb_graph'
