@@ -1,10 +1,3 @@
-GIT
-  remote: git://github.com/jrgifford/delayed_paperclip.git
-  revision: 5b25db8968ab3ca339a197734426e4c2d82b2c05
-  specs:
-    delayed_paperclip (2.5.1.0)
-      paperclip (>= 3.3.0)
-
 GEM
   remote: http://rubygems.org/
   specs:
@@ -392,7 +385,6 @@ DEPENDENCIES
   dalli
   database_cleaner
   decent_exposure
-  delayed_paperclip!
   devise
   draper
   email_spec

@@ -26,8 +26,6 @@ class Image < ActiveRecord::Base
     },
     default_url: "/assets/gallery-thumb.jpg"
 
-  #process_in_background :image
-
   validates :gallery_id, presence: true
 
   validates_attachment_presence :image,

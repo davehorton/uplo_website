@@ -30,27 +30,9 @@ Observers are disabled in specs (see spec_helper) but have their own specific te
 
 We are using the 'letter opener' gem to intercept emails and display them in a Web browser
 
-### Image Renditions
-
-We are using Sidekiq to process images via the delayed_paperclip gem. Therefore to run the Sidekiq locally to process the queue, do this:
-
-```
-bundle exec sidekiq -q default -q paperclip
-```
-
-To view the Sidekiq dashboard, go to http://locahost:3000/sidekiq
-
-To purge Sidekiq jobs, open up the Redis client:
-
-```
-redis-cli
-```
-
-And type: FLUSHALL
-
 #### Rebuilding Image Metadata
 
-To rebuild images metadata locally, be sure Sidekiq is running and run the following Paperclip task:
+To rebuild images metadata locally, run the following Paperclip task:
 
 ```
 bundle exec rake paperclip:refresh:metadata CLASS=Image
