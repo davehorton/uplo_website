@@ -1,10 +1,7 @@
 class GalleriesController < ApplicationController
-  has_mobile_fu
   skip_before_filter :authenticate_user!, only: [:public]
   skip_authorize_resource :only => [:public]
 
-  before_filter :detect_device
-  #before_filter :check_paypal_email, :only => [:public]
   before_filter :show_notification
 
   def index
@@ -153,23 +150,4 @@ class GalleriesController < ApplicationController
       end
     end
   end
-
-  protected
-
-    def detect_device
-      if is_mobile_device? && params[:action]=='public' && (params[:web_default].nil? || params[:web_default]==false)
-        @type = 'gallery'
-        @id = params[:id]
-        return render :template => 'device_requests/show', :layout => nil
-      else
-        request.formats.unshift Mime::HTML
-      end
-    end
-
-    def check_paypal_email
-      if current_user.paypal_email.blank?
-        flash[:warning] = "You must first provide a PayPal email, under My PayPal Information."
-        redirect_to(:controller => :users, :action => :account) and return
-      end
-    end
 end

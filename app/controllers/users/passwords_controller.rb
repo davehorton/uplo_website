@@ -1,5 +1,4 @@
 class Users::PasswordsController < Devise::PasswordsController
-  has_mobile_fu
   skip_before_filter :authenticate_user!, except: [:edit_password, :update_password]
 
   def update_password
@@ -18,17 +17,9 @@ class Users::PasswordsController < Devise::PasswordsController
       flash_message = resource.active_for_authentication? ? :updated : :updated_not_active
       set_flash_message(:notice, flash_message) if is_navigational_format?
       sign_in(resource_name, resource)
-      if(in_mobile_view?)
-        render :finish_reset
-      else
-        respond_with resource, :location => after_sign_in_path_for(resource)
-      end
+      respond_with resource, :location => after_sign_in_path_for(resource)
     else
-      if(in_mobile_view?)
-        render :action => :edit
-      else
-        respond_with resource
-      end
+      respond_with resource
     end
   end
 

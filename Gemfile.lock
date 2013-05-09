@@ -180,9 +180,6 @@ GEM
     metaclass (0.0.1)
     method_source (0.8.1)
     mime-types (1.23)
-    mobile-fu (1.1.1)
-      rack-mobile-detect
-      rails
     mocha (0.12.7)
       metaclass (~> 0.0.1)
     money (5.1.1)
@@ -224,8 +221,6 @@ GEM
     rack (1.4.5)
     rack-cache (1.2)
       rack (>= 0.4)
-    rack-mobile-detect (0.4.0)
-      rack
     rack-oauth2 (1.0.3)
       activesupport (>= 2.3)
       attr_required (>= 0.0.5)
@@ -404,7 +399,6 @@ DEPENDENCIES
   jquery-rails
   launchy
   letter_opener
-  mobile-fu
   money
   nested_form
   nokogiri
