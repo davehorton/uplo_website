@@ -1,6 +1,10 @@
 # Be sure to restart your server when you modify this file.
 
-Uplo::Application.config.session_store :cookie_store, key: '_uplo_com_session', :domain => 'uplo.com'
+if Rails.env.production?
+  Uplo::Application.config.session_store :cookie_store, key: '_uplo_com_session', :domain => 'uplo.com'
+else
+  Uplo::Application.config.session_store :cookie_store, key: '_uplo_com_session', :domain => :all
+end
 
 # Use the database for sessions instead of the cookie-based default,
 # which shouldn't be used to store highly confidential information
