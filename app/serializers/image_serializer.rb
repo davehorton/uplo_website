@@ -20,7 +20,8 @@ class ImageSerializer < ActiveModel::Serializer
         name:        "#{product.size.to_name} - #{product.moulding.name}",
         size_name:   product.size.to_name,
         mould_name:  product.moulding.name,
-        price:       "%0.2f" % product.price_for_tier(object.tier_id)
+        price:       "%0.2f" % product.price_for_tier(object.tier_id),
+        shipping:    "%0.2f" % product.shipping_price
       }
     end
     options

@@ -12,7 +12,8 @@ class LineItemSerializer < ActiveModel::Serializer
       name:        "#{prod.size.to_name} - #{prod.moulding.name}",
       size_name:   prod.size.to_name,
       mould_name:  prod.moulding.name,
-      price:       "%0.2f" % prod.price_for_tier(object.image.tier_id)
+      price:       "%0.2f" % prod.price_for_tier(object.image.tier_id),
+      shipping:    "%0.2f" % prod.shipping_price
     }
   end
 end
