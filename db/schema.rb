@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130508142641) do
+ActiveRecord::Schema.define(:version => 20130510055916) do
 
   create_table "addresses", :force => true do |t|
     t.string   "first_name"
@@ -231,6 +231,7 @@ ActiveRecord::Schema.define(:version => 20130508142641) do
     t.datetime "updated_at",                                                        :null => false
     t.boolean  "public_gallery",                                 :default => true
     t.boolean  "private_gallery",                                :default => false
+    t.decimal  "shipping_price",   :precision => 8, :scale => 2, :default => 0.0
   end
 
   add_index "products", ["moulding_id"], :name => "index_products_on_moulding_id"
