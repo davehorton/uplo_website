@@ -11,5 +11,6 @@
   <%= f.input :tier4_commission, label: 'Tier 4 Commission (%)' %>
   <%= f.input :public_gallery, label: 'Public Gallery', collection: [["yes", true], ["no", false]], include_blank: false %>
   <%= f.input :private_gallery, label: 'Private Gallery', collection: [["yes", true], ["no", false]], include_blank: false %>
+  <%= f.input :shipping_price, label: 'Shipping Price' %>
   <%= f.submit %>
 <% end %>
