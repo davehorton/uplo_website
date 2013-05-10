@@ -256,7 +256,8 @@ describe Image do
 
     context "when no matching product exists" do
       it "raises an error" do
-        expect { create(:image).get_price(create(:moulding), rectangular_size) }.to raise_error("No matching product")
+        moulding = create(:moulding)
+        expect { create(:image).get_price(moulding, rectangular_size) }.to raise_error("No matching product for size, #{rectangular_size.to_name}, and moulding, #{moulding.name}")
       end
     end
   end
