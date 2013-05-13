@@ -148,11 +148,11 @@ initTabs = (tab) ->
 
 $ ->
   window.grid_changed = false
-  $("#fileupload").fileupload()
-  $("#fileupload").fileupload "option",
+  $("#multiple-fileupload").fileupload()
+  $("#multiple-fileupload").fileupload "option",
     dataType: 'text'
     maxFileSize: 5000000
-    acceptFileTypes: /(\.|\/)(gif|jpe?g|png)$/i
+    acceptFileTypes: /(\.|\/)(jpg|jpe?g)$/i
     previewMaxWidth: 180
     previewMaxHeight: 180
     add: (e, data) ->
