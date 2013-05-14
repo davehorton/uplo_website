@@ -28,10 +28,10 @@ class Image < ActiveRecord::Base
 
   validates :gallery_id, presence: true
 
-  validates_attachment_presence :image,
+  validates_attachment :image, :presence => true,
     :size => { :in => 0..100.megabytes, :message => 'File size cannot exceed 100MB' },
-    :content_type => { :content_type => [ 'image/jpeg','image/jpg' ],
-    :message => 'File must have an extension of .jpeg or .jpg' }, :on => :create
+    :content_type => { :content_type => [ 'image/jpeg','image/jpg' ], :message => 'File must have an extension of .jpeg or .jpg' },
+    :on => :create
 
   validate :minimum_dimensions_are_met, on: :create
 

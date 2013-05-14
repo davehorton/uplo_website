@@ -1,4 +1,4 @@
-renderUploadingElement = (element, img, img_name) ->
+renderUploadingElement = (element, img, img_name, error) ->
   clear_div = $(document.createElement 'div').addClass 'clear'
   separator = $(document.createElement 'div').addClass 'line-separator left'
 
@@ -18,9 +18,14 @@ renderUploadingElement = (element, img, img_name) ->
   name.append tmp
   tmp = $(document.createElement 'div')
   tmp.addClass 'progress info-line left'
-  progress_div = $(document.createElement 'div')
-  progress_div.addClass 'uploading'
-  tmp.append progress_div
+  if (error)
+    tmp.append(error).removeClass('progress').addClass('error text italic font12')
+    previewed_img.html('')
+  else
+    progress_div = $(document.createElement 'div')
+    progress_div.addClass 'uploading'
+    tmp.append progress_div
+                               
   name.append tmp
 
   element.addClass 'upload-template container left'
@@ -34,7 +39,7 @@ renderUploadingElement = (element, img, img_name) ->
 renderUpload = (file) ->
   element = $(document.createElement 'div')
   window.loadImage file, ((img) ->
-      renderUploadingElement(element, img, file.name)
+      renderUploadingElement(element, img, file.name, file.error)
       element.prependTo('#images-panel')
     ),
     maxWidth: 155
