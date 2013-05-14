@@ -25,7 +25,7 @@ renderUploadingElement = (element, img, img_name, error) ->
     progress_div = $(document.createElement 'div')
     progress_div.addClass 'uploading'
     tmp.append progress_div
-                               
+
   name.append tmp
 
   element.addClass 'upload-template container left'
@@ -154,9 +154,9 @@ initTabs = (tab) ->
 $ ->
   window.grid_changed = false
   $("#multiple-fileupload").fileupload()
-  $("#multiple-fileupload").fileupload "option",        
+  $("#multiple-fileupload").fileupload "option",
     dataType: 'text'
-    maxFileSize: 5000000
+    maxFileSize: 20000000
     acceptFileTypes: /^image\/(jpg|jpeg)$/
     previewMaxWidth: 180
     previewMaxHeight: 180
