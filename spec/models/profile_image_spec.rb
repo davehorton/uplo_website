@@ -11,7 +11,7 @@ describe ProfileImage do
   it { should have_attached_file(:avatar) }
   it { should validate_attachment_presence(:avatar) }
   it { should validate_attachment_content_type(:avatar).allowing('image/jpeg', 'image/jpg') }
-  it { should validate_attachment_size(:avatar).less_than(100.megabytes) }
+  it { should validate_attachment_size(:avatar).less_than(20.megabytes) }
 
   describe "#set_as_default" do
     context "execute after create callback" do
