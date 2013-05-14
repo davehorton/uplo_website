@@ -18,7 +18,9 @@
 //= require highcharts
 //= require highcharts/highcharts-more
 //= require load_image
-//= require jquery-fileupload/basic
+//= require jquery.iframe-transport
+//= require jquery.fileupload
+//= require jquery.fileupload-ui
 //= require jquery.center
 //= require jquery.contextMenu
 //= require jquery.inline_label

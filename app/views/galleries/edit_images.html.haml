@@ -14,8 +14,8 @@
       .separator.left= '|'
       #add-files.hidden-uploader.text.black.bold.font12.left{ :data => { :method => :get } }
         Upload Photo
-        = form_for @image, url: "/galleries/#{@gallery.id}/images", html: { id: 'fileupload' } do |f|
-          = f.file_field :image
+        = form_for @image, url: "/galleries/#{@gallery.id}/images", html: { id: 'multiple-fileupload' } do |f|
+          = file_field_tag "files[]", :multiple => true
   .line-separator.left
 
 .wrapper.left
