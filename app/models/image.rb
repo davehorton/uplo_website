@@ -124,12 +124,12 @@ class Image < ActiveRecord::Base
   delegate :name, :to => :gallery, prefix: true
 
   def gallery_cover=(is_cover)
-    gallery.images.update_all(gallery_cover: false) if is_cover
+    gallery.images.update_all(gallery_cover: false) if is_cover && is_cover != '0'
     super
   end
 
   def owner_avatar=(is_owner_avatar)
-    user.images.where(owner_avatar: true).update_all(owner_avatar: false) if is_owner_avatar
+    user.images.where(owner_avatar: true).update_all(owner_avatar: false) if is_owner_avatar && is_owner_avatar != '0'
     super
   end
 
