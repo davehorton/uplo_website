@@ -7,17 +7,10 @@
       .line-separator.left
       .buttons-container.right
         - public_url = public_image_path(params[:id])
-        - flickr_request = flickr_post_image_url(params[:id])
-        - if current_user.tumblr_token?
-          %a.tumblr.button.right{ :href => '#', :onclick => "showSocialPopup('tumblr');"}
-        - if current_user.flickr_token?
-          %a.flickr.button.right{ :href => '#', :onclick => "showSocialPopup('flickr');"}
-        - if current_user.twitter_token?
-          %a.twitter.button.right{ :href => '#', :onclick => "showSocialPopup('twitter');"}
-        - if current_user.facebook_token?
-          %a.facebook.button.right{ :href => '#', :onclick => "showSocialPopup('facebook');"}
-
-        %a.email.button.right{ :href => '#', :onclick => 'showEmailPopup();' }
-
+        - image_url = "https://www.facebook.com/sharer.php?u=#{browse_image_url(@image)}"
+        - twitter_image_url = "https://twitter.com/share?url=#{browse_image_url(@image)}"
+        %a.twitter.button.right.share-popup{ :href => twitter_image_url}
+        %a.facebook.button.right.share-popup{ :href => image_url}
+     
   .tail.left
     .icon.right
