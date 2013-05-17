@@ -67,8 +67,6 @@
       = image_tag(@image.url(:medium), :class => 'image medium',
                 'data-width' => @image.image.width,
                 'data-height' => @image.image.height, :alt => @image.name)
-  - if !@image.flagged?
-    = render 'sharing_popup'
   .actions.left
     .left
       .like.left
@@ -86,9 +84,14 @@
       - if !@is_owner
         .button.flag.left{:onclick => "show_flag_form();"}
       .button.order.left{:onclick => "window.location.href = '#{order_url}';", :data => {:url => "#{order_url}"}}
-      - if @image.gallery.is_public? && !@image.flagged?
-        .button.share.left{:onclick => "display_sharing_box();"}
-  .line-separator.clear
+      .buttons-container.right
+        - if @image.gallery.is_public? && !@image.flagged?
+          - image_url = "https://www.facebook.com/sharer.php?u=#{browse_image_url(@image)}"
+          - twitter_image_url = "https://twitter.com/share?url=#{browse_image_url(@image)}"
+        %a.twitter.button.right.share-popup{ :href => twitter_image_url}
+        %a.facebook.button.right.share-popup{ :href => image_url}
+
+    .line-separator.clear
   #comments-section{ :data => { :id => "#{@image.id}" }}
     .header.text.black.font18.bold Comments and faves
     #current_comments

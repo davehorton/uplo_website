@@ -25,4 +25,13 @@ module ImagesHelper
 
     options_for_select(opts, selected_size)
   end
+
+  def image_name_with_default
+    @image.name + ' | ' + t('common.site_title')
+  end
+
+  def image_description
+    @image.description
+  end
+
 end
