@@ -66,6 +66,11 @@ module Uplo
     config.assets.version = '1.0'
 
     # Precompile additional assets (application.js, application.css, and all non-JS/CSS are already added)
-    config.assets.precompile += %w( admin.css admin.js mobile.css )
+    config.assets.precompile += %w(
+      admin.css
+      admin.js
+      edit_images.js
+      mobile.css
+    )
   end
 end

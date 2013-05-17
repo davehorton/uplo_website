@@ -1,6 +1,7 @@
 - page_title "Edit Images"
-
 - content_for :body_class, 'images'
+- content_for :js do
+  = javascript_include_tag 'edit_images'
 
 - content_for :top_content do
   .left

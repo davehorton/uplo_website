@@ -2,6 +2,9 @@
 
 - can_promote = can_promote_image?(@image)
 
+- content_for :metatags do
+  = render "layouts/photo_meta_tag"
+
 - content_for :head do
   = javascript_include_tag("admin") if can_promote
 
@@ -84,14 +87,14 @@
       - if !@is_owner
         .button.flag.left{:onclick => "show_flag_form();"}
       .button.order.left{:onclick => "window.location.href = '#{order_url}';", :data => {:url => "#{order_url}"}}
+    - if @image.gallery.is_public? && !@image.flagged?
       .buttons-container.right
-        - if @image.gallery.is_public? && !@image.flagged?
-          - image_url = "https://www.facebook.com/sharer.php?u=#{browse_image_url(@image)}"
-          - twitter_image_url = "https://twitter.com/share&data-url=#{browse_image_url(@image)}"
+        - image_url = "https://www.facebook.com/sharer.php?u=#{browse_image_url(@image)}"
+        - twitter_image_url = "https://twitter.com/share&data-url=#{browse_image_url(@image)}"
         %a.twitter-share-button.right{ :href => twitter_image_url}
         %a.facebook.button.right.share-popup{ :href => image_url}
 
-    .line-separator.clear
+    .line-separator.clear{ style: 'padding-top: 4px;' }
   #comments-section{ :data => { :id => "#{@image.id}" }}
     .header.text.black.font18.bold Comments and faves
     #current_comments
@@ -261,7 +264,7 @@
         href = $(this).attr('href');
         e.preventDefault();
         window.open(href, '', 'width=626,height=436,left=200,top=200');
-      }); 
+      });
 
       function showSocialPopup(class_name){
       $('#social-sharing').addClass('hide');
