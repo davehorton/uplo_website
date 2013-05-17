@@ -4,6 +4,7 @@
   %head
     %title= page_title_with_default
     %meta{ charset: "utf-8" }
+    = render "layouts/photo_meta_tag" if @image
     = csrf_meta_tags
 
     %link(href="#{path_to_image('/favicon.ico')}" type="image/x-icon" rel="shortcut icon")/

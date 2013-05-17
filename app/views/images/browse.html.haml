@@ -254,8 +254,14 @@
         $("#email-sharing-popup").modal();
       };
 
+      $(document).on('click', '.share-popup', function(e){
+        href = $(this).attr('href');
+        e.preventDefault();
+        window.open(href, '', 'width=626,height=436,left=200,top=200');
+      }); 
+
       function showSocialPopup(class_name){
-        $('#social-sharing').addClass('hide');
+      $('#social-sharing').addClass('hide');
         $("#social-sharing-popup").modal();
         $("#social-sharing-popup .header .left").first().html("<div class='" + class_name + "-icon left'></div>");
         $("#social_type_social").val(class_name);
