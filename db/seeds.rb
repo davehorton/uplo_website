@@ -6,14 +6,14 @@ Rails.cache.clear # in case caching is enabled
 puts "Creating seed data..."
 
 puts 'Creating sizes'
-size5x5 = Size.create(width: 5, height: 5)
-size5x7 = Size.create(width: 5, height: 7)
-size8x8 = Size.create(width: 8, height: 8)
-size8x10 = Size.create(width: 8, height: 10)
-size12x12 = Size.create(width: 12, height: 12)
-size12x16 = Size.create(width: 12, height: 16)
-size20x24 = Size.create(width: 20, height: 24)
-size24x36 = Size.create(width: 24, height: 36)
+size5x5   = Size.create(height: 5, width: 5)
+size5x7   = Size.create(height: 5, width: 7)
+size8x8   = Size.create(height: 8, width: 8)
+size8x10  = Size.create(height: 8, width: 10)
+size12x12 = Size.create(height: 12, width: 12)
+size12x16 = Size.create(height: 12, width: 16)
+size20x24 = Size.create(height: 20, width: 24)
+size24x36 = Size.create(height: 24, width: 36)
 
 puts 'Creating mouldings'
 print = Moulding.create(name: 'Print Only (Gloss)')
