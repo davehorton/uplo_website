@@ -1,5 +1,6 @@
 class UsersController < ApplicationController
   self.per_page = 12
+  skip_before_filter :authenticate_user!, :only => [:set_follow]
   before_filter :show_notification
   respond_to :json
 

@@ -14,7 +14,6 @@ class ApplicationController < ActionController::Base
 
   helper_method :gallery_owner
   helper_method :image_owner
-  helper_method :check_current_user
 
   def image_owner
     current_user || @image.user

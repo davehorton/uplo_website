@@ -84,7 +84,6 @@
       - order_url = url_for(:controller => 'images', :action => 'order', :id => params[:id])
       - if gallery_owner
         #btn-like.button.left{:class => "#{like_class}", :onclick => 'update_liked();', :data => { 'id' => params[:id], 'dislike' => "#{ @dislike }" }}
-      - if !@is_owner
         .button.flag.left{:onclick => "show_flag_form();"}
       .button.order.left{:onclick => "window.location.href = '#{order_url}';", :data => {:url => "#{order_url}"}}
     - if @image.gallery.is_public? && !@image.flagged?
