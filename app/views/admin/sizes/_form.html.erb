@@ -1,7 +1,7 @@
 <%= simple_form_for [:admin, size] do |f| %>
-  <%= f.input :width, hint: ' inches' %>
   <%= f.input :height, hint: ' inches' %>
-  <%= f.input :minimum_width_in_pixels, label: 'Min Resolution Width', hint: ' pixels (leave blank to auto-calculate based on 150 dpi)', input_html: { value: (!f.object.new_record? ? f.object.minimum_recommended_resolution[:w] : nil) } %>
+  <%= f.input :width, hint: ' inches' %>
   <%= f.input :minimum_height_in_pixels, label: 'Min Resolution Height', hint: ' pixels (leave blank to auto-calculate based on 150 dpi)', input_html: { value: (!f.object.new_record? ? f.object.minimum_recommended_resolution[:h] : nil) } %>
+  <%= f.input :minimum_width_in_pixels, label: 'Min Resolution Width', hint: ' pixels (leave blank to auto-calculate based on 150 dpi)', input_html: { value: (!f.object.new_record? ? f.object.minimum_recommended_resolution[:w] : nil) } %>
   <%= f.submit %>
 <% end %>

@@ -356,4 +356,3 @@ class Image < ActiveRecord::Base
       self.user_id = gallery.user_id
     end
 end
-
