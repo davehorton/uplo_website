@@ -1,6 +1,5 @@
 class UsersController < ApplicationController
   self.per_page = 12
-
   before_filter :show_notification
   respond_to :json
 

@@ -1,5 +1,6 @@
 class ProfilesController < ApplicationController
   self.per_page = 12
+  skip_before_filter :authenticate_user!
   around_filter :apply_user_scope
   before_filter :find_user
 

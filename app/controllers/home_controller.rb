@@ -1,7 +1,7 @@
 class HomeController < ApplicationController
   self.per_page = 30
 
-  skip_before_filter :authenticate_user!, only: [:index, :terms, :privacy]
+  skip_before_filter :authenticate_user!, :except => [:friends_feed]
   before_filter :accept_gallery_invitation, :only => [:index]
 
   IMAGE_SORT_VIEW = {
@@ -12,8 +12,7 @@ class HomeController < ApplicationController
 
   USER_SORT_VIEW = {
     User::SORT_OPTIONS[:name] => 'Best Match',
-    User::SORT_OPTIONS[:date_joined] => 'Date Joined'
-  }
+    User::SORT_OPTIONS[:date_joined] => 'Date Joined'  }
 
   def index
     session[:back_url] = url_for(:controller => 'home', :action => "browse") if session[:back_url].nil?
