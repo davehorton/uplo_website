@@ -1,5 +1,5 @@
 (function() {
-  var computePrice, initSizeOptions, refreshMouldingOptions, refreshSizeOptions;
+  var computePrice, initSizeOptions;
 
   computePrice = function() {
     var quantity;
@@ -9,8 +9,7 @@
         url: '/images/' + image_id + '/price',
         type: 'GET',
         data: {
-          size_id: $('#line_item_size').val(),
-          moulding_id: $('#line_item_moulding').val()
+          product_id: $('#line_item_product_id').val()
         },
         dataType: 'json',
         success: function(response) {
@@ -25,43 +24,6 @@
         }
       });
     }
-  };
-
-  refreshMouldingOptions = function(size) {
-    var has_constrain, moulding_selection, options;
-    has_constrain = false;
-    moulding_selection = $('#line_item_moulding');
-    options = moulding_selection.find('option');
-    $.each(moulding_constrain, function(key, val) {
-      var limited_size;
-      limited_size = true;
-      $.each(val, function(i, v) {
-        if (size.toString() === '' || size.toString() === v.toString()) {
-          return limited_size = false;
-        }
-      });
-      if (limited_size) {
-        options = options.not("option[value!=" + key + "]");
-        return has_constrain = true;
-      }
-    });
-    options.prop('disabled', has_constrain);
-    return moulding_selection.selectmenu();
-  };
-
-  refreshSizeOptions = function(mould) {
-    var has_constrain, options, sizes_selection;
-    has_constrain = false;
-    sizes_selection = $('#line_item_size');
-    options = sizes_selection.find('option');
-    if (moulding_constrain[mould]) {
-      $.each(moulding_constrain[mould], function(i, v) {
-        options = options.not("option[value=" + v + "]");
-        return has_constrain = true;
-      });
-    }
-    options.prop('disabled', has_constrain);
-    return sizes_selection.selectmenu();
   };
 
   initSizeOptions = function() {
@@ -105,13 +67,12 @@
       }
     });
 
-    $('#line_item_size, #line_item_moulding').change(function(){
+    $('#line_item_product_id').change(function(){
       $.ajax({
         url: '/images/' + image_id + '/product_options',
         type: 'GET',
         data: {
-          size_id: $('#line_item_size').val(),
-          moulding_id: $('#line_item_moulding').val()
+          product_id: $('#line_item_product_id').val()
         }
       });
     });

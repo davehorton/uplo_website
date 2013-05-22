@@ -3,7 +3,7 @@ class Product < ActiveRecord::Base
   belongs_to :size
   has_many   :product_options
 
-  accepts_nested_attributes_for :product_options, :reject_if => :all_blank
+  accepts_nested_attributes_for :product_options, :reject_if => :all_blank, :allow_destroy => true
 
   after_save :expire_cached_entries
 
@@ -44,6 +44,10 @@ class Product < ActiveRecord::Base
 
   def associated_with_any_orders?
     LineItem.where(product_id: self.id).exists?
+  end
+
+  def display_name
+    "#{size.to_name} - #{moulding.name}"
   end
 
   private

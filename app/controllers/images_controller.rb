@@ -316,15 +316,13 @@ class ImagesController < ApplicationController
       @product_options = @line_item.product.product_options
     end
 
-    @sizes = @image.available_sizes
-    @mouldings = @image.available_mouldings
+    @products = @image.available_products
   end
 
   def price
     @image = Image.find(params[:id])
-    @moulding = Moulding.find(params[:moulding_id])
-    @size = Size.find(params[:size_id])
-    render json: { success: true, price: @image.get_price(@moulding, @size) }
+    @product = Product.find(params[:product_id])
+    render json: { success: true, price: @product.price_for_tier(@image.tier_id) }
   end
 
   def pricing
@@ -340,9 +338,8 @@ class ImagesController < ApplicationController
 
   def product_options
     @image = Image.find(params[:id])
-    @size = Size.find(params[:size_id])
-    product = Product.where(moulding_id: params[:moulding_id], size_id: params[:size_id]).first
-    @product_options = product.product_options
+    @product = Product.find(params[:product_id])
+    @product_options = @product.product_options
   end
 
   def print_image_preview

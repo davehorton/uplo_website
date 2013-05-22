@@ -24,7 +24,7 @@ class ShoppingCartController < ApplicationController
       flash[:warning] = "Please fill all options first."
       redirect_to order_image_path(image) and return
     else
-      product = Product.where(moulding_id: params[:line_item][:moulding], size_id: params[:line_item][:size]).first
+      product = Product.find(params[:line_item][:product_id])
 
       line_item = if params[:line_item_id].present?
                     @cart.order.line_items.find(params[:line_item_id])
@@ -101,7 +101,7 @@ class ShoppingCartController < ApplicationController
     end
 
     def valid_item?(hash)
-      required_fields = ["size", "moulding", "quantity"]
+      required_fields = ["product_id", "quantity"]
       required_fields.each { |k| return false if hash.has_key?(k)==false or hash[k].blank? }
       if hash["quantity"] =~ /^\d*$/
         return false if hash["quantity"].to_i<=0
