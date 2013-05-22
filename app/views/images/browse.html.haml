@@ -22,11 +22,12 @@
       %span.text.gray.font12.line12 By
       %a.text.black.normal.font12.line12{:href => "#{ author_profile }"}= @author.username.truncate(20)
       .text.gray.font11= "#{@author.fullname} &bull; #{ pluralize(images_count, 'Item')}".html_safe
-    - if gallery_owner
+    - if gallery_owner(@image.gallery)
       %a#btn-edit.button.edit.right{ :href => "#{ edit_images_gallery_path(@image.gallery) }" }
-        - is_author_following = @author.has_follower?(current_user.id)
-        - follow_class = is_author_following ? 'unfollow' : 'follow'
-      #btn-follow.button.right{ :class => "#{ follow_class }", :data => { 'author-id' => "#{ @author.id }", 'following' => "#{ is_author_following }"} }
+    - if current_user && !gallery_owner(@image.gallery)
+      - is_author_following = @author.has_follower?(current_user.id)
+      - follow_class = is_author_following ? 'unfollow' : 'follow'
+    #btn-follow.button.right{ :class => "#{ follow_class }", :data => { 'author-id' => "#{ @author.id }", 'following' => "#{ is_author_following }"} }
   .line-separator.left
   .frame-fit.text.line10.left
     .text.black.font12.left{:style => 'margin-top:7px;'}= "Uploaded on #{@image.created_at.strftime('%m/%d/%Y')}"
@@ -82,18 +83,18 @@
     .right
       - like_class = @dislike ? "dislike" : "like"
       - order_url = url_for(:controller => 'images', :action => 'order', :id => params[:id])
-      - if gallery_owner
+      - if current_user.present?
         #btn-like.button.left{:class => "#{like_class}", :onclick => 'update_liked();', :data => { 'id' => params[:id], 'dislike' => "#{ @dislike }" }}
         .button.flag.left{:onclick => "show_flag_form();"}
       .button.order.left{:onclick => "window.location.href = '#{order_url}';", :data => {:url => "#{order_url}"}}
-    - if @image.gallery.is_public? && !@image.flagged?
+    - if current_user &&  @image.gallery.is_public? && !@image.flagged?
       .buttons-container.right
         - image_url = "https://www.facebook.com/sharer.php?u=#{browse_image_url(@image)}"
         - twitter_image_url = "https://twitter.com/share&data-url=#{browse_image_url(@image)}"
         %a.twitter-share-button.right{ :href => twitter_image_url}
         %a.facebook.button.right.share-popup{ :href => image_url}
     
-    - if gallery_owner
+    - if current_user.present?
       .line-separator.clear{ style: 'padding-top: 4px;' }
       #comments-section{ :data => { :id => "#{@image.id}" }}
         .header.text.black.font18.bold Comments and faves

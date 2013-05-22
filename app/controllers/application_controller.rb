@@ -19,8 +19,8 @@ class ApplicationController < ActionController::Base
     current_user || @image.user
   end
 
-  def gallery_owner
-    @gallery && @gallery.user == current_user
+  def gallery_owner(gallery)
+    gallery && gallery.user == current_user
   end
 
   def result_hash
@@ -58,7 +58,7 @@ class ApplicationController < ActionController::Base
   end
 
   def after_sign_in_path_for(resource)
-    "/"
+    session[:user_return_to].presence || root_url
   end
 
   def sticky_flash_message_key

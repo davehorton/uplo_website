@@ -8,7 +8,6 @@
             :locals => {:controller => "/home", :action => "search"})
 #non-login-container.wrapper.images-wrapper.left
   = render :partial => 'images/photos_template', :locals => { :images => @images, :photos_per_line => 6, :photo_size => 'thumb', :other_classes => '' }
-  = render :partial => 'welcome' if params[:authenticate]
   = render_pagination(@images, {:controller => "home", :action => params[:action]})
 #login-overlay
 

@@ -1,13 +1,13 @@
 class Users::RegistrationsController < Devise::RegistrationsController
   layout 'main'
   before_filter :find_invitation, :only => [:new, :create]
+  skip_before_filter :authenticate_user!
 
   def new
     if @inv
       super
     else
       flash[:info] = 'Please login.'
-      redirect_to '/'
     end
   end
 
@@ -16,7 +16,6 @@ class Users::RegistrationsController < Devise::RegistrationsController
       super
     else
       flash[:info] = 'Invalid invitation!'
-      redirect_to '/'
     end
   end
 

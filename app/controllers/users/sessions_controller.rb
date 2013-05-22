@@ -4,10 +4,7 @@ class Users::SessionsController < Devise::SessionsController
 
   # GET /resource/sign_in
   def new
-    session[:devise_message] = flash.now[:alert]
-    # Clear the flash
-    flash.now[:alert] = nil
-    redirect_to root_path(:authenticate => true)
+    session[:devise_message] = flash[:alert]
   end
 
   def create
