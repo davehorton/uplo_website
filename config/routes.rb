@@ -93,6 +93,7 @@ Uplo::Application.routes.draw do
       get  :product_options
       get  :public
       put  :switch_like
+      get  :switch_like
       put  :tier
     end
   end

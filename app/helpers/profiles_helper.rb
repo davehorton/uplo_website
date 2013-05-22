@@ -16,4 +16,9 @@ module ProfilesHelper
       "#{user.try(:username)} Is Following"
     end
   end
+
+  def profile_owner?(user)
+    user == current_user
+  end
+
 end

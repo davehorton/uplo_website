@@ -1,7 +1,7 @@
 class ImagesController < ApplicationController
   self.per_page = 30
 
-  skip_before_filter :authenticate_user!, only: [:public, :browse, :switch_like, :index]
+  skip_before_filter :authenticate_user!, only: [:public, :browse, :index]
   skip_authorize_resource :only => :public
 
   def index
@@ -143,13 +143,15 @@ class ImagesController < ApplicationController
 
   def switch_like
     image = Image.find_by_id(params[:id])
+    return redirect_to browse_image_path(image) if request.get?
+
     dislike = params[:dislike].to_bool
-    if image.nil? || (image.image_flags.count > 0 && !image_owner.owns_image?(image))
+    if image.nil? || (image.image_flags.count > 0 && !current_user.owns_image?(image))
       result = { :success => false, :msg => "This image does not exist anymore!" }
     elsif dislike
-      result = image.user.unlike_image(image)
+      result = current_user.unlike_image(image)
     else
-      result = image.user.like_image(image)
+      result = current_user.like_image(image)
     end
 
     render :json => result
@@ -188,13 +190,13 @@ class ImagesController < ApplicationController
 
     @image = Image.find_by_id(params[:id])
 
-    if @image.nil? || (@image.user.blocked? && !image_owner.admin?)
+    if @image.nil?
       render_not_found
-    elsif @image.gallery && !image_owner.can_access?(@image.gallery)
+    elsif current_user && !current_user.can_access?(@image.gallery)
       render_unauthorized
     end
 
-    @is_owner = image_owner.owns_image?(@image)
+    @is_owner = current_user && current_user.owns_image?(@image)
 
     if @is_owner
       @images = @image.gallery.images.unflagged.where("images.id not in (#{@image.id})").order('name')

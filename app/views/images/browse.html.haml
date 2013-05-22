@@ -14,20 +14,20 @@
   .text.black.font18.bold= @image.name
   .line-separator
   .user-section.left
-    - images_count = image_owner ? @author.images.count : @author.public_images.count
+    - images_count = current_user ? @author.images.count : @author.public_images.count
     - author_profile = profile_user_path(@author)
     %a{:href => "#{ author_profile }"}
       = image_tag @author.avatar_url(:small), :class => 'avatar small left'
     .left
       %span.text.gray.font12.line12 By
-      %a.text.black.normal.font12.line12{:href => "#{ author_profile }"}= @author.username.truncate(20)
+      %a.text.black.normalfont12.line12{:href => "#{ author_profile }"}= @author.username.truncate(20)
       .text.gray.font11= "#{@author.fullname} &bull; #{ pluralize(images_count, 'Item')}".html_safe
-    - if gallery_owner(@image.gallery)
+    - if @author == current_user
       %a#btn-edit.button.edit.right{ :href => "#{ edit_images_gallery_path(@image.gallery) }" }
-    - if current_user && !gallery_owner(@image.gallery)
+    - if current_user && (@author != current_user)
       - is_author_following = @author.has_follower?(current_user.id)
       - follow_class = is_author_following ? 'unfollow' : 'follow'
-    #btn-follow.button.right{ :class => "#{ follow_class }", :data => { 'author-id' => "#{ @author.id }", 'following' => "#{ is_author_following }"} }
+      #btn-follow.button.right{ :class => "#{ follow_class }", :data => { 'author-id' => "#{ @author.id }", 'following' => "#{ is_author_following }"} }
   .line-separator.left
   .frame-fit.text.line10.left
     .text.black.font12.left{:style => 'margin-top:7px;'}= "Uploaded on #{@image.created_at.strftime('%m/%d/%Y')}"
@@ -81,13 +81,20 @@
         .times.text.fuzzy-gray.bold.left= @image.comments.count
         .label.text.fuzzy-gray.font16.left= pluralize_without_count(@image.comments.count, 'Comment')
     .right
-      - like_class = @dislike ? "dislike" : "like"
-      - order_url = url_for(:controller => 'images', :action => 'order', :id => params[:id])
-      - if current_user.present?
+      - if current_user
+        - like_class = @dislike ? "dislike" : "like"
+       
         #btn-like.button.left{:class => "#{like_class}", :onclick => 'update_liked();', :data => { 'id' => params[:id], 'dislike' => "#{ @dislike }" }}
         .button.flag.left{:onclick => "show_flag_form();"}
+      - else
+        #btn-like.button.left{:class => "like"}
+          = link_to "&nbsp;".html_safe, switch_like_image_path(@image), :class => "like-link"
+        .button.flag.left
+          = link_to "&nbsp;".html_safe, switch_like_image_path(@image), :class => "like-link"
+      
+      - order_url = url_for(:controller => 'images', :action => 'order', :id => params[:id])  
       .button.order.left{:onclick => "window.location.href = '#{order_url}';", :data => {:url => "#{order_url}"}}
-    - if current_user &&  @image.gallery.is_public? && !@image.flagged?
+    - if @image.gallery.is_public? && !@image.flagged?
       .buttons-container.right
         - image_url = "https://www.facebook.com/sharer.php?u=#{browse_image_url(@image)}"
         - twitter_image_url = "https://twitter.com/share&data-url=#{browse_image_url(@image)}"
@@ -101,8 +108,8 @@
       #current_comments
       = render :partial => 'comments_template', :locals => { :comments => @comments }
       .user-section.left
-        %a{ :href => profile_user_path(image_owner) }
-          = image_tag image_owner.avatar_url(:medium), :class => "avatar medium left"
+        %a{ :href => profile_user_path(current_user) }
+          = image_tag current_user.avatar_url(:medium), :class => "avatar medium left"
       .left
         = form_for :comment, :url => '/comments', :method => 'post', :html => {:id =>'frm-comment'} do |f|
           = f.text_area :description, :class => 'text gray font12 left', :title => 'Add your comment here...'

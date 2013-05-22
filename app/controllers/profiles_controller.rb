@@ -152,11 +152,7 @@ class ProfilesController < ApplicationController
   protected
 
     def find_user
-      @user = if params[:user_id].present?
-                User.find(params[:user_id])
-              else
-                current_user
-              end
+      @user = (params[:user_id].present? ? User.find(params[:user_id]) : current_user)
     rescue ActiveRecord::RecordNotFound
       flash[:warning] = I18n.t("user.user_was_banned_or_removed")
       redirect_to(profile_path) and return
