@@ -150,7 +150,7 @@ class Image < ActiveRecord::Base
       image.reprocess!
     end
 
-    image.url(product_option.preview_image_name)
+    url(product_option.preview_image_name)
   end
 
   def get_price(moulding, size)
