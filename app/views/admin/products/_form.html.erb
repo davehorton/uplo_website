@@ -1,6 +1,24 @@
-<%= simple_form_for [:admin, product] do |f| %>
-  <%= f.association :size, label_method: :to_name, hint: link_to('Manage sizes', admin_sizes_path) %>
-  <%= f.association :moulding, hint: link_to('Manage mouldings', admin_mouldings_path) %>
+<style type="text/css">
+.fields {
+  border: 1px solid #999;
+  padding: 6px;
+  margin: 10px 0;
+  width: 445px;
+}
+</style>
+
+<%= simple_nested_form_for [:admin, product] do |f| %>
+  <%= f.association :size, label_method: :to_name, collection: Size.by_height_width, hint: link_to("&nbsp;Add / Edit Sizes".html_safe, admin_sizes_path) %>
+  <%= f.association :moulding, hint: link_to("&nbsp;Add / Edit Mouldings".html_safe, admin_mouldings_path) %>
+  <%= f.fields_for :product_options do |po_form| %>
+    <%= po_form.input :description %>
+    <%= po_form.input :border_top_bottom, label: 'Border Top/Bottom (in)' %>
+    <%= po_form.input :border_left_right, label: 'Border Left/Right (in)' %><br/>
+    <%= po_form.link_to_remove "Remove this option" %><br/><br/>
+  <% end %>
+  <br/>
+  <%= f.link_to_add "Add frame option", :product_options %>
+  <br/>
   <%= f.input :tier1_price, label: 'Tier 1 Price ($)' %>
   <%= f.input :tier1_commission, label: 'Tier 1 Commission (%)' %>
   <%= f.input :tier2_price, label: 'Tier 2 Price ($)' %>

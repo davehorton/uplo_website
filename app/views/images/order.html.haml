@@ -7,31 +7,32 @@
   - if @line_item.nil?
     - size = nil
     - moulding = nil
+    - product_option = nil
     - quantity = 1
   - else
     - size = @line_item.size
     - quantity = @line_item.quantity
     - size = @line_item.product.size_id
     - moulding = @line_item.product.moulding_id
+    - product_option = @line_item.product_option_id
   .right
     .text.black.bold.font18 Build Your Order
-    .line-separator
     = simple_form_for(:line_item, :url => url_for(:controller => "shopping_cart", :action => "add_to_cart", :image_id => @image.id), :method => 'post', :html => { :id => 'order-details', :class => 'left' }) do |f|
-      - [:crop_x, :crop_y, :crop_w, :crop_h].each do |attr|
-        = f.hidden_field attr, id: attr
-
       = hidden_field_tag :line_item_id, @line_item.id if @line_item
 
-      %h1 Instructions: Use the cropping tool visible in the photo to select the printable area for your order.
       .line-separator.left
       .round-box.option.left.print-sizes-container
         .header.text.black.bold.font14= "Print Size"
         .item.left
           = f.select :size, size_options(@sizes, size)
-      .round-box.option.left{:style => 'width:138px;'}
+      .round-box.option.left
         .header.text.black.bold.font14= "Moulding Choice"
         .item.left
           = f.select :moulding, options_from_collection_for_select(@mouldings, :id, :name, moulding)
+      .round-box.option.left
+        .header.text.black.bold.font14= "Options"
+        .item.left
+          = f.select :product_option_id, product_option_options(@product_options, product_option)
       .round-box.option.right{:style => 'width:138px;'}
         .header.text.black.bold.font14= "Quantity"
         .item.left
@@ -45,18 +46,12 @@
       .button.add-to-cart.clear.right
 
 .sections.clearfix
-  .image-container-wrapper.clearfix
-    #order-preview.image-container.medium.left
-      #preview-frame.clearfix
-        = image_tag(@image.url(:medium), :id => "preview-image", :class => 'image',
-                  'data-width' => @image.image.width,
-                  'data-height' => @image.image.height, :alt => @image.name)
-        .image-frame
-        .icon.loading-small#preview-waiting{:style => 'display: none'}
+  #order-preview.left
+    #preview-frame.clearfix
+      #preview-image
+      .icon.loading-small#preview-waiting
 
 - content_for :js do
   = javascript_tag do
     :erb
       var image_id = '<%= params[:id] %>';
-      var geometry = <%= {width: @image.image.width, height: @image.image.height}.to_json %>;
-      var cropped_dimensions = <%= @line_item.try(:cropped_dimensions).to_a %>;

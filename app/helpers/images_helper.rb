@@ -20,10 +20,22 @@ module ImagesHelper
   def size_options(sizes, selected_size=nil)
     opts = []
     sizes.each do |size|
-      opts << [ size.to_name, size.id, { :'data-min-width' => size.minimum_recommended_resolution[:w], :'data-min-height' => size.minimum_recommended_resolution[:h] } ]
+      opts << [ size.to_name, size.id, {
+        :'data-min-height' => size.minimum_recommended_resolution[:h],
+        :'data-min-width' => size.minimum_recommended_resolution[:w],
+        :'data-ratio' => size.aspect_ratio } ]
     end
 
     options_for_select(opts, selected_size)
+  end
+
+  def product_option_options(product_options, selected_option=nil)
+    opts = []
+    product_options.each do |po|
+      opts << [ po.description, po.id, { :'data-border_top_bottom' => po.border_top_bottom, :'data-border_left_right' => po.border_left_right } ]
+    end
+
+    options_for_select(opts, selected_option)
   end
 
   def image_name_with_default

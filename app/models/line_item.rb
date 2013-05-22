@@ -1,19 +1,19 @@
 class LineItem < ActiveRecord::Base
   include ::Shared::QueryMethods
 
+  attr_accessor :generate_ordered_print
+
   belongs_to :image
   belongs_to :product
+  belongs_to :product_option
   belongs_to :order
 
-  # for cropping
-  attr_accessor :crop_x, :crop_y, :crop_w, :crop_h
   attr_protected :price
 
   has_attached_file :content,
+                    styles: lambda { |attachment| attachment.instance.thumbnail_styles },
                     :storage => :dropbox,
                     :dropbox_credentials => "#{Rails.root}/config/dropbox.yml",
-                    :styles => lambda {|attachment| {:original => (attachment.instance.dyn_style)}},
-                    :processors => [:cropper],
                     :dropbox_options => { :path => proc { |style| dropbox_path }  }
 
   validates :quantity, numericality: { less_than_or_equal_to: 10 }
@@ -31,16 +31,14 @@ class LineItem < ActiveRecord::Base
     (tax + price) * quantity
   end
 
-  def set_crop_dimension(options)
-    self.crop_dimension = "#{options[:crop_w]}x#{options[:crop_h]}+#{options[:crop_x]}+#{options[:crop_y]}"
+  def thumbnail_styles
+    if generate_ordered_print
+      Hash[product_option.ordered_print_image_name => product_option.image_options(self.image)]
+    end
   end
 
-  def cropped_dimensions
-    self.crop_dimension.to_s.split(/[x,+]/).collect(&:to_i)
-  end
-
-  def copy_image
-    self.crop_w, self.crop_h, self.crop_x, self.crop_y = self.cropped_dimensions
+  def save_image_to_dropbox
+    self.generate_ordered_print = true
     self.content = download_remote_image
     self.save!
   end
@@ -58,15 +56,6 @@ class LineItem < ActiveRecord::Base
     nil
   end
 
-  # croping
-  def cropping?
-    [crop_x, crop_y, crop_w, crop_h].all?(&:present?)
-  end
-
-  def dyn_style
-    cropping? ? "#{crop_w}x#{crop_h}" : "#{image.image.width}x#{image.image.height}"
-  end
-
   def s3_expire_time
     Time.zone.now.beginning_of_day.since 25.hours
   end
@@ -74,7 +63,6 @@ class LineItem < ActiveRecord::Base
   def dropbox_path
     "#{order.dropbox_order_root_path}/#{id}.#{content.original_filename.split('.').last}"
   end
-
 
   private
 

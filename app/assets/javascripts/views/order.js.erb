@@ -1,0 +1,181 @@
+(function() {
+  var CARDNUM_VALIDATOR, computeTax;
+
+  CARDNUM_VALIDATOR = /^(?:4[0-9]{12}(?:[0-9]{3})?|5[1-5][0-9]{14}|6(?:011|5[0-9][0-9])[0-9]{12}|3[47][0-9]{13}|3(?:0[0-5]|[68][0-9])[0-9]{11}|(?:2131|1800|35\d{3})\d{11})$/;
+
+  window.CARD_TYPE_VALIDATORS = [
+    {
+      value: 'USA_express',
+      reg: /^3[47][0-9]{13}$/
+    }, {
+      value: 'discover',
+      reg: /^6(?:011|5[0-9]{2})[0-9]{12}$/
+    }, {
+      value: 'visa',
+      reg: /^4[0-9]{12}(?:[0-9]{3})?$/
+    }, {
+      value: 'jcb',
+      reg: /^(?:2131|1800|35\d{3})\d{11}$/
+    }, {
+      value: 'dinners_club',
+      reg: /^3(?:0[0-5]|[68][0-9])[0-9]{11}$/
+    }, {
+      value: 'master_card',
+      reg: /^5[1-5][0-9]{14}$/
+    }
+  ];
+
+  computeTax = function(region) {
+    var grand_total, grand_total_elm, has_tax;
+    has_tax = false;
+    grand_total_elm = $('#grand-total');
+    $.each(regions_tax, function(key, val) {
+      var grand_total, shipping_fee, total_tax;
+      if (region === val.state_code) {
+        has_tax = true;
+        total_tax = 0;
+        grand_total = 0;
+        shipping_fee = parseFloat($('#shipping_fee').text().replace(/[$]/g, ''));
+        $.each($('#order-summary .price'), function(idx, elm) {
+          var price, price_elm, tax;
+          price_elm = $(elm);
+          price = parseFloat(price_elm.text().replace(/[$]/g, ''));
+          tax = price * val.tax;
+          total_tax += tax;
+          grand_total += tax + price;
+          return price_elm.closest('.block').find('.tax').text("$" + (tax.toFixed(2)));
+        });
+        grand_total += shipping_fee;
+        $('#order-summary .summary .tax').text("$" + (total_tax.toFixed(2)));
+        return grand_total_elm.text("$" + (grand_total.toFixed(2)));
+      }
+    });
+    if (!has_tax) {
+      grand_total = 0;
+      $.each($('#order-summary .price'), function(idx, elm) {
+        var price, price_elm;
+        price_elm = $(elm);
+        price = parseFloat(price_elm.text().replace(/[$]/g, ''));
+        return grand_total += price;
+      });
+      $('#order-summary .tax').text('--');
+      return grand_total_elm.text("$" + (grand_total.toFixed(2)));
+    }
+  };
+
+  $(function() {
+    $('.state').selectmenu({
+      change: function(e, obj) {
+        if (this.id === 'order_billing_address_attributes_state') {
+          if ($('#billing_ship_to_billing').is(':checked')) {
+            return computeTax(obj.value);
+          }
+        } else {
+          return computeTax(obj.value);
+        }
+      }
+    });
+    $('#card_card_number').change(function() {
+      var card_type, validator, _i, _len, _results;
+      card_type = $('#card_card_type').val();
+      if (card_type === '') {
+        return helper.show_notification('Please choose card type!');
+      } else {
+        _results = [];
+        for (_i = 0, _len = CARD_TYPE_VALIDATORS.length; _i < _len; _i++) {
+          validator = CARD_TYPE_VALIDATORS[_i];
+          if (validator.value === card_type) {
+            if (!validator.reg.test($(this).val())) {
+              helper.show_notification('Your card number does not match this card type!');
+            }
+            break;
+          } else {
+            _results.push(void 0);
+          }
+        }
+        return _results;
+      }
+    });
+    $('#card_card_type').change(function() {
+      var card_num, validator, _i, _len, _results;
+      card_num = $('#card_card_number').val();
+      _results = [];
+      for (_i = 0, _len = CARD_TYPE_VALIDATORS.length; _i < _len; _i++) {
+        validator = CARD_TYPE_VALIDATORS[_i];
+        if (validator.value === $(this).val()) {
+          if (card_num !== '' && !validator.reg.test(card_num)) {
+            helper.show_notification('Your card number does not match this card type!');
+          }
+          break;
+        } else {
+          _results.push(void 0);
+        }
+      }
+      return _results;
+    });
+    $('#cvv-explanation').click(function(e) {
+      var cvv_form, left, top;
+      cvv_form = $('#cvv-form');
+      left = e.clientX - 155;
+      top = e.clientY - cvv_form.height();
+      return $('#cvv-form').modal({
+        opacity: 5,
+        overlayClose: true,
+        position: [top, left]
+      });
+    });
+    $('#cvv-form .close').click(function() {
+      return $.modal.close();
+    });
+    $(".zip_input").keypress(function(event) {
+      var part1, part2, reg;
+      reg = /^\d{0,5}$/;
+      if (!event.charCode) {
+        return true;
+      }
+      part1 = this.value.substring(0, this.selectionStart);
+      part2 = this.value.substring(this.selectionEnd, this.value.length);
+      return reg.test(part1 + String.fromCharCode(event.charCode) + part2);
+    });
+    $('#shipping-address .edit a').click(function() {
+      $('#shipping-address .inputs').removeClass('hide').addClass('show');
+      $('#shipping-address .edit').removeClass('show').addClass('hide');
+      $('#ship_to_billing').prop('checked', false);
+      return $('#shipping-address .header .italic').removeClass('hide').addClass('show');
+    });
+    $('#ship_to_billing').change(function() {
+      if ($(this).is(':checked')) {
+        $('#shipping-address .inputs').removeClass('show').addClass('hide');
+        $('#shipping-address .header .italic').removeClass('show').addClass('hide');
+        $('#shipping-address .edit').removeClass('hide').addClass('show');
+        return computeTax($('#order_billing_address_attributes_state').val());
+      } else {
+        $('#shipping-address .inputs').removeClass('hide').addClass('show');
+        $('#shipping-address .header .italic').removeClass('hide').addClass('show');
+        $('#shipping-address .edit').removeClass('show').addClass('hide');
+        return computeTax($('#order_shipping_address_attributes_state').val());
+      }
+    });
+    $('.submit').click(function() {
+      if ($('#shipping-address .edit.hide').length === 0) {
+        $('#shipping-address .inputs').text("");
+      }
+
+      <% if Rails.env.production? %>
+      # Google Analytics
+      _gaq.push(['_trackEvent', 'UPLO Web / Check Out', 'Place Order', 'checkout', -1])
+      <% end %>
+
+      return $('#order-shippings').submit();
+    });
+    $('#use_stored_cc').change(function() {
+      if ($(this).is(':checked')) {
+        return $('.cc_info').hide();
+      } else {
+        return $('.cc_info').show();
+      }
+    });
+    return form_validation.setup($('form.simple_form .error'));
+  });
+
+}).call(this);

@@ -89,6 +89,8 @@ Uplo::Application.routes.draw do
       get  :order
       get  :price
       get  :pricing
+      get  :print_image_preview
+      get  :product_options
       get  :public
       put  :switch_like
       put  :tier

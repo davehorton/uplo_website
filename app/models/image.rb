@@ -2,6 +2,8 @@ class Image < ActiveRecord::Base
   include ::Shared::QueryMethods
   include ImageConstants
 
+  attr_accessor :generate_print_preview, :selected_product_option
+
   belongs_to :active_user, class_name: 'User', foreign_key: 'user_id', conditions: { banned: false, removed: false }
   belongs_to :user, counter_cache: true
   belongs_to :gallery,     :touch => true
@@ -16,14 +18,7 @@ class Image < ActiveRecord::Base
   has_many :tags,          :through => :image_tags
 
   has_attached_file :image,
-    styles: {
-      smallest:        '66x66#',
-      smaller:         '67x67#',
-      small:           '68x68#',
-      thumb:           '155x155#',
-      spotlight_thumb: '174x154#',
-      medium:          '640x640>'
-    },
+    styles: lambda { |attachment| attachment.instance.thumbnail_styles },
     default_url: "/assets/gallery-thumb.jpg"
 
   validates :gallery_id, presence: true
@@ -133,6 +128,31 @@ class Image < ActiveRecord::Base
     super
   end
 
+  def thumbnail_styles
+    if generate_print_preview
+      Hash[selected_product_option.preview_image_name => selected_product_option.image_options(self, true)]
+    else
+      {
+        smallest:        '66x66#',
+        smaller:         '67x67#',
+        small:           '68x68#',
+        thumb:           '155x155#',
+        spotlight_thumb: '174x154#',
+        medium:          '640x640>'
+      }
+    end
+  end
+
+  def find_or_generate_preview_image(product_option)
+    if !image.exists?(product_option.preview_image_name)
+      self.generate_print_preview = true
+      self.selected_product_option = product_option
+      image.reprocess!
+    end
+
+    image.url(product_option.preview_image_name)
+  end
+
   def get_price(moulding, size)
     product = Product.where(moulding_id: moulding.id, size_id: size.id)
     product = gallery.is_public? ? product.public_gallery : product.private_gallery
@@ -163,8 +183,8 @@ class Image < ActiveRecord::Base
       end
 
       compatible_sizes = compatible_sizes.select do |size|
-        current_geometry.smaller  >= size.minimum_recommended_resolution[:w] &&
-        current_geometry.larger >= size.minimum_recommended_resolution[:h]
+        current_geometry.width >= size.minimum_recommended_resolution[:w] &&
+        current_geometry.height >= size.minimum_recommended_resolution[:h]
       end
 
       if gallery.is_public?

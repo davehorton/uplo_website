@@ -28,6 +28,7 @@
 //= require jquery.poshytip
 //= require jquery.jcarousel
 //= require jquery.livequery
+//= require jquery_nested_form
 //= require jquery.simplemodal
 //= require jquery.purl
 //= require jquery.Jcrop.min

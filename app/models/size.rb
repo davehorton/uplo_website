@@ -44,12 +44,16 @@ class Size < ActiveRecord::Base
     width == height
   end
 
+  def dpi
+    minimum_recommended_resolution[:w] / width
+  end
+
   # returns a hash consisting of a width and height;
   # values are either based on stored values or, if not set,
   # a calculation based on a DPI of 150
   def minimum_recommended_resolution(dpi = 150)
     @minimum_recommended_resolution ||=
-      { w: (minimum_width_in_pixels || dpi*width), h: (minimum_height_in_pixels || dpi*height) }
+      { w: (minimum_width_in_pixels || dpi*width).to_f, h: (minimum_height_in_pixels || dpi*height).to_f }
   end
 
   private
