@@ -1,6 +1,6 @@
 - page_title "Browse"
 
-- can_promote = can_promote_image?(@image, @image.user)
+- can_promote = (current_user.present? ? can_promote_image?(@image) : false)
 
 - content_for :metatags do
   = render "layouts/photo_meta_tag"
