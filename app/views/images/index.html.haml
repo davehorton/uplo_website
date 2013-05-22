@@ -4,13 +4,13 @@
   .text.bold.font16.line12.left
     %span.text.black My Gallery /
     %span.text.gray= @gallery.name.truncate(40)
-  - if !gallery_owner(@gallery)
+  - if !gallery_owner?(@gallery)
     %span.text.black /
     %span.text.fuzzy-gray= "From "
     %span.text.fuzzy-gray
       = link_to @gallery.user.fullname, profile_user_path(@gallery.user)
   .text.black.bold.font12.line12.right
-    - if gallery_owner(@gallery)
+    - if gallery_owner?(@gallery)
       - if @images.blank?
         - images_action = "Upload Photos"
       - else
