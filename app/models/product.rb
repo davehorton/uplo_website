@@ -1,6 +1,9 @@
 class Product < ActiveRecord::Base
   belongs_to :moulding
   belongs_to :size
+  has_many   :product_options
+
+  accepts_nested_attributes_for :product_options, :reject_if => :all_blank
 
   after_save :expire_cached_entries
 

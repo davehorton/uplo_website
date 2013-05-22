@@ -6,30 +6,30 @@ class Size < ActiveRecord::Base
 
   after_save :expire_cached_entries
 
-  scope :by_width_height, order('sizes.width, sizes.height')
+  scope :by_height_width, order('sizes.height, sizes.width')
 
   def self.rectangular
     Rails.cache.fetch :rectangular_sizes do
-      where("sizes.width <> sizes.height").by_width_height
+      where("sizes.width <> sizes.height").by_height_width
     end
   end
 
   def self.square
     Rails.cache.fetch :square_sizes do
-      where("sizes.width = sizes.height").by_width_height
+      where("sizes.width = sizes.height").by_height_width
     end
   end
 
   def to_name
-    "#{width}x#{height}"
+    "#{height}x#{width}"
   end
 
   def to_recommended_pixels
-    "#{minimum_recommended_resolution[:w]}x#{minimum_recommended_resolution[:h]}"
+    "#{minimum_recommended_resolution[:h]}x#{minimum_recommended_resolution[:w]}"
   end
 
   def to_a
-    [ width, height ]
+    [ height, width ]
   end
 
   def aspect_ratio
@@ -44,12 +44,16 @@ class Size < ActiveRecord::Base
     width == height
   end
 
+  def dpi
+    minimum_recommended_resolution[:w] / width
+  end
+
   # returns a hash consisting of a width and height;
   # values are either based on stored values or, if not set,
   # a calculation based on a DPI of 150
   def minimum_recommended_resolution(dpi = 150)
     @minimum_recommended_resolution ||=
-      { w: (minimum_width_in_pixels || dpi*width), h: (minimum_height_in_pixels || dpi*height) }
+      { w: (minimum_width_in_pixels || dpi*width).to_f, h: (minimum_height_in_pixels || dpi*height).to_f }
   end
 
   private

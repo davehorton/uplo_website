@@ -294,7 +294,7 @@ class ImagesController < ApplicationController
   end
 
   def order
-    @image = Image.unflagged.find_by_id(params[:id])
+    @image = Image.find_by_id(params[:id])
 
     if @image.nil? || (@image.user.blocked? && !current_user.admin?)
       render_not_found
@@ -306,8 +306,12 @@ class ImagesController < ApplicationController
       elsif @image.gallery && !current_user.can_access?(@image.gallery)
         render_unauthorized
       end
+
+      products = @image.available_products
+      @product_options = products.first.product_options if products.any?
     else
       @line_item = LineItem.find_by_id(params[:line_item])
+      @product_options = @line_item.product.product_options
     end
 
     @sizes = @image.available_sizes
@@ -315,14 +319,14 @@ class ImagesController < ApplicationController
   end
 
   def price
-    @image = Image.unflagged.find_by_id(params[:id])
+    @image = Image.find(params[:id])
     @moulding = Moulding.find(params[:moulding_id])
     @size = Size.find(params[:size_id])
     render json: { success: true, price: @image.get_price(@moulding, @size) }
   end
 
   def pricing
-    image = Image.unflagged.find_by_id params[:id]
+    image = Image.find(params[:id])
     if image.nil? || (image.user.blocked? && !current_user.admin?)
       result = { :success => false, :msg => 'This image does not exist anymore' }
     else
@@ -332,8 +336,21 @@ class ImagesController < ApplicationController
     render :json => result
   end
 
+  def product_options
+    @image = Image.find(params[:id])
+    @size = Size.find(params[:size_id])
+    product = Product.where(moulding_id: params[:moulding_id], size_id: params[:size_id]).first
+    @product_options = product.product_options
+  end
+
+  def print_image_preview
+    @image = Image.find(params[:id])
+    @product_option = ProductOption.find(params[:product_option_id])
+    @preview_url = @image.find_or_generate_preview_image(@product_option)
+  end
+
   def tier
-    image = Image.unflagged.find_by_id params[:id]
+    image = Image.find(params[:id])
     if image.nil? || (image.user.blocked? && !current_user.admin?)
       result = { :success => false, :msg => 'This image does not exist anymore' }
     else

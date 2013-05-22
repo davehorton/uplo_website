@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130510055916) do
+ActiveRecord::Schema.define(:version => 20130521040651) do
 
   create_table "addresses", :force => true do |t|
     t.string   "first_name"
@@ -172,6 +172,7 @@ ActiveRecord::Schema.define(:version => 20130510055916) do
     t.string   "content_content_type"
     t.integer  "content_file_size"
     t.datetime "content_updated_at"
+    t.integer  "product_option_id"
   end
 
   add_index "line_items", ["image_id"], :name => "index_line_items_on_image_id"
@@ -215,6 +216,17 @@ ActiveRecord::Schema.define(:version => 20130510055916) do
   end
 
   add_index "orders", ["user_id"], :name => "index_orders_on_user_id"
+
+  create_table "product_options", :force => true do |t|
+    t.integer  "product_id"
+    t.string   "description"
+    t.decimal  "border_top_bottom", :precision => 8, :scale => 2, :default => 0.0
+    t.decimal  "border_left_right", :precision => 8, :scale => 2, :default => 0.0
+    t.datetime "created_at",                                                       :null => false
+    t.datetime "updated_at",                                                       :null => false
+  end
+
+  add_index "product_options", ["product_id"], :name => "index_product_options_on_product_id"
 
   create_table "products", :force => true do |t|
     t.integer  "size_id"

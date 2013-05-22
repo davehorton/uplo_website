@@ -1,0 +1,9 @@
+$('#preview-image').html("<%= j image_tag(@preview_url) %>");
+$('#preview-waiting').hide();
+
+var selectedMould = $('#line_item_moulding').find(':selected').text().toLowerCase();
+if(selectedMould.indexOf('canvas')>-1){
+  $('#preview-image').append("<br><br>Preview:<br><%= j image_tag('img-frames/canvas.png', style:'width: 200px') %>");
+} else if(selectedMould.indexOf('plexi')>-1){
+  $('#preview-image').append("<br><br>Preview:<br><%= j image_tag('img-frames/plexi.png', style:'width: 200px') %>");
+}

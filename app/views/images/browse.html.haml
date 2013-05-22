@@ -194,23 +194,6 @@
           return true;
         });
         <% end %>
-
-        $('.image-container-wrapper .image-container.medium img.image.medium').each(function(){
-          var img = this;
-
-          // Auto-resize the image frame
-          $(img).load(function(){
-            $(img).parent().removeClass('no-border');
-            image_util.resize_frame(img);
-          });
-
-          if($(img).prop('complete')){
-            $(img).load();
-          }
-          else{
-            image_util.resize_frame($(img), {auto: true});
-          }
-        });
       });
 
       function submit_flag(desc, type){

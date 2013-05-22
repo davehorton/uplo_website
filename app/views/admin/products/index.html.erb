@@ -41,6 +41,7 @@
   <tr>
     <th>Size</th>
     <th>Moulding</th>
+    <th>Frame<br/>Options</th>
     <th>Tier 1<br/>Price</th>
     <th>Tier 1<br/>Comm.</th>
     <th>Tier 2<br/>Price</th>
@@ -49,9 +50,9 @@
     <th>Tier 3<br/>Comm.</th>
     <th>Tier 4<br/>Price</th>
     <th>Tier 4<br/>Comm.</th>
-    <th>Public Gallery</th>
-    <th>Private Gallery</th>
-    <th>Shipping Price</th>
+    <th>Public</th>
+    <th>Private</th>
+    <th>Shipping</th>
     <th></th>
   </tr>
 </thead>
@@ -60,6 +61,13 @@
   <tr>
     <td><%= product.size.to_name %></td>
     <td><%= product.moulding.name %></td>
+    <td>
+      <ul>
+      <% product.product_options.each do |po| %>
+        <li><%= po.description %></li>
+      <% end %>
+      </ul>
+    </td>
     <td><%= number_to_currency product.tier1_price %></td>
     <td><%= number_to_percentage product.tier1_commission, precision: 1 %></td>
     <td><%= number_to_currency product.tier2_price %></td>
@@ -70,7 +78,7 @@
     <td><%= number_to_percentage product.tier4_commission, precision: 1 %></td>
     <td><%= yes_or_no product.public_gallery %></td>
     <td><%= yes_or_no product.private_gallery %></td>
-    <td><%= number_with_precision(product.shipping_price, :precision => 2) %></td>
+    <td><%= number_to_currency(product.shipping_price, :precision => 2) %></td>
     <td>
       <%= link_to 'Edit', edit_admin_product_path(product) %>
       <% unless product.associated_with_any_orders? %>

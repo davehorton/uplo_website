@@ -1,0 +1,4 @@
+$('#line_item_product_option_id').selectmenu("destroy");
+$('#line_item_product_option_id').html("<%= j(select :line_item, :product_option, product_option_options(@product_options)) %>");
+$('#line_item_product_option_id').selectmenu();
+$('#line_item_product_option_id').change();

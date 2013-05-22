@@ -105,7 +105,7 @@ class Order < ActiveRecord::Base
 
   def add_to_dropbox
     self.line_items.each do |line_item|
-      line_item.delay.copy_image
+      line_item.delay.save_image_to_dropbox
     end
   end
 
