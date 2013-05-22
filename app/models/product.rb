@@ -46,6 +46,10 @@ class Product < ActiveRecord::Base
     LineItem.where(product_id: self.id).exists?
   end
 
+  def display_name
+    "#{size.to_name} - #{moulding.name}"
+  end
+
   private
 
     def expire_cached_entries

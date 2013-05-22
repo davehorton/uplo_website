@@ -5,16 +5,13 @@
 
 - content_for :right_content do
   - if @line_item.nil?
-    - size = nil
-    - moulding = nil
+    - product = nil
     - product_option = nil
     - quantity = 1
   - else
-    - size = @line_item.size
-    - quantity = @line_item.quantity
-    - size = @line_item.product.size_id
-    - moulding = @line_item.product.moulding_id
+    - product = @line_item.product
     - product_option = @line_item.product_option_id
+    - quantity = @line_item.quantity
   .right
     .text.black.bold.font18 Build Your Order
     = simple_form_for(:line_item, :url => url_for(:controller => "shopping_cart", :action => "add_to_cart", :image_id => @image.id), :method => 'post', :html => { :id => 'order-details', :class => 'left' }) do |f|
@@ -24,11 +21,7 @@
       .round-box.option.left.print-sizes-container
         .header.text.black.bold.font14= "Print Size"
         .item.left
-          = f.select :size, size_options(@sizes, size)
-      .round-box.option.left
-        .header.text.black.bold.font14= "Moulding Choice"
-        .item.left
-          = f.select :moulding, options_from_collection_for_select(@mouldings, :id, :name, moulding)
+          = f.select :product_id, options_from_collection_for_select(@products, :id, :display_name, product)
       .round-box.option.left
         .header.text.black.bold.font14= "Options"
         .item.left
