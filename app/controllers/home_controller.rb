@@ -84,6 +84,7 @@ class HomeController < ApplicationController
 
   def require_login
     session[:user_return_to] = request.referrer
+    flash[:alert] = "You need to sign in or sign up before continuing."
     redirect_to new_user_session_path
   end
 
