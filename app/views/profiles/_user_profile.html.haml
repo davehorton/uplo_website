@@ -43,3 +43,8 @@
     - if is_followed_user
       .icon.check.left
       .left= "You are following this user.".html_safe
+  - unless current_user
+    .follow-section.left
+      #btn-follow.button.left{ :class => "follow"}
+        = link_to "&nbsp;".html_safe, require_login_path, :class => "like-link"
+

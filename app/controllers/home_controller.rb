@@ -82,6 +82,11 @@ class HomeController < ApplicationController
     render :template => 'home/browse'
   end
 
+  def require_login
+    session[:user_return_to] = request.referrer
+    redirect_to new_user_session_path
+  end
+
   protected
 
     def process_search_params
@@ -101,4 +106,5 @@ class HomeController < ApplicationController
         return redirect_to gallery_images_path(gallery_invitation.gallery)
       end
     end
+
 end
