@@ -363,7 +363,7 @@ class ImagesController < ApplicationController
 
     def find_gallery_and_authorize
       @gallery = Gallery.find(params[:gallery_id])
-      #render_unauthorized if !current_user.can_access?(@gallery)
+      render_unauthorized if current_user && !current_user.can_access?(@gallery)
     end
 
     def push_to_uplo_photoset(image_id)
