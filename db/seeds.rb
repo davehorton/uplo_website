@@ -21,18 +21,36 @@ canvas = Moulding.create(name: 'Canvas')
 Moulding.create(name: 'Plexi')
 
 puts 'Creating products for private galleries'
-Product.create(size: size5x5, moulding: print, tier1_price: 10, tier2_price: 20, tier3_price: 30, tier4_price: 40, tier1_commission: 30, tier2_commission: 35, tier3_commission: 40, tier4_commission: 50, private_gallery: true, public_gallery: false)
-Product.create(size: size5x5, moulding: canvas, tier1_price: 20, tier2_price: 30, tier3_price: 40, tier4_price: 50, tier1_commission: 30, tier2_commission: 35, tier3_commission: 40, tier4_commission: 50, private_gallery: true, public_gallery: false)
-Product.create(size: size5x7, moulding: print, tier1_price: 10, tier2_price: 20, tier3_price: 30, tier4_price: 40, tier1_commission: 30, tier2_commission: 35, tier3_commission: 40, tier4_commission: 50, private_gallery: true, public_gallery: false)
-Product.create(size: size5x7, moulding: canvas, tier1_price: 20, tier2_price: 30, tier3_price: 40, tier4_price: 50, tier1_commission: 30, tier2_commission: 35, tier3_commission: 40, tier4_commission: 50, private_gallery: true, public_gallery: false)
+p = Product.create(size: size5x5, moulding: print, tier1_price: 10, tier2_price: 20, tier3_price: 30, tier4_price: 40, tier1_commission: 30, tier2_commission: 35, tier3_commission: 40, tier4_commission: 50, private_gallery: true, public_gallery: false)
+p.product_options.create(description: 'Borderless')
+
+p = Product.create(size: size5x5, moulding: canvas, tier1_price: 20, tier2_price: 30, tier3_price: 40, tier4_price: 50, tier1_commission: 30, tier2_commission: 35, tier3_commission: 40, tier4_commission: 50, private_gallery: true, public_gallery: false)
+p.product_options.create(description: 'Borderless')
+
+p = Product.create(size: size5x7, moulding: print, tier1_price: 10, tier2_price: 20, tier3_price: 30, tier4_price: 40, tier1_commission: 30, tier2_commission: 35, tier3_commission: 40, tier4_commission: 50, private_gallery: true, public_gallery: false)
+p.product_options.create(description: 'Borderless')
+
+p = Product.create(size: size5x7, moulding: canvas, tier1_price: 20, tier2_price: 30, tier3_price: 40, tier4_price: 50, tier1_commission: 30, tier2_commission: 35, tier3_commission: 40, tier4_commission: 50, private_gallery: true, public_gallery: false)
+p.product_options.create(description: 'Borderless')
 
 puts 'Creating products for public galleries'
-Product.create(size: size8x8, moulding: print, tier1_price: 20, tier2_price: 30, tier3_price: 40, tier4_price: 50, tier1_commission: 30, tier2_commission: 35, tier3_commission: 40, tier4_commission: 50)
-Product.create(size: size8x8, moulding: canvas, tier1_price: 50, tier2_price: 80, tier3_price: 90, tier4_price: 100, tier1_commission: 30, tier2_commission: 35, tier3_commission: 40, tier4_commission: 50)
-Product.create(size: size8x10, moulding: print, tier1_price: 20, tier2_price: 30, tier3_price: 40, tier4_price: 50, tier1_commission: 30, tier2_commission: 35, tier3_commission: 40, tier4_commission: 50)
-Product.create(size: size8x10, moulding: canvas, tier1_price: 50, tier2_price: 80, tier3_price: 90, tier4_price: 100, tier1_commission: 30, tier2_commission: 35, tier3_commission: 40, tier4_commission: 50)
-Product.create(size: size24x36, moulding: print, tier1_price: 300, tier2_price: 600, tier3_price: 1000, tier4_price: 5000, tier1_commission: 30, tier2_commission: 35, tier3_commission: 40, tier4_commission: 50)
-Product.create(size: size24x36, moulding: canvas, tier1_price: 500, tier2_price: 800, tier3_price: 1500, tier4_price: 7500, tier1_commission: 30, tier2_commission: 35, tier3_commission: 40, tier4_commission: 50)
+p = Product.create(size: size8x8, moulding: print, tier1_price: 20, tier2_price: 30, tier3_price: 40, tier4_price: 50, tier1_commission: 30, tier2_commission: 35, tier3_commission: 40, tier4_commission: 50)
+p.product_options.create(description: 'Borderless')
+
+p = Product.create(size: size8x8, moulding: canvas, tier1_price: 50, tier2_price: 80, tier3_price: 90, tier4_price: 100, tier1_commission: 30, tier2_commission: 35, tier3_commission: 40, tier4_commission: 50)
+p.product_options.create(description: 'Borderless')
+
+p = Product.create(size: size8x10, moulding: print, tier1_price: 20, tier2_price: 30, tier3_price: 40, tier4_price: 50, tier1_commission: 30, tier2_commission: 35, tier3_commission: 40, tier4_commission: 50)
+p.product_options.create(description: 'Borderless')
+
+p = Product.create(size: size8x10, moulding: canvas, tier1_price: 50, tier2_price: 80, tier3_price: 90, tier4_price: 100, tier1_commission: 30, tier2_commission: 35, tier3_commission: 40, tier4_commission: 50)
+p.product_options.create(description: 'Borderless')
+
+p = Product.create(size: size24x36, moulding: print, tier1_price: 300, tier2_price: 600, tier3_price: 1000, tier4_price: 5000, tier1_commission: 30, tier2_commission: 35, tier3_commission: 40, tier4_commission: 50)
+p.product_options.create(description: 'Borderless')
+
+p = Product.create(size: size24x36, moulding: canvas, tier1_price: 500, tier2_price: 800, tier3_price: 1500, tier4_price: 7500, tier1_commission: 30, tier2_commission: 35, tier3_commission: 40, tier4_commission: 50)
+p.product_options.create(description: 'Borderless')
 
 puts "Admin login: admin/secret"
 admin = User.new({
@@ -101,12 +119,12 @@ Gallery.create!(
   permission: :private
 )
 
-puts 'Creating gallery images...'
-
-# 3 images for user's public gallery
 gallery = user.galleries.first
+puts "Creating 3 images for user's public gallery named #{gallery.name}..."
+
 3.times do |counter|
   img = gallery.images.create!(
+    gallery_id: gallery.id,
     name: Faker::Lorem.word,
     image: File.open("#{Rails.root}/spec/fixtures/assets/photo.jpg"),
     tier_id: 1,
@@ -114,10 +132,12 @@ gallery = user.galleries.first
   )
 end
 
-# 2 images for admin's public gallery
 gallery = admin.galleries.public_access.first
+puts "Creating 2 images for admin's public gallery named #{gallery.name}..."
+
 2.times do |counter|
   img = gallery.images.create!(
+    gallery_id: gallery.id,
     name: Faker::Lorem.word,
     image: File.open("#{Rails.root}/spec/fixtures/assets/photo.jpg"),
     tier_id: 1,
@@ -125,14 +145,17 @@ gallery = admin.galleries.public_access.first
   )
 end
 
-# 2 images for admin's private gallery
 gallery = admin.galleries.private_access.first
+puts "Creating 2 images for admin's private gallery named #{gallery.name}..."
+
 2.times do |counter|
   img = gallery.images.create!(
+    gallery_id: gallery.id,
     name: Faker::Lorem.word,
     image: File.open("#{Rails.root}/spec/fixtures/assets/photo.jpg"),
     tier_id: 1
   )
 end
 
-puts 'To process uploaded images, do the following: bundle exec sidekiq -q default -q paperclip'
+# ensure previously cached content is gone
+Rails.cache.clear
