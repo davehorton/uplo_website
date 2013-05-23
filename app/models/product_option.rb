@@ -39,17 +39,17 @@ class ProductOption < ActiveRecord::Base
     end
 
     if border_top_bottom == 0 && border_left_right == 0
-      convert_options = "-thumbnail #{width}x#{height}^ -gravity center -extent #{width}x#{height}"
+      convert_options = "-thumbnail #{width}x#{height}"
     elsif border_top_bottom > 0 && border_left_right == 0
       top_border = border_top_bottom*dpi*preview_ratio
       convert_options = "-resize #{width}x#{height-top_border*2} -gravity center -background white -extent #{width}x#{height}"
     elsif border_top_bottom == 0 && border_left_right > 0
       sides_border = border_left_right*dpi*preview_ratio
-      convert_options = "-resize #{width-sides_border*2}x#{height}\\> -gravity center -background white -extent #{width}x#{height}"
+      convert_options = "-resize #{width-sides_border*2}x#{height} -gravity center -background white -extent #{width}x#{height}"
     else # border_top_bottom > 0 && border_left_right > 0
       sides_border = border_left_right*dpi*preview_ratio
       top_border = border_top_bottom*dpi*preview_ratio
-      convert_options = "-resize #{width-sides_border*2}x#{height-top_border*2}^ -gravity center -background white -extent #{width-sides_border*2}x#{height-top_border*2} -bordercolor White -border #{sides_border}x#{top_border}"
+      convert_options = "-resize #{width-sides_border*2}x#{height-top_border*2} -bordercolor White -border #{sides_border}x#{top_border}"
     end
 
     # set geometry to empty string and manually run resize command so that
