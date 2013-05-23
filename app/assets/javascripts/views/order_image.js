@@ -27,7 +27,7 @@
   };
 
   initSizeOptions = function() {
-    return $('#line_item_size, #line_item_moulding').selectmenu({
+    return $('#line_item_product_id').selectmenu({
       style: 'dropdown',
       change: function(e, obj) {
         return computePrice();
