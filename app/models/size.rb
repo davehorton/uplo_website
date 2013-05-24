@@ -25,7 +25,7 @@ class Size < ActiveRecord::Base
   end
 
   def to_recommended_pixels
-    "#{minimum_recommended_resolution[:h]}x#{minimum_recommended_resolution[:w]}"
+    "#{minimum_recommended_resolution[:h].to_i}x#{minimum_recommended_resolution[:w].to_i}"
   end
 
   def to_a
