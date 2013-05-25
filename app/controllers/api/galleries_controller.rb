@@ -1,6 +1,4 @@
 class Api::GalleriesController < Api::BaseController
-  respond_to :json
-
   # GET /api/galleries
   # params:
   #   page

@@ -1,8 +1,6 @@
 class Api::ImagesController < Api::BaseController
   skip_before_filter :require_login!, only: [:index, :mouldings, :popular]
-
   respond_to :html, only: [:sale_chart]
-  respond_to :json
 
   # GET /api/images
   # required:
@@ -177,5 +175,14 @@ class Api::ImagesController < Api::BaseController
     image = Image.find(params[:id])
     result = image.flag!(current_user, params)
     render json: result, status: (result[:success] == true ? :ok : :bad_request)
+  end
+
+  # GET /api/images/:id/print_image_preview
+  # required:
+  #   product_option_id
+  def print_image_preview
+    image = Image.find(params[:id])
+    product_option = ProductOption.find(params[:product_option_id])
+    render json: { preview_url: image.find_or_generate_preview_image(product_option) }
   end
 end

@@ -21,7 +21,8 @@ class ImageSerializer < ActiveModel::Serializer
         size_name:   product.size.to_name,
         mould_name:  product.moulding.name,
         price:       "%0.2f" % product.price_for_tier(object.tier_id),
-        shipping:    "%0.2f" % product.shipping_price
+        shipping:    "%0.2f" % product.shipping_price,
+        product_options: product.product_options.map {|po| ProductOptionSerializer.new(po, root: false)}
       }
     end
     options

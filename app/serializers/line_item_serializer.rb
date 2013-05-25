@@ -1,8 +1,12 @@
 class LineItemSerializer < ActiveModel::Serializer
-  attributes :id, :product, :quantity, :price, :image
+  attributes :id, :product, :product_option, :quantity, :price, :image
 
   def image
     ImageSerializer.new(object.image, root: false)
+  end
+
+  def product_option
+    ProductOptionSerializer.new(object.product_option, root: false)
   end
 
   def product

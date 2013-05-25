@@ -1,10 +1,25 @@
 class Api::UsersController < Api::BaseController
   include DeviseHelper
-
-  respond_to :json
-
-  skip_before_filter :require_login!, only: [:login, :create_user, :reset_password, :request_invitation]
+  skip_before_filter :require_login!, only: [:login, :register, :reset_password, :request_invitation]
   before_filter      :find_user, only: [:show, :followers, :following]
+
+  # POST /api/register
+  # params: user
+  def register
+    sign_out(:user)
+    user = User.new(params[:user])
+
+    if user.save
+      render json: { user_id: user.id }, status: :created
+    else
+      render json: { msg: user.errors.full_messages.to_sentence }, status: :bad_request
+    end
+  end
+
+  # GET /api/users/:id
+  def show
+    render json: @user
+  end
 
   # POST /api/users/check_emails
   # required:
@@ -36,11 +51,6 @@ class Api::UsersController < Api::BaseController
     render json: users, meta: { total: users.total_entries }
   end
 
-  # GET /api/users/:id
-  def show
-    render json: @user
-  end
-
   # GET /api/users/:id/followers
   def followers
     followers = @user.followers.paginate_and_sort(filtered_params)
@@ -63,21 +73,6 @@ class Api::UsersController < Api::BaseController
       render json: { msg: "We'll let you know when your account is ready." }, status: :ok
     else
       render json: { msg: invite_request.errors.full_messages[0] }, status: :bad_request
-    end
-  end
-
-  # POST /api/registration
-  # params: user
-  def create_user
-    info = params[:user]
-    profile_image_params = params[:profile_image]
-    user = User.new(info)
-    user.profile_images.build profile_image_params
-
-    if user.save
-      render json: user, status: :created
-    else
-      render json: { msg: user.errors.full_messages.to_sentence }, status: :bad_request
     end
   end
 
