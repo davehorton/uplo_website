@@ -194,7 +194,7 @@
     $("#multiple-fileupload").fileupload();
     $("#multiple-fileupload").fileupload("option", {
       dataType: 'text',
-      maxFileSize: 20000000,
+      maxFileSize: 75000000,
       acceptFileTypes: /^image\/(jpg|jpeg)$/,
       previewMaxWidth: 180,
       previewMaxHeight: 180,
