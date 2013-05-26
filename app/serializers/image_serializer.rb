@@ -2,7 +2,7 @@ class ImageSerializer < ActiveModel::Serializer
   attributes :id, :name, :description, :image_file_name, :gallery_id,
              :image_likes_count, :keyword, :owner_avatar, :gallery_cover, :tier_id,
              :image_url, :image_thumb_url, :username, :creation_timestamp, :user_fullname,
-             :public_link, :user_id, :user_avatar, :comments_number, :gallery_name, :products
+             :public_link, :user_id, :user_avatar, :comments_number, :gallery_name, :products, :in_private_gallery
 
   def public_link
     object.decorate.public_link
@@ -27,5 +27,9 @@ class ImageSerializer < ActiveModel::Serializer
       }
     end
     options
+  end
+
+  def in_private_gallery
+    !object.gallery.is_public?
   end
 end
