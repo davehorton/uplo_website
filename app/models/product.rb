@@ -34,8 +34,18 @@ class Product < ActiveRecord::Base
     where(size_id: Size.square.map(&:id))
   end
 
-  def price_for_tier(tier_id)
-    send(:"tier#{tier_id || 1}_price")
+  def price_for_tier(tier_id, viewing_own_print = false)
+    p = send(:"tier#{tier_id || 1}_price")
+
+    if viewing_own_print
+      c = commission_for_tier(tier_id)
+      if c
+        discount = p*(c/100.0)
+        p = p - discount
+      end
+    end
+
+    p
   end
 
   def commission_for_tier(tier_id)

@@ -10,13 +10,15 @@ class LineItemSerializer < ActiveModel::Serializer
   end
 
   def product
+    viewing_own_image = (scope && scope.id == object.image.user_id)
+
     prod = object.product
     {
       id:          prod.id,
       name:        "#{prod.size.to_name} - #{prod.moulding.name}",
       size_name:   prod.size.to_name,
       mould_name:  prod.moulding.name,
-      price:       "%0.2f" % prod.price_for_tier(object.image.tier_id)
+      price:       "%0.2f" % prod.price_for_tier(object.image.tier_id, viewing_own_image)
     }
   end
 end
