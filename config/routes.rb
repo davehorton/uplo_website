@@ -209,6 +209,8 @@ Uplo::Application.routes.draw do
         get :low_res_tool
       end
     end
+
+    resources :shipping_prices
   end
 
   # API ROUTING

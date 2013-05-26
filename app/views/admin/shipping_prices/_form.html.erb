@@ -1,0 +1,6 @@
+<%= simple_form_for [:admin, shipping_price] do |f| %>
+  <%= f.association :product, label_method: :display_name %>
+  <%= f.input :quantity %>
+  <%= f.input :amount %>
+  <%= f.submit %>
+<% end %>

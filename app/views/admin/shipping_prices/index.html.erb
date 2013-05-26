@@ -1,0 +1,58 @@
+<%= render partial: 'admin/admin_menu' %>
+
+<style type="text/css">
+  #actions {
+    margin-bottom: 30px;
+  }
+
+  #actions a {
+    background-color: #ddd;
+    border: 1px solid #999;
+    padding: 10px;
+  }
+
+  #shipping_options {
+    width: 100%
+  }
+
+  #shipping_options thead th {
+    padding-bottom: 10px
+  }
+
+  #shipping_options th {
+    text-align: left;
+  }
+
+  #shipping_options td {
+    border: 1px solid #ddd;
+    padding: 6px;
+  }
+</style>
+
+<div id="actions">
+  <%= link_to "Add New Shipping Rule", new_admin_shipping_price_path %>
+</div>
+
+<table id="shipping_options">
+<thead>
+  <tr>
+    <th>Product</th>
+    <th>Quantity (Up To)</th>
+    <th>Price</th>
+    <th></th>
+  </tr>
+</thead>
+<tbody>
+  <% ShippingPrice.all.each do |sp| %>
+  <tr>
+    <td><%= sp.product.display_name %></td>
+    <td><%= sp.quantity %></td>
+    <td><%= number_to_currency sp.amount %></td>
+    <td>
+      <%= link_to 'Edit', edit_admin_shipping_price_path(sp) %>
+        | <%= link_to 'Delete', admin_shipping_price_path(sp), method: :delete, confirm: 'Are you sure?' %>
+    </td>
+  </tr>
+  <% end %>
+</tbody>
+</table>
