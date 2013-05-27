@@ -103,13 +103,13 @@
             .tax.right= (@order.tax > 0 ? number_to_currency(@order.tax) : "--")
           .text.clear
             .left Shipping & Handling:
-            .right#shipping_fee= number_to_currency SHIPPING_FEE
+            .right#shipping_fee= number_to_currency @order.shipping_fee
 
         .line-separator.left
         .summary.right
           .grand-total.text.black.bold.font14.line18.right.clear
             .left Grand Total:
-            #grand-total.right= number_to_currency(@order.tax + subtotal + SHIPPING_FEE)
+            #grand-total.right= number_to_currency(@order.tax + subtotal + @order.shipping_fee)
         .line-separator.left
         .submit.right
 

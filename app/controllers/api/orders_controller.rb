@@ -6,6 +6,7 @@ class Api::OrdersController < Api::BaseController
   # required:
   #   item[image_id]
   #   item[product_id]
+  #   item[product_option_id]
   #   item[quantity]
   def add_item
     item = params[:item]
@@ -14,7 +15,8 @@ class Api::OrdersController < Api::BaseController
     order = current_user.init_cart.order
     line_item = order.line_items.where(
       image_id: image.id,
-      product_id: item[:product_id]
+      product_id: item[:product_id],
+      product_option_id: item[:product_option_id]
     ).first
 
     if line_item.present?

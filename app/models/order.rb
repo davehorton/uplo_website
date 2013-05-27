@@ -64,9 +64,25 @@ class Order < ActiveRecord::Base
   def compute_totals
     self.price_total = self.compute_image_total
     #self.tax = self.compute_tax_total
-    self.shipping_fee = SHIPPING_FEE
+    self.shipping_fee = calculate_shipping
     self.order_total = self.price_total + (self.tax ||= 0) + self.shipping_fee
     self.save
+  end
+
+  def calculate_shipping
+    @calculate_shipping ||= begin
+      total_shipping = 0.00
+
+      line_items.includes(:product).each do |line|
+        sp = ShippingPrice.where(product_id: line.product_id).where("quantity <= ?", line.quantity).all
+        if sp.any?
+          logger.debug "sp: #{sp.inspect}"
+          total_shipping += sp.last.amount
+        end
+      end
+
+      total_shipping
+    end
   end
 
   def compute_image_total

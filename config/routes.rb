@@ -212,6 +212,8 @@ Uplo::Application.routes.draw do
         get :low_res_tool
       end
     end
+
+    resources :shipping_prices
   end
 
   # API ROUTING
@@ -233,6 +235,7 @@ Uplo::Application.routes.draw do
         member do
           post :flag
           post :like
+          get  :print_image_preview
           get  :purchases
           get  :sale_chart
           get  :total_sales
@@ -262,10 +265,10 @@ Uplo::Application.routes.draw do
         end
       end
 
+      post "register", :to => "users#register"
       get "total_sales", :to => "users#get_total_sales"
       post "login", :to => "users#login"
       post "logout", :to => "users#logout"
-      post "register", :to => "users#create_user"
       get "reset_password", :to => "users#reset_password"
       post "update_profile", :to => "users#update_profile"
       get 'follow', :to => 'users#set_follow'

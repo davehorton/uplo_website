@@ -52,7 +52,6 @@
     <th>Tier 4<br/>Comm.</th>
     <th>Public</th>
     <th>Private</th>
-    <th>Shipping</th>
     <th></th>
   </tr>
 </thead>
@@ -78,7 +77,6 @@
     <td><%= number_to_percentage product.tier4_commission, precision: 1 %></td>
     <td><%= yes_or_no product.public_gallery %></td>
     <td><%= yes_or_no product.private_gallery %></td>
-    <td><%= number_to_currency(product.shipping_price, :precision => 2) %></td>
     <td>
       <%= link_to 'Edit', edit_admin_product_path(product) %>
       <% unless product.associated_with_any_orders? %>

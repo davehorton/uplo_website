@@ -44,41 +44,6 @@ describe LineItem do
     end
   end
 
-  describe "#set_crop_dimension" do
-    it "should set crop dimension field from a hash" do
-      options = {crop_x: "1445", crop_y: "312", crop_w: "888", crop_h: "888"}
-      line_item.set_crop_dimension(options)
-      line_item.crop_dimension.should == "888x888+1445+312"
-    end
-  end
-
-  describe "#cropped_dimensions" do
-    it "should return an empty array" do
-      line_item.cropped_dimensions.should == []
-    end
-
-    it "should not return an empty array" do
-      options = {crop_x: "1445", crop_y: "312", crop_w: "888", crop_h: "888"}
-      line_item.set_crop_dimension(options)
-      line_item.cropped_dimensions.should == [888, 888, 1445, 312]
-    end
-  end
-
-  describe "#cropping?" do
-    context "with cropping parameters" do
-      it "should return true" do
-        line_item.update_attributes(:crop_x => 40, :crop_y => 50, :crop_h => 40, :crop_w => 50)
-        line_item.cropping?.should be_true
-      end
-    end
-
-    context "without cropping parameters" do
-      it "should return false" do
-        line_item.cropping?.should be_false
-      end
-    end
-  end
-
   describe "#dropbox_path" do
     it "should return the dropbox path" do
       line_item1 = create(:line_item, :content_file_name => 'test.jpg')
@@ -91,6 +56,4 @@ describe LineItem do
       line_item.s3_expire_time.should == "#{Time.zone.now.beginning_of_day.since 25.hours}"
     end
   end
-
 end
-

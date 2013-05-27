@@ -34,7 +34,7 @@
           .numbers
             %span= "Joined #{user.created_at.strftime('%m/%d/%y')}"
             %span.separator= '|'
-            %span= pluralize(user.images_count, 'item')
+            %span= pluralize(user.public_images.size, 'item')
             %span.separator= '|'
             %span= pluralize(user.images_pageview, 'view')
 

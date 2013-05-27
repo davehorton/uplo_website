@@ -21,7 +21,7 @@
           .numbers
             %span= "Joined #{user.confirmed_at.strftime('%m/%d/%y')}"
             %span.separator= '|'
-            %span= pluralize(user.images_count, 'item')
+            %span= pluralize(user.public_images.size, 'item')
             %span.separator= '|'
             %span= pluralize(user.images_pageview, 'view')
 = render_pagination(@data, {:controller => 'home', :action => params[:action]})

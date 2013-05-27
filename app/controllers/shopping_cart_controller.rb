@@ -25,15 +25,24 @@ class ShoppingCartController < ApplicationController
       redirect_to order_image_path(image) and return
     else
       product = Product.find(params[:line_item][:product_id])
+      product_option = ProductOption.find(params[:line_item][:product_option_id])
 
-      line_item = if params[:line_item_id].present?
-                    @cart.order.line_items.find(params[:line_item_id])
-                  else
-                    @cart.order.line_items.new(image_id: image.id)
-                  end
+      if params[:line_item_id].present?
+        line_item = @cart.order.line_items.find(params[:line_item_id])
+        line_item.quantity = params[:line_item][:quantity].to_i
+      else
+        line_item = @cart.order.line_items.where(product_id: product.id, product_option_id: product_option.id).first
+
+        if line_item
+          line_item.quantity += params[:line_item][:quantity].to_i
+        else
+          line_item = @cart.order.line_items.new(image_id: image.id)
+          line_item.quantity = params[:line_item][:quantity].to_i
+        end
+      end
+
       line_item.product_id = product.id
       line_item.product_option_id = params[:line_item][:product_option_id]
-      line_item.quantity = params[:line_item][:quantity].to_i
 
       if line_item.save
         @order = @cart.order.reload

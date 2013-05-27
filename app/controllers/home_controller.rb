@@ -2,6 +2,7 @@ class HomeController < ApplicationController
   self.per_page = 30
 
   skip_before_filter :authenticate_user!, :except => [:friends_feed]
+
   before_filter :accept_gallery_invitation, :only => [:index]
 
   IMAGE_SORT_VIEW = {
@@ -44,9 +45,11 @@ class HomeController < ApplicationController
   end
 
   def terms
+    render :layout => params[:nolayout] ? 'blank' : 'main'
   end
 
   def payment
+    render :layout => params[:nolayout] ? 'blank' : 'main'
   end
 
   def friends_feed

@@ -22,10 +22,3 @@
     <li><%= link_to "#{size.to_name} (#{size.to_recommended_pixels})", edit_admin_size_path(size) %></li>
   <% end %>
 </ul>
-
-<% if @sizes.any? %>
-  <br/>
-  <p>
-    <%= link_to "Rebuild all member uploaded photos", rebuild_photos_admin_sizes_path %><br/>Use this option whenever you've added or edited existing sizes. The rebuilding process happens in the backend and may take a while before all renditions are generated.
-  </p>
-<% end %>
