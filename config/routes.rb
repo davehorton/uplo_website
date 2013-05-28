@@ -5,6 +5,9 @@ Uplo::Application.routes.draw do
   # WEB ROUTING
   root :to => "home#index"
 
+  # preserve legacy path
+  match '/intro' => redirect('/iphone_app')
+
   get "shopping_cart/show"
   post "shopping_cart/update_cart"
   post "shopping_cart/add_to_cart"
