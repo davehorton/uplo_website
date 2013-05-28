@@ -14,7 +14,7 @@
       = current_user.job
     .line_info
       Personal Site:
-      = current_user.website
+      = append_http(current_user.website) if current_user.website
     .line_info
       Bio:
       = current_user.biography

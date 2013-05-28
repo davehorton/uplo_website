@@ -207,4 +207,11 @@ module ApplicationHelper
   def yes_or_no(value)
     value ? t(:'yes') : t(:'no')
   end
+
+  def append_http(link)
+    unless link.start_with?('http')
+      link = "http://#{link}"
+    end
+    link
+  end
 end
