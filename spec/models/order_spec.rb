@@ -67,7 +67,7 @@ describe Order do
         line_item.update_attributes(:quantity => 4)
         order.compute_totals
         order.price_total.to_i.should == 4000
-        order.order_total.to_i.should == 4015
+        order.order_total.to_i.should == 4000
       end
     end
 
@@ -75,7 +75,7 @@ describe Order do
       it "should return result" do
         empty_order.compute_totals
         empty_order.price_total.should be_zero
-        empty_order.order_total.to_i.should == 15
+        empty_order.order_total.to_i.should be_zero
       end
     end
   end

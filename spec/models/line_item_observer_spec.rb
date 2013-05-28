@@ -15,7 +15,7 @@ describe LineItemObserver do
       line_item.update_attributes(:quantity => 4)
       observer = LineItemObserver.instance
       observer.after_save(line_item)
-      line_item.order.order_total.to_i.should == 4015
+      line_item.order.order_total.to_i.should == 4000
     end
   end
 
