@@ -15,19 +15,29 @@ class HomeController < ApplicationController
     User::SORT_OPTIONS[:name] => 'Best Match',
     User::SORT_OPTIONS[:date_joined] => 'Date Joined'  }
 
+  def index
+    session[:back_url] = url_for(:controller => 'home', :action => "browse") if session[:back_url].nil?
+    @images = Image.spotlight.paginate_and_sort(filtered_params)
+    @current_views = 'recent images'
+    filtered_params[:sort_direction] = 'desc'
+    filtered_params[:sort_field] = "images.updated_at"
+    @recent_images = Image.public_access.paginate_and_sort(filtered_params)
+  end
 
   def browse
     @current_views = IMAGE_SORT_VIEW[Image::SORT_OPTIONS[:recent]]
     filtered_params[:sort_direction] = 'desc'
     filtered_params[:sort_field] = "images.created_at"
     @data = Image.public_access.paginate_and_sort(filtered_params)
+    @mode = 'Browse'
   end
 
-  def index
+  def spotlight
     @current_views = IMAGE_SORT_VIEW[Image::SORT_OPTIONS[:spotlight]]
     filtered_params[:sort_direction] = ''
     filtered_params[:sort_field] = "random()"
     @data = Image.spotlight.paginate_and_sort(filtered_params)
+    @mode = 'Spotlight'
     render :template => 'home/browse'
   end
 
@@ -41,9 +51,6 @@ class HomeController < ApplicationController
 
   def friends_feed
     @images = current_user.friends_images.popular_with_pagination(filtered_params)
-  end
-
-  def intro
   end
 
   def search
