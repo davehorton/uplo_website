@@ -18,7 +18,7 @@ Uplo::Application.routes.draw do
   get "spotlight", :to => "home#spotlight"
   get "terms", :to => "home#terms"
   get "payment", :to => "home#payment"
-  get "intro", :to => "home#intro"
+  get "iphone_app", :to => "home#iphone_app"
   get 'friends', :to => 'home#friends_feed'
   get "back", :to => "application#redirect_back"
   get "my_account", :to => "users#account"
