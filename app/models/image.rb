@@ -112,10 +112,14 @@ class Image < ActiveRecord::Base
     images = images.where("created_at >= ?", opts[:since]) if opts.has_key?(:since)
 
     images.find_each do |image|
-      image.available_products.includes(:product_options).each do |product|
-        product.product_options.each do |po|
-          image.find_or_generate_preview_image(po)
+      begin
+        image.available_products.includes(:product_options).each do |product|
+          product.product_options.each do |po|
+            image.find_or_generate_preview_image(po)
+          end
         end
+      rescue Exception => ex
+        ExternalLogger.new.log_error(ex, "Image.generate_previews", { image_id: image.id })
       end
     end
   end
