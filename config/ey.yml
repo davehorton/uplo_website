@@ -28,3 +28,5 @@ environments:
     - .git
     migrate: false
     precompile_assets: true
+  staging:
+    migrate: false
