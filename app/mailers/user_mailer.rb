@@ -45,4 +45,9 @@ class UserMailer < ApplicationMailer
 
     mail(:to => @user.friendly_email, :subject => subject)
   end
+
+  def deliver_welcome_email(user)
+    mail(:to =>  user.email, :subject => "Welcome to UPLO!!")
+  end
+
 end

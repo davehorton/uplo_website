@@ -8,13 +8,13 @@ describe Size do
 
   describe "#to_name" do
     it "should return value" do
-      size.to_name.should == "50x45"
+      size.to_name.should == "45x50"
     end
   end
 
   describe "to_a" do
     it "should return array" do
-      size.to_a.should == [50, 45]
+      size.to_a.should == [45, 50]
     end
   end
 
