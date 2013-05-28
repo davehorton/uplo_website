@@ -472,7 +472,7 @@ class User < ActiveRecord::Base
   end
 
   def confirm!
-    UserMailer.deliver_welcome_alert(self).deliver
+    UserMailer.deliver_welcome_email(self).deliver
     super
   end
 
