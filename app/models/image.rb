@@ -107,10 +107,16 @@ class Image < ActiveRecord::Base
     public_access.paginate_and_sort(params)
   end
 
-  # reprocesses images based on any new sizes
-  def self.rebuild_all_photos
-    Image.find_each do |image|
-      image.image.reprocess!
+  def self.generate_previews(opts = {})
+    images = Image.scoped
+    images = images.where("created_at >= ?", opts[:since]) if opts.has_key?(:since)
+
+    images.find_each do |image|
+      image.available_products.includes(:product_options).each do |product|
+        product.product_options.each do |po|
+          image.find_or_generate_preview_image(po)
+        end
+      end
     end
   end
 

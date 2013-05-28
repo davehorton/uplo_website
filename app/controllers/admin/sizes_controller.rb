@@ -21,12 +21,6 @@ class Admin::SizesController < Admin::AdminController
     end
   end
 
-  def rebuild_photos
-    Image.delay.rebuild_all_photos
-    flash[:notice] = "Images scheduled for reprocessing."
-    redirect_to admin_sizes_path
-  end
-
   protected
 
     def set_current_tab

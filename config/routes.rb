@@ -205,9 +205,7 @@ Uplo::Application.routes.draw do
     end
 
     resources :products, except: [:show]
-    resources :sizes, except: [:show] do
-      get :rebuild_photos, on: :collection
-    end
+    resources :sizes, except: [:show]
     resources :mouldings, except: [:show]
 
     resources :image_tools, only: [:index] do
