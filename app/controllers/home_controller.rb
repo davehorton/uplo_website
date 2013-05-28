@@ -25,8 +25,8 @@ class HomeController < ApplicationController
 
   def index
     @current_views = IMAGE_SORT_VIEW[Image::SORT_OPTIONS[:spotlight]]
-    filtered_params[:sort_direction] = 'desc'
-    filtered_params[:sort_field] = "images.created_at"
+    filtered_params[:sort_direction] = ''
+    filtered_params[:sort_field] = "random()"
     @data = Image.spotlight.paginate_and_sort(filtered_params)
     render :template => 'home/browse'
   end

@@ -36,7 +36,6 @@ class Image < ActiveRecord::Base
                  :set_as_cover_if_first_one
   before_destroy :ensure_not_associated_with_an_order
 
-  default_scope order('images.id desc')
   scope :removed,     where(removed: true)
   scope :not_removed, where(removed: false)
 
