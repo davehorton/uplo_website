@@ -4,9 +4,7 @@ class CreditCard < ActiveMerchant::Billing::CreditCard
                            ['American Express', 'american_express'],
                            ['Discover', 'discover'],
                            ['MasterCard', 'master'],
-                           ['Visa', 'visa'],
-                           ['JCB', 'jcb'],
-                           ['Diners Club/Carte Blanche', 'diners_club']
+                           ['Visa', 'visa']
                           ]
 
   def self.brands

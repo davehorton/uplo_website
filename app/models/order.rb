@@ -74,10 +74,14 @@ class Order < ActiveRecord::Base
       total_shipping = 0.00
 
       line_items.includes(:product).each do |line|
-        sp = ShippingPrice.where(product_id: line.product_id).where("quantity <= ?", line.quantity).all
+        sp = ShippingPrice.where(product_id: line.product_id).where("quantity >= ?", line.quantity).all
         if sp.any?
-          logger.debug "sp: #{sp.inspect}"
-          total_shipping += sp.last.amount
+          total_shipping += sp.first.amount
+        else
+          sp = ShippingPrice.where(product_id: line.product_id).all
+          if sp.any?
+            total_shipping += sp.last.amount
+          end
         end
       end
 

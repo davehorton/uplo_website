@@ -21,5 +21,3 @@ For your reference, you can use the following test credit card numbers when test
 - Discover Test Card: 6011000000000012
 - Visa Test Card: 4007000000027
 - Second Visa Test Card: 4012888818888
-- JCB: 3088000000000017
-- Diners Club/ Carte Blanche: 38000000000006
