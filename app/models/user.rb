@@ -66,7 +66,7 @@ class User < ActiveRecord::Base
   validates_presence_of :first_name, :last_name, :username, :message => 'cannot be blank'
   validates :password, :presence => true, :confirmation => true, :if => :check_password?
   validates_format_of :website, :allow_blank => true,
-          :with => /(^$)|(^(http|https):\/\/[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(([0-9]{1,5})?\/.*)?$)/ix
+          :with => /(^$)|([a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(([0-9]{1,5})?\/.*)?$)/ix
   validates_uniqueness_of :username, :message => 'is taken. Choose another one.'
 
   validates_length_of :first_name, :in => 1..30
