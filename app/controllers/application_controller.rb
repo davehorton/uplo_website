@@ -12,6 +12,12 @@ class ApplicationController < ActionController::Base
   before_filter :authenticate_user!
   before_filter :set_current_tab, :check_banned_user
 
+  helper_method :gallery_owner?
+
+  def gallery_owner?(gallery)
+    gallery && gallery.user == current_user
+  end
+
   def result_hash
     @result_hash ||= {}
   end
@@ -47,7 +53,7 @@ class ApplicationController < ActionController::Base
   end
 
   def after_sign_in_path_for(resource)
-    "/"
+    session[:user_return_to].presence || root_url
   end
 
   def sticky_flash_message_key

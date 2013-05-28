@@ -9,6 +9,7 @@
               :input_html => {:class => 'signin'}, 
               :label => t('public.signin.password'), 
               :required => true)
-    %p.signin= f.submit "Sign in", :class => "button medium"
+    %p.signin= f.submit "Sign in", :class => "button medium align-top"
   - if devise_mapping.recoverable? && controller_name != 'passwords'
+    .align-top
     = link_to "Forgot your password?", new_password_path(resource_name), :class => "icon-info-link"

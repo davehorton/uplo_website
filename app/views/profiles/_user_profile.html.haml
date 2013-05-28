@@ -1,5 +1,4 @@
-- is_current_user = current_user?(user.id)
-- if is_current_user
+- if profile_owner?(user)
   - user_profile_page = profile_path
 - else
   - user_profile_page = profile_user_path(user)
@@ -7,7 +6,7 @@
   .avatar.left
     %a{ :href => "#{user_profile_page}" }
       = image_tag(user.avatar_url(:large), :class => 'avatar large left')
-    - if is_current_user
+    - if profile_owner?(user)
       .clear
       .edit-pane
         .icon.edit.left.left
@@ -17,29 +16,35 @@
       .name.text.black.bold.font20
         %a{ :href => "#{user_profile_page}" }= user.fullname.truncate(18)
       .text.fuzzy-gray.font12= "Joined #{ user.joined_date }"
-    - if is_current_user
+    - if profile_owner?(user)
       .edit-pane.left
         .icon.edit.left
         .text.black.font11 Edit Profile Information
 
 .line-separator.left
 .biography.left
-  .text.wordwrap.black.bold.font14.span= user.location
+  .text.wordwrap.black.bold.font14.span= user.location 
   .text.wordwrap.black.bold.font12.span= user.job
   .text.wordwrap.black.bold.font12.span= link_to(user.website, user.website) if user.website?
   .text.wordwrap.gray.font12.span= user.biography
 
-- if is_current_user
-  = render :partial => 'edit_profile_photo', :layout => 'layouts/popup', :locals => { :title => 'Edit Your Profile Photo', :id => 'edit-profile-photo-popup', :user => user }
-  = render :partial => 'edit_profile_info', :layout => 'layouts/popup', :locals => { :title => 'Edit Your Profile Information', :id => 'edit-profile-info-popup', :user => user }
-  = render :partial => 'delete_confirm', :layout => 'layouts/popup', :locals => { :title => 'Delete Confirm', :id => 'delete-confirm-popup', :popup_class => 'profile-photo', :text => 'Are you sure you want to delete this profile photo?' }
-- else
-  .line-separator.left
-  - is_followed_user = user.has_follower?(current_user.id)
-  - follow_class = is_followed_user ? 'unfollow' : 'follow'
-  - note_class = is_followed_user ? '' : 'hide'
-  .follow-section.left
-    #btn-follow.button.left{ :class => "#{ follow_class }", :data => { 'author-id' => "#{ user.id }", 'following' => "#{ is_followed_user }"} }
-    .note.text.light-gray.left{ :class => "#{ note_class }" }
+  - if profile_owner?(user)
+    = render :partial => 'edit_profile_photo', :layout => 'layouts/popup', :locals => { :title => 'Edit Your Profile Photo', :id => 'edit-profile-photo-popup', :user => user }
+    = render :partial => 'edit_profile_info', :layout => 'layouts/popup', :locals => { :title => 'Edit Your Profile Information', :id => 'edit-profile-info-popup', :user => user }
+    = render :partial => 'delete_confirm', :layout => 'layouts/popup', :locals => { :title => 'Delete Confirm', :id => 'delete-confirm-popup', :popup_class => 'profile-photo', :text => 'Are you sure you want to delete this profile photo?' }
+    .line-separator.left
+  - if current_user && !profile_owner?(user)
+    - is_followed_user = user.has_follower?(current_user.id)
+    - follow_class = is_followed_user ? 'unfollow' : 'follow'
+    - note_class = is_followed_user ? '' : 'hide'
+    .follow-section.left
+      #btn-follow.button.left{ :class => "#{ follow_class }", :data => { 'author-id' => "#{ user.id }", 'following' => "#{ is_followed_user }"} }
+      .note.text.light-gray.left{ :class => "#{ note_class }" }
+    - if is_followed_user
       .icon.check.left
       .left= "You are following this user.".html_safe
+  - unless current_user
+    .follow-section.left
+      #btn-follow.button.left{ :class => "follow"}
+        = link_to "&nbsp;".html_safe, require_login_path, :class => "like-link"
+

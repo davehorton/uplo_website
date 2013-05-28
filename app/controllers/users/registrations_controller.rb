@@ -1,23 +1,14 @@
 class Users::RegistrationsController < Devise::RegistrationsController
   layout 'main'
-  before_filter :find_invitation, :only => [:new, :create]
+  before_filter :get_invitation, :only => [:new, :create]
+  skip_before_filter :authenticate_user!
 
   def new
-    if @inv
-      super
-    else
-      flash[:info] = 'Please login.'
-      redirect_to '/'
-    end
+    super
   end
 
   def create
-    if @inv
-      super
-    else
-      flash[:info] = 'Invalid invitation!'
-      redirect_to '/'
-    end
+    super
   end
 
   def update
@@ -26,7 +17,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
 
   protected
 
-  def find_invitation
+  def get_invitation
     @inv = if params[:token].present?
              Invitation.find_by_token params[:token]
            elsif params[:secret_token].present?

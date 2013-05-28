@@ -148,7 +148,7 @@ module ApplicationHelper
   end
 
   def current_user?(user_id)
-    user_id == current_user.id
+    user_id == current_user.try(:id)
   end
 
   def pluralize_without_count(count, noun)

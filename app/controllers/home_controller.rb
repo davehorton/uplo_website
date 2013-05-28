@@ -1,7 +1,8 @@
 class HomeController < ApplicationController
   self.per_page = 30
 
-  skip_before_filter :authenticate_user!, only: [:index, :payment, :privacy, :terms]
+  skip_before_filter :authenticate_user!, :except => [:friends_feed]
+
   before_filter :accept_gallery_invitation, :only => [:index]
 
   IMAGE_SORT_VIEW = {
@@ -12,22 +13,8 @@ class HomeController < ApplicationController
 
   USER_SORT_VIEW = {
     User::SORT_OPTIONS[:name] => 'Best Match',
-    User::SORT_OPTIONS[:date_joined] => 'Date Joined'
-  }
+    User::SORT_OPTIONS[:date_joined] => 'Date Joined'  }
 
-  def index
-    session[:back_url] = url_for(:controller => 'home', :action => "browse") if session[:back_url].nil?
-    @images = Image.spotlight.paginate_and_sort(filtered_params)
-    if user_signed_in?
-      @current_views = 'recent images'
-      filtered_params[:sort_direction] = 'desc'
-      filtered_params[:sort_field] = "images.updated_at"
-      @recent_images = Image.public_access.paginate_and_sort(filtered_params)
-      render :template => 'home/spotlight'
-    else
-      @devise_message = session.delete(:devise_message)
-    end
-  end
 
   def browse
     @current_views = IMAGE_SORT_VIEW[Image::SORT_OPTIONS[:recent]]
@@ -36,7 +23,7 @@ class HomeController < ApplicationController
     @data = Image.public_access.paginate_and_sort(filtered_params)
   end
 
-  def spotlight
+  def index
     @current_views = IMAGE_SORT_VIEW[Image::SORT_OPTIONS[:spotlight]]
     filtered_params[:sort_direction] = 'desc'
     filtered_params[:sort_field] = "images.created_at"
@@ -85,6 +72,12 @@ class HomeController < ApplicationController
     render :template => 'home/browse'
   end
 
+  def require_login
+    session[:user_return_to] = request.referrer
+    flash[:alert] = "You need to sign in or sign up before continuing."
+    redirect_to new_user_session_path
+  end
+
   protected
 
     def process_search_params
@@ -104,4 +97,5 @@ class HomeController < ApplicationController
         return redirect_to gallery_images_path(gallery_invitation.gallery)
       end
     end
+
 end

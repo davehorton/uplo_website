@@ -13,6 +13,7 @@ Uplo::Application.routes.draw do
   get "shopping_cart/checkout"
 
   get "browse", :to => "home#browse"
+  get "require_login", :to => "home#require_login"
   get "search", :to => "home#search"
   get "spotlight", :to => "home#spotlight"
   get "terms", :to => "home#terms"
@@ -93,6 +94,7 @@ Uplo::Application.routes.draw do
       get  :product_options
       get  :public
       put  :switch_like
+      get  :switch_like
       put  :tier
     end
   end
@@ -129,6 +131,7 @@ Uplo::Application.routes.draw do
     end
 
     get "signin", :to => "users/sessions#new"
+
     post "signin", :to => "users/sessions#new"
     get "register", :to => "users/registrations#new"
     delete "signout", :to => "users/sessions#destroy"

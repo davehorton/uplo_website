@@ -3,7 +3,7 @@
     .header.text.white.bold New to UPLO? Create an account.
     .title.text.bold.font16.line18
       %span Already a member?
-      %a.text.highlight{ :href => '/'} Login
+      %a.text.highlight{ :href => new_user_session_path } Login
     - message = resource.errors.full_messages.first || @devise_message
     .message.text.highlight{:class => message ? "" : "hidden"}=  message
     = form_for(:user, :url => registration_path(:user), :html => {:id => 'register-form', :class => 'left'}) do |f|
@@ -19,8 +19,11 @@
       .line
         .half.left
           = f.label :user_email, 'Email Address', :class => 'left'
-          = f.text_field :email, :required => true, :autofocus => true, :value => @inv.email, :disabled => true
-          = f.hidden_field :email, :as => :hidden, :value => @inv.email
+          - if @inv.present?
+            = f.text_field :email, :required => true, :autofocus => true, :value => @inv.email, :disabled => true
+            = f.hidden_field :email, :as => :hidden, :value => @inv.email          
+          - else
+            = f.text_field :email, :required => true, :autofocus => true
         .half.right
           = f.label :user_username, 'username', :class => 'left'
           = f.text_field :username, :required => true, :autofocus => true
