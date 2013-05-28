@@ -471,6 +471,11 @@ class User < ActiveRecord::Base
     { image_likes_count: image.reload.image_likes.size }
   end
 
+  def confirm!
+    UserMailer.deliver_welcome_alert(self).deliver
+    super
+  end
+
   private
 
     def check_password?
