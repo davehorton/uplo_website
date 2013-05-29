@@ -13,6 +13,10 @@
 - content_for :right_content do
   .text.black.font18.bold= @image.name
   .line-separator
+  - if current_user && current_user.admin? 
+    .text.black.font18.bold
+    = toggle_hidden_by_admin_link(@image)
+    .line-separator
   .user-section.left
     - images_count = current_user ? @author.images.count : @author.public_images.count
     - author_profile = profile_user_path(@author)

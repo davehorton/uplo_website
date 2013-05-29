@@ -20,6 +20,10 @@
   %li{:class => set_current_tab("image_tools")}
     %div
       = link_to 'Image Tools', [:admin, :image_tools]
+  %li{:class => set_current_tab("hidden_images")}
+    %div
+      = link_to 'Hidden Images', admin_hidden_images_path
   %li{:class => set_current_tab("shipping_prices")}
     %div
       = link_to 'Shipping', [:admin, :shipping_prices]
+ 

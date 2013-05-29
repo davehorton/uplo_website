@@ -25,7 +25,7 @@
 .biography.left
   .text.wordwrap.black.bold.font14.span= user.location
   .text.wordwrap.black.bold.font12.span= user.job
-  .text.wordwrap.black.bold.font12.span= link_to(user.website, append_http(user.website)) if user.website?
+  .text.wordwrap.black.bold.font12.span= link_to(user.website, "#") if user.website?
   .text.wordwrap.gray.font12.span= user.biography
 
   - if profile_owner?(user)

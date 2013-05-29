@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130526060010) do
+ActiveRecord::Schema.define(:version => 20130529053654) do
 
   create_table "addresses", :force => true do |t|
     t.string   "first_name"
@@ -132,6 +132,7 @@ ActiveRecord::Schema.define(:version => 20130526060010) do
     t.boolean  "promoted",           :default => false
     t.integer  "tier_id"
     t.text     "image_meta"
+    t.boolean  "hidden_by_admin",    :default => false
   end
 
   add_index "images", ["gallery_cover"], :name => "index_images_on_gallery_cover"
