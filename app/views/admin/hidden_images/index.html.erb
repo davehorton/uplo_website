@@ -1,0 +1,25 @@
+<%= page_title 'Hide Images' %>
+<%= render :partial => "admin/admin_menu" %>
+<div class="admin spotlights clearfix">
+  <div id="top" class="title-bar clearfix">
+  </div>
+  <div class="content clearfix">
+    <% @images.each_with_index do |image, idx| %>
+      <div class="image-container" class=(((idx + 1) % 6) == 0 ? 'no-margin-right' : '')>
+        <%= link_to (image_tag image.url(:thumb), :alt => image.name, :class => "image-thumb image small"), browse_image_path(image), :class => "image-link" %>
+        <div class="image-info">
+          <div class="image-name">
+            <%= link_to image.name.truncate(20), browse_image_path(image) %>
+          </div>
+          <div class="username">
+            <%= link_to image.user.try(:username), profile_path(:user_id => image.user.id) %>
+          </div>
+          <div class="pageview"><%= image.hidden_by_admin ? 'Hidden' : 'Not Hidden' %></div>
+          <div class="pageview"><%= pluralize(image.pageview, 'View') %></div>
+          <div class="permission"><%= image.gallery.permission.to_s %></div>
+        </div>
+      </div>
+    <% end %>
+    <%= render_pagination(@images) %>
+</div>
+</div>

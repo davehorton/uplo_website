@@ -208,10 +208,13 @@ module ApplicationHelper
     value ? t(:'yes') : t(:'no')
   end
 
-  def append_http(link)
-    unless link.start_with?('http')
-      link = "http://#{link}"
+  def is_hidden(image)
+    html_options = {:class => "toggle-hide", :method => :put, :remote => true}
+    if image.hidden_by_admin
+      link_to "UnHide Image", toggle_hidden_by_admin_admin_hidden_image_path(image), html_options
+    else
+      link_to "Hide Image", toggle_hidden_by_admin_admin_hidden_image_path(image), html_options
     end
-    link
   end
+
 end

@@ -215,6 +215,11 @@ Uplo::Application.routes.draw do
     end
 
     resources :shipping_prices
+    resources :hidden_images, :only => [:index] do
+      member do
+        put :toggle_hidden_by_admin
+      end
+    end
   end
 
   # API ROUTING

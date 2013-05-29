@@ -70,6 +70,12 @@ describe Image do
     Image.spotlight.should == [image]
   end
 
+  it "has a not hidden scope" do
+    image.update_attribute(:hidden_by_admin, false)
+    Image.not_hidden.should == [image]
+  end
+
+
   describe ".flagged_of_type" do
     context "when image flag type is nil" do
       it "should return flagged images" do

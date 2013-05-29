@@ -1,0 +1,3 @@
+<% if @image %>
+  $(".toggle-hide").replaceWith('<%= escape_javascript(is_hidden(@image)) %>');
+<% end %>

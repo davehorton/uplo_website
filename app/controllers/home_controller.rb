@@ -28,7 +28,7 @@ class HomeController < ApplicationController
     @current_views = IMAGE_SORT_VIEW[Image::SORT_OPTIONS[:recent]]
     filtered_params[:sort_direction] = 'desc'
     filtered_params[:sort_field] = "images.created_at"
-    @data = Image.public_access.paginate_and_sort(filtered_params)
+    @data = Image.public_access.not_hidden.paginate_and_sort(filtered_params)
     @mode = 'Browse'
   end
 
