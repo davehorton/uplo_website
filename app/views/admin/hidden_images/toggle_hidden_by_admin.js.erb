@@ -1,0 +1,3 @@
+<% if @image %>
+  $(".toggle-hide").replaceWith('<%= escape_javascript(toggle_hidden_by_admin_link(@image)) %>');
+<% end %>
