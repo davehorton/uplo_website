@@ -14,6 +14,7 @@
           <div class="username">
             <%= link_to image.user.try(:username), profile_path(:user_id => image.user.id) %>
           </div>
+          <div class="pageview"><%= image.hidden_by_admin ? 'Hidden' : 'Not Hidden' %></div>
           <div class="pageview"><%= pluralize(image.pageview, 'View') %></div>
           <div class="permission"><%= image.gallery.permission.to_s %></div>
         </div>

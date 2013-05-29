@@ -70,9 +70,9 @@ describe Image do
     Image.spotlight.should == [image]
   end
 
-  it "has a hidden scope" do
-    image.update_attribute(:hidden_by_admin, true)
-    Image.hidden.should == [image]
+  it "has a not hidden scope" do
+    image.update_attribute(:hidden_by_admin, false)
+    Image.not_hidden.should == [image]
   end
 
 

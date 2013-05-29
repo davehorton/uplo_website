@@ -49,7 +49,7 @@ class Image < ActiveRecord::Base
 
   scope :spotlight, where(promoted: true)
   scope :with_gallery, includes(:gallery)
-  scope :hidden, where(hidden_by_admin: true)
+  scope :not_hidden, where(hidden_by_admin: false)
 
   def self.flagged_of_type(image_flag_type = nil)
     images = Image.flagged

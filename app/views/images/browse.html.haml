@@ -15,7 +15,7 @@
   .line-separator
   - if current_user && current_user.admin? 
     .text.black.font18.bold
-    = toggle_hidden_by_admin_link(@image)
+    = is_hidden(@image)
     .line-separator
   .user-section.left
     - images_count = current_user ? @author.images.count : @author.public_images.count
