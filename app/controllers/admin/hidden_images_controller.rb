@@ -4,7 +4,7 @@ class Admin::HiddenImagesController < Admin::AdminController
   def index
     @sort_field = params[:sort_field] || "date_uploaded"
     @sort_direction = params[:sort_direction] || "asc"
-    @images = Image.public_access.with_gallery.paginate_and_sort(filtered_params.merge(:sort_field => @sort_field, :sort_direction => @sort_direction ))
+    @images = Image.where(hidden_by_admin: true).public_access.with_gallery.paginate_and_sort(filtered_params.merge(:sort_field => @sort_field, :sort_direction => @sort_direction ))
   end
 
   def toggle_hidden_by_admin

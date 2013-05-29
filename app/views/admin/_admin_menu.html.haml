@@ -8,22 +8,21 @@
   %li{:class => set_current_tab("member_profiles")}
     %div
       = link_to t("admin.member_profiles"), {:controller => :members, :action => :index}
-  %li{:class => set_current_tab("spotlights")}
-    %div
-      = link_to t("admin.spotlights"), {:controller => :spotlights, :action => :index}
   %li{:class => set_current_tab("invites")}
     %div
       = link_to 'Invites', {:controller => :invites, :action => :index}
+  %li{:class => set_current_tab("spotlights")}
+    %div
+      = link_to t("admin.spotlights"), {:controller => :spotlights, :action => :index}
+  %li{:class => set_current_tab("hidden_images")}
+    %div
+      = link_to 'Hidden', admin_hidden_images_path
   %li{:class => set_current_tab("products")}
     %div
       = link_to 'Products', [:admin, :products]
-  %li{:class => set_current_tab("image_tools")}
-    %div
-      = link_to 'Image Tools', [:admin, :image_tools]
-  %li{:class => set_current_tab("hidden_images")}
-    %div
-      = link_to 'Hidden Images', admin_hidden_images_path
   %li{:class => set_current_tab("shipping_prices")}
     %div
       = link_to 'Shipping', [:admin, :shipping_prices]
- 
+  %li{:class => set_current_tab("image_tools")}
+    %div
+      = link_to 'Image Tools', [:admin, :image_tools]

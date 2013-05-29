@@ -36,8 +36,8 @@ en:
   admin:
     flagged_images: "Flagged Images"
     flagged_users: "Flagged Users"
-    member_profiles: "Member Profiles"
-    spotlights: "Promote to Spotlight"
+    member_profiles: "Members"
+    spotlights: "Spotlight"
     flagged_images_type:
       terms_of_use_violation: "Terms of Use Violation"
       copyright: "Copyright"
