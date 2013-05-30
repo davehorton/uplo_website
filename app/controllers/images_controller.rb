@@ -118,14 +118,12 @@ class ImagesController < ApplicationController
   end
 
   def public
-    @image = Image.unflagged.find_by_id(params[:id])
-    if @image.nil? || (@image.user.blocked? && !current_user.admin?)
-      render_not_found
+    @image = Image.not_removed.public_access.find_by_id(params[:id])
+    if @image.nil?
+      redirect_to root_path
+    else
+      redirect_to browse_image_path(@image)
     end
-    @author = @image.user
-    @sale = Sales.new(@image)
-    @purchased_info = @sale.raw_image_purchased(filtered_params)
-    render :layout => 'public', :formats => 'html'
   end
 
   def public_images
