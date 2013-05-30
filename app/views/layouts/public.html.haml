@@ -13,6 +13,7 @@
     = javascript_include_tag 'application'
     = yield :head
     = render(partial: "analytics/google") if Rails.env.production?
+    = render(partial: "analytics/woopra") if Rails.env.production?
 
   = body_tag do
     #fb-root
