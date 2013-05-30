@@ -21,7 +21,7 @@ class HomeController < ApplicationController
     @current_views = 'recent images'
     filtered_params[:sort_direction] = 'desc'
     filtered_params[:sort_field] = "images.updated_at"
-    @recent_images = Image.public_access.paginate_and_sort(filtered_params)
+    @recent_images = Image.public_access.not_hidden.paginate_and_sort(filtered_params)
   end
 
   def browse
