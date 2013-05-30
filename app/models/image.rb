@@ -127,7 +127,7 @@ class Image < ActiveRecord::Base
 
   delegate :username, :to => :user, allow_nil: true
   delegate :id, :fullname, :to => :user, allow_nil: true, prefix: true
-  delegate :name, :to => :gallery, allow_nil: true, prefix: true
+  delegate :name, :is_public?, :to => :gallery, allow_nil: true, prefix: true
 
   def gallery_cover=(is_cover)
     gallery.images.update_all(gallery_cover: false) if is_cover && is_cover != '0'

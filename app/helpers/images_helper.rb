@@ -14,7 +14,7 @@ module ImagesHelper
   # TODO: move to ability class
   def can_promote_image?(image, user = nil)
     user ||= current_user
-    (current_user.admin? && !image.promoted? && !image.removed? && !image.flagged?)
+    (current_user.admin? && image.gallery_is_public? && !image.promoted? && !image.removed? && !image.flagged?)
   end
 
   def size_options(sizes, selected_size=nil)
