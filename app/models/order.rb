@@ -112,7 +112,7 @@ class Order < ActiveRecord::Base
       PaymentMailer.delay.inform_new_order(id)
 
     rescue Exception => exc
-      ExternalLogger.log_error(exc, "Finalizing transaction failed")
+      ExternalLogger.new.log_error(exc, "Finalizing transaction failed")
       raise
     end
 
