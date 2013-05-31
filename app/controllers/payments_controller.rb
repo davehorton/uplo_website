@@ -68,58 +68,60 @@ class PaymentsController < ApplicationController
 
   def checkout
     case params[:type]
-      when "pp"
-        total_as_cents, setup_purchase_params = get_setup_purchase_params(request)
-        setup_response = pp_gateway.setup_purchase(total_as_cents, setup_purchase_params)
-        redirect_to pp_gateway.redirect_url_for(setup_response.token)
-      when "an"
-        order_info = params[:order].clone
-        user_info = order_info.delete(:user)
+    when "pp"
+      total_as_cents, setup_purchase_params = get_setup_purchase_params(request)
+      setup_response = pp_gateway.setup_purchase(total_as_cents, setup_purchase_params)
+      redirect_to pp_gateway.redirect_url_for(setup_response.token) and return
 
-        if params[:ship_to_billing].present?
-          order_info[:shipping_address_attributes] = order_info[:billing_address_attributes]
-        end
+    when "an"
+      order_info = params[:order].clone
+      user_info = order_info.delete(:user)
 
-        # set user info
-        if params[:use_stored_cc].to_i == 0
-          @credit_card = CreditCard.build_card_from_param(user_info)
-          user_info[:card_number] = @credit_card.display_number
-          set_expiration(user_info)
-        else
-          user_info = {}
-        end
-        user_info[:billing_address_attributes] = order_info[:billing_address_attributes]
-        user_info[:shipping_address_attributes] = order_info[:shipping_address_attributes]
+      if params[:ship_to_billing].present?
+        order_info[:shipping_address_attributes] = order_info[:billing_address_attributes]
+      end
 
-        @order = Order.find_by_id(params[:order_id])
+      # set user info
+      if params[:use_stored_cc].to_i == 0
+        @credit_card = CreditCard.build_card_from_param(user_info)
+        user_info[:card_number] = @credit_card.display_number
+        set_expiration(user_info)
+      else
+        user_info = {}
+      end
+      user_info[:billing_address_attributes] = order_info[:billing_address_attributes]
+      user_info[:shipping_address_attributes] = order_info[:shipping_address_attributes]
 
-        if @order.update_attributes(order_info)
-          # TODO: update tax + price follow shipping state
-          @order.update_tax_by_state
-          @order.compute_totals
+      @order = Order.find_by_id(params[:order_id])
 
-          if current_user.update_profile(user_info)
-            if @credit_card && !@credit_card.valid?
-              flash[:error] = "Please fill all required fields first!"
-              return redirect_to :controller => 'orders', :action => 'index'
-            end
+      if @order.update_attributes(order_info)
+        # TODO: update tax + price follow shipping state
+        @order.update_tax_by_state
+        @order.compute_totals
 
-            response = Payment.process_purchase(current_user, @order, @credit_card)
-            success = !response.nil? && response.success?
-            if success
-              finalize_cart
-              flash[:success] = "Congratulations! Your order is being processed."
-              redirect_to order_path(@order) and return
-            else
-              flash.now[:error] = "Problem with your order!"
-              render :template => "orders/index", :params => params and return
-            end
+        if current_user.update_profile(user_info)
+          if @credit_card && !@credit_card.valid?
+            flash[:error] = "Please fill all required fields first!"
+            redirect_to(:controller => 'orders', :action => 'index') and return
+          end
+
+          response = Payment.process_purchase(current_user, @order, @credit_card)
+          success = !response.nil? && response.success?
+
+          if success
+            finalize_cart
+            flash[:success] = "Congratulations! Your order is being processed."
+            redirect_to order_path(@order) and return
           else
-            render :template => "orders/index", :params => params and return
+            flash.now[:error] = "Problem with your order!"
+            render(:template => "orders/index", :params => params) and return
           end
         else
-          render :template => "orders/index", :params => params
+          render(:template => "orders/index", :params => params) and return
         end
+      else
+        render :template => "orders/index", :params => params
+      end
     end
   end
 
