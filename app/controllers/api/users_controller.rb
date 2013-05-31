@@ -235,8 +235,8 @@ class Api::UsersController < Api::BaseController
   # GET /api/card_info
   def get_user_card_info
     render json: { card_info: { name_on_card: current_user.name_on_card, card_type: current_user.card_type,
-      card_number: current_user.card_number, expiration: current_user.expiration.present? ? Date.parse(current_user.expiration).strftime("%m/%Y") : '',
-      cvv: current_user.cvv }}, status: :ok
+      card_number: current_user.card_number, expiration: '',
+      cvv: '***' }}, status: :ok
   end
 
   # POST /api/withdraw
