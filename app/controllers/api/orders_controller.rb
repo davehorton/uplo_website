@@ -102,66 +102,6 @@ class Api::OrdersController < Api::BaseController
     render json: { msg: ex.message }, status: :bad_request
   end
 
-  # POST: /api/finalize_order
-  # params:
-  # {order => {:id => 1, :transaction_code => "*", :transaction_status => "*"}
-  def finalize_order
-    order_info = params[:order]
-    order = Order.find_by_id current_user.cart.order_id
-    if order.nil?
-      @result[:msg] = "This order does not exist anymore!"
-      @result[:success] = false
-      return render :json => @result
-    end
-
-    card_required_info = ['name_on_card', 'card_type', 'card_number', 'expiration']
-    expires_on = Date.parse order_info[:expiration]
-    order_info[:expiration] = expires_on.strftime("%m-%Y")
-    order_info[:user] = current_user
-
-    # Checking requested information
-    card_required_info.each { |val|
-      if !params[:order].has_key?(val) || params[:order][val].blank?
-        @result[:msg] = "Please fill all required fields first!"
-        @result[:success] = false
-        return render :json => @result
-      end
-    }
-
-    order.transaction_date = Time.now
-    card_string = order_info["card_number"]
-    done = false
-
-    if current_user.update_profile(order_info)
-      # TODO: update tax + price follow shipping state
-      order.update_tax_by_state
-      order.compute_totals
-
-      an_value = Payment.create_authorizenet_test(card_string, expires_on, {:shipping => order_info[:shipping_address_attributes], :address => order_info[:billing_address_attributes]})
-      response = an_value[:transaction].purchase(order.order_total, an_value[:credit_card])
-      success = !response.nil? && response.success?
-
-      if success
-        finalize_cart
-        @result[:transaction_id] = response.transaction_id
-        done = true
-      else
-        @result[:success] = false
-        @result[:msg] = 'Failed to make purchase.'
-        return render :json => @result
-      end
-    else
-      @result[:success] = false
-      @result[:msg] = current_user.errors.full_messages.to_sentence
-      return render :json => @result
-    end
-
-    @result[:success] = done
-    @result[:msg] = order.errors.full_messages.to_sentence if !done
-
-    return render :json => @result
-  end
-
   # GET /api/orders/cart
   def cart
     order = current_user.init_cart.order
