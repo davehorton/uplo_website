@@ -34,6 +34,9 @@ class User < ActiveRecord::Base
                  :confirmed_at,
                  :created_at
 
+  # hack for making accessor behave like a date
+  columns_hash["expiration"] = ActiveRecord::ConnectionAdapters::Column.new("expiration", nil, "date")
+
   belongs_to :billing_address,  :class_name => "Address", :foreign_key => :billing_address_id
   belongs_to :shipping_address, :class_name => "Address", :foreign_key => :shipping_address_id
 
@@ -73,11 +76,10 @@ class User < ActiveRecord::Base
   validates_length_of :last_name,  :in => 1..30
   validates_confirmation_of :paypal_email, :message => "should match confirmation"
 
-  validates_length_of :cvv, :in => 3..4, :allow_nil => true
-  validates_numericality_of :cvv, :only_integer => true, :allow_nil => true
-
   validates_presence_of :paypal_email_confirmation, :if => :paypal_email_changed?
   validates :paypal_email, :email => true, :if => :paypal_email_changed?
+
+  before_save :scrub_sensitive_fields
 
   default_scope where(removed: false, banned: false).order('users.username asc')
 
@@ -220,24 +222,27 @@ class User < ActiveRecord::Base
     self.save!
   end
 
-  def update_profile(params)
+  def update_profile(params, type_update='')
     result = nil
-    params ||= {}
     params.to_options!
-    [:username].each do |key|
-      # Remove sensitive parameter.
-      params.delete(key)
+    params.delete(:username)
+
+    self.attributes = params.except(:current_password, :password, :password_confirmation)
+
+    if type_update == 'payment_info'
+      credit_card = CreditCard.build_card_from_param(params)
+      return false if !credit_card.valid?
+      PaymentInfo.create_payment_profile(self, credit_card)
+    elsif billing_address.try(:valid?) && billing_address.try(:changed?) && an_customer_payment_profile_id?
+      PaymentInfo.update_billing_address(self)
     end
 
-    # If there is any password parameter we will update user info with password.
     if !params[:current_password].blank? &&
           (params.has_key?(:password) ||
            params.has_key?(:password_confirmation))
       result = self.update_with_password(params)
     else
-      # Update without password
       [:password, :password_confirmation].each do |key|
-        # Remove sensitive parameter.
         params.delete(key)
       end
 
@@ -480,5 +485,10 @@ class User < ActiveRecord::Base
 
     def check_password?
       (!self.force_submit && self.password_required?)
+    end
+
+    def scrub_sensitive_fields
+      self.cvv = nil
+      self.expiration = nil
     end
 end

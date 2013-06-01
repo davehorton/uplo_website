@@ -99,6 +99,7 @@ class Api::OrdersController < Api::BaseController
       render json: { msg: "Problem charging your card." }, status: :bad_request
     end
   rescue Exception => ex
+    ExternalLogger.new.log_error(ex, "Problem charging card for order #{order.try(:id)}.")
     render json: { msg: ex.message }, status: :bad_request
   end
 

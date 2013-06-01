@@ -36,7 +36,7 @@
         .line= u.input_field :job
         .line= u.input_field :website
         .line= u.input_field :biography
-        .line= hidden_field :user, :type_update, :value => :my_information
+        .line= hidden_field_tag :type_update, 'my_information'
         %br
         .update_button.left
         .button.cancel.left

@@ -72,8 +72,6 @@
 
             .info
               = user_f.label :cvv, "CVV <span style='color:red;'>*</span> <span id='cvv-explanation'>What's This?</span>".html_safe
-              - message = first_error_message_for(user_f.object, :cvv)
-              - css = message ? "error" : nil
               = user_f.input_field :cvv, :autocomplete => :off, :required => true, :label => false, :maxlength => 4, :class => css, :title => message, :value => nil
 
     #order-summary.order_summary.no-padding-right.left{:style => "height:auto;min-height: 100px;"}

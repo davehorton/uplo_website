@@ -112,10 +112,4 @@ class ApplicationController < ActionController::Base
         render_banned_message
       end
     end
-
-    def set_expiration(options)
-      expires_on = Date.civil(options["expiration(1i)"].to_i, options["expiration(2i)"].to_i, 1)
-      ["expiration(1i)", "expiration(2i)", "expiration(3i)"].each { |attr| options.delete(attr)}
-      options[:expiration] = expires_on.strftime("%m-%Y")
-    end
 end

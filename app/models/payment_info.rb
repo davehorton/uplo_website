@@ -27,10 +27,14 @@ class PaymentInfo
         customer_profile_id: user.an_customer_profile_id,
         customer_payment_profile_id: user.an_customer_payment_profile_id
       )
+      user.update_column(:an_customer_payment_profile_id, nil)
     end
 
+    billing_address = user.billing_address.try(:cc_address_attributes) || {}
+    billing_address.merge!(first_name: credit_card.first_name, last_name: credit_card.last_name)
+
     payment_profile = {
-      bill_to: user.billing_address.cc_address_attributes,
+      bill_to: billing_address,
       payment: {
         credit_card: credit_card
       }
@@ -59,6 +63,36 @@ class PaymentInfo
 
     if !response.success?
       description = "Problem validating payment profile. #{response.try(:message)}"
+      raise description
+    end
+  end
+
+  def self.update_billing_address(user)
+    payment_profile = GATEWAY.get_customer_payment_profile(customer_profile_id: user.an_customer_profile_id, customer_payment_profile_id: user.an_customer_payment_profile_id).params['payment_profile']
+
+    bill_to = payment_profile['bill_to'].to_options
+    billing_address = user.billing_address.try(:cc_address_attributes).try(:to_options) || {}
+    billing_address.merge!(first_name: bill_to[:first_name], last_name: bill_to[:last_name])
+
+    payment_profile = {
+      customer_payment_profile_id: user.an_customer_payment_profile_id,
+      bill_to: billing_address,
+      payment: {
+        credit_card: CreditCard.new(
+          number: payment_profile['payment']['credit_card']['card_number']
+        )
+      }
+    }
+
+    options = {
+      customer_profile_id: user.an_customer_profile_id,
+      payment_profile: payment_profile
+    }
+
+    response = GATEWAY.update_customer_payment_profile(options)
+
+    if !response.success?
+      description = "Problem updating billing address. #{response.try(:message)}"
       raise description
     end
   end

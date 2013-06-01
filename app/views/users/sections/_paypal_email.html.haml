@@ -1,8 +1,8 @@
 = render :layout => "account_wrapper", :locals => {:header => "My PayPal Information", :last => true} do
   .yield_info
     .line_info
-      - if (user.paypal_email)
-        = user.paypal_email
+      - if (current_user.paypal_email)
+        = current_user.paypal_email
       - else
         Commissions are paid via PayPal. Please enter your PayPal account email address.
   .yield_edit.hide
@@ -13,7 +13,7 @@
       .form_wrapper.left{:style => "width:180px; margin-left:10px"}
         .line= user.input_field :paypal_email
         .line= user.input_field :paypal_email_confirmation, :value => ""
-        .line= hidden_field :user, :type_update, :value => :paypal_email
+        .line= hidden_field_tag :type_update, 'paypal_email'
         %br
         .update_button.left
         .button.cancel.left

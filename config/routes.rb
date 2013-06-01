@@ -284,9 +284,6 @@ Uplo::Application.routes.draw do
       post 'withdraw', :to => "users#withdraw"
       get 'card_info', :to => "users#get_user_card_info"
       post 'request_invitation', :to => 'users#request_invitation'
-
-      # Order
-      post "finalize_order", :to => "orders#finalize_order"
       post 'delete_ordered_item', :to => 'orders#delete_ordered_item'
     end
   end

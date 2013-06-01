@@ -1,28 +1,20 @@
 - card_type = CreditCard.brands
 - card_type_reverse = Hash.new {|h,k| h[k] = ""}
 - card_type.each {|k,v| card_type_reverse[v] << k}
-- if user.expiration
-  - user.expiration = Date.strptime(user.expiration, "%m-%Y")
+- if current_user.expiration
+  - current_user.expiration = Date.strptime(current_user.expiration, "%m-%Y")
 - else
-  - user.expiration = Date.today
+  - current_user.expiration = Date.today
 = render :layout => "account_wrapper", :locals => {:header => "My Payment Information"} do
   .yield_info
-    - if (user.name_on_card)
+    - if (current_user.name_on_card)
       .line_info
-        Name on Card:
-        = user.name_on_card
+        Cardholder Name:
+        = current_user.name_on_card
       .line_info
-        Card Type:
-        = card_type_reverse[user.card_type]
-      .line_info
-        Card Number: **** **** ****
-        = user.card_number.last(4)
-      .line_info
-        Expiration:
-        = user.expiration.strftime("%m/%y")
-      .line_info
-        CVV:
-        ***
+        = card_type_reverse[current_user.card_type]
+        ending with
+        = current_user.card_number.last(4)
     - else
       There is no card information
   .yield_edit.hide
@@ -39,12 +31,12 @@
       .form_wrapper.left{:style => "width:190px; margin-left:10px"}
         .line= user.input_field :name_on_card
         .line= user.select :card_type, options_for_select(card_type, current_user.card_type), {:prompt => 'Select One'}
-        .line= user.input_field :card_number
+        .line= user.input_field :card_number, value: nil
         - today = Date.today
         .line{:style => "width:200px"}
           = user.date_select :expiration, :discard_day => true, :start_year => Date.today.year, :end_year => (Date.today.year+10), :add_month_numbers => false, :order => [:month, :year], :required => true, :label => false, :default => { :day => '1', :mon => '12' }, :prompt => { :month => 'Month', :year => 'Year' }
         .line= user.input_field :cvv, :maxlength => 4
-        .line= hidden_field :user, :type_update, :value => :payment_info
+        .line= hidden_field_tag :type_update, 'payment_info'
         %br
         .update_button.left
         .button.cancel.left

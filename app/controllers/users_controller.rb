@@ -4,56 +4,14 @@ class UsersController < ApplicationController
   respond_to :json
 
   def update
-    type_update = params[:user][:type_update]
-    params[:user].delete(:type_update)
-    if (type_update == "payment_info")
-      credit_card = CreditCard.build_card_from_param(params[:user])
-      unless credit_card.valid?
-        error = "#{credit_card.errors.full_messages.to_sentence}"
-        return render :json => [error], :status => :unprocessable_entity
-      end
-
-      params[:user][:card_number] = credit_card.display_number
-      set_expiration(params[:user])
-
-      # update Authorize Net Account
-      begin
-        PaymentInfo.create_payment_profile(current_user, credit_card)
-      rescue Exception => ex
-        error = "There was a problem processing your credit card. Please try again."
-        return render :json => [error], :status => :unprocessable_entity
-      end
-    end
-    address = nil
-    if (type_update == "billing_address" || type_update == "shipping_address")
-      # Update Authorize Net Account
-
-      address = current_user.billing_address ||= Address.new if (type_update == "billing_address")
-      address = current_user.shipping_address ||= Address.new if (type_update == "shipping_address")
-
-      if (address.update_attributes params[:address])
-        params[:user][:billing_address_id] = address.id if (type_update == "billing_address")
-        params[:user][:shipping_address_id] = address.id if (type_update == "shipping_address")
-      else
-        respond_to do |format|
-          format.html do
-            if request.xhr?
-              render :json => address.errors.full_messages, :status => :unprocessable_entity
-            else
-              redirect_to("/my_account", :notice => address.errors)
-            end
-          end
-        end
-        return
-      end
-    end
+    type_update = params[:type_update]
 
     respond_to do |format|
-      if current_user.update_profile(params[:user])
+      if current_user.update_profile(params[:user], type_update)
         sign_in current_user, :bypass => true
         format.html do
           if request.xhr?
-            render :partial => "/users/sections/#{type_update}", :locals => {:user => current_user, :address => address}, :layout => false
+            render(partial: "/users/sections/#{type_update}", layout: false)
           else
             redirect_to("/my_account", :notice => I18n.t('user.update_done'))
           end
@@ -292,9 +250,5 @@ class UsersController < ApplicationController
     end
     flash[:notice] = "Disabled #{params[:type_social]}"
     redirect_to :action => :account
-  end
-
-  def account
-    @user = current_user
   end
 end

@@ -4,32 +4,32 @@
   %br
   .line_wrapper
     .partial_wrapper
-      = render :partial => "/users/sections/my_information", :locals => {:user => @user}
+      = render :partial => "/users/sections/my_information"
 
     .partial_wrapper
-      = render :partial => "/users/sections/billing_address", :locals => {:address => @user.billing_address}
+      = render :partial => "/users/sections/billing_address"
 
     .partial_wrapper
-      = render :partial => "/users/sections/shipping_address", :locals => {:address => @user.shipping_address}
+      = render :partial => "/users/sections/shipping_address"
 
     .clear
 
     .partial_wrapper
-      = render :partial => "/users/sections/password", :locals => {:user => @user}
+      = render :partial => "/users/sections/password"
 
     .partial_wrapper
-      = render :partial => "/users/sections/payment_info", :locals => {:user => @user}
+      = render :partial => "/users/sections/payment_info"
       = render :partial => '/orders/cvv_form', :layout => 'layouts/bubble', :locals => { :id => 'cvv-form' }
 
     .partial_wrapper
-      = render :partial => "/users/sections/paypal_email", :locals => {:user => @user}
+      = render :partial => "/users/sections/paypal_email"
     .clear
 
     .partial_wrapper
-      = render :partial => "/users/sections/orders", :locals => {:user => @user}
+      = render :partial => "/users/sections/orders"
 
     .partial_wrapper
-      = render :partial => "/users/sections/social_setting", :locals => {:user => @user}
+      = render :partial => "/users/sections/social_setting"
 
 - content_for :js do
   = javascript_tag do

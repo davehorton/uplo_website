@@ -25,13 +25,13 @@ class CreditCard < ActiveMerchant::Billing::CreditCard
     end
 
     CreditCard.new(
-                   first_name: first_name,
-                   last_name: last_name,
-                   month: month,
-                   year: year,
-                   number: options['card_number'],
-                   brand: options['card_type'],
-                   verification_value:  options['cvv'],
-                   )
+      first_name: first_name,
+      last_name: last_name,
+      month: month.to_i,
+      year: year.to_i,
+      number: options['card_number'],
+      brand: options['card_type'],
+      verification_value:  options['cvv'],
+    )
   end
 end

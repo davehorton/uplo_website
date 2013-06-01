@@ -1,6 +1,6 @@
 = render :layout => "account_wrapper", :locals => {:header => "My Social Networks", :hide_edit => true} do
   .yield_info
-    = simple_form_for user, :remote => true do |u|
+    = simple_form_for current_user, :remote => true do |u|
       .form_wrapper.left{:style => "width:70px; margin-left:10px"}
         .line Facebook
         .line Twitter
@@ -11,25 +11,25 @@
       .form_wrapper.left{:style => "width:180px; margin-left:10px"}
         .line
           .remove_css_effect
-            - if user.facebook_token.blank?
+            - if current_user.facebook_token.blank?
               = link_to "Enable", {:action => :enable_social, :type_social => "Facebook"}, :method => :put
             - else
               = link_to "Disable", {:action => :disable_social, :type_social => "Facebook"}, :method => :put
         .line
           .remove_css_effect
-            - if user.twitter_token.blank?
+            - if current_user.twitter_token.blank?
               = link_to "Enable", {:action => :enable_social, :type_social => "Twitter"}, :method => :put
             - else
               = link_to "Disable", {:action => :disable_social, :type_social => "Twitter"}, :method => :put
         .line
           .remove_css_effect
-            - if user.tumblr_token.blank?
+            - if current_user.tumblr_token.blank?
               = link_to "Enable", {:action => :enable_social, :type_social => "Tumblr"}, :method => :put
             - else
               = link_to "Disable", {:action => :disable_social, :type_social => "Tumblr"}, :method => :put
         .line
           .remove_css_effect
-            - if user.flickr_token.blank?
+            - if current_user.flickr_token.blank?
               = link_to "Enable", {:action => :enable_social, :type_social => "Flickr"}, :method => :put
             - else
               = link_to "Disable", {:action => :disable_social, :type_social => "Flickr"}, :method => :put
@@ -45,4 +45,4 @@
         /       = link_to "Enable", {:action => :enable_social, :type_social => "Pinterest"}, :method => :put
         /     - else
         /       = link_to "Disable", {:action => :disable_social, :type_social => "Pinterest"}, :method => :put
-        .line= hidden_field :user, :type_update, :value => :social_setting
+        .line= hidden_field_tag :type_update, 'social_setting'
