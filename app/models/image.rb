@@ -125,8 +125,8 @@ class Image < ActiveRecord::Base
     end
   end
 
-  delegate :username, :to => :user, allow_nil: true
-  delegate :id, :fullname, :to => :user, allow_nil: true, prefix: true
+  delegate :fullname, :username, :to => :user, allow_nil: true
+  delegate :id, :to => :user, allow_nil: true, prefix: true
   delegate :name, :is_public?, :to => :gallery, allow_nil: true, prefix: true
 
   def gallery_cover=(is_cover)
