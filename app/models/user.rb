@@ -34,8 +34,12 @@ class User < ActiveRecord::Base
                  :confirmed_at,
                  :created_at
 
-  # hack for making accessor behave like a date
-  columns_hash["expiration"] = ActiveRecord::ConnectionAdapters::Column.new("expiration", nil, "date")
+  # make string column behave like a date
+  class << columns_hash['expiration']
+    def type
+      :date
+    end
+  end
 
   belongs_to :billing_address,  :class_name => "Address", :foreign_key => :billing_address_id
   belongs_to :shipping_address, :class_name => "Address", :foreign_key => :shipping_address_id
