@@ -314,6 +314,8 @@ class ImagesController < ApplicationController
       @product_options = @line_item.product.product_options
     end
 
+    raise "No product options exist for image #{@image.id}" if !@product_options
+
     @products = @image.available_products
   end
 
