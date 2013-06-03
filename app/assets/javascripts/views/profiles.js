@@ -200,7 +200,7 @@
       $("#edit-profile-photo-popup #fileupload").fileupload("option", {
         dataType: 'text',
         maxFileSize: 75000000,
-        acceptFileTypes: /(\.|\/)(gif|jpe?g|png)$/i,
+        acceptFileTypes: /(\.|\/)(jpg|jpeg)$/i,
         add: function(e, data) {
           $.modal.close();
           window.setTimeout("$('#mask').modal()", 300);
