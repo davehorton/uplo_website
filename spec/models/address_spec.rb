@@ -31,4 +31,20 @@ describe Address do
     end
   end
 
+  describe "cc_address_attributes" do
+    context "when optional address present" do
+      it "should return proper address" do
+        address1 = create(:address, :street_address => "lincoln street", :optional_address => "test", :city => "kolkata", :state => "test1", :zip => 100000)
+        address1.cc_address_attributes.should == {:address=>"lincoln street, test", :city=>"kolkata", :state=>"test1", :zip=>100000}
+      end
+    end
+
+    context "when optional address not present" do
+      it "should return proper address" do
+        address1 = create(:address, :street_address => "lincoln street", :city => "kolkata", :state => "test1", :zip => 100000)
+        address1.cc_address_attributes.should == {:address=>"lincoln street", :city=>"kolkata", :state=>"test1", :zip=>100000}
+      end
+    end
+  end
+
 end

@@ -2,5 +2,6 @@
 
 FactoryGirl.define do
   factory :product_option do
+    product
   end
 end
