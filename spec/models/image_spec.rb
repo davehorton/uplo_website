@@ -453,6 +453,10 @@ describe Image do
       image.name.should == "test"
     end
 
+    it "should set s3_expire_time" do
+      "#{Time.zone.now.beginning_of_day.since 25.hours}"
+    end
+
     it "should set user" do
       image.user_id.should == image.gallery.user_id
     end
