@@ -15,18 +15,20 @@ class ImageSerializer < ActiveModel::Serializer
   def products
     viewing_own_image = (scope && scope.id == object.user_id)
 
-    options = []
-    object.available_products.each do |product|
-      options << {
-        id:          product.id,
-        name:        "#{product.size.to_name} - #{product.moulding.name}",
-        size_name:   product.size.to_name,
-        mould_name:  product.moulding.name,
-        price:       "%0.2f" % product.price_for_tier(object.tier_id, viewing_own_image),
-        product_options: product.product_options.map {|po| ProductOptionSerializer.new(po, root: false)}
-      }
+    Rails.cache.fetch [:image, object.id, :serialized_products, :viewing_own_image, viewing_own_image.present?], :expires_in => 1.minute do
+      options = []
+      object.available_products.each do |product|
+        options << {
+          id:          product.id,
+          name:        "#{product.size.to_name} - #{product.moulding.name}",
+          size_name:   product.size.to_name,
+          mould_name:  product.moulding.name,
+          price:       "%0.2f" % product.price_for_tier(object.tier_id, viewing_own_image),
+          product_options: product.product_options.map {|po| ProductOptionSerializer.new(po, root: false)}
+        }
+      end
+      options
     end
-    options
   end
 
   def in_private_gallery

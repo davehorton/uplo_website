@@ -54,7 +54,7 @@ class Api::ImagesController < Api::BaseController
   #   sort_direction
   def popular
     filtered_params[:sort_field] = "random()"
-    images = Image.spotlight.paginate_and_sort(filtered_params)
+    images = Image.spotlight.includes(:gallery, :user).paginate_and_sort(filtered_params)
     render json: images, meta: { total: images.total_entries }
   end
 
