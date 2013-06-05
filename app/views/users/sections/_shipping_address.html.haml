@@ -15,8 +15,6 @@
       .line_info
         = [address.city, address.state].join(', ')
         = address.zip
-      .line_info
-        = address.country
   .yield_edit.hide
     = simple_form_for current_user, :url => user_path(current_user) , :remote => true, :method => :put do |user|
       .form_wrapper.left
@@ -25,9 +23,8 @@
         .line Street Address
         .line
         .line City
-        .line State/Province
+        .line State
         .line Zip Code
-        .line Country
       = user.simple_fields_for :shipping_address, address do |add|
         .form_wrapper.left{:style => "width:200px; margin-left:10px"}
           .line= add.input_field :first_name
@@ -37,7 +34,6 @@
           .line= add.input_field :city
           .line= add.input_field :state
           .line= add.input_field :zip
-          .line= add.input_field :country, priority: [ "United States", "Canada" ]
           .line= hidden_field_tag :type_update, 'shipping_address'
           %br
           .update_button.left
