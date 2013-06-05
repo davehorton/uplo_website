@@ -1,5 +1,5 @@
-<script>
-  function woopraReady(tracker) {
+<script type="text/javascript">
+function woopraReady(tracker) {
     tracker.setDomain('uplo.com');
     tracker.setIdleTimeout(1800000);
     <% if current_user %>
@@ -7,13 +7,13 @@
     <% end %>
     tracker.track();
     return false;
-  }
-  (function() {
+}
+(function() {
     var wsc = document.createElement('script');
     wsc.src = document.location.protocol+'//static.woopra.com/js/woopra.js';
     wsc.type = 'text/javascript';
     wsc.async = true;
     var ssc = document.getElementsByTagName('script')[0];
     ssc.parentNode.insertBefore(wsc, ssc);
-  })();
+})();
 </script>
