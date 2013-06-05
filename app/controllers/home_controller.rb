@@ -17,11 +17,9 @@ class HomeController < ApplicationController
 
   def index
     session[:back_url] = url_for(:controller => 'home', :action => "browse") if session[:back_url].nil?
-    @images = Image.spotlight.paginate_and_sort(filtered_params)
+    @images = Image.spotlight.paginate_and_sort(set_filtered_params(32, "random()", ''))
     @current_views = 'recent images'
-    filtered_params[:sort_direction] = 'desc'
-    filtered_params[:sort_field] = "images.updated_at"
-    @recent_images = Image.public_access.not_hidden.paginate_and_sort(filtered_params)
+    @recent_images = Image.public_access.not_hidden.paginate_and_sort(set_filtered_params(30, "images.updated_at", 'desc'))
   end
 
   def browse
@@ -105,4 +103,7 @@ class HomeController < ApplicationController
       end
     end
 
+    def set_filtered_params(per_page, sort_field, sort_direction)
+      filtered_params = { :per_page => per_page, :sort_field => sort_field, :sort_direction => sort_direction}
+    end
 end
