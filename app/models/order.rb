@@ -63,7 +63,6 @@ class Order < ActiveRecord::Base
 
   def compute_totals
     self.price_total = self.compute_image_total
-    #self.tax = self.compute_tax_total
     self.shipping_fee = calculate_shipping
     self.order_total = self.price_total + (self.tax ||= 0) + self.shipping_fee
     self.save
