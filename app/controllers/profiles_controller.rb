@@ -1,6 +1,6 @@
 class ProfilesController < ApplicationController
   self.per_page = 12
-  skip_before_filter :authenticate_user!
+  skip_before_filter :authenticate_user!, :unless => :viewing_own_profile?
   around_filter :apply_user_scope
   before_filter :find_user
 
@@ -143,10 +143,14 @@ class ProfilesController < ApplicationController
 
   protected
 
+    def viewing_own_profile?
+      action_name == 'show' && !current_user && params[:user_id].nil?
+    end
+
     def find_user
-      @user = (params[:user_id].present? ? User.find(params[:user_id]) : current_user)
+      @user = User.find(params[:user_id] || current_user.try(:id))
     rescue ActiveRecord::RecordNotFound
-      flash[:warning] = I18n.t("user.user_was_banned_or_removed")
-      redirect_to(profile_path) and return
+      flash[:warning] = "Profile not found"
+      redirect_to root_path and return
     end
 end
