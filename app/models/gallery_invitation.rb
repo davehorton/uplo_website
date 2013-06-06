@@ -1,7 +1,7 @@
 class GalleryInvitation < ActiveRecord::Base
-  attr_accessible :email, :message, :gallery_id, :secret_token, :user_id
+  attr_accessible :emails, :message, :gallery_id, :secret_token, :user_id
 
-  validates :email, presence: true, format: { with: Devise.email_regexp }
+  validates :emails, presence: true, format: { with: Devise.email_regexp }
   validates :gallery_id, presence: true
 
   belongs_to :gallery

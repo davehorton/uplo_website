@@ -4,9 +4,9 @@ describe GalleryInvitation do
   let(:user) { create(:user) }
   let(:gallery_invitation) { create(:gallery_invitation) }
 
-  it { should validate_presence_of(:email) }
-  it { should allow_value("a@b.com").for(:email) }
-  it { should_not allow_value("foo").for(:email) }
+  it { should validate_presence_of(:emails) }
+  it { should allow_value("a@b.com").for(:emails) }
+  it { should_not allow_value("foo").for(:emails) }
 
   it { should validate_presence_of(:gallery_id) }
 

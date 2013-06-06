@@ -2,7 +2,7 @@
 
 FactoryGirl.define do
   factory :gallery_invitation do
-    email { Faker::Internet.email }
+    emails { Faker::Internet.email }
     gallery
   end
 end
