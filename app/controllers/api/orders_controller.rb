@@ -85,6 +85,7 @@ class Api::OrdersController < Api::BaseController
     user_info = {}
     user_info[:billing_address_attributes] = order_info[:billing_address_attributes]
     user_info[:shipping_address_attributes] = order_info[:shipping_address_attributes]
+    user_info[:card_number] = credit_card.display_number
     current_user.update_profile(user_info)
 
     response = Payment.process_purchase(current_user, order, credit_card)
