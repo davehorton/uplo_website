@@ -18,11 +18,13 @@ class Users::RegistrationsController < Devise::RegistrationsController
   protected
 
   def get_invitation
-    @inv = if params[:token].present?
-             Invitation.find_by_token params[:token]
-           elsif params[:secret_token].present?
-             GalleryInvitation.find_by_secret_token(params[:secret_token])
-           end
+    if params[:token].present?
+      @inv = Invitation.find_by_token params[:token]
+      @email = @inv.email
+    elsif params[:secret_token].present?
+      @inv = GalleryInvitation.find_by_secret_token(params[:secret_token])
+      @email = @inv.emails
+    end
   end
 
   def after_sign_up_path_for(resource)

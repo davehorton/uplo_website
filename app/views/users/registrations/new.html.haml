@@ -20,8 +20,8 @@
         .half.left
           = f.label :user_email, 'Email Address', :class => 'left'
           - if @inv.present?
-            = f.text_field :email, :required => true, :autofocus => true, :value => @inv.emails, :disabled => true
-            = f.hidden_field :email, :as => :hidden, :value => @inv.emails          
+            = f.text_field :email, :required => true, :autofocus => true, :value => @email, :disabled => true
+            = f.hidden_field :email, :as => :hidden, :value => @email
           - else
             = f.text_field :email, :required => true, :autofocus => true
         .half.right
