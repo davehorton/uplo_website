@@ -19,7 +19,7 @@
   .line-separator.clear
   %p
     Tax:
-    = @order.tax > 0 ? number_to_currency(@order.tax) : "n/a"
+    = number_to_currency(@order.tax || 0)
   %br
   %p
     S&H:
