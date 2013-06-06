@@ -18,7 +18,7 @@ class InvitationsController < ApplicationController
   def accept_gallery_invitation
     @inv = GalleryInvitation.where(:secret_token => params[:id]).first
     if @inv
-      user = User.find_by_email(@inv.email)
+      user = User.find_by_email(@inv.emails)
       session[:gallery_invitation_id] = @inv.id
       if user
         @inv.update_attribute(:user_id, user.id)

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130529053654) do
+ActiveRecord::Schema.define(:version => 20130606130717) do
 
   create_table "addresses", :force => true do |t|
     t.string   "first_name"
@@ -67,7 +67,7 @@ ActiveRecord::Schema.define(:version => 20130529053654) do
 
   create_table "gallery_invitations", :force => true do |t|
     t.integer  "gallery_id",   :null => false
-    t.string   "email",        :null => false
+    t.text     "emails",       :null => false
     t.string   "secret_token"
     t.text     "message"
     t.integer  "user_id"

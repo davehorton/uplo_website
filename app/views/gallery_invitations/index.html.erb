@@ -30,7 +30,7 @@
     <tbody>
         <% @gallery_invitations.each do |gallery_invitation| %>
         <tr>
-          <td><%= gallery_invitation.email %></td>
+          <td><%= gallery_invitation.emails %></td>
           <td><%= gallery_invitation.created_at.strftime("%d/%m/%Y") %></td>
           <td><%= (gallery_invitation.accepted? ? "Yes" : "No") %></td>
         </tr>
