@@ -177,7 +177,6 @@ class UsersController < ApplicationController
       oauth_client = OAuth2::Client.new(@api_key, @secret, {
         :authorize_url => 'https://www.facebook.com/dialog/oauth'
       })
-
       redirect_to oauth_client.authorize_url({
           :client_id => @api_key,
           :redirect_uri => url_for(:controller => :socials, :action => :facebook_callback),
@@ -202,7 +201,7 @@ class UsersController < ApplicationController
       @consumer_key = TUMBLR_CONFIG["consumer_key"]
       @consumer_secret = TUMBLR_CONFIG["consumer_secret"]
 
-      consumer=OAuth::Consumer.new( @consumer_key, @consumer_secret, {
+      consumer = OAuth::Consumer.new( @consumer_key, @consumer_secret, {
         :site => "http://www.tumblr.com",
         :scheme             => :header,
         :http_method        => :post,
@@ -211,8 +210,8 @@ class UsersController < ApplicationController
         :authorize_path     => "/oauth/authorize"
       })
 
-      request_token=consumer.get_request_token
-      session[:request_token]=request_token
+      request_token = consumer.get_request_token(:oauth_callback => url_for(:controller => :socials, :action => :tumblr_callback))
+      session[:request_token] = request_token
       redirect_to request_token.authorize_url and return
 
     elsif (params[:type_social] == "Flickr")
