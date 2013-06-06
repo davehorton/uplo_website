@@ -20,10 +20,10 @@ class Users::RegistrationsController < Devise::RegistrationsController
   def get_invitation
     if params[:token].present?
       @inv = Invitation.find_by_token params[:token]
-      @email = @inv.email
+      @email = @inv.try(:email)
     elsif params[:secret_token].present?
       @inv = GalleryInvitation.find_by_secret_token(params[:secret_token])
-      @email = @inv.emails
+      @email = @inv.try(:emails)
     end
   end
 
