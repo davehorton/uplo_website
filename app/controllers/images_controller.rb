@@ -189,9 +189,9 @@ class ImagesController < ApplicationController
     @image = Image.find_by_id(params[:id])
 
     if @image.nil?
-      render_not_found
+      return render_not_found
     elsif current_user && !current_user.can_access?(@image.gallery)
-      render_unauthorized
+      return render_unauthorized
     end
 
     @is_owner = current_user && current_user.owns_image?(@image)
@@ -297,14 +297,14 @@ class ImagesController < ApplicationController
     @image = Image.find_by_id(params[:id])
 
     if @image.nil? || (@image.user.blocked? && !current_user.admin?)
-      render_not_found
+      return render_not_found
     end
 
     if params[:line_item].blank?
       if @image.blank?
-        render_not_found
+        return render_not_found
       elsif @image.gallery && !current_user.can_access?(@image.gallery)
-        render_unauthorized
+        return render_unauthorized
       end
 
       products = @image.available_products

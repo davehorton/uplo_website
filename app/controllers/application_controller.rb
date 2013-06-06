@@ -109,7 +109,7 @@ class ApplicationController < ActionController::Base
 
     def check_banned_user
       if current_user && !current_user.admin? && current_user.blocked?
-        render_banned_message
+        return render_banned_message
       end
     end
 end

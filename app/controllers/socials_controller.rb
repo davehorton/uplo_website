@@ -143,7 +143,7 @@ class SocialsController < ApplicationController
 		elsif (params[:image_id])
 			go_to_browser_image_url(params[:image_id])
 		else
-			render_not_found
+			return render_not_found
 		end
 	end
 
