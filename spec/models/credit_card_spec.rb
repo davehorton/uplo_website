@@ -34,8 +34,8 @@ describe CreditCard do
       options['expiration(1i)'] = '2015'
 
       card = klass.build_card_from_param(options)
-      card.month.should == '1'
-      card.year.should == '2015'
+      card.month.should == 1
+      card.year.should == 2015
     end
 
     it "handles date with month/year correctly" do
@@ -43,8 +43,8 @@ describe CreditCard do
       options['expiration'] = '1/2015'
 
       card = klass.build_card_from_param(options)
-      card.month.should == '1'
-      card.year.should == '2015'
+      card.month.should == 1
+      card.year.should == 2015
     end
 
     it "returns an instance of ActiveMerchant::Billing::CreditCard" do
