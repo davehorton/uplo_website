@@ -16,7 +16,7 @@ Historical note: we inherited this project from another shop in February 2013. W
 2. cp config/database.yml.example config/database.yml (update settings if needed)
 3. Setup other config files (see config/*.yml.sample)
 4. bundle
-5. bin/rake db:setup
+5. rake db:setup && rake db:test:prepare
 
 ## Testing
 
