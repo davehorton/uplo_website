@@ -244,12 +244,12 @@ class User < ActiveRecord::Base
       PaymentInfo.update_billing_address(self)
     end
 
-    if !params[:current_password].blank? &&
+    if params[:current_password].present? &&
           (params.has_key?(:password) ||
            params.has_key?(:password_confirmation))
       result = self.update_with_password(params)
     else
-      [:password, :password_confirmation].each do |key|
+      [:current_password, :password, :password_confirmation].each do |key|
         params.delete(key)
       end
 
