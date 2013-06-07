@@ -186,7 +186,7 @@ class UsersController < ApplicationController
 
       @consumer_key = TWITTER_CONFIG["consumer_key"]
       @consumer_secret = TWITTER_CONFIG["consumer_secret"]
-      @options = {:site => "http://api.twitter.com", :request_endpoint => "http://api.twitter.com"}
+      @options = {:site => "https://api.twitter.com", :request_endpoint => "https://api.twitter.com"}
 
       consumer = OAuth::Consumer.new(@consumer_key, @consumer_secret, @options)
       request_token = consumer.get_request_token(:oauth_callback => url_for(:controller => :socials, :action => :twitter_callback))
