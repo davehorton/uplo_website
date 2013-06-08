@@ -181,7 +181,7 @@ GEM
       metaclass (~> 0.0.1)
     money (5.1.1)
       i18n (~> 0.6.0)
-    multi_json (1.7.4)
+    multi_json (1.7.6)
     multi_xml (0.5.3)
     multipart-post (1.2.0)
     nested_form (0.3.1)
@@ -197,7 +197,7 @@ GEM
       rack (~> 1.2)
     oj (2.0.10)
     orm_adapter (0.4.0)
-    paperclip (3.4.1)
+    paperclip (3.4.2)
       activemodel (>= 3.0.0)
       activerecord (>= 3.0.0)
       activesupport (>= 3.0.0)
@@ -369,7 +369,7 @@ DEPENDENCIES
   activemerchant
   aescrypt
   alchemist
-  aws-sdk (~> 1.5.7)
+  aws-sdk
   cancan
   capybara
   classy_enum
