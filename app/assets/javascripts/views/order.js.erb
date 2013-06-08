@@ -166,11 +166,6 @@
         $('#shipping-address .inputs').text("");
       }
 
-      <% if Rails.env.production? %>
-      //Google Analytics
-      _gaq.push(['_trackEvent', 'UPLO Web / Check Out', 'Place Order', 'checkout', -1])
-      <% end %>
-
       return $('#order-shippings').submit();
     });
 

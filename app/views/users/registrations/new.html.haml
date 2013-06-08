@@ -44,15 +44,5 @@
   <script type="text/javascript">
     $(document).ready(function(){
       user.setup_datepicker();
-
-      <% if Rails.env.production? %>
-      $('#register-form').submit(function(){
-        // Get current date.
-        var date = new Date();
-        _gaq.push(['_setCustomVar', 2, 'UPLO Web - Sign Up Time', date.toUTCString()]);
-        _gaq.push(['_trackEvent', 'UPLO Web / Sign Up', 'sign up by UPLO web', 'status']);
-        return true;
-      });
-      <% end %>
     });
   </script>

@@ -13,7 +13,7 @@
 - content_for :right_content do
   .text.black.font18.bold= @image.name
   .line-separator
-  - if current_user && current_user.admin? 
+  - if current_user && current_user.admin?
     .text.black.font18.bold
     = is_hidden(@image)
     .line-separator
@@ -89,7 +89,7 @@
     .right
       - if current_user
         - like_class = @dislike ? "dislike" : "like"
-       
+
         #btn-like.button.left{:class => "#{like_class}", :onclick => 'update_liked();', :data => { 'id' => params[:id], 'dislike' => "#{ @dislike }" }}
         .button.flag.left{:onclick => "show_flag_form();"}
       - else
@@ -97,8 +97,8 @@
           = link_to "&nbsp;".html_safe, require_login_path, :class => "like-link"
         .button.flag.left
           = link_to "&nbsp;".html_safe, require_login_path, :class => "like-link"
-      
-      - order_url = url_for(:controller => 'images', :action => 'order', :id => params[:id])  
+
+      - order_url = url_for(:controller => 'images', :action => 'order', :id => params[:id])
       .button.order.left{:onclick => "window.location.href = '#{order_url}';", :data => {:url => "#{order_url}"}}
     - if @image.gallery.is_public? && !@image.flagged?
       .buttons-container.right
@@ -106,7 +106,7 @@
         - twitter_image_url = "https://twitter.com/share&data-url=#{browse_image_url(@image)}"
         %a.twitter-share-button.right{ :href => twitter_image_url}
         %a.facebook.button.right.share-popup{ :href => image_url}
-     
+
       .line-separator.clear{ style: 'padding-top: 4px;' }
       - if current_user.present?
         #comments-section{ :data => { :id => "#{@image.id}" }}
@@ -202,14 +202,6 @@
         $('#social-sharing .close .right').click(function(){
           $('#social-sharing').addClass('hide');
         });
-
-        <% if Rails.env.production? %>
-        $('#post-comment').click(function(){
-          // Google Analytics
-          _gaq.push(['_trackEvent', 'UPLO Web / Comment', 'post comment', 'status', 1]);
-          return true;
-        });
-        <% end %>
       });
 
       function submit_flag(desc, type){
@@ -318,16 +310,6 @@
           },
           fail: function(){}
         });
-
-        <% if Rails.env.production? %>
-        // Google Analytics
-        if(dislike == 'false'){
-          _gaq.push(['_trackEvent', 'UPLO Web / Like', 'like', 'status', 1]);
-        }
-        else{
-          _gaq.push(['_trackEvent', 'UPLO Web / Like', 'dislike', 'status', 0]);
-        }
-        <% end %>
       }
 
       !function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");
