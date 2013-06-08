@@ -17,7 +17,7 @@ class CreditCard < ActiveMerchant::Billing::CreditCard
       last_name = middle_name
     end
 
-    if options['expiration(2i)'].present? && options['expiration(1i)'].present?
+    if options['expiration(2i)'] && options['expiration(1i)']
       month = options['expiration(2i)']
       year  = options['expiration(1i)']
     else

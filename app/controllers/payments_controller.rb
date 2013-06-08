@@ -74,6 +74,7 @@ class PaymentsController < ApplicationController
       redirect_to pp_gateway.redirect_url_for(setup_response.token) and return
 
     when "an"
+      @order = Order.find(params[:order_id])
       order_info = params[:order].clone
       user_info = order_info.delete(:user)
 
@@ -90,8 +91,6 @@ class PaymentsController < ApplicationController
 
       user_info[:billing_address_attributes]  = order_info[:billing_address_attributes]
       user_info[:shipping_address_attributes] = order_info[:shipping_address_attributes]
-
-      @order = Order.find(params[:order_id])
 
       if @order.update_attributes(order_info)
         @order.update_tax_by_state
