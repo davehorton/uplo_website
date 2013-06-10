@@ -128,9 +128,9 @@ class PaymentsController < ApplicationController
 
   def pp_gateway
     @pp_gateway ||= ActiveMerchant::Billing::PaypalExpressGateway.new(
-      :login => PP_API_USERNAME,
-      :password => PP_API_PASSWORD,
-      :signature => PP_API_SIGN
+      :login => PAYPAL_CONFIG[:api_username],
+      :password => PAYPAL_CONFIG[:api_password],
+      :signature => PAYPAL_CONFIG[:api_signature]
     )
   end
 

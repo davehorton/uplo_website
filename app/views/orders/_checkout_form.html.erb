@@ -1,16 +1,16 @@
 <%
 member = current_user
-paypal_id = PP_ACCOUNT
+paypal_id = PAYPAL_CONFIG[:email]
 
 if paypal_id-%>
-<form method="post" id="order" action="<%= PAYPAL_API_URL %>" name="order_form">
+<form method="post" id="order" action="<%= PAYPAL_CONFIG[:api_url] %>" name="order_form">
 <!--set a Paypal ID of Nonprofits -->
   <%= hidden_field_tag 'business', paypal_id%>
   <%= hidden_field_tag 'cmd', '_cart'%>
   <%= hidden_field_tag 'upload', 1%>
   <%= hidden_field_tag 'item_name_1', 'Entire Item'%>
   <%= hidden_field_tag 'amount_1',  order.order_total%>
-  <%= hidden_field_tag 'return', url_for(:only_path => false, :controller => 'payments', :action => 'paypal_result') %>  
+  <%= hidden_field_tag 'return', url_for(:only_path => false, :controller => 'payments', :action => 'paypal_result') %>
   <%= hidden_field_tag 'cancel_return', url_for(:only_path => false, :controller => 'payments', :action => 'paypal_cancel') %>
   <%= hidden_field_tag 'notify_url', url_for(:only_path => false, :controller => 'payments', :action => 'paypal_notify') %>
   <%= hidden_field_tag 'invoice', order.id%>

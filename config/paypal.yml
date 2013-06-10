@@ -1,0 +1,12 @@
+common: &common
+  email: uplo.m_1345779585_biz@gmail.com
+  api_username: uplo.m_1345779585_biz_api1.gmail.com
+  api_password: 1345779609
+  api_signature: AaglRe.uxaLGgVcRUWEETDxysqRdATqXG5NMLob3pDjDaX7-DLbII166
+  api_url: https://www.sandbox.paypal.com/cgi-bin/webscr
+
+development:
+  <<: *common
+
+test:
+  <<: *common

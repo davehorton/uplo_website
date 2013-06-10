@@ -2,21 +2,21 @@
 %p{:style => "font-size: 13px"}= "Login to https://developer.paypal.com/ with uplo.mailer@gmail.com / uploTPL123456"
 
 .clearfix.hidden
-  = payment_service_for(@pp_payment.item_number, PP_ACCOUNT, 
-                      :amount => @pp_payment.amount, :currency => @pp_payment.currency, 
+  = payment_service_for(@pp_payment.item_number, PAYPAL_CONFIG[:email],
+                      :amount => @pp_payment.amount, :currency => @pp_payment.currency,
                       :service => :paypal) do |service|
-    - service.customer( :first_name => @pp_payment.user.first_name, 
-                        :last_name => @pp_payment.user.last_name, :phone => @pp_payment.user.phone, 
+    - service.customer( :first_name => @pp_payment.user.first_name,
+                        :last_name => @pp_payment.user.last_name, :phone => @pp_payment.user.phone,
                         :email => @pp_payment.user.email)
-    - service.billing_address(  :city => @pp_payment.user.city, 
-                                :address1 => @pp_payment.user.address1, 
-                                :state => @pp_payment.user.state, 
-                                :country => @pp_payment.user.country, 
+    - service.billing_address(  :city => @pp_payment.user.city,
+                                :address1 => @pp_payment.user.address1,
+                                :state => @pp_payment.user.state,
+                                :country => @pp_payment.user.country,
                                 :zip => @pp_payment.user.zip)
     - service.item_name "Testing Image"
     - service.invoice @pp_payment.invoice
     - service.tax "0.00"
-    
+
     - service.notify_url url_for(:only_path => false, :controller => 'payments', :action => 'paypal_notify')
     - service.return_url url_for(:only_path => false, :controller => 'payments',:action => 'paypal_result')
     - service.cancel_return_url url_for(:only_path => false, :controller => 'payments', :action => 'paypal_cancel')
@@ -24,11 +24,11 @@
 
 .clearfix
 
-= link_to(image_tag("https://www.paypal.com/en_US/i/btn/btn_xpressCheckout.gif"), 
+= link_to(image_tag("https://www.paypal.com/en_US/i/btn/btn_xpressCheckout.gif"),
           :controller => 'payments', :action => "checkout", :type => "pp")
 
 .clearfix
 %h2= "Pay with Authorize.net"
 %p{:style => "font-size: 13px"}= "Login to https://test.authorize.net with: uplo-payment / uploTPL007"
-= link_to(image_tag("https://testcontent.authorize.net/images/buy-now-gray.gif"), 
+= link_to(image_tag("https://testcontent.authorize.net/images/buy-now-gray.gif"),
           :controller => 'payments', :action => "checkout", :type => "an")
