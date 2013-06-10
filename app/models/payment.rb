@@ -26,7 +26,7 @@ class Payment
     return payment
   end
 
-  def self.transfer_ballance_via_paypal(amount, receiver)
+  def self.transfer_balance_via_paypal(amount, receiver)
     ActiveMerchant::Billing::PaypalGateway.default_currency = 'USD'
     gateway = ActiveMerchant::Billing::PaypalGateway.new({
       :login => PP_API_USERNAME,

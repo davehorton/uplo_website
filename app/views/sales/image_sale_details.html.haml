@@ -17,7 +17,7 @@
           .text.black.bold.font24= @image.name
           - if (image.flagged? || image.removed?)
             .text.font20{:style => "color:red"} Unavailable
-          .quantity.text.fuzzy-gray.font18= "#{@sale.sold_image_quantity} Sales"
+          .quantity.text.fuzzy-gray.font18= pluralize(@sale.sold_image_quantity, "Sale")
           .price.text.bold= number_to_currency @sale.total_image_sales, {:precision => 2}
       .line-separator.left
       .clear

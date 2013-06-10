@@ -460,7 +460,7 @@ describe User do
     end
   end
 
-  describe "#raw_sales" do
+  describe "#sold_items" do
     context "with line items" do
       it "should return result" do
         another_user = create(:user_with_gallery)
@@ -468,13 +468,13 @@ describe User do
         image = create(:image, :gallery => gallery1)
         new_order = create(:order, :transaction_status => "completed")
         line_item = create(:line_item, :image_id => image.id, :order_id => new_order.id, :quantity => 4)
-        another_user.raw_sales.should == [line_item]
+        another_user.sold_items.should == [line_item]
       end
     end
 
     context "without line items" do
       it "should return blank array" do
-        user.raw_sales.should == []
+        user.sold_items.should == []
       end
     end
   end

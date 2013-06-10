@@ -26,7 +26,7 @@ class Sales
     total = 0
     sold_items = self.sold_items(month)
     sold_items.each do |item|
-      total += ((item.price * item.quantity) * item.commission_percent)
+      total += ((item.price * item.quantity) * item.commission_percent/100)
     end
     total
   end

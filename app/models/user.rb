@@ -321,7 +321,7 @@ class User < ActiveRecord::Base
     result
   end
 
-  def raw_sales
+  def sold_items
     LineItem.sold_items.where(images: { user_id: id })
   end
 
@@ -347,7 +347,7 @@ class User < ActiveRecord::Base
 
   def total_sales(image_paging_params = {})
     result = {:total_entries => 0, :data => []}
-    line_items = raw_sales.paginate_and_sort(image_paging_params)
+    line_items = sold_items.paginate_and_sort(image_paging_params)
     array = []
     line_items.each { |item|
       info = item
@@ -439,17 +439,17 @@ class User < ActiveRecord::Base
 
   def withdraw_paypal(amount)
     if (self.paypal_email.blank?)
-      errors.add(:paypal_email, "must be exists")
+      errors.add(:paypal_email, "must exist")
       return false
     elsif (amount > owned_amount)
-      errors.add(:base, "The owed amount is not enough")
+      errors.add(:base, "Amount must be greated than owned amount")
       return false
     elsif (amount <= 0)
       errors.add(:base, "Amount not valid")
       return false
     else
       # PAYPAL WITHDRAW HERE
-      paypal_result = Payment.transfer_ballance_via_paypal amount, self.paypal_email
+      paypal_result = Payment.transfer_balance_via_paypal amount, self.paypal_email
       if paypal_result.success?
         self.increment!(:withdrawn_amount, amount)
         return true
