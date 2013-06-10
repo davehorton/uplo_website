@@ -17,35 +17,37 @@ class ImagesController < ApplicationController
 
   def create
     gallery = current_user.galleries.find(params[:gallery_id])
-    image_params = params["files"].first
-    image = Image.new(gallery_id: gallery.id, name: image_params.original_filename, image: image_params)
-    image.user = current_user
+    if params["files"].present?
+      image_params = params["files"].first
+      image = Image.new(gallery_id: gallery.id, name: image_params.original_filename, image: image_params)
+      image.user = current_user
 
-    if image.save
-      images = gallery.images.unflagged.paginate_and_sort(filtered_params)
+      if image.save
+        images = gallery.images.unflagged.paginate_and_sort(filtered_params)
 
-      pagination = render_to_string(
-        partial: 'pagination',
-        locals: {
+        pagination = render_to_string(
+          partial: 'pagination',
+          locals: {
           source: images,
-          params: {
-            controller: 'galleries',
-            action:     'edit_images',
-            gallery_id: gallery.id
-          },
+            params: {
+              controller: 'galleries',
+              action:     'edit_images',
+              gallery_id: gallery.id
+            },
           classes: 'text left'
         })
 
-      item = render_to_string(
-        partial: 'images/edit_photo_template',
-        locals: { image: image })
+        item = render_to_string(
+          partial: 'images/edit_photo_template',
+          locals: { image: image })
 
-      gal_options = self.class.helpers.gallery_options(current_user.id, gallery.id, true)
+        gal_options = self.class.helpers.gallery_options(current_user.id, gallery.id, true)
 
-      render json: { success: true, item: item, pagination: pagination, gallery_options: gal_options },
-             content_type: 'text/plain'
-    else
-      render(json: { msg: image.errors.full_messages.join(', ') }, content_type: 'text/plain') and return
+        render json: { success: true, item: item, pagination: pagination, gallery_options: gal_options },
+        content_type: 'text/plain'
+      else
+        render(json: { msg: image.errors.full_messages.join(', ') }, content_type: 'text/plain') and return
+      end
     end
   end
 
