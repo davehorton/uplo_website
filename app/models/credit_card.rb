@@ -1,7 +1,6 @@
 class CreditCard < ActiveMerchant::Billing::CreditCard
 
   ACCEPTED_CREDIT_CARDS = [
-                           ['American Express', 'american_express'],
                            ['Discover', 'discover'],
                            ['MasterCard', 'master'],
                            ['Visa', 'visa']

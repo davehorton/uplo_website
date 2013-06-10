@@ -17,7 +17,6 @@ key: 52sU5n6Dq3Mpg75y
 
 For your reference, you can use the following test credit card numbers when testing your connection. The expiration date must be set to the present date or later:
 
-- American Express Test Card: 370000000000002
 - Discover Test Card: 6011000000000012
 - Visa Test Card: 4007000000027
 - Second Visa Test Card: 4012888818888
