@@ -35,7 +35,7 @@ describe Sales do
         sale = Sales.new(image)
         new_order = create(:order, :transaction_status => "completed")
         line_item = create(:line_item, :image_id => image.id, :order_id => new_order.id, :quantity => 4, :price => 50, :commission_percent => 35.0)
-        sale.total_image_sales.should == 200000.0
+        sale.total_image_sales.should == 2000.0
       end
     end
 
@@ -45,7 +45,7 @@ describe Sales do
         new_order = create(:order, :transaction_status => "completed")
         line_item = create(:line_item, :image_id => image.id, :order_id => new_order.id, :quantity => 4, :price => 500, :commission_percent => 35.0)
         sale.total_image_sales("April")
-        sale.total_image_sales.should == 200000.0
+        sale.total_image_sales.should == 2000.0
       end
     end
   end
@@ -74,7 +74,7 @@ describe Sales do
         sale = Sales.new(image)
         new_order = create(:order, :transaction_status => "completed", :transaction_date => "10-04-2013")
         line_item = create(:line_item, :image_id => image.id, :order_id => new_order.id, :quantity => 5)
-        sale.image_monthly_sales_over_year("01-04-2013", { :report_by => "price"}).should == [{:month=>"Apr", :sales=>0}, {:month=>"May", :sales=>0}, {:month=>"Jun", :sales=>0}, {:month=>"Jul", :sales=>0}, {:month=>"Aug", :sales=>0}, {:month=>"Sep", :sales=>0}, {:month=>"Oct", :sales=>0}, {:month=>"Nov", :sales=>0}, {:month=>"Dec", :sales=>0}, {:month=>"Jan", :sales=>0}, {:month=>"Feb", :sales=>0}, {:month=>"Mar", :sales=>0}, {:month=>"Apr", :sales=>250000.0}]
+        sale.image_monthly_sales_over_year("01-04-2013", { :report_by => "price"}).should == [{:month=>"Apr", :sales=>0}, {:month=>"May", :sales=>0}, {:month=>"Jun", :sales=>0}, {:month=>"Jul", :sales=>0}, {:month=>"Aug", :sales=>0}, {:month=>"Sep", :sales=>0}, {:month=>"Oct", :sales=>0}, {:month=>"Nov", :sales=>0}, {:month=>"Dec", :sales=>0}, {:month=>"Jan", :sales=>0}, {:month=>"Feb", :sales=>0}, {:month=>"Mar", :sales=>0}, {:month=>"Apr", :sales=>2500.0}]
       end
     end
   end

@@ -485,7 +485,7 @@ describe User do
       image = create(:image, :gallery => gallery1)
       new_order = create(:order, :transaction_status => "completed", :transaction_date => "03-03-2012")
       line_item = create(:line_item, :image_id => image.id, :order_id => new_order.id, :quantity => 4, :price => 500, :commission_percent => 35.0)
-      another_user.monthly_sales("01-03-2012").should == [{:month=>"Mar", :sales=>0}, {:month=>"Apr", :sales=>0}, {:month=>"May", :sales=>0}, {:month=>"Jun", :sales=>0}, {:month=>"Jul", :sales=>0}, {:month=>"Aug", :sales=>0}, {:month=>"Sep", :sales=>0}, {:month=>"Oct", :sales=>0}, {:month=>"Nov", :sales=>0}, {:month=>"Dec", :sales=>0}, {:month=>"Jan", :sales=>0}, {:month=>"Feb", :sales=>0}, {:month=>"Mar", :sales=>200000.0}]
+      another_user.monthly_sales("01-03-2012").should == [{:month=>"Mar", :sales=>0}, {:month=>"Apr", :sales=>0}, {:month=>"May", :sales=>0}, {:month=>"Jun", :sales=>0}, {:month=>"Jul", :sales=>0}, {:month=>"Aug", :sales=>0}, {:month=>"Sep", :sales=>0}, {:month=>"Oct", :sales=>0}, {:month=>"Nov", :sales=>0}, {:month=>"Dec", :sales=>0}, {:month=>"Jan", :sales=>0}, {:month=>"Feb", :sales=>0}, {:month=>"Mar", :sales=>2000.0}]
     end
   end
 
@@ -616,18 +616,18 @@ describe User do
       image = create(:image, :gallery => gallery1)
       new_order = create(:order, :transaction_status => "completed")
       line_item = create(:line_item, :image_id => image.id, :order_id => new_order.id, :quantity => 4, :price => 50, :commission_percent => 35.0)
-      another_user.total_earn.should == 200000.0
+      another_user.total_earn.should == 2000.0
     end
   end
 
   describe "#owned_amount" do
     it "should return amount" do
-      another_user.update_attribute(:withdrawn_amount, 100000.0)
+      another_user.update_attribute(:withdrawn_amount, 100.0)
       gallery1 = another_user.galleries.first
       image = create(:image, :gallery => gallery1)
       new_order = create(:order, :transaction_status => "completed")
       line_item = create(:line_item, :image_id => image.id, :order_id => new_order.id, :quantity => 4, :price => 50, :commission_percent => 35.0)
-      another_user.owned_amount.should == 100000.0
+      another_user.owned_amount.should == 1900.0
     end
   end
 
