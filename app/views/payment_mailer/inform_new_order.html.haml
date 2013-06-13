@@ -6,7 +6,9 @@
     %p
       Hi,
     %p
-      #{@user.username} (#{@user.fullname}) purchased a photo on Uplo.com.
+      #{@user.username} (#{@user.fullname}, #{mail_to @user.email}) purchased a photo on Uplo.com.
+    %p
+      Shipping Address: #{@user.shipping_address.full_address}
     %h3
       Order Summary
     %table
@@ -17,6 +19,8 @@
           Quantity
         %th
           Price
+        %th
+          Description
       - subtotal = 0
       - (0...@order.line_items.length).each do |idx|
         - line_item = @order.line_items[idx]
@@ -28,6 +32,8 @@
             = line_item.quantity
           %td
             = number_to_currency(line_item.price * line_item.quantity)
+          %td
+            = line_item.product_option.try(:description) 
     %br
     .summary.text.black.font11.line18.right
       .text.bold.right
@@ -36,7 +42,6 @@
         Tax: #{(@order.tax > 0 ? number_to_currency(@order.tax) : "--")}
       .text.clear
         S&H: #{number_to_currency SHIPPING_FEE}
-
     .line-separator.left
     .summary.right
       .grand-total.text.black.bold.font14.line18.right.clear
