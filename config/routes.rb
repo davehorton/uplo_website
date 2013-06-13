@@ -215,6 +215,12 @@ Uplo::Application.routes.draw do
     end
 
     resources :shipping_prices
+    resources :orders do
+      member do
+        post :resend_fulfillment_email
+        post :regenerate_print
+      end
+    end
     resources :hidden_images, :only => [:index] do
       member do
         put :toggle_hidden_by_admin
