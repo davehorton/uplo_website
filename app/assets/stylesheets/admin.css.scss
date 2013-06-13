@@ -48,7 +48,8 @@ $color-input-border: #cdcdcd;
 #admin_menu li div a{
 	margin-left:22px;
 	margin-right:22px;
-	color:#868686;
+  font-size:11px;
+ 	color:#868686;
 	font-weight:normal;
 }
 
@@ -401,3 +402,21 @@ $color-input-border: #cdcdcd;
     .button.send-invite { margin-left: 103px; }
   }
 }
+
+#order_options { width: 100%; }
+#order_options thead th { padding-bottom: 10px; }
+#order_options th { text-align: left; }
+#order_options td {
+  border: 1px solid #ddd;
+  padding: 6px;
+}
+
+#order_details { width: 100%; }
+#order_details td {
+  border: 1px solid #ddd;
+  padding: 6px;
+  vertical-align: top;
+}
+#order_details tr > td:first-child { font-weight: bold; }
+#order_details table { width:100%; }
+#order_details table td { text-align:center; }

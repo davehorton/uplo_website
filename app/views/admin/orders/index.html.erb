@@ -1,0 +1,28 @@
+<%= page_title 'Orders' %>
+<%= render partial: 'admin/admin_menu' %>
+<table id="order_options">
+  <thead>
+    <tr>
+      <th>Order ID</th>
+      <th>Order Date</th>
+      <th>Customer Name</th>
+      <th>Billing Address</th>
+      <th>Order Amount</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @orders.each do |order| %>
+      <tr>
+        <td><%= order.id %></td>
+        <td><%= convert_to_edt(order.created_at) %></td>
+        <td><%= order.user.fullname %></td>
+        <td><%= order.billing_address.try(:full_address) %></td>
+        <td><%= number_to_currency(order.order_total) %></td>
+        <td><%= link_to 'Show', admin_order_path(order) %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+<%= render_pagination(@orders) %>
+
