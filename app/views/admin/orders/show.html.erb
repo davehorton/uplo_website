@@ -1,0 +1,67 @@
+<%= page_title 'Order Details' %>
+<%= render partial: 'admin/admin_menu' %>
+<style type="text/css">
+  #order_options {
+    width: 100%
+  }
+  
+  #order_options td {
+    border: 1px solid #ddd;
+    padding: 6px;
+    vertical-align: top;
+  }
+  #order_options tr > td:first-child { font-weight: bold;}
+  #order_options table { width:100%; }
+  #order_options table td { text-align:center; }
+</style>
+
+<table id="order_options">
+  <tbody>
+    <tr>
+      <td>Order ID</td>
+      <td><%= @order.id %></td>
+    </tr>
+    <tr>
+      <td>Order Date</td>
+      <td><%= convert_to_edt(@order.created_at) %></td>
+    </tr>
+    <tr>
+      <td>Customer Name</td>
+      <td><%= @order.user.fullname %></td>
+    </tr>
+    <tr>
+      <td>Billing Address</td>
+      <td><%= @order.billing_address.try(:full_address) %></td>
+    </tr>
+    <tr>
+      <td>Order Amount</td>
+      <td><%= number_to_currency(@order.order_total) %></td>
+    </tr>
+    <tr>
+      <td>Line Items</td>
+      <td>
+        <table>
+          <% @order.line_items.each do |line_item| %>
+            <tr>
+              <td><%= link_to (image_tag line_item.image.url(:thumb), :alt => line_item.image.name, :class => "image-thumb image small"), browse_image_path(line_item.image), :class => "image-link" %></td>
+              <td><%= line_item.product_option.description %></td>
+              <td><%= number_to_currency(line_item.price) %></td>
+              <td><%= button_to "Regenerate Print", regenerate_print_admin_order_path(line_item.id) %></td>
+            </tr>
+          <% end %>
+        </table>
+      </td>
+    </tr>
+    <tr>
+      <td>Shipping Tax</td>
+      <td><%= number_to_currency(@order.shipping_fee) %></td>
+    </tr>
+    <tr>
+      <td>Total Amount</td>
+      <td><%= number_to_currency(@order.order_total + @order.shipping_fee) %></td>
+    </tr>
+  </tbody>
+</table>
+<br/><br/>
+<%= button_to "Resend Fulfillment Email", resend_fulfillment_email_admin_order_path(@order.id) %>
+
