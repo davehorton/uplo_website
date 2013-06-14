@@ -16,7 +16,7 @@ class Address < ActiveRecord::Base
   end
 
   def full_address(seperator = ", ")
-    [street_address, optional_address, zip, city, state, country].select(&:present?).join(seperator)
+    [street_address, optional_address, city, state, zip, country].select(&:present?).join(seperator)
   end
 
 end
