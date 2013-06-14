@@ -16,7 +16,7 @@ describe Order do
   it { should accept_nested_attributes_for(:shipping_address) }
 
   it "has a completed scope" do
-    empty_order.update_attribute(:transaction_status, "completed")
+    empty_order.update_attribute(:status, "completed")
     Order.completed.should == [empty_order]
   end
 

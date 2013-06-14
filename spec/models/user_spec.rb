@@ -430,7 +430,7 @@ describe User do
   describe "#paid_items" do
     context "with image id" do
       it "should" do
-        new_order = create(:order, :transaction_status => "completed", :user_id => user.id)
+        new_order = create(:completed_order, :user_id => user.id)
         line_item = create(:line_item, :image_id => image.id, :order_id => new_order.id)
         user.paid_items(image.id).should == [line_item]
       end
@@ -446,7 +446,7 @@ describe User do
 
   describe "#paid_items_number" do
     it "should calculate result" do
-      new_order = create(:order, :transaction_status => "completed", :user_id => user.id)
+      new_order = create(:completed_order, :user_id => user.id)
       line_item = create(:line_item, :image_id => image.id, :order_id => new_order.id, :quantity => 5)
       user.paid_items_number(image.id).should == 5
     end
@@ -454,7 +454,7 @@ describe User do
 
   describe "total_paid" do
     it "should calculate result" do
-      new_order = create(:order, :transaction_status => "completed", :user_id => user.id)
+      new_order = create(:completed_order, :user_id => user.id)
       line_item = create(:line_item, :image_id => image.id, :order_id => new_order.id, :quantity => 5, :price => 50.0, :tax => 10.0)
       user.total_paid(image.id).should == 2500
     end
@@ -466,7 +466,7 @@ describe User do
         another_user = create(:user_with_gallery)
         gallery1 = another_user.galleries.first
         image = create(:image, :gallery => gallery1)
-        new_order = create(:order, :transaction_status => "completed")
+        new_order = create(:completed_order)
         line_item = create(:line_item, :image_id => image.id, :order_id => new_order.id, :quantity => 4)
         another_user.sold_items.should == [line_item]
       end
@@ -483,7 +483,7 @@ describe User do
     it "should return calculated hash" do
       gallery1 = another_user.galleries.first
       image = create(:image, :gallery => gallery1)
-      new_order = create(:order, :transaction_status => "completed", :transaction_date => "03-03-2012")
+      new_order = create(:completed_order, :transaction_date => "03-03-2012")
       line_item = create(:line_item, :image_id => image.id, :order_id => new_order.id, :quantity => 4, :price => 500, :commission_percent => 35.0)
       another_user.monthly_sales("01-03-2012").should == [{:month=>"Mar", :sales=>0}, {:month=>"Apr", :sales=>0}, {:month=>"May", :sales=>0}, {:month=>"Jun", :sales=>0}, {:month=>"Jul", :sales=>0}, {:month=>"Aug", :sales=>0}, {:month=>"Sep", :sales=>0}, {:month=>"Oct", :sales=>0}, {:month=>"Nov", :sales=>0}, {:month=>"Dec", :sales=>0}, {:month=>"Jan", :sales=>0}, {:month=>"Feb", :sales=>0}, {:month=>"Mar", :sales=>2000.0}]
     end
@@ -494,7 +494,7 @@ describe User do
       it "should return proper matched result" do
         gallery1 = another_user.galleries.first
         image = create(:image, :gallery => gallery1)
-        new_order = create(:order, :transaction_status => "completed")
+        new_order = create(:completed_order)
         line_item = create(:line_item, :image_id => image.id, :order_id => new_order.id, :quantity => 5)
         another_user.total_sales.should be_a(Hash)
       end
@@ -614,7 +614,7 @@ describe User do
     it "should calculate result" do
       gallery1 = another_user.galleries.first
       image = create(:image, :gallery => gallery1)
-      new_order = create(:order, :transaction_status => "completed")
+      new_order = create(:completed_order)
       line_item = create(:line_item, :image_id => image.id, :order_id => new_order.id, :quantity => 4, :price => 50, :commission_percent => 35.0)
       another_user.total_earn.should == 2000.0
     end
@@ -625,7 +625,7 @@ describe User do
       another_user.update_attribute(:withdrawn_amount, 100.0)
       gallery1 = another_user.galleries.first
       image = create(:image, :gallery => gallery1)
-      new_order = create(:order, :transaction_status => "completed")
+      new_order = create(:completed_order)
       line_item = create(:line_item, :image_id => image.id, :order_id => new_order.id, :quantity => 4, :price => 50, :commission_percent => 35.0)
       another_user.owned_amount.should == 1900.0
     end
@@ -646,7 +646,7 @@ describe User do
       it "should raise error with amount greater than owned_amount" do
         gallery1 = another_user.galleries.first
         image = create(:image, :gallery => gallery1)
-        new_order = create(:order, :transaction_status => "completed")
+        new_order = create(:completed_order)
         line_item = create(:line_item, :image_id => image.id, :order_id => new_order.id, :quantity => 4, :price => 50, :commission_percent => 10.0)
         another_user.withdraw_paypal(5000000).should raise_error
       end

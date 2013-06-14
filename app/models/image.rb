@@ -325,14 +325,6 @@ class Image < ActiveRecord::Base
     self.class.increment_counter(:pageview, self.id)
   end
 
-  def sales_count
-    if !self.attributes.has_key?('sales_count')
-      self.attributes['sales_count'] = self.orders.completed.joins(:line_items).sum('line_items.quantity').to_i
-    else
-      self.attributes['sales_count'].to_i
-    end
-  end
-
   protected
 
     def minimum_dimensions_are_met

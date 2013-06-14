@@ -303,8 +303,8 @@ class User < ActiveRecord::Base
     end
     LineItem.all :from => from_condition, :select => 'lis.*',
       :joins => 'LEFT JOIN orders ON orders.id = lis.order_id',
-      :conditions => ['orders.user_id=? and orders.transaction_status=?',
-        self.id, Order::TRANSACTION_STATUS[:complete]]
+      :conditions => ['orders.user_id=? and orders.status=?',
+        self.id, Order::STATUS[:complete]]
   end
 
   def paid_items_number(image_id=nil)

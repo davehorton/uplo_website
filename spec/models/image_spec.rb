@@ -426,22 +426,6 @@ describe Image do
     end
   end
 
-  describe "#sales_count" do
-    context "without sales count key" do
-      it "should calculate result" do
-        new_order = create(:order, :transaction_status => "completed")
-        line_item = create(:line_item, :image_id => image.id, :order_id => new_order.id, :quantity => 4)
-        image.sales_count.should == 4
-      end
-    end
-
-    context "with sales count key" do
-      it "should display result" do
-        image.sales_count.should be_zero
-      end
-    end
-  end
-
   describe "execute before create callback" do
     before { image.save }
 

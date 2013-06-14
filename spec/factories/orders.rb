@@ -12,4 +12,9 @@ FactoryGirl.define do
     end
   end
 
+  factory :completed_order, parent: :order do
+    status 'completed'
+    transaction_status 'completed'
+  end
+
 end
