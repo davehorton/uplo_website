@@ -8,6 +8,7 @@
       <th>Customer Name</th>
       <th>Billing Address</th>
       <th>Order Amount</th>
+      <th>Transaction Status</th>
       <th></th>
     </tr>
   </thead>
@@ -19,6 +20,12 @@
         <td><%= order.user.fullname %></td>
         <td><%= order.billing_address.try(:full_address) %></td>
         <td><%= number_to_currency(order.order_total) %></td>
+        <td>
+          <%= radio_button_tag "transaction_status_#{order.id}", 1, order.transaction_completed?, :disabled => true %>
+          <%= label_tag "completed", "Completed" %>       
+          <%= radio_button_tag "transaction_status_#{order.id}", 1, !order.transaction_completed?, :disabled => true %>
+          <%= label_tag "processing", "Processing" %>       
+        </td>
         <td><%= link_to 'Show', admin_order_path(order) %></td>
       </tr>
     <% end %>
