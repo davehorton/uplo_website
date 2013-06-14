@@ -150,6 +150,12 @@ class Order < ActiveRecord::Base
     "orders/#{id}"
   end
 
+  # shipping address only exists if user does not want to
+  # use billing address for deliveries
+  def ship_to_address
+    (shipping_address || billing_address).try(:full_address)
+  end
+
   protected
 
     def init_transaction_date

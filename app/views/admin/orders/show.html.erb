@@ -23,7 +23,7 @@
     <% if @order.transaction_completed? %>
     <tr>
       <td>Shipping Address</td>
-      <td><%= @order.shipping_address.try(:full_address) %></td>
+      <td><%= @order.ship_to_address %></td>
     </tr>
     <% end %>
     <tr>

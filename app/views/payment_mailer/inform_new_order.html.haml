@@ -8,7 +8,7 @@
     %p
       #{@user.username} (#{@user.fullname}, #{mail_to @user.email}) purchased a photo on Uplo.com.
     %p
-      Shipping Address: #{@user.shipping_address.full_address}
+      Shipping Address: #{@user.ship_to_address}
     %h3
       Order Summary
     %table
@@ -33,7 +33,7 @@
           %td
             = number_to_currency(line_item.price * line_item.quantity)
           %td
-            = line_item.product_option.try(:description) 
+            = line_item.product_option.try(:description)
     %br
     .summary.text.black.font11.line18.right
       .text.bold.right
