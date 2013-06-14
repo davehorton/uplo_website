@@ -3,7 +3,13 @@ class Admin::OrdersController < Admin::AdminController
 
   def index
     @orders = Order.scoped
-    @orders = params[:transaction_status] ? @orders.in_status(params[:transaction_status]).with_items : @orders.completed
+    @orders = if params[:in_cart].present?
+      @in_cart = true
+      @orders.in_cart.with_items
+    else
+      @orders.completed
+    end
+
     @orders = @orders.paginate_and_sort(filtered_params.merge(:sort_field => "created_at", :sort_direction => "desc" ))
   end
 

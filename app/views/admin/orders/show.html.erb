@@ -2,7 +2,7 @@
 <%= render partial: 'admin/admin_menu' %>
 <table id="order_details">
   <tbody>
-    <% if @order.transaction_completed? %>
+    <% if @order.completed? %>
     <tr>
       <td>Order ID</td>
       <td><%= @order.id %></td>
@@ -20,16 +20,12 @@
       <td>Customer Name</td>
       <td><%= @order.user.fullname %> (<%= @order.user.username %>)</td>
     </tr>
-    <% if @order.transaction_completed? %>
+    <% if @order.completed? %>
     <tr>
       <td>Shipping Address</td>
       <td><%= @order.ship_to_address %></td>
     </tr>
     <% end %>
-    <tr>
-      <td>Order Amount</td>
-      <td><%= number_to_currency(@order.order_total) %></td>
-    </tr>
     <tr>
       <td>Line Items</td>
       <td>
@@ -39,7 +35,7 @@
               <td><%= link_to (image_tag line_item.image.url(:thumb), :alt => line_item.image.name, :class => "image-thumb image small"), browse_image_path(line_item.image), :class => "image-link" %></td>
               <td><%= line_item.product_option.description %></td>
               <td><%= number_to_currency(line_item.price) %></td>
-              <% if @order.transaction_completed? %>
+              <% if @order.completed? %>
                 <td><%= button_to "Regenerate Print", regenerate_print_admin_order_path(line_item.id) %></td>
               <% end %>
             </tr>
@@ -47,19 +43,17 @@
         </table>
       </td>
     </tr>
-    <% if @order.transaction_completed? %>
     <tr>
-      <td>Shipping Tax</td>
+      <td>Shipping</td>
       <td><%= number_to_currency(@order.shipping_fee) %></td>
     </tr>
     <tr>
       <td>Total Amount</td>
-      <td><%= number_to_currency(@order.order_total + @order.shipping_fee) %></td>
+      <td><%= number_to_currency(@order.order_total) %></td>
     </tr>
-    <% end %>
   </tbody>
 </table>
 <br/><br/>
-<% if @order.transaction_completed? %>
+<% if @order.completed? %>
   <%= button_to "Resend Fulfillment Email", resend_fulfillment_email_admin_order_path(@order.id) %>
 <% end %>

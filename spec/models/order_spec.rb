@@ -80,17 +80,17 @@ describe Order do
     end
   end
 
-  describe "#transaction_completed?" do
+  describe "#completed?" do
     context "with completed status" do
       it "should return true" do
-        empty_order.update_attribute(:transaction_status, "completed")
-        empty_order.transaction_completed?.should be_true
+        empty_order.update_attribute(:status, "completed")
+        empty_order.completed?.should be_true
       end
     end
 
     context "with not completed status" do
       it "should return false" do
-        empty_order.transaction_completed?.should be_false
+        empty_order.completed?.should be_false
       end
     end
   end

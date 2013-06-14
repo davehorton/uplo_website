@@ -34,11 +34,12 @@ class Order < ActiveRecord::Base
   }
 
   default_scope order('orders.transaction_date desc')
-  scope :completed,  where(transaction_status: TRANSACTION_STATUS[:complete])
+  scope :completed,  where(status: STATUS[:complete])
+  scope :in_cart,    where(status: [STATUS[:shopping], STATUS[:checkout]])
   scope :with_items, where('orders.order_total > 0')
 
-  def self.in_status(status)
-    where(transaction_status: status)
+  def completed?
+    status == STATUS[:complete]
   end
 
   def update_tax_by_state
@@ -123,12 +124,6 @@ class Order < ActiveRecord::Base
     return true
   end
 
-  def transaction_completed?
-    @transaction_completed ||= begin
-      self.transaction_status.to_s == TRANSACTION_STATUS[:complete]
-    end
-  end
-
   def humanized_status
     case transaction_status
     when TRANSACTION_STATUS[:complete]
@@ -153,7 +148,7 @@ class Order < ActiveRecord::Base
   # shipping address only exists if user does not want to
   # use billing address for deliveries
   def ship_to_address
-    (shipping_address || billing_address).try(:full_address)
+    (shipping_address || user.shipping_address || user.billing_address).try(:full_address)
   end
 
   protected

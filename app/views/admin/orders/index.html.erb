@@ -18,14 +18,14 @@
 </style>
 
 <div id="actions">
-  <%= link_to "Orders", admin_orders_path(), class: (params[:transaction_status] ? nil : "selected") %>
-  <%= link_to "Carts", admin_orders_path(transaction_status: "processing"), class: (params[:transaction_status] ? "selected" : nil ) %>
+  <%= link_to "Orders", admin_orders_path(), class: (@in_cart ? nil : "selected") %>
+  <%= link_to "Carts", admin_orders_path(in_cart: true), class: (@in_cart ? "selected" : nil ) %>
 </div>
 
 <table id="order_options">
   <thead>
     <tr>
-      <% unless params[:transaction_status] %>
+      <% unless @in_cart %>
       <th>Order ID</th>
       <% end %>
       <th>Created On</th>
@@ -39,7 +39,7 @@
   <tbody>
     <% @orders.each do |order| %>
       <tr>
-        <% unless params[:transaction_status] %>
+        <% unless @in_cart %>
         <td><%= order.id %></td>
         <% end %>
         <td><%= l convert_to_edt(order.created_at), format: :default %></td>
@@ -52,4 +52,4 @@
     <% end %>
   </tbody>
 </table>
-<%= render_pagination(@orders, transaction_status: params[:transaction_status]) %>
+<%= render_pagination(@orders, in_cart: @in_cart) %>
