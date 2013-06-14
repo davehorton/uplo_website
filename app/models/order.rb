@@ -34,7 +34,11 @@ class Order < ActiveRecord::Base
   }
 
   default_scope order('orders.transaction_date desc')
-  scope :completed, where(transaction_status: TRANSACTION_STATUS[:complete])
+  scope :completed,  where(transaction_status: TRANSACTION_STATUS[:complete])
+
+  def self.in_status(status)
+    where(transaction_status: status)
+  end
 
   def update_tax_by_state
     has_tax  = false
@@ -119,7 +123,20 @@ class Order < ActiveRecord::Base
   end
 
   def transaction_completed?
-    return (self.transaction_status.to_s == TRANSACTION_STATUS[:complete])
+    @transaction_completed ||= begin
+      self.transaction_status.to_s == TRANSACTION_STATUS[:complete]
+    end
+  end
+
+  def humanized_status
+    case transaction_status
+    when TRANSACTION_STATUS[:complete]
+      'Complete'
+    when TRANSACTION_STATUS[:processing]
+      'In Cart'
+    when TRANSACTION_STATUS[:failed]
+      'Failed'
+    end
   end
 
   def add_to_dropbox

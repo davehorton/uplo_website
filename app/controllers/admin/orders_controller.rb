@@ -2,7 +2,9 @@ class Admin::OrdersController < Admin::AdminController
   self.per_page = 20
 
   def index
-    @orders = Order.paginate_and_sort(filtered_params.merge(:sort_field => "created_at", :sort_direction => "desc" ))
+    @orders = Order.scoped
+    @orders = params[:transaction_status] ? @orders.in_status(params[:transaction_status]) : @orders.completed
+    @orders = @orders.paginate_and_sort(filtered_params.merge(:sort_field => "created_at", :sort_direction => "desc" ))
   end
 
   def show

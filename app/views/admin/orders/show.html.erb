@@ -2,22 +2,30 @@
 <%= render partial: 'admin/admin_menu' %>
 <table id="order_details">
   <tbody>
+    <% if @order.transaction_completed? %>
     <tr>
       <td>Order ID</td>
       <td><%= @order.id %></td>
     </tr>
+    <% end %>
     <tr>
-      <td>Order Date</td>
-      <td><%= convert_to_edt(@order.created_at) %></td>
+      <td>Status</td>
+      <td><%= @order.humanized_status %></td>
+    </tr>
+    <tr>
+      <td>Created On</td>
+      <td><%= l convert_to_edt(@order.created_at), format: :default %></td>
     </tr>
     <tr>
       <td>Customer Name</td>
-      <td><%= @order.user.fullname %></td>
+      <td><%= @order.user.fullname %> (<%= @order.user.username %>)</td>
     </tr>
+    <% if @order.transaction_completed? %>
     <tr>
       <td>Billing Address</td>
       <td><%= @order.billing_address.try(:full_address) %></td>
     </tr>
+    <% end %>
     <tr>
       <td>Order Amount</td>
       <td><%= number_to_currency(@order.order_total) %></td>
@@ -32,13 +40,14 @@
               <td><%= line_item.product_option.description %></td>
               <td><%= number_to_currency(line_item.price) %></td>
               <% if @order.transaction_completed? %>
-                <td><%= button_to "Regenerate Print", regenerate_print_admin_order_path(line_item.id) %></td> 
+                <td><%= button_to "Regenerate Print", regenerate_print_admin_order_path(line_item.id) %></td>
               <% end %>
             </tr>
           <% end %>
         </table>
       </td>
     </tr>
+    <% if @order.transaction_completed? %>
     <tr>
       <td>Shipping Tax</td>
       <td><%= number_to_currency(@order.shipping_fee) %></td>
@@ -47,6 +56,7 @@
       <td>Total Amount</td>
       <td><%= number_to_currency(@order.order_total + @order.shipping_fee) %></td>
     </tr>
+    <% end %>
   </tbody>
 </table>
 <br/><br/>

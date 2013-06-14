@@ -1,35 +1,55 @@
 <%= page_title 'Orders' %>
 <%= render partial: 'admin/admin_menu' %>
+
+<style type="text/css">
+  #actions {
+    margin-bottom: 30px;
+  }
+
+  #actions a {
+    background-color: #eee;
+    border: 1px solid #999;
+    padding: 10px;
+  }
+
+  #actions a.selected {
+    background-color: #fff
+  }
+</style>
+
+<div id="actions">
+  <%= link_to "Orders", admin_orders_path(), class: (params[:transaction_status] ? nil : "selected") %>
+  <%= link_to "Carts", admin_orders_path(transaction_status: "processing"), class: (params[:transaction_status] ? "selected" : nil ) %>
+</div>
+
 <table id="order_options">
   <thead>
     <tr>
+      <% unless params[:transaction_status] %>
       <th>Order ID</th>
-      <th>Order Date</th>
-      <th>Customer Name</th>
-      <th>Billing Address</th>
+      <% end %>
+      <th>Created On</th>
+      <th>Last Name</th>
+      <th>First Name</th>
+      <th>User Name</th>
       <th>Order Amount</th>
-      <th>Transaction Status</th>
       <th></th>
     </tr>
   </thead>
   <tbody>
     <% @orders.each do |order| %>
       <tr>
+        <% unless params[:transaction_status] %>
         <td><%= order.id %></td>
-        <td><%= convert_to_edt(order.created_at) %></td>
-        <td><%= order.user.fullname %></td>
-        <td><%= order.billing_address.try(:full_address) %></td>
+        <% end %>
+        <td><%= l convert_to_edt(order.created_at), format: :default %></td>
+        <td><%= order.user.last_name.titleize %></td>
+        <td><%= order.user.first_name.titleize %></td>
+        <td><%= order.user.username %></td>
         <td><%= number_to_currency(order.order_total) %></td>
-        <td>
-          <%= radio_button_tag "transaction_status_#{order.id}", 1, order.transaction_completed?, :disabled => true %>
-          <%= label_tag "completed", "Completed" %>       
-          <%= radio_button_tag "transaction_status_#{order.id}", 1, !order.transaction_completed?, :disabled => true %>
-          <%= label_tag "processing", "Processing" %>       
-        </td>
         <td><%= link_to 'Show', admin_order_path(order) %></td>
       </tr>
     <% end %>
   </tbody>
 </table>
-<%= render_pagination(@orders) %>
-
+<%= render_pagination(@orders, transaction_status: params[:transaction_status]) %>
