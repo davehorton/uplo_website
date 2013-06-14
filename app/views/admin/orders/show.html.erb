@@ -22,8 +22,8 @@
     </tr>
     <% if @order.transaction_completed? %>
     <tr>
-      <td>Billing Address</td>
-      <td><%= @order.billing_address.try(:full_address) %></td>
+      <td>Shipping Address</td>
+      <td><%= @order.shipping_address.try(:full_address) %></td>
     </tr>
     <% end %>
     <tr>
