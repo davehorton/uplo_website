@@ -31,7 +31,9 @@
               <td><%= link_to (image_tag line_item.image.url(:thumb), :alt => line_item.image.name, :class => "image-thumb image small"), browse_image_path(line_item.image), :class => "image-link" %></td>
               <td><%= line_item.product_option.description %></td>
               <td><%= number_to_currency(line_item.price) %></td>
-              <td><%= button_to "Regenerate Print", regenerate_print_admin_order_path(line_item.id) %></td>
+              <% if @order.transaction_completed? %>
+                <td><%= button_to "Regenerate Print", regenerate_print_admin_order_path(line_item.id) %></td> 
+              <% end %>
             </tr>
           <% end %>
         </table>
@@ -48,5 +50,6 @@
   </tbody>
 </table>
 <br/><br/>
-<%= button_to "Resend Fulfillment Email", resend_fulfillment_email_admin_order_path(@order.id) %>
-
+<% if @order.transaction_completed? %>
+  <%= button_to "Resend Fulfillment Email", resend_fulfillment_email_admin_order_path(@order.id) %>
+<% end %>
