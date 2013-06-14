@@ -10,7 +10,7 @@
     <% end %>
     <tr>
       <td>Status</td>
-      <td><%= @order.humanized_status %></td>
+      <td><%= @order.status.try(:humanize) %></td>
     </tr>
     <tr>
       <td>Created On</td>

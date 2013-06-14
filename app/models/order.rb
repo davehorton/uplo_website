@@ -124,17 +124,6 @@ class Order < ActiveRecord::Base
     return true
   end
 
-  def humanized_status
-    case transaction_status
-    when TRANSACTION_STATUS[:complete]
-      'Complete'
-    when TRANSACTION_STATUS[:processing]
-      'In Cart'
-    when TRANSACTION_STATUS[:failed]
-      'Failed'
-    end
-  end
-
   def add_to_dropbox
     self.line_items.each do |line_item|
       line_item.delay.save_image_to_dropbox
