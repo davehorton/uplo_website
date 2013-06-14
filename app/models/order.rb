@@ -35,6 +35,7 @@ class Order < ActiveRecord::Base
 
   default_scope order('orders.transaction_date desc')
   scope :completed,  where(transaction_status: TRANSACTION_STATUS[:complete])
+  scope :with_items, where('orders.order_total > 0')
 
   def self.in_status(status)
     where(transaction_status: status)
