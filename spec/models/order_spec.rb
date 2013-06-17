@@ -106,13 +106,6 @@ describe Order do
     end
   end
 
-  describe "before create callback init_transaction_date" do
-    it "should assign transaction date" do
-      order1 = create(:order, :transaction_date => "")
-      order1.transaction_date.should_not be_blank
-    end
-  end
-
   describe "#ship_to_address" do
     context "with shipping address" do
       it "should return full address" do
@@ -137,6 +130,13 @@ describe Order do
         new_order = create(:order, :user_id => user1.id, :shipping_address_id => nil)
         new_order.ship_to_address.should == "Street1, City of Joy, abc, 111111, usa"
       end
+    end
+  end
+
+  describe "before create callback init_transaction_date" do
+    it "should assign transaction date" do
+      order1 = create(:order, :transaction_date => "")
+      order1.transaction_date.should_not be_blank
     end
   end
 
