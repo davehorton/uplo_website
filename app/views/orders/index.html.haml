@@ -107,7 +107,7 @@
         .summary.right
           .grand-total.text.black.bold.font14.line18.right.clear
             .left Grand Total:
-            #grand-total.right= number_to_currency(@order.tax + subtotal + @order.shipping_fee)
+            #grand-total.right= number_to_currency @order.order_total
         .line-separator.left
         .submit.right
 

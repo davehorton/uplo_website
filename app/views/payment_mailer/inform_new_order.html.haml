@@ -41,7 +41,7 @@
       .text.right.clear
         Tax: #{(@order.tax > 0 ? number_to_currency(@order.tax) : "--")}
       .text.clear
-        S&H: #{number_to_currency SHIPPING_FEE}
+        S&H: #{number_to_currency @order.shipping_fee}
     .line-separator.left
     .summary.right
       .grand-total.text.black.bold.font14.line18.right.clear
