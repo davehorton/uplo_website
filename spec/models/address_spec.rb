@@ -47,4 +47,11 @@ describe Address do
     end
   end
 
+  describe "#full_address" do
+    it "should return proper address" do
+      new_address = create(:address, :city => "City1", :state => "abc", :country => "India", :street_address => "Street1", :zip => "111111")
+      new_address.full_address.should == "Street1, City1, abc, 111111, India"
+    end
+  end
+
 end

@@ -102,4 +102,31 @@ describe Order do
     end
   end
 
+  describe "#ship_to_address" do
+    context "with shipping address" do
+      it "should return full address" do
+        empty_order.shipping_address.update_attributes(:state => "abc", :street_address => "Street1", :zip => "111111")
+        empty_order.ship_to_address.should == "Street1, City of Joy, abc, 111111, usa"
+      end
+    end
+
+    context "with user's shipping address" do
+      it "should return full address" do
+        shipping_address = create(:shipping_address, :state => "abc", :street_address => "Street1", :zip => "111111")
+        user1 = create(:user, :shipping_address_id => shipping_address.id, :billing_address_id => nil)
+        new_order = create(:order, :user_id => user1.id, :shipping_address_id => nil)
+        new_order.ship_to_address.should == "Street1, City of Joy, abc, 111111, usa"
+      end
+    end
+
+    context "with user's billing address" do
+      it "should return full address" do
+        billing_address = create(:billing_address, :state => "abc", :street_address => "Street1", :zip => "111111")
+        user1 = create(:user, :billing_address_id => billing_address.id, :shipping_address_id => nil)
+        new_order = create(:order, :user_id => user1.id, :shipping_address_id => nil)
+        new_order.ship_to_address.should == "Street1, City of Joy, abc, 111111, usa"
+      end
+    end
+  end
+
 end
