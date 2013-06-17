@@ -7,14 +7,14 @@
       <td>Order ID</td>
       <td><%= @order.id %></td>
     </tr>
+    <tr>
+      <td>Created On</td>
+      <td><%= l convert_to_edt(@order.transaction_date), format: :default %></td>
+    </tr>
     <% end %>
     <tr>
       <td>Status</td>
       <td><%= @order.status.try(:humanize) %></td>
-    </tr>
-    <tr>
-      <td>Created On</td>
-      <td><%= l convert_to_edt(@order.created_at), format: :default %></td>
     </tr>
     <tr>
       <td>Customer Name</td>

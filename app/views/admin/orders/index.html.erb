@@ -27,8 +27,8 @@
     <tr>
       <% unless @in_cart %>
       <th>Order ID</th>
-      <% end %>
       <th>Created On</th>
+      <% end %>
       <th>Last Name</th>
       <th>First Name</th>
       <th>User Name</th>
@@ -41,8 +41,8 @@
       <tr>
         <% unless @in_cart %>
         <td><%= order.id %></td>
+        <td><%= l convert_to_edt(order.transaction_date), format: :default %></td>
         <% end %>
-        <td><%= l convert_to_edt(order.created_at), format: :default %></td>
         <td><%= order.user.last_name.titleize %></td>
         <td><%= order.user.first_name.titleize %></td>
         <td><%= order.user.username %></td>
