@@ -41,7 +41,7 @@
       <tr>
         <% unless @in_cart %>
         <td><%= order.id %></td>
-        <td><%= l convert_to_edt(order.transaction_date), format: :default %></td>
+        <td><%= l convert_to_edt(order.updated_at), format: :default %></td>
         <% end %>
         <td><%= order.user.last_name.titleize %></td>
         <td><%= order.user.first_name.titleize %></td>

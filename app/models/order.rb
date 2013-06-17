@@ -33,7 +33,7 @@ class Order < ActiveRecord::Base
     :newyork => {:state_code => 'NY', :tax => 0.08875}
   }
 
-  default_scope order('orders.transaction_date desc')
+  default_scope order('orders.updated_at desc')
   scope :completed,  where(status: STATUS[:complete])
   scope :in_cart,    where(status: [STATUS[:shopping], STATUS[:checkout]])
   scope :with_items, where('orders.order_total > 0')
