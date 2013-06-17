@@ -28,7 +28,8 @@ describe Order do
 
   it "has a with_items scope" do
     empty_order.update_attribute(:order_total, 100.0)
-    Order.with_items.should == [empty_order]
+    order.update_attribute(:order_total, 50.0)
+    Order.with_items.should == [empty_order, order]
   end
 
   describe "#update_tax_by_state" do
