@@ -20,6 +20,18 @@ describe Order do
     Order.completed.should == [empty_order]
   end
 
+  it "has a in_cart scope" do
+    empty_order.update_attribute(:status, "shopping")
+    new_order = create(:order, :status => "checkout")
+    Order.in_cart.should == [empty_order, new_order]
+  end
+
+  it "has a with_items scope" do
+    empty_order.update_attribute(:order_total, 100.0)
+    order.update_attribute(:order_total, 50.0)
+    Order.with_items.should == [empty_order, order]
+  end
+
   describe "#update_tax_by_state" do
     context "when no has tax" do
       it "should update tax to zero" do
@@ -91,6 +103,33 @@ describe Order do
     context "with not completed status" do
       it "should return false" do
         empty_order.completed?.should be_false
+      end
+    end
+  end
+
+  describe "#ship_to_address" do
+    context "with shipping address" do
+      it "should return full address" do
+        empty_order.shipping_address.update_attributes(:state => "abc", :street_address => "Street1", :zip => "111111")
+        empty_order.ship_to_address.should == "Street1, City of Joy, abc, 111111, usa"
+      end
+    end
+
+    context "with user's shipping address" do
+      it "should return full address" do
+        shipping_address = create(:shipping_address, :state => "abc", :street_address => "Street1", :zip => "111111")
+        user1 = create(:user, :shipping_address_id => shipping_address.id, :billing_address_id => nil)
+        new_order = create(:order, :user_id => user1.id, :shipping_address_id => nil)
+        new_order.ship_to_address.should == "Street1, City of Joy, abc, 111111, usa"
+      end
+    end
+
+    context "with user's billing address" do
+      it "should return full address" do
+        billing_address = create(:billing_address, :state => "abc", :street_address => "Street1", :zip => "111111")
+        user1 = create(:user, :billing_address_id => billing_address.id, :shipping_address_id => nil)
+        new_order = create(:order, :user_id => user1.id, :shipping_address_id => nil)
+        new_order.ship_to_address.should == "Street1, City of Joy, abc, 111111, usa"
       end
     end
   end

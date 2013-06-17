@@ -55,6 +55,12 @@ describe Gallery do
      end
    end
 
+  describe "#last_update" do
+    it "should return proper formatted time" do
+      gallery.last_update.should == gallery.updated_at.strftime('%B %Y')
+    end
+  end
+
    describe "#cover_image" do
      context "when conditions met" do
        it "should get cover image" do

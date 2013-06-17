@@ -19,4 +19,16 @@ describe LineItemObserver do
     end
   end
 
+  describe "after_destroy" do
+    it "calls update order" do
+      order = create(:order_with_line_items)
+      line_item = order.line_items.first
+      line_item.price = 500
+      line_item.update_attributes(:quantity => 4)
+      observer = LineItemObserver.instance
+      observer.after_destroy(line_item)
+      line_item.order.order_total.to_i.should == 4000
+    end
+  end
+
 end
