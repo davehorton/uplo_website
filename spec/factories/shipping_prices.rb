@@ -2,7 +2,7 @@
 
 FactoryGirl.define do
   factory :shipping_price do
-    product_id 1
+    product
     quantity 1
     amount "9.99"
   end
