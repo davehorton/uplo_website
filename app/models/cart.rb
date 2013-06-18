@@ -9,4 +9,10 @@ class Cart < ActiveRecord::Base
   def clear
     line_items.destroy_all
   end
+
+  def assign_empty_order!
+    self.order = self.user.recent_empty_order
+    self.save!
+  end
+
 end

@@ -112,6 +112,7 @@ class Order < ActiveRecord::Base
 
       self.update_attributes(params)
       self.add_to_dropbox
+      self.cart.assign_empty_order!
 
       PaymentMailer.delay.transaction_finish(id)
       PaymentMailer.delay.inform_new_order(id)

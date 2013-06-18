@@ -12,4 +12,13 @@ describe Cart do
     end
   end
 
+  describe "#assign_empty_order!" do
+    it "should create a new order" do
+      cart = create(:cart, :order => nil)
+      cart.assign_empty_order!
+      cart.order.should_not be_nil
+      cart.order.status.should == "shopping"
+    end
+  end
+
 end
