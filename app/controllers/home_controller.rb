@@ -28,17 +28,13 @@ class HomeController < ApplicationController
 
   def browse
     @current_views = IMAGE_SORT_VIEW[Image::SORT_OPTIONS[:recent]]
-    filtered_params[:sort_direction] = 'desc'
-    filtered_params[:sort_field] = "images.created_at"
-    @data = Image.public_access.not_hidden.paginate_and_sort(filtered_params)
+    @data = Image.public_access.not_hidden.reorder("images.created_at desc")
     @mode = 'Browse'
   end
 
   def spotlight
     @current_views = IMAGE_SORT_VIEW[Image::SORT_OPTIONS[:spotlight]]
-    filtered_params[:sort_direction] = ''
-    filtered_params[:sort_field] = "random()"
-    @data = Image.spotlight.paginate_and_sort(filtered_params)
+    @data = Image.spotlight.reorder("random()")
     @mode = 'Spotlight'
     render :template => 'home/browse'
   end
