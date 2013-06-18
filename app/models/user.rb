@@ -277,20 +277,14 @@ class User < ActiveRecord::Base
   end
 
   def recent_empty_order
-    empty_order = self.orders.where(:status => Order::STATUS[:shopping]).order("orders.created_at DESC").first
-    if empty_order.blank?
-      empty_order = self.orders.create(:status => Order::STATUS[:shopping])
-    end
-    empty_order
+    self.orders.where(:status => Order::STATUS[:shopping]).first_or_create!
   end
 
   def init_cart
     if cart.nil?
-      new_order = recent_empty_order
-      new_cart = create_cart(:order => new_order)
+      create_cart(:order => recent_empty_order)
     elsif cart.order.nil?
-      cart.order = recent_empty_order
-      cart.save
+      cart.assign_empty_order!
     end
     cart
   end

@@ -167,7 +167,6 @@ class PaymentsController < ApplicationController
     def finalize_cart
       if find_cart
         @order = @cart.order
-        @cart.destroy if @cart
         @order.finalize_transaction
       end
     end
