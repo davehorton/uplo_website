@@ -3,7 +3,7 @@
 
 - result_type = (params[:filtered_by]==User::SEARCH_TYPE) ? 'User' : 'Photo'
 - content_for :top_content do
-  = render :partial => 'browse_header', :locals => {:num_of_records => @data.total_entries, :current_views => @current_views}
+  = render :partial => 'browse_header', :locals => {:num_of_records => @data.count, :current_views => @current_views}
 
 .wrapper.images-wrapper.left
   - if result_type == 'Photo'
@@ -24,4 +24,4 @@
             %span= pluralize(user.public_images.size, 'item')
             %span.separator= '|'
             %span= pluralize(user.images_pageview, 'view')
-= render_pagination(@data, {:controller => 'home', :action => params[:action]})
+
