@@ -32,13 +32,8 @@ class ShoppingCartController < ApplicationController
         line_item.quantity = params[:line_item][:quantity].to_i
       else
         line_item = @cart.order.line_items.where(product_id: product.id, product_option_id: product_option.id).first
-
-        if line_item
-          line_item.quantity += params[:line_item][:quantity].to_i
-        else
-          line_item = @cart.order.line_items.new(image_id: image.id)
-          line_item.quantity = params[:line_item][:quantity].to_i
-        end
+        line_item = @cart.order.line_items.new(image_id: image.id)
+        line_item.quantity = params[:line_item][:quantity].to_i
       end
 
       line_item.product_id = product.id
