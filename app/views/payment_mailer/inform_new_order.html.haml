@@ -34,6 +34,8 @@
             = number_to_currency(line_item.price * line_item.quantity)
           %td
             = line_item.product_option.try(:description)
+            = line_item.product.size.to_name
+            = line_item.product.moulding.name
     %br
     .summary.text.black.font11.line18.right
       .text.bold.right
