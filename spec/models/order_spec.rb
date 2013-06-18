@@ -23,13 +23,13 @@ describe Order do
   it "has a in_cart scope" do
     empty_order.update_attribute(:status, "shopping")
     new_order = create(:order, :status => "checkout")
-    Order.in_cart.should == [empty_order, new_order]
+    Order.in_cart.should == [new_order, empty_order]
   end
 
   it "has a with_items scope" do
     empty_order.update_attribute(:order_total, 100.0)
     order.update_attribute(:order_total, 50.0)
-    Order.with_items.should == [empty_order, order]
+    Order.with_items.should == [order, empty_order]
   end
 
   describe "#update_tax_by_state" do
