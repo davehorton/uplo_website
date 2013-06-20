@@ -124,7 +124,6 @@ module ApplicationHelper
       :next_label => empty_space,
       :param_name => "page",
       :params => paging_params,
-      :page_links => false
     }))
   end
 
