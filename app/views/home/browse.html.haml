@@ -25,3 +25,4 @@
             %span.separator= '|'
             %span= pluralize(user.images_pageview, 'view')
 
+= render_pagination(@data, {:controller => 'home', :action => params[:action]})
