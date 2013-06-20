@@ -53,7 +53,7 @@ describe ImageFlag do
         image_flag.description_presence.should raise_error
       end
 
-     it "should raise error when flag type is copyright" do
+      it "should raise error when flag type is copyright" do
         image_flag.update_attributes(:flag_type => 2, :description => "")
         image_flag.description_presence.should raise_error
       end

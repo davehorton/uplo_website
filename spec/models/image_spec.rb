@@ -253,6 +253,14 @@ describe Image do
     end
   end
 
+  describe "#thumbnail_styles" do
+    context "without generate_print_preview" do
+      it "should return diffierent thubnail styles" do
+        image.thumbnail_styles.should be_a(Hash)
+      end
+    end
+  end
+
   describe "#get_price" do
     context "when product exists" do
       it "returns the price" do
