@@ -10,7 +10,7 @@ class LineItemSerializer < ActiveModel::Serializer
   end
 
   def product
-    viewing_own_image = (scope && scope.id == object.image.user_id)
+    viewing_own_image = object.image.owner?(scope)
 
     prod = object.product
     {

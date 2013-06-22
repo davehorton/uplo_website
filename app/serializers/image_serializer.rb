@@ -13,7 +13,7 @@ class ImageSerializer < ActiveModel::Serializer
   end
 
   def products
-    viewing_own_image = (scope && scope.id == object.user_id)
+    viewing_own_image = object.owner?(scope)
 
     Rails.cache.fetch [:image, object.id, :serialized_products, :viewing_own_image, viewing_own_image.present?], :expires_in => 1.minute do
       options = []
