@@ -458,5 +458,29 @@ describe Image do
     end
   end
 
-end
+  describe "#owner?" do
+    context "when user owns image" do
+      let(:user) { image.user }
 
+      it "should be true" do
+        image.owner?(user).should be_true
+      end
+    end
+
+    context "when user does not own image" do
+      let(:user) { create(:user) }
+
+      it "should be false" do
+        image.owner?(user).should be_false
+      end
+    end
+
+    context "when user is nil" do
+      let(:user) { nil }
+
+      it "should be false" do
+        image.owner?(user).should be_false
+      end
+    end
+  end
+end

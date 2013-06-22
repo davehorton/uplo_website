@@ -325,6 +325,10 @@ class Image < ActiveRecord::Base
     self.class.increment_counter(:pageview, self.id)
   end
 
+  def owner?(user)
+    self.user_id == user.try(:id)
+  end
+
   protected
 
     def minimum_dimensions_are_met

@@ -324,10 +324,7 @@ class ImagesController < ApplicationController
   def price
     @image = Image.find(params[:id])
     @product = Product.find(params[:product_id])
-
-    viewing_own_image = (current_user && current_user.id == @image.user_id)
-
-    render json: { success: true, price: @product.price_for_tier(@image.tier_id, viewing_own_image) }
+    render json: { success: true, price: @product.price_for_tier(@image.tier_id, @image.owner?(current_user)) }
   end
 
   def pricing
