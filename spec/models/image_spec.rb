@@ -261,21 +261,6 @@ describe Image do
     end
   end
 
-  describe "#get_price" do
-    context "when product exists" do
-      it "returns the price" do
-        create(:image).get_price(square_product.moulding, square_product.size).should be_a(BigDecimal)
-      end
-    end
-
-    context "when no matching product exists" do
-      it "raises an error" do
-        moulding = create(:moulding)
-        expect { create(:image).get_price(moulding, rectangular_size) }.to raise_error("No matching product for size, #{rectangular_size.to_name}, and moulding, #{moulding.name}")
-      end
-    end
-  end
-
   describe "#liked_by?" do
     context "when liked by a user" do
       it "should return true" do

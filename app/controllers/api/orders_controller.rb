@@ -25,7 +25,7 @@ class Api::OrdersController < Api::BaseController
       line_item = order.line_items.build(item)
     end
 
-    line_item.price = Product.find(line_item.product_id).price_for_tier(image.tier_id)
+    line_item.price = Product.find(line_item.product_id).price_for_tier(image.tier_id, image.owner?(current_user))
     line_item.tax = line_item.price * PER_TAX
 
     if line_item.save
@@ -46,7 +46,7 @@ class Api::OrdersController < Api::BaseController
     line_item = order.line_items.find(params[:id])
     line_item.attributes = params[:item]
     image = line_item.image
-    line_item.price = Product.find(line_item.product_id).price_for_tier(image.tier_id)
+    line_item.price = Product.find(line_item.product_id).price_for_tier(image.tier_id, image.owner?(current_user))
     line_item.tax = line_item.price * PER_TAX
 
     if line_item.save
@@ -135,21 +135,5 @@ class Api::OrdersController < Api::BaseController
       end
 
       return true
-    end
-
-    # items: [{"image_id":1, "moulding":1, "size":"500x500", "quantity":"5"}]
-    def build_order_items(items)
-      result = []
-      items.each do |item_info|
-        line_item = LineItem.new do |item|
-          image = Image.unflagged.find_by_id item_info['image_id']
-          unless image.nil?
-            item.attributes = item_info
-            item.price = image.get_price(item_info["moulding"], item_info["size"])
-            result << item
-          end
-        end
-      end
-      return result
     end
 end

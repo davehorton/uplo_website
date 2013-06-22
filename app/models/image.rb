@@ -164,15 +164,6 @@ class Image < ActiveRecord::Base
     url(product_option.preview_image_name)
   end
 
-  def get_price(moulding, size)
-    product = Product.where(moulding_id: moulding.id, size_id: size.id)
-    product = gallery.is_public? ? product.public_gallery : product.private_gallery
-    product = product.first
-    raise "No matching product for size, #{size.to_name}, and moulding, #{moulding.name}" if product.nil?
-
-    product.price_for_tier(tier_id)
-  end
-
   def sample_product_price
     available_products.first.try(:price_for_tier, tier_id) || 0
   end
