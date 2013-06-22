@@ -86,6 +86,14 @@ describe Product do
       img = create(:image, :tier_id => 4)
       product1.price_for_tier(img.tier_id).should == 500.0
     end
+
+    context "when user owns image" do
+      it "subtracts commission from total price" do
+        product1  = create(:product, :tier4_price => 500.0, :tier4_commission => 10)
+        img = create(:image, :tier_id => 4)
+        product1.price_for_tier(img.tier_id, img.user).should == 450.0
+      end
+    end
   end
 
   describe "#commission_for_tier" do
