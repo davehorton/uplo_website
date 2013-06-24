@@ -1,4 +1,5 @@
 class Image < ActiveRecord::Base
+  include ::Shared::AttachmentMethods
   include ::Shared::QueryMethods
   include ImageConstants
 
@@ -31,7 +32,6 @@ class Image < ActiveRecord::Base
   validate :minimum_dimensions_are_met, on: :create
 
   before_create  :set_name,
-                 :normalize_filename,
                  :set_tier,
                  :set_user,
                  :set_as_cover_if_first_one
@@ -361,14 +361,6 @@ class Image < ActiveRecord::Base
 
     def set_name
       self.name = image.original_filename.gsub(/(.jpeg|.jpg)$/i, '')
-    end
-
-    def normalize_filename
-      each_attachment do |name, attachment|
-        attachment.instance_write(
-          :file_name, FilenameNormalizer.normalize(attachment.instance_read(:file_name))
-        )
-      end
     end
 
     def set_tier

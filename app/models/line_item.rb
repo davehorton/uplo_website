@@ -1,4 +1,5 @@
 class LineItem < ActiveRecord::Base
+  include ::Shared::AttachmentMethods
   include ::Shared::QueryMethods
 
   attr_accessor :generate_ordered_print
