@@ -17,8 +17,10 @@
       <td><%= @order.status.try(:humanize) %></td>
     </tr>
     <tr>
-      <td>Customer Name</td>
-      <td><%= @order.user.fullname %> (<%= @order.user.username %>)</td>
+      <td>Customer Info</td>
+      <td>
+        <%= @order.user.fullname %> (<%= @order.user.username %>) - <%= mail_to @order.user.email %>
+      </td>
     </tr>
     <% if @order.completed? %>
     <tr>
