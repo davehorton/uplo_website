@@ -31,6 +31,7 @@ class Image < ActiveRecord::Base
   validate :minimum_dimensions_are_met, on: :create
 
   before_create  :set_name,
+                 :normalize_filename,
                  :set_tier,
                  :set_user,
                  :set_as_cover_if_first_one
@@ -346,7 +347,7 @@ class Image < ActiveRecord::Base
         end
 
         min_size = product.first.size
-        errors.add(:base, "A #{format_label} image being uploaded to a #{permission_label} gallery must be at least #{min_size.minimum_recommended_resolution[:w]} x #{min_size.minimum_recommended_resolution[:h]} pixels.")
+        errors.add(:base, "A #{format_label} image being uploaded to a #{permission_label} gallery must be at least #{min_size.minimum_recommended_resolution[:w].to_i} x #{min_size.minimum_recommended_resolution[:h].to_i} pixels.")
       end
     end
 
@@ -360,6 +361,14 @@ class Image < ActiveRecord::Base
 
     def set_name
       self.name = image.original_filename.gsub(/(.jpeg|.jpg)$/i, '')
+    end
+
+    def normalize_filename
+      each_attachment do |name, attachment|
+        attachment.instance_write(
+          :file_name, FilenameNormalizer.normalize(attachment.instance_read(:file_name))
+        )
+      end
     end
 
     def set_tier
