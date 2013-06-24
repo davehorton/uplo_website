@@ -21,7 +21,7 @@
       = @order.tax > 0 ? number_to_currency(@order.tax) : "n/a"
     %h4
       S&H:
-      = number_to_currency SHIPPING_FEE
+      = number_to_currency @order.shipping_fee
     %h4
       Order Total:
       = number_to_currency @order.order_total
