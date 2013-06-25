@@ -67,8 +67,6 @@ class Api::ImagesController < Api::BaseController
   #   sort_field
   #   sort_direction
   def search
-    raise 'Invalid request' if params[:query].blank?
-
     images = Image.search_scope(params[:query]).
               public_or_owner(current_user).
               paginate_and_sort(filtered_params)
