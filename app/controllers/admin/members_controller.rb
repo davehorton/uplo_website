@@ -11,7 +11,7 @@ class Admin::MembersController < Admin::AdminController
   end
 
   def search
-    @users  = User.search_scope(params[:query]).paginate_and_sort(filtered_params)
+    @users  = User.search_scope(params[:admin_query]).paginate_and_sort(filtered_params)
     render 'admin/members/index'
   end
 
