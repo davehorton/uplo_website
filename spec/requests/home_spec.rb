@@ -1,10 +1,10 @@
 require 'spec_helper'
 
 feature "Home Pages" do
-
-  given(:product) { create(:product)}
-  given(:user) { create(:user)}
-  given(:image) { create(:image, :promoted => true)}
+  let!(:another_product) { create(:product, :size => create(:square_size)) }
+  let!(:product) { create(:product)}
+  let!(:user) { create(:user)}
+  let!(:image) { create(:real_image, :promoted => true)}
 
   context "home page" do
     background do
@@ -27,9 +27,6 @@ feature "Home Pages" do
 
   context "browse page" do
     background do
-      product
-      user
-      image
       visit browse_path
     end
 
@@ -51,7 +48,6 @@ feature "Home Pages" do
 
   context "spotlight page" do
     background do
-      image
       visit spotlight_path
     end
 
