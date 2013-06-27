@@ -23,7 +23,6 @@ feature "Gallery" do
     within("#frm-edit-gallery #button-container") do
       expect { page.find("#btn-gallery-save").click }.to change(Gallery, :count).by(1)
     end
-    current_path.should == edit_images_gallery_path(Gallery.first)
     page.should have_selector('div', text: "My Gallery")
     within("#gallery_selector_id-button") do
       page.should have_selector('span', text: Gallery.first.name)
@@ -64,7 +63,6 @@ feature "Gallery" do
       page.should have_selector('span', text: "my new gallery")
     end
   end
-
 end
 
 
