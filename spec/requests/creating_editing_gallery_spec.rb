@@ -48,21 +48,21 @@ feature "Gallery" do
   end
 
   scenario "editing", :js => true do
-    puts old_gallery.name
     visit edit_images_gallery_path(old_gallery.id)
     click_link("edit-gallery")
     within("#edit-gallery-popup .header") do
       page.should have_selector('div', text: "Edit Your Gallery Infomation")
     end
     within("#frm-edit-gallery") do
+      fill_in "gallery_name", :with => "my new gallery"
       fill_in "gallery_description", :with => "a thing of beauty"
     end
     within("#edit-gallery-popup #button-container") do
        page.find("#btn-gallery-save").click
      end
-    current_path.should == edit_images_gallery_path(old_gallery.id)
-    old_gallery.reload
-    old_gallery.description.should == "a thing of beauty"
+    within("#gallery_selector_id-button") do
+      page.should have_selector('span', text: "my new gallery")
+    end
   end
 
 end
