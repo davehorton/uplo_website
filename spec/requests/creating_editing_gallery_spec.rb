@@ -24,9 +24,6 @@ feature "Gallery" do
       expect { page.find("#btn-gallery-save").click }.to change(Gallery, :count).by(1)
     end
     page.should have_selector('div', text: "My Gallery")
-    within("#gallery_selector_id-button") do
-      page.should have_selector('span', text: Gallery.first.name)
-    end
     page.should have_link("Edit Gallery Info", href: "#")
     page.should have_selector('a', text: "Delete Gallery")
   end
