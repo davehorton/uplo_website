@@ -48,7 +48,7 @@ feature "Gallery" do
 
   scenario "editing", :js => true do
     visit edit_images_gallery_path(old_gallery.id)
-    click_link("edit-gallery")
+    click_link "edit-gallery"
     within("#edit-gallery-popup .header") do
       page.should have_selector('div', text: "Edit Your Gallery Infomation")
     end
