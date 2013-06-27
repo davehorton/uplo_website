@@ -3,8 +3,8 @@ require 'spec_helper'
 feature "Accessing Photo Page" do
   let!(:product) { create(:product) }
   let!(:another_product) { create(:product, :size => create(:square_size)) }
-  let!(:product_option) { create(:product_option, :product_id => product.id) }
-  let!(:another_product_option) { create(:product_option, :product_id => another_product.id) }
+  let!(:product_option) { create(:product_option, :product_id => product.id, :description => "Borderless") }
+  let!(:another_product_option) { create(:product_option, :product_id => another_product.id, :description => "Borderless") }
   let!(:image) { create(:real_image) }
   let!(:related_image) { create(:image, :gallery => image.gallery)}
   let!(:user) { create(:user) }
@@ -22,8 +22,8 @@ feature "Accessing Photo Page" do
     scenario "no of comments and post comment" do
       page.should have_selector('div', text: "Comments")
       page.should have_selector('div', text: "#{image.comments.count}")
-      within("div#post-comment .post-comment") do
-        page.find("like-link").click
+      within("#post-comment") do
+        page.find(".like-link").click
         current_path.should == new_user_session_path
       end
     end
@@ -37,16 +37,14 @@ feature "Accessing Photo Page" do
 
     scenario "flag button" do
       within("div#center .right .flag") do
-        page.find("like-link").click
+        page.find(".like-link").click
         current_path.should == new_user_session_path
       end
     end
 
-    scenario "order button" do
-      within("div#center .right") do
-        page.find(".order").click
-        current_path.should == new_user_session_path
-      end
+    scenario "order button", :js => true do
+      page.find(".order").click
+      current_path.should == new_user_session_path
     end
 
     scenario "follow button" do
@@ -111,10 +109,8 @@ feature "Accessing Photo Page" do
       current_path.should == browse_image_path(image.id)
     end
 
-    scenario "order button" do
-      within("div#center .right") do
-        page.find(".order").click
-      end
+    scenario "order button", :js => true do
+      page.find(".order").click
       current_path.should == order_image_path(image.id)
     end
 
@@ -122,7 +118,6 @@ feature "Accessing Photo Page" do
       within("div#right .user-section") do
         page.find("#btn-follow").click
       end
-      page.should have_selector(".unfollow")
       current_path.should == browse_image_path(image.id)
     end
 
