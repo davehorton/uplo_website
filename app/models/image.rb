@@ -1,5 +1,4 @@
 class Image < ActiveRecord::Base
-  include ::Shared::AttachmentMethods
   include ::Shared::QueryMethods
   include ImageConstants
 
