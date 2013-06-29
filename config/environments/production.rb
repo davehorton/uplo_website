@@ -79,7 +79,7 @@ Uplo::Application.configure do
   }
 
   config.paperclip_defaults = {
-    :path => ":attachment_singular/:id/:style.:extension",
+    :path => ":attachment_singular/:id/:style.:extension_or_default",
     :storage => :s3,
     :s3_credentials => "#{Rails.root}/config/amazon_s3.yml",
     :s3_permissions => :private,
