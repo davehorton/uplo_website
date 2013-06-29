@@ -30,6 +30,6 @@ class FilenameNormalizer
   end
 
   def ext_name
-    File.extname(@name).downcase.presence || '.jpg'
+    File.extname(@name).presence || '.jpg'
   end
 end
