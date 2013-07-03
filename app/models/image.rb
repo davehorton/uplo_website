@@ -16,6 +16,7 @@ class Image < ActiveRecord::Base
   has_many :line_items
   has_many :orders,        :through => :line_items
   has_many :tags,          :through => :image_tags
+  has_many :users,         :through => :image_likes
 
   has_attached_file :image,
     styles: lambda { |attachment| attachment.instance.thumbnail_styles },

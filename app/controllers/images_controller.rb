@@ -350,6 +350,21 @@ class ImagesController < ApplicationController
     @preview_url = @image.find_or_generate_preview_image(@product_option)
   end
 
+  def liking_users
+    image = Image.find(params[:id])
+    if image.nil? || (image.user.blocked? && !current_user.admin?)
+      result = { :success => false, :msg => 'This image does not exist anymore' }
+    else
+      liking_users = image.users
+      names = []
+      liking_users.each do |user|
+        names.push(user.fullname)
+      end
+      result = { :success => true, :liking_users => names }
+    end
+    render :json => result
+  end
+
   def tier
     image = Image.find(params[:id])
     if image.nil? || (image.user.blocked? && !current_user.admin?)

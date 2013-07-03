@@ -78,7 +78,7 @@
                 'data-height' => @image.image.height, :alt => @image.name)
   .actions.left
     .left
-      .like.left
+      #likes-list.like.left
         .icon.left
         .times.text.fuzzy-gray.bold.font16.left= @image.image_likes_count
         .label.text.fuzzy-gray.font16.left= pluralize_without_count(@image.image_likes_count, "Like")
@@ -164,20 +164,43 @@
           var unfollow = $(this).attr('data-following');
           $.ajax({
             url: '/users/follow',
-            type: "GET",
+            type: "get",
             data: { user_id:author_id, unfollow: unfollow },
-            dataType: "json",
+            datatype: "json",
             success: function(response){
               if(response.success==false){
                 helper.show_notification(response.msg);
               } else if(unfollow=='false') {
                 $('#btn-follow').attr('data-following', 'true');
-                $('#btn-follow').removeClass('follow');
-                $('#btn-follow').addClass('unfollow');
+                $('#btn-follow').removeclass('follow');
+                $('#btn-follow').addclass('unfollow');
               } else {
                 $('#btn-follow').attr('data-following', 'false');
-                $('#btn-follow').removeClass('unfollow');
-                $('#btn-follow').addClass('follow');
+                $('#btn-follow').removeclass('unfollow');
+                $('#btn-follow').addclass('follow');
+              }
+            }
+          });
+        });
+
+        $('#likes-list').click(function(){
+        _this = $(this);
+        var image_id = $('#btn-like').attr('data-id');
+          $.ajax({
+            url: '/images/' + image_id + '/liking_users',
+            type: "GET",
+            data: { },
+            dataType: "json",
+            success: function(response){
+              if(response.success==false){
+                helper.show_notification(response.msg);
+              } else {
+                list = "";
+                $.each(response.liking_users, function(index, value) {
+                  list = list + '<li>' + value + '</li>';
+                });
+                _this.children('ul').remove();
+                _this.append('<ul>' + list + '</ul>');
               }
             }
           });
