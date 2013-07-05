@@ -183,9 +183,11 @@
           });
         });
 
+        ul = "false";
+
         $('#likes-list').click(function(){
-        _this = $(this);
-        var image_id = $('#btn-like').attr('data-id');
+          _this = $(this);
+          var image_id = $('#btn-like').attr('data-id');
           $.ajax({
             url: '/images/' + image_id + '/liking_users',
             type: "GET",
@@ -199,8 +201,13 @@
                 $.each(response.liking_users, function(index, value) {
                   list = list + '<li>' + value + '</li>';
                 });
-                _this.children('ul').remove();
-                _this.append('<ul>' + list + '</ul>');
+                if(ul == "false"){
+                  remove_likes();
+                  _this.append('<ul>' + list + '</ul>');
+                  ul = "true";
+                } else {
+                  remove_likes();
+                }
               }
             }
           });
@@ -226,6 +233,13 @@
           $('#social-sharing').addClass('hide');
         });
       });
+
+      function remove_likes(){
+        if(ul == "true"){
+          ul = "false";
+          $('#likes-list').children('ul').remove();
+        }
+      }
 
       function submit_flag(desc, type){
         var image_id = $('#btn-like').attr('data-id');
@@ -305,6 +319,7 @@
       }
 
       function update_liked(){
+        remove_likes();
         var image_id = $('#btn-like').attr('data-id');
         var dislike = $('#btn-like').attr('data-dislike');
         $('#mask').modal();
