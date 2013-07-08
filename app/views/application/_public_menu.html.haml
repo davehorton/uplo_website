@@ -1,4 +1,7 @@
 %ul#menu-items
+  %li{:class => set_current_tab("galleries")}
+    = link_to(I18n.t("main_menu.upload"), "/galleries")
+
   %li{:class => set_current_tab("browse")}
     = link_to(I18n.t("main_menu.browse"), "/browse")
 

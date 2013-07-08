@@ -32,6 +32,7 @@ en:
     the_app: "The App"
     friend: "Friends"
     admin: "Admin"
+    upload: "Upload"
 
   admin:
     flagged_images: "Flagged Images"
