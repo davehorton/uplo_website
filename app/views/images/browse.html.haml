@@ -82,7 +82,7 @@
         .icon.left
         .times.text.fuzzy-gray.bold.font16.left= @image.image_likes_count
         .label.text.fuzzy-gray.font16.left= pluralize_without_count(@image.image_likes_count, "Like")
-      .comment.text.fuzzy-gray.font16.left
+      .comment.text.fuzzy-gray.font16.left{:style => "position:absolute;margin-left:86px;"}
         .icon.left
         .times.text.fuzzy-gray.bold.left= @image.comments.count
         .label.text.fuzzy-gray.font16.left= pluralize_without_count(@image.comments.count, 'Comment')
