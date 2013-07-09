@@ -3,7 +3,7 @@ $('#preview-waiting').hide();
 
 var selectedProduct = $('#line_item_product_id').find(':selected').text().toLowerCase();
 if(selectedProduct.indexOf('canvas')>-1){
-  $('#preview-image').append("<br><br>Preview:<br><%= j image_tag('img-frames/canvas.png', style:'width: 200px') %>");
+  $('#preview-image').append('<br><br>Preview:<br><img alt="Canvas" src="' + $('#preview-image').children("img").attr("src") + '" style="width: 200px">');
 } else if(selectedProduct.indexOf('plexi')>-1){
-  $('#preview-image').append("<br><br>Preview:<br><%= j image_tag('img-frames/plexi.png', style:'width: 200px') %>");
+  $('#preview-image').append('<br><br>Preview:<br><img alt="Plexi" src="' + $('#preview-image').children("img").attr("src") + '" style="width: 200px">');
 }
