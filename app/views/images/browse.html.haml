@@ -199,7 +199,7 @@
               } else {
                 list = "";
                 $.each(response.liking_users, function(index, value) {
-                  list = list + '<li>' + value + '</li>';
+                  list = list + '<li>' + '<img class="avatar medium left" src="' + value.avatar + '">' + value.fullname + '</li>';
                 });
                 if(ul == "false"){
                   remove_likes();

@@ -358,7 +358,7 @@ class ImagesController < ApplicationController
       liking_users = image.users
       names = []
       liking_users.each do |user|
-        names.push(user.fullname)
+        names.push({ :fullname => user.fullname, :avatar => user.avatar_url })
       end
       result = { :success => true, :liking_users => names }
     end
