@@ -47,6 +47,8 @@ class User < ActiveRecord::Base
   belongs_to :billing_address,  :class_name => "Address", :foreign_key => :billing_address_id
   belongs_to :shipping_address, :class_name => "Address", :foreign_key => :shipping_address_id
 
+  has_many :authentications
+
   has_many :galleries, :dependent => :destroy
   has_many :public_galleries, class_name: 'Gallery', conditions: { permission: Permission::Public.new.to_s }
   has_many :gallery_invitations
@@ -106,7 +108,7 @@ class User < ActiveRecord::Base
         GROUP BY galleries.user_id
       ) galleries_data
       ON galleries_data.user_id = users.id
-      AND galleries_data.flagged_images_count < ?",
+      AND galleries_data.flagged_images_count < ? ",
       MIN_FLAGGED_IMAGES])
     ).select("DISTINCT users.*, galleries_data.flagged_images_count")
 
@@ -480,6 +482,24 @@ class User < ActiveRecord::Base
   def confirm!
     UserMailer.deliver_welcome_email(self).deliver
     super
+  end
+
+  def apply_omniauth(omniauth)
+    self.email = omniauth.info.email if email.blank?
+    self.username = omniauth.info.nickname if username.blank?
+    if omniauth.provider == "twitter"
+      name = omniauth.info.name.split(' ')
+      self.first_name = name.first
+      self.last_name = name.last
+    elsif omniauth.provider == "facebook"
+      self.first_name = omniauth.info.first_name
+      self.last_name = omniauth.info.last_name
+    end
+    authentications.build(:provider => omniauth['provider'], :uid => omniauth['uid'])
+  end
+
+  def password_required?
+    (authentications.empty? || !password.blank?) && super
   end
 
   private

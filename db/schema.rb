@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130606130717) do
+ActiveRecord::Schema.define(:version => 20130717142653) do
 
   create_table "addresses", :force => true do |t|
     t.string   "first_name"
@@ -26,6 +26,14 @@ ActiveRecord::Schema.define(:version => 20130606130717) do
     t.datetime "created_at",                          :null => false
     t.datetime "updated_at",                          :null => false
     t.string   "country",          :default => "usa"
+  end
+
+  create_table "authentications", :force => true do |t|
+    t.integer  "user_id"
+    t.string   "provider"
+    t.string   "uid"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
   end
 
   create_table "carts", :force => true do |t|
@@ -383,6 +391,8 @@ ActiveRecord::Schema.define(:version => 20130606130717) do
     t.integer  "images_count",                                  :default => 0
     t.integer  "an_customer_profile_id"
     t.integer  "an_customer_payment_profile_id"
+    t.string   "provider"
+    t.string   "uid"
   end
 
   add_index "users", ["banned"], :name => "index_users_on_banned"

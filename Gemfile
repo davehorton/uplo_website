@@ -32,7 +32,7 @@ gem 'nested_form'
 gem 'newrelic_rpm'
 gem 'nokogiri'
 gem 'oauth'
-gem 'oauth2'
+gem 'oauth2', '~> 0.6.0'
 gem 'oj'
 gem 'paperclip'
 gem 'paperclip-dropbox'
@@ -44,6 +44,10 @@ gem 'twitter'
 gem 'urbanairship'
 gem 'valid_email'
 gem 'will_paginate', '~> 3.0'
+gem 'omniauth'
+gem 'omniauth-facebook', '1.4.0'
+gem 'omniauth-twitter'
+gem 'nifty-generators'
 
 # for sidekiq admin
 gem 'sinatra', require: false
@@ -89,3 +93,5 @@ group :staging, :production do
   gem 'ey_config'
   gem 'unicorn'
 end
+
+gem "mocha", :group => :test
