@@ -1,0 +1,114 @@
+<% title "Sign In" %>
+<% if @authentications %>
+ <% unless @authentications.empty? %>
+  <p><strong>You can sign in to this account using:</strong></p>
+   <div class="authentications">
+    <% for authentication in @authentications %>
+     <div class="authentication">
+      <%= image_tag "#{authentication.provider}_32.png", :size => "32x32" %>
+      <div class="provider"><%= authentication.provider.titleize %></div>
+      <div class="uid"><%= authentication.uid %></div>
+       <%= link_to "X", authentication, :confirm => 'Are you sure you want to remove this authentication option?', :method => :delete, :class => "remove" %>
+     </div>
+     <% end %>
+     <div class="clear"></div>
+    </div>
+   <% end %>
+   <p><strong>Add another service to sign in with:</strong></p>
+  <% else %>
+  <p><strong>Sign in through one of these services:</strong></p>
+<% end %>
+
+<a href="/auth/twitter" class="auth_provider">
+  <%= image_tag "twitter_64.png", :size => "64x64", :alt => "Twitter" %>Twitter</a>
+<a href="/auth/facebook" class="auth_provider">
+  <%= image_tag "facebook_64.png", :size => "64x64", :alt => "Facebook" %>Facebook</a>
+<div class="clear"></div>
+
+<div class="content-wrapper clearfix">
+  <%= simple_form_for(resource, :as => resource_name,
+      :url => session_path(resource_name),
+      :html => {:class => "signin"}) do |f| %>
+  <%= f.input :login, :wrapper_class => "input clearfix", :required => false %>
+  <%= f.error :email %>
+  <%= f.input(:password, :wrapper_class => "input clearfix",
+              :label_html => {:class => "signin"},
+              :input_html => {:class => 'signin'},
+              :label => t('public.signin.password'),
+              :required => false) %>
+  <p class="signin">
+    <%= f.submit "Sign in", :class => "button medium align-top" %>
+  </p>
+  <% end %>
+  <% if devise_mapping.recoverable? && controller_name != 'passwords' %>
+  <div class="align-top">
+    <%= link_to "Forgot your password?", new_password_path(resource_name), :class => "icon-info-link" %>
+  </div>
+  <% end %>
+</div>
+
+<div id="non-login-container" class="wrapper">
+  <div id="register-panel" class="clearfix">
+    <div class="header text white bold">New to UPLO? Create an account.</div>
+    <div class="title text bold font16 line18">
+      <span>Already a member?</span>
+      <a class="text highlight" href="<%= new_user_session_path %>">Login</a>
+    </div>
+    <% message = resource.errors.full_messages.first || @devise_message %>
+    <div class="message text highlight <%= message ? "" : "hidden" %>">
+      <%= message %>
+    </div>
+    <%= form_for(:user, :url => registration_path(:user), :html => {:id => 'register-form', :class => 'left'}) do |f| %>
+    <%= hidden_field_tag :token, params[:token] %>
+    <%= hidden_field_tag :secret_token, params[:secret_token] %>
+     <div class="line">
+       <div class="half left">
+         <%= f.label :user_first_name, 'First name', :class => 'left' %>
+         <%= f.text_field :first_name, :required => true %>
+       </div>
+       <div class="half right">
+         <%= f.label :user_last_name, 'Last name', :class => 'left' %>
+         <%= f.text_field :last_name, :required => true %>
+       </div>
+     </div>
+     <div class="line">
+       <div class="half left">
+         <%= f.label :user_email, 'Email Address', :class => 'left' %>
+         <% if @inv.present? %>
+         <%= f.text_field :email, :required => true, :autofocus => true, :value => @email, :disabled => true %>
+         <%= f.hidden_field :email, :as => :hidden, :value => @email %>
+         <% else %>
+         <%= f.text_field :email, :required => true, :autofocus => true %>
+         <% end %>
+       </div>
+       <div class="half right">
+         <%= f.label :user_username, 'username', :class => 'left' %>
+         <%= f.text_field :username, :required => true, :autofocus => true %>
+       </div>
+     </div>
+     <div class="line">
+       <div class="half left">
+         <%= f.label :user_password, 'password', :class => 'left' %>
+         <%= f.password_field :password, :required => true %>
+       </div>
+       <div class="half right">
+         <%= f.label :user_password_confirmation, 'password confirmation', :class => 'left' %>
+         <%= f.password_field :password_confirmation, :required => true %>
+       </div>
+     </div>
+     <div class="line">
+       <div class="text font11 line32 left">
+         <span class="term-of-use">By registering you agree to the</span>
+         <a class="term-of-use" href='/terms' target='blank'>Terms and Conditions</a>
+       </div>
+       <%= f.submit '', :class => "button signup right", :id => 'btn-signup' %>
+     </div>
+     <% end %>
+  </div>
+</div>
+
+<script type="text/javascript">
+  $(document).ready(function(){
+    user.setup_datepicker();
+  });
+</script>

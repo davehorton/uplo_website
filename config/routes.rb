@@ -2,9 +2,6 @@ require 'sidekiq/web'
 
 Uplo::Application.routes.draw do
 
-  match '/auth/:provider/callback' => 'authentications#create'
-  resources :authentications
-
   # WEB ROUTING
   root :to => "home#index"
 
@@ -126,6 +123,9 @@ Uplo::Application.routes.draw do
 
   get 'users/search', :to => 'users#search'
   get 'users/follow', :to => 'users#set_follow'
+
+  match '/auth/:provider/callback' => 'authentications#create'
+  resources :authentications
 
   devise_for :users, :controllers => {:registrations => "registrations", :sessions => "users/sessions",
     :confirmations => "users/confirmations", :passwords => "users/passwords" }

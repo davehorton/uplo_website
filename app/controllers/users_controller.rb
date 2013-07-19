@@ -250,4 +250,9 @@ class UsersController < ApplicationController
     flash[:notice] = "Disabled #{params[:type_social]}"
     redirect_to :action => :account
   end
+
+  def account
+    @authentications = current_user.authentications if current_user
+  end
+
 end

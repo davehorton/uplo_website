@@ -1,8 +1,5 @@
 class AuthenticationsController < ApplicationController
   skip_before_filter :authenticate_user!
-  def index
-    @authentications = current_user.authentications if current_user
-  end
 
   def create
     omniauth = request.env["omniauth.auth"]
@@ -10,11 +7,14 @@ class AuthenticationsController < ApplicationController
     authentication = Authentication.find_by_provider_and_uid(omniauth['provider'], omniauth['uid'])
     if authentication
       flash[:notice] = "Signed in successfully."
-      sign_in_and_redirect(:user, authentication.user)
+      #sign_in_and_redirect(:user, authentication.user)
+      sign_in(:user, authentication.user)
+      redirect_to controller: 'home', action: 'index'
     elsif current_user
       current_user.authentications.create!(:provider => omniauth['provider'], :uid => omniauth['uid'])
       flash[:notice] = "Authentication successful."
-      redirect_to authentications_url
+      #redirect_to authentications_url
+      redirect_to controller: 'users', action: 'account'
     else
       user = User.new
       user.apply_omniauth(omniauth)
@@ -31,6 +31,7 @@ class AuthenticationsController < ApplicationController
   def destroy
     @authentication = current_user.authentications.find(params[:id])
     @authentication.destroy
-    redirect_to authentications_url, :notice => "Successfully destroyed authentication."
+    flash[:notice] = "Successfully destroyed authentication."
+    redirect_to controller: 'users', action: 'account'
   end
 end
