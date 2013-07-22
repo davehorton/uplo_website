@@ -1,17 +1,25 @@
 %ul
-  %li.wide_li  
-    %p Sell Photos:
-    %a{:href => "/galleries"}
-      %img{:src => "assets/upload-btn.png"}/
-  %li
-    %a.app-btn{:href => "/iphone_app"}
-      %img{:src => "assets/get-app-btn.png"}/
-
-      
   - if user_signed_in?
+    %li.wide_li  
+      %p .
+      %a{:href => "/galleries"}
+        %img{:src => "/assets/upload-btn.png"}/
+    %li
+      %a.app-btn{:href => "/iphone_app"}
+        %img{:src => "/assets/get-app-btn.png"}/
+
     %li
       = select_tag "private_pages", private_links_options(current_section), :id => "my_links"
   - else
+    %li.wide_li  
+      %p Sell Photos:
+      %a{:href => "/galleries"}
+        %img{:src => "/assets/upload-btn.png"}/
+    %li
+      %a.app-btn{:href => "/iphone_app"}
+        %img{:src => "/assets/get-app-btn.png"}/
+
+
     %li
       = link_to image_tag('login-btn.png'), signin_path
       
