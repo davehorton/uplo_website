@@ -1,5 +1,13 @@
-%ul
-%li.wide_li
-  %p Sell Photos:
-  %a{:href => "/galleries"}
-    %img{:src => "assets/upload-btn.png"}/
+%form{:action => "/search"}
+  %ul#menu-items
+    %li
+      %a{:href => "/browse"} Explore
+    %li
+      %a{:href => "/spotlight"} Spotlight
+    %li
+      %img.mag_glass{:src => "assets/magglass.png"}/
+      %input#search_field{:type => "text",:name => "query"}/
+    %li.current.first
+      %a{:href => shopping_cart_show_path}
+        %img{:src => "assets/shopping_cart.png"}/
+      .shopping_cart_count 0

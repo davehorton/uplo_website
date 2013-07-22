@@ -16,7 +16,6 @@ a {
 
 .wrapper {
 width: 960px;
-height: 100%;
 margin: 0 auto;
 }
 
@@ -181,10 +180,6 @@ and your footer gets pushed down a bit more, creating vertical scroll bars in th
 html, body {height: 100%;}
 
 #wrap {min-height: 100%;}
-
-#main {
-padding-bottom: 174px;
-margin-top: 30px;}  /* must be same height as the footer */
 
 #footer {position: relative;
 	margin-top: -101px; /* negative value of footer height */
