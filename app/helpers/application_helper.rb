@@ -36,7 +36,7 @@ module ApplicationHelper
 
   def sections
     { :default => '/', :profile => '/profile', :account => '/my_account',
-      :gallery => '/galleries', :sale => '/sales', :admin => '/admin' }
+      :gallery => '/galleries', :sale => '/sales', :admin => '/admin' , :signout => '/signout'}
   end
 
   def current_section
@@ -68,7 +68,7 @@ module ApplicationHelper
   def private_links_options(active = sections[:default])
     options = [["My UPLO", sections[:default]], ['My Profile', sections[:profile]],
       ["My Account", sections[:account]], ["My Galleries", sections[:gallery]],
-      ["My Sales", sections[:sale]]]
+      ["My Sales", sections[:sale]],["Logout", sections[:signout]]]
     options << ["Admin", sections[:admin]] if current_user.admin?
     options_for_select(options, active)
   end

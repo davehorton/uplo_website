@@ -10,8 +10,6 @@
       
   - if user_signed_in?
     %li
-      = link_to "Logout", "/signout", :class => "icon-link icon-logout", :method => "delete"
-    %li
       = select_tag "private_pages", private_links_options(current_section), :id => "my_links"
   - else
     %li

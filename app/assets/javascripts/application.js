@@ -39,3 +39,15 @@
 //= require effects
 //= require helper
 //= require_tree ./views
+
+
+$(document).ready(function(){
+	$('#my_links').change(function(){
+		if($(this).val() == ''){
+			setTimeout(function(){
+		 window.location = '/signout';		
+			},2000);
+	
+		}
+	});
+});
