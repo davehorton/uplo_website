@@ -37,14 +37,16 @@ font-weight: 100;
 width: 260px;
 margin: 26px;
 }
-
+.body-third fieldset input[type=password],
 .body-third fieldset input[type=text] {
 background: white;
 border-radius: 4px;
 color: #d8d8d8;
-width: 255px;
+width: 245px;
 height: 33px;
+padding:0 5px;
 font-size: 12px;
+margin:5px 0 15px 0;
 }
 
 .middle_section{
