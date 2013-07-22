@@ -1,4 +1,8 @@
 %ul
+%li
+  %a.app-btn{:href => "/iphone_app"}
+    %img{:src => "assets/get-app-btn.png"}/
+
   - if user_signed_in?
     %li
       = link_to "Logout", "/signout", :class => "icon-link icon-logout", :method => "delete"
@@ -11,8 +15,6 @@
     %li.no-padding-right{:style => "margin-top: 2px"}
       = render :partial => "search_box_new", :locals => {:action => '/search'}
   - else
-    %li
-      = link_to 'Sign Up', register_path
-    %li.no-padding= "|"
-    %li
-      = link_to 'Login', signin_path
+%li
+  %a.login-btn{:href => "/signin"}
+    %img{:src => "assets/login-btn.png"}/

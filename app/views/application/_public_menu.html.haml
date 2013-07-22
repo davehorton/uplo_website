@@ -1,15 +1,5 @@
-%ul#menu-items
-  %li{:class => set_current_tab("galleries")}
-    = link_to(I18n.t("main_menu.upload"), "/galleries")
-
-  %li{:class => set_current_tab("browse")}
-    = link_to(I18n.t("main_menu.browse"), "/browse")
-
-  %li.first{:class => set_current_tab("popular")}
-    = link_to(I18n.t("main_menu.spotlight"), "/spotlight")
-  - if user_signed_in?
-    %li{:class => set_current_tab("friend")}
-      = link_to(I18n.t("main_menu.friend"), "/friends")
-
-  %li{:class => set_current_tab("galleries")}
-    = link_to(I18n.t("main_menu.the_app"), "/iphone_app")
+%ul
+%li.wide_li
+  %p Sell Photos:
+  %a{:href => "/galleries"}
+    %img{:src => "assets/upload-btn.png"}/
