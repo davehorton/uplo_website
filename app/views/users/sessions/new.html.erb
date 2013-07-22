@@ -1,31 +1,144 @@
 <% title "Sign In" %>
-<% if @authentications %>
- <% unless @authentications.empty? %>
-  <p><strong>You can sign in to this account using:</strong></p>
-   <div class="authentications">
-    <% for authentication in @authentications %>
-     <div class="authentication">
-      <%= image_tag "#{authentication.provider}_32.png", :size => "32x32" %>
-      <div class="provider"><%= authentication.provider.titleize %></div>
-      <div class="uid"><%= authentication.uid %></div>
-       <%= link_to "X", authentication, :confirm => 'Are you sure you want to remove this authentication option?', :method => :delete, :class => "remove" %>
-     </div>
-     <% end %>
-     <div class="clear"></div>
-    </div>
-   <% end %>
-   <p><strong>Add another service to sign in with:</strong></p>
-  <% else %>
-  <p><strong>Sign in through one of these services:</strong></p>
-<% end %>
+<%= stylesheet_link_tag "registrations" %>
+<div class='wrapper'>
+		<div id="main">
+			<div class="body-third">
+				<div id="white-box">
+					<h3>Login</h3>
+					<h5>Please login to continue</h5>
+						<fieldset>
+  <%= simple_form_for(resource, :as => resource_name,
+      :url => session_path(resource_name),
+      :html => {:class => "fresh signin"}) do |f| %>
+            <%= f.input :login, :wrapper_class => "input clearfix", :required => false %>
+            <%= f.error :email %>
+            <%= f.input(:password, :wrapper_class => "input clearfix",
+              :label_html => {:class => "signin"},
+              :input_html => {:class => 'signin'},
+              :label => t('public.signin.password'),
+              :required => false) %>
+            <%= f.submit "", :class => "button medium align-top join-btn" %>
+          <% end %>
+					</fieldset>
+ 
+					<form accept-charset="UTF-8" action="/users/sign_in" method="post" accept-charset="utf-8" class="fresh" novalidate="novalidate">
+						<fieldset>
+							<div class="field">
+								<label for="firstname">First Name</label>
+								<input type="text"
+								    value="First Name"
+								    class="not_bottom"
+								    name="visitors_name"
+								    onblur="if(value=='') value = 'First Name'"
+								    onfocus="if(value=='First Name') value = ''">
+							</div>
 
-<a href="/auth/twitter" class="auth_provider">
-  <%= image_tag "twitter_64.png", :size => "64x64", :alt => "Twitter" %>Twitter</a>
-<a href="/auth/facebook" class="auth_provider">
-  <%= image_tag "facebook_64.png", :size => "64x64", :alt => "Facebook" %>Facebook</a>
-<div class="clear"></div>
+							<div class="field">
+								<label for="lastname">Last Name</label>
+								<input type="text"
+								    value="Last Name"
+								    class="bottom_field"
+								    name="visitors_name"
+								    onblur="if(value=='') value = 'Last Name'"
+								    onfocus="if(value=='Last Name') value = ''">
+							</div>
+              <%= link_to "Forgot your password?", new_password_path(resource_name), :id => "forget_link" %>
+							<button type="submit" class="join-btn"></button>
 
-<div class="content-wrapper clearfix">
+						</fieldset>
+					</form>
+				</div>
+			</div>
+			<div class="body-third middle_section">
+				<h3>Sign up with Facebook or Twitter</h3>
+				<h5>It's fast and easy</h5>
+				<button class="facebook-large-btn" onclick="location.href='/auth/facebook'"></button>
+				<div class="or-divider"></div>
+				<button class="twitter-large-btn" onclick="location.href='/auth/twitter'"></button>
+				<p>We'll never post anything
+				</br></br>
+				without your permission.</p>
+			</div>
+			<div class="body-third side-border">
+				<h3>Or sign up the old fashioned way</h3>
+				<h5>Use your email address to join</h5>
+				<form action="" method="post" accept-charset="utf-8" class="fresh" novalidate="">
+					<fieldset>
+						<div class="field" data-error="Please enter your name, or an amusing alternative">
+							<label for="name">Your name</label>
+							<input type="text"
+							    value="First Name"
+							    class="not_bottom"
+							    name="visitors_name"
+							    onblur="if(value=='') value = 'First Name'"
+							    onfocus="if(value=='First Name') value = ''">
+						</div>
+
+						<div class="field" data-error="Please enter your e-mail address so we can get in touch">
+							<label for="phone">Your email</label>
+							<input type="text"
+							    value="Last Name"
+							    class="not_bottom"
+							    name="visitors_name"
+							    onblur="if(value=='') value = 'Last Name'"
+							    onfocus="if(value=='Last Name') value = ''">
+						</div>
+
+						<div class="field" data-error="Please enter your e-mail address so we can get in touch">
+							<label for="email">Subject</label>
+							<input type="text"
+							    value="Email Address"
+							    class="not_bottom"
+							    name="visitors_name"
+							    onblur="if(value=='') value = 'Email Address'"
+							    onfocus="if(value=='Email Address') value = ''">
+						</div>
+
+						<div class="field" data-error="Please enter your e-mail address so we can get in touch">
+							<label for="phone">Your email</label>
+							<input type="text"
+							    value="Re-enter Email Address"
+							    class="not_bottom"
+							    name="visitors_name"
+							    onblur="if(value=='') value = 'Re-enter Email Address'"
+							    onfocus="if(value=='Re-enter Email Address') value = ''">
+						</div>
+
+						<div class="field" data-error="Please enter your e-mail address so we can get in touch">
+							<label for="email">Subject</label>
+							<input type="text"
+							    value="Set Password"
+							    class="bottom_field"
+							    name="visitors_name"
+							    onblur="if(value=='') value = 'Set Password'"
+							    onfocus="if(value=='Set Password') value = ''">
+						</div>
+						<button type="submit" class="join-btn"></button>
+					</fieldset>
+				</form>
+			</div><!--End of box-third --->
+		</div><!--End of Main --->
+	</div><!--End of Wrapper --->
+
+  <form accept-charset="UTF-8" action="/users/sign_in" class="simple_form signin" id="new_user" method="post" novalidate="novalidate">
+    <div style="margin:0;padding:0;display:inline">
+      <input name="utf8" type="hidden" value="✓">
+      <input name="authenticity_token" type="hidden" value="BdkoFG3M/DkKqK7kcp0XAs25VgqwcPrOWRB8h6N9Nbw="></div>
+      <div class="input clearfix string optional user_login">
+        <label class="string optional control-label" for="user_login">Login</label>
+        <input class="string optional" id="user_login" name="user[login]" size="50" type="text">
+      </div>
+      <div class="input clearfix password optional user_password">
+        <label class="password optional control-label signin" for="user_password">
+          <span class="translation_missing" title="translation missing: en.public.signin.password">Password</span>
+        </label>
+        <input class="password optional signin" id="user_password" name="user[password]" size="50" type="password">
+      </div>
+      <p class="signin">
+        <input class="button medium align-top" name="commit" type="submit" value="Sign in">
+      </p>
+  </form>
+
   <%= simple_form_for(resource, :as => resource_name,
       :url => session_path(resource_name),
       :html => {:class => "signin"}) do |f| %>
@@ -36,16 +149,8 @@
               :input_html => {:class => 'signin'},
               :label => t('public.signin.password'),
               :required => false) %>
-  <p class="signin">
     <%= f.submit "Sign in", :class => "button medium align-top" %>
-  </p>
   <% end %>
-  <% if devise_mapping.recoverable? && controller_name != 'passwords' %>
-  <div class="align-top">
-    <%= link_to "Forgot your password?", new_password_path(resource_name), :class => "icon-info-link" %>
-  </div>
-  <% end %>
-</div>
 
 <div id="non-login-container" class="wrapper">
   <div id="register-panel" class="clearfix">

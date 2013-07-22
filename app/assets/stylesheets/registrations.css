@@ -1,0 +1,118 @@
+.body-third{
+width:33%;
+float: left;}
+
+#white-box{
+width: 100%;
+margin: 0 auto;
+height: 340px;
+background: white;
+-moz-box-shadow: 0 0 3px -1px #888;
+-webkit-box-shadow: 0 0 3px -1px #888;
+box-shadow: 0 0 3px -1px #888;
+}
+
+.body-third h3{
+padding: 19px 25px 8px 25px;
+font-size: 16px;
+}
+
+.body-third h5{
+text-align: justify;
+margin-left: 26px;
+font-size: 1.1em;
+color: #848484;
+font-weight: 100;
+}
+
+.body-third p{
+text-align: justify;
+margin: 23px 0 0 93px;
+font-size: 1.0em;
+color: #848484;
+font-weight: 100;
+}
+
+.body-third fieldset{
+width: 260px;
+margin: 26px;
+}
+
+.body-third fieldset input[type=text] {
+background: white;
+border-radius: 4px;
+color: #d8d8d8;
+width: 255px;
+height: 33px;
+font-size: 12px;
+}
+
+.middle_section{
+margin-right: 8px;}
+.body-third fieldset label{
+font-weight: bold;}
+
+.not_bottom{
+margin-top: 5px !important;
+margin-bottom: 15px !important;
+}
+
+.bottom_field{
+margin-top: 5px !important;
+margin-bottom: 6px !important}
+
+.body-third fieldset input[type=checkbox] {
+opacity: 1;
+position: relative !important;
+top: 0;
+left: 0;
+margin-right: 4px;
+}
+
+#body{
+	width: 100%;
+	margin-top: 30px;
+}
+
+.or-divider{
+background: url('/assets/or-divider.png');
+width:300px;
+height: 10px;
+background-repeat: no-repeat;
+margin: 2px 25px -5px 25px;}
+
+.facebook-large-btn{
+border: none;
+background: url('/assets/fb-btn.png');
+height: 50px;
+width: 273px;
+background-repeat: no-repeat;
+margin: 22px 25px 11px 25px;}
+
+.twitter-large-btn{
+border: none;
+background: url('/assets/twitter_btn.png');
+height: 50px;
+width: 273px;
+background-repeat: no-repeat;
+margin: 22px 25px 11px 25px;}
+
+.join-btn{
+border: none;
+background: url('/assets/join-btn.png');
+height: 50px;
+width: 273px;
+background-repeat: no-repeat;
+margin: 32px 25px 11px -4px;}
+
+#forget_link{
+font-size: 0.9em;
+float: right;
+color: red;
+font-style: italic;
+margin-right: 10px;
+margin-top: 0px;}
+
+.side-border{
+border-left: 1px #e5e5e5 solid;
+height: 498px;}
