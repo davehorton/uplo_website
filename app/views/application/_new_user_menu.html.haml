@@ -1,7 +1,7 @@
-%ul
-%li
-  %a.app-btn{:href => "/iphone_app"}
-    %img{:src => "assets/get-app-btn.png"}/
+%ul#menu-items
+	%li
+	  %a.app-btn{:href => "/iphone_app"}
+	    %img{:src => "assets/get-app-btn.png"}/
 
   - if user_signed_in?
     %li
@@ -15,6 +15,6 @@
     %li.no-padding-right{:style => "margin-top: 2px"}
       = render :partial => "search_box_new", :locals => {:action => '/search'}
   - else
-%li
-  %a.login-btn{:href => "/signin"}
-    %img{:src => "assets/login-btn.png"}/
+	%li
+	  %a.login-btn{:href => "/signin"}
+	    %img{:src => "assets/login-btn.png"}/
