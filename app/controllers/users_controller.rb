@@ -253,6 +253,7 @@ class UsersController < ApplicationController
 
   def account
     @authentications = current_user.authentications if current_user
+    @user = current_user
   end
 
 end

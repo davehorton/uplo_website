@@ -14,8 +14,9 @@
 
     .clear
 
-    .partial_wrapper
-      = render :partial => "/users/sections/password"
+      - if !@user.encrypted_password.blank?
+        .partial_wrapper
+          = render :partial => "/users/sections/password"
 
     .partial_wrapper
       = render :partial => "/users/sections/payment_info"
