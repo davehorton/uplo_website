@@ -487,6 +487,7 @@ class User < ActiveRecord::Base
   def apply_omniauth(omniauth)
     self.email = omniauth.info.email if email.blank?
     self.username = omniauth.info.nickname if username.blank?
+    self.confirmed_at = Time.now.utc
     if omniauth.provider == "twitter"
       name = omniauth.info.name.split(' ')
       self.first_name = name.first
