@@ -5,3 +5,8 @@ TWITTER_CONFIG   = config['twitter']
 FLICKR_CONFIG    = config['flickr']
 TUMBLR_CONFIG    = config['tumblr']
 #PINTEREST_CONFIG = config['pinterest']
+
+ENV['FACEBOOK_KEY'] = FACEBOOK_CONFIG["api_key"]
+ENV['FACEBOOK_SECRET'] = FACEBOOK_CONFIG["secret"]
+ENV["TWITTER_CONSUMER_KEY"] = TWITTER_CONFIG["consumer_key"]
+ENV["TWITTER_CONSUMER_SECRET"] = TWITTER_CONFIG["consumer_secret"]
