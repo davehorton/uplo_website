@@ -1,29 +1,144 @@
 <% title "Sign In" %>
 <% if @authentications %>
  <% unless @authentications.empty? %>
-  <p><strong>You can sign in to this account using:</strong></p>
-   <div class="authentications">
-    <% for authentication in @authentications %>
-     <div class="authentication">
-      <%= image_tag "#{authentication.provider}_32.png", :size => "32x32" %>
-      <div class="provider"><%= authentication.provider.titleize %></div>
-      <div class="uid"><%= authentication.uid %></div>
-      <% if @authentications.length > 1 || !@user.encrypted_password.blank? %>
-      <%= link_to "X", authentication, :confirm => 'Are you sure you want to remove this authentication option?', :method => :delete, :class => "remove" %>
-      <% end %>
-     </div>
-     <% end %>
-     <div class="clear"></div>
-    </div>
-   <% end %>
-   <p><strong>Add another service to sign in with:</strong></p>
-  <% else %>
-  <p><strong>Sign in through one of these services:</strong></p>
-<% end %>
+	<div class="account_wrapper last_wrapper">
+	
+        <div class="wrapper_header left font16 bold text">Social Settings</div>
+        <div class="clear"></div>
+        <div class="line-separator"></div>
+			  <br/>
+			  <p>Connect with your social network to easily share and get notified!</p>
+			  <br/>
+			   <div class="authentications">
 
-<a href="/auth/twitter" class="auth_provider">
-  <%= image_tag "twitter_64.png", :size => "64x64", :alt => "Twitter" %>Twitter</a>
-<a href="/auth/facebook" class="auth_provider">
-  <%= image_tag "facebook_64.png", :size => "64x64", :alt => "Facebook" %>Facebook</a>
+
+										
+			    <% for authentication in @authentications %>
+			    
+			     <% if authentication.provider == 'facebook' %>
+			     	<% @facebook = true %>
+			     <% end %>
+
+			     <% if authentication.provider == 'twitter' %>
+			     	<% @twitter = true %>
+			     <% end %>
+
+		     <% end %>
+		     	
+		     	
+
+		     	<% if @facebook %>
+						<div class="authentication enabled">
+							<div class="provider-icon" style="background-image:url(<%= "/assets/social-facebook.png" %>)"></div>
+							<div class="provider">Facebook</div>
+							<% if @authentications.length > 1 || !@user.encrypted_password.blank? %>
+								<%= link_to "disconnect", authentication, :confirm => 'Are you sure you want to remove this authentication option?', :method => :delete, :class => "remove" %>
+							<% else %>
+								<small>Primary (Cannot be disabled)</small>
+							<% end %>
+						</div>		     	
+		     	<% else %>
+						<div class="authentication">
+							<div class="provider-icon" style="background-image:url(<%= "/assets/social-facebook.png" %>)"></div>
+							<div class="provider">Facebook</div>
+							<a href="/auth/facebook" class="auth_provider">
+								<%= image_tag "facebook_64.png", :size => "64x64", :alt => "Facebook" %>Connect</a>
+						</div>		     	
+		     	<% end %>
+		     	
+		     	
+		     	<% if @twitter %>
+			     <div class="authentication enabled">
+							<div class="provider-icon" style="background-image:url(<%= "/assets/social-twitter.png" %>)"></div>
+			     	<div class="provider">Twitter</div>
+
+			      <% if @authentications.length > 1 || !@user.encrypted_password.blank? %>
+			      <%= link_to "disconnect", authentication, :confirm => 'Are you sure you want to remove this authentication option?', :method => :delete, :class => "remove" %>
+							<% else %>
+								<small>Primary (Cannot be disabled)</small>
+							<% end %>
+			     </div>		     	
+		     	<% else %>
+			     <div class="authentication">
+			     	<div class="provider-icon" style="background-image:url(<%= "/assets/social-twitter.png" %>)"></div>
+			     	<div class="provider">Twitter</div>
+			     	
+						<a href="/auth/twitter" class="auth_provider">Connect</a>
+			     </div>		     	
+		     	<% end %>		     	
+		     
+
+			     <div class="clear"></div>
+			    </div>
+			   <% end %>
+
+			  <% else %>
+
+			<% end %>
+			
 <div class="clear"></div>
+</div>
 
+<style>
+.authentication {
+	display:inline;
+	float:left;
+	width:100%;
+	clear:both;
+	padding: 5px 0;
+	border-bottom:1px solid #e5e5e5;
+}
+.provider-icon {
+	display:inline;
+	float:left;
+	width:30px;
+	height:30px;
+	background-position: center bottom;
+	backgroound-repeat:no-repeat;
+	opacity:.5;
+}
+.authentication.enabled .provider-icon {
+	background-position: center top;
+	opacity:1;
+}
+.authentications img {
+	display:inline;
+	float:left;
+}
+.authentications .provider {
+	display:inline;
+	font-size:14px;
+	color:#999;
+	font-weight:500;
+	margin-left:10px;
+	line-height:30px;
+	float:left;
+}
+.authentication small {
+	display:inline;
+	float:right;
+	color:#999;
+	font-size:11px;
+	line-height:30px;
+}
+
+
+.authentication a {
+	display:inline;
+	float:right;
+	-moz-border-radius:3px;
+	-webkit-border-radius:3px;
+	border-radius:3px;
+	background:#333;
+	color:#fff;
+	font-size:11px;
+	text-transform: uppercase;
+	font-weight:600;
+	margin:3px 0;
+	padding:5px 10px;
+}
+.authentication.enabled .provider {
+	color:#333;
+	font-weight:600;
+}
+</style>

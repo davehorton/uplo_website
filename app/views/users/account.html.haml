@@ -24,13 +24,15 @@
 
     .partial_wrapper
       = render :partial => "/users/sections/paypal_email"
+
+
+    .partial_wrapper
+      = render :partial => "/users/sections/social_setting"
+
     .clear
 
     .partial_wrapper
       = render :partial => "/users/sections/orders"
-
-    .partial_wrapper
-      = render :partial => "/users/sections/social_setting"
 
 - content_for :js do
   = javascript_tag do

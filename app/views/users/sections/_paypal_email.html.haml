@@ -1,4 +1,4 @@
-= render :layout => "account_wrapper", :locals => {:header => "My PayPal Information", :last => true} do
+= render :layout => "account_wrapper", :locals => {:header => "My PayPal Information"} do
   .yield_info
     .line_info
       - if (current_user.paypal_email)
