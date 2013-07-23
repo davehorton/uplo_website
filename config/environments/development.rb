@@ -1,11 +1,6 @@
 Uplo::Application.configure do
   # Settings specified here will take precedence over those in config/application.rb
 
-  # ENV['FACEBOOK_KEY'] = '164091983778781'
-  # ENV['FACEBOOK_SECRET'] = '39feaa2763d6cf829991ebeff78f1439'
-  # ENV["TWITTER_CONSUMER_KEY"] = '7jHkC1FBt3fvkpLD6Ul8g'
-  # ENV["TWITTER_CONSUMER_SECRET"] = 'n9R54l0LzvZOAOMrs51VvEkxS9VUN5k5puJfCPD4pFw'
-
   ENV['UPLO_DOMAIN'] = 'uplo.nightowls.co:3000'
   DOMAIN = ENV['UPLO_DOMAIN'] || 'localhost:3000'
 
