@@ -27,7 +27,24 @@ class UsersController < ApplicationController
       end
     end
   end
+  def testnotifications
+  	
 
+  
+        tokens = ['47f3f6d22d4e23fce35cb52bd9fab16beee07cd6e697d076c2033341821e3744']
+       
+
+        message = "#Hey Patrick do you get this? Bas"
+        notification = {
+          :schedule_for => [30.second.from_now],
+          :device_tokens => tokens,
+          :aps => { :alert => message },
+          :data => { :type => 'like'.to_s, :id => 'd' }
+        }
+        Rails.logger.debug notification.to_yaml;
+        Urbanairship.push(notification)
+  end
+  
   def update_avatar
     avatar = current_user.profile_images.build(:avatar => params[:user][:avatar])
     if avatar.save

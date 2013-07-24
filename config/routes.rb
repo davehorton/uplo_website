@@ -147,6 +147,8 @@ Uplo::Application.routes.draw do
     put "update_password", :to => "users/passwords#update_password"
     post 'update_avatar', :to => 'users#update_avatar'
     get 'delete_profile_photo', :to => 'users#delete_profile_photo'
+    get 'testnotifications', :to => 'users#testnotifications'
+
     get 'set_avatar', :to => 'users#set_avatar'
     put 'update_profile_info', :to => 'users#update_profile_info'
     get 'unlike_image', :to => 'users#unlike_image'
