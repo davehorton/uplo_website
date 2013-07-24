@@ -71,7 +71,6 @@ module Uplo
       admin.js
       edit_images.js
       mobile.css
-      nightlowl.css
     )
   end
 end
