@@ -5,6 +5,7 @@ class AuthenticationsController < ApplicationController
     omniauth = request.env["omniauth.auth"]
     #return render :text => omniauth.to_yaml
     authentication = Authentication.find_by_provider_and_uid(omniauth['provider'], omniauth['uid'])
+    Rails.logger.debug User.find_by_email(omniauth['info']['email']).to_yaml
     if authentication
       flash[:notice] = "Signed in successfully."
       #sign_in_and_redirect(:user, authentication.user)
@@ -15,7 +16,14 @@ class AuthenticationsController < ApplicationController
       flash[:notice] = "Authentication successful."
       #redirect_to authentications_url
       redirect_to controller: 'users', action: 'account'
+    elsif omniauth['provider'] == 'facebook' && user = User.find_by_email(omniauth['info']['email'])
+      Rails.logger.debug "third"
+      user.authentications.create!(:provider => omniauth['provider'], :uid => omniauth['uid'])
+      flash[:notice] = "Signed in successfully."
+      sign_in(:user, user)
+      redirect_to controller: 'home', action: 'index'
     else
+      Rails.logger.debug "fourth"
       user = User.new
       user.apply_omniauth(omniauth)
       if user.save
