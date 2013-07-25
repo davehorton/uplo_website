@@ -107,6 +107,14 @@ width: 273px;
 background-repeat: no-repeat;
 margin: 32px 25px 11px -4px;}
 
+.login-btn{
+border: none;
+background: url('/assets/login-btn2.png');
+height: 50px;
+width: 273px;
+background-repeat: no-repeat;
+margin: 32px 25px 11px -4px;}
+
 #forget_link{
 font-size: 0.9em;
 float: right;

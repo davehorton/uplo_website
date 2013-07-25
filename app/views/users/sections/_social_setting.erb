@@ -1,8 +1,7 @@
 <% title "Sign In" %>
 <% if @authentications %>
- <% unless @authentications.empty? %>
 	<div class="account_wrapper last_wrapper">
-	
+
         <div class="wrapper_header left font16 bold text">Social Settings</div>
         <div class="clear"></div>
         <div class="line-separator"></div>
@@ -12,9 +11,9 @@
 			   <div class="authentications">
 
 
-										
+
 			    <% for authentication in @authentications %>
-			    
+
 			     <% if authentication.provider == 'facebook' %>
 			     	<% @facebook = true %>
 			     <% end %>
@@ -24,8 +23,8 @@
 			     <% end %>
 
 		     <% end %>
-		     	
-		     	
+
+
 
 		     	<% if @facebook %>
 						<div class="authentication enabled">
@@ -36,17 +35,17 @@
 							<% else %>
 								<small>Primary (Cannot be disabled)</small>
 							<% end %>
-						</div>		     	
+						</div>
 		     	<% else %>
 						<div class="authentication">
 							<div class="provider-icon" style="background-image:url(<%= "/assets/social-facebook.png" %>)"></div>
 							<div class="provider">Facebook</div>
 							<a href="/auth/facebook" class="auth_provider">
 								<%= image_tag "facebook_64.png", :size => "64x64", :alt => "Facebook" %>Connect</a>
-						</div>		     	
+						</div>
 		     	<% end %>
-		     	
-		     	
+
+
 		     	<% if @twitter %>
 			     <div class="authentication enabled">
 							<div class="provider-icon" style="background-image:url(<%= "/assets/social-twitter.png" %>)"></div>
@@ -57,16 +56,16 @@
 							<% else %>
 								<small>Primary (Cannot be disabled)</small>
 							<% end %>
-			     </div>		     	
+			     </div>
 		     	<% else %>
 			     <div class="authentication">
 			     	<div class="provider-icon" style="background-image:url(<%= "/assets/social-twitter.png" %>)"></div>
 			     	<div class="provider">Twitter</div>
-			     	
+
 						<a href="/auth/twitter" class="auth_provider">Connect</a>
-			     </div>		     	
-		     	<% end %>		     	
-		     
+			     </div>
+		     	<% end %>
+
 
 			     <div class="clear"></div>
 			    </div>
@@ -74,8 +73,7 @@
 
 			  <% else %>
 
-			<% end %>
-			
+
 <div class="clear"></div>
 </div>
 

@@ -5,7 +5,6 @@ class AuthenticationsController < ApplicationController
     omniauth = request.env["omniauth.auth"]
     #return render :text => omniauth.to_yaml
     authentication = Authentication.find_by_provider_and_uid(omniauth['provider'], omniauth['uid'])
-    Rails.logger.debug User.find_by_email(omniauth['info']['email']).to_yaml
     if authentication
       flash[:notice] = "Signed in successfully."
       #sign_in_and_redirect(:user, authentication.user)

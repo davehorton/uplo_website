@@ -1,11 +1,20 @@
-<h2>Sign up</h2>
-
+<%= stylesheet_link_tag "registrations" %>
 <%= simple_form_for(resource, :as => resource_name, :url => registration_path(resource_name)) do |f| %>
-  <%= f.error_notification %>
+  <%-# f.error_notification -%>
   <%-# devise_error_messages! -%>
   <div class="form-inputs">
+<%-# Rails.logger.debug resource.attributes['username'].to_yaml %>
+<%-# Rails.logger.debug User.check_username(resource.attributes['username']).to_yaml %>
+    <% if @user.errors[:email].any? %>
     <%= f.input :email, :required => true, :autofocus => true %>
+    <% else %>
+    <%= f.input :email, :as => :hidden, :required => true %>
+    <% end %>
+    <% if @user.errors[:username].any? %>
     <%= f.input :username, :required => true %>
+    <% else %>
+    <%= f.input :username, :as => :hidden, :required => true %>
+    <% end %>
     <% if @user.password_required? %>
     <%= f.input :password, :required => true %>
     <%= f.input :password_confirmation, :required => true %>
@@ -13,8 +22,8 @@
   </div>
 
   <div class="form-actions">
-    <%= f.button :submit, "Sign up" %>
+    <%= f.button :submit, "", :class => "button medium align-top join-btn" %>
   </div>
 <% end %>
 
-<%= render "devise/shared/links" %>
+<%-# render "devise/shared/links" -%>
