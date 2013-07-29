@@ -3,6 +3,6 @@
 %meta{ property: "og:description", content: image_description}
 %meta{ property: "og:image", content: @image.url(:medium) }
 %meta{ property: "og:url", content: browse_image_url(@image) }
-%meta{ property: "og:type", content: 'uploapp:photo' }
+%meta{ property: "og:type", content: ENV['FACEBOOK_APP'] + ':photo' }
 %meta{ name: "twitter:title", content: image_name_with_default}
 

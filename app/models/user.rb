@@ -488,7 +488,6 @@ class User < ActiveRecord::Base
     self.email = omniauth.info.email if email.blank?
     self.username = omniauth.info.nickname if username.blank?
     self.confirmed_at = Time.now.utc
-    self.oauth_token = omniauth.credentials.token
     if omniauth.provider == "twitter"
       name = omniauth.info.name.split(' ')
       self.first_name = name.first
@@ -497,7 +496,7 @@ class User < ActiveRecord::Base
       self.first_name = omniauth.info.first_name
       self.last_name = omniauth.info.last_name
     end
-    authentications.build(:provider => omniauth['provider'], :uid => omniauth['uid'])
+    authentications.build(:provider => omniauth['provider'], :uid => omniauth['uid'], :oauth_token => omniauth['credentials']['token'])
   end
 
   def password_required?
