@@ -49,6 +49,7 @@ gem 'omniauth-facebook', '1.4.0'
 gem 'omniauth-twitter'
 gem 'nifty-generators'
 gem "bundler", "~> 1.3.5"
+gem "koala", "~> 1.7.0rc1"
 
 # for sidekiq admin
 gem 'sinatra', require: false

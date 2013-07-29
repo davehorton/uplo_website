@@ -488,6 +488,7 @@ class User < ActiveRecord::Base
     self.email = omniauth.info.email if email.blank?
     self.username = omniauth.info.nickname if username.blank?
     self.confirmed_at = Time.now.utc
+    self.oauth_token = omniauth.credentials.token
     if omniauth.provider == "twitter"
       name = omniauth.info.name.split(' ')
       self.first_name = name.first
@@ -502,6 +503,22 @@ class User < ActiveRecord::Base
   def password_required?
     (authentications.empty? || !password.blank?) && super
   end
+
+  def facebook
+    @facebook ||= Koala::Facebook::API.new(authentications.first.oauth_token)
+    block_given? ? yield(@facebook) : @facebook
+  rescue Koala::Facebook::APIError => e
+    logger.info e.to_s
+    nil # or consider a custom null object
+  end
+
+
+  def twitter
+    # if provider == "twitter"
+      @twitter ||= Twitter::Client.new(oauth_token: oauth_token, oauth_token_secret: oauth_secret)
+    # end
+  end
+
 
   private
 
