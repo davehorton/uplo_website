@@ -172,12 +172,12 @@
                 helper.show_notification(response.msg);
               } else if(unfollow=='false') {
                 $('#btn-follow').attr('data-following', 'true');
-                $('#btn-follow').removeclass('follow');
-                $('#btn-follow').addclass('unfollow');
+                $('#btn-follow').removeClass('follow');
+                $('#btn-follow').addClass('unfollow');
               } else {
                 $('#btn-follow').attr('data-following', 'false');
-                $('#btn-follow').removeclass('unfollow');
-                $('#btn-follow').addclass('follow');
+                $('#btn-follow').removeClass('unfollow');
+                $('#btn-follow').addClass('follow');
               }
             }
           });
@@ -197,12 +197,14 @@
               if(response.success==false){
                 helper.show_notification(response.msg);
               } else {
+                _this.children('.icon').addClass('icon-red');
                 list = "";
                 $.each(response.liking_users, function(index, value) {
-                  list = list + '<li>' + '<img class="avatar medium left" src="' + value.avatar + '">' + value.fullname + '</li>';
+                  list = list + '<li style="margin: 30px 0">' + '<img style="margin-right:10px" class="avatar medium left" src="' + value.avatar + '">' + value.fullname + '</li>';
                 });
                 if(ul == "false"){
                   remove_likes();
+                  _this.children('.icon').addClass('icon-red');
                   _this.append('<ul>' + list + '</ul>');
                   ul = "true";
                 } else {
@@ -238,6 +240,7 @@
         if(ul == "true"){
           ul = "false";
           $('#likes-list').children('ul').remove();
+          $('#likes-list').children('.icon-red').removeClass('icon-red');
         }
       }
 
