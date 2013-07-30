@@ -511,6 +511,12 @@ class User < ActiveRecord::Base
     nil # or consider a custom null object
   end
 
+  def self.share_review(user_id, image_url)
+    user = User.find(user_id)
+    if user.authentications.where("provider = ?", "facebook").any?
+      user.facebook.put_connections("me", "uploapp:upload", photo: image_url)
+    end
+  end
 
   def twitter
     # if provider == "twitter"
