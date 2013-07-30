@@ -146,6 +146,7 @@ class ImagesController < ApplicationController
 
   def switch_like
     image = Image.find_by_id(params[:id])
+    image_url = url_for :controller => 'images', :action => 'browse', :id => image.id
     return redirect_to browse_image_path(image) if request.get?
 
     dislike = params[:dislike].to_bool
@@ -154,7 +155,7 @@ class ImagesController < ApplicationController
     elsif dislike
       result = current_user.unlike_image(image)
     else
-      result = current_user.like_image(image)
+      result = current_user.like_image(image, image_url)
     end
 
     render :json => result

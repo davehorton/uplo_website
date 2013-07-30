@@ -469,7 +469,8 @@ class User < ActiveRecord::Base
     owns_gallery?(gallery) || gallery.permission.public? || GalleryInvitation.find_by_user_id(id).present?
   end
 
-  def like_image(image)
+  def like_image(image, image_url=nil)
+    User.delay.like_review(self.id, image_url) unless image.liked_by?(self)
     image_likes.create(image_id: image.id) unless image.liked_by?(self)
     { image_likes_count: image.reload.image_likes.size }
   end
@@ -515,6 +516,13 @@ class User < ActiveRecord::Base
     user = User.find(user_id)
     if user.authentications.where("provider = ?", "facebook").any?
       user.facebook.put_connections("me", "uploapp:upload", photo: image_url)
+    end
+  end
+
+  def self.like_review(user_id, image_url)
+    user = User.find(user_id)
+    if user.authentications.where("provider = ?", "facebook").any?
+      user.facebook.put_connections("me", "og.likes", object: image_url)
     end
   end
 
