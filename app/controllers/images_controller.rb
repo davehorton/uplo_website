@@ -44,7 +44,8 @@ class ImagesController < ApplicationController
         gal_options = self.class.helpers.gallery_options(current_user.id, gallery.id, true)
 
         image_url = url_for :controller => 'images', :action => 'browse', :id => image.id
-        User.delay.share_review(current_user.id, image_url)
+        User.delay.facebook_upload(current_user.id, image_url)
+        User.delay.twitter_upload(current_user.id, image_url)
 
         render json: { success: true, item: item, pagination: pagination, gallery_options: gal_options },
         content_type: 'text/plain'

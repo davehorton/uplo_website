@@ -252,8 +252,14 @@ class UsersController < ApplicationController
   end
 
   def account
+    @user = current_user if current_user
     @authentications = current_user.authentications if current_user
-    @user = current_user
+    twitter = @authentications.where("provider = ?", "twitter")
+    facebook = @authentications.where("provider = ?", "facebook")
+    @twitter_any = twitter.any?
+    @facebook_any = facebook.any?
+    @twitter = twitter.first
+    @facebook = facebook.first
   end
 
 end

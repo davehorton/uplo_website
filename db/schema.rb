@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130730182029) do
+ActiveRecord::Schema.define(:version => 20130731134453) do
 
   create_table "addresses", :force => true do |t|
     t.string   "first_name"
@@ -32,9 +32,10 @@ ActiveRecord::Schema.define(:version => 20130730182029) do
     t.integer  "user_id"
     t.string   "provider"
     t.string   "uid"
-    t.datetime "created_at",  :null => false
-    t.datetime "updated_at",  :null => false
+    t.datetime "created_at",   :null => false
+    t.datetime "updated_at",   :null => false
     t.string   "oauth_token"
+    t.string   "oauth_secret"
   end
 
   create_table "carts", :force => true do |t|

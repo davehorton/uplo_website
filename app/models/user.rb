@@ -470,7 +470,8 @@ class User < ActiveRecord::Base
   end
 
   def like_image(image, image_url=nil)
-    User.delay.like_review(self.id, image_url) unless image.liked_by?(self)
+    User.delay.facebook_like(self.id, image_url) unless image.liked_by?(self)
+    User.twitter_like(self.id, image_url) unless image.liked_by?(self)
     image_likes.create(image_id: image.id) unless image.liked_by?(self)
     { image_likes_count: image.reload.image_likes.size }
   end
@@ -497,7 +498,7 @@ class User < ActiveRecord::Base
       self.first_name = omniauth.info.first_name
       self.last_name = omniauth.info.last_name
     end
-    authentications.build(:provider => omniauth['provider'], :uid => omniauth['uid'], :oauth_token => omniauth['credentials']['token'])
+    authentications.build(:provider => omniauth['provider'], :uid => omniauth['uid'], :oauth_token => omniauth['credentials']['token'], :oauth_secret => omniauth['credentials']['secret'])
   end
 
   def password_required?
@@ -505,31 +506,50 @@ class User < ActiveRecord::Base
   end
 
   def facebook
-    @facebook ||= Koala::Facebook::API.new(authentications.first.oauth_token)
+    @facebook ||= Koala::Facebook::API.new(authentications.where("provider = ?", "facebook").first.oauth_token)
     block_given? ? yield(@facebook) : @facebook
   rescue Koala::Facebook::APIError => e
     logger.info e.to_s
     nil # or consider a custom null object
   end
 
-  def self.share_review(user_id, image_url)
+  def self.facebook_upload(user_id, image_url)
     user = User.find(user_id)
     if user.authentications.where("provider = ?", "facebook").any?
       user.facebook.put_connections("me", "uploapp:upload", photo: image_url)
     end
   end
 
-  def self.like_review(user_id, image_url)
+  def self.twitter_upload(user_id, image_url)
+    url = Googl.shorten(image_url)
+    user = User.find(user_id)
+    if user.authentications.where("provider = ?", "twitter").any?
+      user.twitter.update("Uploaded photo: " + url.short_url + " on Uplo")
+    end
+  end
+
+  def self.facebook_like(user_id, image_url)
     user = User.find(user_id)
     if user.authentications.where("provider = ?", "facebook").any?
       user.facebook.put_connections("me", "og.likes", object: image_url)
     end
   end
 
+  def self.twitter_like(user_id, image_url)
+    url = Googl.shorten(image_url)
+    user = User.find(user_id)
+    if user.authentications.where("provider = ?", "twitter").any?
+      user.twitter.update("Liked photo: " + url.short_url + " on Uplo")
+    end
+  end
+
   def twitter
-    # if provider == "twitter"
-      @twitter ||= Twitter::Client.new(oauth_token: oauth_token, oauth_token_secret: oauth_secret)
-    # end
+    auth = authentications.where("provider = ?", "twitter").first
+    @twitter ||= Twitter::Client.new(consumer_key: ENV["TWITTER_CONSUMER_KEY"], consumer_secret: ENV["TWITTER_CONSUMER_SECRET"], oauth_token: auth.oauth_token, oauth_token_secret: auth.oauth_secret)
+    block_given? ? yield(@twitter) : @twitter
+  rescue Twitter::Error => e
+    logger.info e.to_s
+    nil # or consider a custom null object
   end
 
 
