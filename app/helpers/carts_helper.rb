@@ -1,8 +1,12 @@
 module CartsHelper
   def total_line_items
-    cart = current_user.cart
-    if cart && cart.order
-      return cart.order.line_items.count
+    if current_user
+      cart = current_user.cart
+      if cart && cart.order
+        return cart.order.line_items.count
+      else
+        return 0
+      end
     else
       return 0
     end

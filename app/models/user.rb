@@ -518,6 +518,8 @@ class User < ActiveRecord::Base
     if user.authentications.where("provider = ?", "facebook").any?
       user.facebook.put_connections("me", "uploapp:upload", photo: image_url)
     end
+  rescue Exception => e
+    nil
   end
 
   def self.twitter_upload(user_id, image_url)
@@ -525,6 +527,8 @@ class User < ActiveRecord::Base
     if user.authentications.where("provider = ?", "twitter").any?
       user.twitter.update("Uploaded a photo: " + image_url + " on Uplo")
     end
+  rescue Exception => e
+    nil
   end
 
   def self.facebook_like(user_id, image_url)
@@ -532,6 +536,8 @@ class User < ActiveRecord::Base
     if user.authentications.where("provider = ?", "facebook").any?
       user.facebook.put_connections("me", "og.likes", object: image_url)
     end
+  rescue Exception => e
+    nil
   end
 
   def self.twitter_like(user_id, image_url)
@@ -539,6 +545,8 @@ class User < ActiveRecord::Base
     if user.authentications.where("provider = ?", "twitter").any?
       user.twitter.update("Liked a photo: " + image_url + " on Uplo")
     end
+  rescue Exception => e
+    nil
   end
 
   def twitter
