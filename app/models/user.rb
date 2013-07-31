@@ -521,10 +521,9 @@ class User < ActiveRecord::Base
   end
 
   def self.twitter_upload(user_id, image_url)
-    url = Googl.shorten(image_url)
     user = User.find(user_id)
     if user.authentications.where("provider = ?", "twitter").any?
-      user.twitter.update("Uploaded photo: " + url.short_url + " on Uplo")
+      user.twitter.update("Uploaded a photo: " + image_url + " on Uplo")
     end
   end
 
@@ -536,10 +535,9 @@ class User < ActiveRecord::Base
   end
 
   def self.twitter_like(user_id, image_url)
-    url = Googl.shorten(image_url)
     user = User.find(user_id)
     if user.authentications.where("provider = ?", "twitter").any?
-      user.twitter.update("Liked photo: " + url.short_url + " on Uplo")
+      user.twitter.update("Liked a photo: " + image_url + " on Uplo")
     end
   end
 
