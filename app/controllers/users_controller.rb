@@ -27,23 +27,7 @@ class UsersController < ApplicationController
       end
     end
   end
-  def testnotifications
-  	
-
   
-        tokens = ['47f3f6d22d4e23fce35cb52bd9fab16beee07cd6e697d076c2033341821e3744']
-       
-
-        message = "#Hey Patrick do you get this? Bas"
-        notification = {
-          :schedule_for => [30.second.from_now],
-          :device_tokens => tokens,
-          :aps => { :alert => message },
-          :data => { :type => 'like'.to_s, :id => 'd' }
-        }
-        Rails.logger.debug notification.to_yaml;
-        Urbanairship.push(notification)
-  end
   
   def update_avatar
     avatar = current_user.profile_images.build(:avatar => params[:user][:avatar])
@@ -138,8 +122,8 @@ class UsersController < ApplicationController
   def set_follow
     result = {}
     user = User.find(params[:user_id])
-    follower = current_user
 
+    follower = current_user
     if user.blank?
       result[:msg] = I18n.t("user.user_was_banned_or_removed")
       result[:success] = false
@@ -163,6 +147,8 @@ class UsersController < ApplicationController
         result[:success] = false
       else
         UserFollow.create({ :user_id => user.id, :followed_by => follower.id })
+              	  			Rails.logger.debug 'bas is the best'
+
         result[:followers] = current_user.followers.length
         result[:followings] = current_user.followed_users.length
         result[:followee_followers] = user.followers.length
