@@ -63,7 +63,17 @@ class UsersController < ApplicationController
       redirect_to profile_path
     end
   end
-
+  def testpush
+   message = "#your image"
+       tokens = ['6DB667D3B507408892B8CF891A9DB00B388BF8F7B95E1C1C9C3DADF67F2C70BD']
+        notification = {
+          :schedule_for => [30.second.from_now],
+          :device_tokens => tokens,
+          :aps => { :alert => message },
+          :data => { :type => 'like', :id => '1' }
+        }
+        Urbanairship.push(notification)
+  end
   def delete_profile_photo
     if request.xhr?
       if !ProfileImage.exists?(params[:id])

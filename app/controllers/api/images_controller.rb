@@ -34,6 +34,10 @@ class Api::ImagesController < Api::BaseController
     image = Image.find(params[:id])
     render json: image
   end
+   def get_by_id
+    image = Image.find(5)
+    render json: image
+  end
 
   # GET /api/images/liked
   # optional:
@@ -53,7 +57,7 @@ class Api::ImagesController < Api::BaseController
   #   sort_field
   #   sort_direction
   def popular
-    filtered_params[:sort_field] = "promoted_at desc"
+    filtered_params[:sort_field] = "promoted_at"
     images = Image.spotlight.includes(:gallery, :user).paginate_and_sort(filtered_params)
     render json: images, meta: { total: images.total_entries }
   end

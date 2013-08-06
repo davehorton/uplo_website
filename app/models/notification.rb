@@ -18,8 +18,12 @@ class Notification < ActiveRecord::Base
   def self.deliver_image_notification(image_id, by_user, type)
 
     image = Image.find_by_id image_id.to_i
+	
     if image
       by_user = User.find_by_id by_user.to_i
+      Rails.logger.debug "rtyrty"
+           Rails.logger.debug UserDevice.exists?(user_id: image.user_id)
+
       if image.user && by_user && UserDevice.exists?(user_id: image.user_id)
         tokens = []
         image.user.devices.each do |d|
@@ -43,10 +47,12 @@ class Notification < ActiveRecord::Base
     if image
       if UserDevice.exists?(user_id: image.user_id)
 		 device = UserDevice.find_by_user_id image.user_id
-        message = "#Your image was just added to the Spotlight"
+		 tokens = []
+		 tokens << device.device_token
+        message = "Your image was just added to the Spotlight"
         notification = {
           :schedule_for => [30.second.from_now],
-          :device_tokens => device.device_token,
+          :device_tokens => tokens,
           :aps => { :alert => message },
           :data => { :type => TYPE_ACTION[type].to_s, :id => image.id.to_s }
         }
@@ -60,10 +66,13 @@ class Notification < ActiveRecord::Base
     if follower
       if UserDevice.exists?(user_id: user_follow.user_id)
 		 device = UserDevice.find_by_user_id user_follow.user_id
+        tokens = []
+		 tokens << device.device_token
+
         message = "#{follower.username} has just added you as a friend"
         notification = {
           :schedule_for => [30.second.from_now],
-          :device_tokens => device.device_token,
+          :device_tokens => tokens,
           :aps => { :alert => message },
           :data => { :type => TYPE_ACTION[type].to_s, :id => follower.id.to_s }
         }

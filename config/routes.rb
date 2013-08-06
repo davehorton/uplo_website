@@ -25,6 +25,8 @@ Uplo::Application.routes.draw do
   get 'friends', :to => 'home#friends_feed'
   get "back", :to => "application#redirect_back"
   get "my_account", :to => "users#account"
+  get "testpush", :to => "users#testpush"
+
   get "my_account/edit", :to => "users#edit"
   put "my_account/update", :to => "users#update"
 
@@ -247,6 +249,8 @@ Uplo::Application.routes.draw do
           get :by_friends
           get :liked
           get :popular
+          post :get_by_id
+          get :show
           get :search
           get :search_by_id
         end
