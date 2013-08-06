@@ -268,11 +268,14 @@ class Image < ActiveRecord::Base
 
   def promote!
     self.promoted = true
+    self.promoted_at =  Time.now.utc
     save!
   end
 
   def demote!
     self.promoted = false
+	self.promoted_at =  ''
+
     save!
   end
 

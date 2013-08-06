@@ -19,6 +19,7 @@ class Admin::SpotlightsController < Admin::AdminController
   # Ajax method.
   def promote
     image = Image.unflagged.find_by_id(params[:id])
+   
     result = {}
 
     if image
@@ -26,6 +27,10 @@ class Admin::SpotlightsController < Admin::AdminController
         method = :demote!
       else
         method = :promote!
+        Notification.deliver_spotlight_notification(
+     		image,
+      		Notification::TYPE[:spotlight]
+   		) 
       end
 
       if image.send(method)

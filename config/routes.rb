@@ -25,6 +25,8 @@ Uplo::Application.routes.draw do
   get 'friends', :to => 'home#friends_feed'
   get "back", :to => "application#redirect_back"
   get "my_account", :to => "users#account"
+  get "testpush", :to => "users#testpush"
+
   get "my_account/edit", :to => "users#edit"
   put "my_account/update", :to => "users#update"
 
@@ -147,6 +149,8 @@ Uplo::Application.routes.draw do
     put "update_password", :to => "users/passwords#update_password"
     post 'update_avatar', :to => 'users#update_avatar'
     get 'delete_profile_photo', :to => 'users#delete_profile_photo'
+    get 'testnotifications', :to => 'users#testnotifications'
+
     get 'set_avatar', :to => 'users#set_avatar'
     put 'update_profile_info', :to => 'users#update_profile_info'
     get 'unlike_image', :to => 'users#unlike_image'
@@ -245,6 +249,8 @@ Uplo::Application.routes.draw do
           get :by_friends
           get :liked
           get :popular
+          post :get_by_id
+          get :show
           get :search
           get :search_by_id
         end

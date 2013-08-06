@@ -1,5 +1,6 @@
 class ImageLikeObserver < ActiveRecord::Observer
   def after_create(image_like)
+
     Notification.deliver_image_notification(
       image_like.image_id,
       image_like.user_id,

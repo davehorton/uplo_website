@@ -29,6 +29,7 @@ module Uplo
                                      :image_like_observer,
                                      :invitation_observer,
                                      :line_item_observer,
+                                     :user_follow_observer,
                                      :user_observer
 
     # Set Time.zone default to the specified zone and make Active Record auto-convert to this zone.
