@@ -506,11 +506,11 @@ class User < ActiveRecord::Base
   end
 
   def facebook
-    @facebook ||= Koala::Facebook::API.new(authentications.where("provider = ?", "facebook").first.oauth_token)
+    auth = authentications.where("provider = ?", "facebook").first
+    if auth
+    @facebook ||= Koala::Facebook::API.new(auth.oauth_token)
     block_given? ? yield(@facebook) : @facebook
-  rescue Koala::Facebook::APIError => e
-    logger.info e.to_s
-    nil # or consider a custom null object
+  	end
   end
 
   def self.facebook_upload(user_id, image_url)
@@ -551,11 +551,11 @@ class User < ActiveRecord::Base
 
   def twitter
     auth = authentications.where("provider = ?", "twitter").first
+    if auth
     @twitter ||= Twitter::Client.new(consumer_key: ENV["TWITTER_CONSUMER_KEY"], consumer_secret: ENV["TWITTER_CONSUMER_SECRET"], oauth_token: auth.oauth_token, oauth_token_secret: auth.oauth_secret)
     block_given? ? yield(@twitter) : @twitter
-  rescue Twitter::Error => e
-    logger.info e.to_s
-    nil # or consider a custom null object
+  
+    end
   end
 
 
