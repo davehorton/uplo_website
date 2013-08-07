@@ -250,7 +250,6 @@ Uplo::Application.routes.draw do
           get :liked
           get :popular
           post :get_by_id
-          get :show
           get :search
           get :search_by_id
         end
