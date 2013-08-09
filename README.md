@@ -6,7 +6,7 @@ Historical note: we inherited this project from another shop in February 2013. W
 
 ## Key Components
 
-* Ruby 1.9.3
+* Ruby 1.9.3-p448 (matches Semaphore version)
 * Rails 3.2
 * Postgresql (9.1+)
 
