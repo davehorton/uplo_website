@@ -41,7 +41,8 @@ describe User do
   it { should validate_confirmation_of(:password) }
   it { should ensure_length_of(:first_name).is_at_least(1).is_at_most(30) }
   it { should validate_confirmation_of(:paypal_email).with_message(/should match confirmation/) }
-  it { should validate_format_of(:website) }
+  it { should allow_value('www.example.com').for(:website) }
+  it { should_not allow_value('wrong#?.format').for(:website) }
 
   describe "validations" do
     before(:each) do
