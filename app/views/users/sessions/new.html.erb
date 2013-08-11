@@ -15,7 +15,7 @@
             <%= f.error :email %>
             </div>
             <div class="field">
-            <%= f.input(:password, 
+            <%= f.input(:password,
               :label_html => {:class => "signin"},
               :input_html => {:class => 'signin'},
               :label => t('public.signin.password'),
@@ -23,15 +23,15 @@
               <%= link_to "Forgot your password?", new_password_path(resource_name), :id => "forget_link" %>
 
              </div>
-             
-            <%= f.submit "", :class => "button medium align-top login-btn" %>
+
+            <%= f.submit "", :class => "button medium align-top login-btn", id: 'login' %>
           <% end %>
 						</fieldset>
- 
 
-					
-					
-					
+
+
+
+
 				</div>
 			</div>
 			<div class="body-third middle_section">
@@ -47,8 +47,8 @@
 			<div class="body-third side-border">
 				<h3>Or sign up the old fashioned way</h3>
 				<h5>Use your email address to join</h5>
-				
-    
+
+
     <% message = resource.errors.full_messages.first || @devise_message %>
     <div class="message text highlight <%= message ? "" : "hidden" %>">
       <%= message %>
@@ -59,19 +59,19 @@
 
 
 					<fieldset>
-    
+
 			 <div class="field" data-error="Please enter your name, or an amusing alternative">
          <%= f.label :user_first_name, 'First name', :class => 'left' %>
          <%= f.text_field :first_name, :required => true %>
        </div>
-       
+
 			 <div class="field" data-error="Please enter your e-mail address so we can get in touch">
          <%= f.label :user_last_name, 'Last name', :class => 'left' %>
          <%= f.text_field :last_name, :required => true %>
        </div>
-       
+
  	    <div class="field">
-  
+
          <%= f.label :user_email, 'Email Address', :class => 'left' %>
          <% if @inv.present? %>
          <%= f.text_field :email, :required => true, :autofocus => true, :value => @email, :disabled => true %>
@@ -101,10 +101,10 @@
          <a class="term-of-use" href='/terms' target='blank'>Terms and Conditions</a>
        </div>
        <%= f.submit '', :class => "join-btn", :id => 'btn-signup' %>
-     
+
 					</fieldset>
      <% end %>
-     
+
 			</div><!--End of box-third --->
 
 		</div><!--End of Main --->

@@ -5,7 +5,7 @@ module IntegrationHelpers
     within("#new_user") do
       fill_in "user_login", :with => user.email
       fill_in "user_password", :with => user.password
-      click_on "Sign in"
+      click_on "login"
     end
   end
 
