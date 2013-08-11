@@ -1,7 +1,7 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
 describe AuthenticationsController do
-  fixtures :all
+  # fixtures :all
   render_views
 
   it "index action should render index template" do
@@ -9,19 +9,19 @@ describe AuthenticationsController do
     response.should render_template(:index)
   end
 
-  it "create action should render new template when model is invalid" do
+  xit "create action should render new template when model is invalid" do
     Authentication.any_instance.stubs(:valid?).returns(false)
     post :create
     response.should render_template(:new)
   end
 
-  it "create action should redirect when model is valid" do
+  xit "create action should redirect when model is valid" do
     Authentication.any_instance.stubs(:valid?).returns(true)
     post :create
     response.should redirect_to(authentications_url)
   end
 
-  it "destroy action should destroy model and redirect to index action" do
+  xit "destroy action should destroy model and redirect to index action" do
     authentication = Authentication.first
     delete :destroy, :id => authentication
     response.should redirect_to(authentications_url)
