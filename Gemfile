@@ -95,5 +95,3 @@ group :staging, :production do
   gem 'ey_config'
   gem 'unicorn'
 end
-
-gem "mocha", :group => :test
