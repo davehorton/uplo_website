@@ -26,25 +26,31 @@ feature "Search" do
     end
 
     scenario "for one specific user with correct username" do
-      fill_in "query", :with => new_user.username
-      select "Users", :from => "filtered_by"
-      page.find(".search").click
+      within("#filtering-search-box") do
+        fill_in "query", :with => new_user.username
+        select "Users", :from => "filtered_by"
+        page.find(".search").click
+      end
       page.should have_content("1 User found")
       page.should have_selector('a', text: "#{new_user.username}")
     end
 
     scenario "for one specific user with username along with punctutaions" do
-      fill_in "query", :with => "...demo;;;;"
-      select "Users", :from => "filtered_by"
-      page.find(".search").click
+      within("#filtering-search-box") do
+        fill_in "query", :with => "...demo;;;;"
+        select "Users", :from => "filtered_by"
+        page.find(".search").click
+      end
       page.should have_content("1 User found")
       page.should have_selector('a', text: "demo")
     end
 
     scenario "for one specific user with correct email, it does not find user" do
-      fill_in "query", :with => new_user.email
-      select "Users", :from => "filtered_by"
-      page.find(".search").click
+      within("#filtering-search-box") do
+        fill_in "query", :with => new_user.email
+        select "Users", :from => "filtered_by"
+        page.find(".search").click
+      end
       page.should have_content("0 Users found")
       page.should_not have_selector('a', text: "demo")
     end
@@ -66,9 +72,11 @@ feature "Search" do
     end
 
     scenario "for one specific image" do
-      fill_in "query", :with => another_image.name
-      select "Photos", :from => "filtered_by"
-      page.find(".search").click
+      within("#filtering-search-box") do
+        fill_in "query", :with => another_image.name
+        select "Photos", :from => "filtered_by"
+        page.find(".search").click
+      end
       page.should have_selector('span', text: "Search")
       page.should have_selector('span', text: "1 Photo found")
       page.should have_selector("#image-container-#{another_image.id}")
@@ -76,9 +84,11 @@ feature "Search" do
     end
 
     scenario "for one specific image with name along with punctutaions" do
-      fill_in "query", :with => "...test;;;;"
-      select "Photos", :from => "filtered_by"
-      page.find(".search").click
+      within("#filtering-search-box") do
+        fill_in "query", :with => "...test;;;;"
+        select "Photos", :from => "filtered_by"
+        page.find(".search").click
+      end
       page.should have_content("1 Photo found")
       page.should have_selector("#image-container-#{another_image.id}")
     end

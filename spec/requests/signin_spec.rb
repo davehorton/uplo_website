@@ -6,11 +6,12 @@ feature "Sign in" do
 
   scenario "with invalid credentials" do
     visit signin_path
-    fill_in "Login", :with => user.username
-    fill_in "Password", :with => "123456"
-    click_on "Sign in"
+    within("#new_user") do
+      fill_in "Login", :with => user.username
+      fill_in "Password", :with => "123456"
+      click_on "login"
+    end
     current_path.should_not == root_path
-    page.should have_css(".box-alert")
     page.should have_selector("div", :text => "Invalid email or password")
   end
 
