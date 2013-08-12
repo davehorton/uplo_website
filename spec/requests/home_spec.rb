@@ -14,9 +14,7 @@ feature "Home Pages" do
     scenario "header has correct items" do
       page.should have_selector('a', text: 'Browse')
       page.should have_selector('a', text: 'Spotlight')
-      page.should have_selector('a', text: 'The App')
-      page.should have_selector('a', text: 'Sign Up')
-      page.should have_selector('a', text: 'Login')
+      page.should have_link("Login-btn", href: "#{signin_path}")
     end
 
     scenario "it should show spotlight and recent uploads" do
