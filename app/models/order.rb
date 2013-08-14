@@ -36,6 +36,7 @@ class Order < ActiveRecord::Base
   default_scope order('orders.updated_at desc')
   scope :completed,  where(status: STATUS[:complete])
   scope :in_cart,    where(status: [STATUS[:shopping], STATUS[:checkout]])
+  scope :purchased, where(status: [STATUS[:complete], STATUS[:failed]])
   scope :with_items, where('orders.order_total > 0')
 
   def completed?
