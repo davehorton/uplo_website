@@ -93,6 +93,16 @@ feature "Accessing Photo Page" do
       current_path.should == browse_image_path(image.id)
     end
 
+    scenario "flag button" do
+      page.find(".flag").click
+      page.should have_content("Flag for Review")
+      within("div#selection_container") do
+        page.should have_selector("#rdbtn_nudity")
+        choose("rdbtn_nudity")
+      end
+      current_path.should == browse_image_path(image.id)
+    end
+
     scenario "order button", :js => true do
       page.find(".order").click
       current_path.should == order_image_path(image.id)

@@ -32,7 +32,7 @@ feature "Accessing User Profile Page" do
       page.should have_selector("#image-container-#{image.id}")
     end
 
-    scenario "galleries", :js => true do
+    scenario "galleries" do
       page.should have_selector('div', text: "#{user.username}'s Gallery")
       page.should have_selector('div', text: "(#{user.galleries.count})")
       within("#galleries-section .head") do
