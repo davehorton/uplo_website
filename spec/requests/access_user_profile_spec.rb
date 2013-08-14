@@ -12,7 +12,7 @@ feature "Accessing User Profile Page" do
       visit profile_user_path(:user_id => user.id)
     end
 
-    scenario "profile information" do
+    scenario "profile information", :flickering do
       page.should have_selector('a', text: "#{user.fullname}")
       page.should have_selector('div', text: "Photo")
       page.should have_selector('div', text: "Gallery")
