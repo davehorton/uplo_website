@@ -3,6 +3,7 @@ require 'spec_helper'
 describe Notification do
   let(:image) { create(:image) }
   let(:liked_image) { create(:image_with_image_likes) }
+  let(:image_one_like) { create(:image_with_one_like) }
 
   describe ".deliver_image_notification" do
   end
@@ -35,7 +36,13 @@ describe Notification do
       end
     end
 
-    context "when image likes are prent" do
+    context "when the image has one like" do
+      it "should return proper value" do
+        Notification.action(image_one_like.id, 0).should == " likes"
+      end
+    end
+
+    context "when image likes are present" do
       it "should return proper type" do
         Notification.action(liked_image.id, 0).should == " like"
       end
