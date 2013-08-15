@@ -450,7 +450,7 @@ class User < ActiveRecord::Base
         self.increment!(:withdrawn_amount, amount)
         return true
       else
-        errors.add(:base, 'Cannot payout right now! Please try again later!')
+        errors.add(:base, 'UPLO is processing your commission, please check back later.')
         return false
       end
     end
@@ -554,7 +554,7 @@ class User < ActiveRecord::Base
     if auth
     @twitter ||= Twitter::Client.new(consumer_key: ENV["TWITTER_CONSUMER_KEY"], consumer_secret: ENV["TWITTER_CONSUMER_SECRET"], oauth_token: auth.oauth_token, oauth_token_secret: auth.oauth_secret)
     block_given? ? yield(@twitter) : @twitter
-  
+
     end
   end
 
