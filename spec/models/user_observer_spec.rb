@@ -8,7 +8,7 @@ describe UserObserver do
   end
 
   describe "after_create" do
-    it "removes all existing invites" do
+    xit "removes all existing invites" do
       invitations = create_list(:invitation, 2)
       invitations.first.update_attribute(:email, "test@test.com")
       inv2 = invitations.last
