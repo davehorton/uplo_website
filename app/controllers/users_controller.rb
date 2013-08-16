@@ -145,11 +145,10 @@ class UsersController < ApplicationController
         result[:msg] = I18n.t("user.error_already_followed")
         result[:success] = false
       else
-        user_follow= UserFollow.create({ :user_id => user.id, :followed_by => follower.id })
-        Notification.deliver_follow_notification(
-     		 user_follow,
-     		 Notification::TYPE[:follow]
-    	) 
+        user_follow = UserFollow.create({ :user_id => user.id, :followed_by => follower.id })
+
+        Notification.deliver_follow_notification(user_follow, Notification::TYPE[:follow])
+
         result[:followers] = current_user.followers.length
         result[:followings] = current_user.followed_users.length
         result[:followee_followers] = user.followers.length
