@@ -14,7 +14,6 @@ class Order < ActiveRecord::Base
   accepts_nested_attributes_for :shipping_address
 
   before_create :init_transaction_date
-  after_save    :push_notification
 
   STATUS = {
     :shopping => "shopping",
@@ -117,6 +116,7 @@ class Order < ActiveRecord::Base
 
       PaymentMailer.delay.transaction_finish(id)
       PaymentMailer.delay.inform_new_order(id)
+      self.push_notification
 
     rescue Exception => exc
       ExternalLogger.new.log_error(exc, "Finalizing transaction failed")
@@ -142,6 +142,17 @@ class Order < ActiveRecord::Base
     (shipping_address || user.shipping_address || user.billing_address).try(:full_address)
   end
 
+  def push_notification
+    if self.transaction_status == TRANSACTION_STATUS[:complete]
+      items = self.line_items.select('distinct image_id')
+      items.each do |item|
+        if self.user_id != item.image.user_id
+          Notification.deliver_image_notification(item.image.id, self.user_id, Notification::TYPE[:purchase])
+        end
+      end
+    end
+  end
+
   protected
 
     def init_transaction_date
@@ -149,16 +160,5 @@ class Order < ActiveRecord::Base
         self.transaction_date = Time.now
       end
       return self.transaction_date
-    end
-
-    def push_notification
-      if self.transaction_status == TRANSACTION_STATUS[:complete]
-        items = self.line_items.select('distinct image_id')
-        items.each do |item|
-          if self.user_id != item.image.user_id
-            Notification.deliver_image_notification(item.image.id, self.user_id, Notification::TYPE[:purchase])
-          end
-        end
-      end
     end
 end
