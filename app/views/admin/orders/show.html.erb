@@ -34,6 +34,8 @@
         <table>
           <% @order.line_items.each do |line_item| %>
             <tr>
+              <td><%= line_item.image.user.fullname %></td>
+              <td><%= line_item.image.user.username %></td>
               <td><%= link_to (image_tag line_item.image.url(:thumb), :alt => line_item.image.name, :class => "image-thumb image small"), browse_image_path(line_item.image), :class => "image-link" %></td>
               <td>
                 <%= line_item.product_option.description %>

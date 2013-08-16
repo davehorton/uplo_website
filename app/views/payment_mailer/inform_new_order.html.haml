@@ -21,6 +21,11 @@
           Price
         %th
           Description
+        %th
+          Seller's Name
+        %th
+          Seller's Username
+          
       - subtotal = 0
       - (0...@order.line_items.length).each do |idx|
         - line_item = @order.line_items[idx]
@@ -36,6 +41,10 @@
             = line_item.product_option.try(:description)
             = line_item.product.size.to_name
             = line_item.product.moulding.name
+          %td
+            = line_item.image.user.fullname
+          %td
+            = line_item.image.user.username
     %br
     .summary.text.black.font11.line18.right
       .text.bold.right
