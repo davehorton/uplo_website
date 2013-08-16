@@ -4,6 +4,6 @@ class UserObserver < ActiveRecord::Observer
     Invitation.destroy_all(email: user.email)
 
     # subscribe to newsletter in production
-    Mailchimp.delay.subscribe_user(user.id) if Rails.env.production?
+    # Mailchimp.delay.subscribe_user(user.id) if Rails.env.production?
   end
 end
