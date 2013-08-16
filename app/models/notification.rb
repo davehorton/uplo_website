@@ -51,10 +51,10 @@ class Notification < ActiveRecord::Base
 
     if image
       if UserDevice.exists?(user_id: image.user_id)
-		    device = UserDevice.find_by_user_id image.user_id
+        device = UserDevice.find_by_user_id image.user_id
 
         tokens = []
-		    tokens << device.device_token
+        tokens << device.device_token
 
         message = "Your image was just added to the Spotlight"
 
@@ -75,10 +75,10 @@ class Notification < ActiveRecord::Base
 
     if follower
       if UserDevice.exists?(user_id: user_follow.user_id)
-		    device = UserDevice.find_by_user_id user_follow.user_id
+        device = UserDevice.find_by_user_id user_follow.user_id
 
         tokens = []
-		    tokens << device.device_token
+        tokens << device.device_token
 
         message = "#{follower.username} has just added you as a friend"
 
