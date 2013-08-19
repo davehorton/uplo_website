@@ -1,56 +1,25 @@
 require 'spec_helper'
 
 describe Notification do
+  let(:by_user) { create(:user, :first_name => "john", :last_name => "doe") }
   let(:image) { create(:image) }
-  let(:liked_image) { create(:image_with_image_likes) }
-  let(:image_one_like) { create(:image_with_one_like) }
-
-  describe ".deliver_image_notification" do
-  end
-
-  describe ".check_others" do
-    context "with images like greater than others count" do
-      it "should return proper message" do
-        Notification.check_others(liked_image.id).should == " and 2 others "
-      end
-    end
-
-    context "with images like equal to one" do
-      it "should return proper message" do
-        img_likes = create_list(:image_like, 2, :image_id => image.id)
-        Notification.check_others(image.id).should == " and 1 other "
-      end
-    end
-
-    context "with images like less than one" do
-      it "should return proper message" do
-        Notification.check_others(image.id).should == ' '
-      end
-    end
-  end
 
   describe "action" do
-    context "when type is not like" do
+    context "when type is a like" do
       it "should return proper type" do
-        Notification.action(image.id, 1).should == " commented on"
+        Notification.action(0, by_user.fullname).should == "john doe likes your image"
       end
     end
 
-    context "when the image has one like" do
-      it "should return proper value" do
-        Notification.action(image_one_like.id, 0).should == " likes"
-      end
-    end
-
-    context "when image likes are present" do
+    context "when type is a comment" do
       it "should return proper type" do
-        Notification.action(liked_image.id, 0).should == " like"
+        Notification.action(1, by_user.fullname).should == "john doe left you a comment!"
       end
     end
 
     context "when purchased" do
       it "should return proper type" do
-        Notification.action(image.id, 2).should == " purchased"
+        Notification.action(2, by_user.fullname).should == "You just made a sale!"
       end
     end
   end
