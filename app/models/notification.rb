@@ -42,7 +42,7 @@ class Notification < ActiveRecord::Base
 
     if receiver.device_tokens.present?
 
-      message = "Your image was just made it to the Spotlight!"
+      message = "Your image just made it to the Spotlight!"
 
       notification = {
         :schedule_for => [30.second.from_now],
