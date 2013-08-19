@@ -510,7 +510,7 @@ class User < ActiveRecord::Base
     if auth
     @facebook ||= Koala::Facebook::API.new(auth.oauth_token)
     block_given? ? yield(@facebook) : @facebook
-  	end
+    end
   end
 
   def self.facebook_upload(user_id, image_url)
@@ -556,6 +556,10 @@ class User < ActiveRecord::Base
     block_given? ? yield(@twitter) : @twitter
 
     end
+  end
+
+  def device_tokens
+    devices.pluck(:device_token)
   end
 
 
