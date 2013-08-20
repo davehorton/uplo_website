@@ -4,6 +4,7 @@ require 'sidekiq/testing/inline'
 describe LineItem do
   before { create_sizes }
   let(:line_item) { create(:line_item, image: create(:image))}
+  let(:order) { create(:order) }
 
   it { should belong_to(:image) }
   it { should belong_to(:product) }
@@ -38,9 +39,8 @@ describe LineItem do
   describe "#calculate_totals" do
     context "when order is in new york" do
       it "should apply regional tax" do
-        new_order = create(:order)
-        new_order.billing_address.update_attribute(:state, "NY")
-        new_line_item = create(:line_item, :order => new_order)
+        order.billing_address.update_attribute(:state, "NY")
+        new_line_item = create(:line_item, :order => order)
         new_line_item.tax.should == 44.375
         new_line_item.price.should == 500
       end
@@ -53,6 +53,26 @@ describe LineItem do
         line_item.commission_percent.should == 100
       end
     end
+
+    context "when user owns image" do
+      it "should subtract discount from total price" do
+        product1  = create(:product, :tier4_price => 500.0, :tier4_commission => 10)
+        img = create(:image, :tier_id => 4)
+        new_order = create(:order, :user => img.user)
+        new_line_item = create(:line_item, :product => product1, :order => new_order, :image => img)
+        new_line_item.price.to_i.should == 450
+      end
+    end
+
+    context "when user does not own image" do
+      it "should return the exact price" do
+        product1  = create(:product, :tier4_price => 500.0, :tier4_commission => 10)
+        img = create(:image, :tier_id => 4)
+        new_line_item = create(:line_item, :product => product1, :image => img)
+        new_line_item.price.to_i.should == 500
+      end
+    end
+
   end
 
   describe "#dropbox_path" do
