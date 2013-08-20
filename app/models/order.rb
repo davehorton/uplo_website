@@ -42,35 +42,17 @@ class Order < ActiveRecord::Base
     status == STATUS[:complete]
   end
 
-  def update_tax_by_state
-    has_tax  = false
-
-    # considering shipping state and billing state, 'cause of shipping to billing
-    if self.shipping_address.try(:in_new_york?) || self.billing_address.try(:in_new_york?)
-      has_tax = true
-    end
-
-    if has_tax
-      self.tax = self.compute_image_total * REGION_TAX[:newyork][:tax]
-      self.transaction do
-        self.line_items.each do |line_item|
-          line_item.tax = line_item.price * REGION_TAX[:newyork][:tax]
-          line_item.save
-        end
-      end
-    else
-      self.tax = 0
-    end
-    self.save
-  end
-
-  def compute_tax_and_total
-    self.update_tax_by_state
-    self.compute_totals
+  def in_new_york?
+    self.shipping_address.try(:in_new_york?) || self.billing_address.try(:in_new_york?)
   end
 
   def compute_totals
     self.price_total = self.compute_image_total
+    self.tax = if self.in_new_york?
+                 self.compute_image_total * REGION_TAX[:newyork][:tax]
+               else
+                 0
+               end
     self.shipping_fee = calculate_shipping
     self.order_total = self.price_total + (self.tax ||= 0) + self.shipping_fee
     self.save

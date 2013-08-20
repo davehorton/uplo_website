@@ -58,7 +58,7 @@ class ShoppingCartController < ApplicationController
     @cart.order.status = Order::STATUS[:checkout]
     @cart.order.save
     @order = @cart.order
-    @order.compute_tax_and_total
+    @order.compute_totals
     @order.transaction_status = Order::TRANSACTION_STATUS[:processing]
 
     if @order.save
