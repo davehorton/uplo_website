@@ -80,11 +80,9 @@ feature "Search" do
       page.should have_selector('span', text: "Search")
       page.should have_selector('span', text: "5 Photos found")
       page.should have_selector("#image-container-#{another_image.id}")
-      page.should_not have_selector("#image-container-#{image.id}")
     end
 
     scenario "for one specific image with name along with punctutaions" do
-      puts another_image.inspect
       within("#filtering-search-box") do
         fill_in "query", :with => "...photo;;;;"
         select "Photos", :from => "filtered_by"
