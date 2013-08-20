@@ -9,7 +9,7 @@ feature "Search" do
   let!(:another_product_option) { create(:product_option, :product_id => another_product.id, :description => "Borderless") }
   let!(:images) { create_list(:real_image, 3) }
   let!(:image) { create(:real_image) }
-  let!(:another_image) { create(:image) }
+  let!(:another_image) { create(:real_image) }
 
   context "browse and spotlight page Users search", :js => true do
     background do
@@ -78,18 +78,17 @@ feature "Search" do
         page.find(".search").click
       end
       page.should have_selector('span', text: "Search")
-      page.should have_selector('span', text: "1 Photo found")
+      page.should have_selector('span', text: "5 Photos found")
       page.should have_selector("#image-container-#{another_image.id}")
-      page.should_not have_selector("#image-container-#{image.id}")
     end
 
     scenario "for one specific image with name along with punctutaions" do
       within("#filtering-search-box") do
-        fill_in "query", :with => "...test;;;;"
+        fill_in "query", :with => "...photo;;;;"
         select "Photos", :from => "filtered_by"
         page.find(".search").click
       end
-      page.should have_content("1 Photo found")
+      page.should have_content("5 Photos found")
       page.should have_selector("#image-container-#{another_image.id}")
     end
   end

@@ -4,7 +4,7 @@ feature "Accessing User Profile Page" do
   let!(:product) { create(:product) }
   let!(:product) { create(:product, :size => create(:square_size)) }
   let!(:user) { create(:user, :username => "test_user") }
-  let!(:gallery) { create(:gallery, :user_id => user.id) }
+  let!(:gallery) { create(:gallery, :user_id => user.id, :name => "nature gallery") }
   let!(:image) { create(:real_image, :gallery => gallery) }
 
   context "without login" do
@@ -101,8 +101,8 @@ feature "Accessing User Profile Page" do
       within("#galleries-section .head") do
         page.find(".title").click
       end
-      within("#gallery-container-#{gallery.id} .gallery-info") do
-        page.should have_selector('div', text: "#{user.galleries.last.name}")
+      within("div#gallery-container-#{gallery.id} .gallery-info") do
+        page.should have_selector('div', text: "nature gallery")
         page.should have_selector('div', text: "#{gallery.images.count} Image")
       end
     end

@@ -17,7 +17,12 @@ describe ImageObserver do
   end
 
   describe "after_save" do
-    pending "could not find implementation of owner_avatar_changed?"
+    it "should create default proifle image for user" do
+      image = create(:image, :owner_avatar => false)
+      observer = ImageObserver.instance
+      observer.after_save(image)
+      image.user.profile_images.should_not be_blank
+    end
   end
 
 end
