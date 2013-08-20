@@ -18,7 +18,7 @@ describe ImageObserver do
 
   describe "after_save" do
     it "should create default proifle image for user" do
-      img = create(:image, :owner_avatar => false)
+      image = create(:image, :owner_avatar => false)
       observer = ImageObserver.instance
       observer.after_save(image)
       image.user.profile_images.should_not be_blank
