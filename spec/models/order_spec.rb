@@ -32,27 +32,6 @@ describe Order do
     Order.with_items.should == [order, empty_order]
   end
 
-  describe "#update_tax_by_state" do
-    context "when no has tax" do
-      it "should update tax to zero" do
-        empty_order.update_tax_by_state
-        empty_order.tax.should be_zero
-      end
-    end
-
-    context "with with shipping address" do
-      it "should update tax" do
-        shipping_address = create(:shipping_address, :state => "new york")
-        order.shipping_address_id = shipping_address.id
-        line_item = order.line_items.first
-        line_item.price = 500
-        line_item.update_attributes(:quantity => 4)
-        order.update_tax_by_state
-        order.tax.should == 355.0
-      end
-    end
-  end
-
   describe "#compute_image_total" do
     context "with line items having price" do
       it "should return result" do
@@ -71,22 +50,34 @@ describe Order do
     end
   end
 
+  describe "#in_new_york?" do
+    context "when billing or shipping address is in new york" do
+      it "should return true" do
+        empty_order.billing_address.update_attribute(:state, "NY")
+        empty_order.in_new_york?.should be_true
+      end
+    end
+  end
+
   describe "#compute_totals" do
-    context "with line items" do
+    context "with line items and in new york" do
       it "should return result" do
+        order.billing_address.update_attribute(:state, "NY")
         line_item = order.line_items.first
         line_item.price = 500
         line_item.update_attributes(:quantity => 4)
         order.compute_totals
+        order.tax.to_i.should == 355
         order.price_total.to_i.should == 4000
-        order.order_total.to_i.should == 4000
+        order.order_total.to_i.should == 4355
       end
     end
 
-    context "without line items" do
+    context "without line items and not in new york" do
       it "should return result" do
         empty_order.compute_totals
         empty_order.price_total.should be_zero
+        empty_order.tax.should be_zero
         empty_order.order_total.to_i.should be_zero
       end
     end

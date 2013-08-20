@@ -65,11 +65,20 @@ class LineItem < ActiveRecord::Base
     "#{order.dropbox_order_root_path}/#{id}.#{content.original_filename.split('.').last}"
   end
 
+  def calculate_tax
+    if self.order.in_new_york?
+      self.price * Order::REGION_TAX[:newyork][:tax]
+    else
+      self.price * PER_TAX
+    end
+  end
+
   private
 
     def calculate_totals
       self.price = product.price_for_tier(image.tier_id, image.owner?(order.user))
-      self.tax   = self.price * PER_TAX
+      self.tax   = self.calculate_tax
       self.commission_percent = product.commission_for_tier(image.tier_id) if self.image.gallery.commission_percent?
     end
+
 end

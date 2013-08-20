@@ -93,7 +93,6 @@ class PaymentsController < ApplicationController
       user_info[:shipping_address_attributes] = order_info[:shipping_address_attributes]
 
       if @order.update_attributes(order_info)
-        @order.update_tax_by_state
         @order.compute_totals
       else
         render(:template => "orders/index", :params => params) and return

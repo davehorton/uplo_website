@@ -150,12 +150,6 @@ describe User do
         User.search_scope("---\n- private..;").should == []
       end
     end
-
-    context "when query email present" do
-      it "should return searched results" do
-        pending "search with email seems broken"
-      end
-    end
   end
 
   describe ".paginate_and_sort" do
