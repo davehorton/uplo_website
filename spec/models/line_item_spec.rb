@@ -36,8 +36,18 @@ describe LineItem do
   end
 
   describe "#calculate_totals" do
-    context "executing before_save calback" do
-      it "should calculate result" do
+    context "when order is in new york" do
+      it "should apply regional tax" do
+        new_order = create(:order)
+        new_order.billing_address.update_attribute(:state, "NY")
+        new_line_item = create(:line_item, :order => new_order)
+        new_line_item.tax.should == 44.375
+        new_line_item.price.should == 500
+      end
+    end
+
+    context "when order is not in new york" do
+      it "should not apply regional tax" do
         line_item.price.should == 500
         line_item.tax.should be_zero
         line_item.commission_percent.should == 100
