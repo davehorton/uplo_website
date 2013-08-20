@@ -24,7 +24,7 @@ class Notification < ActiveRecord::Base
 
       if by_user && receiver && receiver.device_tokens.present?
 
-        message = Notification.action(type, by_user.fullname)
+        message = Notification.action(type, by_user)
 
         notification = {
           :schedule_for => [30.second.from_now],
@@ -60,7 +60,11 @@ class Notification < ActiveRecord::Base
 
     if receiver.device_tokens.present?
 
-      message = "#{follower.username} has just started following you"
+      if follower.admin?
+        message = "UPLO has just started following you"
+      else
+        message = "#{follower.username has just started following you}"
+      end
 
       notification = {
         :schedule_for => [30.second.from_now],
@@ -72,7 +76,13 @@ class Notification < ActiveRecord::Base
     end
   end
 
-  def self.action(type, fullname)
+  def self.action(type, by_user)
+    if by_user.admin?
+      fullname = "UPLO"
+    else
+      fullname = by_user.fullname
+    end
+
     case type
       when TYPE[:like] then "#{fullname} likes your image"
       when TYPE[:comment] then "#{fullname} left you a comment!"
