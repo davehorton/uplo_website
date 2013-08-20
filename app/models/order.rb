@@ -44,13 +44,10 @@ class Order < ActiveRecord::Base
 
   def update_tax_by_state
     has_tax  = false
-    # considering shipping state
-    if self.shipping_address
-      has_tax = true if self.shipping_address.in_new_york?
 
-    # considering billing state, 'cause of shipping to billing
-    elsif self.billing_address
-      has_tax = true if self.billing_address.in_new_york?
+    # considering shipping state and billing state, 'cause of shipping to billing
+    if self.shipping_address.try(:in_new_york?) || self.billing_address.try(:in_new_york?)
+      has_tax = true
     end
 
     if has_tax
@@ -65,6 +62,11 @@ class Order < ActiveRecord::Base
       self.tax = 0
     end
     self.save
+  end
+
+  def compute_tax_and_total
+    self.update_tax_by_state
+    self.compute_totals
   end
 
   def compute_totals

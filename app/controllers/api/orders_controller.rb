@@ -63,8 +63,7 @@ class Api::OrdersController < Api::BaseController
     if item
       @result[:success] = false
       LineItem.transaction do
-        item.order.compute_totals
-        item.order.update_tax_by_state
+        item.order.compute_tax_and_total
         item.destroy
         @result[:success] = true
       end
