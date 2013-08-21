@@ -5,6 +5,13 @@ $(document).on('change', '#gallery_permission', function(){
     $("#has-commission").show();
 });
 
+$(document).on('click', '#share-facebook', function(e){
+  href = $(this).attr('href');
+  e.preventDefault();
+  window.open(href, '', 'width=626,height=436,left=200,top=200');
+});
+
+
 var gallery = {
   setup: function(){
     var target = "#gallery-form-container";
