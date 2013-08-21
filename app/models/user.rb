@@ -348,9 +348,9 @@ class User < ActiveRecord::Base
     line_items.each { |item|
       info = item
       sale = Sales.new(item.image)
-      info[:total_sale] = sale.total_image_sales
-      info[:quantity_sale] = sale.sold_image_quantity
-      info[:no_longer_avai] = (item.image.flagged? || item.image.removed?)
+      info.total_sale = sale.total_image_sales
+      info.quantity_sale = sale.sold_image_quantity
+      info.no_longer_avai = (item.image.flagged? || item.image.removed?)
       array << {:item => info }
     }
     result[:data] = array
