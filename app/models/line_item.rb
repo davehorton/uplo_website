@@ -2,7 +2,7 @@ class LineItem < ActiveRecord::Base
   include ::Shared::AttachmentMethods
   include ::Shared::QueryMethods
 
-  attr_accessor :generate_ordered_print
+  attr_accessor :generate_ordered_print, :total_sale, :quantity_sale, :no_longer_avai
 
   belongs_to :image
   belongs_to :product
