@@ -63,7 +63,7 @@ class Notification < ActiveRecord::Base
       if follower.admin?
         message = "UPLO has just started following you"
       else
-        message = "#{follower.username has just started following you}"
+        message = "#{follower.username} has just started following you"
       end
 
       notification = {
