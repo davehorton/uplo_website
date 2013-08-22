@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe Image do
-  let(:image){ create(:image) }
+  let(:image) { create(:image) }
   let(:square_size) { create(:size, width: 8, height: 8) }
   let(:rectangular_size) { create(:size, width: 8, height: 10) }
   let(:square_product) { create(:product, size: square_size) }

@@ -6,7 +6,7 @@ describe User do
   let(:image) { create(:image) }
 
   it { should respond_to(:password) }
-  it { should respond_to(:password_confirmation)}
+  it { should respond_to(:password_confirmation) }
   it { should respond_to(:force_submit) }
   it { should respond_to(:login) }
   it { should respond_to(:skip_state_changed_tracking) }
@@ -16,20 +16,20 @@ describe User do
   it { should have_many(:galleries) }
   it { should have_many(:public_galleries) }
   it { should have_many(:images)}
-  it { should have_many(:public_images).through(:public_galleries)}
-  it { should have_many(:profile_images)}
+  it { should have_many(:public_images).through(:public_galleries) }
+  it { should have_many(:profile_images) }
   it { should have_many(:image_likes) }
-  it { should have_many(:source_liked_images).through(:image_likes)}
-  it { should have_many(:comments)}
+  it { should have_many(:source_liked_images).through(:image_likes) }
+  it { should have_many(:comments) }
   it { should have_many(:devices) }
   it { should have_many(:orders) }
-  it { should have_many(:user_followers)}
-  it { should have_many(:followers).through(:user_followers)}
-  it { should have_many(:user_followings)}
-  it { should have_many(:followed_users).through(:user_followings)}
-  it { should have_many(:friends_images).through(:followed_users)}
+  it { should have_many(:user_followers) }
+  it { should have_many(:followers).through(:user_followers) }
+  it { should have_many(:user_followings) }
+  it { should have_many(:followed_users).through(:user_followings) }
+  it { should have_many(:friends_images).through(:followed_users) }
 
-  it { should have_one(:cart)}
+  it { should have_one(:cart) }
 
   it { should accept_nested_attributes_for(:billing_address) }
   it { should accept_nested_attributes_for(:shipping_address) }
