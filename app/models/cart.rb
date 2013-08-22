@@ -7,7 +7,7 @@ class Cart < ActiveRecord::Base
   delegate :empty?, to: :line_items
 
   def clear
-    line_items.destroy_all
+    order.line_items.destroy_all
   end
 
   def assign_empty_order!

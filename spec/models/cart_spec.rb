@@ -8,7 +8,11 @@ describe Cart do
 
   describe "#clear" do
     it "should destroy all associated line items" do
-      pending "has many through association seems broken"
+      order = create(:order_with_line_items)
+      cart = create(:cart, :order => order)
+      cart.line_items.count.should == 2
+      cart.clear
+      cart.line_items.should == []
     end
   end
 
