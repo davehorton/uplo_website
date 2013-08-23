@@ -22,6 +22,7 @@ class HomeController < ApplicationController
     filtered_params[:sort_field] = "images.updated_at"
     @recent_images = Image.public_access.not_hidden.paginate_and_sort(filtered_params)
     filtered_params[:per_page] = 32
+    filtered_params[:sort_field] = "images.created_at"
     @images = Image.spotlight.paginate_and_sort(filtered_params)
   end
 
@@ -36,7 +37,7 @@ class HomeController < ApplicationController
   def spotlight
     @current_views = IMAGE_SORT_VIEW[Image::SORT_OPTIONS[:spotlight]]
     filtered_params[:sort_direction] = 'desc'
-    filtered_params[:sort_field] = "images.updated_at"
+    filtered_params[:sort_field] = "images.created_at"
     @data = Image.spotlight.paginate_and_sort(filtered_params)
     @mode = 'Spotlight'
     render :template => 'home/browse'
