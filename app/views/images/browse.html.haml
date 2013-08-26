@@ -11,7 +11,7 @@
 - content_for :body_class, 'images'
 
 - content_for :right_content do
-  .text.black.font18.bold= @image.name
+  .text.black.font18.bold= @image.name.humanize
   .line-separator
   - if current_user && current_user.admin?
     .text.black.font18.bold
