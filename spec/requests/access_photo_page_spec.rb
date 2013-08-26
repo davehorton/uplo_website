@@ -56,7 +56,7 @@ feature "Accessing Photo Page" do
 
     scenario "photo details on the right bar" do
       within("div#right") do
-        page.should have_content(image.name)
+        page.should have_content(image.name.humanize)
       end
       page.should have_selector('a', text: "#{image.user.username}")
       page.should have_selector('div', text: "Uploaded on #{image.created_at.strftime('%m/%d/%Y')}")
@@ -117,7 +117,7 @@ feature "Accessing Photo Page" do
 
     scenario "photo details on the right bar" do
       within("div#right") do
-        page.should have_content(image.name)
+        page.should have_content(image.name.humanize)
       end
       page.should have_selector('a', text: "#{image.user.username}")
       page.should have_selector('div', text: "Uploaded on #{image.created_at.strftime('%m/%d/%Y')}")
