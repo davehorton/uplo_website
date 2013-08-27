@@ -420,3 +420,42 @@ $color-input-border: #cdcdcd;
 #order_details tr > td:first-child { font-weight: bold; }
 #order_details table { width:100%; }
 #order_details table td { text-align:center; }
+
+/* Products */
+
+#new_product a {
+  margin-left: 10px
+}
+
+.fields {
+  border: 1px solid #999;
+  padding: 6px;
+  margin: 10px 0;
+  width: 445px;
+}
+  #actions {
+    margin-bottom: 30px;
+  }
+
+  #actions a {
+    background-color: #ddd;
+    border: 1px solid #999;
+    padding: 10px;
+  }
+
+  #product_options {
+    width: 100%
+  }
+
+  #product_options thead th {
+    padding-bottom: 10px
+  }
+
+  #product_options th {
+    text-align: left;
+  }
+
+  #product_options td {
+    border: 1px solid #ddd;
+    padding: 6px;
+}
