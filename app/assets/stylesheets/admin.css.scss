@@ -433,29 +433,31 @@ $color-input-border: #cdcdcd;
   margin: 10px 0;
   width: 445px;
 }
-  #actions {
-    margin-bottom: 30px;
-  }
 
-  #actions a {
-    background-color: #ddd;
-    border: 1px solid #999;
-    padding: 10px;
-  }
-
-  #product_options {
-    width: 100%
-  }
-
-  #product_options thead th {
-    padding-bottom: 10px
-  }
-
-  #product_options th {
-    text-align: left;
-  }
-
-  #product_options td {
-    border: 1px solid #ddd;
-    padding: 6px;
+#product_options {
+  width: 100%
 }
+
+#product_options thead th {
+  padding-bottom: 10px
+}
+
+#product_options th {
+  text-align: left;
+}
+
+#product_options td {
+  border: 1px solid #ddd;
+  padding: 6px;
+}
+
+#actions {
+  margin-bottom: 30px;
+}
+
+#actions a {
+  background-color: #ddd;
+  border: 1px solid #999;
+  padding: 10px;
+}
+  
