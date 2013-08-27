@@ -607,7 +607,7 @@ textarea { padding-top:5px; }
   margin-top: 5px;
 }
 
-.simple_form label {float: left; width: 140px; margin-right: 10px; margin-top: 10px}
+.simple_form label {width: 140px; margin-right: 10px; margin-top: 10px; display: inline-block;}
 .simple_form .input.optional span label{float: none; vertical-align: middle;}
 .simple_form label abbr {float: right; color: #D4550B;}
 .simple_form select {width: 165px; float: left;}
