@@ -104,9 +104,10 @@
       .buttons-container.right
         - image_url = "https://www.facebook.com/sharer.php?u=#{browse_image_url(@image)}"
         - twitter_image_url = "https://twitter.com/share&data-url=#{browse_image_url(@image)}"
-        %a.twitter-share-button.right{ :href => twitter_image_url}
-        %a.facebook.button.right.share-popup{ :href => image_url}
-
+        %a.facebook.button.left.share-popup{ :href => image_url}
+        %a.twitter-share-button.left{ :href => twitter_image_url}
+        %a.button.right{ :href => "#{image_pinterest_share_url(@image, browse_image_url(@image))}"}
+               
       .line-separator.clear{ style: 'padding-top: 4px;' }
       - if current_user.present?
         #comments-section{ :data => { :id => "#{@image.id}" }}
@@ -138,6 +139,7 @@
 
 - content_for :js do
   = javascript_include_tag('http://platform.tumblr.com/v1/share.js')
+  = javascript_include_tag("//assets.pinterest.com/js/pinit.js")
   = javascript_tag do
     :erb
       $(document).ready(function(){
