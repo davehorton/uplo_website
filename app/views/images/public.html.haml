@@ -2,7 +2,6 @@
   %meta{:property=>"og:title", :content=>"Shared from UPLO" }
   %meta{:property=>"og:description", :content=>"#{@image.description}" }
   %meta{:property=>"og:image", :content=>"#{@image.url(:thumb)}" }
-  = javascript_include_tag("//assets.pinterest.com/js/pinit.js")
 
 - content_for :body_class, 'public images'
 
@@ -38,5 +37,6 @@
       = image_tag("//assets.pinterest.com/images/PinExt.png", :title => "Pin It", :border => 0, :alt => "Pin It")
 
 - content_for :js do
+  = javascript_include_tag("//assets.pinterest.com/js/pinit.js")
   = javascript_tag do
     !function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");
