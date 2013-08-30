@@ -1,7 +1,8 @@
 development: &development
   facebook:
-    api_key: '1681267485345167'
-    secret: 'baae7dac3520d70ba14edf6c1273c547'
+    api_key: "618207694880677"
+    secret: "b9e266fe550fcc22f8af4d12d458e49d"
+    name: 'uplo'
   twitter:
     consumer_key: "CJoc3Hxu5ZvjU6UVXUpA"
     consumer_secret: "6POCeNga1Do6apmiArT1GrlNjRjHOikPTlMXxfIM"
@@ -17,3 +18,13 @@ test:
 
 staging:
   <<: *development
+
+production: 
+  facebook:
+    api_key: "164091983778781"
+    secret: "39feaa2763d6cf829991ebeff78f1439"
+    name: "uploapp"
+  twitter: 
+    consumer_key: '7jHkC1FBt3fvkpLD6Ul8g'
+    consumer_secret: 'n9R54l0LzvZOAOMrs51VvEkxS9VUN5k5puJfCPD4pFw'
+ 
