@@ -10,7 +10,8 @@ describe ImageLikeObserver do
   describe "after_create" do
     it "calls Notification deliver image notification" do
       Notification.should_receive(:deliver_image_notification)
-      create(:image_like)
+      user = create(:user, :username => "john doe")
+      create(:image_like, :user => user)
     end
   end
 
