@@ -19,10 +19,9 @@ class HomeController < ApplicationController
     session[:back_url] = url_for(:controller => 'home', :action => "browse") if session[:back_url].nil?
     @current_views = 'recent images'
     filtered_params[:sort_direction] = 'desc'
-    filtered_params[:sort_field] = "images.updated_at"
+    filtered_params[:sort_field] = "images.created_at"
     @recent_images = Image.public_access.not_hidden.paginate_and_sort(filtered_params)
     filtered_params[:per_page] = 32
-    filtered_params[:sort_field] = "images.created_at"
     @images = Image.spotlight.paginate_and_sort(filtered_params)
   end
 
