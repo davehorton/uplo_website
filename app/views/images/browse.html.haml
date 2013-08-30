@@ -7,6 +7,7 @@
 
 - content_for :head do
   = javascript_include_tag("admin") if can_promote
+  = javascript_include_tag("//assets.pinterest.com/js/pinit.js")
 
 - content_for :body_class, 'images'
 
@@ -104,8 +105,10 @@
       .buttons-container.right
         - image_url = "https://www.facebook.com/sharer.php?u=#{browse_image_url(@image)}"
         - twitter_image_url = "https://twitter.com/share&data-url=#{browse_image_url(@image)}"
+        %a.pinterest.button.share-popup.right{ :href => "#{image_pinterest_share_url(@image, browse_image_url(@image))}"}
         %a.twitter-share-button.right{ :href => twitter_image_url}
         %a.facebook.button.right.share-popup{ :href => image_url}
+        
 
       .line-separator.clear{ style: 'padding-top: 4px;' }
       - if current_user.present?
