@@ -224,4 +224,12 @@ module ApplicationHelper
     end
   end
 
+  def facebook_app_name
+    if Rails.env.production? || Rails.env.staging?
+      "uploapp" + ":photo"
+    else
+      "uplo" + ":photo"
+    end
+  end
+
 end
