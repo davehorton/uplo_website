@@ -274,8 +274,7 @@ class Image < ActiveRecord::Base
 
   def demote!
     self.promoted = false
-	self.promoted_at =  ''
-
+    self.promoted_at =  ''
     save!
   end
 
