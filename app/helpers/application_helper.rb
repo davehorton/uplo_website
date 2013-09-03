@@ -224,4 +224,8 @@ module ApplicationHelper
     end
   end
 
+  def facebook_app_name
+    Rails.env.production? ? "uploapp" : "uplo"
+  end
+
 end
