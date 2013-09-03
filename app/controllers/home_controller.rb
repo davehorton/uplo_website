@@ -52,7 +52,9 @@ class HomeController < ApplicationController
   end
 
   def friends_feed
-    @images = current_user.friends_images.popular_with_pagination(filtered_params)
+    filtered_params[:sort_direction] = "desc"
+    filtered_params[:sort_field] = "images.created_at"
+    @images = current_user.friends_images.paginate_and_sort(filtered_params)
   end
 
   def search
