@@ -17,7 +17,6 @@ class Notification < ActiveRecord::Base
 
   def self.deliver_image_notification(image_id, by_user_id, type)
     image = Image.find_by_id(image_id)
-
     if image
       by_user = User.find_by_id(by_user_id)
       receiver = image.user
@@ -33,6 +32,36 @@ class Notification < ActiveRecord::Base
           :data => { :type => TYPE_ACTION[type].to_s, :id => image.id.to_s }
         }
         Urbanairship.push(notification)
+      end
+    end
+  end
+
+  def self.deliver_comment_notification(image_id, by_user_id, type)
+    image = Image.find_by_id(image_id)
+    if image
+      by_user = User.find_by_id(by_user_id)
+      receivers = User.where(id: image.comments.where("user_id != ?", by_user_id).pluck(:user_id).uniq)
+
+      if by_user && receivers.present?
+
+        receivers.each do |receiver|
+          if receiver.device_tokens.present?
+
+            if by_user.admin?
+              message = "UPLO has commented on the same image"
+            else
+              message = "#{by_user.fullname} has commented on the same image"
+            end
+
+            notification = {
+              :schedule_for => [30.second.from_now],
+              :device_tokens => receiver.device_tokens,
+              :aps => { :alert => message },
+              :data => { :type => TYPE_ACTION[type].to_s, :id => image.id.to_s }
+            }
+            Urbanairship.push(notification)
+          end
+        end
       end
     end
   end
