@@ -43,7 +43,7 @@ class Notification < ActiveRecord::Base
       notification = {
         :schedule_for => [30.second.from_now],
         :device_tokens => receiver.device_tokens,
-        :aps => { :alert => "#{by_user.name_for_notification} also commented on #{comment.image.name.humanize}" },
+        :aps => { :alert => "#{by_user.name_for_notification} also commented on image #{comment.image.name.humanize}" },
         :data => { :type => "commented_on", :id => comment.image_id.to_s }
       }
       Urbanairship.push(notification)
