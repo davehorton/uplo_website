@@ -562,6 +562,13 @@ class User < ActiveRecord::Base
     devices.pluck(:device_token)
   end
 
+  def name_for_notification
+    if admin?
+      "UPLO"
+    else
+      fullname
+    end
+  end
 
   private
 
