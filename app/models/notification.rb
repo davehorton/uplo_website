@@ -38,12 +38,12 @@ class Notification < ActiveRecord::Base
 
   def self.deliver_comment_notification(comment)
     by_user = comment.user
-    receivers =  User.where(id: comment.image.comments.where("user_id != ?", by_user.id).pluck(:user_id).uniq).select {|u| u.device_tokens.present?}
+    receivers =  User.where(id: comment.image.comments.where("user_id != ?", by_user.id).pluck(:user_id).uniq).select { |u| u.device_tokens.present? }
     receivers.each do |receiver|
       notification = {
         :schedule_for => [30.second.from_now],
         :device_tokens => receiver.device_tokens,
-        :aps => { :alert => "#{by_user.name_for_notification} has commented on the same image" },
+        :aps => { :alert => "#{by_user.name_for_notification} also commented on #{comment.image.name.humanize}" },
         :data => { :type => "commented_on", :id => comment.image_id.to_s }
       }
       Urbanairship.push(notification)
