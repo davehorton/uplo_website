@@ -23,7 +23,7 @@ class ApplicationController < ActionController::Base
   end
 
   def render_not_found
-    render_error_response("public/404.html", :not_found)
+    render_error_response("errors/not_found.html", :not_found, 'main')
   end
 
   def render_unauthorized
@@ -34,8 +34,8 @@ class ApplicationController < ActionController::Base
     render_error_response("public/banned_user.html", :unauthorized)
   end
 
-  def render_error_response(file, response_code)
-    render(file: file, status: response_code, layout: false) and return
+  def render_error_response(file, response_code, layout=false)
+    render(file: file, status: response_code, layout: layout) and return
   end
 
   def push_redirect
