@@ -237,6 +237,10 @@ Uplo::Application.routes.draw do
     end
   end
 
+  # custom error pages
+  match '/404', :to => 'errors#not_found'
+
+
   # API ROUTING
   namespace :api do
     # User
