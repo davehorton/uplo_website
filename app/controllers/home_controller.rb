@@ -94,7 +94,7 @@ class HomeController < ApplicationController
     def process_search_params
       params[:filtered_by] = Image::SEARCH_TYPE if params[:filtered_by].blank?
       if params[:filtered_by] == Image::SEARCH_TYPE
-        params[:sort_by] = Image::SORT_OPTIONS[:recent] if params[:sort_by].blank? || !Image::SORT_OPTIONS.has_value?(params[:sort_by])
+        params[:sort_by] = Image::SORT_OPTIONS[:spotlight] if params[:sort_by].blank? || !Image::SORT_OPTIONS.has_value?(params[:sort_by])
       else #filtered by user
         params[:sort_by] = User::SORT_OPTIONS[:name] if params[:sort_by].blank?|| !User::SORT_OPTIONS.has_value?(params[:sort_by])
       end

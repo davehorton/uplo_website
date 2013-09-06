@@ -162,12 +162,11 @@ module ApplicationHelper
   def search_sort_options(type = Image::SEARCH_TYPE, selected=nil)
     type = Image::SEARCH_TYPE if type.blank?
     if type == Image::SEARCH_TYPE
-      selected = Image::SORT_OPTIONS[:recent] if selected.blank?
       options_for_select({
         'Recent Uploads' => Image::SORT_OPTIONS[:recent],
         'Most Views' => Image::SORT_OPTIONS[:view],
         'Spotlight Images' => Image::SORT_OPTIONS[:spotlight]
-      }, selected)
+      }, params[:sort_by])
     else
       selected = User::SORT_OPTIONS[:name] if selected.blank?
       options_for_select({

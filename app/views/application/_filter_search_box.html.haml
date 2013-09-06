@@ -9,7 +9,7 @@
     .left= select_tag :filtered_by, search_filter_options(filtered_by)
     .button.search.left
     .sort.text.black.font11.left Sort by
-    .left= select_tag :sort_by, search_sort_options(params[:filtered_by], sort_by)
+    .left= select_tag :sort_by, search_sort_options(params[:filtered_by], sort_by), {include_blank: true} 
 
 = javascript_tag do
   helper.setup_filtering_search()
