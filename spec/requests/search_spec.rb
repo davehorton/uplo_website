@@ -65,7 +65,6 @@ feature "Search" do
       select "Users", :from => "filtered_by"
       select "Photos", :from => "filtered_by"
       page.find(".search").click
-      page.should have_selector('span', text: "Recent Uploads")
       images.each do |image|
         page.should have_selector("#image-container-#{image.id}")
       end
