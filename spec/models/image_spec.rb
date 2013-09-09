@@ -149,21 +149,21 @@ describe Image do
     context "when query name present" do
       it "should return searched results" do
         img1 = create(:image, :name => "test")
-        Image.search_scope("---\n- test\n").should == [img1]
+        Image.search_scope("Test").should == [img1]
       end
     end
     context "when query description present" do
       it "should return searched results" do
         img1 = create(:image, :description => "hello")
-        Image.search_scope("---\n- hello;").should == [img1]
-        Image.search_scope("---\n- abc..;").should == []
+        Image.search_scope("h").should == [img1]
+        Image.search_scope("abc").should == []
       end
     end
     context "when query keyword present" do
       it "should return searched results" do
         img1 = create(:image, :keyword => "public")
-        Image.search_scope("---\n- ...public;").should == [img1]
-        Image.search_scope("---\n- private..;").should == []
+        Image.search_scope("Pub").should == [img1]
+        Image.search_scope("pri").should == []
       end
     end
   end

@@ -71,9 +71,8 @@ class Image < ActiveRecord::Base
   def self.search_scope(query)
     images = Image.scoped
     if query.present?
-      #query = query.gsub(/[[:punct:]]/, ' ').squish
-      images = images.where("images.name ILIKE (?) OR images.description ILIKE (?) OR images.keyword ILIKE (?)", "#{query}%", "#{query}%", "#{query}%")
-      # images = images.advanced_search_by_name_or_description_or_keyword(query, query, query)
+      query = "#{query}%"
+      images = images.where("images.name ILIKE (?) OR images.description ILIKE (?) OR images.keyword ILIKE (?)", query, query, query)
     end
     images
   end

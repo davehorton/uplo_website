@@ -130,24 +130,24 @@ describe User do
     context "when query first name present" do
       it "should return searched results" do
         user1 = create(:user, :first_name => "rose")
-        User.search_scope("---\n- rose\n").should == [user1]
-        User.search_scope("---\n- rosy\n").should == []
+        User.search_scope("ro").should == [user1]
+        User.search_scope("R").should == [user1]
       end
     end
 
     context "when query last name present" do
       it "should return searched results" do
         user1 = create(:user, :last_name => "doe")
-        User.search_scope("---\n- doe;").should == [user1]
-        User.search_scope("---\n- abc..;").should == []
+        User.search_scope("d").should == [user1]
+        User.search_scope("Do").should == [user1]
       end
     end
 
     context "when query username present" do
       it "should return searched results" do
         user1 = create(:user, :username => "julia")
-        User.search_scope("---\n- ...julia;").should == [user1]
-        User.search_scope("---\n- private..;").should == []
+        User.search_scope("jul").should == [user1]
+        User.search_scope("JUL").should == [user1]
       end
     end
   end

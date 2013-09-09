@@ -20,23 +20,23 @@ describe Gallery do
     context "when query name present" do
       it "should return searched results" do
         gallery.update_attribute(:name, "test")
-        Gallery.search_scope("---\n- test\n").should == [gallery]
+        Gallery.search_scope("te").should == [gallery]
       end
     end
 
     context "when query description present" do
       it "should return searched results" do
         gallery.update_attribute(:description, "hello")
-        Gallery.search_scope("---\n- hello;").should == [gallery]
-        Gallery.search_scope("---\n- abc..;").should == []
+        Gallery.search_scope("Hel").should == [gallery]
+        Gallery.search_scope("abc").should == []
       end
     end
 
     context "when query keyword present" do
       it "should return searched results" do
         gallery.update_attribute(:keyword, "public")
-        Gallery.search_scope("---\n- ...public;").should == [gallery]
-        Gallery.search_scope("---\n- private..;").should == []
+        Gallery.search_scope("publ").should == [gallery]
+        Gallery.search_scope("private").should == []
       end
     end
   end

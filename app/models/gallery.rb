@@ -19,9 +19,8 @@ class Gallery < ActiveRecord::Base
   def self.search_scope(query)
     galleries = Gallery.scoped
     if query.present?
-      #query = query.gsub(/[[:punct:]]/, ' ').squish
-      galleries = galleries.where("galleries.name ILIKE (?) OR galleries.description ILIKE (?) OR galleries.keyword ILIKE (?)", "#{query}%", "#{query}%", "#{query}%")
-      # galleries = galleries.advanced_search_by_name_or_description_or_keyword(query, query, query)
+      query = "#{query}%"
+      galleries = galleries.where("galleries.name ILIKE (?) OR galleries.description ILIKE (?) OR galleries.keyword ILIKE (?)", query, query, query)
     end
     galleries
   end
