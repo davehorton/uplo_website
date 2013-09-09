@@ -37,7 +37,7 @@ feature "Search" do
 
     scenario "for one specific user with username along with punctutaions" do
       within("#filtering-search-box") do
-        fill_in "query", :with => "...demo;;;;"
+        fill_in "query", :with => "de"
         select "Users", :from => "filtered_by"
         page.find(".search").click
       end
@@ -83,7 +83,7 @@ feature "Search" do
 
     scenario "for one specific image with name along with punctutaions" do
       within("#filtering-search-box") do
-        fill_in "query", :with => "...photo;;;;"
+        fill_in "query", :with => "PHOTO"
         select "Photos", :from => "filtered_by"
         page.find(".search").click
       end
