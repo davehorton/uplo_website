@@ -72,7 +72,8 @@ class Image < ActiveRecord::Base
     images = Image.scoped
     if query.present?
       query = query.gsub(/[[:punct:]]/, ' ').squish
-      images = images.advanced_search_by_name_or_description_or_keyword(query, query, query)
+      images = images.where("lower(images.name) LIKE (?) OR lower(images.description) LIKE (?) OR lower(images.keyword) LIKE (?)", "#{query.downcase}%", "#{query.downcase}%", "#{query.downcase}%")
+      # images = images.advanced_search_by_name_or_description_or_keyword(query, query, query)
     end
     images
   end

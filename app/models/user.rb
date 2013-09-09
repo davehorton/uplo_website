@@ -116,7 +116,8 @@ class User < ActiveRecord::Base
     users = User.scoped
     if query.present?
       query = query.gsub(/[[:punct:]]/, ' ').squish
-      users = users.advanced_search_by_first_name_or_last_name_or_username_or_email(query, query, query, query)
+      users = users.where("lower(users.username) LIKE (?) OR lower(users.first_name) LIKE (?) OR lower(users.last_name) LIKE (?)", "#{query.downcase}%", "#{query.downcase}%", "#{query.downcase}%")
+      #users = users.advanced_search_by_first_name_or_last_name_or_username_or_email(query, query, query, query)
     end
     users
   end
