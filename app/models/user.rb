@@ -117,7 +117,7 @@ class User < ActiveRecord::Base
     if query.present?
       if query.match(/[[:space:]]/)
         first_name, last_name = query.split
-        users = users.where("users.first_name ILIKE (?) OR users.last_name ILIKE (?)", "#{first_name}%", "{#{last_name}}%")
+        users = users.where("users.first_name ILIKE (?) OR users.last_name ILIKE (?)", "#{first_name}%", "#{last_name}%")
       else
         query = "#{query}%"
         users = users.where("users.username ILIKE (?) OR users.first_name ILIKE (?) OR users.last_name ILIKE (?)", query, query, query)
