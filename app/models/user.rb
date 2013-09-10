@@ -115,12 +115,16 @@ class User < ActiveRecord::Base
   def self.search_scope(query)
     users = User.scoped
     if query.present?
-      query = "#{query}%"
-      users = users.where("users.username ILIKE (?) OR users.first_name ILIKE (?) OR users.last_name ILIKE (?)", query, query, query)
+      if query.match(/[[:space:]]/)
+        first_name, last_name = query.split
+        users = users.where("users.first_name ILIKE (?) OR users.last_name ILIKE (?)", "#{first_name}%", "{#{last_name}}%")
+      else
+        query = "#{query}%"
+        users = users.where("users.username ILIKE (?) OR users.first_name ILIKE (?) OR users.last_name ILIKE (?)", query, query, query)
+      end
     end
     users
   end
-
   # re-implements Shared::QueryMethods function
   # by replacing search fields before caling super
   def self.paginate_and_sort(params = {})
