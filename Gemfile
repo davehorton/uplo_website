@@ -7,7 +7,7 @@ gem 'pg'
 
 # application components
 gem 'activemerchant'
-gem 'active_model_serializers', '~> 0.7.0'
+gem 'active_model_serializers', '~> 0.8.0'
 gem 'active_utils'
 gem 'alchemist'
 gem 'aescrypt'
