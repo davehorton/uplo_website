@@ -148,7 +148,7 @@ class Image < ActiveRecord::Base
         smallest:        '66x66#',
         smaller:         '67x67#',
         small:           '68x68#',
-        thumb:           '150x150#',
+        thumb:           '155x155#',
         spotlight_thumb: '174x154#',
         medium:          '640x640>'
       }
