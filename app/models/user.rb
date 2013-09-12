@@ -475,7 +475,6 @@ class User < ActiveRecord::Base
 
   def like_image(image, image_url=nil)
     User.delay.facebook_like(self.id, image_url) unless image.liked_by?(self)
-    User.twitter_like(self.id, image_url) unless image.liked_by?(self)
     image_likes.create(image_id: image.id) unless image.liked_by?(self)
     { image_likes_count: image.reload.image_likes.size }
   end
