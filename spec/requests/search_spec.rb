@@ -40,7 +40,6 @@ feature "Search" do
         select "Users", :from => "filtered_by"
         page.find(".search").click
       end
-      page.should have_content("1 User found")
       page.should have_selector('a', text: "demo")
     end
 
