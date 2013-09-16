@@ -38,4 +38,8 @@ class ImageSerializer < ActiveModel::Serializer
   def liked
     current_user && current_user.image_likes.exists?(image_id: object.id)
   end
+
+  def name
+    object.name.humanize
+  end
 end
