@@ -9,7 +9,7 @@
         <%= link_to (image_tag image.url(:thumb), :alt => image.name, :class => "image-thumb image small"), browse_image_path(image), :class => "image-link" %>
         <div class="image-info">
           <div class="image-name">
-            <%= link_to image.name.truncate(20), browse_image_path(image) %>
+            <%= link_to image.name.humanize.truncate(20), browse_image_path(image) %>
           </div>
           <div class="username">
             <%= link_to image.user.try(:username), profile_path(:user_id => image.user.id) %>

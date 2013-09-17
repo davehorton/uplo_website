@@ -18,7 +18,7 @@
               %dt.preview
                 = image_tag(image.url(:thumb), :class => "image-thumb")
           .info.left
-            .text.bold= image.name
+            .text.bold= image.name.humanize
             .text
               %span= number_to_currency image.total_sales, {:precision => 2}
               %span.fuzzy Cumulative

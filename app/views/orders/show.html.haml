@@ -12,7 +12,7 @@
       = image_tag line.image.url(:thumb)
       %p
         Photo Name:
-        = line.image.name
+        = line.image.name.humanize
       %p
         Price:
         = number_to_currency line.price
