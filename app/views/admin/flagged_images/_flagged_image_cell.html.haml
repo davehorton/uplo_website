@@ -20,7 +20,7 @@
 
   .image_name.info_line
     %a.text.black.font11.image_link{ :href => '#', 'data-url' => popup_url}
-      = truncate(image.name, :length => 20)
+      = truncate(image.name.humanize, :length => 20)
 
   .author.info_line
     %a.text.black.font11.normal{ :href => url_for(:controller => '/profiles',

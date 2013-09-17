@@ -14,7 +14,7 @@
         .image-container.thumb.left.no-padding
           = image_tag(@image.url(:thumb), :class => "image-thumb image thumb")
         .info.left
-          .text.black.bold.font24= @image.name
+          .text.black.bold.font24= @image.name.humanize
           - if (image.flagged? || image.removed?)
             .text.font20{:style => "color:red"} Unavailable
           .quantity.text.fuzzy-gray.font18= pluralize(@sale.sold_image_quantity, "Sale")

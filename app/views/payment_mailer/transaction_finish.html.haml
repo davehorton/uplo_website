@@ -13,7 +13,7 @@
       %p
         = image_tag line.image.url(:thumb)
         %br
-        = line.image.name
+        = line.image.name.humanize
         %br
         = number_to_currency(line.price * line.quantity)
     %h4

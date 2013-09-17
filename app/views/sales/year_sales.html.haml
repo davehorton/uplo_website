@@ -45,7 +45,7 @@
           .image-container.thumb.left.no-padding
             = image_tag(image.url(:thumb), :class => 'image-thumb image thumb')
           .info.left
-            .name.text.black.bold= image.name
+            .name.text.black.bold= image.name.humanize
             - if (image.flagged? || image.removed?)
               .text.font20{:style => "color:red"} Unavailable
             .price
@@ -62,7 +62,7 @@
         .image-container.thumb.left.no-padding
           = image_tag(image.url(:thumb), :class => 'image-thumb image thumb')
         .info.left
-          .text.black.bold.font22= image.name
+          .text.black.bold.font22= image.name.humanize
           - if (image.flagged? || image.removed?)
             .text.red.font22 Unavailable
           .text.fuzzy-gray.price
