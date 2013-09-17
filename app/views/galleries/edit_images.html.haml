@@ -13,7 +13,7 @@
       .separator.left= '|'
       %a#delete-gallery.left{ :href => gallery_path(@gallery), :data => { :method => :delete, :confirm => I18n.t("gallery.delete_confirm") } } Delete Gallery
       .separator.left= '|'
-      #add-files.hidden-uploader.text.black.bold.font12.left{ :data => { :method => :get } }
+      #add-files.hidden-uploader.text.black.bold.font14.left{ :data => { :method => :get } }
         Upload Photo
         = form_for @image, url: "/galleries/#{@gallery.id}/images", html: { id: 'multiple-fileupload' } do |f|
           = file_field_tag "files[]", :multiple => true
