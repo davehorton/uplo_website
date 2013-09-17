@@ -711,7 +711,7 @@ describe User do
     end
 
     context "when gallery has gallery invitations" do
-      it "should return true" do
+      it "should return true", :flickering do
         gallery = create(:gallery)
         gallery_invitation = create(:gallery_invitation, :user_id => user.id)
         user.can_access?(gallery).should be_true
