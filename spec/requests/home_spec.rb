@@ -40,7 +40,7 @@ feature "Home Pages" do
       page.should have_selector('span', text: 'Browse')
       page.should have_selector('span', text: 'Recent Uploads')
       page.should have_selector("#image-container-#{image.id}")
-      page.should have_link(image.name, href: "#{browse_image_path(image.id)}")
+      page.should have_link(image.name.humanize, href: "#{browse_image_path(image.id)}")
     end
   end
 
@@ -60,7 +60,7 @@ feature "Home Pages" do
       page.should have_selector('span', text: 'Browse')
       page.should have_selector('span', text: 'Spotlight Images')
       page.should have_selector("#image-container-#{image.id}")
-      page.should have_link(image.name, href: "#{browse_image_path(image.id)}")
+      page.should have_link(image.name.humanize, href: "#{browse_image_path(image.id)}")
     end
   end
 
