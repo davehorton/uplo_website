@@ -333,16 +333,25 @@ $color-light-gray: #a1a1a1;
 }
 
 #canvas-preview{
-  background: image-url('img-frames/canvas.png') no-repeat;
-  width: 560px;
-  height: 560px;
+  height: 327px;
+  width: 336px;
+  position: relative;
+  overflow: hidden;
+}
+#canvas-preview:after {
+  content:url(img-frames/perspective_mask.png);
+	position:absolute;
+	top:0;
+	left:0;
 }
 #plexi-actual-image{
   margin: 60px 65px 100px 160px;
-  width: 250px;
-  box-shadow: 8px 8px 5px #888888;
+  max-width: 300px;
+  max-height: 250px;
+  box-shadow: 2px 2px 5px #ccc;
+  transform: skew(200deg);
 }
 #canvas-actual-image{
-  margin: 50px 0 0 62px;
-  width: 200px;
+  height: 327px;
+  width: 336px;
 }
