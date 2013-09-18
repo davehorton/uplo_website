@@ -711,10 +711,11 @@ describe User do
     end
 
     context "when gallery has gallery invitations" do
-      it "should return true", :flickering do
+      it "should return true" do
+        new_user = create(:user, :username => "invited_user")
         gallery = create(:gallery)
-        gallery_invitation = create(:gallery_invitation, :user_id => user.id)
-        user.can_access?(gallery).should be_true
+        gallery_invitation = create(:gallery_invitation, :user => new_user)
+        new_user.can_access?(gallery).should be_true
       end
     end
   end
