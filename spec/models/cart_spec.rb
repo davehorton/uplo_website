@@ -24,5 +24,4 @@ describe Cart do
       cart.order.status.should == "shopping"
     end
   end
-
 end
