@@ -52,7 +52,6 @@ feature "Accessing User Profile Page" do
     end
 
     scenario "profile information" do
-      page.should have_selector('div', text: "#{user.fullname}")
       page.should have_selector('div', text: "Photo")
       page.should have_selector('div', text: "Gallery")
       page.should have_selector('div', text: "Likes")
