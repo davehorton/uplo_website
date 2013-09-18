@@ -327,31 +327,35 @@ $color-light-gray: #a1a1a1;
 }
 
 #plexi-preview{
-  background: image-url('img-frames/plexipreview.jpeg') no-repeat;
-  width: 600px;
-  height: 600px;
+  position: relative;
+  perspective: 400px;
+  z-index: 1;
 }
-
+#plexi-preview:after {
+  content: url('img-frames/plexipreview.jpeg'); 
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: -1;
+}
+#plexi-actual-image{
+  box-shadow: 2px 2px 5px #666666;
+  height: 215px;
+  transform: rotateY(-15deg);
+  width: 334px;
+  margin: 50px 0 0 100px;
+}
 #canvas-preview{
   height: 327px;
   width: 336px;
-  position: relative;
-  overflow: hidden;
+  perspective: 430px;
 }
-#canvas-preview:after {
-  content:url(img-frames/perspective_mask.png);
-	position:absolute;
-	top:0;
-	left:0;
-}
-#plexi-actual-image{
-  margin: 60px 65px 100px 160px;
-  max-width: 300px;
-  max-height: 250px;
-  box-shadow: 2px 2px 5px #ccc;
-  transform: skew(200deg);
-}
+
 #canvas-actual-image{
-  height: 327px;
-  width: 336px;
+  background: image-url('img-frames/perspective_side.png') no-repeat right top;
+  padding-right: 23px;
+  height: 325px;
+  width: 360px;
+  transform: rotateY(-11deg);
+  margin-top: 60px;
 }
