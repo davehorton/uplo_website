@@ -1098,7 +1098,7 @@ textarea { padding-top:5px; }
   }
 }
 #preview-image{ min-height: 1080px; }
-
+#preview-image > img { border: 1px solid #666666; }
 #center {
   #images-panel {
     .upload-template.container {
