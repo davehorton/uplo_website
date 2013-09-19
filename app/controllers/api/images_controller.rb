@@ -92,7 +92,7 @@ class Api::ImagesController < Api::BaseController
   def by_friends
     filtered_params[:sort_direction] = "desc"
     filtered_params[:sort_field] = "images.created_at"
-    images = current_user.friends_images.paginate_and_sort(filtered_params)
+    images = current_user.friends_images.public_access.paginate_and_sort(filtered_params)
     render json: images, meta: { total: images.total_entries }
   end
 
