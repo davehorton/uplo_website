@@ -331,10 +331,11 @@ $color-light-gray: #a1a1a1;
   -moz-erspective: 400px;
   -webkit-perspective: 400px;
   perspective: 400px;
+  margin-top: 5px;
   z-index: 1;
 }
 #plexi-preview:after {
-  content: url('img-frames/plexipreview.jpeg'); 
+  content: url('img-frames/plexi_preview.jpg'); 
   position: absolute;
   top: 0;
   left: 0;
@@ -342,12 +343,12 @@ $color-light-gray: #a1a1a1;
 }
 #plexi-actual-image{
   box-shadow: 2px 2px 5px #666666;
-  height: 215px;
+  height: 144px;
   -moz-transform: rotateY(-15deg);
   -webkit-ransform: rotateY(-15deg);
   transform: rotateY(-15deg);
-  width: 334px;
-  margin: 50px 0 0 100px;
+  width: 249px;
+  margin: 20px 0 0 32px;
 }
 #canvas-preview{
   height: 327px;
