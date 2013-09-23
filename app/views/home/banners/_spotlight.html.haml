@@ -1,4 +1,22 @@
 .main.spotlight
+  -if !cookies['hide-raffle']
+    .raffle
+      Enter the UPLO photography competition now and see what you could win in this amazing giveaway!&nbsp;&nbsp;
+      =button_tag ' LEARN MORE '
+      =link_to image_tag('cancel-orange.png'), '#', {id: 'hide-raffle'}
+      -content_for :js do
+        =javascript_tag do
+          :erb
+            $('#hide-raffle').click(function(){
+              $('.raffle').slideUp(300);
+              $.cookie('hide-raffle', 'true');
+              return false;
+            });
+
+            $('.raffle button').click(function() {
+              $('#raffle-modal').modal();
+            });
+
   .banner
     .wrapper
       .left
@@ -37,3 +55,7 @@
       .description.text.black.bold.font14 Choose to share publicly or privately.
       .text.gray.font12.line18
         Don’t want to share your photos with the world? No problem. Password-protect your galleries to keep images private or share them with a select few.
+
+#raffle-modal.hide
+  <a id="rc-dd176e1" class="rafl" href="http://www.rafflecopter.com/rafl/display/dd176e1/" rel="nofollow">a Rafflecopter giveaway</a>
+  <script src="//d12vno17mo87cx.cloudfront.net/embed/rafl/cptr.js"></script>

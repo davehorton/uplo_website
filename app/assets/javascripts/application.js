@@ -23,6 +23,7 @@
 //= require jquery.fileupload-ui
 //= require jquery.center
 //= require jquery.contextMenu
+//= require jquery.cookie
 //= require jquery.inline_label
 //= require jquery.inputHintOverlay
 //= require jquery.poshytip
