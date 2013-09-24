@@ -331,7 +331,7 @@ $color-light-gray: #a1a1a1;
   -moz-perspective: 400px;
   -webkit-perspective: 400px;
   perspective: 400px;
-  width: 315px;
+  width: 504px;
   margin-top: 5px;
   z-index: 1;
   text-align: center;
@@ -345,22 +345,23 @@ $color-light-gray: #a1a1a1;
 }
 #plexi-actual-image{
   box-shadow: 2px 2px 5px #666666;
-  max-height: 144px;
+  max-height: 244px;
   -moz-transform: rotateY(-15deg);
   -webkit-ransform: rotateY(-15deg);
   transform: rotateY(-15deg);
-  max-width: 249px;
+  max-width: 490px;
   margin: 20px 0 0 32px;
 }
 
 #plexi-description {
   position: absolute;
   z-index: 1000;
-  margin-top: 130px;
+  margin-top: 170px;
   text-align: center;
   font-weight: bolder;
-  font-size: 7pt;
-  margin-left: 10px;
+  font-size: 10pt;
+  margin-left: 40px;
+  padding-bottom: 40px;
 }
 #canvas-preview{
   height: 327px;
