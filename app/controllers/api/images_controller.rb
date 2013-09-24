@@ -48,6 +48,7 @@ class Api::ImagesController < Api::BaseController
   end
 
   # GET /api/images/popular
+  #   excluded_image_ids: [id1, id2]
   # optional:
   #   page
   #   per_page
@@ -56,7 +57,9 @@ class Api::ImagesController < Api::BaseController
   def popular
     filtered_params[:sort_direction] = ''
     filtered_params[:sort_field] = "random()"
-    images = Image.spotlight.includes(:gallery, :user).paginate_and_sort(filtered_params)
+    images = Image.spotlight
+    images = images.where("images.id not in (?)", parsed_ids(params[:excluded_image_ids])) if params[:excluded_image_ids].present?
+    images = images.includes(:gallery, :user).paginate_and_sort(filtered_params)
     render json: images, meta: { total: images.total_entries }
   end
 
@@ -79,7 +82,7 @@ class Api::ImagesController < Api::BaseController
   # required:
   #   ids: [id1, id2]
   def search_by_id
-    images = Image.find_all_by_id JSON.parse(URI.unescape(params[:ids]))
+    images = Image.find_all_by_id(parsed_ids(params[:ids]))
     render json: images
   end
 
@@ -187,5 +190,11 @@ class Api::ImagesController < Api::BaseController
     image = Image.find(params[:id])
     product_option = ProductOption.find(params[:product_option_id])
     render json: { preview_url: image.find_or_generate_preview_image(product_option) }
+  end
+
+  protected
+
+  def parsed_ids(id_string)
+    JSON.parse(URI.unescape(id_string))
   end
 end
