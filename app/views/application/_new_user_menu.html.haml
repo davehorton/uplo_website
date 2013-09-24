@@ -1,19 +1,24 @@
 %ul
   - if user_signed_in?
-    %li#divider-image
-      %img{:src => "/assets/divider.jpg", :height => 34}
+    %li.wide_li  
+      %p .
+      = link_to image_tag('upload-btn.png'), galleries_path, :method => :get
+      
     %li
-      = link_to "Logout", "/signout", :method => "delete" 
-    %li
-      %a{:href => shopping_cart_show_path}
-        My Cart
-        %span#cart-counter.normal #{total_line_items}
+      %a.app-btn{:href => "/iphone_app"}
+        %img{:src => "/assets/get-app-btn.png"}/
+
     %li
       = select_tag "private_pages", private_links_options(current_section), :id => "my_links"
-    %li.no-padding-right{:style => "margin-top: 3px"}
-      = render :partial => "search_box_new", :locals => {:action => '/search'} 
   - else
-    
+    %li.wide_li  
+      %p Sell Photos:
+      = link_to image_tag('upload-btn.png'), galleries_path, :method => :get
+    %li
+      %a.app-btn{:href => "/iphone_app"}
+        %img{:src => "/assets/get-app-btn.png"}/
+
+
     %li
       = link_to image_tag('login-btn.png'), signin_path
       
