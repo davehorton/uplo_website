@@ -1,6 +1,6 @@
 %ul
   - if user_signed_in?
-    %li
+    %li#divider-image
       %img{:src => "/assets/divider.jpg", :height => 34}
     %li
       = link_to "Logout", "/signout", :method => "delete" 
