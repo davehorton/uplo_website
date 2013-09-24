@@ -15,6 +15,7 @@ Uplo::Application.routes.draw do
   get "shopping_cart/clear"
   get "shopping_cart/checkout"
 
+  get "raffle", :to => "home#raffle"
   get "browse", :to => "home#browse"
   get "require_login", :to => "home#require_login"
   get "search", :to => "home#search"

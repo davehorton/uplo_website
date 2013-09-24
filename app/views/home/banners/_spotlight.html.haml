@@ -13,12 +13,19 @@
           });
 
           $('.raffle button').click(function() {
-            $('#raffle-modal').modal({onShow: function (dialog) {
-                                           dialog.overlay.on('click', function () {
-                                              $.modal.close();
-                                           });
-                                         }
-                                       });
+            var winH = $( window ).height();
+
+            if (winH > 780) {
+              winH = 780;
+            }
+
+            var popup = window.open('/raffle?nolayout=true','UPLO Raffle','height=' + winH + ',width=460,scrollbars=yes');
+
+            setTimeout( function() {
+              if(!popup || popup.outerHeight === 0) {
+                document.location = '/raffle'
+              }
+            }, 25);
           });
 
 .main.spotlight
@@ -60,7 +67,3 @@
       .description.text.black.bold.font14 Choose to share publicly or privately.
       .text.gray.font12.line18
         Don’t want to share your photos with the world? No problem. Password-protect your galleries to keep images private or share them with a select few.
-
-#raffle-modal.hide
-  <a id="rc-dd176e1" class="rafl" href="http://www.rafflecopter.com/rafl/display/dd176e1/" rel="nofollow">a Rafflecopter giveaway</a>
-  <script src="//d12vno17mo87cx.cloudfront.net/embed/rafl/cptr.js"></script>
