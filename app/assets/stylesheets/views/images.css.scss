@@ -337,7 +337,7 @@ $color-light-gray: #a1a1a1;
   text-align: center;
 }
 #plexi-preview:after {
-  content: url('img-frames/plexi_preview.jpg'); 
+  content: url('img-frames/plexi_preview.jpg');
   position: absolute;
   top: 0;
   left: 0;
@@ -351,6 +351,16 @@ $color-light-gray: #a1a1a1;
   transform: rotateY(-15deg);
   max-width: 249px;
   margin: 20px 0 0 32px;
+}
+
+#plexi-description {
+  position: absolute;
+  z-index: 1000;
+  margin-top: 130px;
+  text-align: center;
+  font-weight: bold;
+  font-size: 8pt;
+  margin-left: 10px;
 }
 #canvas-preview{
   height: 327px;

@@ -3,7 +3,12 @@ $('#preview-waiting').hide();
 
 var selectedProduct = $('#line_item_product_id').find(':selected').text().toLowerCase();
 if(selectedProduct.indexOf('canvas')>-1){
-  $('#preview-image').append("<br/><br/>Preview").append('<div id="canvas-preview"><img id="canvas-actual-image" alt="Canvas" src="' + $('#preview-image').children("img").attr("src") + '"></div>');
+  $('#preview-image').
+          append("<br/><br/>Preview").
+          append('<div id="canvas-preview"><img id="canvas-actual-image" alt="Canvas" src="' + $('#preview-image').children("img").attr("src") + '"></div>');
 } else if(selectedProduct.indexOf('plexi')>-1){
-  $('#preview-image').append("<br/><br/>Preview").append('<div id="plexi-preview"><img id="plexi-actual-image" alt="Plexi" src="' + $('#preview-image').children("img").attr("src") + '"></div>');
+  $('#preview-image').
+          append("<br/><br/>Preview").
+          append('<div id="plexi-preview"><img id="plexi-actual-image" alt="Plexi" src="' + $('#preview-image').children("img").attr("src") +
+                  '"></div><div id="plexi-description">1/4" PLEXI-GLASS MOUNTED TO THE FRONT OF DIGITAL C PHOTO<br />PAPER, BACKED WITH 1/8" SINTRA<br />AND A "READY TO HANG" WOODEN BRACE.</div>');
 }
