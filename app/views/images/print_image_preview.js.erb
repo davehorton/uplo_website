@@ -5,7 +5,8 @@ var selectedProduct = $('#line_item_product_id').find(':selected').text().toLowe
 if(selectedProduct.indexOf('canvas')>-1){
   $('#preview-image').
           append("<br/><br/>Preview").
-          append('<div id="canvas-preview"><img id="canvas-actual-image" alt="Canvas" src="' + $('#preview-image').children("img").attr("src") + '"></div>');
+          append('<div id="canvas-preview"><img id="canvas-actual-image" alt="Canvas" src="' + $('#preview-image').children("img").attr("src") +
+                  '"></div><div id="canvas-description">OUR CANVAS COMES WITH A "MIRROR" STYLE WRAP, PRINTED USING<br />ARCHIVAL PIGMENT INKS, AND IS READY TO HANG.</div>');
 } else if(selectedProduct.indexOf('plexi')>-1){
   $('#preview-image').
           append("<br/><br/>Preview").

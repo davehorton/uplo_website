@@ -370,11 +370,18 @@ $color-light-gray: #a1a1a1;
 }
 
 #canvas-actual-image{
-  background: image-url('img-frames/perspective_side.png') no-repeat right top;
+  //background: image-url('img-frames/perspective_side.png') no-repeat right top;
   padding-right: 23px;
-  height: 325px;
-  width: 360px;
-  transform: rotateY(-11deg);
+  max-height: 325px;
+  max-width: 360px;
+  //transform: rotateY(-11deg);
   margin-top: 60px;
   outline: 2px solid transparent;
+}
+
+#canvas-description {
+  margin-top: 60px;
+  text-align: center;
+  font-weight: bolder;
+  font-size: 10pt;
 }
