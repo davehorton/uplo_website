@@ -38,8 +38,9 @@ feature "Accessing User Profile Page" do
       within("#galleries-section .head") do
         page.find(".title").click
       end
-      within("div#endless-pages #gallery-container-#{gallery.id}") do
-        page.should have_selector(".image-container")
+      within("#gallery-container-#{gallery.id} .gallery-info") do
+        page.should have_selector('div', text: "#{user.galleries.last.name}")
+        page.should have_selector('div', text: "#{gallery.images.count} Image")
       end
     end
   end
