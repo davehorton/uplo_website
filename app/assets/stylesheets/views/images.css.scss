@@ -343,11 +343,11 @@ $color-light-gray: #a1a1a1;
 }
 #plexi-actual-image{
   box-shadow: 2px 2px 5px #666666;
-  height: 144px;
+  max-height: 144px;
   -moz-transform: rotateY(-15deg);
   -webkit-ransform: rotateY(-15deg);
   transform: rotateY(-15deg);
-  width: 249px;
+  max-width: 249px;
   margin: 20px 0 0 32px;
 }
 #canvas-preview{
