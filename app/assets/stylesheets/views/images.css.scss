@@ -363,25 +363,22 @@ $color-light-gray: #a1a1a1;
   margin-left: 40px;
   padding-bottom: 40px;
 }
-#canvas-preview{
-  height: 327px;
-  width: 336px;
-  perspective: 430px;
-}
+//#canvas-preview{
+//  height: 327px;
+//  width: 336px;
+//  perspective: 430px;
+//}
 
-#canvas-actual-image{
-  //background: image-url('img-frames/perspective_side.png') no-repeat right top;
-  padding-right: 23px;
-  max-height: 325px;
-  max-width: 360px;
-  //transform: rotateY(-11deg);
-  margin-top: 60px;
-  outline: 2px solid transparent;
+#canvas-preview{
+  background: image-url('img-frames/canvas_preview.jpg') no-repeat;
+  height: 504px;
+  width: 504px;
 }
 
 #canvas-description {
-  margin-top: 60px;
+  margin-top: -160px;
   text-align: center;
   font-weight: bolder;
   font-size: 10pt;
+  margin-left: -140px;
 }
