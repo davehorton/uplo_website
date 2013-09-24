@@ -17,16 +17,24 @@ class HomeController < ApplicationController
 
   def index
     session[:back_url] = url_for(:controller => 'home', :action => "browse") if session[:back_url].nil?
-    @current_views = 'recent images'
+    if Image.hide_recent?
+      @current_views = 'Most Views'
+      filtered_params[:sort_field] = "images.pageview"
+    else
+      @current_views = 'Recent Uploads'
+      filtered_params[:sort_field] = "images.created_at"
+    end
     filtered_params[:sort_direction] = 'desc'
-    filtered_params[:sort_field] = "images.created_at"
-    @recent_images = Image.public_access.not_hidden.paginate_and_sort(filtered_params)
+    @extra_images = Image.public_access.not_hidden.paginate_and_sort(filtered_params)
+
     filtered_params[:per_page] = 32
     filtered_params[:sort_field] = "random()"
     @images = Image.spotlight.paginate_and_sort(filtered_params)
   end
 
   def browse
+    redirect_to '/search?filtered_by=images&sort_by=views' and return if Image.hide_recent?
+
     @current_views = IMAGE_SORT_VIEW[Image::SORT_OPTIONS[:recent]]
     filtered_params[:sort_direction] = 'desc'
     filtered_params[:sort_field] = "images.created_at"
@@ -64,6 +72,7 @@ class HomeController < ApplicationController
       filtered_params[:sort_direction] = 'DESC'
       case params[:sort_by]
       when "recent"
+        redirect_to '/search?filtered_by=images&sort_by=views' and return if Image.hide_recent?
         filtered_params[:sort_field] = "images.created_at"
       when "views"
         filtered_params[:sort_field] = "images.pageview"

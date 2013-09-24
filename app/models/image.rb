@@ -323,6 +323,12 @@ class Image < ActiveRecord::Base
     self.user_id == user.try(:id)
   end
 
+  def self.hide_recent?
+    # touch uplo_web/hide_recent
+    # rm uplo_web/hide_recent
+    @hide_recent ||= File.exist?(Rails.root.join('hide_recent'))
+  end
+
   protected
 
     def minimum_dimensions_are_met
