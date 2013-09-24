@@ -251,17 +251,6 @@ textarea { padding-top:5px; }
   float: left;
 }
 
-//old
-.text {
-  word-wrap: break-word;
-  &.bold {
-    color: $color-black;
-  }
-  &.normal {
-    color: $color-gray;
-  }
-}
-
 .hidden-uploader {
   position: relative;
   overflow: hidden;
@@ -892,15 +881,10 @@ textarea { padding-top:5px; }
 .like-link { display: block; }
 
 #header {
-  height: 55px;
+  height: 39px;
   background: image-url("bg-header.png") repeat-x scroll 0 0 transparent;
-  box-shadow: 0 0 2px #1b1b1b;
+  padding-top: 16px;
 
-  .wrapper {
-    padding-top: 16px;
-    background: image-url("bg-header.png") repeat-x scroll 0 0 transparent;
-    height: 39px;
-  }
   .header-menu {
     li {
       float: left;
@@ -912,10 +896,10 @@ textarea { padding-top:5px; }
     padding: 0px 5px;
   }
   #user-box{
-    color: #333;
-    display: inline-block;
+    left: -19px;
+    top: -4px;
   }
-
+  
   #cart-counter{
   color:white;
   padding: 1px 3px 2px 3px;
@@ -926,7 +910,6 @@ textarea { padding-top:5px; }
   }
 }
 
-#banner {}
 #top {
   width: 100%;
   margin-top: 30px;
@@ -1231,7 +1214,11 @@ textarea { padding-top:5px; }
   }
 }
 
-#menu-items {}
+#menu-items li { margin-left: 3px }
+#menu-items {
+    left: 13px;
+    position: relative;
+}
 
 #edit-profile-info-popup {
   width: 401px;
@@ -1716,3 +1703,10 @@ div#raffle-modal {
   top: 0px;
   height: 95%;
 }
+#divider-image{ margin-right: 20px; }
+#footer-icons { margin-top: 10px;}
+#follow-us { margin-top: 3px;}
+#footer-icons li { 
+  float: right;
+  margin-left: 7px;
+} 

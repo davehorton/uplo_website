@@ -1,13 +1,10 @@
-%form{:action => "/search"}
+%div
   %ul#menu-items
     %li
-      %a{:href => "/browse"} Explore
+      %a{:href => "/browse"} Browse
     %li
       %a{:href => "/spotlight"} Spotlight
     %li
-      %img.mag_glass{:src => "/assets/magglass.png"}/
-      %input#search_field{:type => "text",:name => "query"}/
-    %li.current.first
-      %a{:href => shopping_cart_show_path}
-        %img{:src => "/assets/shopping_cart.png"}/
-      .shopping_cart_count #{total_line_items}
+      %a{:href => "/friends"} Friends
+    %li
+      %a{:href => "/intro"} The App
