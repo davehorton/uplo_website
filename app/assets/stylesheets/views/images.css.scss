@@ -331,8 +331,10 @@ $color-light-gray: #a1a1a1;
   -moz-perspective: 400px;
   -webkit-perspective: 400px;
   perspective: 400px;
+  width: 315px;
   margin-top: 5px;
   z-index: 1;
+  text-align: center;
 }
 #plexi-preview:after {
   content: url('img-frames/plexi_preview.jpg'); 
