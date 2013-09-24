@@ -68,7 +68,7 @@ module ApplicationHelper
   def private_links_options(active = sections[:default])
     options = [["My UPLO", sections[:default]], ['My Profile', sections[:profile]],
       ["My Account", sections[:account]], ["My Galleries", sections[:gallery]],
-      ["My Sales", sections[:sale]],["Logout", sections[:signout]]]
+      ["My Sales", sections[:sale]]]
     options << ["Admin", sections[:admin]] if current_user.admin?
     options_for_select(options, active)
   end

@@ -12,10 +12,11 @@ feature "Home Pages" do
     end
 
     scenario "header has correct items" do
-      page.should have_selector('a', text: 'Explore')
+      page.should have_selector('a', text: 'Browse')
       page.should have_selector('a', text: 'Spotlight')
+      page.should have_selector('a', text: 'Friends')
+      page.should have_selector('a', text: 'The App')
       page.should have_link("Login-btn", href: "#{signin_path}")
-      page.should have_css('.app-btn')
     end
 
     scenario "it should show spotlight and recent uploads" do
@@ -30,10 +31,9 @@ feature "Home Pages" do
     end
 
     scenario "header has correct items" do
-      page.should have_selector('a', text: 'Explore')
+      page.should have_selector('a', text: 'Browse')
       page.should have_selector('a', text: 'Spotlight')
       page.should have_link("Login-btn", href: "#{signin_path}")
-      page.should have_css('.app-btn')
     end
 
     scenario "Recently updated content" do
@@ -50,10 +50,9 @@ feature "Home Pages" do
     end
 
     scenario "header has correct items" do
-      page.should have_selector('a', text: 'Explore')
+      page.should have_selector('a', text: 'Browse')
       page.should have_selector('a', text: 'Spotlight')
       page.should have_link("Login-btn", href: "#{signin_path}")
-      page.should have_css('.app-btn')
     end
 
     scenario "showing spotlight images" do

@@ -251,17 +251,6 @@ textarea { padding-top:5px; }
   float: left;
 }
 
-//old
-.text {
-  word-wrap: break-word;
-  &.bold {
-    color: $color-black;
-  }
-  &.normal {
-    color: $color-gray;
-  }
-}
-
 .hidden-uploader {
   position: relative;
   overflow: hidden;
@@ -926,7 +915,6 @@ textarea { padding-top:5px; }
   }
 }
 
-#banner {}
 #top {
   width: 100%;
   margin-top: 30px;
@@ -1716,3 +1704,11 @@ div#raffle-modal {
   top: 0px;
   height: 95%;
 }
+
+#copyright{ margin-top: 5px; }
+#footer-icons { margin-top: 10px;}
+#follow-us { margin-top: 3px;}
+#footer-icons li { 
+  float: right;
+  margin-left: 7px;
+} 
