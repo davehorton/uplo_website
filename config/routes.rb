@@ -262,6 +262,7 @@ Uplo::Application.routes.draw do
         member do
           post :flag
           post :like
+          get  :pricing
           get  :print_image_preview
           get  :purchases
           get  :sale_chart
