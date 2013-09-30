@@ -197,15 +197,14 @@ class Api::ImagesController < Api::BaseController
     image = current_user.images.find(params[:id])
     pricing_hash = { }.tap do |h|
       image.available_products.group_by(&:moulding).each do |moulding, products|
-        products.each do |product|
-          options = {
+        h[moulding.name] = products.collect do |product|
+          {
             size: product.size.to_name,
             tier1: product.pricing_hash("tier1"),
             tier2: product.pricing_hash("tier2"),
             tier3: product.pricing_hash("tier3"),
             tier4: product.pricing_hash("tier4")
           }
-          h[moulding.name] = options
         end
       end
     end
