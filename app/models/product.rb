@@ -60,6 +60,10 @@ class Product < ActiveRecord::Base
     "#{size.to_name} - #{moulding.name}"
   end
 
+  def pricing_hash(tier_name)
+    { price: send("#{tier_name}_price"), commission: send("#{tier_name}_commission") }
+  end
+
   private
 
     def expire_cached_entries

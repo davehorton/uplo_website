@@ -192,6 +192,26 @@ class Api::ImagesController < Api::BaseController
     render json: { preview_url: image.find_or_generate_preview_image(product_option) }
   end
 
+  # GET /api/images/:id/pricing
+  def pricing
+    image = current_user.images.find(params[:id])
+    pricing_hash = { }.tap do |h|
+      image.available_products.group_by(&:moulding).each do |moulding, products|
+        products.each do |product|
+          options = {
+            size: product.size.to_name,
+            tier1: product.pricing_hash("tier1"),
+            tier2: product.pricing_hash("tier2"),
+            tier3: product.pricing_hash("tier3"),
+            tier4: product.pricing_hash("tier4")
+          }
+          h[moulding.name] = options
+        end
+      end
+    end
+    render :json => pricing_hash
+  end
+
   protected
 
   def parsed_ids(id_string)
