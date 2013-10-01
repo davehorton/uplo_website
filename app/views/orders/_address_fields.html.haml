@@ -30,4 +30,4 @@
   = address.label :zip, "Postal/Zip Code <span style='color:red;'>*</span>".html_safe
   - message = first_error_message_for(address.object, :zip)
   - css = message ? "error" : nil
-  = address.input_field :zip, :required => true, :class => "zip_input #{css}", :title => message
+  = address.input_field :zip, :required => true, :class => "#{css}", :title => message
