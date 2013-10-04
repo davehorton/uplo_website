@@ -2,4 +2,4 @@
 sudo "monit -g uplo_web_sidekiq restart all"
 
 # ensures memcached is not stale
-run "cd #{current_path} && bundle exec rake cache:clear"
+run "cd #{config.current_path} && bundle exec rake cache:clear"
