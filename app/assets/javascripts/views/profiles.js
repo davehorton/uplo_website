@@ -39,7 +39,7 @@
       success: function(response) {
         var counter, url;
         if (response.success === false) {
-          helper.show_notification(response.msg);
+          helper.show_error_notification(response.msg);
           return $.modal.close();
         } else {
           counter = $('.counter.current');
@@ -67,7 +67,7 @@
       success: function(response) {
         var counter, url;
         if (response.success === false) {
-          helper.show_notification(response.msg);
+          helper.show_error_notification(response.msg);
           return $.modal.close();
         } else if (unfollow === 'false') {
           target.attr('data-following', 'true');
@@ -96,7 +96,9 @@
 
   requestDeleteProfilePhoto = function(node) {
     $.modal.close();
-    window.setTimeout("$('#delete-confirm-popup').modal()", 300);
+    window.setTimeout(function(){
+      $('#delete-confirm-popup').modal();
+    }, 300);
     $('#delete-confirm-popup #btn-ok').click(function() {
       var target;
       $.modal.close();
@@ -110,22 +112,20 @@
         dataType: "json",
         success: function(response) {
           if (response.success === false) {
-            helper.show_notification(response.msg);
-            $.modal.close();
-            return window.setTimeout("$('#edit-profile-photo-popup').modal()", 300);
+            helper.show_error_notification(response.msg);
+            showEditProfilePopup();
           } else {
             $('#edit-profile-photo-popup .current-photo .avatar').attr('src', response.extra_avatar_url);
             $('#user-section .avatar.large').attr('src', response.large_avatar_url);
             $('#edit-profile-photo-popup .held-photos .photos').html(response.profile_photos);
             helper.show_notification('Deleted successfully!');
-            $.modal.close();
-            return window.setTimeout("$('#edit-profile-photo-popup').modal()", 300);
+            showEditProfilePopup();
           }
         }
       });
     });
     return $('#delete-confirm-popup .button.cancel').click(function() {
-      return window.setTimeout("$('#edit-profile-photo-popup').modal()", 300);
+      showEditProfilePopup();
     });
   };
 
@@ -141,7 +141,7 @@
       dataType: "json",
       success: function(response) {
         if (response.success === false) {
-          return helper.show_notification(response.msg);
+          return helper.show_error_notification(response.msg);
         } else {
           helper.show_notification('Updated successfully!');
           $('#edit-profile-photo-popup .current-photo .avatar').attr('src', response.extra_avatar_url);
@@ -162,6 +162,27 @@
         });
       }
     });
+  };
+  
+  showEditProfilePopup = function(){
+    return window.setTimeout(function(){
+      $('#edit-profile-photo-popup').modal();
+      $.modal.close();
+    }, 300);
+  };
+
+  showEditProfileInfoPopup = function(){
+    return window.setTimeout(function(){
+      $('#edit-profile-info-popup').modal();
+      $.modal.close();
+    }, 300);
+  };
+  
+  showLoadingSpinner = function(){
+    $.modal.close();
+    window.setTimeout(function(){
+      $('#mask').modal();
+    }, 300);
   };
 
   $(function() {
@@ -202,25 +223,27 @@
         maxFileSize: 75000000,
         acceptFileTypes: /(\.|\/)(jpg|jpeg)$/i,
         add: function(e, data) {
-          $.modal.close();
-          window.setTimeout("$('#mask').modal()", 300);
+          showLoadingSpinner();
           return data.submit();
         },
         done: function(e, data) {
           var response;
           response = $.parseJSON(data.result);
           if (response.success === false) {
-            helper.show_notification(response.msg);
-            $.modal.close();
-            return window.setTimeout("$('#edit-profile-photo-popup').modal()", 300);
+            helper.show_error_notification(response.msg);
+            showEditProfilePopup();
           } else {
             helper.show_notification('Updated successfully!');
             $('#edit-profile-photo-popup .held-photos .photos').html(response.profile_photos);
             $('#edit-profile-photo-popup .current-photo .avatar').attr('src', response.extra_avatar_url);
             $('#user-section .avatar.large').attr('src', response.large_avatar_url);
-            $.modal.close();
-            return window.setTimeout("$('#edit-profile-photo-popup').modal()", 300);
+            showEditProfilePopup();
           }
+        },
+        fail: function(e, data) {
+          var error = data.files[0].error;
+          helper.show_error_notification(error);
+          showEditProfilePopup();
         }
       });
       $('body').delegate('#edit-profile-photo-popup .held-photos .delete', 'click', function(e) {
@@ -264,7 +287,7 @@
           dataType: "json",
           success: function(response) {
             if (response.success === false) {
-              helper.show_notification(response.msg);
+              helper.show_error_notification(response.msg);
               return $.modal.close();
             } else if (unfollow === 'false') {
               $('#btn-follow').attr('data-following', 'true');
@@ -309,17 +332,16 @@
         email_reg = /^([0-9a-zA-Z]([-.\w]*[0-9a-zA-Z])*@(([0-9a-zA-Z])+([-\w]*[0-9a-zA-Z])*\.)+[a-zA-Z]{2,9})$/i;
         website_reg = /(^$)|(^((http|https):\/\/){0,1}[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(([0-9]{1,5})?\/.*)?$)/i;
         if (email_reg.test($('#user_email').val()) === false) {
-          return helper.show_notification('Email is invalid!');
+          return helper.show_error_notification('Email is invalid!');
         } else if (website_reg.test($('#user_website').val()) === false) {
-          return helper.show_notification('Website is invalid!');
+          return helper.show_error_notification('Website is invalid!');
         } else if ($("#user_first_name").val().length < 1 || $("#user_first_name").val().length > 30) {
-          return helper.show_notification('First name must be between 1 to 30 characters in length');
+          return helper.show_error_notification('First name must be between 1 to 30 characters in length');
         } else if ($("#user_last_name").val().length < 1 || $("#user_last_name").val().length > 30) {
-          return helper.show_notification('Last name must between 1 to 30 characters in length');
+          return helper.show_error_notification('Last name must between 1 to 30 characters in length');
         } else {
           data_form = $('#frm-edit-profile-info');
-          $.modal.close();
-          window.setTimeout("$('#mask').modal()", 300);
+          showLoadingSpinner();
           return $.ajax({
             url: data_form.attr('action'),
             type: 'POST',
@@ -332,14 +354,12 @@
                 return $.modal.close();
               } else {
                 helper.show_notification(response.msg);
-                $.modal.close();
-                return window.setTimeout("$('#edit-profile-info-popup').modal()", 300);
+                showEditProfileInfoPopup();
               }
             },
             error: function() {
-              helper.show_notification("Something went wrong!");
-              $.modal.close();
-              return window.setTimeout("$('#edit-profile-info-popup').modal()", 300);
+              helper.show_error_notification("Something went wrong!");
+              showEditProfileInfoPopup();
             }
           });
         }
@@ -352,12 +372,12 @@
       });
       $("#user_first_name").blur(function() {
         return helper.check_less_than_characters(this.value, 1, function() {
-          return helper.show_notification('First name must be at least 1 character!');
+          return helper.show_error_notification('First name must be at least 1 character!');
         });
       });
       return $("#user_last_name").blur(function() {
         return helper.check_less_than_characters(this.value, 1, function() {
-          return helper.show_notification('Last name must be at least 1 character!');
+          return helper.show_error_notification('Last name must be at least 1 character!');
         });
       });
     }

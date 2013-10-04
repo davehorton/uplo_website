@@ -90,9 +90,14 @@ var helper = {
   show_notification: function(message){
     $('.flash').stop(true, true).fadeIn('fast');
     var string = "<div class='icon_notification left'></div><div class='left message wordwrap'>" + message + "</div>";
-    $(".flash").find(".notification-container").removeClass("hidden");
+    $(".flash").find(".notification-container").removeClass('error').removeClass("hidden");
     $(".flash").find('.messages').html(string);
     helper.auto_hide_flash_message();
+  },
+
+  show_error_notification: function(message){
+    helper.show_notification(message);
+    $('.notification-container').addClass('error');
   },
 
   // Validate IPv4 address format

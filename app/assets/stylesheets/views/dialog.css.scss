@@ -76,8 +76,7 @@ $mask-color: #DADADA;
 
 .fixed-right{
   position: fixed;
-	top:130px;
-	right: 153px;
+  top: 130px;
 	width: 100%;
 	height: 0px;
 	z-index: 2000;
@@ -158,5 +157,15 @@ $mask-color: #DADADA;
 
   .message{
 	  width:170px;
+  }
+}
+
+.notification-container.error {
+  .icon_notification {
+    background: url("/assets/exclamation.png") no-repeat scroll 0 0 transparent;
+    height: 15px;
+    margin-right: 5px;
+    margin-top: -2px;
+    width: 15px;
   }
 }
