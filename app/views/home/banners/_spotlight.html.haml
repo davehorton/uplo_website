@@ -1,33 +1,3 @@
--if !cookies['hide-raffle']
-  .raffle
-    Enter the UPLO photography competition now and see what you could win in this amazing giveaway!&nbsp;&nbsp;
-    =button_tag ' LEARN MORE '
-    =link_to image_tag('cancel-orange.png'), '#', {id: 'hide-raffle'}
-    -content_for :js do
-      =javascript_tag do
-        :erb
-          $('#hide-raffle').click(function(){
-            $('.raffle').slideUp(300);
-            $.cookie('hide-raffle', 'true');
-            return false;
-          });
-
-          $('.raffle button').click(function() {
-            var winH = $( window ).height();
-
-            if (winH > 780) {
-              winH = 780;
-            }
-
-            var popup = window.open('/raffle?nolayout=true','UPLO Raffle','height=' + winH + ',width=460,scrollbars=yes');
-
-            setTimeout( function() {
-              if(!popup || popup.outerHeight === 0) {
-                document.location = '/raffle'
-              }
-            }, 25);
-          });
-
 .main.spotlight
   .banner
     .wrapper

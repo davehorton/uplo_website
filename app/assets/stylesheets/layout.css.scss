@@ -1689,30 +1689,3 @@ a.processing {
   font-weight: bold;
 }
 
-div.raffle {
-  height: 35px;
-  background-color: $color-highlight;
-  color: $color-white;
-  text-align: center;
-  font-size: 11pt;
-  font-weight: bolder;
-  padding-top: 10px;
-}
-
-div.raffle a img {
-  margin-bottom: -7px;
-}
-
-div.raffle button {
-  background-color: $color-white;
-  color: $color-highlight;
-  padding: 3px;
-  font-weight: bold;
-  border-style:none;
-  cursor: pointer;
-}
-
-div#raffle-modal {
-  top: 0px;
-  height: 95%;
-}

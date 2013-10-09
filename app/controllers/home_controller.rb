@@ -92,10 +92,6 @@ class HomeController < ApplicationController
     render :template => 'home/browse'
   end
 
-  def raffle
-    render :layout => params[:nolayout] ? 'blank' : 'main'
-  end
-
   def require_login
     session[:user_return_to] = request.referrer
     flash[:alert] = "You need to sign in or sign up before continuing."
