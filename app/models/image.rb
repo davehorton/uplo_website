@@ -329,6 +329,22 @@ class Image < ActiveRecord::Base
     @hide_recent ||= File.exist?(Rails.root.join('hide_recent'))
   end
 
+  def pricing_tiers
+    { }.tap do |h|
+      self.available_products.group_by(&:moulding).each do |moulding, products|
+        h[moulding.name] = products.collect do |product|
+          {
+            size: product.size.to_name,
+            tier1: product.pricing_hash("tier1"),
+            tier2: product.pricing_hash("tier2"),
+            tier3: product.pricing_hash("tier3"),
+            tier4: product.pricing_hash("tier4")
+          }
+        end
+      end
+    end
+  end
+
   protected
 
     def minimum_dimensions_are_met
