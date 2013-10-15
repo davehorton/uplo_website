@@ -11,15 +11,15 @@ class GalleryInvitationsController < ApplicationController
 
   def create
     @gallery_invitation = @gallery.gallery_invitations.new(params[:gallery_invitation])
-    if params[:gallery_invitation][:emails].present?
-      params[:gallery_invitation][:emails].split(',').each do |email|
-        @gallery_invitation = @gallery.gallery_invitations.where(emails: email.squish).first_or_create!(message: params[:gallery_invitation][:message])
-        flash[:success] = "An Invitation has been sent!"
-        GalleryInvitationMailer.delay.send_invitation(@gallery_invitation.id)
-      end
+    error, @failed_list = GalleryInvitation.create_invitations(@gallery,
+                                                 params[:gallery_invitation][:emails],
+                                                 params[:gallery_invitation][:message]
+                                                 )
+    if error.blank?
+      flash[:success] = "Successfully sent invitations!"
       redirect_to gallery_gallery_invitations_path(@gallery)
     else
-      flash[:error] = 'Please enter one email'
+      flash.now[:error] = error
       render 'new'
     end
   end
