@@ -9,6 +9,22 @@ class GalleryInvitation < ActiveRecord::Base
 
   before_create :set_secret_token
 
+  def self.create_invitations(gallery, emails, message)
+    return "Please enter emails" if emails.blank?
+    return "Please provide a message" if message.blank?
+    failed_list = []
+    emails.split(/[\s,]+/).each do |email|
+      gallery_invitation = gallery.gallery_invitations.where(emails: email.squish).first_or_initialize(message: message)
+      if gallery_invitation.save
+        GalleryInvitationMailer.delay.send_invitation(gallery_invitation.id)
+      else
+        failed_list << email
+      end
+    end
+    error = "Could not send invitation to the following emails." if failed_list.present?
+    [error, failed_list]
+  end
+
   def accepted?
     self.user_id.present?
   end

@@ -880,7 +880,10 @@ textarea { padding-top:5px; }
 /* ID */
 /*==================================================================================*/
 #flash, .flash {
-  margin-bottom: 10px;  margin-top: 10px;
+  margin-bottom: 10px; 
+  margin-top: 10px;
+  clear: both;
+
   .notification-container{
     margin: 0 auto;
     width: 960px;
