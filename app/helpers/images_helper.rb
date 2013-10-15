@@ -8,7 +8,11 @@ module ImagesHelper
       :id => image.id,
       :only_path => false
     )
-    "http://pinterest.com/pin/create/button/?url=#{CGI.escape(image_public_url)}&description=#{"Share from UPLO: #{image.name.humanize} by #{image.user.first_name} #{image.user.last_name}"}&media=#{CGI.escape(image.url(:thumb))}"
+    "http://pinterest.com/pin/create/button/?url=#{CGI.escape(image_public_url)}&description=#{image_desc(image)}&media=#{CGI.escape(image.url(:thumb))}"
+  end
+
+  def image_desc(image)
+    CGI.escape("Share from UPLO: #{image.name.humanize} by #{image.user.fullname}")
   end
 
   # TODO: move to ability class
