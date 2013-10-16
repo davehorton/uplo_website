@@ -1,7 +1,7 @@
 Uplo::Application.configure do
   # Settings specified here will take precedence over those in config/application.rb
 
-  ENV['UPLO_DOMAIN'] = 'uplo.dev:3000'
+  ENV['UPLO_DOMAIN'] = 'uplo.dev'
   DOMAIN = ENV['UPLO_DOMAIN'] || 'localhost:3000'
 
   # In the development environment your application's code is reloaded on
