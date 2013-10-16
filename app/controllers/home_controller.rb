@@ -29,7 +29,7 @@ class HomeController < ApplicationController
 
     filtered_params[:per_page] = 32
     filtered_params[:sort_field] = "random()"
-    @images = Image.spotlight.paginate_and_sort(filtered_params)
+    @images = Image.public_access.not_hidden.spotlight.paginate_and_sort(filtered_params)
   end
 
   def browse
@@ -46,7 +46,7 @@ class HomeController < ApplicationController
     @current_views = IMAGE_SORT_VIEW[Image::SORT_OPTIONS[:spotlight]]
     filtered_params[:sort_direction] = ''
     filtered_params[:sort_field] = "random()"
-    @data = Image.spotlight.paginate_and_sort(filtered_params)
+    @data = Image.public_access.not_hidden.spotlight.paginate_and_sort(filtered_params)
     @mode = 'Spotlight'
     render :template => 'home/browse'
   end

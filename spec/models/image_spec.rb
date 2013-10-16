@@ -166,6 +166,19 @@ describe Image do
         Image.search_scope("pri").should == []
       end
     end
+
+    context "should not return result" do
+      it "when image is hidden by admin" do
+        img1 = create(:image, :keyword => "public", :hidden_by_admin => true)
+        Image.search_scope("Pub").should == []
+      end
+
+      it "when image belongs to a private gallery" do
+        img1 = create(:image, :keyword => "public")
+        img1.gallery.update_attribute(:permission, :private)
+        Image.search_scope("Pub").should == []
+      end
+    end
   end
 
   describe ".public_or_owner" do

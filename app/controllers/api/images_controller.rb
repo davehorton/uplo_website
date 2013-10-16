@@ -57,7 +57,7 @@ class Api::ImagesController < Api::BaseController
   def popular
     filtered_params[:sort_direction] = ''
     filtered_params[:sort_field] = "random()"
-    images = Image.spotlight
+    images = Image.public_access.not_hidden.spotlight
     images = images.where("images.id not in (?)", parsed_ids(params[:excluded_image_ids])) if params[:excluded_image_ids].present?
     images = images.includes(:gallery, :user).paginate_and_sort(filtered_params)
     render json: images, meta: { total: images.total_entries }

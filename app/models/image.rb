@@ -69,7 +69,7 @@ class Image < ActiveRecord::Base
   end
 
   def self.search_scope(query)
-    images = Image.scoped
+    images = Image.scoped.public_access.not_hidden
     if query.present?
       query = "#{query}%"
       images = images.where("images.name ILIKE (?) OR images.description ILIKE (?) OR images.keyword ILIKE (?)", query, query, query)
