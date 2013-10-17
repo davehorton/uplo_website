@@ -20,7 +20,7 @@
         .cell.left.preview
           .image-container.small.no-padding.left= image_tag image.url(:smallest), :class => 'image smallest'
           .item-info.text.black.line18.left
-            .name.text.bold.font12= image.name.humanize.truncate(40)
+            .name.text.bold.font12= formatted_image_name(image).truncate(40)
             - if (image.flagged? || image.removed?)
               .text.bold.font12{:style => "color:red"}Unavailable
             .edit-section

@@ -7,7 +7,7 @@
     %p= t("user_mailer.mail_greeting", :name => @user.fullname)
     %p
       - flag_type = @image.image_flags.first.try(:flag_type_string)
-      = t("user_mailer.message_flagged_image", :image_name => @image.name, :flag_reason => flag_type.try(:downcase))
+      = t("user_mailer.message_flagged_image", :image_name => formatted_image_name(@image), :flag_reason => flag_type.try(:downcase))
       %br
       = t("user_mailer.sub_message")
     %p= t("user_mailer.mail_end")

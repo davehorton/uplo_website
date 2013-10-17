@@ -34,7 +34,7 @@
               %li
                 = I18n.t("slideshow.picture_name")
               %li
-                = f.text_field :name, :value => @selected_image.name
+                = f.text_field :name, :value => formatted_image_name(@selected_image)
               %li
                 = I18n.t("slideshow.description")
               %li

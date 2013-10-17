@@ -10,13 +10,13 @@
         = t("user_mailer.message_reinstated_images")
       - else
         %span
-          = t("user_mailer.message_reinstated_image", :image_name => @image.name)
+          = t("user_mailer.message_reinstated_image", :image_name => formatted_image_name(@image))
         %span
           - image_link = url_for(:controller => "/images", 
               :action => "browse", 
               :id => @image.id,
               :only_path => false, 
               :host => DOMAIN)
-          = link_to(@image.name, image_link)
+          = link_to(formatted_image_name(@image), image_link)
 
     %p= t("user_mailer.mail_end")

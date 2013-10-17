@@ -29,7 +29,7 @@
       .image-container{:id => "image-container-#{image.id}", :class => image_css}
         - image_link = url_for(:controller => "/images", :action => "browse", :id => "#{image.id}")
         %a.image-link{:href => image_link}
-          = image_tag image.url(:thumb), class: "image-thumb image small", alt: image.name
+          = image_tag image.url(:thumb), class: "image-thumb image small", alt: formatted_image_name(image)
 
         .image-info
           - if image.promoted?
@@ -50,7 +50,7 @@
                 = hidden_field_tag(:authenticity_token, form_authenticity_token)
 
           .image-name
-            %a{:href => image_link, :title => image.name}= truncate(image.name.humanize, :length => 20)
+            %a{:href => image_link, :title => formatted_image_name(image)}= truncate(formatted_image_name(image), :length => 20)
           .username
             - author = image.user
             - author_profile = (author ? profile_path(:user_id => author.id) : '#')

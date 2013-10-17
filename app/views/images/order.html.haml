@@ -1,7 +1,7 @@
 - content_for :body_class, 'images'
 
 - content_for :top_content do
-  .text.black.bold.font16{ :style => 'margin-bottom:8px;' }= @image.name.humanize
+  .text.black.bold.font16{ :style => 'margin-bottom:8px;' }= formatted_image_name(@image)
 
 - content_for :right_content do
   - if @line_item.nil?

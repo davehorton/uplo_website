@@ -11,7 +11,7 @@
 - content_for :body_class, 'images'
 
 - content_for :right_content do
-  .text.black.font18.bold= @image.name.humanize
+  .text.black.font18.bold= formatted_image_name(@image)
   .line-separator
   - if current_user && current_user.admin?
     .text.black.font18.bold
@@ -56,7 +56,7 @@
       - (0...@images.length). each do |idx|
         - image = @images[idx]
         - url = url_for(:controller => "images", :action => "browse", :id => "#{image.id}")
-        .image-container.small{:id => "image-container-#{image.id}", :title=>"#{image.name.humanize}"}
+        .image-container.small{:id => "image-container-#{image.id}", :title=>"#{formatted_image_name(image)}"}
           %a{ :href => "#{url}" }
             = image_tag image.url(:small), :class => 'image small left'
 - if !@image.flagged?
@@ -75,7 +75,7 @@
     .image-container.medium.no-border.clearfix
       = image_tag(@image.url(:medium), :class => 'image medium',
                 'data-width' => @image.image.width,
-                'data-height' => @image.image.height, :alt => @image.name)
+                'data-height' => @image.image.height, :alt => formatted_image_name(@image))
   .actions.left
     .left
       #likes-list.like.left

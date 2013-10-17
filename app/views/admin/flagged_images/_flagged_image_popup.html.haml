@@ -6,7 +6,7 @@
     %div{:style => "background:white; width:100%; height:auto"}
     #flagged_image_popup
       .image_name.text.black.font18.bold
-        = flag.image.name
+        = formatted_image_name(flag.image.name)
       %hr
       .user_info_wrapper
         .user_photo.left

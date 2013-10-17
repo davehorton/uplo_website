@@ -4,7 +4,7 @@
   .info-panel.left
     .info-line.left
       .label.text.black.bold.font12 Photo Name
-      = text_field :image, :name, :value => image.name, :style => "font-size:12px; margin-top:5px; padding-top:2px; padding-bottom:2px"
+      = text_field :image, :name, :value => formatted_image_name(image), :style => "font-size:12px; margin-top:5px; padding-top:2px; padding-bottom:2px"
     .info-line.left
       .label.text.black.bold.font12{:style => "margin-bottom:5px;" } Move to Another Gallery
       = select :image, :gallery_id, gallery_options(current_user, image.gallery_id), { class: "left" }

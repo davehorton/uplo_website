@@ -9,7 +9,7 @@
       - if @image.blank?
         = t("user_mailer.message_removed_images")
       - else
-        = t("user_mailer.message_removed_image", :image_name => @image.name)
+        = t("user_mailer.message_removed_image", :image_name => formatted_image_name(@image))
       %br
       = t("user_mailer.sub_message")
     %p= t("user_mailer.mail_end")
