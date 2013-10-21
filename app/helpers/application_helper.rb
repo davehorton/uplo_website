@@ -228,8 +228,9 @@ module ApplicationHelper
     Rails.env.production? ? "uploapp" : "uplo"
   end
 
-  def formatted_image_name(image)
-    image.name.humanize.titleize
+  def formatted_image_name(image, truncation_length = nil)
+    name = image.name.humanize.titleize
+    truncation_length ? name.truncate(truncation_length) : name
   end
 
 end

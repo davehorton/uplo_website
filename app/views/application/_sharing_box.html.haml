@@ -3,7 +3,7 @@
 - id = 0
 - url = "gallery-thumb-180.jpg"
 - if @image
-  - name = formatted_image_name(@image).truncate(20)
+  - name = formatted_image_name(@image, 20)
   - owner_name = @image.username.truncate(15)
   - id = @image.id
   - url = @image.url(:thumb)

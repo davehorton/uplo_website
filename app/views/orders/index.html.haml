@@ -82,7 +82,7 @@
           - line_item = @order.line_items[idx]
           - subtotal += line_item.price * line_item.quantity
           .block.text.black.line22.left{:style => "#{'padding-top:0;' if idx==0}"}
-            .name.line.text.bold.line12.left= formatted_image_name(line_item.image).truncate(36)
+            .name.line.text.bold.line12.left= formatted_image_name(line_item.image, 36)
             .line.no-background.left
               .text.font10.left QTY
               .text.bold.font13.right= line_item.quantity

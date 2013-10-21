@@ -50,7 +50,7 @@
                 = hidden_field_tag(:authenticity_token, form_authenticity_token)
 
           .image-name
-            %a{:href => image_link, :title => formatted_image_name(image)}= truncate(formatted_image_name(image), :length => 20)
+            %a{:href => image_link, :title => formatted_image_name(image)}= formatted_image_name(image, 20)
           .username
             - author = image.user
             - author_profile = (author ? profile_path(:user_id => author.id) : '#')
