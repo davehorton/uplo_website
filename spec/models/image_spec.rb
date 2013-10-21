@@ -440,7 +440,7 @@ describe Image do
     end
 
     it "set name" do
-      image.name.should == "test"
+      image.name.should == "test_image"
     end
 
     it "should set s3_expire_time" do

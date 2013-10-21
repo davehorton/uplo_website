@@ -4,7 +4,7 @@ FactoryGirl.define do
     gallery
     user { gallery.user } # intentional denormalization
     name { Faker::Name.name }
-    image_file_name { 'test.jpg' }
+    image_file_name { 'test_image.jpg' }
     image_content_type { 'image/jpeg' }
     image_file_size { 128 }
 

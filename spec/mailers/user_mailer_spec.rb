@@ -74,7 +74,7 @@ describe UserMailer do
     end
 
     it "renders the body" do
-      mail.body.encoded.should have_link("#{image.name}", :href => browse_image_url(image))
+      mail.body.encoded.should have_link("Test Image", :href => browse_image_url(image))
     end
   end
 
@@ -92,7 +92,7 @@ describe UserMailer do
     end
 
     it "renders the body" do
-      mail.body.encoded.should have_content("Hi #{user.fullname}, Your image \"test\" has been removed by the administrator. Please contact support@uplo.com if you have any questions. Best regards.")
+      mail.body.encoded.should have_content("Hi #{user.fullname}, Your image \"Test Image\" has been removed by the administrator. Please contact support@uplo.com if you have any questions. Best regards.")
 
     end
   end
