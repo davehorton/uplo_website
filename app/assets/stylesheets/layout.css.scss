@@ -560,6 +560,9 @@ textarea { padding-top:5px; }
     width: 16px;
     height: 16px;
     font-size: 12px;
+    &.disabled {
+      background: image-url("icon-previous-page_disabled_16x16.png") no-repeat scroll center center transparent;
+    }
   }
 
   .next_page{
@@ -569,6 +572,9 @@ textarea { padding-top:5px; }
     width: 16px;
     height: 16px;
     font-size: 12px;
+    &.disabled {
+      background: image-url("icon-next-page_disabled_16x16.png") no-repeat scroll center center transparent;
+    }
   }
 
   &.text {
