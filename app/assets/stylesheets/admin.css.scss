@@ -416,10 +416,21 @@ $color-input-border: #cdcdcd;
   border: 1px solid #ddd;
   padding: 6px;
   vertical-align: top;
+  &.seller {
+    a {
+      font-size: 12px;
+    }
+  }
 }
+
 #order_details tr > td:first-child { font-weight: bold; }
 #order_details table { width:100%; }
-#order_details table td { text-align:center; }
+#order_details table td { 
+  text-align:center; 
+  &.seller {
+    text-align: left;
+  }
+}
 
 /* Products */
 
@@ -460,4 +471,3 @@ $color-input-border: #cdcdcd;
   border: 1px solid #999;
   padding: 10px;
 }
-  

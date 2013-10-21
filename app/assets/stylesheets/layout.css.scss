@@ -554,17 +554,21 @@ textarea { padding-top:5px; }
   a:hover { font-weight: bold; }
 
   .previous_page{
-    background: image-url("icon-previous-page.png") no-repeat scroll center center transparent;
+    background: image-url("icon-previous-page_16x16.png") no-repeat scroll center center transparent;
     margin-right: 10px;
     display: inline-block;
-    width: 8px;
+    width: 16px;
+    height: 16px;
+    font-size: 12px;
   }
 
   .next_page{
-    background: image-url("icon-next-page.png") no-repeat scroll center center transparent;
+    background: image-url("icon-next-page_16x16.png") no-repeat scroll center center transparent;
     margin-left: 10px;
     display: inline-block;
-    width: 8px;
+    width: 16px;
+    height: 16px;
+    font-size: 12px;
   }
 
   &.text {
