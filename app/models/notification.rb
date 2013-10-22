@@ -48,7 +48,7 @@ class Notification < ActiveRecord::Base
         :data => { :type => "commented_on", :id => comment.image_id.to_s }
       }
       Urbanairship.push(notification)
-      UserMailer.comment_notification_email(receiver, comment, by_user).deliver
+      UserMailer.delay.comment_notification_email(receiver, comment, by_user)
     end
   end
 
