@@ -13,10 +13,12 @@ class Product < ActiveRecord::Base
   validates :tier2_price, presence: true
   validates :tier3_price, presence: true
   validates :tier4_price, presence: true
+  validates :tier5_price, presence: true
   validates :tier1_commission, presence: true
   validates :tier2_commission, presence: true
   validates :tier3_commission, presence: true
   validates :tier4_commission, presence: true
+  validates :tier5_commission, presence: true
 
   default_scope joins(:size, :moulding).order('sizes.height, sizes.width, mouldings.id').readonly(false)
   scope :private_gallery, where(private_gallery: true)

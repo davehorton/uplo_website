@@ -21,6 +21,8 @@
     <th>Tier 3<br/>Comm.</th>
     <th>Tier 4<br/>Price</th>
     <th>Tier 4<br/>Comm.</th>
+    <th>Tier 5<br/>Price</th>
+    <th>Tier 5<br/>Comm.</th>
     <th>Public</th>
     <th>Private</th>
     <th></th>
@@ -46,6 +48,8 @@
     <td><%= number_to_percentage product.tier3_commission, precision: 1 %></td>
     <td><%= number_to_currency product.tier4_price %></td>
     <td><%= number_to_percentage product.tier4_commission, precision: 1 %></td>
+    <td><%= number_to_currency product.tier5_price %></td>
+    <td><%= number_to_percentage product.tier5_commission, precision: 1 %></td>
     <td><%= yes_or_no product.public_gallery %></td>
     <td><%= yes_or_no product.private_gallery %></td>
     <td>
