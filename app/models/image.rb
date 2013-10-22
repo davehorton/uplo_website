@@ -339,6 +339,7 @@ class Image < ActiveRecord::Base
             tier2: product.pricing_hash("tier2"),
             tier3: product.pricing_hash("tier3"),
             tier4: product.pricing_hash("tier4")
+            tier4: product.pricing_hash("tier5")
           }
         end
       end
