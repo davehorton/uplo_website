@@ -38,7 +38,8 @@ class Notification < ActiveRecord::Base
 
   def self.deliver_comment_notification(comment)
     by_user = comment.user
-    receivers =  User.where(id: comment.image.comments.where("user_id != ?", by_user.id).pluck(:user_id).uniq).select { |u| u.device_tokens.present? }
+    owner = comment.image.user
+    receivers =  User.where(id: comment.image.comments.where("user_id != ? AND user_id != ?", by_user.id, owner.id).pluck(:user_id).uniq).select { |u| u.device_tokens.present? }
     receivers.each do |receiver|
       notification = {
         :schedule_for => [30.second.from_now],
@@ -47,6 +48,7 @@ class Notification < ActiveRecord::Base
         :data => { :type => "commented_on", :id => comment.image_id.to_s }
       }
       Urbanairship.push(notification)
+      UserMailer.comment_notification_email(receiver, comment, by_user).deliver
     end
   end
 
