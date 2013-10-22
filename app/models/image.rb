@@ -376,7 +376,10 @@ class Image < ActiveRecord::Base
     end
 
     def ensure_not_associated_with_an_order
-      return false if orders.any?
+       if orders.any?
+         self.update_attribute(:removed, true)
+         return false
+       end
     end
 
     def s3_expire_time
