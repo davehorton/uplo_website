@@ -481,4 +481,22 @@ describe Image do
       end
     end
   end
+
+  describe "#ensure_not_associated_with_an_order" do
+    context "when orders present" do
+      it "should update removed attribute" do
+        order = create(:order)
+        line_item = create(:line_item, :image => image, :order => order)
+        image.destroy
+        image.removed.should be_true
+      end
+    end
+
+    context "when orders not present" do
+      it "should destroy image" do
+        image
+        expect { image.destroy }.to change(Image, :count).by(-1)
+      end
+    end
+  end
 end
