@@ -377,8 +377,8 @@ class Image < ActiveRecord::Base
 
     def ensure_not_associated_with_an_order
       if orders.any?
-        self.update_attribute(:removed, true)
-        self.line_items.destroy_all
+        self.update_column(:removed, true)
+        self.line_items.in_cart.destroy_all
         return false
       end
     end

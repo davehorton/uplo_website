@@ -24,6 +24,10 @@ class LineItem < ActiveRecord::Base
 
   before_save :calculate_totals
 
+  def self.in_cart
+    joins(:order).where("orders.status in (?)", ["shopping", "checkout"])
+  end
+
   def self.sold_items
     LineItem.joins(:image, :order).where(orders: { transaction_status: Order::TRANSACTION_STATUS[:complete] })
   end
