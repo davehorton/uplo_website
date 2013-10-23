@@ -6,6 +6,7 @@ describe Image do
   let(:rectangular_size) { create(:size, width: 8, height: 10) }
   let(:square_product) { create(:product, size: square_size) }
   let(:rectangular_product) { create(:product, size: rectangular_size) }
+  let!(:recent_order) { create(:order, :status => "shopping") }
 
   before do
     square_size
@@ -482,20 +483,25 @@ describe Image do
     end
   end
 
-  describe "#ensure_not_associated_with_an_order" do
-    context "when orders present" do
-      it "should update removed attribute" do
-        order = create(:order)
-        line_item = create(:line_item, :image => image, :order => order)
-        image.destroy
+  describe "#destroy" do
+    context "when purchased orders present" do
+      it "should update removed attribute and destroy line items in cart" do
+        finalized_order = create(:order, :status => "completed")
+        line_item = create(:line_item, :image => image, :order => finalized_order)
+        new_line_item = create(:line_item, :image => image, :order => recent_order)
+        expect { image.destroy }.not_to change(Image, :count).by(-1)
         image.removed.should be_true
+        image.line_items.should == [line_item]
       end
     end
 
-    context "when orders not present" do
-      it "should destroy image" do
+    context "when purchased orders not present" do
+      it "should update removed attribute" do
         image
+        order = create(:order, :status => "shopping")
+        line_item = create(:line_item, :image => image, :order => order)
         expect { image.destroy }.to change(Image, :count).by(-1)
+        image.line_items.should == []
       end
     end
   end

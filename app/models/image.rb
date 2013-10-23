@@ -9,11 +9,14 @@ class Image < ActiveRecord::Base
   belongs_to :gallery,     :touch => true
   belongs_to :public_gallery, class_name: 'Gallery', foreign_key: 'gallery_id', conditions: { permission: Permission::Public.new.to_s }
 
-  has_many :comments,      :dependent => :destroy
-  has_many :image_flags,   :dependent => :destroy
-  has_many :image_likes,   :dependent => :destroy
-  has_many :image_tags,    :dependent => :destroy
-  has_many :line_items
+  with_options dependent: :destroy do |assoc|
+    assoc.has_many :comments
+    assoc.has_many :image_flags
+    assoc.has_many :image_likes
+    assoc.has_many :image_tags
+    assoc.has_many :line_items
+  end
+
   has_many :orders,        :through => :line_items
   has_many :tags,          :through => :image_tags
   has_many :users,         :through => :image_likes
@@ -35,7 +38,6 @@ class Image < ActiveRecord::Base
                  :set_tier,
                  :set_user,
                  :set_as_cover_if_first_one
-  before_destroy :ensure_not_associated_with_an_order
 
   default_scope order('images.id desc')
   scope :removed,     where(removed: true)
@@ -345,6 +347,17 @@ class Image < ActiveRecord::Base
     end
   end
 
+  # override the AR destroy method
+  def destroy
+    if orders.purchased.any?
+      self.update_column(:removed, true)
+      self.line_items.in_cart.destroy_all
+      return true
+    else
+      super
+    end
+  end
+
   protected
 
     def minimum_dimensions_are_met
@@ -372,14 +385,6 @@ class Image < ActiveRecord::Base
 
         min_size = product.first.size
         errors.add(:base, "A #{format_label} image being uploaded to a #{permission_label} gallery must be at least #{min_size.minimum_recommended_resolution[:w].to_i} x #{min_size.minimum_recommended_resolution[:h].to_i} pixels.")
-      end
-    end
-
-    def ensure_not_associated_with_an_order
-      if orders.any?
-        self.update_column(:removed, true)
-        self.line_items.in_cart.destroy_all
-        return false
       end
     end
 
