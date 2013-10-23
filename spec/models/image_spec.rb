@@ -6,7 +6,8 @@ describe Image do
   let(:rectangular_size) { create(:size, width: 8, height: 10) }
   let(:square_product) { create(:product, size: square_size) }
   let(:rectangular_product) { create(:product, size: rectangular_size) }
-  let!(:recent_order) { create(:order, :status => "shopping") }
+  let(:recent_order) { create(:order, :status => "shopping") }
+  let(:finalized_order) { create(:order, :status => "completed") }
 
   before do
     square_size
@@ -485,23 +486,32 @@ describe Image do
 
   describe "#destroy" do
     context "when purchased orders present" do
-      it "should update removed attribute and destroy line items in cart" do
-        finalized_order = create(:order, :status => "completed")
+      it "should remove image and not destroy it" do
         line_item = create(:line_item, :image => image, :order => finalized_order)
-        new_line_item = create(:line_item, :image => image, :order => recent_order)
         expect { image.destroy }.not_to change(Image, :count).by(-1)
         image.removed.should be_true
-        image.line_items.should == [line_item]
+      end
+
+      it "should remove line items only in cart" do
+        line_item = create(:line_item, :image => image, :order => recent_order)
+        expect { image.destroy }.to change(LineItem, :count).by(-1)
+      end
+
+      it "should not remove line items in placed orders" do
+        finalized_line_item = create(:line_item, :image => image, :order => finalized_order)
+        expect { image.destroy }.not_to change(LineItem, :count).by(-1)
       end
     end
 
     context "when purchased orders not present" do
-      it "should update removed attribute" do
-        image
-        order = create(:order, :status => "shopping")
-        line_item = create(:line_item, :image => image, :order => order)
+      it "should destroy image" do
+        line_item = create(:line_item, :image => image, :order => recent_order)
         expect { image.destroy }.to change(Image, :count).by(-1)
-        image.line_items.should == []
+      end
+
+      it "should destroy associated line items" do
+        line_item = create(:line_item, :image => image, :order => recent_order)
+        expect { image.destroy }.to change(LineItem, :count).by(-1)
       end
     end
   end
