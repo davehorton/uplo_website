@@ -228,7 +228,7 @@ describe Image do
 
   describe ".popular_with_pagination" do
     context "with sort expression" do
-      it "should display output" do
+      it "should display output", :flickering do
         images = create_list(:image, 10)
         Image.popular_with_pagination({ :page => 1, :per_page => 5}).should == images.reverse.first(5)
       end
