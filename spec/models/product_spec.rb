@@ -8,6 +8,7 @@ describe Product do
   it { should belong_to(:size) }
 
   it { should have_many(:product_options) }
+  it { should have_many(:line_items) }
 
   it { should validate_presence_of(:moulding) }
   it { should validate_presence_of(:size) }
