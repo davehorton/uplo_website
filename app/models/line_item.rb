@@ -23,6 +23,11 @@ class LineItem < ActiveRecord::Base
   delegate :name, :to => :image, :prefix => true
 
   before_save :calculate_totals
+  after_destroy :compute_order_totals
+
+  def self.in_cart
+    joins(:order).where("orders.status in (?)", ["shopping", "checkout"])
+  end
 
   def self.sold_items
     LineItem.joins(:image, :order).where(orders: { transaction_status: Order::TRANSACTION_STATUS[:complete] })
@@ -79,6 +84,10 @@ class LineItem < ActiveRecord::Base
       self.price = product.price_for_tier(image.tier_id, image.owner?(order.user))
       self.tax   = self.calculate_tax
       self.commission_percent = product.commission_for_tier(image.tier_id) if self.image.gallery.commission_percent?
+    end
+
+    def compute_order_totals
+      self.order.compute_totals
     end
 
 end
