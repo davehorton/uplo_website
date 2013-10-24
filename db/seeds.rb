@@ -22,52 +22,91 @@ canvas = Moulding.create(name: 'Canvas')
 plexi = Moulding.create(name: 'Plexi')
 
 puts 'Creating products for private galleries'
-p = Product.create(size: size5x5, moulding: print, tier1_price: 10, tier2_price: 20, tier3_price: 30, tier4_price: 40, tier1_commission: 30, tier2_commission: 35, tier3_commission: 40, tier4_commission: 50, private_gallery: true, public_gallery: false)
+p = Product.create(size: size5x5, moulding: print, tier1_price: 10, tier2_price: 20, tier4_price: 30, tier5_price: 40, tier1_commission: 30, tier2_commission: 35, tier4_commission: 40, tier5_commission: 50, private_gallery: true, public_gallery: false)
 p.product_options.create(description: 'Borderless')
 
-p = Product.create(size: size5x5, moulding: canvas, tier1_price: 20, tier2_price: 30, tier3_price: 40, tier4_price: 50, tier1_commission: 30, tier2_commission: 35, tier3_commission: 40, tier4_commission: 50, private_gallery: true, public_gallery: false)
+p = Product.create(size: size5x5, moulding: canvas, tier1_price: 20, tier2_price: 30, tier4_price: 40, tier5_price: 50, tier1_commission: 30, tier2_commission: 35, tier4_commission: 40, tier5_commission: 50, private_gallery: true, public_gallery: false)
 p.product_options.create(description: 'Borderless')
 
-p = Product.create(size: size5x7, moulding: print, tier1_price: 10, tier2_price: 20, tier3_price: 30, tier4_price: 40, tier1_commission: 30, tier2_commission: 35, tier3_commission: 40, tier4_commission: 50, private_gallery: true, public_gallery: false)
+p = Product.create(size: size5x7, moulding: print, tier1_price: 10, tier2_price: 20, tier4_price: 30, tier5_price: 40, tier1_commission: 30, tier2_commission: 35, tier4_commission: 40, tier5_commission: 50, private_gallery: true, public_gallery: false)
 p.product_options.create(description: 'Borderless')
 
-p = Product.create(size: size5x7, moulding: canvas, tier1_price: 20, tier2_price: 30, tier3_price: 40, tier4_price: 50, tier1_commission: 30, tier2_commission: 35, tier3_commission: 40, tier4_commission: 50, private_gallery: true, public_gallery: false)
+p = Product.create(size: size5x7, moulding: canvas, tier1_price: 20, tier2_price: 30, tier4_price: 40, tier5_price: 50, tier1_commission: 30, tier2_commission: 35, tier4_commission: 40, tier5_commission: 50, private_gallery: true, public_gallery: false)
 p.product_options.create(description: 'Borderless')
+
+
+
 
 puts 'Creating products for public galleries'
-p = Product.create(size: size8x8, moulding: print, tier1_price: 20, tier2_price: 30, tier3_price: 40, tier4_price: 50, tier1_commission: 30, tier2_commission: 35, tier3_commission: 40, tier4_commission: 50)
+p = Product.create(size: size8x8, moulding: print, tier1_price: 20, tier2_price: 30, tier4_price: 40, tier5_price: 50, tier1_commission: 30, tier2_commission: 35, tier4_commission: 40, tier5_commission: 50)
 p.product_options.create(description: 'Borderless')
 p.product_options.create(description: '1/4 Border', border_top_bottom: 30.0)
 
-p = Product.create(size: size8x8, moulding: luster, tier1_price: 20, tier2_price: 30, tier3_price: 40, tier4_price: 50, tier1_commission: 30, tier2_commission: 35, tier3_commission: 40, tier4_commission: 50)
+p = Product.create(size: size8x8, moulding: luster, tier1_price: 20, tier2_price: 30, tier4_price: 40, tier5_price: 50, tier1_commission: 30, tier2_commission: 35, tier4_commission: 40, tier5_commission: 50)
 p.product_options.create(description: 'Borderless')
 p.product_options.create(description: '1/4 Border', border_top_bottom: 20.0)
 
-p = Product.create(size: size8x8, moulding: canvas, tier1_price: 50, tier2_price: 80, tier3_price: 90, tier4_price: 100, tier1_commission: 30, tier2_commission: 35, tier3_commission: 40, tier4_commission: 50)
+p = Product.create(size: size8x8, moulding: canvas, tier1_price: 50, tier2_price: 80, tier4_price: 90, tier5_price: 100, tier1_commission: 30, tier2_commission: 35, tier4_commission: 40, tier5_commission: 50)
 p.product_options.create(description: 'Borderless')
 
-p = Product.create(size: size8x8, moulding: plexi, tier1_price: 20, tier2_price: 30, tier3_price: 40, tier4_price: 50, tier1_commission: 30, tier2_commission: 35, tier3_commission: 40, tier4_commission: 50)
+p = Product.create(size: size8x8, moulding: plexi, tier1_price: 20, tier2_price: 30, tier4_price: 40, tier5_price: 50, tier1_commission: 30, tier2_commission: 35, tier4_commission: 40, tier5_commission: 50)
 p.product_options.create(description: 'Borderless')
 
-p = Product.create(size: size8x10, moulding: print, tier1_price: 20, tier2_price: 30, tier3_price: 40, tier4_price: 50, tier1_commission: 30, tier2_commission: 35, tier3_commission: 40, tier4_commission: 50)
-p.product_options.create(description: 'Borderless')
-p.product_options.create(description: '1/4 Border', border_top_bottom: 20.0)
 
-p = Product.create(size: size8x10, moulding: luster, tier1_price: 20, tier2_price: 30, tier3_price: 40, tier4_price: 50, tier1_commission: 30, tier2_commission: 35, tier3_commission: 40, tier4_commission: 50)
+
+p = Product.create(size: size8x10, moulding: print, tier1_price: 32, tier2_price: 60, tier3_price: 150, tier4_price: 240, tier5_price: 720, tier1_commission: 30, tier2_commission: 35, tier3_commission: 35, tier4_commission: 40, tier5_commission: 50)
 p.product_options.create(description: 'Borderless')
 p.product_options.create(description: '1/4 Border', border_top_bottom: 20.0)
 
-p = Product.create(size: size8x10, moulding: canvas, tier1_price: 50, tier2_price: 80, tier3_price: 90, tier4_price: 100, tier1_commission: 30, tier2_commission: 35, tier3_commission: 40, tier4_commission: 50)
+
+p = Product.create(size: size8x10, moulding: luster, tier1_price: 32, tier2_price: 60, tier3_price: 150, tier4_price: 240, tier5_price: 720, tier1_commission: 30, tier2_commission: 35, tier3_commission: 35, tier4_commission: 40, tier5_commission: 50)
+p.product_options.create(description: 'Borderless')
+p.product_options.create(description: '1/4 Border', border_top_bottom: 20.0)
+
+p = Product.create(size: size8x10, moulding: canvas, tier1_price: 50, tier2_price: 80, tier3_price: 150, tier4_price: 320, tier5_price: 960, tier1_commission: 30, tier2_commission: 35, tier3_commission: 35, tier4_commission: 40, tier5_commission: 50)
 p.product_options.create(description: 'Borderless')
 
-p = Product.create(size: size8x10, moulding: plexi, tier1_price: 60, tier2_price: 80, tier3_price: 90, tier4_price: 100, tier1_commission: 30, tier2_commission: 35, tier3_commission: 40, tier4_commission: 50)
+p = Product.create(size: size8x10, moulding: plexi, tier1_price: 85, tier2_price: 200, tier3_price: 300, tier4_price: 400, tier5_price: 1200, tier1_commission: 30, tier2_commission: 35, tier3_commission: 35, tier4_commission: 40, tier5_commission: 50)
 p.product_options.create(description: 'Borderless')
 
-p = Product.create(size: size24x36, moulding: print, tier1_price: 300, tier2_price: 600, tier3_price: 1000, tier4_price: 5000, tier1_commission: 30, tier2_commission: 35, tier3_commission: 40, tier4_commission: 50)
+
+
+p = Product.create(size: size12x16, moulding: plexi, tier1_price: 175, tier2_price: 350, tier3_price: 550, tier4_price: 800, tier5_price: 2400, tier1_commission: 30, tier2_commission: 35, tier3_commission: 35, tier4_commission: 40, tier5_commission: 50)
+p.product_options.create(description: 'Borderless')
+p.product_options.create(description: '1/4 Border', border_top_bottom: 20.0)
+
+p = Product.create(size: size12x16, moulding: canvas, tier1_price: 100, tier2_price: 200, tier3_price: 400, tier4_price: 800, tier5_price: 2400, tier1_commission: 30, tier2_commission: 35, tier3_commission: 35, tier4_commission: 40, tier5_commission: 50)
+p.product_options.create(description: 'Borderless')
+
+p = Product.create(size: size12x16, moulding: print, tier1_price: 80, tier2_price: 200, tier3_price: 400, tier4_price: 800, tier5_price: 3000, tier1_commission: 30, tier2_commission: 35, tier3_commission: 35, tier4_commission: 40, tier5_commission: 50)
+p.product_options.create(description: 'Borderless')
+
+
+
+
+p = Product.create(size: size20x24, moulding: plexi, tier1_price: 250, tier2_price: 600, tier3_price: 1000, tier4_price: 1600, tier5_price: 4800, tier1_commission: 30, tier2_commission: 35, tier3_commission: 35, tier4_commission: 40, tier5_commission: 50)
+p.product_options.create(description: 'Borderless')
+p.product_options.create(description: '1/4 Border', border_top_bottom: 20.0)
+
+p = Product.create(size: size20x24, moulding: canvas, tier1_price: 200, tier2_price: 400, tier3_price: 600, tier4_price: 1000, tier5_price: 4800, tier1_commission: 30, tier2_commission: 35, tier3_commission: 35, tier4_commission: 40, tier5_commission: 50)
+p.product_options.create(description: 'Borderless')
+
+p = Product.create(size: size20x24, moulding: print, tier1_price: 175, tier2_price: 300, tier3_price: 800, tier4_price: 1200, tier5_price: 5000, tier1_commission: 30, tier2_commission: 35, tier3_commission: 35, tier4_commission: 40, tier5_commission: 50)
+p.product_options.create(description: 'Borderless')
+
+
+
+
+
+
+p = Product.create(size: size24x36, moulding: print, tier1_price: 200, tier2_price: 800, tier3_price: 1100, tier4_price: 1500, tier5_price: 6000, tier1_commission: 30, tier2_commission: 35, tier3_commission: 35, tier4_commission: 40, tier5_commission: 50)
 p.product_options.create(description: 'Borderless')
 p.product_options.create(description: '1/4 Border', border_top_bottom: 30.0)
 
-p = Product.create(size: size24x36, moulding: canvas, tier1_price: 500, tier2_price: 800, tier3_price: 1500, tier4_price: 7500, tier1_commission: 30, tier2_commission: 35, tier3_commission: 40, tier4_commission: 50)
+p = Product.create(size: size24x36, moulding: canvas, tier1_price: 300, tier2_price: 600, tier3_price: 1000, tier4_price: 1450, tier5_price: 5500, tier1_commission: 30, tier2_commission: 35, tier3_commission: 35, tier4_commission: 40, tier5_commission: 50)
+p.product_options.create(description: 'Borderless')
+
+p = Product.create(size: size24x36, moulding: plexi, tier1_price: 350, tier2_price: 1000, tier3_price: 1500, tier4_price: 2000, tier5_price: 5500, tier1_commission: 30, tier2_commission: 35, tier3_commission: 35, tier4_commission: 40, tier5_commission: 50)
 p.product_options.create(description: 'Borderless')
 
 puts "Admin login: admin/secret"
