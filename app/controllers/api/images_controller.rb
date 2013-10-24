@@ -194,8 +194,13 @@ class Api::ImagesController < Api::BaseController
 
   # GET /api/images/:id/pricing
   def pricing
-    image = current_user.images.find(params[:id])
-    render :json => image.pricing_tiers
+    image = if params[:id].present?
+              current_user.images.find(params[:id])
+            elsif [params[:gallery_id], params[:width], params[:height]].all?(&:present?)
+              Image.new(gallery_id: params[:gallery_id], tmp_width: params[:width], tmp_height: params[:height])
+            end
+
+    render :json => image.try(:pricing_tiers) || {}
   end
 
   protected

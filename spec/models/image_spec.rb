@@ -364,6 +364,21 @@ describe Image do
         image.available_products.should == [square_product]
       end
     end
+
+    context "for new images, when tmp_height, tmp_width and gallery_id is present" do
+      it "with public gallery should return appropriate products" do
+        image = create(:image, square_aspect_ratio: true)
+        Image.new(tmp_width: image.image.width, tmp_height: image.image.height, gallery_id: image.gallery_id)
+             .available_products.should == [square_product]
+      end
+
+      it "with public gallery should return appropriate products" do
+        image = create(:image, square_aspect_ratio: false)
+        Image.new(tmp_width: image.image.width, tmp_height: image.image.height, gallery_id: image.gallery_id)
+             .available_products.should == [rectangular_product]
+      end
+
+    end
   end
 
   describe "#available_sizes" do
