@@ -63,11 +63,13 @@ Spork.prefork do
 
     config.include Aliases
     config.include Capybara::DSL
-    config.include Devise::TestHelpers, :type => :controller
     config.include FactoryGirl::Syntax::Methods
     config.include Paperclip::Shoulda::Matchers
     config.include Warden::Test::Helpers
     config.include IntegrationHelpers
+
+    config.include Devise::TestHelpers, :type => :controller
+    config.extend ControllerMacros, :type => :controller
 
     config.before(:suite) do
       DatabaseCleaner.clean_with(:truncation)

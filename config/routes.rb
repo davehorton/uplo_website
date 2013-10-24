@@ -253,19 +253,20 @@ Uplo::Application.routes.draw do
           get :by_friends
           get :liked
           get :popular
-          post :get_by_id
           get :search
           get :search_by_id
+          get :pricing
+          post :get_by_id
         end
 
         member do
-          post :flag
-          post :like
           get  :pricing
           get  :print_image_preview
           get  :purchases
           get  :sale_chart
           get  :total_sales
+          post :flag
+          post :like
           post :unlike
         end
 
