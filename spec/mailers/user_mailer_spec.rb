@@ -102,7 +102,7 @@ describe UserMailer do
     let(:mail) { UserMailer.comment_notification_email_to_owner(comment) }
 
     it "should match email details" do
-      mail.subject.should eq("Comment from #{comment.user.first_name}")
+      mail.subject.should eq("UPLO - Comment from #{comment.user.first_name}")
       mail.to.should == [image.user.email]
     end
 
@@ -118,7 +118,7 @@ describe UserMailer do
     let(:mail) { UserMailer.comment_notification_email(another_comment.user, comment, comment.user) }
 
     it "should match email details" do
-      mail.subject.should eq("Comment from #{comment.user.first_name}")
+      mail.subject.should eq("UPLO - Comment from #{comment.user.first_name}")
       mail.to.should == [another_comment.user.email]
     end
 
