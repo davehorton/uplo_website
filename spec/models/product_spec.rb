@@ -16,11 +16,13 @@ describe Product do
   it { should validate_presence_of(:tier2_price) }
   it { should validate_presence_of(:tier3_price) }
   it { should validate_presence_of(:tier4_price) }
+  it { should validate_presence_of(:tier5_price) }
   it { should validate_presence_of(:tier1_commission) }
   it { should validate_presence_of(:tier2_commission) }
   it { should validate_presence_of(:tier3_commission) }
   it { should validate_presence_of(:tier3_commission) }
   it { should validate_presence_of(:tier4_commission) }
+  it { should validate_presence_of(:tier5_commission) }
 
   it { should accept_nested_attributes_for(:product_options) }
 
