@@ -1,3 +1,2 @@
-<p> <strong><%= @author.name_for_notification %></strong> has commented on your image <%= formatted_image_name(@comment.image) %></p>
-<p><%= @author.name_for_notification %> wrote: <%= @comment.description %></p>
-<p>Reply to this email to comment on this photo.</p>
+<p><%= @comment.description %></p>
+<p><%= image_tag(@comment.image.url(:thumb), :alt => "img") %></p>
