@@ -1,13 +1,14 @@
 require 'spec_helper'
 
 describe Product do
-  let(:product) { create(:product) }
+  let(:product) { create(:product, :tier1_price => 400) }
   let(:size) { create(:size) }
 
   it { should belong_to(:moulding) }
   it { should belong_to(:size) }
 
   it { should have_many(:product_options) }
+  it { should have_many(:line_items) }
 
   it { should validate_presence_of(:moulding) }
   it { should validate_presence_of(:size) }
@@ -82,25 +83,25 @@ describe Product do
 
   describe "#price_for_tier" do
     it "should return price for appropriate tier" do
-      product1  = create(:product, :tier4_price => 500.0)
+      product.update_attribute(:tier4_price, 500.0)
       img = create(:image, :tier_id => 4)
-      product1.price_for_tier(img.tier_id).should == 500.0
+      product.price_for_tier(img.tier_id).should == 500.0
     end
 
     context "when user owns image" do
       it "subtracts commission from total price" do
-        product1  = create(:product, :tier4_price => 500.0, :tier4_commission => 10)
+        product.update_attributes(:tier4_price => 500.0, :tier4_commission => 10)
         img = create(:image, :tier_id => 4)
-        product1.price_for_tier(img.tier_id, img.user).should == 450.0
+        product.price_for_tier(img.tier_id, img.user).should == 450.0
       end
     end
   end
 
   describe "#commission_for_tier" do
     it "should return commission for appropriate tier" do
-      product1  = create(:product, :tier4_commission => 100.0)
+      product.update_attribute(:tier4_commission, 100.0)
       img = create(:image, :tier_id => 4)
-      product1.commission_for_tier(img.tier_id).should == 100.0
+      product.commission_for_tier(img.tier_id).should == 100.0
     end
   end
 
@@ -122,6 +123,27 @@ describe Product do
   describe "display_name" do
     it "should return proper name" do
       product.display_name.should == "#{product.size.to_name} - #{product.moulding.name}"
+    end
+  end
+
+
+  describe "#recalculate_line_items" do
+    context "with purchased orders" do
+      it "should not change the price for finalized line items" do
+        order = create(:order, :status => "completed")
+        finalized_line_item = create(:line_item, :order => order, :product => product)
+        product.update_attribute(:tier1_price, 100)
+        finalized_line_item.price.to_f.should == 400
+      end
+    end
+
+    context "without purchased orders" do
+      it "should change the price for line items in cart and update order total" do
+        order = create(:order, :status => "shopping")
+        recent_line_item = create(:line_item, :order => order, :product => product)
+        product.update_attribute(:tier1_price, 100)
+        recent_line_item.reload.price.to_f.should == 100
+      end
     end
   end
 

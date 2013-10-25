@@ -7,15 +7,15 @@
 
   %h2 Order Date: #{l @order.transaction_date, format: :default}
   .line-separator
-  - @order.line_items.each do |line|
+  - @order.line_items.each do |line_item|
     .left
-      = image_tag line.image.url(:thumb)
+      = image_tag line_item.image.url(:thumb)
       %p
         Photo Name:
         = formatted_image_name(line_item.image)
       %p
         Price:
-        = number_to_currency line.price
+        = number_to_currency line_item.price
   .line-separator.clear
   %p
     Tax:

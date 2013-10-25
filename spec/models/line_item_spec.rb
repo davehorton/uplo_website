@@ -13,6 +13,28 @@ describe LineItem do
 
   it { should validate_numericality_of(:quantity) }
 
+  describe ".in_cart" do
+    context "with orders having status shopping" do
+      it "should return appropriate line items" do
+        line_item.order.update_attribute(:status, "shopping")
+        LineItem.in_cart.should == [line_item]
+      end
+    end
+
+    context "with orders having status checkout" do
+      it "should return appropriate line items" do
+        line_item.order.update_attribute(:status, "checkout")
+        LineItem.in_cart.should == [line_item]
+      end
+    end
+
+    context "without matching orders" do
+      it "should return blank array" do
+        LineItem.in_cart.should == []
+      end
+    end
+  end
+
   describe ".sold_items" do
     context "with matching orders" do
       it "should return appropriate line items" do

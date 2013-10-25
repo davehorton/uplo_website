@@ -8,7 +8,6 @@ feature "Search" do
   let!(:product_option) { create(:product_option, :product_id => product.id, :description => "Borderless") }
   let!(:another_product_option) { create(:product_option, :product_id => another_product.id, :description => "Borderless") }
   let!(:images) { create_list(:real_image, 3) }
-  let!(:image) { create(:real_image) }
   let!(:another_image) { create(:real_image) }
 
   context "browse and spotlight page Users search", :js => true do
@@ -64,7 +63,7 @@ feature "Search" do
           page.find(".search").click
         end
         page.should have_selector('span', text: "Search")
-        page.should have_selector('span', text: "5 Photos found")
+        page.should have_selector('span', text: "4 Photos found")
         page.should have_selector("#image-container-#{another_image.id}")
       end
 
@@ -74,7 +73,7 @@ feature "Search" do
           select "Photos", :from => "filtered_by"
           page.find(".search").click
         end
-        page.should have_content("5 Photos found")
+        page.should have_content("4 Photos found")
         page.should have_selector("#image-container-#{another_image.id}")
       end
     end

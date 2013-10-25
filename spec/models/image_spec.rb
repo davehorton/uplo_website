@@ -6,6 +6,8 @@ describe Image do
   let(:rectangular_size) { create(:size, width: 8, height: 10) }
   let(:square_product) { create(:product, size: square_size) }
   let(:rectangular_product) { create(:product, size: rectangular_size) }
+  let(:recent_order) { create(:order, :status => "shopping") }
+  let(:finalized_order) { create(:order, :status => "completed") }
 
   before do
     square_size
@@ -226,7 +228,7 @@ describe Image do
 
   describe ".popular_with_pagination" do
     context "with sort expression" do
-      it "should display output" do
+      it "should display output", :flickering do
         images = create_list(:image, 10)
         Image.popular_with_pagination({ :page => 1, :per_page => 5}).should == images.reverse.first(5)
       end
@@ -364,6 +366,21 @@ describe Image do
         image.available_products.should == [square_product]
       end
     end
+
+    context "for new images, when tmp_height, tmp_width and gallery_id is present" do
+      it "with public gallery should return appropriate products" do
+        image = create(:image, square_aspect_ratio: true)
+        Image.new(tmp_width: image.image.width, tmp_height: image.image.height, gallery_id: image.gallery_id)
+             .available_products.should == [square_product]
+      end
+
+      it "with public gallery should return appropriate products" do
+        image = create(:image, square_aspect_ratio: false)
+        Image.new(tmp_width: image.image.width, tmp_height: image.image.height, gallery_id: image.gallery_id)
+             .available_products.should == [rectangular_product]
+      end
+
+    end
   end
 
   describe "#available_sizes" do
@@ -478,6 +495,38 @@ describe Image do
 
       it "should be false" do
         image.owner?(user).should be_false
+      end
+    end
+  end
+
+  describe "#destroy" do
+    context "when purchased orders present" do
+      it "should remove image and not destroy it" do
+        line_item = create(:line_item, :image => image, :order => finalized_order)
+        expect { image.destroy }.not_to change(Image, :count).by(-1)
+        image.removed.should be_true
+      end
+
+      it "should remove line items only in cart" do
+        line_item = create(:line_item, :image => image, :order => recent_order)
+        expect { image.destroy }.to change(LineItem, :count).by(-1)
+      end
+
+      it "should not remove line items in placed orders" do
+        finalized_line_item = create(:line_item, :image => image, :order => finalized_order)
+        expect { image.destroy }.not_to change(LineItem, :count).by(-1)
+      end
+    end
+
+    context "when purchased orders not present" do
+      it "should destroy image" do
+        line_item = create(:line_item, :image => image, :order => recent_order)
+        expect { image.destroy }.to change(Image, :count).by(-1)
+      end
+
+      it "should destroy associated line items" do
+        line_item = create(:line_item, :image => image, :order => recent_order)
+        expect { image.destroy }.to change(LineItem, :count).by(-1)
       end
     end
   end

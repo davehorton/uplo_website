@@ -2,10 +2,11 @@ class Product < ActiveRecord::Base
   belongs_to :moulding
   belongs_to :size
   has_many   :product_options
+  has_many :line_items
 
   accepts_nested_attributes_for :product_options, :reject_if => :all_blank, :allow_destroy => true
 
-  after_save :expire_cached_entries
+  after_save :expire_cached_entries, :recalculate_line_items!
 
   validates :moulding, presence: true
   validates :size, presence: true
@@ -63,6 +64,14 @@ class Product < ActiveRecord::Base
   def pricing_hash(tier_name)
     { price: send("#{tier_name}_price"), commission: send("#{tier_name}_commission") }
   end
+
+  protected
+
+    def recalculate_line_items!
+      transaction do
+        self.line_items.in_cart.readonly(false).collect(&:save!)
+      end
+    end
 
   private
 
