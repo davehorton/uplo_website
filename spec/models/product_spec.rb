@@ -128,7 +128,6 @@ describe Product do
     end
   end
 
-
   describe "#recalculate_line_items" do
     context "with purchased orders" do
       it "should not change the price for finalized line items" do
@@ -148,5 +147,4 @@ describe Product do
       end
     end
   end
-
 end
