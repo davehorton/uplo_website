@@ -10,8 +10,9 @@ describe CommentObserver do
   describe "after_create" do
     it "calls Notification deliver image notification" do
       Notification.should_receive(:deliver_image_notification)
-      create(:comment)
+      comment = create(:comment)
       ActionMailer::Base.deliveries.should_not be_empty
+      ActionMailer::Base.deliveries.last.to.should == [comment.image.user.email]
     end
   end
 
