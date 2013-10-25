@@ -1,2 +1,6 @@
-<p><%= @comment.description %></p>
-<p><%= image_tag(@comment.image.url(:thumb), :alt => "img") %></p>
+<table>
+  <tr>
+    <td><%= @comment.description %></td>
+    <td><%= image_tag(@comment.image.url(:smallest), :alt => "img") %></td>
+  </tr>
+</table>
