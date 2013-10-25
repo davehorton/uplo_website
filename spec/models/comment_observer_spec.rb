@@ -11,6 +11,7 @@ describe CommentObserver do
     it "calls Notification deliver image notification" do
       Notification.should_receive(:deliver_image_notification)
       create(:comment)
+      ActionMailer::Base.deliveries.should_not be_empty
     end
   end
 
