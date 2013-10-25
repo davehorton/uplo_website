@@ -9,13 +9,13 @@
       Congratulations! Your order is being processed and will ship soon.
     %h3
       Order ##{@order.id}
-    - @order.line_items.each do |line|
+    - @order.line_items.each do |line_item|
       %p
-        = image_tag line.image.url(:thumb)
+        = image_tag line_item.image.url(:thumb)
         %br
         = formatted_image_name(line_item.image)
         %br
-        = number_to_currency(line.price * line.quantity)
+        = number_to_currency(line_item.price * line_item.quantity)
     %h4
       Tax:
       = @order.tax > 0 ? number_to_currency(@order.tax) : "n/a"
