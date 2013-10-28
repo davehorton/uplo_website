@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130807152621) do
+ActiveRecord::Schema.define(:version => 20131025073552) do
 
   create_table "addresses", :force => true do |t|
     t.string   "first_name"
@@ -161,7 +161,7 @@ ActiveRecord::Schema.define(:version => 20130807152621) do
     t.datetime "invited_at"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
-    t.string   "message"
+    t.text     "message"
   end
 
   add_index "invitations", ["token"], :name => "index_invitations_on_token"
@@ -245,17 +245,19 @@ ActiveRecord::Schema.define(:version => 20130807152621) do
     t.integer  "moulding_id"
     t.decimal  "tier1_price",      :precision => 8, :scale => 2, :default => 0.0
     t.decimal  "tier2_price",      :precision => 8, :scale => 2, :default => 0.0
-    t.decimal  "tier3_price",      :precision => 8, :scale => 2, :default => 0.0
     t.decimal  "tier4_price",      :precision => 8, :scale => 2, :default => 0.0
+    t.decimal  "tier5_price",      :precision => 8, :scale => 2, :default => 0.0
     t.decimal  "tier1_commission", :precision => 8, :scale => 2, :default => 0.0
     t.decimal  "tier2_commission", :precision => 8, :scale => 2, :default => 0.0
-    t.decimal  "tier3_commission", :precision => 8, :scale => 2, :default => 0.0
     t.decimal  "tier4_commission", :precision => 8, :scale => 2, :default => 0.0
+    t.decimal  "tier5_commission", :precision => 8, :scale => 2, :default => 0.0
     t.datetime "created_at",                                                        :null => false
     t.datetime "updated_at",                                                        :null => false
     t.boolean  "public_gallery",                                 :default => true
     t.boolean  "private_gallery",                                :default => false
     t.decimal  "shipping_price",   :precision => 8, :scale => 2, :default => 0.0
+    t.decimal  "tier3_price",      :precision => 8, :scale => 2, :default => 0.0
+    t.decimal  "tier3_commission", :precision => 8, :scale => 2, :default => 0.0
   end
 
   add_index "products", ["moulding_id"], :name => "index_products_on_moulding_id"
