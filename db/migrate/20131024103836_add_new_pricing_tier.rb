@@ -12,36 +12,26 @@ class AddNewPricingTier < ActiveRecord::Migration
     add_column :products, :tier3_commission, :decimal, :precision => 8, :scale => 2, :default => 0
 
     # insert tier 3 price for all products
-    mouldings = {
-      "Print Only (Gloss)" => [
-                               { height: 4, width: 4, price: 5 },
-                               { height: 4, width: 6, price: 5 },
-                               { height: 5, width: 5, price: 10 },
-                               { height: 5, width: 7, price: 10 },
-                               { height: 8, width: 8, price: 150 },
-                               { height: 8, width: 10, price: 150 },
-                               { height: 12, width: 12, price: 400 },
-                               { height: 12, width: 16, price: 400 },
-                               { height: 20, width: 20, price: 800 },
-                               { height: 20, width: 24, price: 800 },
-                               { height: 24, width: 24, price: 1100 },
-                               { height: 24, width: 36, price: 1100 }
-                              ],
+    print_sizes = [
+                   { height: 4, width: 4, price: 5 },
+                   { height: 4, width: 6, price: 5 },
+                   { height: 5, width: 5, price: 10 },
+                   { height: 5, width: 7, price: 10 },
+                   { height: 8, width: 8, price: 150 },
+                   { height: 8, width: 10, price: 150 },
+                   { height: 12, width: 12, price: 400 },
+                   { height: 12, width: 16, price: 400 },
+                   { height: 20, width: 20, price: 800 },
+                   { height: 20, width: 24, price: 800 },
+                   { height: 24, width: 24, price: 1100 },
+                   { height: 24, width: 36, price: 1100 }
+                  ]
 
-      "Print Only (Luster)" => [
-                                { height: 4, width: 4, price: 5 },
-                                { height: 4, width: 6, price: 5 },
-                                { height: 5, width: 5, price: 10 },
-                                { height: 5, width: 7, price: 10 },
-                                { height: 8, width: 8, price: 150 },
-                                { height: 8, width: 10, price: 150 },
-                                { height: 12, width: 12, price: 400 },
-                                { height: 12, width: 16, price: 400 },
-                                { height: 20, width: 20, price: 800 },
-                                { height: 20, width: 24, price: 800 },
-                                { height: 24, width: 24, price: 1100 },
-                                { height: 24, width: 36, price: 1100 }
-                               ],
+    mouldings = {
+      "Print Only (Gloss)" => print_sizes,
+
+      "Print Only (Luster)" => print_sizes,
+
       "Canvas" => [
                    { height: 8, width: 8, price: 150 },
                    { height: 8, width: 10, price: 150 },
@@ -70,7 +60,7 @@ class AddNewPricingTier < ActiveRecord::Migration
         size = Size.where(height: options[:height], width: options[:width]).first
         if size
           product = moulding.products.where(size_id: size.id).first
-          if product.present?
+          if product
             product.update_attributes!(tier3_price: options[:price], tier3_commission: 35)
           else
             puts "Product not available for size #{size.to_name} and  moulding #{moulding.name}"
