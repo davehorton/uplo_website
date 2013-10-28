@@ -56,6 +56,10 @@ class AddNewPricingTier < ActiveRecord::Migration
 
     mouldings.each do |moulding_name, sizes|
       moulding = Moulding.find_by_name(moulding_name)
+      unless moulding
+        puts "Moulding #{moulding_name} is not present"
+        next
+      end
       sizes.each do |options|
         size = Size.where(height: options[:height], width: options[:width]).first
         if size
@@ -79,7 +83,11 @@ class AddNewPricingTier < ActiveRecord::Migration
     sizes.each do |options|
       size = Size.where(height: options[:height], width: options[:width]).first
       product = plexi.products.where(size_id: size.id).first
-      product.update_attributes!(tier2_price: options[:price]) if product
+      if product
+        product.update_attributes!(tier2_price: options[:price])
+      else
+        puts "Product not available for size #{size.to_name} and moulding plexi"
+      end
     end
   end
 
