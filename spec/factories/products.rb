@@ -7,10 +7,12 @@ FactoryGirl.define do
     tier2_price 300
     tier3_price 200
     tier4_price 100
+    tier5_price 100
     tier1_commission 100
     tier2_commission 50
     tier3_commission 20
     tier4_commission 10
+    tier5_commission 40
     moulding
     size
   end

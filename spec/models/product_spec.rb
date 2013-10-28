@@ -37,6 +37,11 @@ describe Product do
     klass.all.should == [product, product1]
   end
 
+  it "should have a tier3_price" do
+    product
+    product.tier3_price.should_not be_zero
+  end
+
   describe ".for_sizes" do
     context "with matched sizes" do
       it "should return appropriate products" do
@@ -147,4 +152,5 @@ describe Product do
       end
     end
   end
+
 end
