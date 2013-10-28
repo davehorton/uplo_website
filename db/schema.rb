@@ -245,17 +245,19 @@ ActiveRecord::Schema.define(:version => 20131025073552) do
     t.integer  "moulding_id"
     t.decimal  "tier1_price",      :precision => 8, :scale => 2, :default => 0.0
     t.decimal  "tier2_price",      :precision => 8, :scale => 2, :default => 0.0
-    t.decimal  "tier3_price",      :precision => 8, :scale => 2, :default => 0.0
     t.decimal  "tier4_price",      :precision => 8, :scale => 2, :default => 0.0
+    t.decimal  "tier5_price",      :precision => 8, :scale => 2, :default => 0.0
     t.decimal  "tier1_commission", :precision => 8, :scale => 2, :default => 0.0
     t.decimal  "tier2_commission", :precision => 8, :scale => 2, :default => 0.0
-    t.decimal  "tier3_commission", :precision => 8, :scale => 2, :default => 0.0
     t.decimal  "tier4_commission", :precision => 8, :scale => 2, :default => 0.0
+    t.decimal  "tier5_commission", :precision => 8, :scale => 2, :default => 0.0
     t.datetime "created_at",                                                        :null => false
     t.datetime "updated_at",                                                        :null => false
     t.boolean  "public_gallery",                                 :default => true
     t.boolean  "private_gallery",                                :default => false
     t.decimal  "shipping_price",   :precision => 8, :scale => 2, :default => 0.0
+    t.decimal  "tier3_price",      :precision => 8, :scale => 2, :default => 0.0
+    t.decimal  "tier3_commission", :precision => 8, :scale => 2, :default => 0.0
   end
 
   add_index "products", ["moulding_id"], :name => "index_products_on_moulding_id"
