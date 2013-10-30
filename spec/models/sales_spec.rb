@@ -48,6 +48,17 @@ describe Sales do
         sale.total_image_sales.should == 2000.0
       end
     end
+
+    context "with line items having no commission percent" do
+      it "should calculate correct total " do
+        sale = Sales.new(image)
+        new_order = create(:completed_order)
+        image.gallery.update_attribute(:has_commission, false)
+        line_item = create(:line_item, :image_id => image.id, :order_id => new_order.id, :quantity => 2, :price => 50)
+        sale.total_image_sales("April")
+        sale.total_image_sales.should == line_item.price * line_item.quantity
+      end
+    end
   end
 
   describe "image_monthly_sales_over_year" do

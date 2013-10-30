@@ -44,10 +44,9 @@ class Api::UsersController < Api::BaseController
   #   sort_field
   #   sort_direction
   def search
-    raise 'Invalid request' if params[:query].blank?
-
-    users = User.search_scope(params[:query]).
-              paginate_and_sort(filtered_params)
+    users = User
+    users = users.search_scope(params[:query]) if params[:query].present?
+    users = users.paginate_and_sort(filtered_params)
     render json: users, meta: { total: users.total_entries }
   end
 

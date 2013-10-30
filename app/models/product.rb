@@ -2,10 +2,11 @@ class Product < ActiveRecord::Base
   belongs_to :moulding
   belongs_to :size
   has_many   :product_options
+  has_many :line_items
 
   accepts_nested_attributes_for :product_options, :reject_if => :all_blank, :allow_destroy => true
 
-  after_save :expire_cached_entries
+  after_save :expire_cached_entries, :recalculate_line_items!
 
   validates :moulding, presence: true
   validates :size, presence: true
@@ -13,10 +14,12 @@ class Product < ActiveRecord::Base
   validates :tier2_price, presence: true
   validates :tier3_price, presence: true
   validates :tier4_price, presence: true
+  validates :tier5_price, presence: true
   validates :tier1_commission, presence: true
   validates :tier2_commission, presence: true
   validates :tier3_commission, presence: true
   validates :tier4_commission, presence: true
+  validates :tier5_commission, presence: true
 
   default_scope joins(:size, :moulding).order('sizes.height, sizes.width, mouldings.id').readonly(false)
   scope :private_gallery, where(private_gallery: true)
@@ -63,6 +66,14 @@ class Product < ActiveRecord::Base
   def pricing_hash(tier_name)
     { price: send("#{tier_name}_price"), commission: send("#{tier_name}_commission") }
   end
+
+  protected
+
+    def recalculate_line_items!
+      transaction do
+        self.line_items.in_cart.readonly(false).collect(&:save!)
+      end
+    end
 
   private
 

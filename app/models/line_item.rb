@@ -78,13 +78,13 @@ class LineItem < ActiveRecord::Base
     end
   end
 
-  private
+  def calculate_totals
+    self.price = product.price_for_tier(image.tier_id, image.owner?(order.user))
+    self.tax   = self.calculate_tax
+    self.commission_percent = product.commission_for_tier(image.tier_id) if self.image && self.image.gallery && self.image.gallery.commission_percent?
+  end
 
-    def calculate_totals
-      self.price = product.price_for_tier(image.tier_id, image.owner?(order.user))
-      self.tax   = self.calculate_tax
-      self.commission_percent = product.commission_for_tier(image.tier_id) if self.image.gallery.commission_percent?
-    end
+  private
 
     def compute_order_totals
       self.order.compute_totals

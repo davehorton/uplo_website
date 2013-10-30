@@ -93,7 +93,37 @@ describe UserMailer do
 
     it "renders the body" do
       mail.body.encoded.should have_content("Hi #{user.fullname}, Your image \"Test Image\" has been removed by the administrator. Please contact support@uplo.com if you have any questions. Best regards.")
+    end
+  end
 
+  describe "comment_notification_email_to_owner" do
+    let!(:image) { create(:image) }
+    let!(:comment) { create(:comment, :image => image) }
+    let(:mail) { UserMailer.comment_notification_email_to_owner(comment) }
+
+    it "should match email details" do
+      mail.subject.should eq("UPLO - Comment from #{comment.user.first_name}")
+      mail.to.should == [image.user.email]
+    end
+
+    it "renders the body" do
+      mail.body.encoded.should have_selector('td', :text => "#{comment.description}")
+    end
+  end
+
+  describe "comment_notification_email" do
+    let!(:image) { create(:image) }
+    let!(:another_comment) { create(:comment, :image => image, :user => user) }
+    let!(:comment) { create(:comment, :image => image) }
+    let(:mail) { UserMailer.comment_notification_email(another_comment.user, comment, comment.user) }
+
+    it "should match email details" do
+      mail.subject.should eq("UPLO - Comment from #{comment.user.first_name}")
+      mail.to.should == [another_comment.user.email]
+    end
+
+    it "renders the body" do
+      mail.body.encoded.should have_selector('td', :text => "#{comment.description}")
     end
   end
 end

@@ -228,7 +228,7 @@ describe Image do
 
   describe ".popular_with_pagination" do
     context "with sort expression" do
-      it "should display output" do
+      it "should display output", :flickering do
         images = create_list(:image, 10)
         Image.popular_with_pagination({ :page => 1, :per_page => 5}).should == images.reverse.first(5)
       end
@@ -365,6 +365,21 @@ describe Image do
         square_product.update_attribute(:private_gallery, true)
         image.available_products.should == [square_product]
       end
+    end
+
+    context "for new images, when tmp_height, tmp_width and gallery_id is present" do
+      it "with public gallery should return appropriate products" do
+        image = create(:image, square_aspect_ratio: true)
+        Image.new(tmp_width: image.image.width, tmp_height: image.image.height, gallery_id: image.gallery_id)
+             .available_products.should == [square_product]
+      end
+
+      it "with public gallery should return appropriate products" do
+        image = create(:image, square_aspect_ratio: false)
+        Image.new(tmp_width: image.image.width, tmp_height: image.image.height, gallery_id: image.gallery_id)
+             .available_products.should == [rectangular_product]
+      end
+
     end
   end
 

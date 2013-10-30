@@ -57,7 +57,7 @@ feature "Gallery" do
        page.find("#btn-gallery-save").click
      end
     within("#gallery_selector_id-button") do
-      page.should have_content("my new gallery")
+      page.should have_selector('span', text: "my new gallery")
     end
   end
 end

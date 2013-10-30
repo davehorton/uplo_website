@@ -4,7 +4,7 @@
 
   .frame-fit.left
     .cell.header.text.black.bold.font11.left
-    - (1..4).each do |tier_id|
+    - (1..5).each do |tier_id|
       .type.cell.header.text.black.bold.font11.left
         = f.radio_button :tier_id, tier_id, :checked => (image.tier_id == tier_id)
         = f.label "tier_id_#{tier_id}", "Tier #{tier_id}", :class => 'text gray font11'
@@ -18,6 +18,7 @@
           .cell.text.black.bold.font11.left= number_to_currency product.tier2_price, precision: 0
           .cell.text.black.bold.font11.left= number_to_currency product.tier3_price, precision: 0
           .cell.text.black.bold.font11.left= number_to_currency product.tier4_price, precision: 0
+          .cell.text.black.bold.font11.left= number_to_currency product.tier5_price, precision: 0
   %ul#tabs
     - products.each do |moulding, products|
       %li

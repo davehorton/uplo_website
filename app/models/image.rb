@@ -2,7 +2,7 @@ class Image < ActiveRecord::Base
   include ::Shared::QueryMethods
   include ImageConstants
 
-  attr_accessor :generate_print_preview, :selected_product_option
+  attr_accessor :generate_print_preview, :selected_product_option, :tmp_height, :tmp_width
 
   belongs_to :active_user, class_name: 'User', foreign_key: 'user_id', conditions: { banned: false, removed: false }
   belongs_to :user, counter_cache: true
@@ -172,7 +172,11 @@ class Image < ActiveRecord::Base
   end
 
   def current_geometry
-    @geometry ||= Paperclip::Geometry.new(image.width, image.height)
+    if new_record? && tmp_width && tmp_height
+      Paperclip::Geometry.new(tmp_width, tmp_height)
+    else
+      @geometry ||= Paperclip::Geometry.new(image.width, image.height)
+    end
   end
 
   def square?
@@ -340,7 +344,8 @@ class Image < ActiveRecord::Base
             tier1: product.pricing_hash("tier1"),
             tier2: product.pricing_hash("tier2"),
             tier3: product.pricing_hash("tier3"),
-            tier4: product.pricing_hash("tier4")
+            tier4: product.pricing_hash("tier4"),
+            tier5: product.pricing_hash("tier5")
           }
         end
       end
