@@ -10,13 +10,22 @@ class PaymentInfo
       }
     })
 
-    if !response.success?
-      description = "Problem creating billing profile. #{response.try(:message)}"
-      raise description
-    end
+    customer_profile_id = if response.success?
+                            response.params['customer_profile_id']
+                          elsif response.message =~ /^A duplicate record with ID/
+                            customer_profile_id = response.message.gsub(/\D/, '').to_i
+                            response = GATEWAY.get_customer_profile(customer_profile_id: customer_profile_id)
+                            customer_profile_id if response.success?
+                          end
 
-    user.update_attribute(:an_customer_profile_id, response.params['customer_profile_id'])
-    user.an_customer_profile_id
+    if customer_profile_id
+      user.an_customer_profile_id = customer_profile_id
+      user.save!
+      user.an_customer_profile_id
+    else
+      description = "Problem creating billing profile. #{response.try(:message)}"
+      raise UploException::PaymentProfileError.new(description)
+    end
   end
 
   def self.create_payment_profile(user, credit_card)
@@ -48,7 +57,7 @@ class PaymentInfo
     response = GATEWAY.create_customer_payment_profile(options)
     if !response.success?
       description = "Problem creating payment profile. #{response.try(:message)}"
-      raise description
+      raise UploException::PaymentProfileError.new(description)
     end
 
     customer_payment_profile_id = response.params['customer_payment_profile_id']
@@ -63,13 +72,17 @@ class PaymentInfo
 
     if !response.success?
       description = "Problem validating payment profile. #{response.try(:message)}"
-      raise description
+      raise UploException::PaymentProfileError.new(description)
     end
   end
 
   def self.update_billing_address(user)
-    payment_profile = GATEWAY.get_customer_payment_profile(customer_profile_id: user.an_customer_profile_id, customer_payment_profile_id: user.an_customer_payment_profile_id).params['payment_profile']
+    response = GATEWAY.get_customer_payment_profile(
+                 customer_profile_id: user.an_customer_profile_id,
+                 customer_payment_profile_id: user.an_customer_payment_profile_id
+               )
 
+    payment_profile = response.params['payment_profile']
     bill_to = payment_profile['bill_to'].to_options
     billing_address = user.billing_address.try(:cc_address_attributes).try(:to_options) || {}
     billing_address.merge!(first_name: bill_to[:first_name], last_name: bill_to[:last_name])
@@ -93,7 +106,7 @@ class PaymentInfo
 
     if !response.success?
       description = "Problem updating billing address. #{response.try(:message)}"
-      raise description
+      raise UploException::PaymentProfileError.new(description)
     end
   end
 end

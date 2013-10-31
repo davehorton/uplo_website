@@ -574,6 +574,16 @@ class User < ActiveRecord::Base
     end
   end
 
+  def billing_address_attributes=(options)
+    options.delete(:id)
+    (self.billing_address || self.build_billing_address).update_attributes(options)
+  end
+
+  def shipping_address_attributes=(options)
+    options.delete(:id)
+    (self.shipping_address || self.build_shipping_address).update_attributes(options)
+  end
+
   private
 
     def check_password?
