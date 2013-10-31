@@ -442,7 +442,7 @@ class User < ActiveRecord::Base
       errors.add(:paypal_email, "must exist")
       return false
     elsif (amount > owned_amount)
-      errors.add(:base, "Amount must be greated than owned amount")
+      errors.add(:base, "Amount must be less than owned amount")
       return false
     elsif (amount <= 0)
       errors.add(:base, "Amount not valid")
