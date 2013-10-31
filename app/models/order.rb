@@ -137,6 +137,21 @@ class Order < ActiveRecord::Base
     end
   end
 
+  def billing_address_attributes=(options)
+    options.delete(:id)
+    (self.billing_address || self.build_billing_address).update_attributes(options)
+  end
+
+  def shipping_address_attributes=(options)
+    options.delete(:id)
+    (self.shipping_address || self.build_shipping_address).update_attributes(options)
+  end
+
+  def set_addresses(user)
+    self.billing_address  ||= Address.new.initialize_dup(user.billing_address || Address.new)
+    self.shipping_address ||= Address.new.initialize_dup(user.shipping_address || Address.new)
+  end
+
   protected
 
     def init_transaction_date

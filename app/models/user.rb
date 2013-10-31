@@ -442,19 +442,20 @@ class User < ActiveRecord::Base
       errors.add(:paypal_email, "must exist")
       return false
     elsif (amount > owned_amount)
-      errors.add(:base, "Amount must be greated than owned amount")
+      errors.add(:base, "Amount must be less than owned amount")
       return false
     elsif (amount <= 0)
       errors.add(:base, "Amount not valid")
       return false
     else
       # PAYPAL WITHDRAW HERE
-      paypal_result = Payment.transfer_balance_via_paypal amount, self.paypal_email
+      paypal_result = Payment.transfer_balance_via_paypal(amount, self.paypal_email)
       if paypal_result.success?
         self.increment!(:withdrawn_amount, amount)
         return true
       else
-        errors.add(:base, 'UPLO is processing your commission, please check back later.')
+        errors.add(:base, 'Sorry! Something went wrong while processing your commission, please check back later.')
+        ExternalLogger.new.log_error(paypal_result, paypal_result.message, paypal_result.params)
         return false
       end
     end
@@ -571,6 +572,16 @@ class User < ActiveRecord::Base
     else
       fullname
     end
+  end
+
+  def billing_address_attributes=(options)
+    options.delete(:id)
+    (self.billing_address || self.build_billing_address).update_attributes(options)
+  end
+
+  def shipping_address_attributes=(options)
+    options.delete(:id)
+    (self.shipping_address || self.build_shipping_address).update_attributes(options)
   end
 
   private

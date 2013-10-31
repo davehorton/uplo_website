@@ -4,6 +4,19 @@ describe User do
   let(:user) { create(:user) }
   let(:another_user) { create(:user_with_gallery) }
   let(:image) { create(:image) }
+  let(:address) { create(:address) }
+  let(:address_attr) {
+    {
+      first_name:       "Santanu",
+      last_name:        "Karmakar",
+      optional_address: "Ward No: 6",
+      street_address:   "Guest House Road",
+      city:             "Tarakeswar",
+      zip:              "798421221",
+      state:            "West Bengal",
+      country:          "usa"
+    }
+  }
 
   it { should respond_to(:password) }
   it { should respond_to(:password_confirmation) }
@@ -731,6 +744,44 @@ describe User do
     context "when card number is not valid" do
       it "should raise error" do
         user1 = build(:user, :card_number => "235436478").should raise_error
+      end
+    end
+  end
+
+  describe "#billing_address_attributes=" do
+
+    context "when user has billing address" do
+      it "should not create billing address" do
+        user.update_attribute(:billing_address_id, address.id)
+        attributes = address_attr
+        expect { user.update_attributes(billing_address_attributes: address.attributes )}.not_to change(Address, :count)
+      end
+    end
+
+    context "when user does not have billing address" do
+      it "should create billing address" do
+        user.billing_address.try(:destroy)
+        user.reload
+        expect { user.update_attributes(billing_address_attributes: address_attr )}.to change(Address, :count)
+      end
+    end
+  end
+
+  describe "#shipping_address_attributes=" do
+
+    context "when user has billing address" do
+      it "should not create billing address" do
+        user.update_attribute(:shipping_address_id, address.id)
+        attributes = address_attr
+        expect { user.update_attributes(shipping_address_attributes: address.attributes )}.not_to change(Address, :count)
+      end
+    end
+
+    context "when user does not have billing address" do
+      it "should create billing address" do
+        user.shipping_address.try(:destroy)
+        user.reload
+        expect { user.update_attributes(shipping_address_attributes: address_attr )}.to change(Address, :count)
       end
     end
   end

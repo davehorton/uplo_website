@@ -75,5 +75,7 @@ module Uplo
       nightowl.css
       registrations.css
     )
+
+    require 'custom_exceptions'
   end
 end
