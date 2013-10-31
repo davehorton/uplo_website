@@ -449,12 +449,13 @@ class User < ActiveRecord::Base
       return false
     else
       # PAYPAL WITHDRAW HERE
-      paypal_result = Payment.transfer_balance_via_paypal amount, self.paypal_email
+      paypal_result = Payment.transfer_balance_via_paypal(amount, self.paypal_email)
       if paypal_result.success?
         self.increment!(:withdrawn_amount, amount)
         return true
       else
-        errors.add(:base, 'UPLO is processing your commission, please check back later.')
+        errors.add(:base, 'Sorry! Something went wrong while processing your commission, please check back later.')
+        ExternalLogger.new.log_error(paypal_result, paypal_result.message, paypal_result.params)
         return false
       end
     end
