@@ -67,6 +67,8 @@ class PaymentsController < ApplicationController
   end
 
   def checkout
+    redirect_to orders_path and return false if request.get?
+
     case params[:type]
     when "pp" # Not being used today
       total_as_cents, setup_purchase_params = get_setup_purchase_params(request)
@@ -78,10 +80,6 @@ class PaymentsController < ApplicationController
       order_info = params[:order].clone
       user_info = order_info.delete(:user)
 
-      if params[:ship_to_billing].present?
-        order_info[:shipping_address_attributes] = order_info[:billing_address_attributes]
-      end
-
       if params[:use_stored_cc].to_i == 0
         @credit_card = CreditCard.build_card_from_param(user_info)
         user_info[:card_number] = @credit_card.display_number
@@ -89,20 +87,20 @@ class PaymentsController < ApplicationController
         user_info = {}
       end
 
+      if params[:ship_to_billing].present?
+        order_info[:shipping_address_attributes] = order_info[:billing_address_attributes]
+      end
+      @order.update_attributes!(order_info)
+      @order.compute_totals
+
       user_info[:billing_address_attributes]  = order_info[:billing_address_attributes]
       user_info[:shipping_address_attributes] = order_info[:shipping_address_attributes]
-
-      if @order.update_attributes(order_info)
-        @order.compute_totals
-      else
-        render(:template => "orders/index", :params => params) and return
-      end
-
       if current_user.update_profile(user_info)
         if @credit_card && !@credit_card.valid?
-          raise "Credit card information is invalid!"
+          raise UploException::InvalidCreditCard
         end
       else
+        @order.set_addresses(current_user)
         render(:template => "orders/index", :params => params) and return
       end
 
@@ -113,11 +111,17 @@ class PaymentsController < ApplicationController
         flash[:success] = "Congratulations! Your order is being processed."
         redirect_to order_path(@order) and return
       else
-        raise "Problem with your order!"
+        raise UploException::PaymentProcessError
       end
     end
-  rescue Exception => ex
+  rescue UploException::PaymentProcessError,
+         UploException::InvalidCreditCard,
+         UploException::PaymentProfileError,
+         ActiveRecord::RecordInvalid => ex
+
     flash[:error] = ex.message
+    @order.set_addresses(current_user)
+    ExternalLogger.new.log_error(ex, ex.message, params) if ex.class == UploException::PaymentProfileError
     render :template => "orders/index", :params => params
   end
 

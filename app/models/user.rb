@@ -442,7 +442,7 @@ class User < ActiveRecord::Base
       errors.add(:paypal_email, "must exist")
       return false
     elsif (amount > owned_amount)
-      errors.add(:base, "Amount must be greated than owned amount")
+      errors.add(:base, "Amount must be greater than owned amount")
       return false
     elsif (amount <= 0)
       errors.add(:base, "Amount not valid")
@@ -571,6 +571,16 @@ class User < ActiveRecord::Base
     else
       fullname
     end
+  end
+
+  def billing_address_attributes=(options)
+    options.delete(:id)
+    (self.billing_address || self.build_billing_address).update_attributes(options)
+  end
+
+  def shipping_address_attributes=(options)
+    options.delete(:id)
+    (self.shipping_address || self.build_shipping_address).update_attributes(options)
   end
 
   private
