@@ -404,7 +404,7 @@ describe Image do
 
   describe "#flagged?" do
     context "with image flags" do
-      it "should return true" do
+      it "should return true", :flickering do
         img1 = create(:image_with_image_flags)
         img1.flagged?.should be_true
       end
