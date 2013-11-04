@@ -90,9 +90,7 @@ class User < ActiveRecord::Base
   validates :paypal_email, :email => true, :if => :paypal_email_changed?
 
   before_save :scrub_sensitive_fields
-  after_create do |user|
-    user.create_user_notification
-  end
+  after_create :create_user_notification
 
   default_scope where(removed: false, banned: false).order('users.username asc')
 
@@ -588,8 +586,8 @@ class User < ActiveRecord::Base
     (self.shipping_address || self.build_shipping_address).update_attributes(options)
   end
 
-  def notification?(type)
-    self.user_notification.try(type)
+  def notify?(type)
+    self.user_notification.send(type)
   end
 
   private

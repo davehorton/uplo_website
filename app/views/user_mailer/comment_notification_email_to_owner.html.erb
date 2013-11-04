@@ -4,4 +4,4 @@
     <td><%= link_to (image_tag @comment.image.url(:smallest), :alt => formatted_image_name(@comment.image)), browse_image_url(@comment.image) %></td>    
   </tr>
 </table>
-<p><%= link_to "Click to unsubscribe from this notification", unsubscribe_user_url(@owner.id, type: "comment") %></p>
+<p><%= link_to "Click to unsubscribe from this notification", unsubscribe_user_url("comment") %></p>
