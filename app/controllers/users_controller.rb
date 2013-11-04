@@ -266,13 +266,13 @@ class UsersController < ApplicationController
   end
 
   def unsubscribe
-    session[:user_return_to] = request.referrer
     case params[:id]
-    when "comment"
-      current_user.user_notification.update_attribute(:comment_email, false)
-      flash[:notice] = "You have successfully unsubscribed from this notification"
-      redirect_to root_path
+      when "comment"
+        current_user.user_notification.update_attribute(:comment_email, false)
+        flash[:notice] = "You have successfully unsubscribed from this notification"
     end
+    redirect_to root_path
   end
 
 end
+
