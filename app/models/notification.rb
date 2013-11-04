@@ -47,8 +47,8 @@ class Notification < ActiveRecord::Base
         :aps => { :alert => "#{by_user.name_for_notification} also commented on image #{comment.image.name.humanize}" },
         :data => { :type => "commented_on", :id => comment.image_id.to_s }
       }
-      Urbanairship.push(notification)
-      UserMailer.delay.comment_notification_email(receiver, comment, by_user)
+      Urbanairship.push(notification) if receiver.notification?(:push_comment)
+      UserMailer.delay.comment_notification_email(receiver, comment, by_user) if receiver.notification?(:comment_email)
     end
   end
 

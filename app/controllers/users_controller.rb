@@ -265,4 +265,13 @@ class UsersController < ApplicationController
     @facebook = facebook.first
   end
 
+  def unsubscribe
+    case params[:type]
+    when "comment"
+      current_user.user_notification.update_attribute(:comment_email, false)
+      flash[:notice] = "You have successfully unsubscribed from this notification"
+      redirect_to root_path
+    end
+  end
+
 end
