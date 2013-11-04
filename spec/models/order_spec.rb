@@ -3,6 +3,18 @@ require 'spec_helper'
 describe Order do
   let(:empty_order) { create(:order) }
   let(:order) { create(:order_with_line_items) }
+  let(:address_attr) {
+    {
+      first_name:       "Santanu",
+      last_name:        "Karmakar",
+      optional_address: "Ward No: 6",
+      street_address:   "Guest House Road",
+      city:             "Tarakeswar",
+      zip:              "798421221",
+      state:            "West Bengal",
+      country:          "usa"
+    }
+  }
 
   it { should belong_to(:user) }
   it { should belong_to(:shipping_address) }
@@ -129,6 +141,44 @@ describe Order do
     it "should assign transaction date" do
       order1 = create(:order, :transaction_date => "")
       order1.transaction_date.should_not be_blank
+    end
+  end
+
+  describe "#billing_address_attributes=" do
+
+    context "when order has billing address" do
+      it "should not create billing address" do
+        expect { order.update_attributes(billing_address_attributes: address_attr )}
+               .not_to change(order, :billing_address_id)
+        order.billing_address.first_name.should == address_attr[:first_name]
+      end
+    end
+
+    context "when order does not have billing address" do
+      it "should create billing address" do
+        order.billing_address.try(:destroy)
+        order.reload
+        expect { order.update_attributes(billing_address_attributes: address_attr )}.to change(Address, :count)
+      end
+    end
+  end
+
+  describe "#shipping_address_attributes=" do
+
+    context "when order has billing address" do
+      it "should not create billing address" do
+        expect { order.update_attributes(shipping_address_attributes: address_attr )}
+               .not_to change(order, :shipping_address_id)
+        order.shipping_address.first_name.should == address_attr[:first_name]
+      end
+    end
+
+    context "when order does not have billing address" do
+      it "should create billing address" do
+        order.shipping_address.try(:destroy)
+        order.reload
+        expect { order.update_attributes(shipping_address_attributes: address_attr )}.to change(Address, :count)
+      end
     end
   end
 
