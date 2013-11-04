@@ -71,6 +71,7 @@ class User < ActiveRecord::Base
   has_many :friends_images, :through => :followed_users, :source => :images
 
   has_one  :cart, :dependent => :destroy
+  has_one  :user_notification, :dependent => :destroy
 
   accepts_nested_attributes_for :billing_address
   accepts_nested_attributes_for :shipping_address
@@ -89,6 +90,7 @@ class User < ActiveRecord::Base
   validates :paypal_email, :email => true, :if => :paypal_email_changed?
 
   before_save :scrub_sensitive_fields
+  after_create :create_user_notification
 
   default_scope where(removed: false, banned: false).order('users.username asc')
 
@@ -582,6 +584,10 @@ class User < ActiveRecord::Base
   def shipping_address_attributes=(options)
     options.delete(:id)
     (self.shipping_address || self.build_shipping_address).update_attributes(options)
+  end
+
+  def notify?(type)
+    self.user_notification.send(type)
   end
 
   private

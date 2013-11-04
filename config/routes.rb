@@ -137,6 +137,9 @@ Uplo::Application.routes.draw do
     put "users/disable_social", :to => "users#disable_social"
 
     resources :users do
+      member do
+        get :unsubscribe
+      end
     end
 
     get "signin", :to => "users/sessions#new"
