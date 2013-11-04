@@ -786,4 +786,22 @@ describe User do
     end
   end
 
+  describe "#notification?" do
+
+    context "when user has matching notification type" do
+      it "should return true" do
+        user_notification = create(:user_notification, :user => user)
+        user.notification?(:comment_email).should be_true
+      end
+    end
+
+    context "without matching notification type" do
+      it "should return false" do
+        user
+        user.user_notification.update_attribute(:comment_email, false)
+        user.notification?(:comment_email).should be_false
+      end
+    end
+  end
+
 end
