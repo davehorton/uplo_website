@@ -36,7 +36,7 @@ class ImageSerializer < ActiveModel::Serializer
   end
 
   def liked
-    current_user && current_user.image_likes.exists?(image_id: object.id)
+    current_user && current_user.image_likes.exists?(image_id: object.id) rescue false
   end
 
   def name
