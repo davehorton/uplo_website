@@ -10,7 +10,7 @@ class Admin::OrdersController < Admin::AdminController
       @orders.completed
     end
 
-    @orders = @orders.paginate_and_sort(filtered_params.merge(:sort_field => "created_at", :sort_direction => "desc" ))
+    @orders = @orders.paginate_and_sort(filtered_params.merge(:sort_field => "updated_at", :sort_direction => "desc" ))
   end
 
   def show
