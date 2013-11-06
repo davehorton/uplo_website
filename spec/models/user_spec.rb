@@ -804,4 +804,9 @@ describe User do
     end
   end
 
+  it "should set merchant customer id" do
+    user
+    user.merchant_customer_id.should_not be_blank
+  end
+
 end

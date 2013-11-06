@@ -91,6 +91,7 @@ class User < ActiveRecord::Base
 
   before_save :scrub_sensitive_fields
   after_create :create_user_notification
+  before_create :set_merchant_customer_id
 
   default_scope where(removed: false, banned: false).order('users.username asc')
 
@@ -590,6 +591,10 @@ class User < ActiveRecord::Base
     self.user_notification.send(type)
   end
 
+  def set_merchant_customer_id
+    self.merchant_customer_id = "#{rand(1000)}#{Time.now.to_i}"
+  end
+
   private
 
     def check_password?
@@ -600,4 +605,5 @@ class User < ActiveRecord::Base
       self.cvv = nil
       self.expiration = nil
     end
+
 end
