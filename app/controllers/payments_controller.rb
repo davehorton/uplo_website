@@ -95,15 +95,8 @@ class PaymentsController < ApplicationController
 
       user_info[:billing_address_attributes]  = order_info[:billing_address_attributes]
       user_info[:shipping_address_attributes] = order_info[:shipping_address_attributes]
-      if current_user.update_profile(user_info)
-        if @credit_card && !@credit_card.valid?
-          raise UploException::InvalidCreditCard
-        end
-      else
-        @order.set_addresses(current_user)
-        render(:template => "orders/index", :params => params) and return
-      end
 
+      current_user.update_profile(user_info)
       response = Payment.process_purchase(current_user, @order, @credit_card)
 
       if response.try(:success?)
@@ -121,7 +114,7 @@ class PaymentsController < ApplicationController
 
     flash[:error] = ex.message
     @order.set_addresses(current_user)
-    ExternalLogger.new.log_error(ex, ex.message, params) if ex.class == UploException::PaymentProfileError
+    ExternalLogger.new.log_error(ex, ex.message, params) if ex.is_a?(UploException::PaymentProfileError)
     render :template => "orders/index", :params => params
   end
 

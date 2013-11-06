@@ -98,9 +98,13 @@ class Api::OrdersController < Api::BaseController
     else
       render json: { msg: "Problem charging your card." }, status: :bad_request
     end
-  rescue Exception => ex
-    ExternalLogger.new.log_error(ex, "Problem charging card for order #{order.try(:id)}.")
-    render json: { msg: ex.message }, status: :bad_request
+  rescue UploException::InvalidCreditCard,
+         UploException::PaymentProfileError,
+         ActiveRecord::RecordInvalid => ex
+
+    ExternalLogger.new.log_error(ex, ex.message, params) if ex.is_a?(UploException::PaymentProfileError)
+    error_msg = ex.is_a?(UploException::PaymentProfileError) ? "Please try again." : ex.message
+    render json: { msg: "Problem charging card for order. #{error_msg}" }, status: :bad_request
   end
 
   # GET /api/orders/cart
