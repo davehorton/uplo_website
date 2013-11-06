@@ -101,7 +101,7 @@ describe Sales do
     end
 
     context "with month" do
-      it "should calculate total" do
+      it "should calculate total", :flickering do
         sale = Sales.new(image)
         order.update_attributes(:status => "completed", :transaction_date => "01-01-2013")
         new_order = create(:completed_order, :transaction_date => "05-04-2013")

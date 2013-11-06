@@ -103,7 +103,7 @@ feature "Accessing Photo Page" do
       current_path.should == browse_image_path(image.id)
     end
 
-    scenario "order button", :js => true do
+    scenario "order button", :flickering, :js => true do
       page.find(".order").click
       current_path.should == order_image_path(image.id)
     end
