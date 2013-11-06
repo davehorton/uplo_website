@@ -39,7 +39,12 @@ class Payment
 
   def self.process_purchase(user, order, credit_card = nil)
     raise "Need credit card to complete purchase" unless (user.an_customer_payment_profile_id || credit_card)
-    PaymentInfo.create_payment_profile(user, credit_card) if credit_card
+
+    if credit_card
+      raise UploException::InvalidCreditCard unless credit_card.valid?
+      PaymentInfo.create_payment_profile(user, credit_card)
+    end
+
 
     transaction = {
       transaction: {
