@@ -2,7 +2,7 @@ class Admin::OrdersController < Admin::AdminController
   self.per_page = 20
 
   def index
-    @orders = Order.reorder("created_at desc").scoped
+    @orders = Order.reorder("updated_at desc").scoped
     @orders = if params[:in_cart].present?
       @in_cart = true
       @orders.in_cart.with_items
