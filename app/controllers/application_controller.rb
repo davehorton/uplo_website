@@ -12,11 +12,10 @@ class ApplicationController < ActionController::Base
   before_filter :authenticate_user!
   before_filter :set_current_tab, :check_banned_user
 
-  helper_method :gallery_owner?
-
   def gallery_owner?(gallery)
     gallery && gallery.user == current_user
   end
+  helper_method :gallery_owner?
 
   def result_hash
     @result_hash ||= {}

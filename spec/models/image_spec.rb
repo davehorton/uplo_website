@@ -530,4 +530,32 @@ describe Image do
       end
     end
   end
+
+  describe ".custom_find" do
+    let!(:image) { create(:image) }
+
+    context "image not present" do
+      it "should return nil" do
+        Image.custom_find(89790).should be_nil
+      end
+    end
+
+    context "image owner is blocked" do
+
+      before do
+        image.user.update_attribute(:banned, true)
+      end
+
+      it "should return nil if no logged in user present" do
+        Image.custom_find(image.id).should be_nil
+      end
+
+    end
+
+    context "image owner is NOT blocked" do
+      it "should find image" do
+        Image.custom_find(image.id).should == image
+      end
+    end
+  end
 end

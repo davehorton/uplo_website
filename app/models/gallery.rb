@@ -25,9 +25,14 @@ class Gallery < ActiveRecord::Base
     galleries
   end
 
-  def get_images_without(ids)
+  def get_images_without(ids, owner = nil)
     ids = [] unless ids.is_a?(Array)
-    self.images.unflagged.where("images.id not in (?)", ids).order('name')
+    scoped = if owner
+      self.images
+    else
+      self.images.unflagged
+    end
+    scoped.where("images.id not in (?)", ids).order('name')
   end
 
   def updated_at_string
@@ -56,4 +61,8 @@ class Gallery < ActiveRecord::Base
     is_public? || has_commission
   end
 
+  def accessible?(user = nil)
+    return true if self.permission.public?
+    user && (user.admin? || user.owns_gallery?(self) || self.gallery_invitations.exists?(user_id: user.id))
+  end
 end

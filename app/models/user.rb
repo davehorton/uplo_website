@@ -472,11 +472,6 @@ class User < ActiveRecord::Base
     gallery.user_id == id
   end
 
-  # TODO: move into ability class
-  def can_access?(gallery)
-    owns_gallery?(gallery) || gallery.permission.public? || GalleryInvitation.find_by_user_id(id).present?
-  end
-
   def like_image(image, image_url=nil)
     User.delay.facebook_like(self.id, image_url) unless image.liked_by?(self)
     image_likes.create(image_id: image.id) unless image.liked_by?(self)

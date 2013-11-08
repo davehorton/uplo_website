@@ -2,16 +2,20 @@ class ImagesController < ApplicationController
   self.per_page = 30
 
   skip_before_filter :authenticate_user!, only: [:public, :browse, :index]
-  skip_authorize_resource :only => :public
+  skip_authorize_resource only: :public
+  before_filter :push_redirect, only: [:browse]
+  before_filter :find_accessible_image, :only => [:browse, :order]
 
   def index
     find_gallery_and_authorize
-    @images = @gallery.images.unflagged.paginate_and_sort(filtered_params)
+    @images = @gallery.images
+    @images = @images.unflagged unless (current_user && current_user.owns_gallery?(@gallery))
+    @images = @images.paginate_and_sort(filtered_params)
   end
 
   def show
     @image  = Image.unflagged.find(params[:id])
-    @images = @image.gallery.images.unflagged.all(order: 'images.id')
+    @images = @image.gallery.images.unflagged.order('images.id')
     render layout: 'application'
   end
 
@@ -190,30 +194,12 @@ class ImagesController < ApplicationController
   end
 
   def browse
-    push_redirect
     self.per_page = 10
-
-    @image = Image.find_by_id(params[:id])
-
-    if @image.nil?
-      return render_not_found
-    elsif current_user && !current_user.can_access?(@image.gallery)
-      return render_unauthorized
-    end
-
     @is_owner = current_user && current_user.owns_image?(@image)
-
-    if @is_owner
-      @images = @image.gallery.images.unflagged.where("images.id not in (#{@image.id})").order('name')
-    else
-      @images = @image.gallery.get_images_without([@image.id])
-    end
+    @images = @image.gallery.get_images_without([@image.id], @is_owner)
 
     @author = @image.user
-    @dislike = false
-    if user_signed_in?
-      @dislike = @image.liked_by?(current_user)
-    end
+    @dislike = @image.liked_by?(current_user)
 
     if @image.image_processing?
       flash[:processing_photo] = "Your uploaded photo is being processed. This may take a few moments."
@@ -301,19 +287,7 @@ class ImagesController < ApplicationController
   end
 
   def order
-    @image = Image.find_by_id(params[:id])
-
-    if @image.nil? || (@image.user.blocked? && !current_user.admin?)
-      return render_not_found
-    end
-
     if params[:line_item].blank?
-      if @image.blank?
-        return render_not_found
-      elsif @image.gallery && !current_user.can_access?(@image.gallery)
-        return render_unauthorized
-      end
-
       products = @image.available_products
       @product_options = products.first.product_options if products.any?
     else
@@ -333,8 +307,8 @@ class ImagesController < ApplicationController
   end
 
   def pricing
-    image = Image.find(params[:id])
-    if image.nil? || (image.user.blocked? && !current_user.admin?)
+    image = find_image
+    if image.nil?
       result = { :success => false, :msg => 'This image does not exist anymore' }
     else
       table = render_to_string :partial => 'galleries/price_tiers', :locals => { :image => image }
@@ -356,8 +330,8 @@ class ImagesController < ApplicationController
   end
 
   def liking_users
-    image = Image.find(params[:id])
-    if image.nil? || (image.user.blocked? && !current_user.admin?)
+    image = find_image
+    if image.nil?
       result = { :success => false, :msg => 'This image does not exist anymore' }
     else
       liking_users = image.users
@@ -371,8 +345,8 @@ class ImagesController < ApplicationController
   end
 
   def tier
-    image = Image.find(params[:id])
-    if image.nil? || (image.user.blocked? && !current_user.admin?)
+    image = find_image
+    if image.nil?
       result = { :success => false, :msg => 'This image does not exist anymore' }
     else
       image.update_attributes(params[:image])
@@ -385,7 +359,7 @@ class ImagesController < ApplicationController
 
     def find_gallery_and_authorize
       @gallery = Gallery.find(params[:gallery_id])
-      render_unauthorized if current_user && !current_user.can_access?(@gallery)
+      render_unauthorized unless @gallery.accessible?(current_user)
     end
 
     def push_to_uplo_photoset(image_id)
@@ -404,5 +378,15 @@ class ImagesController < ApplicationController
       end
       flickr.photosets.create(:title => 'UPLO', :description => "from <a href='#{DOMAIN}'>UPLO</a>", :primary_photo_id => photo_id)
       return true
+    end
+
+    def find_accessible_image
+      @image = find_image
+      return render_not_found unless @image
+      return render_unauthorized unless @image.gallery.accessible?(current_user)
+    end
+
+    def find_image
+      Image.custom_find(params[:id])
     end
 end
