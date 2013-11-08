@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20131106074321) do
+ActiveRecord::Schema.define(:version => 20131108123045) do
 
   create_table "addresses", :force => true do |t|
     t.string   "first_name"
@@ -66,7 +66,7 @@ ActiveRecord::Schema.define(:version => 20131106074321) do
     t.boolean  "delta",          :default => true,     :null => false
     t.datetime "created_at",                           :null => false
     t.datetime "updated_at",                           :null => false
-    t.string   "keyword"
+    t.text     "keyword"
     t.string   "permission",     :default => "public"
     t.boolean  "has_commission", :default => true,     :null => false
   end
@@ -133,7 +133,7 @@ ActiveRecord::Schema.define(:version => 20131106074321) do
     t.string   "image_content_type"
     t.integer  "image_file_size"
     t.datetime "image_updated_at"
-    t.string   "keyword"
+    t.text     "keyword"
     t.boolean  "owner_avatar",       :default => false
     t.boolean  "removed",            :default => false
     t.integer  "pageview",           :default => 0
