@@ -366,13 +366,14 @@ class User < ActiveRecord::Base
   end
 
   def total_sold_images(image_paging_params = {})
-    line_items = total_sales[:data].collect {|a| a[:item]}
+    grouped_line_items = total_sales[:data].collect {|a| a[:item]}.group_by(&:image_id)
     [].tap do |a|
-      line_items.each do |line_item|
+      grouped_line_items.each do |image_id, line_items|
+        line_item = line_items.first
         image = line_item.image
-        image.quantity_sale = line_item.quantity_sale
-        image.total_sale = line_item.total_sale
         image.no_longer_avai = line_item.no_longer_avai
+        image.quantity_sale = line_items.sum(&:quantity_sale)
+        image.total_sale = line_items.sum(&:total_sale)
         a << image
       end
     end
