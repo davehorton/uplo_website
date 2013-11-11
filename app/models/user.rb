@@ -365,6 +365,10 @@ class User < ActiveRecord::Base
     result
   end
 
+  def get_total_sales(image_paging_params = {})
+    line_items = sold_items.paginate_and_sort(image_paging_params)
+  end
+
   def images_pageview
     if !self.attributes.has_key?('images_pageview')
       self.attributes['images_pageview'] = self.images.unflagged.sum(:pageview)
