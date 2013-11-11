@@ -61,10 +61,4 @@ class UserMailer < ApplicationMailer
     mail(:to =>  receiver.email, :subject =>  "UPLO - Comment from #{@author.first_name}", :from => @author.friendly_email, :reply_to => "reply+#{@comment.image_id}@reply.uplo.com")
   end
 
-  def receive(email)
-    image_id = email.to.gsub(/\D/, '')
-    user = User.find_by_email(email.from)
-    user.comments.create!(description: email.body, image_id: image_id)
-  end
-
 end
