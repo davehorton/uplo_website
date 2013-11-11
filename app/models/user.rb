@@ -71,6 +71,7 @@ class User < ActiveRecord::Base
   has_many :friends_images, :through => :followed_users, :source => :images
 
   has_one  :cart, :dependent => :destroy
+  has_one  :user_notification, :dependent => :destroy
 
   accepts_nested_attributes_for :billing_address
   accepts_nested_attributes_for :shipping_address
@@ -89,6 +90,8 @@ class User < ActiveRecord::Base
   validates :paypal_email, :email => true, :if => :paypal_email_changed?
 
   before_save :scrub_sensitive_fields
+  after_create :create_user_notification
+  before_create :set_merchant_customer_id
 
   default_scope where(removed: false, banned: false).order('users.username asc')
 
@@ -469,11 +472,6 @@ class User < ActiveRecord::Base
     gallery.user_id == id
   end
 
-  # TODO: move into ability class
-  def can_access?(gallery)
-    owns_gallery?(gallery) || gallery.permission.public? || GalleryInvitation.find_by_user_id(id).present?
-  end
-
   def like_image(image, image_url=nil)
     User.delay.facebook_like(self.id, image_url) unless image.liked_by?(self)
     image_likes.create(image_id: image.id) unless image.liked_by?(self)
@@ -584,6 +582,14 @@ class User < ActiveRecord::Base
     (self.shipping_address || self.build_shipping_address).update_attributes(options)
   end
 
+  def notify?(type)
+    self.user_notification.send(type)
+  end
+
+  def set_merchant_customer_id
+    self.merchant_customer_id = "#{rand(1000)}#{Time.now.to_i}"
+  end
+
   private
 
     def check_password?
@@ -594,4 +600,5 @@ class User < ActiveRecord::Base
       self.cvv = nil
       self.expiration = nil
     end
+
 end

@@ -2,7 +2,7 @@ class Admin::OrdersController < Admin::AdminController
   self.per_page = 20
 
   def index
-    @orders = Order.scoped
+    @orders = Order.reorder("updated_at desc").scoped
     @orders = if params[:in_cart].present?
       @in_cart = true
       @orders.in_cart.with_items
@@ -10,7 +10,7 @@ class Admin::OrdersController < Admin::AdminController
       @orders.completed
     end
 
-    @orders = @orders.paginate_and_sort(filtered_params.merge(:sort_field => "created_at", :sort_direction => "desc" ))
+    @orders = @orders.paginate_and_sort(filtered_params.merge(:sort_field => "updated_at", :sort_direction => "desc" ))
   end
 
   def show

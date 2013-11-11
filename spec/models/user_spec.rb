@@ -707,32 +707,6 @@ describe User do
     end
   end
 
-  describe "#can_access?" do
-    context "when gallery is owned" do
-      it "should return true" do
-        gallery1 = another_user.galleries.first
-        another_user.can_access?(gallery1).should be_true
-      end
-    end
-
-    context "when gallery is public" do
-      it "should return true" do
-        gallery1 = another_user.galleries.first
-        gallery1.update_attribute(:permission, "public")
-        another_user.can_access?(gallery1).should be_true
-      end
-    end
-
-    context "when gallery has gallery invitations" do
-      it "should return true" do
-        new_user = create(:user, :username => "invited_user")
-        gallery = create(:gallery)
-        gallery_invitation = create(:gallery_invitation, :user => new_user)
-        new_user.can_access?(gallery).should be_true
-      end
-    end
-  end
-
   describe "#check_card_number" do
     context "when card number is valid" do
       it "should return true" do
@@ -784,6 +758,29 @@ describe User do
         expect { user.update_attributes(shipping_address_attributes: address_attr )}.to change(Address, :count)
       end
     end
+  end
+
+  describe "#notify?" do
+
+    context "when user has matching notification type" do
+      it "should return true" do
+        user
+        user.notify?(:comment_email).should be_true
+      end
+    end
+
+    context "without matching notification type" do
+      it "should return false" do
+        user
+        user.user_notification.update_attribute(:comment_email, false)
+        user.notify?(:comment_email).should be_false
+      end
+    end
+  end
+
+  it "should set merchant customer id" do
+    user
+    user.merchant_customer_id.should_not be_blank
   end
 
 end

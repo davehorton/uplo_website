@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20131025073552) do
+ActiveRecord::Schema.define(:version => 20131108123045) do
 
   create_table "addresses", :force => true do |t|
     t.string   "first_name"
@@ -66,7 +66,7 @@ ActiveRecord::Schema.define(:version => 20131025073552) do
     t.boolean  "delta",          :default => true,     :null => false
     t.datetime "created_at",                           :null => false
     t.datetime "updated_at",                           :null => false
-    t.string   "keyword"
+    t.text     "keyword"
     t.string   "permission",     :default => "public"
     t.boolean  "has_commission", :default => true,     :null => false
   end
@@ -133,7 +133,7 @@ ActiveRecord::Schema.define(:version => 20131025073552) do
     t.string   "image_content_type"
     t.integer  "image_file_size"
     t.datetime "image_updated_at"
-    t.string   "keyword"
+    t.text     "keyword"
     t.boolean  "owner_avatar",       :default => false
     t.boolean  "removed",            :default => false
     t.integer  "pageview",           :default => 0
@@ -339,6 +339,18 @@ ActiveRecord::Schema.define(:version => 20131025073552) do
   add_index "user_follows", ["followed_by"], :name => "index_user_follows_on_followed_by"
   add_index "user_follows", ["user_id"], :name => "index_user_follows_on_user_id"
 
+  create_table "user_notifications", :force => true do |t|
+    t.integer  "user_id",                          :null => false
+    t.boolean  "push_like",      :default => true
+    t.boolean  "push_comment",   :default => true
+    t.boolean  "comment_email",  :default => true
+    t.boolean  "push_purchase",  :default => true
+    t.boolean  "push_follow",    :default => true
+    t.boolean  "push_spotlight", :default => true
+    t.datetime "created_at",                       :null => false
+    t.datetime "updated_at",                       :null => false
+  end
+
   create_table "users", :force => true do |t|
     t.string   "first_name",                                                       :null => false
     t.string   "last_name",                                                        :null => false
@@ -396,6 +408,7 @@ ActiveRecord::Schema.define(:version => 20131025073552) do
     t.integer  "images_count",                                  :default => 0
     t.integer  "an_customer_profile_id"
     t.integer  "an_customer_payment_profile_id"
+    t.string   "merchant_customer_id",           :limit => 20
   end
 
   add_index "users", ["banned"], :name => "index_users_on_banned"

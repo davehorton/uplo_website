@@ -120,6 +120,54 @@ describe Gallery do
     end
   end
 
+  describe "#accessible?" do
+    let!(:user) { create(:user) }
+    let!(:admin) { create(:user, admin: true) }
+    let!(:another_user) { create(:user_with_gallery) }
+    let!(:gallery) { another_user.galleries.first }
+
+    context "public gallery" do
+      it "should return true if user not logged in" do
+        gallery.accessible?.should be_true
+      end
+
+      it "should return true if user logged in" do
+        gallery.accessible?(user).should be_true
+        gallery.accessible?(another_user).should be_true
+      end
+    end
+
+    context "private gallery" do
+
+      before do
+        gallery.update_attribute(:permission, :private)
+      end
+
+      context "should be true" do
+        it "when gallery is owned" do
+          gallery.accessible?(another_user).should be_true
+        end
+
+        it "when logged in user is admin" do
+          gallery.accessible?(admin).should be_true
+        end
+
+        it "when have invitations" do
+          gallery.accessible?(user).should be_false
+
+          gallery_invitation = create(:gallery_invitation, user: user, gallery: gallery)
+          gallery.accessible?(user).should be_true
+        end
+      end
+
+      context "should be false" do
+        it "when no logged in user" do
+          gallery.accessible?.should be_false
+        end
+      end
+    end
+  end
+
 end
 
 

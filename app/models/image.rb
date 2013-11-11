@@ -54,6 +54,15 @@ class Image < ActiveRecord::Base
   scope :with_gallery, includes(:gallery)
   scope :not_hidden, where(hidden_by_admin: false)
 
+  # should return nil if image not present?
+  # should return nil if image owner is blocked
+  # user model has a default scope, so, blocked users won't get returned
+  def self.custom_find(id)
+    image = self.find_by_id(id)
+    return nil unless image.try(:user) #for blocked user images
+    image
+  end
+
   def self.flagged_of_type(image_flag_type = nil)
     images = Image.flagged
     images = images.where(image_flags: { flag_type: image_flag_type }) if image_flag_type.present?
@@ -316,7 +325,8 @@ class Image < ActiveRecord::Base
     user.try(:avatar_url, :large)
   end
 
-  def liked_by?(user)
+  def liked_by?(user = nil)
+    return false unless user
     ImageLike.exists?(image_id: id, user_id: user.id)
   end
 
