@@ -3,6 +3,7 @@ class Image < ActiveRecord::Base
   include ImageConstants
 
   attr_accessor :generate_print_preview, :selected_product_option, :tmp_height, :tmp_width
+  attr_accessor :total_sale, :quantity_sale, :no_longer_avai
 
   belongs_to :active_user, class_name: 'User', foreign_key: 'user_id', conditions: { banned: false, removed: false }
   belongs_to :user, counter_cache: true
