@@ -1,4 +1,5 @@
 class RepliesController < ApplicationController
+  skip_before_filter :authenticate_user!
 
   def image_comment
     image_id = params[:to].gsub(/\D/, '')
