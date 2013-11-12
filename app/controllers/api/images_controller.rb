@@ -158,12 +158,12 @@ class Api::ImagesController < Api::BaseController
 
   # GET /api/images/:id/purchases
   def purchases
-    purchased_info = Sales.new(current_user_image).image_purchased_info
+    sale = Sales.new(current_user_image)
 
     render json: {
-      total_sale: purchased_info[:total_sale],
-      total_quantity: purchased_info[:total_quantity],
-      data: purchased_info[:data]
+      total_sale: sale.total_image_sales,
+      total_quantity: sale.sold_image_quantity,
+      data: sale.image_purchased_info[:data]
     }
   end
 
