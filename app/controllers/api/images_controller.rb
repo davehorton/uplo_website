@@ -168,9 +168,9 @@ class Api::ImagesController < Api::BaseController
 
   # GET /api/images/:id/sale_chart
   def sale_chart
-    sale = Sales.new(current_user_image)
-    @monthly_sales = sale.image_monthly_sales_over_year(Time.now, {:report_by => Image::SALE_REPORT_TYPE[:quantity]})
-    render :file => "app/views/images/sale_chart.html.haml", :layout => false
+    @sale = Sales.new(current_user_image)
+    @monthly_sales = @sale.image_monthly_sales_over_year(Time.now, {:report_by => Image::SALE_REPORT_TYPE[:quantity]})
+    render :file => "app/views/sales/_chart.html.haml", :locals => {:total_sales => @sale.total_image_sales, :sales => @monthly_sales}, :layout => false
   end
 
   # POST /api/images/:id/flag
