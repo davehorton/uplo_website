@@ -10,11 +10,5 @@
     = javascript_include_tag 'application'
 
   %body{:style => "background:white"}
-    #header
-      .wrapper{:style => "width:100%; text-align:center"}
-        %a#logo{:href => "/"}
-          = image_tag("uplo_logo.png", {:alt => "UPLO"})
-    .clear
-
-    .wrapper{:style => "width:100%; text-align:center"}
+    .wrapper{:style => "width:500px; text-align:center"}
       = yield
