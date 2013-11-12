@@ -1,8 +1,18 @@
 class LineItemSerializer < ActiveModel::Serializer
-  attributes :id, :product, :product_option, :quantity, :price, :image
+  attributes :id, :product, :product_option, :quantity, :price, :image, :total_sale, :quantity_sale
 
   def image
     ImageSerializer.new(object.image, root: false)
+  end
+
+  def quantity_sale
+    sale = Sales.new(object.image)
+    sale.sold_image_quantity
+  end
+
+  def total_sale
+    sale = Sales.new(object.image)
+    sale.total_image_sales
   end
 
   def product_option

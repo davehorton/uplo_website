@@ -365,6 +365,19 @@ class User < ActiveRecord::Base
     result
   end
 
+  def total_sold_images(image_paging_params = {})
+    line_items = total_sales[:data].collect {|a| a[:item]}
+    [].tap do |a|
+      line_items.each do |line_item|
+        image = line_item.image
+        image.quantity_sale = line_item.quantity_sale
+        image.total_sale = line_item.total_sale
+        image.no_longer_avai = line_item.no_longer_avai
+        a << image
+      end
+    end
+  end
+
   def images_pageview
     if !self.attributes.has_key?('images_pageview')
       self.attributes['images_pageview'] = self.images.unflagged.sum(:pageview)
