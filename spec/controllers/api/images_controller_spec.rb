@@ -145,10 +145,10 @@ describe Api::ImagesController do
         get :purchases, id: image.id
         response.body.should_not be_blank
         response.body.should == {
-                                  total_sale: sale.total_image_sales,
-                                  total_quantity: sale.sold_image_quantity,
-                                  data: sale.image_purchased_info[:data]
-                                }.to_json
+          total_sale: sale.total_image_sales,
+          total_quantity: sale.sold_image_quantity,
+          data: sale.image_purchased_info[:data]
+        }.to_json
       end
 
     end
@@ -171,7 +171,6 @@ describe Api::ImagesController do
         response.body.should == image.reload.pricing_tiers.to_json
       end
     end
-
 
     context "should not return result" do
 
