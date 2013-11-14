@@ -13,6 +13,147 @@ describe Api::ImagesController do
     subject.current_user.should_not be_nil
   end
 
+  context "#index" do
+
+    context "should return matched result" do
+
+      it "when gallery id present" do
+        gallery = create(:gallery_with_images)
+        get :index, gallery_id: gallery.id
+        images = gallery.images.unflagged.with_gallery.paginate_and_sort({})
+        response.body.should == ActiveModel::ArraySerializer.new(images, root: "images", scope: subject.current_user, meta: { total: 2 }).to_json
+      end
+
+      it "when user id present" do
+        user = subject.current_user
+        gallery = create(:gallery, :user => user)
+        image = create(:real_image, :gallery => gallery )
+        get :index, user_id: user.id
+        images = user.images.unflagged.with_gallery.paginate_and_sort({})
+        response.body.should == ActiveModel::ArraySerializer.new(images, root: "images", scope: subject.current_user, meta: { total: 1 }).to_json
+      end
+
+    end
+  end
+
+  context "#liked" do
+
+    context "should return matched result" do
+
+      it "when current user present" do
+        image = create(:image_like, :user => subject.current_user)
+        get :liked
+        images = subject.current_user.source_liked_images.paginate_and_sort({})
+        response.body.should_not be_blank
+        response.body.should == ActiveModel::ArraySerializer.new(images, root: "images", scope: subject.current_user, meta: { total: 1}).to_json
+      end
+
+    end
+  end
+
+  context "#popular" do
+
+    context "should return matched result" do
+
+      it "when excluded image not present" do
+        image = create(:real_image, promoted: true)
+        get :popular
+        images = Image.public_access.not_hidden.spotlight.includes(:gallery, :user).paginate_and_sort({sort_field: "random()"})
+        response.body.should_not be_blank
+        response.body.should == ActiveModel::ArraySerializer.new(images, root: "images", scope: subject.current_user, meta: { total: 1}).to_json
+      end
+
+    end
+  end
+
+  context "#search" do
+
+    context "should return matched result" do
+
+      it "when query present" do
+        image = create(:real_image, :name => "photo")
+        get :search, query: "Photo"
+        images = Image.search_scope("Photo").public_or_owner(subject.current_user).paginate_and_sort({})
+        response.body.should == ActiveModel::ArraySerializer.new(images, root: "images", scope: subject.current_user, meta: { total: 1 }).to_json
+      end
+
+    end
+  end
+
+  context "#like" do
+
+    context "should like image" do
+
+      it "when gallery id present" do
+        image = create(:real_image)
+        post :like, id: image.id
+        response.body.should == "{\"image_likes_count\":1}"
+      end
+
+    end
+  end
+
+  context "#unlike" do
+
+    context "should like image" do
+
+      it "when gallery id present" do
+        image = create(:real_image)
+        put :unlike, id: image.id
+        response.body.should == "{\"image_likes_count\":0}"
+      end
+
+    end
+  end
+
+  context "#flag" do
+
+    context "should like image" do
+
+      it "when gallery id present" do
+        image = create(:image)
+        post :flag, id: image.id, type: 3
+        response.body.should == "{\"success\":true}"
+      end
+
+    end
+  end
+
+  context "#show" do
+
+    context "should image details" do
+
+      it "when gallery id present" do
+        image = create(:real_image)
+        get :show, id: image.id
+        response.body.should_not be_blank
+        response.body.should == ImageSerializer.new(image, scope: subject.current_user).to_json
+      end
+
+    end
+  end
+
+  context "#purchases" do
+
+    context "should return result" do
+
+      it "when image id is present" do
+        image = create(:real_image, gallery: create(:gallery, user: subject.current_user ) )
+        new_order = create(:completed_order)
+        line_item = create(:line_item, :image_id => image.id, :order_id => new_order.id, :quantity => 4)
+        sale = Sales.new(image)
+        get :purchases, id: image.id
+        response.body.should_not be_blank
+        response.body.should == {
+                                  total_sale: sale.total_image_sales,
+                                  total_quantity: sale.sold_image_quantity,
+                                  data: sale.image_purchased_info[:data]
+                                }.to_json
+      end
+
+    end
+  end
+
   context "#pricing" do
 
     context "should return result" do
