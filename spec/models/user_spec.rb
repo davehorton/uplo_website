@@ -510,7 +510,7 @@ describe User do
 
     context "without sold line items" do
       it "should return blank array" do
-        user.total_sales.should == {:total_entries=>0, :data=>[]}
+        user.total_sales.should == {:total_entries => 0, :images =>[]}
       end
     end
   end
