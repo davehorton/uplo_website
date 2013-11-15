@@ -26,8 +26,8 @@ describe Api::ImagesController do
 
       it "when user id present" do
         image = create(:real_image, gallery: create(:gallery, user: subject.current_user ))
-        get :index, user_id: user.id
-        images = user.images.unflagged.with_gallery.paginate_and_sort({})
+        get :index, user_id: subject.current_user.id
+        images = subject.current_user.images.unflagged.with_gallery.paginate_and_sort({})
         response.body.should == ActiveModel::ArraySerializer.new(images, root: "images", scope: subject.current_user, meta: { total: 1 }).to_json
       end
 
