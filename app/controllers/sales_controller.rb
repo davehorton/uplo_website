@@ -4,16 +4,16 @@ class SalesController < ApplicationController
   end
 
   def image_sale_details
-    @image = LineItem.find_by_id(params[:id]).image
-    @sale = Sales.new(@image)
+    @image = current_user.images.find(params[:id])
+    @sale = @image.sale
     @sales = ImageDecorator.decorate_collection(@sale.image_monthly_sales_over_year(Time.now, {:report_by => Image::SALE_REPORT_TYPE[:price]}))
     @purchased_info = @sale.raw_image_purchased(filtered_params)
   end
 
   def year_sales
-    @sales = current_user.sold_items.paginate_and_sort(filtered_params)
-    @monthly_sales = current_user.monthly_sales(Time.now)
-    @year_sales = total_sales(@monthly_sales)
+    @sold_images = current_user.sold_images.paginate_and_sort(filtered_params)
+    @monthly_sales = current_user.monthly_sales
+    @total_sale = @monthly_sales.sum { |sale| sale[:sales] }
   end
 
   def withdraw
@@ -30,12 +30,4 @@ class SalesController < ApplicationController
 
     redirect_to :controller => 'sales', :action => 'year_sales'
   end
-
-  protected
-
-    def total_sales(sales)
-      rs = 0
-      sales.each { |sale| rs += sale[:sales] }
-      return rs
-    end
 end

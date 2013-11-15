@@ -374,6 +374,10 @@ class Image < ActiveRecord::Base
     end
   end
 
+  def sale
+    @sale ||= Sales.new(self)
+  end
+
   protected
 
     def minimum_dimensions_are_met

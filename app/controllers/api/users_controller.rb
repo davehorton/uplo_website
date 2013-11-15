@@ -157,7 +157,9 @@ class Api::UsersController < Api::BaseController
 
   # GET /api/total_sales
   def get_total_sales
-    render json: current_user.total_sold_images(filtered_params), root: "images", status: :ok
+    images = current_user.total_sales(filtered_params)[:images]
+    total_entries = current_user.total_sales(filtered_params)[:total_entries]
+    render json: images, root: "images", meta: { total: total_entries }, status: :ok
   end
 
   # /api/follow
