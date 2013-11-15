@@ -25,9 +25,7 @@ describe Api::ImagesController do
       end
 
       it "when user id present" do
-        user = subject.current_user
-        gallery = create(:gallery, :user => user)
-        image = create(:real_image, :gallery => gallery )
+        image = create(:real_image, gallery: create(:gallery, user: subject.current_user ))
         get :index, user_id: user.id
         images = user.images.unflagged.with_gallery.paginate_and_sort({})
         response.body.should == ActiveModel::ArraySerializer.new(images, root: "images", scope: subject.current_user, meta: { total: 1 }).to_json
@@ -74,6 +72,22 @@ describe Api::ImagesController do
         image = create(:real_image, :name => "photo")
         get :search, query: "Photo"
         images = Image.search_scope("Photo").public_or_owner(subject.current_user).paginate_and_sort({})
+        response.body.should == ActiveModel::ArraySerializer.new(images, root: "images", scope: subject.current_user, meta: { total: 1 }).to_json
+      end
+
+    end
+  end
+
+  context "#by_friends" do
+
+    context "should return matched result" do
+
+      it "when friends present" do
+        another_user = create(:user)
+        image = create(:real_image, gallery: create(:gallery, user: another_user ))
+        user_following = create(:user_follow, followed_by: subject.current_user.id, :user_id => another_user.id)
+        get :by_friends
+        images = subject.current_user.friends_images.public_access.paginate_and_sort({})
         response.body.should == ActiveModel::ArraySerializer.new(images, root: "images", scope: subject.current_user, meta: { total: 1 }).to_json
       end
 
@@ -131,6 +145,33 @@ describe Api::ImagesController do
       end
 
     end
+  end
+
+  context "#update" do
+
+    context "when image hash is not blank" do
+
+      it "should update the image successfully" do
+        image = create(:real_image, gallery: create(:gallery, user: subject.current_user ) )
+        put :update, {"id"=>"#{image.id}", "image"=>{"description"=>"a thing of beauty", "keyword"=>"nature", "gallery_id"=>"#{image.gallery.id}", "tier_id"=>"4"}}
+        response.should be_success
+        response.body.should == ImageSerializer.new(image.reload, scope: subject.current_user).to_json
+        image.description.should == "a thing of beauty"
+        image.tier_id.should == 4
+      end
+    end
+
+  end
+
+  context "#destroy" do
+
+    it "should destroy gallery" do
+      gallery = create(:gallery, :user => subject.current_user)
+      image = create(:image, :gallery => gallery)
+      delete :destroy, id: image.id
+      response.body.should == "{\"msg\":\"image deleted\"}"
+    end
+
   end
 
   context "#purchases" do
