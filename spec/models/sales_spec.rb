@@ -34,29 +34,47 @@ describe Sales do
       it "should calculate total" do
         sale = Sales.new(image)
         new_order = create(:completed_order)
-        line_item = create(:line_item, :image_id => image.id, :order_id => new_order.id, :quantity => 4, :price => 50, :commission_percent => 35.0)
-        sale.total_image_sales.should == 2000.0
+
+        # update line item manually to check the calculation
+        2.times do
+          line_item = create(:line_item, :image => image, :order => new_order)
+          line_item.update_column(:price, 50.0)
+          line_item.update_column(:commission_percent, 35.0)
+          line_item.price.should == 50.0
+          line_item.commission_percent.should == 35.0
+        end
+
+        sale.total_image_sales.should == 140.0 # 70.0 * 2, for each 50 * 4 * (35.0/100)
       end
     end
 
     context "with month" do
       it "should calculate total" do
-        sale = Sales.new(image)
+        old_order = create(:completed_order, :transaction_date => 32.days.ago)
+        create(:line_item, :image => image, :order => old_order, :created_at => 32.days.ago)
+
+        # update line item manually to check the calculation
         new_order = create(:completed_order)
-        line_item = create(:line_item, :image_id => image.id, :order_id => new_order.id, :quantity => 4, :price => 500, :commission_percent => 35.0)
-        sale.total_image_sales("April")
-        sale.total_image_sales.should == 2000.0
+        line_item = create(:line_item, :image => image, :order => new_order)
+        line_item.update_column(:price, 50.0)
+        line_item.update_column(:commission_percent, 35.0)
+        line_item.price.should == 50.0
+        line_item.commission_percent.should == 35.0
+
+        sale = Sales.new(image)
+        sale.total_image_sales(Date::ABBR_MONTHNAMES[Date.today.month]).to_f.should == 70.0 # 50 * 4 * (35.0/100)
+        sale.total_image_sales.should == 2070.00
       end
     end
 
     context "with line items having no commission percent" do
-      it "should calculate correct total " do
-        sale = Sales.new(image)
+      it "should calculate correct total" do
+        # gallery must be private
+        image.gallery.update_attributes!(permission: "private", has_commission: false)
         new_order = create(:completed_order)
-        image.gallery.update_attribute(:has_commission, false)
-        line_item = create(:line_item, :image_id => image.id, :order_id => new_order.id, :quantity => 2, :price => 50)
-        sale.total_image_sales("April")
-        sale.total_image_sales.should == line_item.price * line_item.quantity
+        line_item = create(:line_item, :image => image, :order => new_order)
+        sale = Sales.new(image)
+        sale.total_image_sales.should be_zero
       end
     end
   end
