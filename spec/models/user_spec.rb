@@ -487,6 +487,19 @@ describe User do
     end
   end
 
+  describe "#sold_images" do
+    it "should return unique result" do
+      another_user = create(:user_with_gallery)
+      gallery1 = another_user.galleries.first
+      image = create(:image, :gallery => gallery1)
+      new_order = create(:completed_order)
+      2.times do
+        line_item = create(:line_item, :image => image, :order => new_order)
+      end
+      another_user.sold_images.should == [image]
+    end
+  end
+
   describe "#monthly_sales" do
     it "should return calculated hash" do
       gallery1 = another_user.galleries.first
