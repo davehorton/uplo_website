@@ -328,6 +328,10 @@ class User < ActiveRecord::Base
     LineItem.sold_items.where(images: { user_id: id })
   end
 
+  def sold_images
+    images.where(id: sold_items.pluck(:image_id).uniq)
+  end
+
   #==============================================================================
   # Description:
   # - get sales of all images over months
@@ -335,47 +339,30 @@ class User < ActiveRecord::Base
   # Note:
   #
   #==============================================================================
-  def monthly_sales(report_date=Time.now)
-    result = []
+  def monthly_sales(report_date = Time.now)
     date = DateTime.parse report_date.to_s
     prior_months = TimeCalculator.prior_year_period(date, {:format => '%b %Y'})
-    prior_months.each { |mon|
-      short_mon = DateTime.parse(mon).strftime('%b')
-      total_sales = 0
-      self.images.unflagged.each { |img| total_sales += Sales.new(img).total_image_sales(mon) }
-      result << { :month => short_mon, :sales => total_sales }
-    }
-    result
+    [].tap do |results|
+      prior_months.each { |mon|
+        short_mon = DateTime.parse(mon).strftime('%b')
+        total_sales = sold_images.sum { |image| image.sale.total_image_sales(mon) }
+        results <<  { :month => short_mon, :sales => total_sales }
+      }
+    end
   end
 
   def total_sales(image_paging_params = {})
-    result = {:total_entries => 0, :data => []}
-    line_items = sold_items.paginate_and_sort(image_paging_params)
-    array = []
-    line_items.each { |item|
-      info = item
-      sale = Sales.new(item.image)
-      info.total_sale = sale.total_image_sales
-      info.quantity_sale = sale.sold_image_quantity
-      info.no_longer_avai = (item.image.flagged? || item.image.removed?)
-      array << {:item => info }
-    }
-    result[:data] = array
-    result[:total_entries] = line_items.total_entries
-    result
-  end
-
-  def total_sold_images(image_paging_params = {})
-    line_items = total_sales[:data].collect {|a| a[:item]}
-    [].tap do |a|
-      line_items.each do |line_item|
-        image = line_item.image
-        image.quantity_sale = line_item.quantity_sale
-        image.total_sale = line_item.total_sale
-        image.no_longer_avai = line_item.no_longer_avai
-        a << image
-      end
+    total_sold_images = sold_images.paginate_and_sort(image_paging_params)
+    images = [].tap do |arr|
+      total_sold_images.each { |image|
+        info = image
+        info.total_sale = image.sale.total_image_sales
+        info.quantity_sale = image.sale.sold_image_quantity
+        info.no_longer_avai = (image.flagged? || image.removed?)
+        arr << info
+      }
     end
+    {:total_entries => total_sold_images.size, :images => images }
   end
 
   def images_pageview

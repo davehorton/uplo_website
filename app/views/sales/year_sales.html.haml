@@ -5,11 +5,11 @@
   .line-separator.left
 
 .wrapper
-  - if @sales.blank?
+  - if @sold_images.blank?
     .empty-data= "No sales yet"
   - else
     .sale-chart.left
-      = render :partial => 'chart', :locals => {:total_sales => @year_sales, :sales => @monthly_sales}
+      = render :partial => 'chart', :locals => {:total_sales => @total_sale, :sales => @monthly_sales}
     %br
     %br
     %br
@@ -37,10 +37,7 @@
                 = link_to "Set PayPal email", "/my_account"
     .line-separator.left.clear
     .sales-wrapper.left
-      - (0...(@sales.length - 1)). each do |idx|
-        - line_item = @sales[idx]
-        - image = line_item.image
-        - url = url_for(:controller => "sales", :action => "image_sale_details", :id => "#{line_item.id}")
+      - @sold_images.each_with_index do |image, index|
         .sale-item.left
           .image-container.thumb.left.no-padding
             = image_tag(image.url(:thumb), :class => 'image-thumb image thumb')
@@ -49,26 +46,11 @@
             - if (image.flagged? || image.removed?)
               .text.font20{:style => "color:red"} Unavailable
             .price
-              %span.text.fuzzy-gray.bold.font18= number_to_currency line_item.total_price, {:precision => 2}
+              %span.text.fuzzy-gray.bold.font18= number_to_currency image.sale.total_image_sales, {:precision => 2}
               %span.text.fuzzy-gray.font14 Cumulative
-            %a.left{ :href => "#{ url }"}
+            %a.left{ :href => sales_image_sale_details_path(:id => image.id)}
               .btn-detail
-          .line-separator.left
+          - if index != @sold_images.length - 1
+            .line-separator.left
 
-      - line_item = @sales[@sales.length - 1]
-      - image = line_item.image
-      - url = url_for(:controller => "sales", :action => "image_sale_details", :id => "#{line_item.id}")
-      .sale-item.left
-        .image-container.thumb.left.no-padding
-          = image_tag(image.url(:thumb), :class => 'image-thumb image thumb')
-        .info.left
-          .text.black.bold.font22= formatted_image_name(image)
-          - if (image.flagged? || image.removed?)
-            .text.red.font22 Unavailable
-          .text.fuzzy-gray.price
-            %span.text.bold.fuzzy-gray.font18= number_to_currency line_item.total_price, {:precision => 2}
-            %span.text.font14 Cumulative
-          %a.left{ :href => "#{ url }"}
-            .btn-detail
-
-  .clear= render_pagination(@sales, {:controller => "sales", :action => params[:action]})
+  .clear= render_pagination(@sold_images, {:controller => "sales", :action => params[:action]})

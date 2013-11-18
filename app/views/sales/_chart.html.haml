@@ -1,9 +1,9 @@
 #total-amount.text.bold
-  %span.text.font18 Total Monthly Sales
+  %span.text.font18 Total Sales
   %span.text.font24
     = "&nbsp;#{number_to_currency total_sales}".html_safe
-
-#container{:style=>"min-width: 400px; height: 460px; margin: 0 auto"}
+ 
+#container
 
 = javascript_tag do
   :erb
@@ -29,12 +29,15 @@
         <% end %>
 
         $(document).ready(function() {
-            chart = new Highcharts.Chart({
+           chart = new Highcharts.Chart({
                 chart: {
                     renderTo: 'container',
                     type: 'column',
                     shadown: false,
                     backgroundColor: '#f8f8f8',
+                    marginLeft: 49,
+                    height: "<%= params[:controller] == 'api/images' && params[:action] == 'sale_chart' ? 200 : 400 %>",
+                    width: "<%= params[:controller] == 'api/images' && params[:action] == 'sale_chart' ? 320 : 800 %>",
                     style: {
                         fontFamily: 'Arial'
                     }

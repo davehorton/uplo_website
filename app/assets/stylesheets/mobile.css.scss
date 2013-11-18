@@ -126,6 +126,10 @@ textarea { padding-top:5px; }
   width: $frame-width;
   height: 100%;
   margin: 0 auto;
+
+  #container {
+    margin: 0 auto;
+  }
 }
 .panel {
   float: left;
@@ -670,6 +674,7 @@ textarea { padding-top:5px; }
 }
 
 #banner {}
+#total-amount { margin-left: 15px; }
 #top {
   width: 100%;
   margin-top: 30px;
@@ -864,6 +869,7 @@ textarea { padding-top:5px; }
   .profile-wrapper {
     width: 638px;
     #container {
+      
       width: 100%;
       .label { margin-left: 5px; }
       #counter { margin-left: 5px; }

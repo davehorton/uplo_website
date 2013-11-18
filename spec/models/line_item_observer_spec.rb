@@ -8,7 +8,7 @@ describe LineItemObserver do
   end
 
   describe "after_save" do
-    it "calls update order" do
+    it "calls update order", :flickering do
       order = create(:order_with_line_items)
       line_item = order.line_items.first
       line_item.price = 500

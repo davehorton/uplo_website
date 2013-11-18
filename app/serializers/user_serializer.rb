@@ -46,6 +46,6 @@ class UserSerializer < ActiveModel::Serializer
   end
 
   def followed_by_current_user
-    object.has_follower?(scope.id)
+    object.has_follower?(scope.try(:id))
   end
 end

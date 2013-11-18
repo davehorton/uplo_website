@@ -26,25 +26,18 @@ class Sales
     total = 0
     sold_items = self.sold_items(month)
     sold_items.each do |item|
-      if item.commission_percent
-        total += ((item.price * item.quantity) * item.commission_percent/100)
-      else
-        total += ((item.price * item.quantity))
-      end
+      total += ((item.price * item.quantity) * item.commission_percent.to_f / 100)
     end
     total
   end
 
   # mon with year, return sold quantity
   def sold_image_quantity(month = nil)
-    result = 0
-    sold_items = self.sold_items(month)
-    sold_items.each { |item| result += item.quantity }
-    return result
+    self.sold_items(month).sum(&:quantity)
   end
 
   def raw_image_purchased(item_paging_params = {})
-    order_ids = self.image.orders.completed.map(&:id)
+    order_ids = self.image.orders.completed.pluck(:id)
 
     sold_items = []
     if order_ids.any?

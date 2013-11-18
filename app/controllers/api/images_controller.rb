@@ -1,4 +1,5 @@
 class Api::ImagesController < Api::BaseController
+
   skip_before_filter :require_login!, only: [:index, :mouldings, :popular]
   respond_to :html, only: [:sale_chart]
 
@@ -157,20 +158,20 @@ class Api::ImagesController < Api::BaseController
 
   # GET /api/images/:id/purchases
   def purchases
-    purchased_info = Sales.new(current_user_image).image_purchased_info
+    sale = Sales.new(current_user_image)
 
     render json: {
-      total_sale: purchased_info[:total_sale],
-      total_quantity: purchased_info[:total_quantity],
-      data: purchased_info[:data]
+      total_sale: sale.total_image_sales,
+      total_quantity: sale.sold_image_quantity,
+      data: sale.image_purchased_info[:data]
     }
   end
 
   # GET /api/images/:id/sale_chart
   def sale_chart
-    sale = Sales.new(current_user_image)
-    @monthly_sales = sale.image_monthly_sales_over_year(Time.now, {:report_by => Image::SALE_REPORT_TYPE[:quantity]})
-    render :file => "app/views/images/sale_chart.html.haml", :layout => false
+    @sale = Sales.new(current_user_image)
+    @monthly_sales = @sale.image_monthly_sales_over_year(Time.now, {:report_by => Image::SALE_REPORT_TYPE[:quantity]})
+    render :file => "app/views/sales/_chart.html.haml", :locals => {:total_sales => @sale.total_image_sales, :sales => @monthly_sales}, :layout => 'application.mobile.haml'
   end
 
   # POST /api/images/:id/flag
