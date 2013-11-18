@@ -107,7 +107,7 @@ describe UserMailer do
     end
 
     it "renders the body" do
-      mail.body.encoded.should have_selector('td', :text => "#{comment.description}")
+      mail.body.encoded.should have_content(comment.description)
     end
   end
 
@@ -123,7 +123,7 @@ describe UserMailer do
     end
 
     it "renders the body" do
-      mail.body.encoded.should have_selector('td', :text => "#{comment.description}")
+      mail.body.encoded.should have_content(comment.description)
     end
   end
 end

@@ -52,13 +52,13 @@ class UserMailer < ApplicationMailer
 
   def comment_notification_email_to_owner(comment)
     owner, @comment, @author = comment.image.user, comment, comment.user
-    mail(:to =>  owner.email, :subject => "UPLO - Comment from #{@author.first_name}", :from => @author.friendly_email)
+    mail(:to =>  owner.email, :subject => "UPLO - Comment from #{@author.first_name}", :from => @author.friendly_email, :reply_to => "reply+#{@comment.image_id}@reply.uplo.com")
   end
 
 
   def comment_notification_email(receiver, comment, by_user)
     @comment, @author = comment, by_user
-    mail(:to =>  receiver.email, :subject =>  "UPLO - Comment from #{@author.first_name}", :from => @author.friendly_email)
+    mail(:to =>  receiver.email, :subject =>  "UPLO - Comment from #{@author.first_name}", :from => @author.friendly_email, :reply_to => "reply+#{@comment.image_id}@reply.uplo.com")
   end
 
 end

@@ -105,6 +105,12 @@ Uplo::Application.routes.draw do
     end
   end
 
+  resources :replies do
+    collection do
+      post :image_comment
+    end
+  end
+
   get "invites/index"
 
   get "sales", :to => "sales#index"
@@ -308,6 +314,7 @@ Uplo::Application.routes.draw do
       get 'payment_info', :to => "users#get_user_payment_info"
       post 'withdraw', :to => "users#withdraw"
       get 'card_info', :to => "users#get_user_card_info"
+
       post 'request_invitation', :to => 'users#request_invitation'
       post 'delete_ordered_item', :to => 'orders#delete_ordered_item'
     end
