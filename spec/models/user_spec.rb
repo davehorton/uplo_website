@@ -489,7 +489,6 @@ describe User do
 
   describe "#sold_images" do
     it "should return unique result" do
-      another_user = create(:user_with_gallery)
       gallery1 = another_user.galleries.first
       image = create(:image, :gallery => gallery1)
       new_order = create(:completed_order)
@@ -511,13 +510,15 @@ describe User do
   end
 
   describe "#total_sales" do
-    context "with sold line items" do
+    context "with sold line images" do
       it "should return proper matched result" do
         gallery1 = another_user.galleries.first
         image = create(:image, :gallery => gallery1)
         new_order = create(:completed_order)
-        line_item = create(:line_item, :image_id => image.id, :order_id => new_order.id, :quantity => 5)
-        another_user.total_sales.should be_a(Hash)
+        2.times do
+          line_item = create(:line_item, :image => image, :order => new_order, :quantity => 5)
+        end
+        another_user.total_sales.should == { :total_entries => 1, :images => [image]}
       end
     end
 
@@ -636,8 +637,12 @@ describe User do
       gallery1 = another_user.galleries.first
       image = create(:image, :gallery => gallery1)
       new_order = create(:completed_order)
-      line_item = create(:line_item, :image_id => image.id, :order_id => new_order.id, :quantity => 4, :price => 50, :commission_percent => 35.0)
-      another_user.total_earn.should == 2000.0
+      2.times do
+        line_item = create(:line_item, :image => image, :order => new_order, :quantity => 4)
+        line_item.update_column(:commission_percent, 30)
+        line_item.update_column(:price, 50)
+      end
+      another_user.total_earn.should == 120.0 # 60.0 * 2, for each 50 * 4 * (30.0/100)
     end
   end
 

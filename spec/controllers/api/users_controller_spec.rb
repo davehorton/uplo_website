@@ -71,6 +71,55 @@ describe Api::UsersController do
     end
   end
 
+  context "#set_follow" do
+
+    context "when current user follows current user" do
+      it "should show error message" do
+        post :set_follow, {"user_id"=>"#{subject.current_user.id}", "follow"=>"1"}
+        response.body.should == "{\"msg\":\"You cannot follow yourself\"}"
+      end
+    end
+
+    context "when current user has already followed the user" do
+      it "should show error message" do
+        user_follow = create(:user_follow, followed_by: subject.current_user.id, user_id: user.id )
+        post :set_follow, {"user_id"=>"#{user.id}", "follow"=>"1"}
+        response.body.should == "{\"msg\":\"You are already following this user\"}"
+      end
+    end
+
+    context "follow user" do
+      it "should be successfull" do
+        post :set_follow, {"user_id"=>"#{user.id}", "follow"=>"1"}
+        response.should be_success
+        response.body.should == UserFollow.last.to_json
+        UserFollow.last.followed_by.should == subject.current_user.id
+      end
+    end
+
+  end
+
+  context "#withdraw" do
+
+    context "without paypal email" do
+      it "should show error message" do
+        post :withdraw, {"amount"=>"88.0"}
+        response.should_not be_success
+        response.body.should == "{\"msg\":\"Paypal email must exist\"}"
+      end
+    end
+
+  end
+
+  context "#get_user_card_info" do
+
+    it "should display the credit card details" do
+      subject.current_user.update_attributes(name_on_card: "john doe", card_type: "Visa", card_number: "4111111111111111", expiration: "11/2022", cvv: "123")
+      get :get_user_card_info
+      response.body.should == "{\"card_info\":{\"name_on_card\":\"john doe\",\"card_type\":\"Visa\",\"card_number\":\"4111111111111111\",\"expiration\":\"\",\"cvv\":\"***\"}}"
+    end
+  end
+
   context "#logout" do
 
     it "should display message and sign out user" do

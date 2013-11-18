@@ -187,7 +187,7 @@ describe Image do
     context "when user condition matches" do
       it "returns matched images" do
         user = create(:user)
-        new_image = create(:image, :user_id => user.id)
+        new_image = create(:image, :gallery => create(:gallery, :user => user))
         Image.public_or_owner(user).should == [new_image]
       end
     end
