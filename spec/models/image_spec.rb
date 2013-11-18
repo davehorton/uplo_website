@@ -2,12 +2,15 @@ require 'spec_helper'
 
 describe Image do
   let(:image) { create(:image) }
+  let(:user) { create(:user) }
   let(:square_size) { create(:size, width: 8, height: 8) }
   let(:rectangular_size) { create(:size, width: 8, height: 10) }
   let(:square_product) { create(:product, size: square_size) }
   let(:rectangular_product) { create(:product, size: rectangular_size) }
   let(:recent_order) { create(:order, :status => "shopping") }
   let(:finalized_order) { create(:order, :status => "completed") }
+  let(:flagged_image) { create(:image_with_image_flags) }
+  let(:images) { create_list(:image, 3) }
 
   before do
     square_size
@@ -55,8 +58,8 @@ describe Image do
   end
 
   it "has a flagged scope" do
-    new_image = create(:image_with_image_flags)
-    Image.flagged.should == [new_image, new_image]
+    flagged_image
+    Image.flagged.should == [flagged_image, flagged_image]
   end
 
   it "has a unflagged scope" do
@@ -81,15 +84,15 @@ describe Image do
   describe ".flagged_of_type" do
     context "when image flag type is nil" do
       it "should return flagged images" do
-        new_image = create(:image_with_image_flags)
-        Image.flagged_of_type(nil).should == [new_image, new_image]
+        flagged_image
+        Image.flagged_of_type(nil).should == [flagged_image, flagged_image]
       end
     end
     context "when image flag type is present" do
       it "should return flagged images of provided flag type" do
-        new_image = create(:image_with_image_flags)
-        new_image.image_flags.first.update_attribute(:flag_type, 2)
-        Image.flagged_of_type(2).should == [new_image]
+        flagged_image
+        flagged_image.image_flags.first.update_attribute(:flag_type, 2)
+        Image.flagged_of_type(2).should == [flagged_image]
       end
     end
   end
@@ -97,8 +100,7 @@ describe Image do
   describe ".remove_all_flagged_images" do
     context "with flag type" do
       it "should update removed true for all flagged images" do
-        img = create(:image)
-        image_flag = create(:image_flag, :flag_type=> 2, :image_id => img.id)
+        image_flag = create(:image_flag, :flag_type=> 2, :image_id => image.id)
         Image.remove_all_flagged_images(2)
         image.removed.should be_false
       end
@@ -125,24 +127,21 @@ describe Image do
 
     context "when image has image_flags" do
       it "should return message" do
-        user1 = create(:user)
-        img = create(:image_with_image_flags)
-        img.flag!(user1).should == {:success=>false, :msg=>"This image is already flagged."}
+        flagged_image
+        flagged_image.flag!(user).should == {:success=>false, :msg=>"This image is already flagged."}
       end
     end
 
     context "when image not successfully flagged" do
       it "should return" do
-        user1 = create(:user)
-        image.flag!(user1).should == {:success=>false, :msg=>"Flag type cannot be blank, Description Unknown violation type!"}
+        image.flag!(user).should == {:success=>false, :msg=>"Flag type cannot be blank, Description Unknown violation type!"}
       end
     end
 
     context "when image successfully flagged" do
       it "should return" do
-        user1 = create(:user)
-        image.flag!(user1, { :type => 1, :desc => "hello" }).should == {:success=>true}
-        user1.banned.should be_false
+        image.flag!(user, { :type => 1, :desc => "hello" }).should == {:success=>true}
+        user.banned.should be_false
       end
     end
   end
@@ -150,34 +149,34 @@ describe Image do
   describe ".search_scope" do
     context "when query name present" do
       it "should return searched results" do
-        img1 = create(:image, :name => "test")
-        Image.search_scope("Test").should == [img1]
+        image.update_attribute(:name, "test")
+        Image.search_scope("Test").should == [image]
       end
     end
     context "when query description present" do
       it "should return searched results" do
-        img1 = create(:image, :description => "hello")
-        Image.search_scope("h").should == [img1]
+        image.update_attribute(:description, "hello")
+        Image.search_scope("h").should == [image]
         Image.search_scope("abc").should == []
       end
     end
     context "when query keyword present" do
       it "should return searched results" do
-        img1 = create(:image, :keyword => "public")
-        Image.search_scope("Pub").should == [img1]
+        image.update_attribute(:keyword, "public")
+        Image.search_scope("Pub").should == [image]
         Image.search_scope("pri").should == []
       end
     end
 
     context "should not return result" do
       it "when image is hidden by admin" do
-        img1 = create(:image, :keyword => "public", :hidden_by_admin => true)
+        image.update_attributes(:keyword => "public", :hidden_by_admin => true)
         Image.search_scope("Pub").should == []
       end
 
       it "when image belongs to a private gallery" do
-        img1 = create(:image, :keyword => "public")
-        img1.gallery.update_attribute(:permission, :private)
+        image.update_attribute(:keyword, "public")
+        image.gallery.update_attribute(:permission, :private)
         Image.search_scope("Pub").should == []
       end
     end
@@ -186,17 +185,15 @@ describe Image do
   describe ".public_or_owner" do
     context "when user condition matches" do
       it "returns matched images" do
-        user = create(:user)
-        new_image = create(:image, :user_id => user.id)
+        new_image = create(:image, :gallery => create(:gallery, :user => user))
         Image.public_or_owner(user).should == [new_image]
       end
     end
     context "when gallery condition matches" do
       it "returns matched images" do
-        another_user = create(:user)
         gallery = create(:gallery, :permission => "public")
         new_image = create(:image, :gallery_id => gallery.id)
-        Image.public_or_owner(another_user).should == [new_image]
+        Image.public_or_owner(user).should == [new_image]
       end
     end
   end
@@ -204,33 +201,32 @@ describe Image do
   describe ".paginate_and_sort" do
     context "without sort_field" do
       it "should display output" do
-        images = create_list(:image, 10)
-        Image.paginate_and_sort({ :page => 1, :per_page => 5 }).should == images.reverse.first(5)
+        images
+        Image.paginate_and_sort({ :page => 1, :per_page => 2 }).should == images.reverse.first(2)
       end
     end
 
     context "with date uploaded as sort field" do
       it "should display output" do
-        images = create_list(:image, 10)
-        Image.paginate_and_sort({ :page => 1, :per_page => 5, :sort_field => "date_uploaded" }).should == images.reverse.first(5)
+        Image.paginate_and_sort({ :page => 1, :per_page => 2, :sort_field => "date_uploaded" }).should == images.reverse.first(2)
       end
     end
 
     context "with num of views as sort field" do
       it "should display output" do
-        img1 = create(:image, :pageview => 3)
+        image.update_attribute(:pageview, 3)
         img2 = create(:image, :pageview => 2)
         img3 = create(:image, :pageview => 1)
-        Image.paginate_and_sort({ :page => 1, :per_page => 2, :sort_field => "num_of_views" }).should == [img1, img2]
+        Image.paginate_and_sort({ :page => 1, :per_page => 2, :sort_field => "num_of_views" }).should == [image, img2]
       end
     end
   end
 
   describe ".popular_with_pagination" do
     context "with sort expression" do
-      it "should display output", :flickering do
-        images = create_list(:image, 10)
-        Image.popular_with_pagination({ :page => 1, :per_page => 5}).should == images.reverse.first(5)
+      it "should display output" do
+        images
+        Image.popular_with_pagination({ :page => 1, :per_page => 2}).should == images.reverse.first(2)
       end
     end
   end
@@ -299,8 +295,8 @@ describe Image do
     context "when tier id matches" do
       it "should return price" do
         product = create(:product)
-        img = create(:image, tier_id: 1)
-        img.sample_product_price.to_i.should == 500
+        image.update_attribute(:tier_id, 1)
+        image.sample_product_price.to_i.should == 500
       end
     end
 
@@ -404,9 +400,9 @@ describe Image do
 
   describe "#flagged?" do
     context "with image flags" do
-      it "should return true", :flickering do
-        img1 = create(:image_with_image_flags)
-        img1.flagged?.should be_true
+      it "should return true" do
+        flagged_image
+        flagged_image.flagged?.should be_true
       end
     end
     context "without image flags" do
@@ -419,10 +415,10 @@ describe Image do
   describe "#reinstate!" do
     context "with image flags" do
       it "should destroy image flags and remove" do
-        img = create(:image_with_image_flags)
-        img.reinstate!
-        img.image_flags.count.should be_zero
-        img.removed.should be_false
+        flagged_image
+        flagged_image.reinstate!
+        flagged_image.image_flags.count.should be_zero
+        flagged_image.removed.should be_false
       end
     end
   end
