@@ -31,27 +31,27 @@ feature "Accessing Photo Page" do
     scenario "like button" do
       within("#btn-like") do
         page.find(".like-link").click
-        current_path.should == new_user_session_path
       end
+      page.should have_content("You need to sign in or sign up before continuing.")
     end
 
     scenario "flag button" do
       within("div#center .right .flag") do
         page.find(".like-link").click
-        current_path.should == new_user_session_path
       end
+      page.should have_content("You need to sign in or sign up before continuing.")
     end
 
     scenario "order button", :js => true do
       page.find(".order").click
-      current_path.should == new_user_session_path
+      page.should have_content("You need to sign in or sign up before continuing.")
     end
 
     scenario "follow button" do
       within("div#btn-follow") do
         page.find(".like-link").click
-        current_path.should == new_user_session_path
       end
+      page.should have_content("You need to sign in or sign up before continuing.")
     end
 
     scenario "photo details on the right bar" do

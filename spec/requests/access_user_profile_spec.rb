@@ -9,10 +9,10 @@ feature "Accessing User Profile Page" do
 
   context "without login" do
     background do
-      visit profile_user_path(:user_id => user.id)
+      visit profile_user_path(user)
     end
 
-    scenario "profile information", :flickering do
+    scenario "profile information" do
       page.should have_link(user.fullname, href: "#{profile_user_path(user)}")
       page.should have_selector('div', text: "Photo")
       page.should have_selector('div', text: "Gallery")
