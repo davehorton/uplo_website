@@ -38,6 +38,7 @@
 //= require filtrr
 //= require_tree ./extensions
 //= require effects
+//= require touch_tooltip_fix
 //= require helper
 //= require_tree ./views
 
