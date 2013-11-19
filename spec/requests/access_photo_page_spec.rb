@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 feature "Accessing Photo Page" do
-  let!(:product) { create(:product) }
+  let!(:product) { create(:product, :size => create(:rectangular_size)) }
   let!(:another_product) { create(:product, :size => create(:square_size)) }
   let!(:product_option) { create(:product_option, :product_id => product.id, :description => "Borderless") }
   let!(:another_product_option) { create(:product_option, :product_id => another_product.id, :description => "Borderless") }
