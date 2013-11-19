@@ -3,7 +3,7 @@ require 'spork'
 
 if ENV['COVERAGE']
   require 'simplecov'
-  SimpleCov.start do
+  SimpleCov.start 'rails' do
     add_group "Models", "app/models"
   end
 end
