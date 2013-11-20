@@ -53,6 +53,33 @@ describe Api::GalleriesController do
     end
   end
 
+
+  context "#update" do
+
+    context "when gallery hash is correct" do
+
+      it "should update the gallery successfully" do
+        gallery = create(:gallery, user: subject.current_user )
+        put :update, {"id"=>"#{gallery.id}", "gallery"=>{"description"=>"a thing of beauty", "keyword"=>"nature", "name" => "my new gallery"}}
+        response.should be_success
+        response.body.should == GallerySerializer.new(gallery.reload, scope: subject.current_user).to_json
+        gallery.description.should == "a thing of beauty"
+        gallery.name.should == "my new gallery"
+      end
+    end
+
+    context "when gallery hash is incorrect" do
+
+      it "should show error messages" do
+        gallery = create(:gallery, user: subject.current_user )
+        put :update, {"id"=>"#{gallery.id}", "gallery"=>{"description"=>"a thing of beauty", "keyword"=>"nature", "name" => ""}}
+        response.should_not be_success
+        response.body.should == "{\"msg\":\"Name can't be blank\"}"
+      end
+    end
+
+  end
+
   context "#destroy" do
 
     it "should destroy gallery" do

@@ -8,6 +8,8 @@ describe Api::ImagesController do
   let!(:rectangular_size) { create(:size, width: 8, height: 10) }
   let!(:square_product) { create(:product, size: square_size) }
   let!(:rectangular_product) { create(:product, size: rectangular_size) }
+  let!(:product_option) { create(:product_option, product: square_product, description: "Borderless") }
+  let!(:another_product_option) { create(:product_option, product: rectangular_product, description: "Borderless") }
 
   it "should have a current_user" do
     subject.current_user.should_not be_nil
@@ -15,19 +17,33 @@ describe Api::ImagesController do
 
   context "#index" do
 
-    context "should return matched result" do
+    context "when gallery id present" do
 
-      it "when gallery id present" do
+      it "should return matched result" do
         gallery = create(:gallery_with_images)
         get :index, gallery_id: gallery.id
         images = gallery.images.unflagged.with_gallery.paginate_and_sort({})
         response.body.should == ActiveModel::ArraySerializer.new(images, root: "images", scope: subject.current_user, meta: { total: 2 }).to_json
       end
 
-      it "when user id present" do
+    end
+
+    context "when user is current user" do
+      it "should return matched result" do
         image = create(:real_image, gallery: create(:gallery, user: subject.current_user ))
         get :index, user_id: subject.current_user.id
         images = subject.current_user.images.unflagged.with_gallery.paginate_and_sort({})
+        response.body.should == ActiveModel::ArraySerializer.new(images, root: "images", scope: subject.current_user, meta: { total: 1 }).to_json
+      end
+
+    end
+
+    context "when user is not current user" do
+      it "should return matched result" do
+        image = create(:real_image)
+        user = image.user
+        get :index, user_id: user.id
+        images = user.images.public_access.paginate_and_sort({})
         response.body.should == ActiveModel::ArraySerializer.new(images, root: "images", scope: subject.current_user, meta: { total: 1 }).to_json
       end
 
@@ -73,6 +89,21 @@ describe Api::ImagesController do
         get :search, query: "Photo"
         images = Image.search_scope("Photo").public_or_owner(subject.current_user).paginate_and_sort({})
         response.body.should == ActiveModel::ArraySerializer.new(images, root: "images", scope: subject.current_user, meta: { total: 1 }).to_json
+      end
+
+    end
+  end
+
+  context "#search_by_id" do
+
+    context "when ids present" do
+
+      it "should return matched result" do
+        image = create(:real_image)
+        another_image = create(:real_image)
+        get :search_by_id, {"ids"=>"#{[image.id, another_image.id]}"}
+        images = [another_image, image]
+        response.body.should == ActiveModel::ArraySerializer.new(images, scope: subject.current_user, root: "images").to_json
       end
 
     end
@@ -147,9 +178,36 @@ describe Api::ImagesController do
     end
   end
 
+  context "#create" do
+
+    context "when image hash is correct" do
+
+      it "should create the image successfully" do
+        image = build(:real_image, description: "my little experiences", gallery: create(:gallery, user: subject.current_user ) )
+        post :create, {"gallery_id"=>"#{image.gallery_id}", "image"=>image.attributes}
+        response.should be_success
+        response.body.should == ImageSerializer.new(Image.last, scope: subject.current_user).to_json
+        Image.count.should == 1
+        Image.last.description.should == "my little experiences"
+        Image.last.image_file_name.should_not be_nil
+      end
+    end
+
+    context "when image hash is incorrect" do
+
+      it "should show error messages" do
+        image = build(:real_image, gallery: create(:gallery))
+        post :create, {"gallery_id"=>"#{image.gallery_id}", "image"=>image.attributes}
+        response.should_not be_success
+        response.body.should == "{\"msg\":\"Not found\"}"
+      end
+    end
+
+  end
+
   context "#update" do
 
-    context "when image hash is not blank" do
+    context "when image hash is correct" do
 
       it "should update the image successfully" do
         image = create(:real_image, gallery: create(:gallery, user: subject.current_user ) )
@@ -158,6 +216,16 @@ describe Api::ImagesController do
         response.body.should == ImageSerializer.new(image.reload, scope: subject.current_user).to_json
         image.description.should == "a thing of beauty"
         image.tier_id.should == 4
+      end
+    end
+
+    context "when image hash is incorrect" do
+
+      it "should show error messages" do
+        image = create(:real_image, gallery: create(:gallery, user: subject.current_user ) )
+        put :update, {"id"=>"#{image.id}", "image"=>{"description"=>"a thing of beauty", "keyword"=>"nature", "gallery_id" => ""}}
+        response.should_not be_success
+        response.body.should == "{\"msg\":\"Gallery can't be blank\"}"
       end
     end
 
@@ -172,6 +240,9 @@ describe Api::ImagesController do
       response.body.should == "{\"msg\":\"image deleted\"}"
     end
 
+  end
+
+  context "#total_sales", :not_being_used do
   end
 
   context "#purchases" do

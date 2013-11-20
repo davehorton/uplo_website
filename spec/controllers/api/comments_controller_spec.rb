@@ -28,9 +28,10 @@ describe Api::CommentsController do
 
   context "#create" do
 
-    context "when comment hash is blank" do
+    context "when comment hash is incorrect" do
       it "should show error message" do
-        post :create, {:comment => { }}
+        post :create, {"comment"=>{"description"=>"a thing of beauty"}, "image_id"=>""}
+        response.should_not be_success
         response.body.should == "{\"msg\":\"Not found\"}"
       end
     end
