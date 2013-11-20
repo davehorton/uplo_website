@@ -164,19 +164,6 @@ describe Api::ImagesController do
     end
   end
 
-  context "#print_image_preview" do
-
-    context "when image have does not have matching product option" do
-
-      it "should create preview" do
-        image = create(:real_image)
-        get :print_image_preview, id: image.id, product_option_id: product_option.id
-        response.body.should == { preview_url: image.find_or_generate_preview_image(product_option)}.to_json
-      end
-
-    end
-  end
-
   context "#show" do
 
     context "should image details" do
