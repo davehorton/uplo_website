@@ -25,7 +25,7 @@ class ProductOption < ActiveRecord::Base
       height = size.minimum_recommended_resolution[:h]
     end
 
-    if image.image.height > image.image.width
+    if height > width
       new_height = width
       new_width  = height
       height = new_height
