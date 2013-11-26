@@ -206,7 +206,7 @@ class Image < ActiveRecord::Base
         current_geometry.height >= size.minimum_recommended_resolution[:h]
       end
 
-      if gallery.is_public?
+      if gallery && gallery.is_public?
         Rails.cache.fetch [:compatible_sizes_public, compatible_sizes.map(&:id)] do
           Product.public_gallery.includes(:moulding, :size).for_sizes(compatible_sizes)
         end
