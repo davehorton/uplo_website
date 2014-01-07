@@ -104,7 +104,7 @@ class PaymentsController < ApplicationController
         flash[:success] = "Congratulations! Your order is being processed."
         redirect_to order_path(@order) and return
       else
-        raise UploException::PaymentProcessError(response.message)
+        raise UploException::PaymentProcessError.new(response.message)
       end
     end
   rescue UploException::PaymentProcessError,
