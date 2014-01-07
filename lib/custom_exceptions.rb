@@ -6,8 +6,8 @@ module UploException
   end
 
   class PaymentProcessError < StandardError
-    def message
-      "Problem with your order!"
+    def message(custom_message = nil)
+      custom_message || "Problem with your order!"
     end
   end
 
