@@ -1,16 +1,15 @@
 module UploException
   class InvalidCreditCard < StandardError
-    def message
-      "Credit card information is invalid!"
+    def initialize(msg = "Credit card information is invalid!")
+      super(msg)
     end
   end
 
   class PaymentProcessError < StandardError
-    def message(custom_message = nil)
-      custom_message || "Problem with your order!"
+    def initialize(msg = "Problem with your order!")
+      super(msg)
     end
   end
 
   class PaymentProfileError < StandardError; end
-
 end
