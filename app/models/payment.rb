@@ -49,7 +49,7 @@ class Payment
     transaction = {
       transaction: {
         type: :auth_capture,
-        amount: order.order_total,
+        amount: order.order_total.round(4),
         customer_profile_id: user.an_customer_profile_id,
         customer_payment_profile_id: user.an_customer_payment_profile_id
       }
