@@ -44,7 +44,7 @@ module Uplo
     config.encoding = "utf-8"
 
     # Configure sensitive parameters which will be filtered from the log file.
-    config.filter_parameters += [:password]
+    config.filter_parameters += [:card_number, :card_type, :name_on_card, :password]
 
     # Enable escaping HTML in JSON.
     config.active_support.escape_html_entities_in_json = true
