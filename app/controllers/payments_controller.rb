@@ -114,7 +114,7 @@ class PaymentsController < ApplicationController
 
     flash[:error] = ex.message
     @order.set_addresses(current_user)
-    ExternalLogger.new.log_error(ex, ex.message, params) if ex.is_a?(UploException::PaymentProfileError)
+    ExternalLogger.new.log_error(ex, ex.message, params) #if ex.is_a?(UploException::PaymentProfileError)
     render :template => "orders/index", :params => params
   end
 
