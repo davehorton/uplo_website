@@ -1,3 +1,4 @@
+require 'csv'
 require 'valid_email'
 
 class User < ActiveRecord::Base
@@ -173,6 +174,17 @@ class User < ActiveRecord::Base
     self.transaction do
       self.reinstate_ready_users.each do |user|
         user.reinstate
+      end
+    end
+  end
+
+  def self.to_csv
+    columns = %w(first_name last_name email username created_at last_sign_in_at)
+
+    CSV.generate do |csv|
+      csv << columns
+      all.each do |user|
+        csv << user.attributes.values_at(*columns)
       end
     end
   end

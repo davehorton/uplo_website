@@ -202,6 +202,7 @@ Uplo::Application.routes.draw do
     resources :members do
       collection do
         get :search
+        get :export
       end
     end
 

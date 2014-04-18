@@ -15,6 +15,10 @@ class Admin::MembersController < Admin::AdminController
     render 'admin/members/index'
   end
 
+  def export
+    render text: User.confirmed.to_csv
+  end
+
   protected
 
     def set_current_tab
