@@ -221,7 +221,7 @@ GEM
       paperclip (~> 3.1)
     paperclip-meta (0.4.3)
       paperclip
-    pg (0.15.1)
+    pg (0.17.1)
     poltergeist (1.5.0)
       capybara (~> 2.1)
       cliver (~> 0.3.1)
@@ -427,7 +427,7 @@ DEPENDENCIES
   paperclip
   paperclip-dropbox (~> 1.1.7)
   paperclip-meta
-  pg
+  pg (~> 0.17.1)
   poltergeist
   quiet_assets
   rails (= 3.2.13)

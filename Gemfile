@@ -3,7 +3,7 @@ ruby '1.9.3'
 
 # main stack
 gem 'rails', '3.2.13'
-gem 'pg'
+gem 'pg', '~> 0.17.1'
 
 # application components
 gem 'activemerchant'
