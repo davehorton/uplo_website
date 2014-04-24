@@ -28,6 +28,12 @@ Observers are disabled in specs (see spec_helper) but have their own specific te
 NOTE: We are no longer using spork due to some issues it introduces.
 Use Zeus instead, see http://robots.thoughtbot.com/improving-rails-boot-time-with-zeus.
 
+Then it's as easy as running the following from the command line:
+
+```
+zeus test spec/
+```
+
 ## Development Environment Notes
 
 ### Emails
