@@ -2,7 +2,7 @@ source 'http://rubygems.org'
 ruby '1.9.3'
 
 # main stack
-gem 'rails', '3.2.13'
+gem 'rails', '3.2.17'
 gem 'pg', '~> 0.17.1'
 
 # application components
