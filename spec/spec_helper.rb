@@ -20,6 +20,7 @@ Spork.prefork do
   require 'rspec/rails'
   require 'capybara/rspec'
   require 'capybara/rails'
+  require 'capybara/poltergeist'
   require 'database_cleaner'
   require 'sidekiq/testing/inline'
   require 'paperclip/matchers'
@@ -31,10 +32,11 @@ Spork.prefork do
   Capybara.configure do |config|
     config.default_selector  = :css
     config.default_wait_time = 1
+    config.javascript_driver = :poltergeist
   end
 
-  # quieter logger
-#  Rails.logger.level = 4
+  # quieter logger = less i/o = faster specs
+  Rails.logger.level = 4
 
   RSpec.configure do |config|
     # == Mock Framework
