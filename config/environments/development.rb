@@ -1,8 +1,6 @@
 Uplo::Application.configure do
   # Settings specified here will take precedence over those in config/application.rb
-
-  ENV['UPLO_DOMAIN'] = 'uplo.dev'
-  DOMAIN = ENV['UPLO_DOMAIN'] || 'localhost:3000'
+  DOMAIN = ENV['UPLO_DOMAIN']
 
   # In the development environment your application's code is reloaded on
   # every request. This slows down response time but is perfect for development
@@ -16,7 +14,7 @@ Uplo::Application.configure do
   config.whiny_nils = true
 
   # Show full error reports and disable caching
-  config.consider_all_requests_local       = true
+  config.consider_all_requests_local = true
 
   # Don't care if the mailer can't send
   config.action_mailer.raise_delivery_errors = false

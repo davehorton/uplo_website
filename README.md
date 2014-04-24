@@ -17,6 +17,7 @@ Historical note: we inherited this project from another shop in February 2013. W
 3. Setup other config files (see config/*.yml.sample)
 4. bundle
 5. rake db:setup && rake db:test:prepare
+6. cp .env-sample .env and update your settings
 
 ## Testing
 

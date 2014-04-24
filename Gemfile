@@ -65,6 +65,7 @@ group :assets do
 end
 
 group :development, :test do
+  gem 'dotenv-rails'
   gem 'factory_girl_rails', '~> 4.2'
   gem 'faker'
   gem 'rspec-rails', '~> 2.13'
