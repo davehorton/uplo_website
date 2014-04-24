@@ -1,6 +1,8 @@
 source 'http://rubygems.org'
 ruby '1.9.3'
 
+gem 'dotenv-rails', :groups => [:development, :test]
+
 # main stack
 gem 'rails', '3.2.17'
 gem 'pg', '~> 0.17.1'
@@ -65,7 +67,6 @@ group :assets do
 end
 
 group :development, :test do
-  gem 'dotenv-rails'
   gem 'factory_girl_rails', '~> 4.2'
   gem 'faker'
   gem 'rspec-rails', '~> 2.13'
