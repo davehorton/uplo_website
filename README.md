@@ -25,6 +25,9 @@ See https://github.com/webficient/standards/tree/master/testing for guidelines.
 
 Observers are disabled in specs (see spec_helper) but have their own specific tests.
 
+NOTE: We are no longer using spork due to some issues it introduces.
+Use Zeus instead, see http://robots.thoughtbot.com/improving-rails-boot-time-with-zeus.
+
 ## Development Environment Notes
 
 ### Emails

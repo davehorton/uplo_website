@@ -69,7 +69,7 @@ end
 group :development, :test do
   gem 'factory_girl_rails', '~> 4.2'
   gem 'faker'
-  gem 'rspec-rails', '~> 2.13'
+  gem 'rspec-rails', '~> 2.14.2'
 end
 
 group :development do
@@ -82,13 +82,9 @@ group :test do
   gem 'capybara'
   gem 'database_cleaner'
   gem 'email_spec'
-  gem 'guard'
-  gem 'guard-spork'
   gem 'launchy'
   gem 'poltergeist'
   gem 'rb-fsevent'
-  gem 'rspec-nc'
-  gem 'spork-rails'
   gem 'shoulda-matchers'
   gem 'timecop'
   gem 'simplecov', :require => false

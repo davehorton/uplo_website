@@ -30,3 +30,8 @@ db/dumpfile_final
 .powrc
 /coverage
 .env
+zeus.json
+
+custom_plan.rb
+
+.zeus.sock
