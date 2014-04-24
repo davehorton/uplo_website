@@ -24,8 +24,7 @@ class Sales
 
   def total_image_sales(month = nil)
     total = 0
-    sold_items = self.sold_items(month)
-    sold_items.each do |item|
+    sold_items(month).each do |item|
       total += ((item.price * item.quantity) * item.commission_percent.to_f / 100)
     end
     total
@@ -33,26 +32,26 @@ class Sales
 
   # mon with year, return sold quantity
   def sold_image_quantity(month = nil)
-    self.sold_items(month).sum(&:quantity)
+    sold_items(month).sum(&:quantity)
   end
 
   def raw_image_purchased(item_paging_params = {})
     order_ids = self.image.orders.completed.pluck(:id)
 
-    sold_items = []
+    items = []
     if order_ids.any?
-      sold_items = LineItem.paginate_and_sort(item_paging_params.merge(sort_expression: 'orders.transaction_date desc')).
+      items = LineItem.paginate_and_sort(item_paging_params.merge(sort_expression: 'orders.transaction_date desc')).
         includes(:order => :user).
         where(image_id: self.image.id, order_id: order_ids)
     end
-    sold_items
+    items
   end
 
   def image_purchased_info(item_paging_params = {})
     result = {:data => [], :total_quantity => 0, :total_sale => 0}
-    sold_items = self.raw_image_purchased(item_paging_params)
+    items = self.raw_image_purchased(item_paging_params)
 
-    sold_items.each { |item|
+    items.each { |item|
       user = item.order.user
       purchased_date = DateTime.parse((item.order.transaction_date).strftime "%B %d, %Y")
       result[:data] << {
