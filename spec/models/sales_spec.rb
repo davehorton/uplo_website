@@ -126,7 +126,7 @@ describe Sales do
         2.times do
           line_item = create(:line_item, :image => image, :order => new_order, :quantity => 4)
         end
-        sale.sold_image_quantity("April").should == 8
+        sale.sold_image_quantity("Apr 2013").should == 8
       end
     end
   end

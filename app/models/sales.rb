@@ -7,6 +7,7 @@ class Sales
     self.image = image
   end
 
+  # month, e.g. Apr 2013
   def sold_items(month = nil)
     orders = self.image.orders.completed
 
@@ -22,6 +23,7 @@ class Sales
     (orders.length==0) ? [] : self.image.line_items.where(order_id: order_ids)
   end
 
+  # month, e.g. Apr 2013
   def total_image_sales(month = nil)
     total = 0
     sold_items(month).each do |item|
@@ -31,6 +33,7 @@ class Sales
   end
 
   # mon with year, return sold quantity
+  # month, e.g. Apr 2013
   def sold_image_quantity(month = nil)
     sold_items(month).sum(&:quantity)
   end
@@ -76,7 +79,7 @@ class Sales
     result = []
     date = DateTime.parse current_date.to_s
     prior_months = TimeCalculator.prior_year_period(date, {:format => '%b %Y'})
-    prior_months.each { |mon|
+    prior_months.each do |mon|
       short_mon = DateTime.parse(mon).strftime('%b')
       if options.nil?
         result << { :month => short_mon, :sales => self.total_image_sales(mon) }
@@ -86,7 +89,7 @@ class Sales
           :sales => (options[:report_by]==SALE_REPORT_TYPE[:price]) ? total_image_sales(mon) : sold_image_quantity(mon)
         }
       end
-    }
+    end
     return result
   end
 
