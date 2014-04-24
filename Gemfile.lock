@@ -385,7 +385,6 @@ DEPENDENCIES
   aescrypt
   alchemist
   aws-sdk
-  bundler (~> 1.3.5)
   cancan
   capybara
   classy_enum
