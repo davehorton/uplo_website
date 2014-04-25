@@ -295,7 +295,10 @@ class ImagesController < ApplicationController
       @product_options = @line_item.product.product_options
     end
 
-    raise "No product options exist for image #{@image.id}" if !@product_options
+    if !@product_options
+      AdminMailer.delay.missing_product(@image.id)
+      raise "No product options exist for image #{@image.id}"
+    end
 
     @products = @image.available_products
   end
