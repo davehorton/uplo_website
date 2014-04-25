@@ -40,7 +40,7 @@ describe ImageFlag do
     end
   end
 
-  describe "description_presence" do
+  describe "description_presence validator" do
     context "with description" do
       it "should return nil" do
         image_flag.description_presence.should be_nil
@@ -48,19 +48,32 @@ describe ImageFlag do
     end
 
     context "without description" do
-      it "should raise error when flag type is terms_of_use_violation" do
-        image_flag.update_attributes(:flag_type => 1, :description => "")
-        image_flag.description_presence.should raise_error
+      it "should have an error when flag type is terms_of_use_violation" do
+        image_flag.flag_type = ImageFlag::FLAG_TYPE['terms_of_use_violation']
+        image_flag.description = nil
+        image_flag.valid?
+        expect(image_flag.errors_on(:description)).to include(I18n.t("image_flag.missing_description_terms_of_use_violation"))
       end
 
-      it "should raise error when flag type is copyright" do
-        image_flag.update_attributes(:flag_type => 2, :description => "")
-        image_flag.description_presence.should raise_error
+      it "should have an error when flag type is copyright" do
+        image_flag.flag_type = ImageFlag::FLAG_TYPE['copyright']
+        image_flag.description = nil
+        image_flag.valid?
+        expect(image_flag.errors_on(:description)).to include(I18n.t("image_flag.missing_description_copyright"))
       end
 
-      it "should raise error when flag type is nudity" do
-        image_flag.update_attribute(:description, "")
-        image_flag.description_presence.should == ["Unknown violation type!"]
+      it "should not have an error when flag type is nudity" do
+        image_flag.flag_type = ImageFlag::FLAG_TYPE['nudity']
+        image_flag.description = nil
+        image_flag.valid?
+        expect(image_flag).to have(:no).errors_on(:description)
+      end
+
+      it "should have an error when flag type is unknown" do
+        image_flag.flag_type = 43
+        image_flag.description = nil
+        image_flag.valid?
+        expect(image_flag.errors_on(:description)).to include("Unknown violation type!")
       end
     end
   end
