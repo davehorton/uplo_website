@@ -453,13 +453,13 @@ class User < ActiveRecord::Base
   end
 
   def withdraw_paypal(amount)
-    if (self.paypal_email.blank?)
+    if paypal_email.blank?
       errors.add(:paypal_email, "must exist")
       return false
-    elsif (amount > owned_amount)
+    elsif amount > owned_amount
       errors.add(:base, "Amount must be less than owned amount")
       return false
-    elsif (amount <= 0)
+    elsif amount <= 0
       errors.add(:base, "Amount not valid")
       return false
     else

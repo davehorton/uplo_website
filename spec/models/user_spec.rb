@@ -418,10 +418,7 @@ describe User do
       it "should return cart when order has no billing address" do
         cart = create(:cart, :user_id => user.id)
         cart.order.update_attribute(:billing_address_id, nil)
-        user.init_cart
-        cart.order.billing_address.first_name.should == user.billing_address.first_name
-        cart.order.billing_address.last_name.should == user.billing_address.last_name
-        cart.order.billing_address.street_address.should == user.billing_address.street_address
+        user.init_cart.should == cart
       end
 
       it "should update cart and return" do
@@ -658,23 +655,94 @@ describe User do
   end
 
   describe "#withdraw_paypal" do
-    context "without paypal_email" do
-      it "should raise error" do
-        user.withdraw_paypal(500).should raise_error
+    context "when paypal_email is missing" do
+      before do
+        user.paypal_email = nil
+      end
+
+      it "should not be successful" do
+        expect(user.withdraw_paypal(500)).to be_false
+      end
+
+      it "should set an error message" do
+        user.withdraw_paypal(500)
+        expect(user.errors[:paypal_email]).to eq(["must exist"])
       end
     end
 
-    context "with paypal_email" do
-      it "should raise error with amount less or equal to zero" do
-        user.withdraw_paypal(0).should raise_error
+    context "when paypal_email is set" do
+      before do
+        user.paypal_email = Faker::Internet.email
       end
 
-      it "should raise error with amount greater than owned_amount" do
-        gallery1 = another_user.galleries.first
-        image = create(:image, :gallery => gallery1)
-        new_order = create(:completed_order)
-        line_item = create(:line_item, :image_id => image.id, :order_id => new_order.id, :quantity => 4, :price => 50, :commission_percent => 10.0)
-        another_user.withdraw_paypal(5000000).should raise_error
+      context "when amount is greater than owned amount" do
+        before do
+          user.stub(:owned_amount => 100)
+        end
+
+        it "should not be successful" do
+          expect(user.withdraw_paypal(101)).to be_false
+        end
+
+        it "should set an error message" do
+          user.withdraw_paypal(101)
+          expect(user.errors[:base]).to eq(["Amount must be less than owned amount"])
+        end
+      end
+
+      context "when amount is 0" do
+        it "should not be successful" do
+          expect(user.withdraw_paypal(0)).to be_false
+        end
+
+        it "should set an error message" do
+          user.withdraw_paypal(0)
+          expect(user.errors[:base]).to eq(["Amount not valid"])
+        end
+      end
+
+      context "for a successful withdrawal" do
+        let(:owned_amount) { 100 }
+
+        before do
+          user.stub(:owned_amount => owned_amount)
+          gateway_stub = double()
+          gateway_stub.stub(:success? => true)
+          Payment.stub(:transfer_balance_via_paypal => gateway_stub)
+        end
+
+        it "is successful" do
+          expect(user.withdraw_paypal(owned_amount)).to be_true
+        end
+
+        it "increments the withdrawn_amount" do
+          expect { user.withdraw_paypal(owned_amount) }.to change { user.withdrawn_amount }
+        end
+      end
+
+      context "for an unsuccessful withdrawal" do
+        let(:owned_amount) { 100 }
+
+        before do
+          user.stub(:owned_amount => owned_amount)
+          gateway_stub = double()
+          gateway_stub.stub(:success? => false, :message => 'failure', :params => nil)
+          Payment.stub(:transfer_balance_via_paypal => gateway_stub)
+        end
+
+        it "is not successful" do
+          expect(user.withdraw_paypal(owned_amount)).to be_false
+        end
+
+        it "sets an error message" do
+          user.withdraw_paypal(owned_amount)
+          expect(user.errors[:base][0]).to include("Something went wrong")
+        end
+
+        it "calls external logger" do
+          allow_any_instance_of(ExternalLogger).to receive(:log_error)
+          user.withdraw_paypal(owned_amount)
+        end
       end
     end
   end
@@ -725,23 +793,7 @@ describe User do
     end
   end
 
-  describe "#check_card_number" do
-    context "when card number is valid" do
-      it "should return true" do
-        user.update_attribute(:card_number, "1")
-        user.card_number.should == "1"
-      end
-    end
-
-    context "when card number is not valid" do
-      it "should raise error" do
-        user1 = build(:user, :card_number => "235436478").should raise_error
-      end
-    end
-  end
-
   describe "#billing_address_attributes=" do
-
     context "when user has billing address" do
       it "should not create billing address" do
         user.update_attribute(:billing_address_id, address.id)
