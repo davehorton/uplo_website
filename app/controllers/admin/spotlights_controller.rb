@@ -46,6 +46,11 @@ class Admin::SpotlightsController < Admin::AdminController
     render(:json => result)
   end
 
+  def clear_all
+    Image.demote_all!
+    redirect_to admin_spotlights_path, notice: "Spotlights cleared!"
+  end
+
   protected
 
     def set_current_tab

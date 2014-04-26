@@ -138,6 +138,10 @@ class Image < ActiveRecord::Base
     end
   end
 
+  def self.demote_all!
+    Image.where(promoted: true).update_all(promoted: false, promoted_at: nil)
+  end
+
   delegate :fullname, :username, :to => :user, allow_nil: true
   delegate :id, :to => :user, allow_nil: true, prefix: true
   delegate :name, :is_public?, :to => :gallery, allow_nil: true, prefix: true
@@ -290,7 +294,7 @@ class Image < ActiveRecord::Base
 
   def demote!
     self.promoted = false
-    self.promoted_at =  ''
+    self.promoted_at =  nil
     save!
   end
 

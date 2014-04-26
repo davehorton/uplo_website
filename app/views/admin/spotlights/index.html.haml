@@ -9,6 +9,7 @@
     - else
       %h1.left.title= "#{t('admin.spotlights')} / #{t("admin.search")}"
     .right
+      = button_to 'Clear All', clear_all_admin_spotlights_path, confirm: 'Are you sure?', style: 'float:left'
       = render(:partial => "admin_search_box", :locals => {:action => search_admin_spotlights_path})
       #search-options
         %span.sort-direction{'data-sort-direction' => 'asc', :class => current_sort_direction('asc', @sort_direction)}

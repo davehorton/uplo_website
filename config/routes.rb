@@ -209,6 +209,7 @@ Uplo::Application.routes.draw do
     resources :spotlights do
       collection do
         get :search
+        post :clear_all
       end
 
       member do
