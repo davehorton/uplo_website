@@ -1,3 +1,4 @@
+# encoding: UTF-8
 module ImagesHelper
   # Generate Pinterest share link.
   # This link can be also used for 'Pin it' button.
@@ -12,7 +13,7 @@ module ImagesHelper
   end
 
   def image_desc(image)
-    CGI.escape("Share from UPLO: #{formatted_image_name(image)} by #{image.user.fullname}")
+    CGI.escape("Share from UPLO: #{formatted_image_name(image)} by ©#{image.user.fullname}")
   end
 
   # TODO: move to ability class
