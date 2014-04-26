@@ -133,7 +133,7 @@ GEM
     highcharts-rails (2.3.5)
       railties (>= 3.1)
     hike (1.2.3)
-    honeybadger (1.7.0)
+    honeybadger (1.13.0)
       json
     hpricot (0.8.6)
     httparty (0.11.0)
