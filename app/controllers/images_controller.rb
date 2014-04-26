@@ -291,7 +291,7 @@ class ImagesController < ApplicationController
       products = @image.available_products
       @product_options = products.first.product_options if products.any?
     else
-      @line_item = LineItem.find_by_id(params[:line_item])
+      @line_item = LineItem.find(params[:line_item])
       @product_options = @line_item.product.product_options
     end
 
