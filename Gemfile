@@ -6,7 +6,6 @@ gem 'dotenv-rails', :groups => [:development, :test]
 # main stack
 gem 'rails', '3.2.17'
 gem 'pg', '~> 0.17.1'
-gem 'unicorn'
 
 # application components
 gem 'activemerchant'
@@ -76,6 +75,7 @@ end
 group :development do
   gem 'letter_opener'
   gem 'quiet_assets'
+  gem 'thin'
 end
 
 group :test do
@@ -92,4 +92,5 @@ end
 
 group :staging, :production do
   gem 'ey_config'
+  gem 'unicorn'
 end
