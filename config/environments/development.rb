@@ -40,6 +40,8 @@ Uplo::Application.configure do
   # Expands the lines which load the assets
   config.assets.debug = true
 
+  config.middleware.use LogPrettyJson
+
   config.paperclip_defaults = {
     :storage => :filesystem,
     :path => ":rails_root/public/system/:attachment_singular/:id/:style/:filename",
