@@ -61,7 +61,7 @@ $bold-text: #000000;
       }
       .left {
         width: 435px;
-        margin-top: 65px;
+        margin-top: 42px;
         .info {
           margin: 20px 0;
         }
@@ -76,7 +76,7 @@ $bold-text: #000000;
         background: image-url("img-banner-devices-spotlight.png") no-repeat scroll center left transparent;
         height: 316px;
         width: 525px;
-        margin-top: 50px;
+        margin-top: 27px;
       }
     }
   }
@@ -87,6 +87,37 @@ $bold-text: #000000;
 }
 
 #banner {
+  .follow-us {
+    text-align: right;
+    width: 960px;
+    height: 18px;
+    margin: 0 auto;
+    padding-top: 5px;
+    font-size: 11px;
+
+    span {
+      display: inline-block;
+      padding-top: 3px;
+      color: #A1A1A1;
+    }
+
+    a {
+      color: #FFFFFF;
+    }
+
+    ul {
+      float: right;
+      list-style-type: none;
+      margin: 0 69px 0 2px;
+      padding: 0;
+
+      li {
+        float: left;
+        margin-left: 6px;
+      }
+    }
+  }
+
   .sub {
     background: image-url("bg-sub-banner.png") repeat-x scroll center left transparent;
     height: 149px;
@@ -100,6 +131,9 @@ $bold-text: #000000;
       width: 273px;
       margin: 20px 0px;
       word-spacing: -1px;
+      .info-header {
+        padding: 15px 0 2px 0;
+      }
       .description {
         margin: 5px 0px 12px 0px;
       }
