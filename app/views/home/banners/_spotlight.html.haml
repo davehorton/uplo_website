@@ -1,6 +1,17 @@
 .main.spotlight
   .banner
     .wrapper
+      .follow-us
+        %span
+          Follow Us
+        %ul
+          %li
+            =link_to image_tag("icon-facebook-dark.png", :alt => "Facebook"), "http://facebook.com/uploapp"
+          %li
+            =link_to image_tag("icon-twitter-dark.png", :alt => "Twitter"), "http://twitter.com/UPLOapp"
+          %li
+            =link_to image_tag("icon-wordpress-dark.png", :alt => "Wordpress"), "http://www.uploblog.com/"
+
       .left
         .logo
         .text.white.bold.font32 From Camera to Frame<sup style="font-size:12px;vertical-align: top;">&trade;</sup>
@@ -15,25 +26,26 @@
 .sub
   .wrapper
     .info.left
-      .text.black.bold.font24 Buy.
-      .description.text.black.bold.font14 Choose from millions of images.
-      .text.gray.font12.line18
-        Order framed or unframed prints of your own photography, or choose from millions of other images to purchase.
+      .text.black.bold.font24.info-header
+        Buy.
+      .text.gray.font14.line18
+        Collect and hang pristinely printed art prints from your favorite photographers.
 
     .devider.left
       = image_tag("banner-divider.png")
 
     .info.left
-      .text.black.bold.font24 Sell.
-      .description.text.black.bold.font14 Upload photos and name your price.
-      .text.gray.font12.line18
-        Simply create galleries of photos to sell and name your own price. You earn a commission for every print sold while building your fan base.
+      .text.black.bold.font24.info-header
+        Sell.
+      .text.gray.font14.line18
+        UPLO and expose your work to masses of eager buyers and collectors.
 
     .devider.left
       = image_tag("banner-divider.png")
 
     .info.left
-      .text.black.bold.font24 Share.
-      .description.text.black.bold.font14 Choose to share publicly or privately.
-      .text.gray.font12.line18
-        Don’t want to share your photos with the world? No problem. Password-protect your galleries to keep images private or share them with a select few.
+      .text.black.bold.font24.info-header
+        Print.
+      .text.gray.font14.line18
+        UPLO and print your work for private use or as a fine art printing service.
+
