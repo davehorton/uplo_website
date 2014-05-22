@@ -4,7 +4,7 @@ ruby '1.9.3'
 gem 'dotenv-rails', :groups => [:development, :test]
 
 # main stack
-gem 'rails', '3.2.17'
+gem 'rails', '3.2.18'
 gem 'pg', '~> 0.17.1'
 
 # application components
