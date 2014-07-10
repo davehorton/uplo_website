@@ -63,6 +63,7 @@
   = render :partial => 'sharing_box'
 
 .sections
+  - order_url = url_for(:controller => 'images', :action => 'order', :id => params[:id])
   - if can_promote
     .image-container.promote-container.clearfix
       - promote_link = url_for(:controller => "admin/spotlights", :action => "promote", :id => "#{@image.id}")
@@ -71,6 +72,7 @@
                   :id => "promote-photo-form-#{@image.id}", :method=>'post'}
           = hidden_field_tag(:authenticity_token, form_authenticity_token)
 
+  .big-order-button.button.order{:onclick => "window.location.href = '#{order_url}';", :data => {:url => "#{order_url}"}}
   .image-container-wrapper.clearfix
     .image-container.medium.no-border.clearfix
       = image_tag(@image.url(:medium), :class => 'image medium',
@@ -98,7 +100,6 @@
         .button.flag.left
           = link_to "&nbsp;".html_safe, require_login_path, :class => "like-link"
 
-      - order_url = url_for(:controller => 'images', :action => 'order', :id => params[:id])
       .button.order.left{:onclick => "window.location.href = '#{order_url}';", :data => {:url => "#{order_url}"}}
     - if @image.gallery.is_public? && !@image.flagged?
       .buttons-container.right

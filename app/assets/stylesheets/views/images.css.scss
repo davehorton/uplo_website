@@ -201,6 +201,14 @@ $color-light-gray: #a1a1a1;
   .sections {
     width: 640px;
     position: relative;
+
+    .big-order-button {
+      background: url('/assets/big-order-button.jpg');
+      width: 640px ;
+      height: 38px ;
+      margin-bottom: 3px ;
+    }
+    
     .actions {
       width: 100%;
       margin: 10px 0;
